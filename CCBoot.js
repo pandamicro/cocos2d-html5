@@ -597,7 +597,7 @@ cc.loader = /** @lends cc.loader# */{
             args = self._getArgs4Js(arguments);
         this.loadJs(args[0], args[1], function (err) {
             if (err) throw err;
-            jsLoadingImg.parentNode.removeChild(jsLoadingImg);//remove loading gif
+            jsLoadingImg.parentNode && jsLoadingImg.parentNode.removeChild(jsLoadingImg);//remove loading gif
             if (args[2]) args[2]();
         });
     },
@@ -605,14 +605,15 @@ cc.loader = /** @lends cc.loader# */{
         var d = document, self = this, s = cc.newElement('script');
         s.async = isAsync;
         self._jsCache[jsPath] = true;
-        if(cc.game.config["noCache"] && typeof jsPath === "string"){
-            if(self._noCacheRex.test(jsPath))
-                s.src = jsPath + "&_t=" + (new Date() - 0);
-            else
-                s.src = jsPath + "?_t=" + (new Date() - 0);
-        }else{
-            s.src = jsPath;
-        }
+//        if(cc.game.config["noCache"] && typeof jsPath === "string"){
+//            if(self._noCacheRex.test(jsPath))
+//                s.src = jsPath + "&_t=" + (new Date() - 0);
+//            else
+//                s.src = jsPath + "?_t=" + (new Date() - 0);
+//        }else{
+//            s.src = jsPath;
+//        }
+        s.src = jsPath;
         cc._addEventListener(s, 'load', function () {
             s.parentNode.removeChild(s);
             this.removeEventListener('load', arguments.callee, false);
@@ -640,19 +641,19 @@ cc.loader = /** @lends cc.loader# */{
         if (!jsLoadingImg) {
             jsLoadingImg = cc.newElement('img');
 
-            if (cc._loadingImage)
-                jsLoadingImg.src = cc._loadingImage;
+            // if (cc._loadingImage)
+            //     jsLoadingImg.src = cc._loadingImage;
 
-            var canvasNode = d.getElementById(cc.game.config["id"]);
-            canvasNode.style.backgroundColor = "black";
-            canvasNode.parentNode.appendChild(jsLoadingImg);
+            // var canvasNode = d.getElementById(cc.game.config["id"]);
+            // canvasNode.style.backgroundColor = "black";
+            // canvasNode.parentNode.appendChild(jsLoadingImg);
 
-            var canvasStyle = getComputedStyle ? getComputedStyle(canvasNode) : canvasNode.currentStyle;
-            if (!canvasStyle)
-                canvasStyle = {width: canvasNode.width, height: canvasNode.height};
-            jsLoadingImg.style.left = canvasNode.offsetLeft + (parseFloat(canvasStyle.width) - jsLoadingImg.width) / 2 + "px";
-            jsLoadingImg.style.top = canvasNode.offsetTop + (parseFloat(canvasStyle.height) - jsLoadingImg.height) / 2 + "px";
-            jsLoadingImg.style.position = "absolute";
+            // var canvasStyle = getComputedStyle ? getComputedStyle(canvasNode) : canvasNode.currentStyle;
+            // if (!canvasStyle)
+            //     canvasStyle = {width: canvasNode.width, height: canvasNode.height};
+            // jsLoadingImg.style.left = canvasNode.offsetLeft + (parseFloat(canvasStyle.width) - jsLoadingImg.width) / 2 + "px";
+            // jsLoadingImg.style.top = canvasNode.offsetTop + (parseFloat(canvasStyle.height) - jsLoadingImg.height) / 2 + "px";
+            // jsLoadingImg.style.position = "absolute";
         }
         return jsLoadingImg;
     },
@@ -1056,62 +1057,6 @@ cc.formatStr = function(){
     return str;
 };
 
-
-//+++++++++++++++++++++++++something about window events begin+++++++++++++++++++++++++++
-(function () {
-    var win = window, hidden, visibilityChange, _undef = "undefined";
-    if (!cc.isUndefined(document.hidden)) {
-        hidden = "hidden";
-        visibilityChange = "visibilitychange";
-    } else if (!cc.isUndefined(document.mozHidden)) {
-        hidden = "mozHidden";
-        visibilityChange = "mozvisibilitychange";
-    } else if (!cc.isUndefined(document.msHidden)) {
-        hidden = "msHidden";
-        visibilityChange = "msvisibilitychange";
-    } else if (!cc.isUndefined(document.webkitHidden)) {
-        hidden = "webkitHidden";
-        visibilityChange = "webkitvisibilitychange";
-    }
-
-    var onHidden = function () {
-        if (cc.eventManager && cc.game._eventHide)
-            cc.eventManager.dispatchEvent(cc.game._eventHide);
-    };
-    var onShow = function () {
-        if (cc.eventManager && cc.game._eventShow)
-            cc.eventManager.dispatchEvent(cc.game._eventShow);
-
-        if(cc.game._intervalId){
-            window.cancelAnimationFrame(cc.game._intervalId);
-
-            cc.game._runMainLoop();
-        }
-    };
-
-    if (hidden) {
-        cc._addEventListener(document, visibilityChange, function () {
-            if (document[hidden]) onHidden();
-            else onShow();
-        }, false);
-    } else {
-        cc._addEventListener(win, "blur", onHidden, false);
-        cc._addEventListener(win, "focus", onShow, false);
-    }
-
-    if(navigator.userAgent.indexOf("MicroMessenger") > -1){
-        win.onfocus = function(){ onShow() };
-    }
-
-    if ("onpageshow" in window && "onpagehide" in window) {
-        cc._addEventListener(win, "pagehide", onHidden, false);
-        cc._addEventListener(win, "pageshow", onShow, false);
-    }
-    win = null;
-    visibilityChange = null;
-})();
-//+++++++++++++++++++++++++something about window events end+++++++++++++++++++++++++++++
-
 //+++++++++++++++++++++++++something about log start++++++++++++++++++++++++++++
 
 //to make sure the cc.log, cc.warn, cc.error and cc.assert would not throw error before init by debugger mode.
@@ -1142,20 +1087,7 @@ cc.create3DContext = function (canvas, opt_attribs) {
     return context;
 };
 //+++++++++++++++++++++++++something about sys begin+++++++++++++++++++++++++++++
-cc._initSys = function (config, CONFIG_KEY) {
-    /**
-     * Canvas of render type
-     * @constant
-     * @type {Number}
-     */
-    cc._RENDER_TYPE_CANVAS = 0;
-
-    /**
-     * WebGL of render type
-     * @constant
-     * @type {Number}
-     */
-    cc._RENDER_TYPE_WEBGL = 1;
+cc._initSys = function () {
 
     /**
      * System variables
@@ -1572,15 +1504,8 @@ cc._initSys = function (config, CONFIG_KEY) {
     sys._supportMultipleAudio = multipleAudioWhiteList.indexOf(sys.browserType) > -1;
 
 
-    //++++++++++++++++++something about cc._renderTYpe and cc._supportRender begin++++++++++++++++++++++++++++
-    var userRenderMode = parseInt(config[CONFIG_KEY.renderMode]);
-    var renderType = cc._RENDER_TYPE_WEBGL;
-    var tempCanvas = cc.newElement("Canvas");
-    cc._supportRender = true;
-    var notSupportGL = !window.WebGLRenderingContext || browserSupportWebGL.indexOf(sys.browserType) == -1 || osSupportWebGL.indexOf(sys.os) == -1;
-    if (userRenderMode === 1 || (userRenderMode === 0 && notSupportGL) || (location.origin == "file://")) {
-        renderType = cc._RENDER_TYPE_CANVAS;
-    }
+    //++++++++++++++++++something about renderer begin++++++++++++++++++++++++++++
+    sys._notSupportGL = !window.WebGLRenderingContext || browserSupportWebGL.indexOf(sys.browserType) == -1 || osSupportWebGL.indexOf(sys.os) == -1;
 
     sys._canUseCanvasNewBlendModes = function(){
         var canvas = document.createElement('canvas');
@@ -1606,23 +1531,7 @@ cc._initSys = function (config, CONFIG_KEY) {
     //Whether or not the Canvas BlendModes are supported.
     sys._supportCanvasNewBlendModes = sys._canUseCanvasNewBlendModes();
 
-    if (renderType == cc._RENDER_TYPE_WEBGL) {
-        if (!win.WebGLRenderingContext
-            || !cc.create3DContext(tempCanvas, {'stencil': true, 'preserveDrawingBuffer': true })) {
-            if (userRenderMode == 0) renderType = cc._RENDER_TYPE_CANVAS;
-            else cc._supportRender = false;
-        }
-    }
-
-    if (renderType == cc._RENDER_TYPE_CANVAS) {
-        try {
-            tempCanvas.getContext("2d");
-        } catch (e) {
-            cc._supportRender = false;
-        }
-    }
-    cc._renderType = renderType;
-    //++++++++++++++++++something about cc._renderType and cc._supportRender end++++++++++++++++++++++++++++++
+    //++++++++++++++++++something about renderer end++++++++++++++++++++++++++++++
 
     // check if browser supports Web Audio
     // check Web Audio's context
@@ -1652,7 +1561,7 @@ cc._initSys = function (config, CONFIG_KEY) {
     }
 
     var capabilities = sys.capabilities = {"canvas": true};
-    if (cc._renderType == cc._RENDER_TYPE_WEBGL)
+    if (!sys._notSupportGL)
         capabilities["opengl"] = true;
     if (docEle['ontouchstart'] !== undefined || doc['ontouchstart'] !== undefined || nav.msPointerEnabled)
         capabilities["touches"] = true;
@@ -1762,12 +1671,6 @@ cc.ORIENTATION_LANDSCAPE_RIGHT = 3;
 cc._drawingUtil = null;
 
 /**
- * main Canvas 2D/3D Context of game engine
- * @type {CanvasRenderingContext2D|WebGLRenderingContext}
- */
-cc._renderContext = null;
-
-/**
  * main Canvas of game engine
  * @type {HTMLCanvasElement}
  */
@@ -1779,7 +1682,77 @@ cc._canvas = null;
  */
 cc._gameDiv = null;
 
-cc._rendererInitialized = false;
+(function () {
+
+var _config = null,
+    //cache for js and module that has added into jsList to be loaded.
+    _jsAddedCache = {};
+
+cc._engineLoaded = false;
+
+function _getJsListOfModule(moduleMap, moduleName, dir) {
+    if (_jsAddedCache[moduleName]) return null;
+    dir = dir || "";
+    var jsList = [];
+    var tempList = moduleMap[moduleName];
+    if (!tempList) throw "can not find module [" + moduleName + "]";
+    var ccPath = cc.path;
+    for (var i = 0, li = tempList.length; i < li; i++) {
+        var item = tempList[i];
+        if (_jsAddedCache[item]) continue;
+        var extname = ccPath.extname(item);
+        if (!extname) {
+            var arr = _getJsListOfModule(moduleMap, item, dir);
+            if (arr) jsList = jsList.concat(arr);
+        } else if (extname.toLowerCase() == ".js") jsList.push(ccPath.join(dir, item));
+        _jsAddedCache[item] = 1;
+    }
+    return jsList;
+}
+
+function _load(config, cb) {
+    var self = this;
+    var CONFIG_KEY = cc.Game.CONFIG_KEY, engineDir = config[CONFIG_KEY.engineDir], loader = cc.loader;
+
+    if (cc.Class) {
+        // Single file loaded
+        cc._setup();
+        cc._engineLoaded = true;
+        if (cb) cb();
+    } else {
+        // Load cocos modules
+        var ccModulesPath = cc.path.join(engineDir, "moduleConfig.json");
+        loader.loadJson(ccModulesPath, function (err, modulesJson) {
+            if (err) throw err;
+            var modules = config["modules"] || [];
+            var moduleMap = modulesJson["module"];
+            var jsList = [];
+            for (var i = 0, li = modules.length; i < li; i++) {
+                var arr = _getJsListOfModule(moduleMap, modules[i], engineDir);
+                if (arr) jsList = jsList.concat(arr);
+            }
+            cc.loader.loadJsWithImg(jsList, function (err) {
+                if (err) throw err;
+                cc._setup();
+                cc._engineLoaded = true;
+                if (cb) cb();
+            });
+        });
+    }
+}
+
+function _windowLoaded() {
+    this.removeEventListener('load', _windowLoaded, false);
+    _load(_config);
+}
+
+cc._loadEngine = function(config) {
+    _config = config ? config : {};
+    document.body ? _load(_config) : cc._addEventListener(window, 'load', _windowLoaded, false);
+}
+
+})();
+
 /**
  * <p>
  *   setup game main canvas,renderContext,gameDiv and drawingUtil with argument  <br/>
@@ -1803,73 +1776,7 @@ cc._rendererInitialized = false;
  * // declare like this: <div id="Cocos2dGameContainer" width="800" height="450"></div>
  * cc._setup("Cocos2dGameContainer");
  */
-cc._setupCalled = false;
 cc._setup = function (el, width, height) {
-    // Avoid setup to be called twice.
-    if (cc._setupCalled) return;
-    else cc._setupCalled = true;
-    var win = window;
-    var element = cc.$(el) || cc.$('#' + el);
-    var localCanvas, localContainer, localConStyle;
-
-    cc.game._setAnimFrame();
-
-    if (element.tagName == "CANVAS") {
-        width = width || element.width;
-        height = height || element.height;
-
-        //it is already a canvas, we wrap it around with a div
-        localContainer = cc.container = cc.newElement("DIV");
-        localCanvas = cc._canvas = element;
-        localCanvas.parentNode.insertBefore(localContainer, localCanvas);
-        localCanvas.appendTo(localContainer);
-        localContainer.setAttribute('id', 'Cocos2dGameContainer');
-    } else {//we must make a new canvas and place into this element
-        if (element.tagName != "DIV") {
-            cc.log("Warning: target element is not a DIV or CANVAS");
-        }
-        width = width || element.clientWidth;
-        height = height || element.clientHeight;
-        localContainer = cc.container = element;
-        localCanvas = cc._canvas = cc.$(cc.newElement("CANVAS"));
-        element.appendChild(localCanvas);
-    }
-
-    localCanvas.addClass("gameCanvas");
-    localCanvas.setAttribute("width", width || 480);
-    localCanvas.setAttribute("height", height || 320);
-    localCanvas.setAttribute("tabindex", 99);
-    localCanvas.style.outline = "none";
-    localConStyle = localContainer.style;
-    localConStyle.width = (width || 480) + "px";
-    localConStyle.height = (height || 320) + "px";
-    localConStyle.margin = "0 auto";
-
-    localConStyle.position = 'relative';
-    localConStyle.overflow = 'hidden';
-    localContainer.top = '100%';
-
-    if (cc._renderType == cc._RENDER_TYPE_WEBGL)
-        cc._renderContext = cc.webglContext = cc.create3DContext(localCanvas, {
-            'stencil': true,
-            'preserveDrawingBuffer': true,
-            'antialias': !cc.sys.isMobile,
-            'alpha': false});
-    if (cc._renderContext) {
-        win.gl = cc._renderContext; // global variable declared in CCMacro.js
-        cc._drawingUtil = new cc.DrawingPrimitiveWebGL(cc._renderContext);
-        cc._rendererInitialized = true;
-        cc.textureCache._initializingRenderer();
-        cc.shaderCache._init();
-    } else {
-        cc._renderContext = new cc.CanvasContextWrapper(localCanvas.getContext("2d"));
-        cc._drawingUtil = cc.DrawingPrimitiveCanvas ? new cc.DrawingPrimitiveCanvas(cc._renderContext) : null;
-    }
-
-    cc._gameDiv = localContainer;
-    cc.log(cc.ENGINE_VERSION);
-    cc._setContextMenuEnable(false);
-
     if (cc.sys.isMobile) {
         var fontStyle = cc.newElement("style");
         fontStyle.type = "text/css";
@@ -1881,29 +1788,6 @@ cc._setup = function (el, width, height) {
 
     // Init singletons
 
-    /**
-     * @type {cc.EGLView}
-     * @name cc.view
-     * cc.view is the shared view object.
-     */
-    cc.view = cc.EGLView._getInstance();
-    // register system events
-    cc.inputManager.registerSystemEvent(cc._canvas);
-
-    /**
-     * @type {cc.Director}
-     * @name cc.director
-     */
-    cc.director = cc.Director._getInstance();
-    if (cc.director.setOpenGLView)
-        cc.director.setOpenGLView(cc.view);
-    /**
-     * @type {cc.Size}
-     * @name cc.winSize
-     * cc.winSize is the alias object for the size of the current game window.
-     */
-    cc.winSize = cc.director.getWinSize();
-
     // Parsers
     cc.saxParser = new cc.SAXParser();
     /**
@@ -1912,10 +1796,12 @@ cc._setup = function (el, width, height) {
      * A Plist Parser
      */
     cc.plistParser = new cc.PlistParser();
+
+    cc.log(cc.ENGINE_VERSION);
 };
 
 cc._checkWebGLRenderMode = function () {
-    if (cc._renderType !== cc._RENDER_TYPE_WEBGL)
+    if (cc.sys._notSupportGL)
         throw "This feature supports WebGL render mode only.";
 };
 
@@ -1924,9 +1810,9 @@ cc._isContextMenuEnable = false;
  * enable/disable contextMenu for Canvas
  * @param {Boolean} enabled
  */
-cc._setContextMenuEnable = function (enabled) {
+cc._setContextMenuEnable = function (canvas, enabled) {
     cc._isContextMenuEnable = enabled;
-    cc._canvas.oncontextmenu = function () {
+    canvas.oncontextmenu = function () {
         if (!cc._isContextMenuEnable) return false;
     };
 };
@@ -1936,41 +1822,22 @@ cc._setContextMenuEnable = function (enabled) {
  * @class
  * @name cc.game
  */
-cc.game = /** @lends cc.game# */{
-    DEBUG_MODE_NONE: 0,
-    DEBUG_MODE_INFO: 1,
-    DEBUG_MODE_WARN: 2,
-    DEBUG_MODE_ERROR: 3,
-    DEBUG_MODE_INFO_FOR_WEB_PAGE: 4,
-    DEBUG_MODE_WARN_FOR_WEB_PAGE: 5,
-    DEBUG_MODE_ERROR_FOR_WEB_PAGE: 6,
+cc.Game = function (config, onStart) {
+    this.initConfig(config);
+    cc.isFunction && (this.onStart = onStart);
+
+    cc._loadEngine(config);
+
+    this.setEnvironment();
+};
+cc.Game.prototype = /** @lends cc.Game# */{
+    constructor: cc.Game,
     _ready: false,
 
-    EVENT_HIDE: "game_on_hide",
-    EVENT_SHOW: "game_on_show",
     _eventHide: null,
     _eventShow: null,
     _onBeforeStartArr: [],
 
-    /**
-     * Key of config
-     * @constant
-     * @type {Object}
-     */
-    CONFIG_KEY: {
-        engineDir: "engineDir",
-        dependencies: "dependencies",
-        debugMode: "debugMode",
-        showFPS: "showFPS",
-        frameRate: "frameRate",
-        id: "id",
-        renderMode: "renderMode",
-        jsList: "jsList",
-        classReleaseMode: "classReleaseMode"
-    },
-
-    _prepareCalled: false,//whether the prepare function has been called
-    _prepared: false,//whether the engine has prepared
     _paused: true,//whether the game is paused
 
     _intervalId: null,//interval target of main
@@ -1978,11 +1845,28 @@ cc.game = /** @lends cc.game# */{
     _lastTime: null,
     _frameTime: null,
 
+    _requestAnimationFrame: null,
+    _cancelAnimationFrame: null,
+
+    _supportRender: false,
+    _rendererInitialized: false,
+
     /**
      * Config of game
      * @type {Object}
      */
     config: null,
+
+    container: null,
+    canvas: null,
+    _renderContext: null,
+
+    view: null,
+    director: null,
+    inputManager: null,
+    eventManager: null,
+
+    renderType: 0,
 
     /**
      * Callback when the scripts of engine have been load.
@@ -1996,12 +1880,16 @@ cc.game = /** @lends cc.game# */{
      */
     onStop: null,
 
+    setEnvironment: function () {
+        cc.game = this;
+    },
+
     /**
      * Set frameRate of game.
      * @param frameRate
      */
     setFrameRate: function (frameRate) {
-        var self = this, config = self.config, CONFIG_KEY = self.CONFIG_KEY;
+        var self = this, config = self.config, CONFIG_KEY = cc.Game.CONFIG_KEY;
         config[CONFIG_KEY.frameRate] = frameRate;
         if (self._intervalId)
             window.cancelAnimationFrame(self._intervalId);
@@ -2011,37 +1899,38 @@ cc.game = /** @lends cc.game# */{
     },
     _setAnimFrame: function () {
         this._lastTime = new Date();
-        this._frameTime = 1000 / cc.game.config[cc.game.CONFIG_KEY.frameRate];
-        if((cc.sys.os === cc.sys.OS_IOS && cc.sys.browserType === cc.sys.BROWSER_TYPE_WECHAT) || cc.game.config[cc.game.CONFIG_KEY.frameRate] != 60) {
-            window.requestAnimFrame = this._stTime;
-            window.cancelAnimationFrame = this._ctTime;
+        this._frameTime = 1000 / this.config[cc.Game.CONFIG_KEY.frameRate];
+        if((cc.sys.os === cc.sys.OS_IOS && cc.sys.browserType === cc.sys.BROWSER_TYPE_WECHAT)
+           || this.config[cc.Game.CONFIG_KEY.frameRate] != 60) {
+            this._requestAnimationFrame = this._stTime;
+            this._cancelAnimationFrame = this._ctTime;
         }
         else {
-            window.requestAnimFrame = window.requestAnimationFrame ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            window.oRequestAnimationFrame ||
-            window.msRequestAnimationFrame ||
-            this._stTime;
-            window.cancelAnimationFrame = window.cancelAnimationFrame ||
-            window.cancelRequestAnimationFrame ||
-            window.msCancelRequestAnimationFrame ||
-            window.mozCancelRequestAnimationFrame ||
-            window.oCancelRequestAnimationFrame ||
-            window.webkitCancelRequestAnimationFrame ||
-            window.msCancelAnimationFrame ||
-            window.mozCancelAnimationFrame ||
-            window.webkitCancelAnimationFrame ||
-            window.oCancelAnimationFrame ||
-            this._ctTime;
+            this._requestAnimationFrame = window.requestAnimationFrame
+                                       || window.webkitRequestAnimationFrame
+                                       || window.mozRequestAnimationFrame
+                                       || window.oRequestAnimationFrame
+                                       || window.msRequestAnimationFrame
+                                       || this._stTime;
+            this._cancelAnimationFrame = window.cancelAnimationFrame
+                                      || window.cancelRequestAnimationFrame
+                                      || window.msCancelRequestAnimationFrame
+                                      || window.mozCancelRequestAnimationFrame
+                                      || window.oCancelRequestAnimationFrame
+                                      || window.webkitCancelRequestAnimationFrame
+                                      || window.msCancelAnimationFrame
+                                      || window.mozCancelAnimationFrame
+                                      || window.webkitCancelAnimationFrame
+                                      || window.oCancelAnimationFrame
+                                      || this._ctTime;
         }
     },
     _stTime: function(callback){
         var currTime = new Date().getTime();
-        var timeToCall = Math.max(0, cc.game._frameTime - (currTime - cc.game._lastTime));
+        var timeToCall = Math.max(0, this._frameTime - (currTime - this._lastTime));
         var id = window.setTimeout(function() { callback(); },
             timeToCall);
-        cc.game._lastTime = currTime + timeToCall;
+        this._lastTime = currTime + timeToCall;
         return id;
     },
     _ctTime: function(id){
@@ -2049,21 +1938,22 @@ cc.game = /** @lends cc.game# */{
     },
     //Run game.
     _runMainLoop: function () {
-        var self = this, callback, config = self.config, CONFIG_KEY = self.CONFIG_KEY,
-            director = cc.director;
+        var self = this, callback, config = self.config, CONFIG_KEY = cc.Game.CONFIG_KEY,
+            director = self.director;
 
         director.setDisplayStats(config[CONFIG_KEY.showFPS]);
 
         callback = function () {
             if (!self._paused) {
+                self.setEnvironment();
                 director.mainLoop();
                 if(self._intervalId)
-                    window.cancelAnimationFrame(self._intervalId);
-                self._intervalId = window.requestAnimFrame(callback);
+                    self._cancelAnimationFrame.call(window, self._intervalId);
+                self._intervalId = self._requestAnimationFrame.call(window, callback);
             }
         };
 
-        window.requestAnimFrame(callback);
+        self._requestAnimationFrame.call(window, callback);
         self._paused = false;
     },
 
@@ -2071,176 +1961,291 @@ cc.game = /** @lends cc.game# */{
      * Restart game.
      */
     restart: function () {
-        cc.director.popToSceneStackLevel(0);
         // Clean up audio
         cc.audioEngine && cc.audioEngine.end();
 
-        cc.game.onStart();
+        this.director.popToSceneStackLevel(0);
+        this.onStart();
+    },
+
+    _prepare: function () {
+        if (cc._engineLoaded) {
+            // Define properties
+            // cc.winSize
+            var self = this;
+            cc.defineGetterSetter(cc, "winSize", function() {return self.director.getWinSize();});
+            cc.defineGetterSetter(cc, "eventManager", function() {return self.eventManager;});
+            cc.defineGetterSetter(cc, "inputManager", function() {return self.inputManager;});
+            cc.defineGetterSetter(cc, "shaderCache", function() {return self.shaderCache;});
+
+            this._initRenderer();
+
+            // Init view, director and event manager
+            this.eventManager = new cc.EventManager(this);
+            this.inputManager = new cc.InputManager(this);
+
+            this.view = new cc.EGLView(this);
+            this.view.initialize();
+
+            this.director = new cc.DisplayLinkDirector(this);
+            this.director.init();
+            if (this.director.setOpenGLView)
+                this.director.setOpenGLView(this.view);
+
+            this._initEvents();
+
+            this._setAnimFrame();
+            this._runMainLoop();
+
+            var self = this;
+            // Load game scripts
+            var jsList = this.config[cc.Game.CONFIG_KEY.jsList];
+            cc.loader.loadJsWithImg(jsList, function (err) {
+                if (err) throw err;
+                self.onStart();
+            });
+
+            clearInterval(this._checkPrepare);
+        }
     },
 
     /**
      * Run game.
      */
     run: function (id) {
-        if(this._ready === false){
-            this._ready = id === undefined ? true : id;
-            return;
-        }else if(typeof this._ready !== "boolean"){
-            id = this._ready;
+        if (id) {
+            this.config[cc.Game.CONFIG_KEY.id] = id;
         }
+        if (this._supportRender) {
+            if (cc._engineLoaded)
+                this._prepare();
+            else {
+                this._checkPrepare = setInterval((this._prepare).bind(this), 10);
+            }
+        }
+    },
+
+    _initRenderer: function (width, height) {
+        // Avoid setup to be called twice.
+        if (this._rendererInitialized) return;
+
+        var el = this.config[cc.Game.CONFIG_KEY.id],
+            win = window,
+            element = cc.$(el) || cc.$('#' + el),
+            localCanvas, localContainer, localConStyle;
+
+        if (element.tagName == "CANVAS") {
+            width = width || element.width;
+            height = height || element.height;
+
+            //it is already a canvas, we wrap it around with a div
+            this.canvas = localCanvas = element;
+            this.container = localContainer = cc.newElement("DIV");
+            if (localCanvas.parentNode)
+                localCanvas.parentNode.insertBefore(localContainer, localCanvas);
+            localContainer.setAttribute('id', 'Cocos2dGameContainer');
+        } else {//we must make a new canvas and place into this element
+            if (element.tagName != "DIV") {
+                cc.log("Warning: target element is not a DIV or CANVAS");
+            }
+            width = width || element.clientWidth;
+            height = height || element.clientHeight;
+            localCanvas = cc.$(cc.newElement("CANVAS"));
+            localContainer = this.container = element;
+        }
+        localContainer.appendChild(localCanvas);
+
+        localCanvas.addClass("gameCanvas");
+        localCanvas.setAttribute("width", width || 480);
+        localCanvas.setAttribute("height", height || 320);
+        localCanvas.setAttribute("tabindex", 99);
+        localCanvas.style.outline = "none";
+        localConStyle = localContainer.style;
+        localConStyle.width = (width || 480) + "px";
+        localConStyle.height = (height || 320) + "px";
+        localConStyle.margin = "0 auto";
+
+        localConStyle.position = 'relative';
+        localConStyle.overflow = 'hidden';
+        localContainer.top = '100%';
+
+        if (this.renderType == cc.Game.RENDER_TYPE_WEBGL)
+            this._renderContext = cc.create3DContext(localCanvas, {
+                'stencil': true,
+                'preserveDrawingBuffer': true,
+                'antialias': !cc.sys.isMobile,
+                'alpha': false});
+        if (this._renderContext) {
+            win.gl = this._renderContext; // global variable declared in CCMacro.js
+            this.shaderCache = new cc.ShaderCache();
+            this.shaderCache._init();
+// Need to move out
+            cc._drawingUtil = new cc.DrawingPrimitiveWebGL(this._renderContext);
+            cc.textureCache._initializingRenderer();
+        } else {
+            this._renderContext = new cc.CanvasContextWrapper(localCanvas.getContext("2d"));
+            cc._drawingUtil = cc.DrawingPrimitiveCanvas ? new cc.DrawingPrimitiveCanvas(this._renderContext) : null;
+        }
+
+        cc._setContextMenuEnable(this.canvas, false);
+        this._rendererInitialized = true;
+    },
+
+    _initEvents: function () {
+        // register system events
+        this.inputManager.registerSystemEvent(this.canvas);
+
+        var win = window, hidden, visibilityChange, _undef = "undefined";
+        if (!cc.isUndefined(document.hidden)) {
+            hidden = "hidden";
+            visibilityChange = "visibilitychange";
+        } else if (!cc.isUndefined(document.mozHidden)) {
+            hidden = "mozHidden";
+            visibilityChange = "mozvisibilitychange";
+        } else if (!cc.isUndefined(document.msHidden)) {
+            hidden = "msHidden";
+            visibilityChange = "msvisibilitychange";
+        } else if (!cc.isUndefined(document.webkitHidden)) {
+            hidden = "webkitHidden";
+            visibilityChange = "webkitvisibilitychange";
+        }
+
+        var _eventHide = new cc.EventCustom(cc.Game.EVENT_HIDE);
+        var _eventShow = new cc.EventCustom(cc.Game.EVENT_SHOW);
         var self = this;
-        var _run = function () {
-            if (id) {
-                self.config[self.CONFIG_KEY.id] = id;
-            }
-            if (!self._prepareCalled) {
-                self.prepare(function () {
-                    self._prepared = true;
-                });
-            }
-            if (cc._supportRender) {
-                self._checkPrepare = setInterval(function () {
-                    if (self._prepared) {
-                        cc._setup(self.config[self.CONFIG_KEY.id]);
-                        self._runMainLoop();
-                        self._eventHide = self._eventHide || new cc.EventCustom(self.EVENT_HIDE);
-                        self._eventHide.setUserData(self);
-                        self._eventShow = self._eventShow || new cc.EventCustom(self.EVENT_SHOW);
-                        self._eventShow.setUserData(self);
-                        self.onStart();
-                        clearInterval(self._checkPrepare);
-                    }
-                }, 10);
-            }
+
+        var onHidden = function () {
+            if (self.eventManager)
+                self.eventManager.dispatchEvent(_eventHide);
         };
-        document.body ?
-            _run() :
-            cc._addEventListener(window, 'load', function () {
-                this.removeEventListener('load', arguments.callee, false);
-                _run();
+        var onShow = function () {
+            if (self.eventManager)
+                self.eventManager.dispatchEvent(_eventShow);
+        };
+
+        if (hidden) {
+            cc._addEventListener(document, visibilityChange, function () {
+                if (document[hidden]) onHidden();
+                else onShow();
             }, false);
+        } else {
+            cc._addEventListener(win, "blur", onHidden, false);
+            cc._addEventListener(win, "focus", onShow, false);
+        }
+
+        if(navigator.userAgent.indexOf("MicroMessenger") > -1){
+            win.onfocus = function(){ onShow() };
+        }
+
+        if ("onpageshow" in window && "onpagehide" in window) {
+            cc._addEventListener(win, "pagehide", onHidden, false);
+            cc._addEventListener(win, "pageshow", onShow, false);
+        }
+
+        this.eventManager.addCustomListener(cc.Game.EVENT_HIDE, function () {
+            cc.audioEngine._pausePlaying();
+        });
+        this.eventManager.addCustomListener(cc.Game.EVENT_SHOW, function () {
+            cc.audioEngine._resumePlaying();
+        });
+
+        this.eventManager.addCustomListener(cc.Game.EVENT_SHOW, function () {
+            if(self._intervalId){
+                window.cancelAnimationFrame(self._intervalId);
+
+                self._runMainLoop();
+            }
+        });
     },
 
-    _initConfig: function () {
-        var self = this, CONFIG_KEY = self.CONFIG_KEY;
-        var _init = function (cfg) {
-            cfg[CONFIG_KEY.engineDir] = cfg[CONFIG_KEY.engineDir] || "frameworks/cocos2d-html5";
-            if(cfg[CONFIG_KEY.debugMode] == null)
-                cfg[CONFIG_KEY.debugMode] = 0;
-            cfg[CONFIG_KEY.frameRate] = cfg[CONFIG_KEY.frameRate] || 60;
-            if(cfg[CONFIG_KEY.renderMode] == null)
-                cfg[CONFIG_KEY.renderMode] = 1;
-            //init debug move to CCDebugger
-            cc._initSys(cfg, CONFIG_KEY);
-            self.config = cfg;
-            if(cc.game._ready !== false){
-                self._ready = true;
-                cc.game.run();
+    initConfig: function (config) {
+        var self = this, CONFIG_KEY = cc.Game.CONFIG_KEY;
+        config = config || document["ccConfig"];
+        var modules = config[CONFIG_KEY.modules];
+
+        config[CONFIG_KEY.engineDir] = config[CONFIG_KEY.engineDir] || "frameworks/cocos2d-html5";
+        if(config[CONFIG_KEY.debugMode] == null)
+            config[CONFIG_KEY.debugMode] = 0;
+        config[CONFIG_KEY.frameRate] = config[CONFIG_KEY.frameRate] || 60;
+        if(config[CONFIG_KEY.renderMode] == null)
+            config[CONFIG_KEY.renderMode] = 1;
+
+        if (modules.indexOf("core") < 0) modules.splice(0, 0, "core");
+
+// RenderType
+        var userRenderMode = parseInt(config[CONFIG_KEY.renderMode]);
+        var renderType = cc.Game.RENDER_TYPE_WEBGL;
+        this._supportRender = true;
+        if (userRenderMode === 1 || (userRenderMode === 0 && cc.sys._notSupportGL) || (location.origin == "file://")) {
+            renderType = cc.Game.RENDER_TYPE_CANVAS;
+        }
+
+        var tempCanvas = cc.newElement("Canvas");
+        if (renderType == cc.Game.RENDER_TYPE_WEBGL) {
+            if (!window.WebGLRenderingContext
+                || !cc.create3DContext(tempCanvas, {'stencil': true, 'preserveDrawingBuffer': true })) {
+                if (userRenderMode == 0) renderType = cc.Game.RENDER_TYPE_CANVAS;
+                else this._supportRender = false;
             }
-        };
-        if (document["ccConfig"]) {
-            self.config = _init(document["ccConfig"]);
-        } else {
+            else {
+                // Add base4webgl module
+                if (modules.indexOf("base4webgl") < 0) modules.splice(0, 0, "base4webgl");
+            }
+        }
+
+        if (renderType == cc.Game.RENDER_TYPE_CANVAS) {
             try {
-                var cocos_script = document.getElementsByTagName('script');
-                for(var i=0;i<cocos_script.length;i++){
-                    var _t = cocos_script[i].getAttribute('cocos');
-                    if(_t == '' || _t){break;}
-                }
-                var _src, _resPath;
-                if(i < cocos_script.length){
-                    _src = cocos_script[i].src;
-                    if(_src){
-                        _resPath = /(.*)\//.exec(_src)[0];
-                        cc.loader.resPath = _resPath;
-                        _src = cc.path.join(_resPath, 'project.json');
-                    }
-                    cc.loader.loadTxt(_src, function(err, txt){
-                        if(err)
-                            return cc.error(err);
-                        _init(JSON.parse(txt) || {});
-                    });
-                }else{
-                    cc.loader.loadTxt("project.json", function(err, txt){
-                        if(err)
-                            return cc.error(err);
-                        _init(JSON.parse(txt) || {});
-                    });
-                }
+                tempCanvas.getContext("2d");
             } catch (e) {
-                cc.log("Failed to read or parse project.json");
-               _init({});
+                this._supportRender = false;
             }
         }
-    },
+        this.renderType = renderType;
 
-    //cache for js and module that has added into jsList to be loaded.
-    _jsAddedCache: {},
-    _getJsListOfModule: function (moduleMap, moduleName, dir) {
-        var jsAddedCache = this._jsAddedCache;
-        if (jsAddedCache[moduleName]) return null;
-        dir = dir || "";
-        var jsList = [];
-        var tempList = moduleMap[moduleName];
-        if (!tempList) throw "can not find module [" + moduleName + "]";
-        var ccPath = cc.path;
-        for (var i = 0, li = tempList.length; i < li; i++) {
-            var item = tempList[i];
-            if (jsAddedCache[item]) continue;
-            var extname = ccPath.extname(item);
-            if (!extname) {
-                var arr = this._getJsListOfModule(moduleMap, item, dir);
-                if (arr) jsList = jsList.concat(arr);
-            } else if (extname.toLowerCase() == ".js") jsList.push(ccPath.join(dir, item));
-            jsAddedCache[item] = 1;
-        }
-        return jsList;
-    },
-    /**
-     * Prepare game.
-     * @param cb
-     */
-    prepare: function (cb) {
-        var self = this;
-        var config = self.config, CONFIG_KEY = self.CONFIG_KEY, engineDir = config[CONFIG_KEY.engineDir], loader = cc.loader;
-        if (!cc._supportRender) {
-            throw "The renderer doesn't support the renderMode " + config[CONFIG_KEY.renderMode];
-        }
-        self._prepareCalled = true;
-
-        var jsList = config[CONFIG_KEY.jsList] || [];
-        if (cc.Class) {//is single file
-            //load user's jsList only
-            loader.loadJsWithImg("", jsList, function (err) {
-                if (err) throw err;
-                self._prepared = true;
-                if (cb) cb();
-            });
-        } else {
-            //load cc's jsList first
-            var ccModulesPath = cc.path.join(engineDir, "moduleConfig.json");
-            loader.loadJson(ccModulesPath, function (err, modulesJson) {
-                if (err) throw err;
-                var modules = config["modules"] || [];
-                var moduleMap = modulesJson["module"];
-                var newJsList = [];
-                if (cc._renderType == cc._RENDER_TYPE_WEBGL) modules.splice(0, 0, "shaders");
-                else if (modules.indexOf("core") < 0) modules.splice(0, 0, "core");
-                for (var i = 0, li = modules.length; i < li; i++) {
-                    var arr = self._getJsListOfModule(moduleMap, modules[i], engineDir);
-                    if (arr) newJsList = newJsList.concat(arr);
-                }
-                newJsList = newJsList.concat(jsList);
-                cc.loader.loadJsWithImg(newJsList, function (err) {
-                    if (err) throw err;
-                    self._prepared = true;
-                    if (cb) cb();
-                });
-            });
-        }
+// Config
+        config[CONFIG_KEY.modules] = modules;
+        self.config = config;
     }
+
 };
-cc.game._initConfig();
+
+cc.Game.DEBUG_MODE_NONE = 0;
+cc.Game.DEBUG_MODE_INFO = 1;
+cc.Game.DEBUG_MODE_WARN = 2;
+cc.Game.DEBUG_MODE_ERROR = 3;
+cc.Game.DEBUG_MODE_INFO_FOR_WEB_PAGE = 4;
+cc.Game.DEBUG_MODE_WARN_FOR_WEB_PAGE = 5;
+cc.Game.DEBUG_MODE_ERROR_FOR_WEB_PAGE = 6;
+
+cc.Game.RENDER_TYPE_CANVAS = 0;
+cc.Game.RENDER_TYPE_WEBGL = 1;
+cc.Game.RENDER_TYPE_OPENGL = 2;
+
+cc.Game.EVENT_HIDE = "game_on_hide";
+cc.Game.EVENT_SHOW = "game_on_show";
+
+/**
+ * Key of config
+ * @constant
+ * @type {Object}
+ */
+cc.Game.CONFIG_KEY = {
+    engineDir: "engineDir",
+    modules: "modules",
+    debugMode: "debugMode",
+    showFPS: "showFPS",
+    frameRate: "frameRate",
+    id: "id",
+    renderMode: "renderMode",
+    jsList: "jsList",
+    classReleaseMode: "classReleaseMode"
+};
+
+cc.game = null;
+
+//init debug move to CCDebugger
+cc._initSys();
+
 //+++++++++++++++++++++++++something about CCGame end+++++++++++++++++++++++++++++
 
 Function.prototype.bind = Function.prototype.bind || function (oThis) {
