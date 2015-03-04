@@ -115,10 +115,13 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
     _eventAfterVisit: null,
     _eventAfterUpdate: null,
 
-    ctor: function () {
+    game: null,
+
+    ctor: function (game) {
         var self = this;
+        self.game = game;
         self._lastUpdate = Date.now();
-        cc.eventManager.addCustomListener(cc.game.EVENT_SHOW, function () {
+        cc.eventManager.addCustomListener(cc.Game.EVENT_SHOW, function () {
             self._lastUpdate = Date.now();
         });
     },
@@ -182,7 +185,7 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
             this._deltaTime = (now - this._lastUpdate) / 1000;
         }
 
-        if ((cc.game.config[cc.game.CONFIG_KEY.debugMode] > 0) && (this._deltaTime > 0.2))
+        if ((this.game.config[cc.Game.CONFIG_KEY.debugMode] > 0) && (this._deltaTime > 0.2))
             this._deltaTime = 1 / 60.0;
 
         this._lastUpdate = now;
@@ -256,7 +259,7 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
         if (this._afterVisitScene)
             this._afterVisitScene();
 
-        renderer.rendering(cc._renderContext);
+        renderer.rendering(this.game._renderContext);
         cc.eventManager.dispatchEvent(this._eventAfterDraw);
         this._totalFrames++;
 
@@ -413,7 +416,7 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
         // Clear all caches
         this.purgeCachedData();
 
-        cc.checkGLErrorDebug();
+        cc.checkGLErrorDebug(this.game._renderContext);
     },
 
     /**
@@ -900,18 +903,6 @@ cc.DisplayLinkDirector = cc.Director.extend(/** @lends cc.Director# */{
     }
 });
 
-cc.Director.sharedDirector = null;
-cc.Director.firstUseDirector = true;
-
-cc.Director._getInstance = function () {
-    if (cc.Director.firstUseDirector) {
-        cc.Director.firstUseDirector = false;
-        cc.Director.sharedDirector = new cc.DisplayLinkDirector();
-        cc.Director.sharedDirector.init();
-    }
-    return cc.Director.sharedDirector;
-};
-
 /**
  * Default fps is 60
  * @type {Number}
@@ -947,7 +938,7 @@ cc.Director.PROJECTION_CUSTOM = 3;
  */
 cc.Director.PROJECTION_DEFAULT = cc.Director.PROJECTION_3D;
 
-if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
+if (cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS) {
 
     var _p = cc.Director.prototype;
 
@@ -961,16 +952,16 @@ if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
 
     _p.setOpenGLView = function (openGLView) {
         // set size
-        this._winSizeInPoints.width = cc._canvas.width;      //this._openGLView.getDesignResolutionSize();
-        this._winSizeInPoints.height = cc._canvas.height;
-        this._openGLView = openGLView || cc.view;
+        this._winSizeInPoints.width = this.game.canvas.width;      //this._openGLView.getDesignResolutionSize();
+        this._winSizeInPoints.height = this.game.canvas.height;
+        this._openGLView = openGLView || this.game.view;
         if (cc.eventManager)
             cc.eventManager.setEnabled(true);
     };
 
     _p._clear = function () {
         var viewport = this._openGLView.getViewPortRect();
-        var context = cc._renderContext.getContext();
+        var context = this.game._renderContext.getContext();
         context.setTransform(1,0,0,1, 0, 0);
         context.clearRect(-viewport.x, viewport.y, viewport.width, viewport.height);
     };

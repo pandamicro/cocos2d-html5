@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 
-if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
+if (cc.game.renderType === cc.Game.RENDER_TYPE_WEBGL) {
     (function () {
 
         /**
@@ -104,24 +104,24 @@ if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
 
         _p.setDepthTest = function (on) {
 
-            var loc_gl = cc._renderContext;
+            var loc_gl = this.game._renderContext;
             if (on) {
                 loc_gl.clearDepth(1.0);
                 loc_gl.enable(loc_gl.DEPTH_TEST);
                 loc_gl.depthFunc(loc_gl.LEQUAL);
-                //cc._renderContext.hint(cc._renderContext.PERSPECTIVE_CORRECTION_HINT, cc._renderContext.NICEST);
+                //loc_gl.hint(loc_gl.PERSPECTIVE_CORRECTION_HINT, loc_gl.NICEST);
             } else {
                 loc_gl.disable(loc_gl.DEPTH_TEST);
             }
-            //cc.checkGLErrorDebug();
+            //cc.checkGLErrorDebug(loc_gl);
         };
 
         _p.setOpenGLView = function (openGLView) {
             var _t = this;
             // set size
-            _t._winSizeInPoints.width = cc._canvas.width;      //_t._openGLView.getDesignResolutionSize();
-            _t._winSizeInPoints.height = cc._canvas.height;
-            _t._openGLView = openGLView || cc.view;
+            _t._winSizeInPoints.width = this.game.canvas.width;      //_t._openGLView.getDesignResolutionSize();
+            _t._winSizeInPoints.height = this.game.canvas.height;
+            _t._openGLView = openGLView || this.game.view;
 
             // Configuration. Gather GPU info
             var conf = cc.configuration;
@@ -150,7 +150,7 @@ if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
         };
 
         _p._clear = function () {
-            var gl = cc._renderContext;
+            var gl = this.game._renderContext;
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         };
 
@@ -189,7 +189,7 @@ if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
              Secondly, the size of this image is 480*320, to display the FPS label with correct size,
              a factor of design resolution ratio of 480x320 is also needed.
              */
-            var factor = cc.view.getDesignResolutionSize().height / 320.0;
+            var factor = this.game.view.getDesignResolutionSize().height / 320.0;
             if (factor === 0)
                 factor = _t._winSizeInPoints.height / 320.0;
 
@@ -307,11 +307,12 @@ if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
         };
 
         _p.setAlphaBlending = function (on) {
+            var renderContext = this.game._renderContext;
             if (on)
-                cc.glBlendFunc(cc.BLEND_SRC, cc.BLEND_DST);
+                cc.glBlendFunc(renderContext, cc.BLEND_SRC, cc.BLEND_DST);
             else
-                cc.glBlendFunc(cc._renderContext.ONE, cc._renderContext.ZERO);
-            //cc.checkGLErrorDebug();
+                cc.glBlendFunc(renderContext.ONE, renderContext.ZERO);
+            //cc.checkGLErrorDebug(renderContext);
         };
 
         _p.setGLDefaultValues = function () {
@@ -323,7 +324,7 @@ if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
             _t.setProjection(_t._projection);
 
             // set other opengl default values
-            cc._renderContext.clearColor(0.0, 0.0, 0.0, 1.0);
+            this.game._renderContext.clearColor(0.0, 0.0, 0.0, 1.0);
         };
     })();
 }

@@ -69,7 +69,7 @@ switch(cc.sys.browserType){
         break;
     case cc.sys.BROWSER_TYPE_CHROME:
         cc.__BrowserGetter.__defineGetter__("target-densitydpi", function(){
-            return cc.view._targetDensityDPI;
+            return cc.game.view._targetDensityDPI;
         });
     case cc.sys.BROWSER_TYPE_UC:
         cc.__BrowserGetter.availWidth = function(frame){
@@ -157,19 +157,26 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
     _isAdjustViewPort: true,
     _targetDensityDPI: null,
 
+    game: null,
+    canvas: null,
+
     /**
      * Constructor of cc.EGLView
      */
-    ctor: function () {
+    ctor: function (game) {
         var _t = this, d = document, _strategyer = cc.ContainerStrategy, _strategy = cc.ContentStrategy;
+
+        _t.game = game;
+        _t.canvas = game.canvas;
+        _t.container = game.container;
 
         cc.__BrowserGetter.init(this);
 
-        _t._frame = (cc.container.parentNode === d.body) ? d.documentElement : cc.container.parentNode;
+        _t._frame = (game.container.parentNode === d.body) ? d.documentElement : game.container.parentNode;
         _t._frameSize = cc.size(0, 0);
         _t._initFrameSize();
 
-        var w = cc._canvas.width, h = cc._canvas.height;
+        var w = game.canvas.width, h = game.canvas.height;
         _t._designResolutionSize = cc.size(w, h);
         _t._originalDesignResolutionSize = cc.size(w, h);
         _t._viewPortRect = cc.rect(0, 0, w, h);
@@ -188,34 +195,27 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
         _t._rpFixedHeight = new cc.ResolutionPolicy(_strategyer.EQUAL_TO_FRAME, _strategy.FIXED_HEIGHT);
         _t._rpFixedWidth = new cc.ResolutionPolicy(_strategyer.EQUAL_TO_FRAME, _strategy.FIXED_WIDTH);
 
-        _t._hDC = cc._canvas;
-        _t._hRC = cc._renderContext;
+        _t._hDC = game.canvas;
+        _t._hRC = game._renderContext;
         _t._targetDensityDPI = cc.DENSITYDPI_HIGH;
     },
 
     // Resize helper functions
     _resizeEvent: function () {
-        var view;
-        if(this.setDesignResolutionSize){
-            view = this;
-        }else{
-            view = cc.view;
-        }
-
         // Check frame size changed or not
-        var prevFrameW = view._frameSize.width, prevFrameH = view._frameSize.height;
-        view._initFrameSize();
-        if (view._frameSize.width == prevFrameW && view._frameSize.height == prevFrameH)
+        var prevFrameW = this._frameSize.width, prevFrameH = this._frameSize.height;
+        this._initFrameSize();
+        if (this._frameSize.width == prevFrameW && this._frameSize.height == prevFrameH)
             return;
 
         // Frame size changed, do resize works
-        if (view._resizeCallback) {
-            view._resizeCallback.call();
+        if (this._resizeCallback) {
+            this._resizeCallback.call();
         }
-        var width = view._originalDesignResolutionSize.width;
-        var height = view._originalDesignResolutionSize.height;
+        var width = this._originalDesignResolutionSize.width;
+        var height = this._originalDesignResolutionSize.height;
         if (width > 0)
-            view.setDesignResolutionSize(width, height, view._resolutionPolicy);
+            this.setDesignResolutionSize(width, height, this._resolutionPolicy);
     },
 
     /**
@@ -248,19 +248,20 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
      * @param {Boolean} enabled Whether enable automatic resize with browser's resize event
      */
     resizeWithBrowserSize: function (enabled) {
+        var resizeEvent = (this._resizeEvent).bind(this);
         if (enabled) {
             //enable
             if (!this.__resizeWithBrowserSize) {
                 this.__resizeWithBrowserSize = true;
-                cc._addEventListener(window, 'resize', this._resizeEvent);
-                cc._addEventListener(window, 'orientationchange', this._resizeEvent);
+                cc._addEventListener(window, 'resize', resizeEvent);
+                cc._addEventListener(window, 'orientationchange', resizeEvent);
             }
         } else {
             //disable
             if (this.__resizeWithBrowserSize) {
                 this.__resizeWithBrowserSize = false;
-                window.removeEventListener('resize', this._resizeEvent);
-                window.removeEventListener('orientationchange', this._resizeEvent);
+                window.removeEventListener('resize', resizeEvent);
+                window.removeEventListener('orientationchange', resizeEvent);
             }
         }
     },
@@ -423,7 +424,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
     setFrameZoomFactor: function (zoomFactor) {
         this._frameZoomFactor = zoomFactor;
         this.centerWindow();
-        cc.director.setProjection(cc.director.getProjection());
+        this.game.director.setProjection(this.game.director.getProjection());
     },
 
     /**
@@ -479,7 +480,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
         this._frame.style.height = height + "px";
         //this.centerWindow();
         this._resizeEvent();
-        cc.director.setProjection(cc.director.getProjection());
+        this.game.director.setProjection(this.game.director.getProjection());
     },
 
     /**
@@ -603,20 +604,18 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
 
             vb.x = -vp.x / this._scaleX;
             vb.y = -vp.y / this._scaleY;
-            vb.width = cc._canvas.width / this._scaleX;
-            vb.height = cc._canvas.height / this._scaleY;
-            cc._renderContext.setOffset && cc._renderContext.setOffset(vp.x, -vp.y)
+            vb.width = this.canvas.width / this._scaleX;
+            vb.height = this.canvas.height / this._scaleY;
+            this.game._renderContext.setOffset && this.game._renderContext.setOffset(vp.x, -vp.y)
         }
 
         // reset director's member variables to fit visible rect
-        var director = cc.director;
+        var director = this.game.director;
         director._winSizeInPoints.width = this._designResolutionSize.width;
         director._winSizeInPoints.height = this._designResolutionSize.height;
         policy.postApply(this);
-        cc.winSize.width = director._winSizeInPoints.width;
-        cc.winSize.height = director._winSizeInPoints.height;
 
-        if (cc._renderType == cc._RENDER_TYPE_WEBGL) {
+        if (this.game._renderType == cc.Game.RENDER_TYPE_WEBGL) {
             // reset director's member variables to fit visible rect
             director._createStatsLabel();
             director.setGLDefaultValues();
@@ -648,7 +647,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
      */
     setViewPortInPoints: function (x, y, w, h) {
         var locFrameZoomFactor = this._frameZoomFactor, locScaleX = this._scaleX, locScaleY = this._scaleY;
-        cc._renderContext.viewport((x * locScaleX * locFrameZoomFactor + this._viewPortRect.x * locFrameZoomFactor),
+        this.game._renderContext.viewport((x * locScaleX * locFrameZoomFactor + this._viewPortRect.x * locFrameZoomFactor),
             (y * locScaleY * locFrameZoomFactor + this._viewPortRect.y * locFrameZoomFactor),
             (w * locScaleX * locFrameZoomFactor),
             (h * locScaleY * locFrameZoomFactor));
@@ -663,7 +662,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
      */
     setScissorInPoints: function (x, y, w, h) {
         var locFrameZoomFactor = this._frameZoomFactor, locScaleX = this._scaleX, locScaleY = this._scaleY;
-        cc._renderContext.scissor((x * locScaleX * locFrameZoomFactor + this._viewPortRect.x * locFrameZoomFactor),
+        this.game._renderContext.scissor((x * locScaleX * locFrameZoomFactor + this._viewPortRect.x * locFrameZoomFactor),
             (y * locScaleY * locFrameZoomFactor + this._viewPortRect.y * locFrameZoomFactor),
             (w * locScaleX * locFrameZoomFactor),
             (h * locScaleY * locFrameZoomFactor));
@@ -674,7 +673,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
      * @return {Boolean}
      */
     isScissorEnabled: function () {
-        var gl = cc._renderContext;
+        var gl = this.game._renderContext;
         return gl.isEnabled(gl.SCISSOR_TEST);
     },
 
@@ -683,7 +682,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
      * @return {cc.Rect}
      */
     getScissorRect: function () {
-        var gl = cc._renderContext, scaleX = this._scaleX, scaleY = this._scaleY;
+        var gl = this.game._renderContext, scaleX = this._scaleX, scaleY = this._scaleY;
         var boxArr = gl.getParameter(gl.SCISSOR_BOX);
         return cc.rect((boxArr[0] - this._viewPortRect.x) / scaleX, (boxArr[1] - this._viewPortRect.y) / scaleY,
             boxArr[2] / scaleX, boxArr[3] / scaleY);
@@ -771,19 +770,6 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
 });
 
 /**
- * @function
- * @return {cc.EGLView}
- * @private
- */
-cc.EGLView._getInstance = function () {
-    if (!this._instance) {
-        this._instance = this._instance || new cc.EGLView();
-        this._instance.initialize();
-    }
-    return this._instance;
-};
-
-/**
  * <p>cc.ContainerStrategy class is the root strategy class of container's scale strategy,
  * it controls the behavior of how to scale the cc.container and cc._canvas object</p>
  *
@@ -816,12 +802,12 @@ cc.ContainerStrategy = cc.Class.extend(/** @lends cc.ContainerStrategy# */{
 
     _setupContainer: function (view, w, h) {
         var frame = view._frame;
-        if (cc.view._autoFullScreen && cc.sys.isMobile && frame == document.documentElement) {
+        if (view._autoFullScreen && cc.sys.isMobile && frame == document.documentElement) {
             // Automatically full screen when user touches on mobile version
             cc.screen.autoFullScreen(frame);
         }
 
-        var locCanvasElement = cc._canvas, locContainer = cc.container;
+        var locCanvasElement = view.canvas, locContainer = view.container;
         // Setup container
         locContainer.style.width = locCanvasElement.style.width = w + "px";
         locContainer.style.height = locCanvasElement.style.height = h + "px";
@@ -832,7 +818,7 @@ cc.ContainerStrategy = cc.Class.extend(/** @lends cc.ContainerStrategy# */{
         // Setup canvas
         locCanvasElement.width = w * devicePixelRatio;
         locCanvasElement.height = h * devicePixelRatio;
-        cc._renderContext.resetCache && cc._renderContext.resetCache();
+        view.game._renderContext.resetCache && view.game._renderContext.resetCache();
 
         var body = document.body, style;
         if (body && (style = body.style)) {
@@ -851,16 +837,16 @@ cc.ContainerStrategy = cc.Class.extend(/** @lends cc.ContainerStrategy# */{
         }
     },
 
-    _fixContainer: function () {
+    _fixContainer: function (view) {
         // Add container to document body
-        document.body.insertBefore(cc.container, document.body.firstChild);
+        document.body.insertBefore(view.container, document.body.firstChild);
         // Set body's width height to window's size, and forbid overflow, so that game will be centered
         var bs = document.body.style;
         bs.width = window.innerWidth + "px";
         bs.height = window.innerHeight + "px";
         bs.overflow = "hidden";
         // Body size solution doesn't work on all mobile browser so this is the aleternative: fixed container
-        var contStyle = cc.container.style;
+        var contStyle = view.container.style;
         contStyle.position = "fixed";
         contStyle.left = contStyle.top = "0px";
         // Reposition body
@@ -882,7 +868,7 @@ cc.ContentStrategy = cc.Class.extend(/** @lends cc.ContentStrategy# */{
         viewport: null
     },
 
-    _buildResult: function (containerW, containerH, contentW, contentH, scaleX, scaleY) {
+    _buildResult: function (view, containerW, containerH, contentW, contentH, scaleX, scaleY) {
 	    // Makes content fit better the canvas
 	    Math.abs(containerW - contentW) < 2 && (contentW = containerW);
 	    Math.abs(containerH - contentH) < 2 && (contentH = containerH);
@@ -892,9 +878,9 @@ cc.ContentStrategy = cc.Class.extend(/** @lends cc.ContentStrategy# */{
                                contentW, contentH);
 
         // Translate the content
-        if (cc._renderType == cc._RENDER_TYPE_CANVAS){
+        if (view.game._renderType == cc.Game.RENDER_TYPE_CANVAS){
             //TODO: modify something for setTransform
-            //cc._renderContext.translate(viewport.x, viewport.y + contentH);
+            //this.game._renderContext.translate(viewport.x, viewport.y + contentH);
         }
 
         this._result.scale = [scaleX, scaleY];
@@ -948,7 +934,7 @@ cc.ContentStrategy = cc.Class.extend(/** @lends cc.ContentStrategy# */{
      */
     var ProportionalToFrame = cc.ContainerStrategy.extend({
         apply: function (view, designedResolution) {
-            var frameW = view._frameSize.width, frameH = view._frameSize.height, containerStyle = cc.container.style,
+            var frameW = view._frameSize.width, frameH = view._frameSize.height, containerStyle = view.container.style,
                 designW = designedResolution.width, designH = designedResolution.height,
                 scaleX = frameW / designW, scaleY = frameH / designH,
                 containerW, containerH;
@@ -982,7 +968,7 @@ cc.ContentStrategy = cc.Class.extend(/** @lends cc.ContentStrategy# */{
 
         apply: function (view) {
             this._super(view);
-            this._fixContainer();
+            this._fixContainer(view);
         }
     });
 
@@ -998,7 +984,7 @@ cc.ContentStrategy = cc.Class.extend(/** @lends cc.ContentStrategy# */{
 
         apply: function (view, designedResolution) {
             this._super(view, designedResolution);
-            this._fixContainer();
+            this._fixContainer(view);
         }
     });
 
@@ -1008,7 +994,7 @@ cc.ContentStrategy = cc.Class.extend(/** @lends cc.ContentStrategy# */{
      */
     var OriginalContainer = cc.ContainerStrategy.extend({
         apply: function (view) {
-            this._setupContainer(view, cc._canvas.width, cc._canvas.height);
+            this._setupContainer(view, view.canvas.width, view.canvas.height);
         }
     });
 
@@ -1026,16 +1012,16 @@ cc.ContentStrategy = cc.Class.extend(/** @lends cc.ContentStrategy# */{
 // Content scale strategys
     var ExactFit = cc.ContentStrategy.extend({
         apply: function (view, designedResolution) {
-            var containerW = cc._canvas.width, containerH = cc._canvas.height,
+            var containerW = view.canvas.width, containerH = view.canvas.height,
                 scaleX = containerW / designedResolution.width, scaleY = containerH / designedResolution.height;
 
-            return this._buildResult(containerW, containerH, containerW, containerH, scaleX, scaleY);
+            return this._buildResult(view, containerW, containerH, containerW, containerH, scaleX, scaleY);
         }
     });
 
     var ShowAll = cc.ContentStrategy.extend({
         apply: function (view, designedResolution) {
-            var containerW = cc._canvas.width, containerH = cc._canvas.height,
+            var containerW = view.canvas.width, containerH = view.canvas.height,
                 designW = designedResolution.width, designH = designedResolution.height,
                 scaleX = containerW / designW, scaleY = containerH / designH, scale = 0,
                 contentW, contentH;
@@ -1043,13 +1029,13 @@ cc.ContentStrategy = cc.Class.extend(/** @lends cc.ContentStrategy# */{
 	        scaleX < scaleY ? (scale = scaleX, contentW = containerW, contentH = designH * scale)
                 : (scale = scaleY, contentW = designW * scale, contentH = containerH);
 
-            return this._buildResult(containerW, containerH, contentW, contentH, scale, scale);
+            return this._buildResult(view, containerW, containerH, contentW, contentH, scale, scale);
         }
     });
 
     var NoBorder = cc.ContentStrategy.extend({
         apply: function (view, designedResolution) {
-            var containerW = cc._canvas.width, containerH = cc._canvas.height,
+            var containerW = view.canvas.width, containerH = view.canvas.height,
                 designW = designedResolution.width, designH = designedResolution.height,
                 scaleX = containerW / designW, scaleY = containerH / designH, scale,
                 contentW, contentH;
@@ -1057,35 +1043,35 @@ cc.ContentStrategy = cc.Class.extend(/** @lends cc.ContentStrategy# */{
             scaleX < scaleY ? (scale = scaleY, contentW = designW * scale, contentH = containerH)
                 : (scale = scaleX, contentW = containerW, contentH = designH * scale);
 
-            return this._buildResult(containerW, containerH, contentW, contentH, scale, scale);
+            return this._buildResult(view, containerW, containerH, contentW, contentH, scale, scale);
         }
     });
 
     var FixedHeight = cc.ContentStrategy.extend({
         apply: function (view, designedResolution) {
-            var containerW = cc._canvas.width, containerH = cc._canvas.height,
+            var containerW = view.canvas.width, containerH = view.canvas.height,
                 designH = designedResolution.height, scale = containerH / designH,
                 contentW = containerW, contentH = containerH;
 
-            return this._buildResult(containerW, containerH, contentW, contentH, scale, scale);
+            return this._buildResult(view, containerW, containerH, contentW, contentH, scale, scale);
         },
 
         postApply: function (view) {
-            cc.director._winSizeInPoints = view.getVisibleSize();
+            view.game.director._winSizeInPoints = view.getVisibleSize();
         }
     });
 
     var FixedWidth = cc.ContentStrategy.extend({
         apply: function (view, designedResolution) {
-            var containerW = cc._canvas.width, containerH = cc._canvas.height,
+            var containerW = view.canvas.width, containerH = view.canvas.height,
                 designW = designedResolution.width, scale = containerW / designW,
                 contentW = containerW, contentH = containerH;
 
-            return this._buildResult(containerW, containerH, contentW, contentH, scale, scale);
+            return this._buildResult(view, containerW, containerH, contentW, contentH, scale, scale);
         },
 
         postApply: function (view) {
-            cc.director._winSizeInPoints = view.getVisibleSize();
+            view.game.director._winSizeInPoints = view.getVisibleSize();
         }
     });
 
