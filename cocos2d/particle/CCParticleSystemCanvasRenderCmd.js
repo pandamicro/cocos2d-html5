@@ -70,7 +70,7 @@
 
     proto.rendering = function (ctx, scaleX, scaleY) {
         //TODO: need refactor rendering for performance
-        var wrapper = ctx || cc._renderContext, context = wrapper.getContext(),
+        var wrapper = ctx || cc.game._renderContext, context = wrapper.getContext(),
             node = this._node, pointRect = this._pointRect;
 
         wrapper.setTransform(this._worldTransform, scaleX, scaleY);

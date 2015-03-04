@@ -306,7 +306,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
     }
 };
 
-if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
+if (cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS) {
 
     var _p = cc.textureCache;
 

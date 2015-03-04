@@ -41,7 +41,7 @@
 
         this._shaderProgram.use();
         this._shaderProgram._setUniformForMVPMatrixWithMat4(this._stackMatrix);
-        cc.glBlendFuncForParticle(_t._blendFunc.src, _t._blendFunc.dst);
+        cc.glBlendFuncForParticle(ctx, _t._blendFunc.src, _t._blendFunc.dst);
         _t.textureAtlas.drawQuads();
     };
 

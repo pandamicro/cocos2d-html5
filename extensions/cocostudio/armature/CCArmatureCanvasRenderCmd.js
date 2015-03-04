@@ -59,7 +59,7 @@
         var node = this._node, parent = node._parent;
         this.transform(parent ? parent._renderCmd : null);
 
-        var wrapper = ctx || cc._renderContext;
+        var wrapper = ctx || cc.game._renderContext;
         wrapper.save();
 
         //set to armature mode

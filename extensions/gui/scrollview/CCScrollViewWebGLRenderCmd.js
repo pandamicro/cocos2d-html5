@@ -51,7 +51,7 @@
                 EGLViewer.setScissorInPoints(x, y, xx - x, yy - y);
             }
         }else{
-            var ctx = cc._renderContext;
+            var ctx = cc.game._renderContext;
             ctx.enable(ctx.SCISSOR_TEST);
             //clip
             EGLViewer.setScissorInPoints(frame.x, frame.y, frame.width, frame.height);
@@ -64,7 +64,7 @@
             var rect = node._parentScissorRect;
             cc.view.setScissorInPoints(rect.x, rect.y, rect.width, rect.height)
         }else{
-            var ctx = cc._renderContext;
+            var ctx = cc.game._renderContext;
             ctx.disable(ctx.SCISSOR_TEST);
         }
     };

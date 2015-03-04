@@ -98,12 +98,12 @@
         if (!node._textureLoaded)
             return;
 
-        var gl = ctx || cc._renderContext, locTexture = node._texture;
+        var gl = ctx || cc.game._renderContext, locTexture = node._texture;
         if (locTexture && locTexture._textureLoaded) {
             this._shaderProgram.use();
             this._shaderProgram.setUniformForModelViewAndProjectionMatrixWithMat4();
 
-            cc.glBlendFunc(node._blendFunc.src, node._blendFunc.dst);
+            cc.glBlendFunc(ctx, node._blendFunc.src, node._blendFunc.dst);
             //optimize performance for javascript
             cc.glBindTexture2DN(0, locTexture);                   // = cc.glBindTexture2D(locTexture);
             cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);

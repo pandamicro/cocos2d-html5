@@ -36,7 +36,7 @@
 
     proto._startCmd = function(ctx, scaleX, scaleY){
         var node = this._node;
-        var wrapper = ctx || cc._renderContext, context = wrapper.getContext();
+        var wrapper = ctx || cc.game._renderContext, context = wrapper.getContext();
         wrapper.save();
 
         if (node._clippingToBounds) {
@@ -56,7 +56,7 @@
     };
 
     proto._endCmd = function(wrapper){
-        wrapper = wrapper || cc._renderContext;
+        wrapper = wrapper || cc.game._renderContext;
         wrapper.restore();
     };
 

@@ -45,7 +45,7 @@
 })();
 
 (function(){
-    if(cc._renderType !== cc._RENDER_TYPE_WEBGL)
+    if(cc.game.renderType !== cc.Game.RENDER_TYPE_WEBGL)
         return;
 
     cc.ParallaxNode.WebGLRenderCmd = function(renderable){

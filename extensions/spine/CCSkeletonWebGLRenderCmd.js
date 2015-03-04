@@ -36,7 +36,7 @@
         var node = this._node;
         this._shaderProgram.use();
         this._shaderProgram._setUniformForMVPMatrixWithMat4(this._stackMatrix);
-//        cc.glBlendFunc(this._blendFunc.src, this._blendFunc.dst);
+//        cc.glBlendFunc(ctx, this._blendFunc.src, this._blendFunc.dst);
         var color = node.getColor(), locSkeleton = node._skeleton;
         locSkeleton.r = color.r / 255;
         locSkeleton.g = color.g / 255;
@@ -65,7 +65,7 @@
                     textureAtlas.removeAllQuads();
                 }
                 additive = !additive;
-                cc.glBlendFunc(locBlendFunc.src, additive ? cc.ONE : locBlendFunc.dst);
+                cc.glBlendFunc(ctx, locBlendFunc.src, additive ? cc.ONE : locBlendFunc.dst);
             } else if (regionTextureAtlas != textureAtlas && textureAtlas) {
                 textureAtlas.drawQuads();
                 textureAtlas.removeAllQuads();

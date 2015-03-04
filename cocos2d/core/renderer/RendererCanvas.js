@@ -22,7 +22,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-//if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
+//if (cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS) {
 cc.rendererCanvas = {
     childrenOrderDirty: true,
     _transformNodePool: [],                              //save nodes transform dirty
@@ -44,9 +44,9 @@ cc.rendererCanvas = {
      */
     rendering: function (ctx) {
         var locCmds = this._renderCmds, i, len,
-            scaleX = cc.view.getScaleX(),
-            scaleY = cc.view.getScaleY();
-        var context = ctx || cc._renderContext;
+            scaleX = cc.game.view.getScaleX(),
+            scaleY = cc.game.view.getScaleY();
+        var context = ctx || cc.game._renderContext;
         context.computeRealOffsetY();
         for (i = 0, len = locCmds.length; i < len; i++) {
             locCmds[i].rendering(context, scaleX, scaleY);
@@ -144,7 +144,7 @@ cc.rendererCanvas = {
     }
 };
 
-if (cc._renderType === cc._RENDER_TYPE_CANVAS)
+if (cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
     cc.renderer = cc.rendererCanvas;
 
 (function () {

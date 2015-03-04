@@ -120,7 +120,7 @@
             || !node._texture._textureLoaded)) || alpha === 0)
             return;
 
-        var wrapper = ctx || cc._renderContext, context = wrapper.getContext();
+        var wrapper = ctx || cc.game._renderContext, context = wrapper.getContext();
         var locX = node._offsetPosition.x, locHeight = node._rect.height, locWidth = node._rect.width,
             locY = -node._offsetPosition.y - locHeight, image;
 

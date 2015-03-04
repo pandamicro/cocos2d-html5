@@ -178,7 +178,7 @@
     };
 
     proto.rendering = function (ctx, scaleX, scaleY) {
-        var wrapper = ctx || cc._renderContext, context = wrapper.getContext(),
+        var wrapper = ctx || cc.game._renderContext, context = wrapper.getContext(),
             node = this._node,
             curColor = this._displayedColor,
             opacity = this._displayedOpacity / 255,
@@ -338,7 +338,7 @@
     proto.constructor = cc.LayerGradient.CanvasRenderCmd;
 
     proto.rendering = function (ctx, scaleX, scaleY) {
-        var wrapper = ctx || cc._renderContext, context = wrapper.getContext(),
+        var wrapper = ctx || cc.game._renderContext, context = wrapper.getContext(),
             node = this._node,
             opacity = this._displayedOpacity / 255;
 

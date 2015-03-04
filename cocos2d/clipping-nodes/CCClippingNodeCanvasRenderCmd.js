@@ -57,9 +57,10 @@
             }
 
             stencil._renderCmd.rendering = function (ctx, scaleX, scaleY) {
-                scaleX = scaleX || cc.view.getScaleX();
-                scaleY = scaleY ||cc.view.getScaleY();
-                var wrapper = ctx || cc._renderContext, context = wrapper.getContext();
+                var game = cc.game;
+                scaleX = scaleX || game.view.getScaleX();
+                scaleY = scaleY || game.view.getScaleY();
+                var wrapper = ctx || game._renderContext, context = wrapper.getContext();
                 var t = this._transform;                                              //note: use local transform
                 wrapper.save();
                 context.transform(t.a, t.b, t.c, t.d, t.tx * scaleX, -t.ty * scaleY);
@@ -83,7 +84,7 @@
     };
 
     proto._saveCmdCallback  = function(ctx, scaleX, scaleY) {
-        var wrapper = ctx || cc._renderContext, context = wrapper.getContext();
+        var wrapper = ctx || cc.game._renderContext, context = wrapper.getContext();
 
         if (this._clipElemType) {
             var locCache = cc.ClippingNode.CanvasRenderCmd._getSharedCache();
@@ -117,7 +118,7 @@
 
     proto._clipCmdCallback = function(ctx) {
         var node = this._node;
-        var wrapper = ctx || cc._renderContext, context = wrapper.getContext();
+        var wrapper = ctx || cc.game._renderContext, context = wrapper.getContext();
 
         if (this._clipElemType) {
             //hack
@@ -144,7 +145,7 @@
 
     proto._restoreCmdCallback = function (ctx) {
         var locCache = cc.ClippingNode.CanvasRenderCmd._getSharedCache();
-        var wrapper = ctx || cc._renderContext, context = wrapper.getContext();
+        var wrapper = ctx || cc.game._renderContext, context = wrapper.getContext();
         if (this._clipElemType) {
             // Redraw the cached canvas, so that the clipped area shows the background etc.
             context.save();

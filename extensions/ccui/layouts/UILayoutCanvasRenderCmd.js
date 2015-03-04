@@ -62,7 +62,7 @@
     };
 
     proto._onRenderSaveCmd = function(ctx, scaleX, scaleY){
-        var wrapper = ctx || cc._renderContext, context = wrapper.getContext();
+        var wrapper = ctx || cc.game._renderContext, context = wrapper.getContext();
         if (this._clipElemType) {
             var canvas = context.canvas;
             this._locCache = ccui.Layout.CanvasRenderCmd._getSharedCache();
@@ -78,7 +78,7 @@
     };
 
     proto._onRenderSaveSpriteCmd = function(ctx){
-        var wrapper = ctx || cc._renderContext;
+        var wrapper = ctx || cc.game._renderContext;
         //var node = this._node;
         if (this._clipElemType) {
             wrapper.setCompositeOperation("destination-in");
@@ -86,7 +86,7 @@
     };
 
     proto._onRenderClipCmd = function(ctx){
-        var wrapper = ctx || cc._renderContext, context = wrapper.getContext();
+        var wrapper = ctx || cc.game._renderContext, context = wrapper.getContext();
         if (!this._clipElemType) {
             wrapper.restore();
             context.clip();
@@ -94,7 +94,7 @@
     };
 
     proto._onRenderRestoreCmd = function(ctx){
-        var wrapper = ctx || cc._renderContext, context = wrapper.getContext();
+        var wrapper = ctx || cc.game._renderContext, context = wrapper.getContext();
 
         if (this._clipElemType) {
             // Redraw the cached canvas, so that the cliped area shows the background etc.
@@ -113,7 +113,7 @@
     };
 
     proto.__stencilDraw = function(ctx,scaleX, scaleY){          //Only for Canvas
-        var wrapper = ctx || cc._renderContext, locContext = wrapper.getContext(), buffer = this._buffer;
+        var wrapper = ctx || cc.game._renderContext, locContext = wrapper.getContext(), buffer = this._buffer;
 
         for (var i = 0, bufLen = buffer.length; i < bufLen; i++) {
             var element = buffer[i], vertices = element.verts;

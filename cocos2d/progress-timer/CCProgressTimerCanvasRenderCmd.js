@@ -43,7 +43,7 @@
     proto.constructor = cc.ProgressTimer.CanvasRenderCmd;
 
     proto.rendering = function (ctx, scaleX, scaleY) {
-        var wrapper = ctx || cc._renderContext,context = wrapper.getContext(), node = this._node, locSprite = node._sprite;
+        var wrapper = ctx || cc.game._renderContext,context = wrapper.getContext(), node = this._node, locSprite = node._sprite;
         var locTextureCoord = locSprite._renderCmd._textureCoord, alpha = locSprite._renderCmd._displayedOpacity / 255;
 
         if (locTextureCoord.width === 0 || locTextureCoord.height === 0)

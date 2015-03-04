@@ -55,7 +55,8 @@
         // get (only once) the number of bits of the stencil buffer
         cc.ClippingNode.WebGLRenderCmd._init_once = true;
         if (cc.ClippingNode.WebGLRenderCmd._init_once) {
-            cc.stencilBits = cc._renderContext.getParameter(cc._renderContext.STENCIL_BITS);
+            var renderContext = cc.game._renderContext;
+            cc.stencilBits = renderContext.getParameter(renderContext.STENCIL_BITS);
             if (cc.stencilBits <= 0)
                 cc.log("Stencil buffer is not enabled.");
             cc.ClippingNode.WebGLRenderCmd._init_once = false;
@@ -158,7 +159,7 @@
     };
 
     proto._onBeforeVisit = function(ctx){
-        var gl = ctx || cc._renderContext, node = this._node;
+        var gl = ctx || cc.game._renderContext, node = this._node;
         cc.ClippingNode.WebGLRenderCmd._layer++;
 
         // mask of the current layer (ie: for layer 3: 00000100)
@@ -197,14 +198,14 @@
             var program = cc.shaderCache.programForKey(cc.SHADER_POSITION_TEXTURECOLORALPHATEST);
             var alphaValueLocation = gl.getUniformLocation(program.getProgram(), cc.UNIFORM_ALPHA_TEST_VALUE_S);
             // set our alphaThreshold
-            cc.glUseProgram(program.getProgram());
+            cc.glUseProgram(ctx, program.getProgram());
             program.setUniformLocationWith1f(alphaValueLocation, node.alphaThreshold);
             cc.setProgram(node._stencil, program);
         }
     };
 
     proto._onAfterDrawStencil = function(ctx){
-        var gl = ctx || cc._renderContext;
+        var gl = ctx || cc.game._renderContext;
         gl.depthMask(this._currentDepthWriteMask);
 
         gl.stencilFunc(gl.EQUAL, this._mask_layer_le, this._mask_layer_le);
@@ -212,7 +213,7 @@
     };
 
     proto._onAfterVisit = function(ctx){
-        var gl = ctx || cc._renderContext;
+        var gl = ctx || cc.game._renderContext;
 
         gl.stencilFunc(this._currentStencilFunc, this._currentStencilRef, this._currentStencilValueMask);
         gl.stencilOp(this._currentStencilFail, this._currentStencilPassDepthFail, this._currentStencilPassDepthPass);

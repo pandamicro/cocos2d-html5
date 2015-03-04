@@ -29,7 +29,7 @@
         this._needDraw = true;
 
         this._quad = new cc.V3F_C4B_T2F_Quad();
-        this._quadWebBuffer = cc._renderContext.createBuffer();
+        this._quadWebBuffer = cc.game._renderContext.createBuffer();
         this._quadDirty = true;
         this._dirty = false;
         this._recursiveDirty = false;
@@ -419,7 +419,7 @@
         if ((locTexture &&!locTexture._textureLoaded) || this._displayedOpacity === 0)
             return;
 
-        var gl = ctx || cc._renderContext ;
+        var gl = ctx || cc.game._renderContext ;
         //cc.assert(!_t._batchNode, "If cc.Sprite is being rendered by cc.SpriteBatchNode, cc.Sprite#draw SHOULD NOT be called");
 
         if (locTexture) {
@@ -427,7 +427,7 @@
                 this._shaderProgram.use();
                 this._shaderProgram._setUniformForMVPMatrixWithMat4(this._stackMatrix);
 
-                cc.glBlendFunc(node._blendFunc.src, node._blendFunc.dst);
+                cc.glBlendFunc(gl, node._blendFunc.src, node._blendFunc.dst);
                 //optimize performance for javascript
                 cc.glBindTexture2DN(0, locTexture);                   // = cc.glBindTexture2D(locTexture);
                 cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
@@ -446,7 +446,7 @@
             this._shaderProgram.use();
             this._shaderProgram._setUniformForMVPMatrixWithMat4(this._stackMatrix);
 
-            cc.glBlendFunc(node._blendFunc.src, node._blendFunc.dst);
+            cc.glBlendFunc(gl, node._blendFunc.src, node._blendFunc.dst);
             cc.glBindTexture2D(null);
 
             cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_COLOR);

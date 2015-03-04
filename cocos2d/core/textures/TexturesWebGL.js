@@ -83,7 +83,7 @@ cc._tmp.WebGLTexture2D = function () {
          */
         releaseTexture: function () {
             if (this._webTextureObj)
-                cc._renderContext.deleteTexture(this._webTextureObj);
+                cc.game._renderContext.deleteTexture(this._webTextureObj);
             cc.loader.release(this.url);
         },
 
@@ -240,7 +240,7 @@ cc._tmp.WebGLTexture2D = function () {
          */
         initWithData: function (data, pixelFormat, pixelsWide, pixelsHigh, contentSize) {
             var self = this, tex2d = cc.Texture2D;
-            var gl = cc._renderContext;
+            var gl = cc.game._renderContext;
             var format = gl.RGBA, type = gl.UNSIGNED_BYTE;
 
             var bitsPerPixel = cc.Texture2D._B[pixelFormat];
@@ -345,7 +345,7 @@ cc._tmp.WebGLTexture2D = function () {
 
             cc.glBindTexture2D(self);
 
-            var gl = cc._renderContext;
+            var gl = cc.game._renderContext;
             gl.vertexAttribPointer(cc.VERTEX_ATTRIB_POSITION, 2, gl.FLOAT, false, 0, vertices);
             gl.vertexAttribPointer(cc.VERTEX_ATTRIB_TEX_COORDS, 2, gl.FLOAT, false, 0, coordinates);
 
@@ -375,7 +375,7 @@ cc._tmp.WebGLTexture2D = function () {
 
             cc.glBindTexture2D(self);
 
-            var gl = cc._renderContext;
+            var gl = cc.game._renderContext;
             gl.vertexAttribPointer(cc.VERTEX_ATTRIB_POSITION, 2, gl.FLOAT, false, 0, vertices);
             gl.vertexAttribPointer(cc.VERTEX_ATTRIB_TEX_COORDS, 2, gl.FLOAT, false, 0, coordinates);
 
@@ -419,7 +419,7 @@ cc._tmp.WebGLTexture2D = function () {
         initWithElement: function (element) {
             if (!element)
                 return;
-            this._webTextureObj = cc._renderContext.createTexture();
+            this._webTextureObj = cc.game._renderContext.createTexture();
             this._htmlElementObj = element;
             this._textureLoaded = true;
         },
@@ -446,7 +446,7 @@ cc._tmp.WebGLTexture2D = function () {
         handleLoadedTexture: function () {
             var self = this;
             // Not sure about this ! Some texture need to be updated even after loaded
-            if (!cc._rendererInitialized)
+            if (!cc.game._rendererInitialized)
                 return;
             if (!self._htmlElementObj) {
                 var img = cc.loader.getRes(self.url);
@@ -457,7 +457,7 @@ cc._tmp.WebGLTexture2D = function () {
                 return;
 
             //upload image to buffer
-            var gl = cc._renderContext;
+            var gl = cc.game._renderContext;
 
             cc.glBindTexture2D(self);
 
@@ -560,7 +560,7 @@ cc._tmp.WebGLTexture2D = function () {
          */
         setTexParameters: function (texParams, magFilter, wrapS, wrapT) {
             var _t = this;
-            var gl = cc._renderContext;
+            var gl = cc.game._renderContext;
 
             if(magFilter !== undefined)
                 texParams = {minFilter: texParams, magFilter: magFilter, wrapS: wrapS, wrapT: wrapT};
@@ -582,7 +582,7 @@ cc._tmp.WebGLTexture2D = function () {
          *  - GL_TEXTURE_MAG_FILTER = GL_NEAREST
          */
         setAntiAliasTexParameters: function () {
-            var gl = cc._renderContext;
+            var gl = cc.game._renderContext;
 
             cc.glBindTexture2D(this);
             if (!this._hasMipmaps)
@@ -598,7 +598,7 @@ cc._tmp.WebGLTexture2D = function () {
          *   GL_TEXTURE_MAG_FILTER = GL_NEAREST
          */
         setAliasTexParameters: function () {
-            var gl = cc._renderContext;
+            var gl = cc.game._renderContext;
 
             cc.glBindTexture2D(this);
             if (!this._hasMipmaps)
@@ -617,7 +617,7 @@ cc._tmp.WebGLTexture2D = function () {
             cc.assert(_t._pixelsWide == cc.NextPOT(_t._pixelsWide) && _t._pixelsHigh == cc.NextPOT(_t._pixelsHigh), "Mimpap texture only works in POT textures");
 
             cc.glBindTexture2D(_t);
-            cc._renderContext.generateMipmap(cc._renderContext.TEXTURE_2D);
+            cc.game._renderContext.generateMipmap(cc.game._renderContext.TEXTURE_2D);
             _t._hasMipmaps = true;
         },
 
@@ -769,7 +769,7 @@ cc._tmp.WebGLTextureAtlas = function () {
     var _p = cc.TextureAtlas.prototype;
     _p._setupVBO = function () {
         var _t = this;
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
         //create WebGLBuffer
         _t._buffersVBO[0] = gl.createBuffer();
         _t._buffersVBO[1] = gl.createBuffer();
@@ -780,7 +780,7 @@ cc._tmp.WebGLTextureAtlas = function () {
 
     _p._mapBuffers = function () {
         var _t = this;
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
 
         gl.bindBuffer(gl.ARRAY_BUFFER, _t._quadsWebBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, _t._quadsArrayBuffer, gl.DYNAMIC_DRAW);
@@ -788,7 +788,7 @@ cc._tmp.WebGLTextureAtlas = function () {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, _t._buffersVBO[1]);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, _t._indices, gl.STATIC_DRAW);
 
-        //cc.checkGLErrorDebug();
+        //cc.checkGLErrorDebug(gl);
     };
 
     /**
@@ -803,7 +803,7 @@ cc._tmp.WebGLTextureAtlas = function () {
         if (0 === n || !_t.texture || !_t.texture.isLoaded())
             return;
 
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
         cc.glBindTexture2D(_t.texture);
 
         //
@@ -832,7 +832,7 @@ cc._tmp.WebGLTextureAtlas = function () {
             gl.drawElements(gl.TRIANGLES, n * 6, gl.UNSIGNED_SHORT, start * 6 * _t._indices.BYTES_PER_ELEMENT);
 
         cc.g_NumberOfDraws++;
-        //cc.checkGLErrorDebug();
+        //cc.checkGLErrorDebug(gl);
     };
 };
 
@@ -842,7 +842,7 @@ cc._tmp.WebGLTextureCache = function () {
     _p.handleLoadedTexture = function (url) {
         var locTexs = this._textures;
         //remove judge(webgl)
-        if (!cc._rendererInitialized) {
+        if (!cc.game._rendererInitialized) {
             locTexs = this._loadedTexturesBefore;
         }
         var tex = locTexs[url];
@@ -872,7 +872,7 @@ cc._tmp.WebGLTextureCache = function () {
 
         var locTexs = this._textures;
         //remove judge(webgl)
-        if (!cc._rendererInitialized) {
+        if (!cc.game._rendererInitialized) {
             locTexs = this._loadedTexturesBefore;
         }
         var tex = locTexs[url] || locTexs[cc.loader._aliases[url]];

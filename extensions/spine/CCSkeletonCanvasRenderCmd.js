@@ -35,7 +35,7 @@
 
     proto.rendering = function (wrapper, scaleX, scaleY) {
         var node = this._node, i, n, sprites = this._skeletonSprites, selSpriteCmd;
-        wrapper = wrapper || cc._renderContext;
+        wrapper = wrapper || cc.game._renderContext;
 
         //draw skeleton sprite by it self
         wrapper.save();

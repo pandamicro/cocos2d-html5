@@ -29,7 +29,7 @@
         this._realWorldTransform = {a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0};
         this._childrenRenderCmds = [];
 
-        var locCanvas = cc._canvas;
+        var locCanvas = cc.game.canvas;
         var tmpCanvas = cc.newElement('canvas');
         tmpCanvas.width = locCanvas.width;
         tmpCanvas.height = locCanvas.height;
@@ -88,7 +88,7 @@
 
         var node = this._node;
         this._renderingChildToCache(scaleX, scaleY);
-        var wrapper = ctx || cc._renderContext, context = wrapper.getContext();
+        var wrapper = ctx || cc.game._renderContext, context = wrapper.getContext();
         wrapper.setGlobalAlpha(alpha);
 
         var posX = 0 | ( -this._anchorPointInPoints.x), posY = 0 | ( -this._anchorPointInPoints.y);

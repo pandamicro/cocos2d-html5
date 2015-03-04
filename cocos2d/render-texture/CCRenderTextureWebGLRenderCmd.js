@@ -49,7 +49,7 @@
     };
 
     proto.rendering = function (ctx) {
-        var gl = ctx || cc._renderContext;
+        var gl = ctx || cc.game._renderContext;
         var node = this._node;
         if (node.autoDraw) {
             node.begin();
@@ -104,7 +104,7 @@
     };
 
     proto.clearStencil = function(stencilValue) {
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
         // save old stencil value
         var stencilClearValue = gl.getParameter(gl.STENCIL_CLEAR_VALUE);
 
@@ -120,7 +120,7 @@
         //node.sprite = null;
         this._textureCopy = null;
 
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
         gl.deleteFramebuffer(this._fBO);
         if (this._depthRenderBuffer)
             gl.deleteRenderbuffer(this._depthRenderBuffer);
@@ -133,7 +133,7 @@
         if(format == cc.Texture2D.PIXEL_FORMAT_A8)
             cc.log( "cc.RenderTexture._initWithWidthAndHeightForWebGL() : only RGB and RGBA formats are valid for a render texture;");
 
-        var gl = cc._renderContext, locScaleFactor = cc.contentScaleFactor();
+        var gl = cc.game._renderContext, locScaleFactor = cc.contentScaleFactor();
         this._fullRect = new cc.Rect(0,0, width, height);
         this._fullViewport = new cc.Rect(0,0, width, height);
 
@@ -227,7 +227,7 @@
         cc.kmGLMatrixMode(cc.KM_GL_MODELVIEW);
         cc.kmGLPushMatrix();
 
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
 
         var director = cc.director;
         director.setProjection(director.getProjection());
@@ -265,7 +265,7 @@
         if (cc.configuration.checkForGLExtension("GL_QCOM")) {
             // -- bind a temporary texture so we can clear the render buffer without losing our texture
             gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this._textureCopy._webTextureObj, 0);
-            //cc.checkGLErrorDebug();
+            //cc.checkGLErrorDebug(gl);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
             gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, node._texture._webTextureObj, 0);
         }
@@ -277,7 +277,7 @@
         b = b / 255;
         a = a / 255;
 
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
 
         // save clear color
         var clearColor = [0.0, 0.0, 0.0, 0.0];
@@ -316,7 +316,7 @@
         var node = this._node;
         cc.renderer._renderingToBuffer(node.__instanceId);
 
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
         var director = cc.director;
         gl.bindFramebuffer(gl.FRAMEBUFFER, this._oldFBO);
 
@@ -348,7 +348,7 @@
         var node = this._node;
         node.begin();
 
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
         //! save old depth value
         var depthClearValue = gl.getParameter(gl.DEPTH_CLEAR_VALUE);
 

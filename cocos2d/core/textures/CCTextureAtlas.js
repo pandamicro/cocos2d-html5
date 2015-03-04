@@ -199,7 +199,7 @@ cc.TextureAtlas = cc.Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     },
 
     _setupVBO: function () {
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
         //create WebGLBuffer
         this._buffersVBO[0] = gl.createBuffer();
         this._buffersVBO[1] = gl.createBuffer();
@@ -209,7 +209,7 @@ cc.TextureAtlas = cc.Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     },
 
     _mapBuffers: function () {
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this._quadsWebBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, this._quadsArrayBuffer, gl.DYNAMIC_DRAW);
@@ -599,7 +599,7 @@ cc.TextureAtlas = cc.Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     },
 
     _releaseBuffer: function () {
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
         if (this._buffersVBO) {
             if (this._buffersVBO[0])
                 gl.deleteBuffer(this._buffersVBO[0]);
@@ -642,7 +642,7 @@ cc.TextureAtlas.create = function (fileName, capacity) {
  */
 cc.TextureAtlas.createWithTexture = cc.TextureAtlas.create;
 
-if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
+if (cc.game.renderType === cc.Game.RENDER_TYPE_WEBGL) {
     cc.assert(cc.isFunction(cc._tmp.WebGLTextureAtlas), cc._LogInfos.MissingFile, "TexturesWebGL.js");
     cc._tmp.WebGLTextureAtlas();
     delete cc._tmp.WebGLTextureAtlas;

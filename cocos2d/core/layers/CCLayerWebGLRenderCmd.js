@@ -69,20 +69,20 @@
             cc.color(0, 0, 0, 255, locSquareColorsAB, locColorLen),
             cc.color(0, 0, 0, 255, locSquareColorsAB, locColorLen * 2),
             cc.color(0, 0, 0, 255, locSquareColorsAB, locColorLen * 3)];
-        _t._verticesFloat32Buffer = cc._renderContext.createBuffer();
-        _t._colorsUint8Buffer = cc._renderContext.createBuffer();
+        _t._verticesFloat32Buffer = cc.game._renderContext.createBuffer();
+        _t._colorsUint8Buffer = cc.game._renderContext.createBuffer();
     };
     var proto = cc.LayerColor.WebGLRenderCmd.prototype = Object.create(cc.Layer.WebGLRenderCmd.prototype);
     proto.constructor = cc.LayerColor.WebGLRenderCmd;
 
     cc.LayerColor.WebGLRenderCmd.prototype.rendering = function (ctx) {
-        var context = ctx || cc._renderContext;
+        var context = ctx || cc.game._renderContext;
         var node = this._node;
 
         this._shaderProgram.use();
         this._shaderProgram._setUniformForMVPMatrixWithMat4(this._stackMatrix);
         cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_COLOR);
-        cc.glBlendFunc(node._blendFunc.src, node._blendFunc.dst);
+        cc.glBlendFunc(ctx, node._blendFunc.src, node._blendFunc.dst);
 
         //
         // Attributes
@@ -139,13 +139,13 @@
     };
 
     proto._bindLayerVerticesBufferData = function(){
-        var glContext = cc._renderContext;
+        var glContext = cc.game._renderContext;
         glContext.bindBuffer(glContext.ARRAY_BUFFER, this._verticesFloat32Buffer);
         glContext.bufferData(glContext.ARRAY_BUFFER, this._squareVerticesAB, glContext.STATIC_DRAW);
     };
 
     proto._bindLayerColorsBufferData = function(){
-        var glContext = cc._renderContext;
+        var glContext = cc.game._renderContext;
         glContext.bindBuffer(glContext.ARRAY_BUFFER, this._colorsUint8Buffer);
         glContext.bufferData(glContext.ARRAY_BUFFER, this._squareColorsAB, glContext.STATIC_DRAW);
     };

@@ -30,7 +30,7 @@
         cc.Node.WebGLRenderCmd.call(this, renderableObject);
         this._needDraw = true;
 
-        this._vertexWebGLBuffer = cc._renderContext.createBuffer();
+        this._vertexWebGLBuffer = cc.game._renderContext.createBuffer();
         this._vertexDataCount = 0;
         this._vertexData = null;
         this._vertexArrayBuffer = null;
@@ -42,7 +42,7 @@
 
     proto.rendering = function (ctx) {
         var node = this._node;
-        var context = ctx || cc._renderContext;
+        var context = ctx || cc.game._renderContext;
         if (!this._vertexData || !node._sprite)
             return;
 
@@ -50,7 +50,7 @@
         this._shaderProgram._setUniformForMVPMatrixWithMat4(this._stackMatrix);
 
         var blendFunc = node._sprite._blendFunc;
-        cc.glBlendFunc(blendFunc.src, blendFunc.dst);
+        cc.glBlendFunc(ctx, blendFunc.src, blendFunc.dst);
         cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
 
         cc.glBindTexture2D(node._sprite.texture);

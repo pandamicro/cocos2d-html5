@@ -45,7 +45,7 @@ cc.rendererWebGL = {
         var locCmds = this._renderCmds,
             i,
             len;
-        var context = ctx || cc._renderContext;
+        var context = ctx || cc.game._renderContext;
         for (i = 0, len = locCmds.length; i < len; i++) {
             locCmds[i].rendering(context);
         }
@@ -70,7 +70,7 @@ cc.rendererWebGL = {
     _renderingToBuffer: function (renderTextureId) {
         renderTextureId = renderTextureId || this._currentID;
         var locCmds = this._cacheToBufferCmds[renderTextureId], i, len;
-        var ctx = cc._renderContext, locIDs = this._cacheInstanceIds;
+        var ctx = cc.game._renderContext, locIDs = this._cacheInstanceIds;
         for (i = 0, len = locCmds.length; i < len; i++) {
             locCmds[i].rendering(ctx);
         }
@@ -133,5 +133,5 @@ cc.rendererWebGL = {
         }
     }
 };
-if (cc._renderType === cc._RENDER_TYPE_WEBGL)
+if (cc.game.renderType === cc.Game.RENDER_TYPE_WEBGL)
     cc.renderer = cc.rendererWebGL;

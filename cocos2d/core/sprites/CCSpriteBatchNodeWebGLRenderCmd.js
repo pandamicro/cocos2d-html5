@@ -46,7 +46,7 @@
         return true;
     };
 
-    proto.rendering = function () {
+    proto.rendering = function (ctx) {
         var node = this._node;
         if (this._textureAtlas.totalQuads === 0)
             return;
@@ -54,7 +54,7 @@
         this._shaderProgram.use();
         this._shaderProgram._setUniformForMVPMatrixWithMat4(this._stackMatrix);
         node._arrayMakeObjectsPerformSelector(node._children, cc.Node._stateCallbackType.updateTransform);
-        cc.glBlendFunc(node._blendFunc.src, node._blendFunc.dst);
+        cc.glBlendFunc(ctx, node._blendFunc.src, node._blendFunc.dst);
 
         this._textureAtlas.drawQuads();
     };

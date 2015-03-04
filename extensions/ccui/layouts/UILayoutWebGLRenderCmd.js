@@ -73,7 +73,7 @@
     };
 
     proto._onBeforeVisitStencil = function(ctx){
-        var gl = ctx || cc._renderContext;
+        var gl = ctx || cc.game._renderContext;
 
         ccui.Layout.WebGLRenderCmd._layer++;
 
@@ -110,14 +110,14 @@
     };
 
     proto._onAfterDrawStencil = function(ctx){
-        var gl = ctx || cc._renderContext;
+        var gl = ctx || cc.game._renderContext;
         gl.depthMask(this._currentDepthWriteMask);
         gl.stencilFunc(gl.EQUAL, this._mask_layer_le, this._mask_layer_le);
         gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
     };
 
     proto._onAfterVisitStencil = function(ctx){
-        var gl = ctx || cc._renderContext;
+        var gl = ctx || cc.game._renderContext;
         // manually restore the stencil state
         gl.stencilFunc(this._currentStencilFunc, this._currentStencilRef, this._currentStencilValueMask);
         gl.stencilOp(this._currentStencilFail, this._currentStencilPassDepthFail, this._currentStencilPassDepthPass);
@@ -129,14 +129,14 @@
 
     proto._onBeforeVisitScissor = function(ctx){
         var clippingRect = this._getClippingRect();
-        var gl = ctx || cc._renderContext;
+        var gl = ctx || cc.game._renderContext;
         gl.enable(gl.SCISSOR_TEST);
 
         cc.view.setScissorInPoints(clippingRect.x, clippingRect.y, clippingRect.width, clippingRect.height);
     };
 
     proto._onAfterVisitScissor = function(ctx){
-        var gl = ctx || cc._renderContext;
+        var gl = ctx || cc.game._renderContext;
         gl.disable(gl.SCISSOR_TEST);
     };
 

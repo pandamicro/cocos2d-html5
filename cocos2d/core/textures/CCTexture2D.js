@@ -96,7 +96,7 @@ cc.PVRHaveAlphaPremultiplied_ = false;
 
 //cc.Texture2DWebGL move to TextureWebGL.js
 
-if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
+if (cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS) {
 
     /**
      * <p>

@@ -68,7 +68,7 @@
                 node._batchNode.textureAtlas._copyQuadsToTextureAtlas(this._quads, node.atlasIndex);
 
                 //delete buffer
-                cc._renderContext.deleteBuffer(this._buffersVBO[1]);     //where is re-bindBuffer code?
+                cc.game._renderContext.deleteBuffer(this._buffersVBO[1]);     //where is re-bindBuffer code?
             }
         }
     };
@@ -185,13 +185,13 @@
         if (!node._texture)
             return;
 
-        var gl = ctx || cc._renderContext;
+        var gl = ctx || cc.game._renderContext;
 
         this._shaderProgram.use();
         this._shaderProgram._setUniformForMVPMatrixWithMat4(this._stackMatrix);     //;
 
         cc.glBindTexture2D(node._texture);
-        cc.glBlendFuncForParticle(node._blendFunc.src, node._blendFunc.dst);
+        cc.glBlendFuncForParticle(ctx, node._blendFunc.src, node._blendFunc.dst);
 
         //
         // Using VBO without VAO
@@ -325,7 +325,7 @@
 
     proto._setupVBO = function(){
         var node = this;
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
 
         //gl.deleteBuffer(this._buffersVBO[0]);
         this._buffersVBO[0] = gl.createBuffer();
@@ -336,7 +336,7 @@
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._buffersVBO[1]);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this._indices, gl.STATIC_DRAW);
 
-        //cc.checkGLErrorDebug();
+        //cc.checkGLErrorDebug(gl);
     };
 
     proto._allocMemory = function(){
@@ -365,7 +365,7 @@
     };
 
     proto.postStep = function(){
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
         gl.bindBuffer(gl.ARRAY_BUFFER, this._buffersVBO[0]);
         gl.bufferData(gl.ARRAY_BUFFER, this._quadsArrayBuffer, gl.DYNAMIC_DRAW);
     };

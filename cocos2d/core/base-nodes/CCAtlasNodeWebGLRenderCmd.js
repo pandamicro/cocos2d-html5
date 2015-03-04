@@ -35,8 +35,8 @@
         this._uniformColor = null;
 
         //shader stuff
-        this._shaderProgram = cc.shaderCache.programForKey(cc.SHADER_POSITION_TEXTURE_UCOLOR);
-        this._uniformColor = cc._renderContext.getUniformLocation(this._shaderProgram.getProgram(), "u_color");
+        this._shaderProgram = cc.game.shaderCache.programForKey(cc.SHADER_POSITION_TEXTURE_UCOLOR);
+        this._uniformColor = cc.game._renderContext.getUniformLocation(this._shaderProgram.getProgram(), "u_color");
     };
 
     var proto = cc.AtlasNode.WebGLRenderCmd.prototype = Object.create(cc.Node.WebGLRenderCmd.prototype);
@@ -55,12 +55,12 @@
     };
 
     proto.rendering = function (ctx) {
-        var context = ctx || cc._renderContext, node = this._node;
+        var context = ctx || cc.game._renderContext, node = this._node;
 
         this._shaderProgram.use();
         this._shaderProgram._setUniformForMVPMatrixWithMat4(this._stackMatrix);
 
-        cc.glBlendFunc(node._blendFunc.src, node._blendFunc.dst);
+        cc.glBlendFunc(ctx, node._blendFunc.src, node._blendFunc.dst);
         if (this._uniformColor && this._colorF32Array) {
             context.uniform4fv(this._uniformColor, this._colorF32Array);
             this._textureAtlas.drawNumberOfQuads(node.quadsToDraw, 0);
