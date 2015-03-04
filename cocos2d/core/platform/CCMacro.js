@@ -188,7 +188,7 @@ cc.BLEND_DST = 0x0303;
 cc.nodeDrawSetup = function (node) {
     //cc.glEnable(node._glServerState);
     if (node._shaderProgram) {
-        //cc._renderContext.useProgram(node._shaderProgram._programObj);
+        //cc.game._renderContext.useProgram(node._shaderProgram._programObj);
         node._shaderProgram.use();
         node._shaderProgram.setUniformForModelViewAndProjectionMatrixWithMat4();
     }
@@ -259,7 +259,7 @@ cc.FLT_EPSILON = 0.0000001192092896;
  * @function
  */
 cc.contentScaleFactor = cc.IS_RETINA_DISPLAY_SUPPORTED ? function () {
-    return cc.director.getContentScaleFactor();
+    return cc.game.director.getContentScaleFactor();
 } : function () {
     return 1;
 };
@@ -459,9 +459,9 @@ cc.MIRRORED_REPEAT   = 0x8370;
  * Check webgl error.Error will be shown in console if exists.
  * @function
  */
-cc.checkGLErrorDebug = function () {
-    if (cc.renderMode == cc._RENDER_TYPE_WEBGL) {
-        var _error = cc._renderContext.getError();
+cc.checkGLErrorDebug = function (ctx) {
+    if (ctx instanceof WebGLRenderingContext) {
+        var _error = ctx.getError();
         if (_error) {
             cc.log(cc._LogInfos.checkGLErrorDebug, _error);
         }

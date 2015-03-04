@@ -89,9 +89,9 @@ cc.configuration = /** @lends cc.configuration# */{
 
 	_init:function () {
 		var locValueDict = this._valueDict;
-		locValueDict["cocos2d.x.version"] = cc.ENGINE_VERSION;
-		locValueDict["cocos2d.x.compiled_with_profiler"] = false;
-		locValueDict["cocos2d.x.compiled_with_gl_state_cache"] = cc.ENABLE_GL_STATE_CACHE;
+		locValueDict["cocos2d.js.version"] = cc.ENGINE_VERSION;
+		locValueDict["cocos2d.js.compiled_with_profiler"] = false;
+		locValueDict["cocos2d.js.compiled_with_gl_state_cache"] = cc.ENABLE_GL_STATE_CACHE;
 		this._inited = true;
 	},
 
@@ -231,12 +231,12 @@ cc.configuration = /** @lends cc.configuration# */{
      * gathers OpenGL / GPU information
      */
     gatherGPUInfo: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             return;
 
 	    if(!this._inited)
 		    this._init();
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
         var locValueDict = this._valueDict;
         locValueDict["gl.vendor"] = gl.getParameter(gl.VENDOR);
         locValueDict["gl.renderer"] = gl.getParameter(gl.RENDERER);
@@ -267,7 +267,7 @@ cc.configuration = /** @lends cc.configuration# */{
         this._supportsShareableVAO = this.checkForGLExtension("vertex_array_object");
         locValueDict["gl.supports_vertex_array_object"] = this._supportsShareableVAO;
 
-        cc.checkGLErrorDebug();
+        cc.checkGLErrorDebug(gl);
     },
 
     /**
