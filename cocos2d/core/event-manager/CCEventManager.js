@@ -103,7 +103,7 @@ cc.__getListenerID = function (event) {
  * @class
  * @name cc.eventManager
  */
-cc.eventManager = /** @lends cc.eventManager# */{
+cc.EventManager = cc.Class.extend(/** @lends cc.eventManager# */{
     //Priority dirty flag
     DIRTY_NONE:0,
     DIRTY_FIXED_PRIORITY:1 <<0,
@@ -121,7 +121,13 @@ cc.eventManager = /** @lends cc.eventManager# */{
     _isEnabled: false,
     _nodePriorityIndex: 0,
 
-    _internalCustomListenerIDs:[cc.game.EVENT_HIDE, cc.game.EVENT_SHOW],
+    _internalCustomListenerIDs:[cc.Game.EVENT_HIDE, cc.Game.EVENT_SHOW],
+
+    game: null,
+
+    ctor: function (game) {
+        this.game = game;
+    },
 
     _setDirtyForNode: function (node) {
         // Mark the node dirty only when there is an event listener associated with it.
@@ -282,7 +288,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
                 this._sortListenersOfFixedPriority(listenerID);
 
             if (dirtyFlag & this.DIRTY_SCENE_GRAPH_PRIORITY){
-                var rootNode = cc.director.getRunningScene();
+                var rootNode = cc.game.director.getRunningScene();
                 if(rootNode)
                     this._sortListenersOfSceneGraphPriority(listenerID, rootNode);
                 else
@@ -903,6 +909,8 @@ cc.eventManager = /** @lends cc.eventManager# */{
             return;
         }
 
+        this.game.setEnvironment();
+
         var listenerID = cc.__getListenerID(event);
         this._sortEventListeners(listenerID);
         var selListeners = this._listenersMap[listenerID];
@@ -927,9 +935,10 @@ cc.eventManager = /** @lends cc.eventManager# */{
     dispatchCustomEvent: function (eventName, optionalUserData) {
         var ev = new cc.EventCustom(eventName);
         ev.setUserData(optionalUserData);
+        this.game.setEnvironment();
         this.dispatchEvent(ev);
     }
-};
+});
 
 // The event helper
 cc.EventHelper = function(){};

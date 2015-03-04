@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-var _p = cc.inputManager;
+var _p = cc.InputManager.prototype;
 
 /**
  * whether enable accelerometer event
@@ -36,7 +36,7 @@ _p.setAccelerometerEnabled = function(isEnable){
         return;
 
     _t._accelEnabled = isEnable;
-    var scheduler = cc.director.getScheduler();
+    var scheduler = _t.game.director.getScheduler();
     if(_t._accelEnabled){
         _t._accelCurTime = 0;
         scheduler.scheduleUpdateForTarget(_t);
@@ -58,13 +58,14 @@ _p.setAccelerometerInterval = function(interval){
 };
 
 _p._registerKeyboardEvent = function(){
-    cc._addEventListener(cc._canvas, "keydown", function (e) {
-        cc.eventManager.dispatchEvent(new cc.EventKeyboard(e.keyCode, true));
+    var self = this;
+    cc._addEventListener(this.game.canvas, "keydown", function (e) {
+        self.eventManager.dispatchEvent(new cc.EventKeyboard(e.keyCode, true));
         e.stopPropagation();
         e.preventDefault();
     }, false);
-    cc._addEventListener(cc._canvas, "keyup", function (e) {
-        cc.eventManager.dispatchEvent(new cc.EventKeyboard(e.keyCode, false));
+    cc._addEventListener(this.game.canvas, "keyup", function (e) {
+        self.eventManager.dispatchEvent(new cc.EventKeyboard(e.keyCode, false));
         e.stopPropagation();
         e.preventDefault();
     }, false);
