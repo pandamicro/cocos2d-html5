@@ -144,6 +144,6 @@ cc.LoaderScene.preload = function(resources, cb){
     }
     _cc.loaderScene.initWithResources(resources, cb);
 
-    cc.director.runScene(_cc.loaderScene);
+    cc.game.director.runScene(_cc.loaderScene);
     return _cc.loaderScene;
 };

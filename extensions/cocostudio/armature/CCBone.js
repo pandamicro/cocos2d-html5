@@ -630,7 +630,7 @@ ccs.Bone = ccs.Node.extend(/** @lends ccs.Bone# */{
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             return new ccs.Bone.CanvasRenderCmd(this);
         else
             return new ccs.Bone.WebGLRenderCmd(this);

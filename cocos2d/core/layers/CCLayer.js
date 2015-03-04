@@ -92,7 +92,7 @@ cc.Layer = cc.Node.extend(/** @lends cc.Layer# */{
     },
 
     _createRenderCmd: function(){
-        if (cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if (cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             return new cc.Layer.CanvasRenderCmd(this);
         else
             return new cc.Layer.WebGLRenderCmd(this);
@@ -203,10 +203,10 @@ cc.LayerColor = cc.Layer.extend(/** @lends cc.LayerColor# */{
      * @return {Boolean}
      */
     init: function (color, width, height) {
-        if (cc._renderType !== cc._RENDER_TYPE_CANVAS)
+        if (cc.game.renderType !== cc.Game.RENDER_TYPE_CANVAS)
             this.shaderProgram = cc.shaderCache.programForKey(cc.SHADER_POSITION_COLOR);
 
-        var winSize = cc.director.getWinSize();
+        var winSize = cc.winSize;
         color = color || cc.color(0, 0, 0, 255);
         width = width === undefined ? winSize.width : width;
         height = height === undefined ? winSize.height : height;
@@ -255,7 +255,7 @@ cc.LayerColor = cc.Layer.extend(/** @lends cc.LayerColor# */{
     },
 
     _createRenderCmd: function(){
-        if (cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if (cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             return new cc.LayerColor.CanvasRenderCmd(this);
         else
             return new cc.LayerColor.WebGLRenderCmd(this);
@@ -499,7 +499,7 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
     },
 
     _createRenderCmd: function(){
-        if (cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if (cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             return new cc.LayerGradient.CanvasRenderCmd(this);
         else
             return new cc.LayerGradient.WebGLRenderCmd(this);

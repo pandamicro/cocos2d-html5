@@ -739,7 +739,7 @@ cc.LabelTTF = cc.Sprite.extend(/** @lends cc.LabelTTF# */{
     },
 
     _createRenderCmd: function () {
-        if (cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if (cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             return new cc.LabelTTF.CanvasRenderCmd(this);
         else
             return new cc.LabelTTF.WebGLRenderCmd(this);

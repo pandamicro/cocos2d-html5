@@ -203,7 +203,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
         _t._normalizedPosition = cc.p(0,0);
         _t._children = [];
 
-        var director = cc.director;
+        var director = cc.game.director;
         _t._actionManager = director.getActionManager();
         _t._scheduler = director.getScheduler();
 
@@ -2364,7 +2364,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             return new cc.Node.CanvasRenderCmd(this);
         else
             return new cc.Node.WebGLRenderCmd(this);

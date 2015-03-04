@@ -102,7 +102,7 @@ cc.ParticleBatchNode = cc.Node.extend(/** @lends cc.ParticleBatchNode# */{
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             return new cc.ParticleBatchNode.CanvasRenderCmd(this);
         else
             return new cc.ParticleBatchNode.WebGLRenderCmd(this);

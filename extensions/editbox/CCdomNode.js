@@ -363,7 +363,7 @@ cc.DOM.methods = /** @lends cc.DOM# */{
                 if(this.dom.id == ""){
                     cc.DOM._createEGLViewDiv(this);
                 }else{
-                    this.dom.appendTo(cc.container);
+                    this.dom.appendTo(cc.game.container);
                 }
             } else {
                 cc.DOM.parentDOM(this);
@@ -538,7 +538,7 @@ cc.DOM._createEGLViewDiv = function(p){
     }
 
     p.dom.appendTo(div);
-    div.appendTo(cc.container);
+    div.appendTo(cc.game.container);
 };
 
 /**

@@ -71,16 +71,16 @@ cc.glInvalidateStateCache = function () {
  * @function
  * @param {WebGLProgram} program
  */
-cc.glUseProgram = function (program) {
+cc.glUseProgram = function (ctx, program) {
     if (program !== cc._currentShaderProgram) {
         cc._currentShaderProgram = program;
-        cc._renderContext.useProgram(program);
+        ctx.useProgram(program);
     }
 };
 
 if(!cc.ENABLE_GL_STATE_CACHE){
-    cc.glUseProgram = function (program) {
-        cc._renderContext.useProgram(program);
+    cc.glUseProgram = function (ctx, program) {
+        ctx.useProgram(program);
     }
 }
 
@@ -105,11 +105,11 @@ cc.glDeleteProgram = function (program) {
  * @param {Number} sfactor
  * @param {Number} dfactor
  */
-cc.glBlendFunc = function (sfactor, dfactor) {
+cc.glBlendFunc = function (ctx, sfactor, dfactor) {
     if ((sfactor !== cc._blendingSource) || (dfactor !== cc._blendingDest)) {
         cc._blendingSource = sfactor;
         cc._blendingDest = dfactor;
-        cc.setBlending(sfactor, dfactor);
+        cc.setBlending(ctx, sfactor, dfactor);
     }
 };
 
@@ -118,13 +118,12 @@ cc.glBlendFunc = function (sfactor, dfactor) {
  * @param {Number} sfactor
  * @param {Number} dfactor
  */
-cc.setBlending = function (sfactor, dfactor) {
-    var ctx = cc._renderContext;
+cc.setBlending = function (ctx, sfactor, dfactor) {
     if ((sfactor === ctx.ONE) && (dfactor === ctx.ZERO)) {
         ctx.disable(ctx.BLEND);
     } else {
         ctx.enable(ctx.BLEND);
-        cc._renderContext.blendFunc(sfactor,dfactor);
+        ctx.blendFunc(sfactor,dfactor);
         //TODO need fix for WebGL
         //ctx.blendFuncSeparate(ctx.SRC_ALPHA, dfactor, sfactor, dfactor);
     }
@@ -135,11 +134,10 @@ cc.setBlending = function (sfactor, dfactor) {
  * @param {Number} sfactor
  * @param {Number} dfactor
  */
-cc.glBlendFuncForParticle = function(sfactor, dfactor) {
+cc.glBlendFuncForParticle = function(ctx, sfactor, dfactor) {
     if ((sfactor !== cc._blendingSource) || (dfactor !== cc._blendingDest)) {
         cc._blendingSource = sfactor;
         cc._blendingDest = dfactor;
-        var ctx = cc._renderContext;
         if ((sfactor === ctx.ONE) && (dfactor === ctx.ZERO)) {
             ctx.disable(ctx.BLEND);
         } else {
@@ -159,11 +157,10 @@ if(!cc.ENABLE_GL_STATE_CACHE){
  * If CC_ENABLE_GL_STATE_CACHE is disabled, it will just set the default blending mode using GL_FUNC_ADD.
  * @function
  */
-cc.glBlendResetToCache = function () {
-    var ctx = cc._renderContext;
+cc.glBlendResetToCache = function (ctx) {
     ctx.blendEquation(ctx.FUNC_ADD);
     if (cc.ENABLE_GL_STATE_CACHE)
-        cc.setBlending(cc._blendingSource, cc._blendingDest);
+        cc.setBlending(ctx, cc._blendingSource, cc._blendingDest);
     else
         cc.setBlending(ctx.BLEND_SRC, ctx.BLEND_DST);
 };
@@ -191,7 +188,7 @@ cc.setProjectionMatrixDirty = function () {
  */
 cc.glEnableVertexAttribs = function (flags) {
     /* Position */
-    var ctx = cc._renderContext;
+    var ctx = cc.game._renderContext;
     var enablePosition = ( flags & cc.VERTEX_ATTRIB_FLAG_POSITION );
     if (enablePosition !== cc._vertexAttribPosition) {
         if (enablePosition)
@@ -244,7 +241,7 @@ cc.glBindTexture2DN = function (textureUnit, textureId) {
         return;
     cc._currentBoundTexture[textureUnit] = textureId;
 
-    var ctx = cc._renderContext;
+    var ctx = cc.game._renderContext;
     ctx.activeTexture(ctx.TEXTURE0 + textureUnit);
     if(textureId)
         ctx.bindTexture(ctx.TEXTURE_2D, textureId._webTextureObj);
@@ -253,7 +250,7 @@ cc.glBindTexture2DN = function (textureUnit, textureId) {
 };
 if (!cc.ENABLE_GL_STATE_CACHE){
     cc.glBindTexture2DN = function (textureUnit, textureId) {
-        var ctx = cc._renderContext;
+        var ctx = cc.game._renderContext;
         ctx.activeTexture(ctx.TEXTURE0 + textureUnit);
         if(textureId)
             ctx.bindTexture(ctx.TEXTURE_2D, textureId._webTextureObj);
@@ -284,7 +281,7 @@ cc.glDeleteTextureN = function (textureUnit, textureId) {
         if (textureId == cc._currentBoundTexture[ textureUnit ])
             cc._currentBoundTexture[ textureUnit ] = -1;
     }
-    cc._renderContext.deleteTexture(textureId);
+    cc.game._renderContext.deleteTexture(textureId);
 };
 
 /**
@@ -323,18 +320,18 @@ cc.glEnable = function (flags) {
         /*
          if ((enabled = (flags & cc.GL_BLEND)) != (cc._GLServerState & cc.GL_BLEND)) {
          if (enabled) {
-         cc._renderContext.enable(cc._renderContext.BLEND);
+         cc.game._renderContext.enable(cc.game._renderContext.BLEND);
          cc._GLServerState |= cc.GL_BLEND;
          } else {
-         cc._renderContext.disable(cc._renderContext.BLEND);
+         cc.game._renderContext.disable(cc.game._renderContext.BLEND);
          cc._GLServerState &= ~cc.GL_BLEND;
          }
          }*/
     } else {
         /*if ((flags & cc.GL_BLEND))
-         cc._renderContext.enable(cc._renderContext.BLEND);
+         cc.game._renderContext.enable(cc.game._renderContext.BLEND);
          else
-         cc._renderContext.disable(cc._renderContext.BLEND);*/
+         cc.game._renderContext.disable(cc.game._renderContext.BLEND);*/
     }
 };
 

@@ -347,7 +347,7 @@ cc.ParticleSystem = cc.Node.extend(/** @lends cc.ParticleSystem# */{
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             return new cc.ParticleSystem.CanvasRenderCmd(this);
         else
             return new cc.ParticleSystem.WebGLRenderCmd(this);
@@ -1289,7 +1289,7 @@ cc.ParticleSystem = cc.Node.extend(/** @lends cc.ParticleSystem# */{
      * @return {cc.Rect}
      */
     getBoundingBoxToWorld:function () {
-        return cc.rect(0, 0, cc._canvas.width, cc._canvas.height);
+        return cc.rect(0, 0, cc.game.canvas.width, cc.game.canvas.height);
     },
 
     /**

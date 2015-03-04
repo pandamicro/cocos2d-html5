@@ -29,7 +29,7 @@
  * @class
  * @name cc.shaderCache
  */
-cc.shaderCache = /** @lends cc.shaderCache# */{
+cc.ShaderCache = cc.Class.extend(/** @lends cc.shaderCache# */{
 
 	/**
 	 * @public
@@ -88,7 +88,10 @@ cc.shaderCache = /** @lends cc.shaderCache# */{
 
     _programs: {},
 
-    _init: function () {
+    _context: null,
+
+    _init: function (context) {
+        this._context = context;
         this.loadDefaultShaders();
         return true;
     },
@@ -153,7 +156,7 @@ cc.shaderCache = /** @lends cc.shaderCache# */{
         program.link();
         program.updateUniforms();
 
-        //cc.checkGLErrorDebug();
+        //cc.checkGLErrorDebug(this._context);
     },
 
     /**
@@ -161,13 +164,13 @@ cc.shaderCache = /** @lends cc.shaderCache# */{
      */
     loadDefaultShaders: function () {
         // Position Texture Color shader
-        var program = new cc.GLProgram();
+        var program = new cc.GLProgram(null, null, this._context);
         this._loadDefaultShader(program, this.TYPE_POSITION_TEXTURECOLOR);
         this._programs[cc.SHADER_POSITION_TEXTURECOLOR] = program;
         this._programs["ShaderPositionTextureColor"] = program;
 
         // Position Texture Color alpha test
-        program = new cc.GLProgram();
+        program = new cc.GLProgram(null, null, this._context);
         this._loadDefaultShader(program, this.TYPE_POSITION_TEXTURECOLOR_ALPHATEST);
         this._programs[cc.SHADER_POSITION_TEXTURECOLORALPHATEST] = program;
         this._programs["ShaderPositionTextureColorAlphaTest"] = program;
@@ -175,7 +178,7 @@ cc.shaderCache = /** @lends cc.shaderCache# */{
         //
         // Position, Color shader
         //
-        program = new cc.GLProgram();
+        program = new cc.GLProgram(null, null, this._context);
         this._loadDefaultShader(program, this.TYPE_POSITION_COLOR);
         this._programs[cc.SHADER_POSITION_COLOR] = program;
         this._programs["ShaderPositionColor"] = program;
@@ -183,7 +186,7 @@ cc.shaderCache = /** @lends cc.shaderCache# */{
         //
         // Position Texture shader
         //
-        program = new cc.GLProgram();
+        program = new cc.GLProgram(null, null, this._context);
         this._loadDefaultShader(program, this.TYPE_POSITION_TEXTURE);
         this._programs[cc.SHADER_POSITION_TEXTURE] = program;
         this._programs["ShaderPositionTexture"] = program;
@@ -191,7 +194,7 @@ cc.shaderCache = /** @lends cc.shaderCache# */{
         //
         // Position, Texture attribs, 1 Color as uniform shader
         //
-        program = new cc.GLProgram();
+        program = new cc.GLProgram(null, null, this._context);
         this._loadDefaultShader(program, this.TYPE_POSITION_TEXTURE_UCOLOR);
         this._programs[cc.SHADER_POSITION_TEXTURE_UCOLOR] = program;
         this._programs["ShaderPositionTextureUColor"] = program;
@@ -199,7 +202,7 @@ cc.shaderCache = /** @lends cc.shaderCache# */{
         //
         // Position Texture A8 Color shader
         //
-        program = new cc.GLProgram();
+        program = new cc.GLProgram(null, null, this._context);
         this._loadDefaultShader(program, this.TYPE_POSITION_TEXTURE_A8COLOR);
         this._programs[cc.SHADER_POSITION_TEXTUREA8COLOR] = program;
         this._programs["ShaderPositionTextureA8Color"] = program;
@@ -207,7 +210,7 @@ cc.shaderCache = /** @lends cc.shaderCache# */{
         //
         // Position and 1 color passed as a uniform (to similate glColor4ub )
         //
-        program = new cc.GLProgram();
+        program = new cc.GLProgram(null, null, this._context);
         this._loadDefaultShader(program, this.TYPE_POSITION_UCOLOR);
         this._programs[cc.SHADER_POSITION_UCOLOR] = program;
         this._programs["ShaderPositionUColor"] = program;
@@ -215,7 +218,7 @@ cc.shaderCache = /** @lends cc.shaderCache# */{
         //
         // Position, Legth(TexCoords, Color (used by Draw Node basically )
         //
-        program = new cc.GLProgram();
+        program = new cc.GLProgram(null, null, this._context);
         this._loadDefaultShader(program, this.TYPE_POSITION_LENGTH_TEXTURECOLOR);
         this._programs[cc.SHADER_POSITION_LENGTHTEXTURECOLOR] = program;
         this._programs["ShaderPositionLengthTextureColor"] = program;
@@ -298,4 +301,4 @@ cc.shaderCache = /** @lends cc.shaderCache# */{
     addProgram: function (program, key) {
         this._programs[key] = program;
     }
-};
+});

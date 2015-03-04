@@ -85,7 +85,7 @@ cc.AtlasNode = cc.Node.extend(/** @lends cc.AtlasNode# */{
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             this._renderCmd = new cc.AtlasNode.CanvasRenderCmd(this);
         else
             this._renderCmd = new cc.AtlasNode.WebGLRenderCmd(this);

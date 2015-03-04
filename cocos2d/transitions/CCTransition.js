@@ -87,7 +87,7 @@ cc.TransitionScene = cc.Scene.extend(/** @lends cc.TransitionScene# */{
     _setNewScene:function (dt) {
         this.unschedule(this._setNewScene);
         // Before replacing, save the "send cleanup to scene"
-        var director = cc.director;
+        var director = cc.game.director;
         this._isSendCleanupToScene = director.isSendCleanupToScene();
         director.runScene(this._inScene);
 
@@ -189,7 +189,7 @@ cc.TransitionScene = cc.Scene.extend(/** @lends cc.TransitionScene# */{
             });
             // retain
             this._inScene = scene;
-            this._outScene = cc.director.getRunningScene();
+            this._outScene = cc.game.director.getRunningScene();
             if (!this._outScene) {
                 this._outScene = new cc.Scene();
                 this._outScene.init();
@@ -217,7 +217,7 @@ cc.TransitionScene = cc.Scene.extend(/** @lends cc.TransitionScene# */{
 	        scale: 1.0,
 	        rotation: 0.0
         });
-        if(cc._renderType === cc._RENDER_TYPE_WEBGL)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_WEBGL)
             this._inScene.getCamera().restore();
 
         this._outScene.attr({
@@ -227,7 +227,7 @@ cc.TransitionScene = cc.Scene.extend(/** @lends cc.TransitionScene# */{
 	        scale: 1.0,
 	        rotation: 0.0
         });
-        if(cc._renderType === cc._RENDER_TYPE_WEBGL)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_WEBGL)
             this._outScene.getCamera().restore();
 
         //[self schedule:@selector(setNewScene:) interval:0];
@@ -391,7 +391,7 @@ cc.TransitionJumpZoom = cc.TransitionScene.extend(/** @lends cc.TransitionJumpZo
      */
     onEnter:function () {
         cc.TransitionScene.prototype.onEnter.call(this);
-        var winSize = cc.director.getWinSize();
+        var winSize = cc.game.director.getWinSize();
 
 	    this._inScene.attr({
 		    scale: 0.5,
@@ -463,7 +463,7 @@ cc.TransitionMoveInL = cc.TransitionScene.extend(/** @lends cc.TransitionMoveInL
      * initializes the scenes
      */
     initScenes:function () {
-        this._inScene.setPosition(-cc.director.getWinSize().width, 0);
+        this._inScene.setPosition(-cc.game.director.getWinSize().width, 0);
     },
 
     /**
@@ -517,7 +517,7 @@ cc.TransitionMoveInR = cc.TransitionMoveInL.extend(/** @lends cc.TransitionMoveI
      * Init function
      */
     initScenes:function () {
-        this._inScene.setPosition(cc.director.getWinSize().width, 0);
+        this._inScene.setPosition(cc.game.director.getWinSize().width, 0);
     }
 });
 
@@ -555,7 +555,7 @@ cc.TransitionMoveInT = cc.TransitionMoveInL.extend(/** @lends cc.TransitionMoveI
      * init function
      */
     initScenes:function () {
-        this._inScene.setPosition(0, cc.director.getWinSize().height);
+        this._inScene.setPosition(0, cc.game.director.getWinSize().height);
     }
 });
 
@@ -594,7 +594,7 @@ cc.TransitionMoveInB = cc.TransitionMoveInL.extend(/** @lends cc.TransitionMoveI
      * init function
      */
     initScenes:function () {
-        this._inScene.setPosition(0, -cc.director.getWinSize().height);
+        this._inScene.setPosition(0, -cc.game.director.getWinSize().height);
     }
 });
 
@@ -662,14 +662,14 @@ cc.TransitionSlideInL = cc.TransitionScene.extend(/** @lends cc.TransitionSlideI
      * initializes the scenes
      */
     initScenes:function () {
-        this._inScene.setPosition(-cc.director.getWinSize().width + cc.ADJUST_FACTOR, 0);
+        this._inScene.setPosition(-cc.game.director.getWinSize().width + cc.ADJUST_FACTOR, 0);
     },
     /**
      * returns the action that will be performed by the incomming and outgoing scene
      * @return {cc.MoveBy}
      */
     action:function () {
-        return cc.moveBy(this._duration, cc.p(cc.director.getWinSize().width - cc.ADJUST_FACTOR, 0));
+        return cc.moveBy(this._duration, cc.p(cc.game.director.getWinSize().width - cc.ADJUST_FACTOR, 0));
     },
 
     /**
@@ -718,14 +718,14 @@ cc.TransitionSlideInR = cc.TransitionSlideInL.extend(/** @lends cc.TransitionSli
      * initializes the scenes
      */
     initScenes:function () {
-        this._inScene.setPosition(cc.director.getWinSize().width - cc.ADJUST_FACTOR, 0);
+        this._inScene.setPosition(cc.game.director.getWinSize().width - cc.ADJUST_FACTOR, 0);
     },
     /**
      *  returns the action that will be performed by the incomming and outgoing scene
      * @return {cc.MoveBy}
      */
     action:function () {
-        return cc.moveBy(this._duration, cc.p(-(cc.director.getWinSize().width - cc.ADJUST_FACTOR), 0));
+        return cc.moveBy(this._duration, cc.p(-(cc.game.director.getWinSize().width - cc.ADJUST_FACTOR), 0));
     }
 });
 
@@ -767,7 +767,7 @@ cc.TransitionSlideInB = cc.TransitionSlideInL.extend(/** @lends cc.TransitionSli
      * initializes the scenes
      */
     initScenes:function () {
-        this._inScene.setPosition(0, -(cc.director.getWinSize().height - cc.ADJUST_FACTOR));
+        this._inScene.setPosition(0, -(cc.game.director.getWinSize().height - cc.ADJUST_FACTOR));
     },
 
     /**
@@ -775,7 +775,7 @@ cc.TransitionSlideInB = cc.TransitionSlideInL.extend(/** @lends cc.TransitionSli
      * @return {cc.MoveBy}
      */
     action:function () {
-        return cc.moveBy(this._duration, cc.p(0, cc.director.getWinSize().height - cc.ADJUST_FACTOR));
+        return cc.moveBy(this._duration, cc.p(0, cc.game.director.getWinSize().height - cc.ADJUST_FACTOR));
     }
 });
 
@@ -817,7 +817,7 @@ cc.TransitionSlideInT = cc.TransitionSlideInL.extend(/** @lends cc.TransitionSli
      * initializes the scenes
      */
     initScenes:function () {
-        this._inScene.setPosition(0, cc.director.getWinSize().height - cc.ADJUST_FACTOR);
+        this._inScene.setPosition(0, cc.game.director.getWinSize().height - cc.ADJUST_FACTOR);
     },
 
     /**
@@ -825,7 +825,7 @@ cc.TransitionSlideInT = cc.TransitionSlideInL.extend(/** @lends cc.TransitionSli
      * @return {cc.MoveBy}
      */
     action:function () {
-        return cc.moveBy(this._duration, cc.p(0, -(cc.director.getWinSize().height - cc.ADJUST_FACTOR)));
+        return cc.moveBy(this._duration, cc.p(0, -(cc.game.director.getWinSize().height - cc.ADJUST_FACTOR)));
     }
 });
 
@@ -1489,7 +1489,7 @@ cc.TransitionCrossFade = cc.TransitionScene.extend(/** @lends cc.TransitionCross
         // create a transparent color layer
         // in which we are going to add our rendertextures
         var color = cc.color(0, 0, 0, 0);
-        var winSize = cc.director.getWinSize();
+        var winSize = cc.game.director.getWinSize();
         var layer = new cc.LayerColor(color);
 
         // create the first render texture for inScene
@@ -1615,7 +1615,7 @@ cc.TransitionTurnOffTiles = cc.TransitionScene.extend(/** @lends cc.TransitionTu
         this._gridProxy.setTarget(this._outScene);
         this._gridProxy.onEnter();
 
-        var winSize = cc.director.getWinSize();
+        var winSize = cc.game.director.getWinSize();
         var aspect = winSize.width / winSize.height;
         var x = 0 | (12 * aspect);
         var y = 12;
@@ -1803,7 +1803,7 @@ cc.TransitionFadeTR = cc.TransitionScene.extend(/** @lends cc.TransitionFadeTR# 
         this._gridProxy.setTarget(this._outScene);
         this._gridProxy.onEnter();
 
-        var winSize = cc.director.getWinSize();
+        var winSize = cc.game.director.getWinSize();
         var aspect = winSize.width / winSize.height;
         var x = 0 | (12 * aspect);
         var y = 12;

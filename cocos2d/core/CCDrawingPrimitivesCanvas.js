@@ -269,7 +269,7 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
      */
     drawCardinalSpline:function (config, tension, segments) {
         //lazy_init();
-        cc._renderContext.setStrokeStyle("rgba(255,255,255,1)");
+        cc.game._renderContext.setStrokeStyle("rgba(255,255,255,1)");
         var points = this._cacheArray;
         points.length = 0;
         var p, lt;

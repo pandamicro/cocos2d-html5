@@ -288,7 +288,7 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             return new cc.ProtectedNode.CanvasRenderCmd(this);
         else
             return new cc.ProtectedNode.WebGLRenderCmd(this);

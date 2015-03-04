@@ -248,7 +248,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
             cc.LabelTTF.prototype.setString.call(this,this._inputText);
             this.setColor(this._colorText);
         }
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             this._renderCmd._updateTexture();
         this._charCount = this._inputText.length;
     },
@@ -289,7 +289,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
      */
     draw:function (ctx) {
         //console.log("size",this._contentSize);
-        var context = ctx || cc._renderContext;
+        var context = ctx || cc.game._renderContext;
         if (this.delegate && this.delegate.onDraw(this))
             return;
 

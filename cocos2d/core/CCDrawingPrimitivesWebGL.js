@@ -43,7 +43,7 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
      */
     ctor:function (ctx) {
         if (ctx == null)
-            ctx = cc._renderContext;
+            ctx = cc.game._renderContext;
 
         if (!ctx instanceof  WebGLRenderingContext)
             throw "Can't initialise DrawingPrimitiveWebGL. context need is WebGLRenderingContext";
@@ -58,7 +58,7 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
             //
             // Position and 1 color passed as a uniform (to similate glColor4ub )
             //
-            _t._shader = cc.shaderCache.programForKey(cc.SHADER_POSITION_UCOLOR);
+            _t._shader = cc.game.shaderCache.programForKey(cc.SHADER_POSITION_UCOLOR);
             _t._colorLocation = _t._renderContext.getUniformLocation(_t._shader.getProgram(), "u_color");
             _t._pointSizeLocation = _t._renderContext.getUniformLocation(_t._shader.getProgram(), "u_pointSize");
 

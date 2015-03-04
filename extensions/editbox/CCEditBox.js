@@ -269,7 +269,7 @@ cc.EditBox = cc.ControlButton.extend({
             if (e.keyCode === cc.KEY.enter) {
                 e.stopPropagation();
                 e.preventDefault();
-                cc._canvas.focus();
+                cc.game.canvas.focus();
             }
         });
         cc._addEventListener(tmpEdTxt, "focus", function () {
@@ -284,7 +284,7 @@ cc.EditBox = cc.ControlButton.extend({
             }
             if (selfPointer._delegate && selfPointer._delegate.editBoxEditingDidBegin)
                 selfPointer._delegate.editBoxEditingDidBegin(selfPointer);
-            cc._addEventListener(cc._canvas, "click", onCanvasClick);
+            cc._addEventListener(cc.game.canvas, "click", onCanvasClick);
         });
         cc._addEventListener(tmpEdTxt, "blur", function () {
             if (this.value == "") {
@@ -297,7 +297,7 @@ cc.EditBox = cc.ControlButton.extend({
                 selfPointer._delegate.editBoxEditingDidEnd(selfPointer);
             if (selfPointer._delegate && selfPointer._delegate.editBoxReturn)
                 selfPointer._delegate.editBoxReturn(selfPointer);
-            cc._canvas.removeEventListener('click', onCanvasClick);
+            cc.game.canvas.removeEventListener('click', onCanvasClick);
         });
 
         cc.DOM.convert(tmpDOMSprite);

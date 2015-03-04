@@ -260,7 +260,7 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
     set2DProjection:function () {
         var winSize = cc.director.getWinSizeInPixels();
 
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
         gl.viewport(0, 0, winSize.width , winSize.height);
         cc.kmGLMatrixMode(cc.KM_GL_PROJECTION);
         cc.kmGLLoadIdentity();
@@ -373,7 +373,7 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
         //this._shaderProgram.setUniformsForBuiltins();
         this._shaderProgram._setUniformForMVPMatrixWithMat4(target._renderCmd._stackMatrix);
 
-        var gl = cc._renderContext, locDirty = this._dirty;
+        var gl = cc.game._renderContext, locDirty = this._dirty;
         //
         // Attributes
         //
@@ -408,7 +408,7 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
     },
 
     calculateVertexPoints:function () {
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
 
         var width = this._texture.pixelsWidth;
         var height = this._texture.pixelsHeight;
@@ -605,7 +605,7 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
         //
         // Attributes
         //
-        var gl = cc._renderContext, locDirty = this._dirty;
+        var gl = cc.game._renderContext, locDirty = this._dirty;
         cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_TEX_COORDS);
 
         // position
@@ -649,7 +649,7 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
         this._texCoordinates = new Float32Array(numQuads * 8);
         this._indices = new Uint16Array(numQuads * 6);
 
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
         if(this._verticesBuffer)
             gl.deleteBuffer(this._verticesBuffer);
         this._verticesBuffer = gl.createBuffer();

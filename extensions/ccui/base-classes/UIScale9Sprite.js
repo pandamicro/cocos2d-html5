@@ -150,7 +150,7 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         var leftWidth = locBottomLeftContentSize.width;
         var bottomHeight = locBottomLeftContentSize.height;
 
-        if (cc._renderType == cc._RENDER_TYPE_WEBGL) {
+        if (cc.game.renderType === cc.Game.RENDER_TYPE_WEBGL) {
             //browser is in canvas mode, need to manually control rounding to prevent overlapping pixels
             var roundedRescaledWidth = Math.round(rescaledWidth);
             if (rescaledWidth != roundedRescaledWidth) {
@@ -502,7 +502,7 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
                 // the texture is rotated on Canvas render mode, so isRotated always is false.
                 var preferredSize = this._preferredSize;
                 preferredSize = cc.size(preferredSize.width, preferredSize.height);
-                this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc._renderType == cc._RENDER_TYPE_WEBGL && sender.isRotated(), this._capInsets);
+                this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc.game.renderType === cc.Game.RENDER_TYPE_WEBGL && sender.isRotated(), this._capInsets);
                 this.setPreferredSize(preferredSize);
                 this._positionsAreDirty = true;
                 this.dispatchEvent("load");
@@ -510,7 +510,7 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         }
         var batchNode = new cc.SpriteBatchNode(spriteFrame.getTexture(), 9);
         // the texture is rotated on Canvas render mode, so isRotated always is false.
-        return this.initWithBatchNode(batchNode, spriteFrame.getRect(), cc._renderType == cc._RENDER_TYPE_WEBGL && spriteFrame.isRotated(), capInsets);
+        return this.initWithBatchNode(batchNode, spriteFrame.getRect(), cc.game.renderType === cc.Game.RENDER_TYPE_WEBGL && spriteFrame.isRotated(), capInsets);
     },
 
     /**
@@ -876,7 +876,7 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
         }
 
         this.setContentSize(rect.width, rect.height);
-        if(cc._renderType === cc._RENDER_TYPE_WEBGL)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_WEBGL)
             this.addChild(locScale9Image);
 
         if (this._spritesGenerated) {
@@ -902,13 +902,13 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
                 // the texture is rotated on Canvas render mode, so isRotated always is false.
                 var preferredSize = this._preferredSize;
                 preferredSize = cc.size(preferredSize.width, preferredSize.height);
-                this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc._renderType == cc._RENDER_TYPE_WEBGL && sender.isRotated(), this._capInsets);
+                this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc.game.renderType === cc.Game.RENDER_TYPE_WEBGL && sender.isRotated(), this._capInsets);
                 this.setPreferredSize(preferredSize);
                 this._positionsAreDirty = true;
                 this.dispatchEvent("load");
             },this);
         }
-        this.updateWithBatchNode(batchNode, spriteFrame.getRect(), cc._renderType == cc._RENDER_TYPE_WEBGL && spriteFrame.isRotated(), cc.rect(0, 0, 0, 0));
+        this.updateWithBatchNode(batchNode, spriteFrame.getRect(), cc.game.renderType === cc.Game.RENDER_TYPE_WEBGL && spriteFrame.isRotated(), cc.rect(0, 0, 0, 0));
 
         // Reset insets
         this._insetLeft = 0;
@@ -1023,7 +1023,7 @@ ccui.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             return new ccui.Scale9Sprite.CanvasRenderCmd(this);
         else
             return new ccui.Scale9Sprite.WebGLRenderCmd(this);

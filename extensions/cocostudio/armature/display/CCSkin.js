@@ -174,7 +174,7 @@ ccs.Skin = ccs.Sprite.extend(/** @lends ccs.Skin# */{
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             return new ccs.Skin.CanvasRenderCmd(this);
         else
             return new ccs.Skin.WebGLRenderCmd(this);

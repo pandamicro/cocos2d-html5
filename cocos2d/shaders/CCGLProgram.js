@@ -83,7 +83,7 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
         if (!source || !shader)
             return false;
 
-        var preStr = cc.GLProgram._isHighpSupported() ? "precision highp float;\n" : "precision mediump float;\n";
+        var preStr = cc.GLProgram._isHighpSupported(this._glContext) ? "precision highp float;\n" : "precision mediump float;\n";
         source = preStr
             + "uniform mat4 CC_PMatrix;         \n"
             + "uniform mat4 CC_MVMatrix;        \n"
@@ -118,7 +118,7 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
     ctor: function (vShaderFileName, fShaderFileName, glContext) {
         this._uniforms = [];
         this._hashForUniforms = [];
-        this._glContext = glContext || cc._renderContext;
+        this._glContext = glContext || cc.game._renderContext;
 
 		vShaderFileName && fShaderFileName && this.init(vShaderFileName, fShaderFileName);
     },
@@ -144,7 +144,7 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
     initWithVertexShaderByteArray: function (vertShaderStr, fragShaderStr) {
         var locGL = this._glContext;
         this._programObj = locGL.createProgram();
-        //cc.checkGLErrorDebug();
+        //cc.checkGLErrorDebug(locGL);
 
         this._vertShader = null;
         this._fragShader = null;
@@ -166,13 +166,13 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
 
         if (this._vertShader)
             locGL.attachShader(this._programObj, this._vertShader);
-        cc.checkGLErrorDebug();
+        cc.checkGLErrorDebug(locGL);
 
         if (this._fragShader)
             locGL.attachShader(this._programObj, this._fragShader);
         this._hashForUniforms.length = 0;
 
-        cc.checkGLErrorDebug();
+        cc.checkGLErrorDebug(locGL);
         return true;
     },
 
@@ -239,7 +239,7 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
         this._vertShader = null;
         this._fragShader = null;
 
-        if (cc.game.config[cc.game.CONFIG_KEY.debugMode]) {
+        if (cc.game.config[cc.Game.CONFIG_KEY.debugMode]) {
             var status = this._glContext.getProgramParameter(this._programObj, this._glContext.LINK_STATUS);
             if (!status) {
                 cc.log("cocos2d: ERROR: Failed to link program: " + this._glContext.getProgramInfoLog(this._programObj));
@@ -256,7 +256,7 @@ cc.GLProgram = cc.Class.extend(/** @lends cc.GLProgram# */{
      * it will call glUseProgram()
      */
     use: function () {
-        cc.glUseProgram(this._programObj);
+        cc.glUseProgram(this._glContext, this._programObj);
     },
 
     /**
@@ -733,9 +733,8 @@ cc.GLProgram.create = function (vShaderFileName, fShaderFileName) {
 
 cc.GLProgram._highpSupported = null;
 
-cc.GLProgram._isHighpSupported = function(){
+cc.GLProgram._isHighpSupported = function(ctx){
     if(cc.GLProgram._highpSupported == null){
-        var ctx = cc._renderContext;
         var highp = ctx.getShaderPrecisionFormat(ctx.FRAGMENT_SHADER, ctx.HIGH_FLOAT);
         cc.GLProgram._highpSupported = highp.precision != 0;
     }

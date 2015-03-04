@@ -48,7 +48,7 @@ cc.Scene = cc.Node.extend(/** @lends cc.Scene# */{
         cc.Node.prototype.ctor.call(this);
         this._ignoreAnchorPointForPosition = true;
         this.setAnchorPoint(0.5, 0.5);
-        this.setContentSize(cc.director.getWinSize());
+        this.setContentSize(cc.game.director.getWinSize());
     }
 });
 

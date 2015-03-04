@@ -1828,7 +1828,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
 
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc._RENDER_TYPE_WEBGL)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_WEBGL)
             return new ccui.Widget.WebGLRenderCmd(this);
         else
             return new ccui.Widget.CanvasRenderCmd(this);

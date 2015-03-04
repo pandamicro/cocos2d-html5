@@ -526,7 +526,7 @@ cc.DrawNodeWebGL = cc.Node.extend({
         if (cc.Node.prototype.init.call(this)) {
             this.shaderProgram = cc.shaderCache.programForKey(cc.SHADER_POSITION_LENGTHTEXTURECOLOR);
             this._ensureCapacity(64);
-            this._trianglesWebBuffer = cc._renderContext.createBuffer();
+            this._trianglesWebBuffer = cc.game._renderContext.createBuffer();
             this._dirty = true;
             return true;
         }
@@ -656,7 +656,7 @@ cc.DrawNodeWebGL = cc.Node.extend({
     },
 
     _render:function () {
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
 
         cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
         gl.bindBuffer(gl.ARRAY_BUFFER, this._trianglesWebBuffer);
@@ -675,7 +675,7 @@ cc.DrawNodeWebGL = cc.Node.extend({
 
         gl.drawArrays(gl.TRIANGLES, 0, this._buffer.length * 3);
         cc.incrementGLDraws(1);
-        //cc.checkGLErrorDebug();
+        //cc.checkGLErrorDebug(gl);
     },
 
     _ensureCapacity:function(count){
@@ -911,7 +911,7 @@ cc.DrawNodeWebGL = cc.Node.extend({
     }
 });
 
-cc.DrawNode = cc._renderType == cc._RENDER_TYPE_WEBGL ? cc.DrawNodeWebGL : cc.DrawNodeCanvas;
+cc.DrawNode = cc.game.renderType === cc.Game.RENDER_TYPE_WEBGL ? cc.DrawNodeWebGL : cc.DrawNodeCanvas;
 
 /**
  * Creates a DrawNode

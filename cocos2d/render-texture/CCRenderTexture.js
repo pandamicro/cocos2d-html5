@@ -125,7 +125,7 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             return new cc.RenderTexture.CanvasRenderCmd(this);
         else
             return new cc.RenderTexture.WebGLRenderCmd(this);
@@ -199,7 +199,7 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
      */
     beginWithClear:function (r, g, b, a, depthValue, stencilValue) {
         //todo: only for WebGL?
-        var gl = cc._renderContext;
+        var gl = cc.game._renderContext;
         depthValue = depthValue || gl.COLOR_BUFFER_BIT;
         stencilValue = stencilValue || (gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 

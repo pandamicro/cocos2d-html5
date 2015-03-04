@@ -232,7 +232,7 @@ cc.ParallaxNode = cc.Node.extend(/** @lends cc.ParallaxNode# */{
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc.game.renderType === cc.Game._RENDER_TYPE_CANVAS)
             return new cc.ParallaxNode.CanvasRenderCmd(this);
         else
             return new cc.ParallaxNode.WebGLRenderCmd(this);

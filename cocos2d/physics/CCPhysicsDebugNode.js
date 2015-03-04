@@ -194,7 +194,7 @@ cc.PhysicsDebugNode = cc.DrawNode.extend({
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS)
             return new cc.PhysicsDebugNode.CanvasRenderCmd(this);
         else
             return new cc.PhysicsDebugNode.WebGLRenderCmd(this);

@@ -1002,23 +1002,16 @@ cc.Audio = cc.Class.extend({
             ){
                 bg._touch = true;
                 bg.play(0, bg.loop);
-                !polyfill.replay && cc._canvas.removeEventListener("touchstart", reBGM);
+                !polyfill.replay && cc.game.canvas.removeEventListener("touchstart", reBGM);
             }
 
         };
 
         setTimeout(function(){
-            if(cc._canvas){
-                cc._canvas.addEventListener("touchstart", reBGM, false);
+            if(cc.game.canvas){
+                cc.game.canvas.addEventListener("touchstart", reBGM, false);
             }
         }, 150);
     }
-
-    cc.eventManager.addCustomListener(cc.game.EVENT_HIDE, function () {
-        cc.audioEngine._pausePlaying();
-    });
-    cc.eventManager.addCustomListener(cc.game.EVENT_SHOW, function () {
-        cc.audioEngine._resumePlaying();
-    });
 
 })(cc.__audioSupport);

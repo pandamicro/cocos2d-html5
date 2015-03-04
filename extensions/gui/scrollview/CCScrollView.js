@@ -777,7 +777,7 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
     },
 
     _createRenderCmd: function(){
-        if (cc._renderType === cc._RENDER_TYPE_CANVAS) {
+        if (cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS) {
             return new cc.ScrollView.CanvasRenderCmd(this);
         } else {
             return new cc.ScrollView.WebGLRenderCmd(this);
