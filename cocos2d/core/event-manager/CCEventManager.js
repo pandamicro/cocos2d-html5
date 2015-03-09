@@ -110,13 +110,13 @@ cc.EventManager = cc.Class.extend(/** @lends cc.eventManager# */{
     DIRTY_SCENE_GRAPH_PRIORITY : 1<< 1,
     DIRTY_ALL: 3,
 
-    _listenersMap: {},
-    _priorityDirtyFlagMap: {},
-    _nodeListenersMap: {},
-    _nodePriorityMap: {},
-    _globalZOrderNodeMap: {},
-    _toAddedListeners: [],
-    _dirtyNodes: [],
+    _listenersMap: null,
+    _priorityDirtyFlagMap: null,
+    _nodeListenersMap: null,
+    _nodePriorityMap: null,
+    _globalZOrderNodeMap: null,
+    _toAddedListeners: null,
+    _dirtyNodes: null,
     _inDispatch: 0,
     _isEnabled: false,
     _nodePriorityIndex: 0,
@@ -127,6 +127,13 @@ cc.EventManager = cc.Class.extend(/** @lends cc.eventManager# */{
 
     ctor: function (game) {
         this.game = game;
+        this._listenersMap = {};
+        this._priorityDirtyFlagMap = {};
+        this._nodeListenersMap = {};
+        this._nodePriorityMap = {};
+        this._globalZOrderNodeMap = {};
+        this._toAddedListeners = [];
+        this._dirtyNodes = [];
     },
 
     _setDirtyForNode: function (node) {
@@ -1032,4 +1039,3 @@ cc.EventHelper.prototype = {
         }
     }
 };
-

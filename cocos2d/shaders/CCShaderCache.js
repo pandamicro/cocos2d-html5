@@ -86,12 +86,13 @@ cc.ShaderCache = cc.Class.extend(/** @lends cc.shaderCache# */{
 	 */
 	TYPE_MAX: 8,
 
-    _programs: {},
+    _programs: null,
 
     _context: null,
 
     _init: function (context) {
         this._context = context;
+		this._programs = {};
         this.loadDefaultShaders();
         return true;
     },

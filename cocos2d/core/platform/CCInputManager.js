@@ -60,14 +60,14 @@ cc.InputManager = cc.Class.extend(/** @lends cc.inputManager# */{
 
     _isRegisterEvent: false,
 
-    _preTouchPoint: cc.p(0,0),
-    _prevMousePoint: cc.p(0,0),
+    _preTouchPoint: null,
+    _prevMousePoint: null,
 
-    _preTouchPool: [],
+    _preTouchPool: null,
     _preTouchPoolPointer: 0,
 
-    _touches: [],
-    _touchesIntegerDict:{},
+    _touches: null,
+    _touchesIntegerDict:null,
 
     _indexBitsUsed: 0,
     _maxTouches: 5,
@@ -85,6 +85,12 @@ cc.InputManager = cc.Class.extend(/** @lends cc.inputManager# */{
     ctor: function(game) {
         this.game = game;
         this.eventManager = game.eventManager;
+
+        this._preTouchPoint = cc.p(0,0);
+        this._prevMousePoint = cc.p(0,0);
+        this._preTouchPool = [];
+        this._touches = [];
+        this._touchesIntegerDict = {};
     },
 
     _getUnUsedIndex: function () {

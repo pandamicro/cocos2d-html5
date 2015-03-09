@@ -22,15 +22,22 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-cc.rendererWebGL = {
+cc.RendererWebGL = cc.Class.extend({
     childrenOrderDirty: true,
-    _transformNodePool: [],                              //save nodes transform dirty
-    _renderCmds: [],                                     //save renderer commands
+    _transformNodePool: null,                               //save nodes transform dirty
+    _renderCmds: null,                                      //save renderer commands
 
-    _isCacheToBufferOn: false,                          //a switch that whether cache the rendererCmd to cacheToCanvasCmds
-    _cacheToBufferCmds: {},                              // an array saves the renderer commands need for cache to other canvas
-    _cacheInstanceIds: [],
+    _isCacheToBufferOn: false,                              //a switch that whether cache the rendererCmd to cacheToCanvasCmds
+    _cacheToBufferCmds: null,                               // an array saves the renderer commands need for cache to other canvas
+    _cacheInstanceIds: null,
     _currentID: 0,
+
+    ctor: function() {
+        this._transformNodePool = [];
+        this._renderCmds = [];
+        this._cacheToBufferCmds = {};
+        this._cacheInstanceIds = [];
+    },
 
     getRenderCmd: function (renderableObject) {
         //TODO Add renderCmd pool here
@@ -132,6 +139,4 @@ cc.rendererWebGL = {
                 this._renderCmds.push(cmd);
         }
     }
-};
-if (cc.game.renderType === cc.Game.RENDER_TYPE_WEBGL)
-    cc.renderer = cc.rendererWebGL;
+});
