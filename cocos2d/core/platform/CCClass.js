@@ -83,8 +83,7 @@ ClassManager.compileSuper.ClassManager = ClassManager;
  */
 (function () {
     var fnTest = /\b_super\b/;
-    var config = cc.game.config;
-    var releaseMode = config[cc.Game.CONFIG_KEY.classReleaseMode];
+    var releaseMode = false;
     if(releaseMode) {
         console.log("release Mode");
     }
@@ -330,4 +329,3 @@ cc.inject = function(srcPrototype, destPrototype){
     for(var key in srcPrototype)
         destPrototype[key] = srcPrototype[key];
 };
-

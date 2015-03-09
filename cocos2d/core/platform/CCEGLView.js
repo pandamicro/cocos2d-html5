@@ -164,7 +164,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
      * Constructor of cc.EGLView
      */
     ctor: function (game) {
-        var _t = this, d = document, _strategyer = cc.ContainerStrategy, _strategy = cc.ContentStrategy;
+        var _t = this, _strategyer = cc.ContainerStrategy, _strategy = cc.ContentStrategy;
 
         _t.game = game;
         _t.canvas = game.canvas;
@@ -172,8 +172,8 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
 
         cc.__BrowserGetter.init(this);
 
-        _t._frame = (game.container.parentNode === d.body) ? d.documentElement : game.container.parentNode;
         _t._frameSize = cc.size(0, 0);
+        this.setFrame();
         _t._initFrameSize();
 
         var w = game.canvas.width, h = game.canvas.height;
@@ -281,8 +281,9 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
 
     _initFrameSize: function () {
         var locFrameSize = this._frameSize;
-        locFrameSize.width = cc.__BrowserGetter.availWidth(this._frame);
-        locFrameSize.height = cc.__BrowserGetter.availHeight(this._frame);
+        var frame = this._frame ? this._frame : this.container;
+        locFrameSize.width = cc.__BrowserGetter.availWidth(frame);
+        locFrameSize.height = cc.__BrowserGetter.availHeight(frame);
     },
 
     // hack
@@ -455,6 +456,14 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
      */
     getContentTranslateLeftTop: function () {
         return this._contentTranslateLeftTop;
+    },
+
+    getFrame: function () {
+        return this._frame;
+    },
+
+    setFrame: function (frame) {
+        this._frame = frame ? frame : ((this.container.parentNode === document.body) ? document.documentElement : this.container.parentNode)
     },
 
     /**
