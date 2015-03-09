@@ -332,5 +332,4 @@ cc._initDebugSetting = function (mode) {
             };
     }
 };
-cc._initDebugSetting(cc.game.config[cc.Game.CONFIG_KEY.debugMode]);
 //+++++++++++++++++++++++++something about log end+++++++++++++++++++++++++++++

@@ -1824,7 +1824,7 @@ cc._setContextMenuEnable = function (canvas, enabled) {
  */
 cc.Game = function (config, onStart) {
     this.initConfig(config);
-    cc.isFunction && (this.onStart = onStart);
+    cc.isFunction(onStart) && (this.onStart = onStart);
 
     cc._loadEngine(config);
 
@@ -1841,7 +1841,7 @@ cc.Game.prototype = /** @lends cc.Game# */{
     _paused: true,//whether the game is paused
 
     _intervalId: null,//interval target of main
-    
+
     _lastTime: null,
     _frameTime: null,
 
@@ -1882,6 +1882,12 @@ cc.Game.prototype = /** @lends cc.Game# */{
 
     setEnvironment: function () {
         cc.game = this;
+        cc.renderer = this.renderer;
+        cc.director = this.director;
+        cc.winSize = this.director ? this.director.getWinSize() : null;
+        cc.eventManager = this.eventManager;
+        cc.shaderCache = this.shaderCache;
+        cc.inputManager = this.inputManager;
     },
 
     /**
@@ -1970,27 +1976,29 @@ cc.Game.prototype = /** @lends cc.Game# */{
 
     _prepare: function () {
         if (cc._engineLoaded) {
-            // Define properties
-            // cc.winSize
-            var self = this;
-            cc.defineGetterSetter(cc, "winSize", function() {return self.director.getWinSize();});
-            cc.defineGetterSetter(cc, "eventManager", function() {return self.eventManager;});
-            cc.defineGetterSetter(cc, "inputManager", function() {return self.inputManager;});
-            cc.defineGetterSetter(cc, "shaderCache", function() {return self.shaderCache;});
+            cc._initDebugSetting(this.config[cc.Game.CONFIG_KEY.debugMode]);
 
-            this._initRenderer();
+            this._initRenderer(this.config[cc.Game.CONFIG_KEY.width], this.config[cc.Game.CONFIG_KEY.height]);
+            cc.shaderCache = this.shaderCache;
 
             // Init view, director and event manager
-            this.eventManager = new cc.EventManager(this);
-            this.inputManager = new cc.InputManager(this);
+            cc.eventManager = this.eventManager = new cc.EventManager(this);
+            cc.inputManager = this.inputManager = new cc.InputManager(this);
 
             this.view = new cc.EGLView(this);
             this.view.initialize();
+
+            if (this.renderType === cc.Game.RENDER_TYPE_CANVAS)
+                cc.renderer = this.renderer = new cc.RendererCanvas();
+            else if (this.renderType === cc.Game.RENDER_TYPE_WEBGL)
+                cc.renderer = this.renderer = new cc.RendererWebGL();
 
             this.director = new cc.DisplayLinkDirector(this);
             this.director.init();
             if (this.director.setOpenGLView)
                 this.director.setOpenGLView(this.view);
+
+            cc.winSize = this.director.getWinSize();
 
             this._initEvents();
 
@@ -2034,7 +2042,13 @@ cc.Game.prototype = /** @lends cc.Game# */{
             element = cc.$(el) || cc.$('#' + el),
             localCanvas, localContainer, localConStyle;
 
-        if (element.tagName == "CANVAS") {
+        if (!el) {
+            width = width || 480;
+            height = height || 320;
+            this.canvas = localCanvas = cc.$(cc.newElement("CANVAS"));
+            this.container = localContainer = cc.$(cc.newElement("DIV"));
+            localContainer.setAttribute('id', 'Cocos2dGameContainer');
+        } else if (element.tagName == "CANVAS") {
             width = width || element.width;
             height = height || element.height;
 
@@ -2050,8 +2064,8 @@ cc.Game.prototype = /** @lends cc.Game# */{
             }
             width = width || element.clientWidth;
             height = height || element.clientHeight;
-            localCanvas = cc.$(cc.newElement("CANVAS"));
-            localContainer = this.container = element;
+            this.canvas = localCanvas = cc.$(cc.newElement("CANVAS"));
+            this.container = localContainer = element;
         }
         localContainer.appendChild(localCanvas);
 
@@ -2170,7 +2184,7 @@ cc.Game.prototype = /** @lends cc.Game# */{
         if(config[CONFIG_KEY.renderMode] == null)
             config[CONFIG_KEY.renderMode] = 1;
 
-        if (modules.indexOf("core") < 0) modules.splice(0, 0, "core");
+        if (modules && modules.indexOf("core") < 0) modules.splice(0, 0, "core");
 
 // RenderType
         var userRenderMode = parseInt(config[CONFIG_KEY.renderMode]);
@@ -2189,7 +2203,7 @@ cc.Game.prototype = /** @lends cc.Game# */{
             }
             else {
                 // Add base4webgl module
-                if (modules.indexOf("base4webgl") < 0) modules.splice(0, 0, "base4webgl");
+                if (modules && modules.indexOf("base4webgl") < 0) modules.splice(0, 0, "base4webgl");
             }
         }
 
@@ -2203,7 +2217,7 @@ cc.Game.prototype = /** @lends cc.Game# */{
         this.renderType = renderType;
 
 // Config
-        config[CONFIG_KEY.modules] = modules;
+        modules && (config[CONFIG_KEY.modules] = modules);
         self.config = config;
     }
 
@@ -2230,6 +2244,8 @@ cc.Game.EVENT_SHOW = "game_on_show";
  * @type {Object}
  */
 cc.Game.CONFIG_KEY = {
+    width: "width",
+    height: "height",
     engineDir: "engineDir",
     modules: "modules",
     debugMode: "debugMode",
@@ -2241,7 +2257,9 @@ cc.Game.CONFIG_KEY = {
     classReleaseMode: "classReleaseMode"
 };
 
-cc.game = null;
+cc.game = {
+    renderType: cc.Game.RENDER_TYPE_CANVAS
+};
 
 //init debug move to CCDebugger
 cc._initSys();
