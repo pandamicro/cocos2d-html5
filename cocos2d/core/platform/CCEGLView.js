@@ -157,6 +157,8 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
     _isAdjustViewPort: true,
     _targetDensityDPI: null,
 
+    _backgroundColor: "#000",
+
     game: null,
     canvas: null,
 
@@ -745,6 +747,13 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
      */
     getDevicePixelRatio: function() {
         return this._devicePixelRatio;
+    },
+
+    setBackgroundColor: function (color) {
+        this._backgroundColor = cc.colorToHex(color);
+    },
+    getBackgroundColor: function () {
+        return cc.hexToColor(this._backgroundColor);
     },
 
     /**

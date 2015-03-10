@@ -1943,16 +1943,19 @@ cc.Game.prototype = /** @lends cc.Game# */{
         window.clearTimeout(id);
     },
     //Run game.
-    _runMainLoop: function () {
-        var self = this, callback, config = self.config, CONFIG_KEY = cc.Game.CONFIG_KEY,
-            director = self.director;
+    frameRun: function () {
+        this.setEnvironment();
+        this.director.mainLoop();
+    },
 
-        director.setDisplayStats(config[CONFIG_KEY.showFPS]);
+    _runMainLoop: function () {
+        var self = this, callback, config = self.config, CONFIG_KEY = cc.Game.CONFIG_KEY;
+
+        self.director.setDisplayStats(config[CONFIG_KEY.showFPS]);
 
         callback = function () {
             if (!self._paused) {
-                self.setEnvironment();
-                director.mainLoop();
+                self.frameRun();
                 if(self._intervalId)
                     self._cancelAnimationFrame.call(window, self._intervalId);
                 self._intervalId = self._requestAnimationFrame.call(window, callback);
@@ -1961,6 +1964,14 @@ cc.Game.prototype = /** @lends cc.Game# */{
 
         self._requestAnimationFrame.call(window, callback);
         self._paused = false;
+    },
+
+    pause: function () {
+        this._paused = true;
+    },
+    resume: function () {
+        this._paused = false;
+        this._runMainLoop();
     },
 
     /**
