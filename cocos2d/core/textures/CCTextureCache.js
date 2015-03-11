@@ -257,7 +257,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
 
         // prevents overloading the autorelease pool
         var texture = new cc.Texture2D();
-        texture.initWithImage(image);
+        texture.initWithElement(image);
         if ((key != null) && (texture != null))
             this._textures[key] = texture;
         else
