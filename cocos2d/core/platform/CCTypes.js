@@ -188,7 +188,7 @@ cc.blendFuncDisable = function () {
 };
 
 /**
- * convert a string of color for style to Color.
+ * convert a hex string of color for style to Color.
  * e.g. "#ff06ff"  to : cc.color(255,6,255)
  * @function
  * @param {String} hex
@@ -204,7 +204,7 @@ cc.hexToColor = function (hex) {
 };
 
 /**
- * convert Color to a string of color for style.
+ * convert Color to a hex string of color for style.
  * e.g.  cc.color(255,6,255)  to : "#ff06ff"
  * @function
  * @param {cc.Color} color
@@ -213,6 +213,35 @@ cc.hexToColor = function (hex) {
 cc.colorToHex = function (color) {
     var hR = color.r.toString(16), hG = color.g.toString(16), hB = color.b.toString(16);
     return "#" + (color.r < 16 ? ("0" + hR) : hR) + (color.g < 16 ? ("0" + hG) : hG) + (color.b < 16 ? ("0" + hB) : hB);
+};
+
+/**
+* convert a string of color for style to Color.
+* e.g. "rgba(255, 6, 255, 0.5)"  to : cc.color(255,6,255)
+* @function
+* @param {String} hex
+* @return {cc.Color}
+*/
+cc.stringToColor = function (str) {
+    str = str.replace(/^rgba?\(?/, "");
+    //str = str.substr(0, str.length-1);
+    var res = str.split(",");
+    var r = parseInt(res[0]);
+    var g = parseInt(res[1]);
+    var b = parseInt(res[2]);
+    var a = res[3] === undefined ? parseFloat(res[3])*255 : 255;
+    return cc.color(r, g, b, a);
+};
+
+/**
+* convert Color to a string of color for style.
+* e.g.  cc.color(255,6,255,128)  to : "rgba(255, 6, 255, 0.5)"
+* @function
+* @param {cc.Color} color
+* @return {String}
+*/
+cc.colorToString = function (color) {
+    return "rgba(" + color.r + "," + color.g + "," + color.b + "," + (color.a/255) + ")";
 };
 
 /**
@@ -405,4 +434,3 @@ if (cc.game.renderType === cc.Game.RENDER_TYPE_WEBGL) {
 cc.assert(cc.isFunction(cc._tmp.PrototypeColor), cc._LogInfos.MissingFile, "CCTypesPropertyDefine.js");
 cc._tmp.PrototypeColor();
 delete cc._tmp.PrototypeColor;
-
