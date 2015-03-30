@@ -158,6 +158,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
     _targetDensityDPI: null,
 
     _backgroundColor: "#000",
+    _backgroundOpac: false,
 
     game: null,
     canvas: null,
@@ -750,6 +751,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
     },
 
     setBackgroundColor: function (color) {
+        this._backgroundOpac = (color.a < 255);
         this._backgroundColor = cc.colorToHex(color);
     },
     getBackgroundColor: function () {

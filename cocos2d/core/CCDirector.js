@@ -966,6 +966,8 @@ if (cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS) {
         var context = this.game._renderContext.getContext();
         context.setTransform(1,0,0,1, 0, 0);
         context.fillStyle = this.view._backgroundColor;
+        if (this.view._backgroundOpac)
+            context.clearRect(-viewport.x, viewport.y, viewport.width, viewport.height);
         context.fillRect(-viewport.x, viewport.y, viewport.width, viewport.height);
     };
 
