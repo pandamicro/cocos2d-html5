@@ -2198,10 +2198,12 @@ cc.Game.prototype = /** @lends cc.Game# */{
         if (modules && modules.indexOf("core") < 0) modules.splice(0, 0, "core");
 
 // RenderType
-        var userRenderMode = parseInt(config[CONFIG_KEY.renderMode]);
+        var userRenderMode = parseInt(config[CONFIG_KEY.renderMode]);   // 0: WebGL, 1: Canvas
         var renderType = cc.Game.RENDER_TYPE_WEBGL;
         this._supportRender = true;
-        if (userRenderMode === 1 || (userRenderMode === 0 && cc.sys._notSupportGL) || (location.origin == "file://")) {
+        if (userRenderMode === 1
+            || (userRenderMode === 0 && cc.sys._notSupportGL)
+            || (location.origin == "file://" && !cc._isNodeJs)) {
             renderType = cc.Game.RENDER_TYPE_CANVAS;
         }
 
