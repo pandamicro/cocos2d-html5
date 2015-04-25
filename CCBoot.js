@@ -2105,7 +2105,7 @@ cc.Game.prototype = /** @lends cc.Game# */{
             this.shaderCache = new cc.ShaderCache();
             this.shaderCache._init();
 // Need to move out
-            cc._drawingUtil = new cc.DrawingPrimitiveWebGL(this._renderContext);
+            cc._drawingUtil = cc.DrawingPrimitiveWebGL ? new cc.DrawingPrimitiveWebGL(this._renderContext) : null;
             cc.textureCache._initializingRenderer();
         } else {
             this._renderContext = new cc.CanvasContextWrapper(localCanvas.getContext("2d"));
