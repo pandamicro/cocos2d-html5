@@ -65,7 +65,7 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
 
         this._insertProtectedChild(child, localZOrder);
         child.setParent(this);
-        child.setOrderOfArrival(cc.s_globalOrderOfArrival);
+        child.setOrderOfArrival(cc.game.s_globalOrderOfArrival);
 
         if(this._running){
             child.onEnter();
@@ -185,7 +185,7 @@ cc.ProtectedNode = cc.Node.extend(/** @lends cc.ProtectedNode# */{
     reorderProtectedChild: function(child, localZOrder){
         cc.assert( child != null, "Child must be non-nil");
         this._reorderProtectedChildDirty = true;
-        child.setOrderOfArrival(cc.s_globalOrderOfArrival++);
+        child.setOrderOfArrival(cc.game.s_globalOrderOfArrival++);
         child._setLocalZOrder(localZOrder);
     },
 

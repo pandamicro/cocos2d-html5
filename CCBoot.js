@@ -1865,6 +1865,7 @@ cc.Game.prototype = /** @lends cc.Game# */{
     director: null,
     inputManager: null,
     eventManager: null,
+    s_globalOrderOfArrival: 1,
 
     renderType: 0,
 

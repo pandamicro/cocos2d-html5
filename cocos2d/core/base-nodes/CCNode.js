@@ -34,7 +34,7 @@ cc.NODE_TAG_INVALID = -1;
 /**
  * XXX: Yes, nodes might have a sort problem once every 15 days if the game runs at 60 FPS and each frame sprites are reordered.
  */
-cc.s_globalOrderOfArrival = 1;
+cc.game.s_globalOrderOfArrival = 1;
 
 /**
  * <p>cc.Node is the root class of all node. Anything that gets drawn or contains things that get drawn is a cc.Node.<br/>
@@ -1277,7 +1277,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
             child.setName(name);
 
         child.setParent(this);
-        child.setOrderOfArrival(cc.s_globalOrderOfArrival++);
+        child.setOrderOfArrival(cc.game.s_globalOrderOfArrival++);
 
         if( this._running ){
             child.onEnter();
@@ -1439,8 +1439,8 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
     reorderChild: function (child, zOrder) {
         cc.assert(child, cc._LogInfos.Node_reorderChild);
         cc.renderer.childrenOrderDirty = this._reorderChildDirty = true;
-        child.arrivalOrder = cc.s_globalOrderOfArrival;
-        cc.s_globalOrderOfArrival++;
+        child.arrivalOrder = cc.game.s_globalOrderOfArrival;
+        cc.game.s_globalOrderOfArrival++;
         child._setLocalZOrder(zOrder);
     },
 
