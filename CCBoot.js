@@ -1883,6 +1883,7 @@ cc.Game.prototype = /** @lends cc.Game# */{
 
     setEnvironment: function () {
         cc.game = this;
+        cc.view = this.view;
         cc.renderer = this.renderer;
         cc.director = this.director;
         cc.winSize = this.director ? this.director.getWinSize() : null;
