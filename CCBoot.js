@@ -1892,6 +1892,7 @@ cc.Game.prototype = /** @lends cc.Game# */{
         cc.shaderCache = this.shaderCache;
         cc.inputManager = this.inputManager;
         cc._drawingUtil = this._drawingUtil;
+        cc._renderContext = this._renderContext;
         //cc.g_NumberOfDraws
     },
 
