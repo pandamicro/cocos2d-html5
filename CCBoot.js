@@ -414,7 +414,7 @@ cc.path = /** @lends cc.path# */{
      * @param {string} fileName
      * @returns {string}
      */
-    mainFileName: function(fileName){
+     mainFileName: function(fileName){
         if(fileName){
            var idx = fileName.lastIndexOf(".");
             if(idx !== -1)
@@ -1866,6 +1866,7 @@ cc.Game.prototype = /** @lends cc.Game# */{
     inputManager: null,
     eventManager: null,
     s_globalOrderOfArrival: 1,
+    _drawingUtil: null,
 
     renderType: 0,
 
@@ -1890,6 +1891,8 @@ cc.Game.prototype = /** @lends cc.Game# */{
         cc.eventManager = this.eventManager;
         cc.shaderCache = this.shaderCache;
         cc.inputManager = this.inputManager;
+        cc._drawingUtil = this._drawingUtil;
+        //cc.g_NumberOfDraws
     },
 
     /**
@@ -2106,12 +2109,11 @@ cc.Game.prototype = /** @lends cc.Game# */{
             win.gl = this._renderContext; // global variable declared in CCMacro.js
             this.shaderCache = new cc.ShaderCache();
             this.shaderCache._init();
-// Need to move out
-            cc._drawingUtil = cc.DrawingPrimitiveWebGL ? new cc.DrawingPrimitiveWebGL(this._renderContext) : null;
+            this._drawingUtil = cc.DrawingPrimitiveWebGL ? new cc.DrawingPrimitiveWebGL(this._renderContext) : null;
             cc.textureCache._initializingRenderer();
         } else {
             this._renderContext = new cc.CanvasContextWrapper(localCanvas.getContext("2d"));
-            cc._drawingUtil = cc.DrawingPrimitiveCanvas ? new cc.DrawingPrimitiveCanvas(this._renderContext) : null;
+            this._drawingUtil = cc.DrawingPrimitiveCanvas ? new cc.DrawingPrimitiveCanvas(this._renderContext) : null;
         }
 
         cc._setContextMenuEnable(this.canvas, false);
