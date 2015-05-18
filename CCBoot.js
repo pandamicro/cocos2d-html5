@@ -2285,7 +2285,7 @@ cc.Game.CONFIG_KEY = {
 };
 
 cc.game = {
-    renderType: cc.Game.RENDER_TYPE_CANVAS
+    renderType: cc.Game.RENDER_TYPE_WEBGL
 };
 
 //init debug move to CCDebugger
