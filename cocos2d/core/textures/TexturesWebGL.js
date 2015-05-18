@@ -339,13 +339,14 @@ cc._tmp.WebGLTexture2D = function () {
                 point.x, height + point.y, 0.0,
                 width + point.x, height + point.y, 0.0 ];
 
-            cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_TEX_COORDS);
+            var gl = cc.game._renderContext;
+
+            cc.glEnableVertexAttribs(gl, cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_TEX_COORDS);
             self._shaderProgram.use();
             self._shaderProgram.setUniformsForBuiltins();
 
             cc.glBindTexture2D(self);
 
-            var gl = cc.game._renderContext;
             gl.vertexAttribPointer(cc.VERTEX_ATTRIB_POSITION, 2, gl.FLOAT, false, 0, vertices);
             gl.vertexAttribPointer(cc.VERTEX_ATTRIB_TEX_COORDS, 2, gl.FLOAT, false, 0, coordinates);
 
@@ -369,13 +370,13 @@ cc._tmp.WebGLTexture2D = function () {
                 rect.x, rect.y + rect.height, /*0.0,*/
                 rect.x + rect.width, rect.y + rect.height        /*0.0*/ ];
 
-            cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_TEX_COORDS);
+            var gl = cc.game._renderContext;
+
+            cc.glEnableVertexAttribs(gl, cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_TEX_COORDS);
             self._shaderProgram.use();
             self._shaderProgram.setUniformsForBuiltins();
 
             cc.glBindTexture2D(self);
-
-            var gl = cc.game._renderContext;
             gl.vertexAttribPointer(cc.VERTEX_ATTRIB_POSITION, 2, gl.FLOAT, false, 0, vertices);
             gl.vertexAttribPointer(cc.VERTEX_ATTRIB_TEX_COORDS, 2, gl.FLOAT, false, 0, coordinates);
 
@@ -812,7 +813,7 @@ cc._tmp.WebGLTextureAtlas = function () {
         //vertices
         //gl.bindBuffer(gl.ARRAY_BUFFER, _t._buffersVBO[0]);
         // XXX: update is done in draw... perhaps it should be done in a timer
-        cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
+        cc.glEnableVertexAttribs(gl, cc.VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, _t._quadsWebBuffer);
         if (_t.dirty){

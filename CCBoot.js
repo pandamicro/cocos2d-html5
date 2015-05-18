@@ -1084,6 +1084,10 @@ cc.create3DContext = function (canvas, opt_attribs) {
             break;
         }
     }
+    // Predefine flags
+    context._vertexAttribPosition = null;
+    context._vertexAttribColor = null;
+    context._vertexAttribTexCoords = null;
     return context;
 };
 //+++++++++++++++++++++++++something about sys begin+++++++++++++++++++++++++++++

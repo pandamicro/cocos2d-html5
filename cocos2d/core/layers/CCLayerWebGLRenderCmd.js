@@ -81,7 +81,7 @@
 
         this._shaderProgram.use();
         this._shaderProgram._setUniformForMVPMatrixWithMat4(this._stackMatrix);
-        cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_COLOR);
+        cc.glEnableVertexAttribs(context, cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_COLOR);
         cc.glBlendFunc(ctx, node._blendFunc.src, node._blendFunc.dst);
 
         //

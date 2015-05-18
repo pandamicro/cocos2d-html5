@@ -186,36 +186,42 @@ cc.setProjectionMatrixDirty = function () {
  * @function
  * @param {cc.VERTEX_ATTRIB_FLAG_POSITION | cc.VERTEX_ATTRIB_FLAG_COLOR | cc.VERTEX_ATTRIB_FLAG_TEX_OORDS} flags
  */
-cc.glEnableVertexAttribs = function (flags) {
+cc.glEnableVertexAttribs = function (ctx, flags) {
+    if (flags === undefined) {
+        flags = ctx;
+        ctx = cc.game._renderContext;
+    }
+    else {
+        ctx = ctx || cc.game._renderContext;
+    }
     /* Position */
-    var ctx = cc.game._renderContext;
     var enablePosition = ( flags & cc.VERTEX_ATTRIB_FLAG_POSITION );
-    if (enablePosition !== cc._vertexAttribPosition) {
+    if (enablePosition !== ctx._vertexAttribPosition) {
         if (enablePosition)
             ctx.enableVertexAttribArray(cc.VERTEX_ATTRIB_POSITION);
         else
             ctx.disableVertexAttribArray(cc.VERTEX_ATTRIB_POSITION);
-        cc._vertexAttribPosition = enablePosition;
+        ctx._vertexAttribPosition = enablePosition;
     }
 
     /* Color */
     var enableColor = (flags & cc.VERTEX_ATTRIB_FLAG_COLOR);
-    if (enableColor !== cc._vertexAttribColor) {
+    if (enableColor !== ctx._vertexAttribColor) {
         if (enableColor)
             ctx.enableVertexAttribArray(cc.VERTEX_ATTRIB_COLOR);
         else
             ctx.disableVertexAttribArray(cc.VERTEX_ATTRIB_COLOR);
-        cc._vertexAttribColor = enableColor;
+        ctx._vertexAttribColor = enableColor;
     }
 
     /* Tex Coords */
     var enableTexCoords = (flags & cc.VERTEX_ATTRIB_FLAG_TEX_COORDS);
-    if (enableTexCoords !== cc._vertexAttribTexCoords) {
+    if (enableTexCoords !== ctx._vertexAttribTexCoords) {
         if (enableTexCoords)
             ctx.enableVertexAttribArray(cc.VERTEX_ATTRIB_TEX_COORDS);
         else
             ctx.disableVertexAttribArray(cc.VERTEX_ATTRIB_TEX_COORDS);
-        cc._vertexAttribTexCoords = enableTexCoords;
+        ctx._vertexAttribTexCoords = enableTexCoords;
     }
 };
 

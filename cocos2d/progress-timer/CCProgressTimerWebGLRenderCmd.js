@@ -51,7 +51,7 @@
 
         var blendFunc = node._sprite._blendFunc;
         cc.glBlendFunc(ctx, blendFunc.src, blendFunc.dst);
-        cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
+        cc.glEnableVertexAttribs(context, cc.VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
 
         cc.glBindTexture2D(node._sprite.texture);
 
