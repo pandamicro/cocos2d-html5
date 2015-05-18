@@ -29,12 +29,12 @@
  * @class
  * @name cc.textureCache
  */
-cc.textureCache = /** @lends cc.textureCache# */{
-    _textures: {},
-    _textureColorsCache: {},
-    _textureKeySeq: (0 | Math.random() * 1000),
+cc.TextureCache = cc.Class.extend(/** @lends cc.textureCache# */{
+    _textures: null,
+    _textureColorsCache: null,
+    _textureKeySeq: 0,
 
-    _loadedTexturesBefore: {},
+    _loadedTexturesBefore: null,
 
     //handleLoadedTexture move to Canvas/WebGL
 
@@ -47,6 +47,13 @@ cc.textureCache = /** @lends cc.textureCache# */{
             tex2d.handleLoadedTexture();
             locTextures[selPath] = tex2d;
         }
+        this._loadedTexturesBefore = {};
+    },
+
+    ctor: function () {
+        this._textures = {};
+        this._textureColorsCache = {};
+        this._textureKeySeq = (0 | Math.random() * 1000);
         this._loadedTexturesBefore = {};
     },
 
@@ -304,11 +311,11 @@ cc.textureCache = /** @lends cc.textureCache# */{
         this._textureKeySeq = (0 | Math.random() * 1000);
         this._loadedTexturesBefore = {};
     }
-};
+});
 
 if (cc.game.renderType === cc.Game.RENDER_TYPE_CANVAS) {
 
-    var _p = cc.textureCache;
+    var _p = cc.TextureCache.prototype;
 
     _p.handleLoadedTexture = function (url) {
         var locTexs = this._textures;

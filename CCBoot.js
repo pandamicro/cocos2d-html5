@@ -1883,17 +1883,20 @@ cc.Game.prototype = /** @lends cc.Game# */{
     onStop: null,
 
     setEnvironment: function () {
-        cc.game = this;
-        cc.view = this.view;
-        cc.renderer = this.renderer;
-        cc.director = this.director;
-        cc.winSize = this.director ? this.director.getWinSize() : null;
-        cc.eventManager = this.eventManager;
-        cc.shaderCache = this.shaderCache;
-        cc.inputManager = this.inputManager;
-        cc._drawingUtil = this._drawingUtil;
-        cc._renderContext = this._renderContext;
-        //cc.g_NumberOfDraws
+        if (cc.game !== this) {
+            cc.game = this;
+            cc.view = this.view;
+            cc.renderer = this.renderer;
+            cc.director = this.director;
+            cc.winSize = this.director ? this.director.getWinSize() : null;
+            cc.eventManager = this.eventManager;
+            cc.shaderCache = this.shaderCache;
+            cc.textureCache = this.textureCache;
+            cc.inputManager = this.inputManager;
+            cc._drawingUtil = this._drawingUtil;
+            cc._renderContext = this._renderContext;
+            //cc.g_NumberOfDraws
+        }
     },
 
     /**
@@ -1997,6 +2000,7 @@ cc.Game.prototype = /** @lends cc.Game# */{
 
             this._initRenderer(this.config[cc.Game.CONFIG_KEY.width], this.config[cc.Game.CONFIG_KEY.height]);
             cc.shaderCache = this.shaderCache;
+            cc.textureCache = this.textureCache;
 
             // Init view, director and event manager
             cc.eventManager = this.eventManager = new cc.EventManager(this);
@@ -2109,9 +2113,10 @@ cc.Game.prototype = /** @lends cc.Game# */{
         if (this._renderContext) {
             win.gl = this._renderContext; // global variable declared in CCMacro.js
             this.shaderCache = new cc.ShaderCache();
-            this.shaderCache._init();
+            this.shaderCache._init(this._renderContext);
             this._drawingUtil = cc.DrawingPrimitiveWebGL ? new cc.DrawingPrimitiveWebGL(this._renderContext) : null;
-            cc.textureCache._initializingRenderer();
+            this.textureCache = new cc.TextureCache();
+            this.textureCache._initializingRenderer();
         } else {
             this._renderContext = new cc.CanvasContextWrapper(localCanvas.getContext("2d"));
             this._drawingUtil = cc.DrawingPrimitiveCanvas ? new cc.DrawingPrimitiveCanvas(this._renderContext) : null;

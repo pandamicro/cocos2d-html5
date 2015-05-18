@@ -837,7 +837,7 @@ cc._tmp.WebGLTextureAtlas = function () {
 };
 
 cc._tmp.WebGLTextureCache = function () {
-    var _p = cc.textureCache;
+    var _p = cc.TextureCache.prototype;
 
     _p.handleLoadedTexture = function (url) {
         var locTexs = this._textures;
