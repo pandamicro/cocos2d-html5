@@ -105,6 +105,10 @@ cc.Node.RenderCmd.prototype = {
         this._dirtyFlag |= dirtyFlag;
     },
 
+    removeDirtyFlag: function(dirtyFlag) {
+        this._dirtyFlag = this._dirtyFlag - (this._dirtyFlag & dirtyFlag);
+    },
+
     getParentRenderCmd: function(){
         if(this._node && this._node._parent && this._node._parent._renderCmd)
             return this._node._parent._renderCmd;
@@ -449,7 +453,7 @@ cc.Node.RenderCmd.prototype = {
         cc.Node.RenderCmd.prototype.setDirtyFlag.call(this, dirtyFlag);
         this._setCacheDirty();                  //TODO it should remove from here.
         if(this._cachedParent)
-            this._cachedParent.setDirtyFlag(dirtyFlag);
+            this._cachedParent.setDirtyFlag(cc.Node._dirtyFlags.cacheDirty);
     };
 
     proto._setCacheDirty = function () {

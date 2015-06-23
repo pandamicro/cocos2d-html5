@@ -48,6 +48,7 @@
             cc.renderer.childrenOrderDirty = true;
             //limit: 1. its children's blendfunc are invalid.
             this._isBaked = this._cacheDirty = true;
+            this.setDirtyFlag(cc.Node._dirtyFlags.cacheDirty);
 
             var children = this._node._children;
             for(var i = 0, len = children.length; i < len; i++)
@@ -55,6 +56,7 @@
 
             if (!this._bakeSprite){
                 this._bakeSprite = new cc.BakeSprite();
+                this._bakeSprite.setParent(this._node);
                 this._bakeSprite.setAnchorPoint(0,0);
             }
         }
@@ -78,34 +80,44 @@
     };
 
     proto.rendering = function(){
-        if(this._cacheDirty){
+        if(this._dirtyFlag > 0){
             var node = this._node;
             var children = node._children, locBakeSprite = this._bakeSprite;
+            var parentCmd = this.getParentRenderCmd();
 
-            //compute the bounding box of the bake layer.
-            this.transform(this.getParentRenderCmd(), true);
-
+            this.transform(parentCmd, true);
+            //compute the bounding box of the bake layer
             var boundingBox = this._getBoundingBoxForBake();
             boundingBox.width = 0|(boundingBox.width+0.5);
             boundingBox.height = 0|(boundingBox.height+0.5);
+            var cacheTrans = cc.affineTransformMakeIdentity();
+            cacheTrans.tx = boundingBox.x;
+            cacheTrans.ty = boundingBox.y;
+            locBakeSprite._renderCmd._worldTransform = cc.affineTransformConcat(this._worldTransform, cacheTrans);
 
-            var bakeContext = locBakeSprite.getCacheContext();
-            var ctx = bakeContext.getContext();
-            locBakeSprite.resetCanvasSize(boundingBox.width, boundingBox.height);
+            if (this._dirtyFlag > cc.Node._dirtyFlags.transformDirty) {
+                //locBakeSprite.setPosition(boundingBox.x, boundingBox.y);
 
-            bakeContext.setOffset(0 - boundingBox.x, ctx.canvas.height - boundingBox.height + boundingBox.y );
-            locBakeSprite.setPosition(boundingBox.x, boundingBox.y);
+                var transInv = cc.affineTransformInvert(cacheTrans);
+                var bakeContext = locBakeSprite.getCacheContext();
+                locBakeSprite.resetCanvasSize(boundingBox.width, boundingBox.height);
+                //bakeContext.setTransform(transInv);
+                //var ctx = bakeContext.getContext();
+                // bakeContext.setOffset(0 - boundingBox.x, ctx.canvas.height - boundingBox.height + boundingBox.y );
 
-            //visit for canvas
-            node.sortAllChildren();
-            cc.renderer._turnToCacheMode(this.__instanceId);
-            for (var i = 0, len = children.length; i < len; i++) {
-                children[i].visit(this);
+                //visit for canvas
+                node.sortAllChildren();
+                cc.renderer._turnToCacheMode(this.__instanceId);
+                for (var i = 0, len = children.length; i < len; i++) {
+                    children[i].visit(this, true);
+                }
+
+                cc.renderer._renderingToCacheCanvas(bakeContext, this.__instanceId, 1, 1, transInv);
+                this.removeDirtyFlag(cc.Node._dirtyFlags.cacheDirty);
             }
-            cc.renderer._renderingToCacheCanvas(bakeContext, this.__instanceId);
-            locBakeSprite.transform();                   //because bake sprite's position was changed at rendering.
             this._cacheDirty = false;
         }
+        this._dirtyFlag = 0;
     };
 
     proto.visit = function(parentCmd){
@@ -126,7 +138,7 @@
 
         //the bakeSprite is drawing
         this._bakeSprite.visit(this);
-        this._dirtyFlag = 0;
+        //this._dirtyFlag = 0;
     };
 
     proto._bakeForAddChild = function(child){
@@ -140,18 +152,18 @@
         //query child's BoundingBox
         if (!node._children || node._children.length === 0)
             return cc.rect(0, 0, 10, 10);
-        var trans = node.getNodeToWorldTransform();
+        //var trans = node.getNodeToWorldTransform();
 
         var locChildren = node._children;
         for (var i = 0, len = locChildren.length; i < len; i++) {
             var child = locChildren[i];
             if (child && child._visible) {
                 if(rect){
-                    var childRect = child._getBoundingBoxToCurrentNode(trans);
+                    var childRect = child._getBoundingBoxToCurrentNode();
                     if (childRect)
                         rect = cc.rectUnion(rect, childRect);
                 }else{
-                    rect = child._getBoundingBoxToCurrentNode(trans);
+                    rect = child._getBoundingBoxToCurrentNode();
                 }
             }
         }

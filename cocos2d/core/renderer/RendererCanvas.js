@@ -60,16 +60,19 @@ cc.rendererCanvas = {
      * @param {Number} [scaleX]
      * @param {Number} [scaleY]
      */
-    _renderingToCacheCanvas: function (ctx, instanceID, scaleX, scaleY) {
+    _renderingToCacheCanvas: function (ctx, instanceID, scaleX, scaleY, additionalTrans) {
         if (!ctx)
             cc.log("The context of RenderTexture is invalid.");
         scaleX = cc.isUndefined(scaleX) ? 1 : scaleX;
         scaleY = cc.isUndefined(scaleY) ? 1 : scaleY;
         instanceID = instanceID || this._currentID;
-        var locCmds = this._cacheToCanvasCmds[instanceID], i, len;
+        var locCmds = this._cacheToCanvasCmds[instanceID], i, len, worldTrans;
         ctx.computeRealOffsetY();
         for (i = 0, len = locCmds.length; i < len; i++) {
+            worldTrans = locCmds[i]._worldTransform;
+            additionalTrans && (locCmds[i]._worldTransform = cc.affineTransformConcat(worldTrans, additionalTrans));
             locCmds[i].rendering(ctx, scaleX, scaleY);
+            locCmds[i]._worldTransform = worldTrans;
         }
         locCmds.length = 0;
         var locIDs = this._cacheInstanceIds;
