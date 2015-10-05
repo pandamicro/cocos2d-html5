@@ -65,7 +65,26 @@ cc._addEventListener = function (element, type, listener, useCapture) {
 };
 
 //is nodejs ? Used to support node-webkit.
-cc._isNodeJs = typeof require !== 'undefined' && require("fs");
+cc._isNodeJs = !!(typeof process !== 'undefined' && process.versions && process.versions.node);
+
+cc.isEditor = cc._isNodeJs && typeof Editor !== 'undefined';
+
+// if global_defs not declared by uglify, declare them globally
+// (use eval to ignore uglify)
+if (typeof CC_EDITOR === 'undefined') {
+    eval('CC_EDITOR=cc.isEditor');
+}
+if (typeof CC_DEV === 'undefined') {
+    eval('CC_DEV=CC_EDITOR');
+}
+if (typeof CC_TEST === 'undefined') {
+    if (CC_EDITOR) {
+        eval('CC_TEST=typeof describe!=="undefined"');
+    }
+    else {
+        eval('CC_TEST=typeof QUnit!=="undefined"');
+    }
+}
 
 /**
  * Iterate over an object or an array, executing a function for each matched element.
@@ -1147,7 +1166,11 @@ cc.formatStr = function(){
 
 //to make sure the cc.log, cc.warn, cc.error and cc.assert would not throw error before init by debugger mode.
 
-cc.log = cc.warn = cc.error = cc.assert = function () {
+cc.log = cc.warn = cc.error = cc.assert = cc.info = function () {
+};
+
+cc._throw = function (error) {
+    cc.error(error.stack || error);
 };
 
 //+++++++++++++++++++++++++something about log end+++++++++++++++++++++++++++++
@@ -1741,7 +1764,7 @@ cc._initSys = function (config, CONFIG_KEY) {
     } catch (e) {
         var warn = function () {
             cc.warn("Warning: localStorage isn't enabled. Please confirm browser cookie or privacy option");
-        }
+        };
         sys.localStorage = {
             getItem : warn,
             setItem : warn,
@@ -1834,7 +1857,7 @@ cc._initSys = function (config, CONFIG_KEY) {
         str += "os : " + self.os + "\r\n";
         str += "platform : " + self.platform + "\r\n";
         cc.log(str);
-    }
+    };
 
     /**
      * Open a url in browser
@@ -1844,7 +1867,7 @@ cc._initSys = function (config, CONFIG_KEY) {
      */
     sys.openURL = function(url){
         window.open(url);
-    }
+    };
 };
 
 //+++++++++++++++++++++++++something about sys end+++++++++++++++++++++++++++++

@@ -1,4 +1,5 @@
 lib
+bin
 /web.config
 .idea
 build
