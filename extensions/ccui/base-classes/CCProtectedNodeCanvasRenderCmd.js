@@ -145,7 +145,7 @@
     };
 
     var proto = cc.ProtectedNode.CanvasRenderCmd.prototype = Object.create(cc.Node.CanvasRenderCmd.prototype);
-    cc.inject(cc.ProtectedNode.RenderCmd, proto);
+    cc.js.mixin(cc.ProtectedNode.RenderCmd, proto);
     proto.constructor = cc.ProtectedNode.CanvasRenderCmd;
 
     proto.visit = function(parentCmd){

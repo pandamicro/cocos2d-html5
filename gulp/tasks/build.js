@@ -129,26 +129,26 @@ function createBundler() {
     return bundler;
 }
 
-function modularity () {
-    if (typeof exports !== 'undefined') {
-        if (typeof module !== 'undefined' && module.exports) {
-            exports = module.exports = cc;
-        }
-        exports.cc = cc;
-    }
-    else if (typeof define !== 'undefined' && define.amd) {
-        define(cc);
-    }
-    else {
-        var root = typeof global !== 'undefined' ? global : window;
-        root.cc = cc;
-    }
-}
+//function modularity () {
+//    if (typeof exports !== 'undefined') {
+//        if (typeof module !== 'undefined' && module.exports) {
+//            exports = module.exports = cc;
+//        }
+//        exports.cc = cc;
+//    }
+//    else if (typeof define !== 'undefined' && define.amd) {
+//        define(cc);
+//    }
+//    else {
+//        var root = typeof global !== 'undefined' ? global : window;
+//        root.cc = cc;
+//    }
+//}
 
 gulp.task('build-modular-cocos2d', ['clean'], function () {
-    var header = new Buffer('(function () {\n');
-    var footer = new Buffer('\n(' + modularity + ')();\n' +
-                            '}).call(window);\n');
+    var header = new Buffer('(function (cc) {\n');
+    var footer = new Buffer(/*'\n(' + modularity + ')();\n' +*/
+                            '\n}).call(window, cc);\n');
 
     function wrap (header, footer) {
         return es.through(function (file) {

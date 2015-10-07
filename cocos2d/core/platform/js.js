@@ -21,9 +21,9 @@ function _copyprop(name, source, target) {
 /**
  * This module provides some JavaScript utilities.
  *
- * @module cc.JS
+ * @module cc.js
  */
-var JS = {
+var js = {
 
     /**
      * copy all properties not defined in obj from arguments[1...n]
@@ -39,7 +39,7 @@ var JS = {
             var source = arguments[i];
             if (source) {
                 if (typeof source !== 'object') {
-                    cc.error('cc.JS.addon called on non-object:', source);
+                    cc.error('cc.js.addon called on non-object:', source);
                     continue;
                 }
                 for ( var name in source) {
@@ -66,7 +66,7 @@ var JS = {
             var source = arguments[i];
             if (source) {
                 if (typeof source !== 'object') {
-                    cc.error('cc.JS.mixin: arguments must be type object:', source);
+                    cc.error('cc.js.mixin: arguments must be type object:', source);
                     continue;
                 }
                 for ( var name in source) {
@@ -118,7 +118,7 @@ var JS = {
     },
 
     /**
-     * 查找所有父类，直到找到原始定义 property 的地方
+     * Get property descriptor in object and all its ancestors
      * @method getPropertyDescriptor
      * @param {object} obj
      * @param {string} name
@@ -134,7 +134,7 @@ var JS = {
  * @param {object|function} obj - instance or constructor
  * @return {string}
  */
-JS.getClassName = function (obj) {
+js.getClassName = function (obj) {
     if (typeof obj === 'function') {
         if (obj.prototype.__classname__) {
             return obj.prototype.__classname__;
@@ -176,7 +176,7 @@ function getTempClassIdInEditor () {
     }
 }
 
-JS._isTempClassId = function (id) {
+js._isTempClassId = function (id) {
     return CC_EDITOR && id.startsWith(TCID);
 };
 
@@ -200,7 +200,7 @@ JS._isTempClassId = function (id) {
                     if (CC_TEST) {
                         error += ' (This may be caused by error of unit test.) \
 If you dont need serialization, you can set class id to "". You can also call \
-cc.JS.unregisterClass to remove the id of unused class';
+cc.js.unregisterClass to remove the id of unused class';
                     }
                     cc.error(error);
                 }
@@ -221,7 +221,7 @@ cc.JS.unregisterClass to remove the id of unused class';
      * @param {function} constructor
      * @private
      */
-    JS._setClassId = getRegister('__cid__', _idToClass);
+    js._setClassId = getRegister('__cid__', _idToClass);
 
     var doSetClassName = getRegister('__classname__', _nameToClass);
 
@@ -231,13 +231,13 @@ cc.JS.unregisterClass to remove the id of unused class';
      * @param {string} className
      * @param {function} constructor
      */
-    JS.setClassName = function (className, constructor) {
+    js.setClassName = function (className, constructor) {
         doSetClassName(className, constructor);
         // auto set class id
         if (!constructor.prototype.hasOwnProperty('__cid__')) {
             var id = className || (CC_EDITOR && getTempClassIdInEditor());
             if (id) {
-                JS._setClassId(id, constructor);
+                js._setClassId(id, constructor);
             }
         }
     };
@@ -251,7 +251,7 @@ cc.JS.unregisterClass to remove the id of unused class';
      * @method unregisterClass
      * @param {function} ...constructor - the class you will want to unregister, any number of classes can be added
      */
-    JS.unregisterClass = function (constructor) {
+    js.unregisterClass = function (constructor) {
         'use strict';
         for (var i = 0; i < arguments.length; i++) {
             var p = arguments[i].prototype;
@@ -273,15 +273,8 @@ cc.JS.unregisterClass to remove the id of unused class';
      * @return {function} constructor
      * @private
      */
-    JS._getClassById = function (classId) {
-        var cls = _idToClass[classId];
-        if (CC_EDITOR && !cls) {
-            if (classId.length === 32) {
-                // 尝试解析旧的 uuid 压缩格式
-                cls = _idToClass[Editor.compressUuid(classId)];
-            }
-        }
-        return cls;
+    js._getClassById = function (classId) {
+        return _idToClass[classId];
     };
 
     /**
@@ -290,7 +283,7 @@ cc.JS.unregisterClass to remove the id of unused class';
      * @param {string} classname
      * @return {function} constructor
      */
-    JS.getClassByName = function (classname) {
+    js.getClassByName = function (classname) {
         return _nameToClass[classname];
     };
 
@@ -302,13 +295,13 @@ cc.JS.unregisterClass to remove the id of unused class';
      * @return {string}
      * @private
      */
-    JS._getClassId = function (obj, allowTempId) {
+    js._getClassId = function (obj, allowTempId) {
         allowTempId = (typeof allowTempId !== 'undefined' ? allowTempId: true) && CC_EDITOR;
 
         var res;
         if (typeof obj === 'function' && obj.prototype.hasOwnProperty('__cid__')) {
             res = obj.prototype.__cid__;
-            if (!allowTempId && JS._isTempClassId(res)) {
+            if (!allowTempId && js._isTempClassId(res)) {
                 return '';
             }
             return res;
@@ -317,7 +310,7 @@ cc.JS.unregisterClass to remove the id of unused class';
             var prototype = obj.constructor.prototype;
             if (prototype && prototype.hasOwnProperty('__cid__')) {
                 res = obj.__cid__;
-                if (!allowTempId && JS._isTempClassId(res)) {
+                if (!allowTempId && js._isTempClassId(res)) {
                     return '';
                 }
                 return res;
@@ -327,7 +320,7 @@ cc.JS.unregisterClass to remove the id of unused class';
     };
 
     if (CC_EDITOR) {
-        Object.defineProperty(JS, '_registeredClassIds', {
+        Object.defineProperty(js, '_registeredClassIds', {
             get: function () {
                 var dump = {};
                 for (var id in _idToClass) {
@@ -336,13 +329,13 @@ cc.JS.unregisterClass to remove the id of unused class';
                 return dump;
             },
             set: function (value) {
-                JS.clear(_idToClass);
+                js.clear(_idToClass);
                 for (var id in value) {
                     _idToClass[id] = value[id];
                 }
             }
         });
-        Object.defineProperty(JS, '_registeredClassNames', {
+        Object.defineProperty(js, '_registeredClassNames', {
             get: function () {
                 var dump = {};
                 for (var id in _nameToClass) {
@@ -351,7 +344,7 @@ cc.JS.unregisterClass to remove the id of unused class';
                 return dump;
             },
             set: function (value) {
-                JS.clear(_nameToClass);
+                js.clear(_nameToClass);
                 for (var id in value) {
                     _nameToClass[id] = value[id];
                 }
@@ -370,7 +363,7 @@ cc.JS.unregisterClass to remove the id of unused class';
  * @param {function} setter
  * @param {Boolean} [enumerable=false]
  */
-JS.getset = function (obj, prop, getter, setter, enumerable) {
+js.getset = function (obj, prop, getter, setter, enumerable) {
     Object.defineProperty(obj, prop, {
         get: getter,
         set: setter,
@@ -386,7 +379,7 @@ JS.getset = function (obj, prop, getter, setter, enumerable) {
  * @param {function} getter
  * @param {Boolean} [enumerable=false]
  */
-JS.get = function (obj, prop, getter, enumerable) {
+js.get = function (obj, prop, getter, enumerable) {
     Object.defineProperty(obj, prop, {
         get: getter,
         enumerable: !!enumerable
@@ -401,7 +394,7 @@ JS.get = function (obj, prop, getter, enumerable) {
  * @param {function} setter
  * @param {Boolean} [enumerable=false]
  */
-JS.set = function (obj, prop, setter, enumerable) {
+js.set = function (obj, prop, setter, enumerable) {
     Object.defineProperty(obj, prop, {
         set: setter,
         enumerable: !!enumerable
@@ -416,16 +409,16 @@ JS.set = function (obj, prop, setter, enumerable) {
  * @param {string} newPropName - "NewParam"
  * @param {bool} [writable=false]
  */
-JS.obsolete = function (obj, obsoleted, newPropName, writable) {
+js.obsolete = function (obj, obsoleted, newPropName, writable) {
     var oldName = obsoleted.split('.').slice(-1);
-    JS.get(obj, oldName, function () {
+    js.get(obj, oldName, function () {
         if (CC_DEV) {
             cc.warn('"%s" is deprecated, use "%s" instead please.', obsoleted, newPropName);
         }
         return obj[newPropName];
     });
     if (writable) {
-        JS.set(obj, oldName, function (value) {
+        js.set(obj, oldName, function (value) {
             if (CC_DEV) {
                 cc.warn('"%s" is deprecated, use "%s" instead please.', obsoleted, newPropName);
             }
@@ -442,10 +435,10 @@ JS.obsolete = function (obj, obsoleted, newPropName, writable) {
  * @param {object} props
  * @param {bool} [writable=false]
  */
-JS.obsoletes = function (obj, objName, props, writable) {
+js.obsoletes = function (obj, objName, props, writable) {
     for (var obsoleted in props) {
         var newName = props[obsoleted];
-        JS.obsolete(obj, objName + '.' + obsoleted, newName, writable);
+        js.obsolete(obj, objName + '.' + obsoleted, newName, writable);
     }
 };
 
@@ -453,7 +446,7 @@ JS.obsoletes = function (obj, objName, props, writable) {
  * @class Array
  * @static
  */
-JS.Array = {
+js.Array = {
     /**
      * Removes the first occurrence of a specific object from the array.
      * @method remove
@@ -494,36 +487,6 @@ JS.Array = {
     }
 };
 
-/**
- * @class String
- * @static
- */
-JS.String = {
-    /**
-     * The startsWith() method determines whether a string begins with the characters of another string, returning true or false as appropriate.
-     * @method startsWith
-     * @param {string} string
-     * @param {string} searchString - The characters to be searched for at the start of this string.
-     * @param {string} [position=0] - Optional. The position in this string at which to begin searching for searchString; defaults to 0.
-     * @return {boolean}
-     */
-    startsWith: function (string, searchString, position) {
-        return string.startsWith(searchString, position);
-    },
+cc.js = js;
 
-    /**
-     * This method lets you determine whether or not a string ends with another string.
-     * @method startsWith
-     * @param {string} string
-     * @param {string} searchString - The characters to be searched for at the end of this string.
-     * @param {string} [position=0] - Optional. Search within this string as if this string were only this long; defaults to this string's actual length, clamped within the range established by this string's length.
-     * @return {boolean}
-     */
-    endsWith: function (string, searchString, position) {
-        return string.endsWith(searchString, position);
-    },
-};
-
-cc.JS = JS;
-
-module.exports = JS;
+module.exports = js;

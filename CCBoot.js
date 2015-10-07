@@ -67,7 +67,7 @@ cc._addEventListener = function (element, type, listener, useCapture) {
 //is nodejs ? Used to support node-webkit.
 cc._isNodeJs = !!(typeof process !== 'undefined' && process.versions && process.versions.node);
 
-cc.isEditor = cc._isNodeJs && typeof Editor !== 'undefined';
+cc.isEditor = typeof Editor !== 'undefined';
 
 // if global_defs not declared by uglify, declare them globally
 // (use eval to ignore uglify)
@@ -2430,3 +2430,5 @@ cc._urlRegExp = new RegExp(
         "(?:/\\S*)?" +
     "$", "i"
 );
+
+require('../cocos2d/core/platform/js');
