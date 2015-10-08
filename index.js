@@ -46,13 +46,41 @@ require('./bin/modular-cocos2d');
 
 // EXTENDS FOR FIREBALL
 
-require('./cocos2d/core/platform/js');
+require('./cocos2d/core/platform');
+require('./cocos2d/core/assets');
+
+if (cc.sys.isBrowser) {
+    // engine, runtime...
+}
 
 if (CC_EDITOR) {
 
     require('./cocos2d/deprecated');
 
+    /**
+     * In editor, in addition to the modules defined in cc scope, you can also access to the internal modules by using _require.
+     * @method _require
+     * @example
+     * var isDomNode = cc._require('./cocos2d/core/platform/utils').isDomNode;
+     */
+    cc._require = require;
+
+    if (cc.sys.platform === cc.sys.EDITOR_CORE) {
+        //Editor.versions['cocos2d'] = require('./package.json').version;
+    }
 }
 
+if (cc.isEditor && cc.sys.platform === cc.sys.EDITOR_CORE) {
+    cc.isRuntimeNode = function () {
+        return false;
+    };
+    getWrapper = function () {
+        return null;
+    };
+}
+else {
+    //cc.Runtime = require('./runtime/index');
+    cc.isRuntimeNode = cc.getWrapperType;   // 由于是借助 wrapper 来判断，所以该方法只有在 wrapper 都注册好后才有效
+}
 
 module.exports = cc;

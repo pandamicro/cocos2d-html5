@@ -1,0 +1,42 @@
+<link rel="import" href="packages://inspector/share/node-header.html">
+<link rel="import" href="packages://inspector/share/mixins-section.html">
+<link rel="import" href="node-size-enable-section.html">
+<link rel="import" href="widget-section.html">
+<link rel="import" href="layout-section.html">
+
+<dom-module id="runtime-page-view-wrapper-inspector">
+    <link rel="import" type="css" href="packages://inspector/share/common.css">
+
+    <template>
+        <inspector-node-header
+            target="{{target}}"
+        >
+        </inspector-node-header>
+
+        <div class="props flex-1">
+            <inspector-runtime-node-size-enable-section target="{{target}}">
+            </inspector-runtime-node-size-enable-section>
+
+            <inspector-runtime-widget-section target="{{target}}">
+            </inspector-runtime-widget-section>
+
+            <inspector-runtime-layout-section target="{{target}}">
+            </inspector-runtime-layout-section>
+
+            <inspector-mixins-section target="{{target}}">
+            </inspector-mixins-section>
+        </div>
+    </template>
+
+    <script>
+        Editor.registerElement({
+            properties: {
+                target: {
+                    type: Object,
+                    value: null,
+                    notify: true,
+                },
+            },
+        });
+    </script>
+</dom-module>

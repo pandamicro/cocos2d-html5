@@ -1,0 +1,24 @@
+<dom-module id="inspector-runtime-scroll-view-section">
+    <style>
+    </style>
+
+    <template>
+        <editor-section text="Scroll">
+            <editor-prop prop="{{target.direction}}"></editor-prop>
+            <editor-prop prop="{{target.bounce}}"></editor-prop>
+            <editor-prop prop="{{target.innerSize}}"></editor-prop>
+        </editor-section>
+    </template>
+
+    <script>
+        Editor.registerElement({
+            properties: {
+                target: {
+                    type: Object,
+                    value: null,
+                    notify: true,
+                },
+            },
+        });
+    </script>
+</dom-module>

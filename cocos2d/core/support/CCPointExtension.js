@@ -243,6 +243,15 @@ cc.clampf = function (value, min_inclusive, max_inclusive) {
 };
 
 /**
+ * Clamp a value between 0 and 1.
+ * @param {Number} value
+ * @return {Number}
+ */
+cc.clamp01 = function (value) {
+    return value < 0 ? 0 : value < 1 ? value : 1;
+};
+
+/**
  * Clamp a point between from and to.
  * @param {Point} p
  * @param {Number} min_inclusive

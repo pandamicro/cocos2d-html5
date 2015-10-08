@@ -12,7 +12,7 @@ global.paths = {
         src: 'qunit/unit/**/*.js',
         runner: 'qunit/lib/qunit-runner.html',
         lib: [
-            'editor/static/cc-config.js',
+            'gulp/cc-config.js',
             'bin/cocos2d.test.js',
         ]
     },

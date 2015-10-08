@@ -1,0 +1,102 @@
+<link rel="import" href="packages://inspector/share/node-header.html">
+<link rel="import" href="packages://inspector/share/mixins-section.html">
+<link rel="import" href="node-section.html">
+
+<dom-module id="runtime-particle-wrapper-inspector">
+    <link rel="import" type="css" href="packages://inspector/share/common.css">
+
+    <template>
+        <inspector-node-header
+            target="{{target}}"
+        >
+        </inspector-node-header>
+
+        <div class="props flex-1">
+            <inspector-runtime-node-section target="{{target}}">
+            </inspector-runtime-node-section>
+
+            <editor-section text="Default">
+                <editor-prop prop="{{target.preview}}"></editor-prop>
+                <editor-prop prop="{{target.file}}"></editor-prop>
+                <editor-prop prop="{{target.particleCount}}"></editor-prop>
+                <editor-prop prop="{{target.custom}}"></editor-prop>
+            </editor-section>
+
+            <template is="dom-if" if="[[target.custom.value]]">
+                <editor-section text="Custom">
+                    <editor-prop prop="{{target.texture}}"></editor-prop>
+                    <editor-prop prop="{{target.maxParticles}}"></editor-prop>
+                    <editor-prop prop="{{target.duration}}"></editor-prop>
+                    <editor-prop prop="{{target.emissionRate}}"></editor-prop>
+                    <editor-prop prop="{{target.life}}"></editor-prop>
+                    <editor-prop prop="{{target.lifeVariance}}"></editor-prop>
+                    <editor-prop prop="{{target.startColor}}"></editor-prop>
+                    <editor-prop prop="{{target.startColorVariance}}"></editor-prop>
+                    <editor-prop prop="{{target.endColor}}"></editor-prop>
+                    <editor-prop prop="{{target.endColorVariance}}"></editor-prop>
+                    <editor-prop prop="{{target.angle}}"></editor-prop>
+                    <editor-prop prop="{{target.angleVariance}}"></editor-prop>
+                    <editor-prop prop="{{target.startSize}}"></editor-prop>
+                    <editor-prop prop="{{target.startSizeVariance}}"></editor-prop>
+                    <editor-prop prop="{{target.endSize}}"></editor-prop>
+                    <editor-prop prop="{{target.endSizeVariance}}"></editor-prop>
+                    <editor-prop prop="{{target.startSpin}}"></editor-prop>
+                    <editor-prop prop="{{target.startSpinVariance}}"></editor-prop>
+                    <editor-prop prop="{{target.endSpin}}"></editor-prop>
+                    <editor-prop prop="{{target.endSpinVariance}}"></editor-prop>
+                    <editor-prop prop="{{target.sourcePosition}}"></editor-prop>
+                    <editor-prop prop="{{target.sourcePositionVariance}}"></editor-prop>
+                    <editor-prop prop="{{target.positionType}}"></editor-prop>
+                    <editor-prop prop="{{target.emitterMode}}"></editor-prop>
+                </editor-section>
+            </template>
+
+            <template is="dom-if" if="[[_isGravityMode(target.custom.value, target.emitterMode.value)]]">
+                <editor-section text="Gravity Mode">
+                    <editor-prop prop="{{target.gravity}}"></editor-prop>
+                    <editor-prop prop="{{target.speed}}"></editor-prop>
+                    <editor-prop prop="{{target.speedVariance}}"></editor-prop>
+                    <editor-prop prop="{{target.tangentialAccel}}"></editor-prop>
+                    <editor-prop prop="{{target.tangentialAccelVariance}}"></editor-prop>
+                    <editor-prop prop="{{target.radialAccel}}"></editor-prop>
+                    <editor-prop prop="{{target.radialAccelVariance}}"></editor-prop>
+                    <editor-prop prop="{{target.rotationIsDir}}"></editor-prop>
+                </editor-section>
+            </template>
+
+            <template is="dom-if" if="[[_isRadiusMode(target.custom.value, target.emitterMode.value)]]">
+                <editor-section text="Radius Mode">
+                    <editor-prop prop="{{target.startRadius}}"></editor-prop>
+                    <editor-prop prop="{{target.startRadiusVariance}}"></editor-prop>
+                    <editor-prop prop="{{target.endRadius}}"></editor-prop>
+                    <editor-prop prop="{{target.endRadiusVariance}}"></editor-prop>
+                    <editor-prop prop="{{target.rotatePerSecond}}"></editor-prop>
+                    <editor-prop prop="{{target.rotatePerSecondVariance}}"></editor-prop>
+                </editor-section>
+            </template>
+
+            <inspector-mixins-section target="{{target}}">
+            </inspector-mixins-section>
+        </div>
+    </template>
+
+    <script>
+        Editor.registerElement({
+            properties: {
+                target: {
+                    type: Object,
+                    value: null,
+                    notify: true,
+                },
+            },
+
+            _isGravityMode: function(custom, mode) {
+                return custom && mode === 0;
+            },
+
+            _isRadiusMode: function(custom, mode) {
+                return custom && mode === 1;
+            }
+        });
+    </script>
+</dom-module>

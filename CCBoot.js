@@ -85,6 +85,11 @@ if (typeof CC_TEST === 'undefined') {
         eval('CC_TEST=typeof QUnit!=="undefined"');
     }
 }
+if (CC_TEST) {
+    // contains internal apis for unit tests
+    // @expose
+    cc._Test = {};
+}
 
 /**
  * Iterate over an object or an array, executing a function for each matched element.
@@ -379,165 +384,10 @@ cc.async = /** @lends cc.async# */{
 };
 //+++++++++++++++++++++++++something about async end+++++++++++++++++++++++++++++++++
 
-//+++++++++++++++++++++++++something about path begin++++++++++++++++++++++++++++++++
-/**
- * @class
- */
-cc.path = /** @lends cc.path# */{
-    normalizeRE: /[^\.\/]+\/\.\.\//,
-
-    /**
-     * Join strings to be a path.
-     * @example
-     cc.path.join("a", "b.png");//-->"a/b.png"
-     cc.path.join("a", "b", "c.png");//-->"a/b/c.png"
-     cc.path.join("a", "b");//-->"a/b"
-     cc.path.join("a", "b", "/");//-->"a/b/"
-     cc.path.join("a", "b/", "/");//-->"a/b/"
-     * @returns {string}
-     */
-    join: function () {
-        var l = arguments.length;
-        var result = "";
-        for (var i = 0; i < l; i++) {
-            result = (result + (result === "" ? "" : "/") + arguments[i]).replace(/(\/|\\\\)$/, "");
-        }
-        return result;
-    },
-
-    /**
-     * Get the ext name of a path.
-     * @example
-     cc.path.extname("a/b.png");//-->".png"
-     cc.path.extname("a/b.png?a=1&b=2");//-->".png"
-     cc.path.extname("a/b");//-->null
-     cc.path.extname("a/b?a=1&b=2");//-->null
-     * @param {string} pathStr
-     * @returns {*}
-     */
-    extname: function (pathStr) {
-        var temp = /(\.[^\.\/\?\\]*)(\?.*)?$/.exec(pathStr);
-        return temp ? temp[1] : null;
-    },
-
-    /**
-     * Get the main name of a file name
-     * @param {string} fileName
-     * @returns {string}
-     */
-    mainFileName: function(fileName){
-        if(fileName){
-           var idx = fileName.lastIndexOf(".");
-            if(idx !== -1)
-               return fileName.substring(0,idx);
-        }
-        return fileName;
-    },
-
-    /**
-     * Get the file name of a file path.
-     * @example
-     cc.path.basename("a/b.png");//-->"b.png"
-     cc.path.basename("a/b.png?a=1&b=2");//-->"b.png"
-     cc.path.basename("a/b.png", ".png");//-->"b"
-     cc.path.basename("a/b.png?a=1&b=2", ".png");//-->"b"
-     cc.path.basename("a/b.png", ".txt");//-->"b.png"
-     * @param {string} pathStr
-     * @param {string} [extname]
-     * @returns {*}
-     */
-    basename: function (pathStr, extname) {
-        var index = pathStr.indexOf("?");
-        if (index > 0) pathStr = pathStr.substring(0, index);
-        var reg = /(\/|\\\\)([^(\/|\\\\)]+)$/g;
-        var result = reg.exec(pathStr.replace(/(\/|\\\\)$/, ""));
-        if (!result) return null;
-        var baseName = result[2];
-        if (extname && pathStr.substring(pathStr.length - extname.length).toLowerCase() === extname.toLowerCase())
-            return baseName.substring(0, baseName.length - extname.length);
-        return baseName;
-    },
-
-    /**
-     * Get dirname of a file path.
-     * @example
-     * unix
-     cc.path.driname("a/b/c.png");//-->"a/b"
-     cc.path.driname("a/b/c.png?a=1&b=2");//-->"a/b"
-     cc.path.dirname("a/b/");//-->"a/b"
-     cc.path.dirname("c.png");//-->""
-     * windows
-     cc.path.driname("a\\b\\c.png");//-->"a\b"
-     cc.path.driname("a\\b\\c.png?a=1&b=2");//-->"a\b"
-     * @param {string} pathStr
-     * @returns {*}
-     */
-    dirname: function (pathStr) {
-        return pathStr.replace(/((.*)(\/|\\|\\\\))?(.*?\..*$)?/, '$2');
-    },
-
-    /**
-     * Change extname of a file path.
-     * @example
-     cc.path.changeExtname("a/b.png", ".plist");//-->"a/b.plist"
-     cc.path.changeExtname("a/b.png?a=1&b=2", ".plist");//-->"a/b.plist?a=1&b=2"
-     * @param {string} pathStr
-     * @param {string} [extname]
-     * @returns {string}
-     */
-    changeExtname: function (pathStr, extname) {
-        extname = extname || "";
-        var index = pathStr.indexOf("?");
-        var tempStr = "";
-        if (index > 0) {
-            tempStr = pathStr.substring(index);
-            pathStr = pathStr.substring(0, index);
-        }
-        index = pathStr.lastIndexOf(".");
-        if (index < 0) return pathStr + extname + tempStr;
-        return pathStr.substring(0, index) + extname + tempStr;
-    },
-    /**
-     * Change file name of a file path.
-     * @example
-     cc.path.changeBasename("a/b/c.plist", "b.plist");//-->"a/b/b.plist"
-     cc.path.changeBasename("a/b/c.plist?a=1&b=2", "b.plist");//-->"a/b/b.plist?a=1&b=2"
-     cc.path.changeBasename("a/b/c.plist", ".png");//-->"a/b/c.png"
-     cc.path.changeBasename("a/b/c.plist", "b");//-->"a/b/b"
-     cc.path.changeBasename("a/b/c.plist", "b", true);//-->"a/b/b.plist"
-     * @param {String} pathStr
-     * @param {String} basename
-     * @param {Boolean} [isSameExt]
-     * @returns {string}
-     */
-    changeBasename: function (pathStr, basename, isSameExt) {
-        if (basename.indexOf(".") === 0) return this.changeExtname(pathStr, basename);
-        var index = pathStr.indexOf("?");
-        var tempStr = "";
-        var ext = isSameExt ? this.extname(pathStr) : "";
-        if (index > 0) {
-            tempStr = pathStr.substring(index);
-            pathStr = pathStr.substring(0, index);
-        }
-        index = pathStr.lastIndexOf("/");
-        index = index <= 0 ? 0 : index + 1;
-        return pathStr.substring(0, index) + basename + ext + tempStr;
-    },
-    //todo make public after verification
-    _normalize: function(url){
-        var oldUrl = url = String(url);
-
-        //removing all ../
-        do {
-            oldUrl = url;
-            url = url.replace(this.normalizeRE, "");
-        } while(oldUrl.length !== url.length);
-        return url;
-    }
-};
-//+++++++++++++++++++++++++something about path end++++++++++++++++++++++++++++++++
-
 //+++++++++++++++++++++++++something about loader start+++++++++++++++++++++++++++
+
+var FireUrl = CC_EDITOR && !CC_TEST && require('fire-url');
+
 /**
  * Loader for resource loading process. It's a singleton object.
  * @class
@@ -791,6 +641,10 @@ cc.loader = /** @lends cc.loader# */{
      * @returns {Image}
      */
     loadImg: function (url, option, callback) {
+        if (CC_EDITOR && FireUrl) {
+            url = FireUrl.addRandomQuery(url);
+        }
+
         var opt = {
             isCrossOrigin: true
         };
@@ -1553,6 +1407,25 @@ cc._initSys = function (config, CONFIG_KEY) {
      */
     sys.DESKTOP_BROWSER = 101;
 
+    /**
+     * Indicates whether executes in editor's window process (Electron's renderer context)
+     * @memberof cc.sys
+     * @name EDITOR_PAGE
+     * @constant
+     * @default
+     * @type {Number}
+     */
+    sys.EDITOR_PAGE = 102;
+    /**
+     * Indicates whether executes in editor's main process (Electron's browser context)
+     * @memberof cc.sys
+     * @name EDITOR_CORE
+     * @constant
+     * @default
+     * @type {Number}
+     */
+    sys.EDITOR_CORE = 103;
+
     sys.BROWSER_TYPE_WECHAT = "wechat";
     sys.BROWSER_TYPE_ANDROID = "androidbrowser";
     sys.BROWSER_TYPE_IE = "ie";
@@ -1582,116 +1455,149 @@ cc._initSys = function (config, CONFIG_KEY) {
      */
     sys.isNative = false;
 
-    var win = window, nav = win.navigator, doc = document, docEle = doc.documentElement;
-    var ua = nav.userAgent.toLowerCase();
-
     /**
-     * Indicate whether system is mobile system
+     * Is web browser ?
      * @memberof cc.sys
-     * @name isMobile
+     * @name isBrowser
      * @type {Boolean}
      */
-    sys.isMobile = ua.indexOf('mobile') !== -1 || ua.indexOf('android') !== -1;
+    sys.isBrowser = typeof window === 'object' && typeof document === 'object';
 
-    /**
-     * Indicate the running platform
-     * @memberof cc.sys
-     * @name platform
-     * @type {Number}
-     */
-    sys.platform = sys.isMobile ? sys.MOBILE_BROWSER : sys.DESKTOP_BROWSER;
+    if (cc.isEditor && !sys.isBrowser) {
+        // core level
+        sys.isMobile = false;
+        sys.platform = sys.EDITOR_CORE;
+        //sys.language = undefined;
+        sys.os = ({
+            darwin: sys.OS_OSX,
+            win32: sys.OS_WINDOWS,
+            linux: sys.OS_LINUX
+        })[process.platform] || sys.OS_UNKNOWN;
+        //sys.browserType = undefined;
+        //sys.browserVersion = undefined;
+        //sys.windowPixelResolution = undefined;
+    }
+    else {
+        // browser or runtime
+        var win = window, nav = win.navigator, doc = document, docEle = doc.documentElement;
+        var ua = nav.userAgent.toLowerCase();
 
-    var currLanguage = nav.language;
-    currLanguage = currLanguage ? currLanguage : nav.browserLanguage;
-    currLanguage = currLanguage ? currLanguage.split("-")[0] : sys.LANGUAGE_ENGLISH;
+        if (cc.isEditor) {
+            sys.isMobile = false;
+            sys.platform = sys.EDITOR_PAGE;
+        }
+        else {
+            /**
+             * Indicate whether system is mobile system
+             * @memberof cc.sys
+             * @name isMobile
+             * @type {Boolean}
+             */
+            sys.isMobile = ua.indexOf('mobile') !== -1 || ua.indexOf('android') !== -1;
 
-    /**
-     * Indicate the current language of the running system
-     * @memberof cc.sys
-     * @name language
-     * @type {String}
-     */
-    sys.language = currLanguage;
+            /**
+             * Indicate the running platform
+             * @memberof cc.sys
+             * @name platform
+             * @type {Number}
+             */
+            sys.platform = sys.isMobile ? sys.MOBILE_BROWSER : sys.DESKTOP_BROWSER;
+        }
 
-    // Get the os of system
-    var iOS = ( ua.match(/(iPad|iPhone|iPod)/i) ? true : false );
-    var isAndroid = ua.match(/android/i) || nav.platform.match(/android/i) ? true : false;
-    var osName = sys.OS_UNKNOWN;
-    if (nav.appVersion.indexOf("Win") !== -1) osName = sys.OS_WINDOWS;
-    else if (iOS) osName = sys.OS_IOS;
-    else if (nav.appVersion.indexOf("Mac") !== -1) osName = sys.OS_OSX;
-    else if (nav.appVersion.indexOf("X11") !== -1 && nav.appVersion.indexOf("Linux") === -1) osName = sys.OS_UNIX;
-    else if (isAndroid) osName = sys.OS_ANDROID;
-    else if (nav.appVersion.indexOf("Linux") !== -1) osName = sys.OS_LINUX;
+        var currLanguage = nav.language;
+        currLanguage = currLanguage ? currLanguage : nav.browserLanguage;
+        currLanguage = currLanguage ? currLanguage.split("-")[0] : sys.LANGUAGE_ENGLISH;
 
-    /**
-     * Indicate the running os name
-     * @memberof cc.sys
-     * @name os
-     * @type {String}
-     */
-    sys.os = osName;
+        /**
+         * Indicate the current language of the running system
+         * @memberof cc.sys
+         * @name language
+         * @type {String}
+         */
+        sys.language = currLanguage;
 
-    /**
-     * Indicate the running browser type
-     * @memberof cc.sys
-     * @name browserType
-     * @type {String}
-     */
-    sys.browserType = sys.BROWSER_TYPE_UNKNOWN;
-    /* Determine the browser type */
-    (function(){
-        var typeReg1 = /sogou|qzone|liebao|micromessenger|ucbrowser|360 aphone|360browser|baiduboxapp|baidubrowser|maxthon|mxbrowser|trident|miuibrowser/i;
-        var typeReg2 = /qqbrowser|chrome|safari|firefox|opr|oupeng|opera/i;
-        var browserTypes = typeReg1.exec(ua);
-        if(!browserTypes) browserTypes = typeReg2.exec(ua);
-        var browserType = browserTypes ? browserTypes[0] : sys.BROWSER_TYPE_UNKNOWN;
-        if (browserType === 'micromessenger')
-            browserType = sys.BROWSER_TYPE_WECHAT;
-        else if (browserType === "safari" && (ua.match(/android.*applewebkit/)))
-            browserType = sys.BROWSER_TYPE_ANDROID;
-        else if (browserType === "trident")
-            browserType = sys.BROWSER_TYPE_IE;
-        else if (browserType === "360 aphone")
-            browserType = sys.BROWSER_TYPE_360;
-        else if (browserType === "mxbrowser")
-            browserType = sys.BROWSER_TYPE_MAXTHON;
-        else if (browserType === "opr")
-            browserType = sys.BROWSER_TYPE_OPERA;
+        // Get the os of system
+        var iOS = ( ua.match(/(iPad|iPhone|iPod)/i) ? true : false );
+        var isAndroid = ua.match(/android/i) || nav.platform.match(/android/i) ? true : false;
+        var osName = sys.OS_UNKNOWN;
+        if (nav.appVersion.indexOf("Win") !== -1) osName = sys.OS_WINDOWS;
+        else if (iOS) osName = sys.OS_IOS;
+        else if (nav.appVersion.indexOf("Mac") !== -1) osName = sys.OS_OSX;
+        else if (nav.appVersion.indexOf("X11") !== -1 && nav.appVersion.indexOf("Linux") === -1) osName = sys.OS_UNIX;
+        else if (isAndroid) osName = sys.OS_ANDROID;
+        else if (nav.appVersion.indexOf("Linux") !== -1) osName = sys.OS_LINUX;
 
-        sys.browserType = browserType;
-    })();
+        /**
+         * Indicate the running os name
+         * @memberof cc.sys
+         * @name os
+         * @type {String}
+         */
+        sys.os = osName;
 
-    /**
-     * Indicate the running browser version
-     * @memberof cc.sys
-     * @name browserVersion
-     * @type {Number}
-     */
-    sys.browserVersion = "";
-    /* Determine the browser version number */
-    (function(){
-        var versionReg1 = /(micromessenger|mx|maxthon|baidu|sogou)(mobile)?(browser)?\/?([\d.]+)/i;
-        var versionReg2 = /(msie |rv:|firefox|chrome|ucbrowser|qq|oupeng|opera|opr|safari|miui)(mobile)?(browser)?\/?([\d.]+)/i;
-        var tmp = ua.match(versionReg1);
-        if(!tmp) tmp = ua.match(versionReg2);
-        sys.browserVersion = tmp ? tmp[4] : "";
-    })();
+        /**
+         * Indicate the running browser type
+         * @memberof cc.sys
+         * @name browserType
+         * @type {String}
+         */
+        sys.browserType = sys.BROWSER_TYPE_UNKNOWN;
+        /* Determine the browser type */
+        (function(){
+            var typeReg1 = /sogou|qzone|liebao|micromessenger|ucbrowser|360 aphone|360browser|baiduboxapp|baidubrowser|maxthon|mxbrowser|trident|miuibrowser/i;
+            var typeReg2 = /qqbrowser|chrome|safari|firefox|opr|oupeng|opera/i;
+            var browserTypes = typeReg1.exec(ua);
+            if(!browserTypes) browserTypes = typeReg2.exec(ua);
+            var browserType = browserTypes ? browserTypes[0] : sys.BROWSER_TYPE_UNKNOWN;
+            if (browserType === 'micromessenger')
+                browserType = sys.BROWSER_TYPE_WECHAT;
+            else if (browserType === "safari" && (ua.match(/android.*applewebkit/)))
+                browserType = sys.BROWSER_TYPE_ANDROID;
+            else if (browserType === "trident")
+                browserType = sys.BROWSER_TYPE_IE;
+            else if (browserType === "360 aphone")
+                browserType = sys.BROWSER_TYPE_360;
+            else if (browserType === "mxbrowser")
+                browserType = sys.BROWSER_TYPE_MAXTHON;
+            else if (browserType === "opr")
+                browserType = sys.BROWSER_TYPE_OPERA;
 
-    var w = window.innerWidth || document.documentElement.clientWidth;
-    var h = window.innerHeight || document.documentElement.clientHeight;
-    var ratio = window.devicePixelRatio || 1;
+            sys.browserType = browserType;
+        })();
 
-    /**
-     * Indicate the real pixel resolution of the whole game window
-     * @memberof cc.sys
-     * @name windowPixelResolution
-     * @type {Number}
-     */
-    sys.windowPixelResolution = {
-        width: ratio * w,
-        height: ratio * h
-    };
+
+        /**
+         * Indicate the running browser version
+         * @memberof cc.sys
+         * @name browserVersion
+         * @type {Number}
+         */
+        sys.browserVersion = "";
+        /* Determine the browser version number */
+        (function(){
+            var versionReg1 = /(micromessenger|mx|maxthon|baidu|sogou)(mobile)?(browser)?\/?([\d.]+)/i;
+            var versionReg2 = /(msie |rv:|firefox|chrome|ucbrowser|qq|oupeng|opera|opr|safari|miui)(mobile)?(browser)?\/?([\d.]+)/i;
+            var tmp = ua.match(versionReg1);
+            if(!tmp) tmp = ua.match(versionReg2);
+            sys.browserVersion = tmp ? tmp[4] : "";
+        })();
+
+        var w = window.innerWidth || document.documentElement.clientWidth;
+        var h = window.innerHeight || document.documentElement.clientHeight;
+        var ratio = window.devicePixelRatio || 1;
+
+        /**
+         * Indicate the real pixel resolution of the whole game window
+         * @memberof cc.sys
+         * @name windowPixelResolution
+         * @type {Number}
+         */
+        sys.windowPixelResolution = {
+            width: ratio * w,
+            height: ratio * h
+        };
+    }
+
 
     //++++++++++++++++++something about cc._renderTYpe and cc._supportRender begin++++++++++++++++++++++++++++
 
@@ -2375,6 +2281,191 @@ cc.game = /** @lends cc.game# */{
 };
 cc.game._initConfig();
 //+++++++++++++++++++++++++something about CCGame end+++++++++++++++++++++++++++++
+
+//+++++++++++++++++++++++++something about path begin++++++++++++++++++++++++++++++++
+/**
+ * @class
+ */
+cc.path = /** @lends cc.path# */{
+    normalizeRE: /[^\.\/]+\/\.\.\//,
+
+    /**
+     * Join strings to be a path.
+     * @example
+     cc.path.join("a", "b.png");//-->"a/b.png"
+     cc.path.join("a", "b", "c.png");//-->"a/b/c.png"
+     cc.path.join("a", "b");//-->"a/b"
+     cc.path.join("a", "b", "/");//-->"a/b/"
+     cc.path.join("a", "b/", "/");//-->"a/b/"
+     * @returns {string}
+     */
+    join: function () {
+        var l = arguments.length;
+        var result = "";
+        for (var i = 0; i < l; i++) {
+            result = (result + (result === "" ? "" : "/") + arguments[i]).replace(/(\/|\\\\)$/, "");
+        }
+        return result;
+    },
+
+    /**
+     * Get the ext name of a path.
+     * @example
+     cc.path.extname("a/b.png");//-->".png"
+     cc.path.extname("a/b.png?a=1&b=2");//-->".png"
+     cc.path.extname("a/b");//-->null
+     cc.path.extname("a/b?a=1&b=2");//-->null
+     * @param {string} pathStr
+     * @returns {*}
+     */
+    extname: function (pathStr) {
+        var temp = /(\.[^\.\/\?\\]*)(\?.*)?$/.exec(pathStr);
+        return temp ? temp[1] : null;
+    },
+
+    /**
+     * Get the main name of a file name
+     * @param {string} fileName
+     * @returns {string}
+     */
+    mainFileName: function(fileName){
+        if(fileName){
+            var idx = fileName.lastIndexOf(".");
+            if(idx !== -1)
+                return fileName.substring(0,idx);
+        }
+        return fileName;
+    },
+
+    /**
+     * Get the file name of a file path.
+     * @example
+     cc.path.basename("a/b.png");//-->"b.png"
+     cc.path.basename("a/b.png?a=1&b=2");//-->"b.png"
+     cc.path.basename("a/b.png", ".png");//-->"b"
+     cc.path.basename("a/b.png?a=1&b=2", ".png");//-->"b"
+     cc.path.basename("a/b.png", ".txt");//-->"b.png"
+     * @param {string} pathStr
+     * @param {string} [extname]
+     * @returns {*}
+     */
+    basename: function (pathStr, extname) {
+        var index = pathStr.indexOf("?");
+        if (index > 0) pathStr = pathStr.substring(0, index);
+        var reg = /(\/|\\\\)([^(\/|\\\\)]+)$/g;
+        var result = reg.exec(pathStr.replace(/(\/|\\\\)$/, ""));
+        if (!result) return null;
+        var baseName = result[2];
+        if (extname && pathStr.substring(pathStr.length - extname.length).toLowerCase() === extname.toLowerCase())
+            return baseName.substring(0, baseName.length - extname.length);
+        return baseName;
+    },
+
+    /**
+     * Get dirname of a file path.
+     * @example
+     * unix
+     cc.path.driname("a/b/c.png");//-->"a/b"
+     cc.path.driname("a/b/c.png?a=1&b=2");//-->"a/b"
+     cc.path.dirname("a/b/");//-->"a/b"
+     cc.path.dirname("c.png");//-->""
+     * windows
+     cc.path.driname("a\\b\\c.png");//-->"a\b"
+     cc.path.driname("a\\b\\c.png?a=1&b=2");//-->"a\b"
+     * @param {string} pathStr
+     * @returns {*}
+     */
+    dirname: function (pathStr) {
+        return pathStr.replace(/((.*)(\/|\\|\\\\))?(.*?\..*$)?/, '$2');
+    },
+
+    /**
+     * Change extname of a file path.
+     * @example
+     cc.path.changeExtname("a/b.png", ".plist");//-->"a/b.plist"
+     cc.path.changeExtname("a/b.png?a=1&b=2", ".plist");//-->"a/b.plist?a=1&b=2"
+     * @param {string} pathStr
+     * @param {string} [extname]
+     * @returns {string}
+     */
+    changeExtname: function (pathStr, extname) {
+        extname = extname || "";
+        var index = pathStr.indexOf("?");
+        var tempStr = "";
+        if (index > 0) {
+            tempStr = pathStr.substring(index);
+            pathStr = pathStr.substring(0, index);
+        }
+        index = pathStr.lastIndexOf(".");
+        if (index < 0) return pathStr + extname + tempStr;
+        return pathStr.substring(0, index) + extname + tempStr;
+    },
+    /**
+     * Change file name of a file path.
+     * @example
+     cc.path.changeBasename("a/b/c.plist", "b.plist");//-->"a/b/b.plist"
+     cc.path.changeBasename("a/b/c.plist?a=1&b=2", "b.plist");//-->"a/b/b.plist?a=1&b=2"
+     cc.path.changeBasename("a/b/c.plist", ".png");//-->"a/b/c.png"
+     cc.path.changeBasename("a/b/c.plist", "b");//-->"a/b/b"
+     cc.path.changeBasename("a/b/c.plist", "b", true);//-->"a/b/b.plist"
+     * @param {String} pathStr
+     * @param {String} basename
+     * @param {Boolean} [isSameExt]
+     * @returns {string}
+     */
+    changeBasename: function (pathStr, basename, isSameExt) {
+        if (basename.indexOf(".") === 0) return this.changeExtname(pathStr, basename);
+        var index = pathStr.indexOf("?");
+        var tempStr = "";
+        var ext = isSameExt ? this.extname(pathStr) : "";
+        if (index > 0) {
+            tempStr = pathStr.substring(index);
+            pathStr = pathStr.substring(0, index);
+        }
+        index = pathStr.lastIndexOf("/");
+        index = index <= 0 ? 0 : index + 1;
+        return pathStr.substring(0, index) + basename + ext + tempStr;
+    },
+    //todo make public after verification
+    _normalize: function(url){
+        var oldUrl = url = String(url);
+
+        //removing all ../
+        do {
+            oldUrl = url;
+            url = url.replace(this.normalizeRE, "");
+        } while(oldUrl.length !== url.length);
+        return url;
+    },
+
+    // The platform-specific file separator. '\\' or '/'.
+    sep: (cc.sys.os === cc.sys.OS_WINDOWS ? '\\' : '/'),
+
+    // @param {string} path
+    // @param {boolean|string} [endsWithSep = true]
+    // @returns {string}
+    setEndWithSep: function (path, endsWithSep) {
+        var sep = cc.path.sep;
+        if (typeof endsWithSep === 'undefined') {
+            endsWithSep = true;
+        }
+        else if (typeof endsWithSep === 'string') {
+            sep = endsWithSep;
+            endsWithSep = !!endsWithSep;
+        }
+
+        var endChar = path[path.length - 1];
+        var oldEndWithSep = (endChar === '\\' || endChar === '/');
+        if (!oldEndWithSep && endsWithSep) {
+            path += sep;
+        }
+        else if (oldEndWithSep && !endsWithSep) {
+            path = path.slice(0, -1);
+        }
+        return path;
+    }
+};
+//+++++++++++++++++++++++++something about path end++++++++++++++++++++++++++++++++
 
 Function.prototype.bind = Function.prototype.bind || function (oThis) {
     if (!cc.isFunction(this)) {
