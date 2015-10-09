@@ -1,6 +1,55 @@
 
-var TextAlign = Runtime.TextAlign;
-var TextAnchor = Runtime.TextAnchor;
+var TextAlign = cc.TextAlignment;
+
+var TextAnchor = cc.Enum({
+    /**
+     * @property TopLeft
+     * @type {number}
+     */
+    TopLeft: -1,
+    /**
+     * @property TopCenter
+     * @type {number}
+     */
+    TopCenter: -1,
+    /**
+     * @property TopRight
+     * @type {number}
+     */
+    TopRight: -1,
+    /**
+     * @property MiddleLeft
+     * @type {number}
+     */
+    MiddleLeft: -1,
+    /**
+     * @property MiddleCenter
+     * @type {number}
+     */
+    MiddleCenter: -1,
+    /**
+     * @property MiddleRight
+     * @type {number}
+     */
+    MiddleRight: -1,
+    /**
+     * @property BottomLeft
+     * @type {number}
+     */
+    BottomLeft: -1,
+    /**
+     * @property BottomCenter
+     * @type {number}
+     */
+    BottomCenter: -1,
+    /**
+     * @property BottomRight
+     * @type {number}
+     */
+    BottomRight: -1,
+});
+
+cc._TextAnchor = TextAnchor;
 
 var getAnchorPoint = (function () {
     var Anchor2Point = new Array(TextAnchor.BottomRight + 1);

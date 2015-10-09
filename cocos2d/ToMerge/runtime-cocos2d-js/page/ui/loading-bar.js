@@ -33,7 +33,7 @@ var LoadingBarWrapper = cc.FireClass({
                 }
             },
 
-            type: Runtime.LoadingBarDirection
+            type: ccui.LoadingBar.Type
         },
 
         percent: {
@@ -51,7 +51,7 @@ var LoadingBarWrapper = cc.FireClass({
         },
 
         _direction: {
-            default: Runtime.LoadingBarDirection.Left
+            default: ccui.LoadingBar.Type.LEFT
         },
 
         _percent: {

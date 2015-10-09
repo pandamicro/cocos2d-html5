@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 /**
- * The horizontal box of Cocos UI. Its layout type is ccui.Layout.LINEAR_HORIZONTAL.
+ * The horizontal box of Cocos UI. Its layout type is ccui.Layout.LayoutType.LINEAR_HORIZONTAL.
  * @class
  * @extends ccui.Layout
  */
@@ -49,7 +49,7 @@ ccui.HBox = ccui.Layout.extend(/** @lends ccui.HBox# */{
      */
     init: function(){
         if(ccui.Layout.prototype.init.call(this)){
-            this.setLayoutType(ccui.Layout.LINEAR_HORIZONTAL);
+            this.setLayoutType(ccui.Layout.LayoutType.LINEAR_HORIZONTAL);
             return true;
         }
         return false;

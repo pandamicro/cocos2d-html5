@@ -28,7 +28,7 @@
  * @class
  * @extends ccui.Widget
  *
- * @property {ccui.LoadingBar.TYPE_LEFT | ccui.LoadingBar.TYPE_RIGHT}   direction   - The progress direction of loadingbar
+ * @property {ccui.LoadingBar.Type}   direction   - The progress direction of loadingbar
  * @property {Number}               percent     - The current progress of loadingbar
  */
 ccui.LoadingBar = ccui.Widget.extend(/** @lends ccui.LoadingBar# */{
@@ -56,7 +56,7 @@ ccui.LoadingBar = ccui.Widget.extend(/** @lends ccui.LoadingBar# */{
      * var uiLoadingBar = new ccui.LoadingBar;
      */
     ctor: function (textureName, percentage) {
-        this._direction = ccui.LoadingBar.TYPE_LEFT;
+        this._direction = ccui.LoadingBar.Type.LEFT;
         this._barRendererTextureSize = cc.size(0, 0);
         this._capInsets = cc.rect(0, 0, 0, 0);
         ccui.Widget.prototype.ctor.call(this);
@@ -77,20 +77,20 @@ ccui.LoadingBar = ccui.Widget.extend(/** @lends ccui.LoadingBar# */{
     /**
      * Changes the progress direction of LoadingBar.                           <br/>
      * LoadingBarTypeLeft means progress left to right, LoadingBarTypeRight otherwise.
-     * @param {ccui.LoadingBar.TYPE_LEFT | ccui.LoadingBar.TYPE_RIGHT} dir
+     * @param {ccui.LoadingBar.Type} dir
      */
     setDirection: function (dir) {
         if (this._direction === dir)
             return;
         this._direction = dir;
         switch (this._direction) {
-            case ccui.LoadingBar.TYPE_LEFT:
+            case ccui.LoadingBar.Type.LEFT:
                 this._barRenderer.setAnchorPoint(0, 0.5);
                 this._barRenderer.setPosition(0, this._contentSize.height*0.5);
                 if (!this._scale9Enabled)
                     this._barRenderer.setFlippedX(false);
                 break;
-            case ccui.LoadingBar.TYPE_RIGHT:
+            case ccui.LoadingBar.Type.RIGHT:
                 this._barRenderer.setAnchorPoint(1, 0.5);
                 this._barRenderer.setPosition(this._totalLength,this._contentSize.height*0.5);
                 if (!this._scale9Enabled)
@@ -102,7 +102,7 @@ ccui.LoadingBar = ccui.Widget.extend(/** @lends ccui.LoadingBar# */{
     /**
      * Returns the progress direction of LoadingBar.                               <br/>
      * LoadingBarTypeLeft means progress left to right, LoadingBarTypeRight otherwise.
-     * @returns {ccui.LoadingBar.TYPE_LEFT | ccui.LoadingBar.TYPE_RIGHT}
+     * @returns {ccui.LoadingBar.Type}
      */
     getDirection: function () {
         return this._direction;
@@ -145,12 +145,12 @@ ccui.LoadingBar = ccui.Widget.extend(/** @lends ccui.LoadingBar# */{
         this._barRendererTextureSize.height = bz.height;
 
         switch (this._direction) {
-            case ccui.LoadingBar.TYPE_LEFT:
+            case ccui.LoadingBar.Type.LEFT:
                 barRenderer.setAnchorPoint(0,0.5);
                 if (!this._scale9Enabled)
                     barRenderer.setFlippedX(false);
                 break;
-            case ccui.LoadingBar.TYPE_RIGHT:
+            case ccui.LoadingBar.Type.RIGHT:
                 barRenderer.setAnchorPoint(1,0.5);
                 if (!this._scale9Enabled)
                     barRenderer.setFlippedX(true);
@@ -354,10 +354,10 @@ ccui.LoadingBar = ccui.Widget.extend(/** @lends ccui.LoadingBar# */{
             }
         }
         switch (this._direction) {
-            case ccui.LoadingBar.TYPE_LEFT:
+            case ccui.LoadingBar.Type.LEFT:
                 locBarRender.setPosition(0, locContentSize.height * 0.5);
                 break;
-            case ccui.LoadingBar.TYPE_RIGHT:
+            case ccui.LoadingBar.Type.RIGHT:
                 locBarRender.setPosition(this._totalLength, locContentSize.height * 0.5);
                 break;
             default:
@@ -420,18 +420,20 @@ ccui.LoadingBar.create = function (textureName, percentage) {
 // Constants
 //loadingBar Type
 
-/**
- * The left direction of ccui.LoadingBar.
- * @constant
- * @type {number}
- */
-ccui.LoadingBar.TYPE_LEFT = 0;
-/**
- * The right direction of ccui.LoadingBar.
- * @constant
- * @type {number}
- */
-ccui.LoadingBar.TYPE_RIGHT = 1;
+ccui.LoadingBar.Type = cc.Enum({
+    /**
+     * The left direction of ccui.LoadingBar.
+     * @constant
+     * @type {number}
+     */
+    LEFT: 0,
+    /**
+     * The right direction of ccui.LoadingBar.
+     * @constant
+     * @type {number}
+     */
+    RIGHT: 1,
+});
 
 /**
  * The zOrder value of ccui.LoadingBar's renderer.

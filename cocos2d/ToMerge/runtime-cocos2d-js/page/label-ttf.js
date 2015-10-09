@@ -82,7 +82,7 @@ var LabelTTFWrapper = cc.FireClass({
                     cc.error('The new textAlign must be number');
                 }
             },
-            type: Runtime.TextAlign
+            type: cc.TextAlignment
         },
 
         verticalAlign: {
@@ -97,7 +97,7 @@ var LabelTTFWrapper = cc.FireClass({
                     cc.error('The new verticalAlign must be number');
                 }
             },
-            type: Runtime.TextVerticalAlign
+            type: cc.VerticalTextAlignment
         },
 
         boundingBox: {
@@ -146,11 +146,11 @@ var LabelTTFWrapper = cc.FireClass({
         },
 
         _align: {
-            default: Runtime.TextAlign.Left
+            default: cc.TextAlignment.LEFT
         },
 
         _verticalAlign: {
-            default: Runtime.TextVerticalAlign.Top
+            default: cc.VerticalTextAlignment.TOP
         },
 
         _boundingBox: {

@@ -29,11 +29,11 @@
  */
 ccui.getLayoutManager = function (type) {
     switch (type) {
-        case ccui.Layout.LINEAR_VERTICAL:
+        case ccui.Layout.LayoutType.LINEAR_VERTICAL:
             return ccui.linearVerticalLayoutManager;
-        case ccui.Layout.LINEAR_HORIZONTAL:
+        case ccui.Layout.LayoutType.LINEAR_HORIZONTAL:
             return ccui.linearHorizontalLayoutManager;
-        case ccui.Layout.RELATIVE:
+        case ccui.Layout.LayoutType.RELATIVE:
             return ccui.relativeLayoutManager;
     }
     return null;
@@ -222,45 +222,45 @@ ccui.relativeLayoutManager = /** @lends ccui.relativeLayoutManager# */{
         var layoutSize = layout._getLayoutContentSize();
 
         switch (align) {
-            case ccui.RelativeLayoutParameter.NONE:
-            case ccui.RelativeLayoutParameter.PARENT_TOP_LEFT:
+            case ccui.RelativeLayoutParameter.Type.NONE:
+            case ccui.RelativeLayoutParameter.Type.PARENT_TOP_LEFT:
                 this._finalPositionX = ap.x * cs.width;
                 this._finalPositionY = layoutSize.height - ((1.0 - ap.y) * cs.height);
                 break;
-            case ccui.RelativeLayoutParameter.PARENT_TOP_CENTER_HORIZONTAL:
+            case ccui.RelativeLayoutParameter.Type.PARENT_TOP_CENTER_HORIZONTAL:
                 this._finalPositionX = layoutSize.width * 0.5 - cs.width * (0.5 - ap.x);
                 this._finalPositionY = layoutSize.height - ((1.0 - ap.y) * cs.height);
                 break;
-            case ccui.RelativeLayoutParameter.PARENT_TOP_RIGHT:
+            case ccui.RelativeLayoutParameter.Type.PARENT_TOP_RIGHT:
                 this._finalPositionX = layoutSize.width - ((1.0 - ap.x) * cs.width);
                 this._finalPositionY = layoutSize.height - ((1.0 - ap.y) * cs.height);
                 break;
-            case ccui.RelativeLayoutParameter.PARENT_LEFT_CENTER_VERTICAL:
+            case ccui.RelativeLayoutParameter.Type.PARENT_LEFT_CENTER_VERTICAL:
                 this._finalPositionX = ap.x * cs.width;
                 this._finalPositionY = layoutSize.height * 0.5 - cs.height * (0.5 - ap.y);
                 break;
-            case ccui.RelativeLayoutParameter.CENTER_IN_PARENT:
+            case ccui.RelativeLayoutParameter.Type.CENTER_IN_PARENT:
                 this._finalPositionX = layoutSize.width * 0.5 - cs.width * (0.5 - ap.x);
                 this._finalPositionY = layoutSize.height * 0.5 - cs.height * (0.5 - ap.y);
                 break;
-            case ccui.RelativeLayoutParameter.PARENT_RIGHT_CENTER_VERTICAL:
+            case ccui.RelativeLayoutParameter.Type.PARENT_RIGHT_CENTER_VERTICAL:
                 this._finalPositionX = layoutSize.width - ((1.0 - ap.x) * cs.width);
                 this._finalPositionY = layoutSize.height * 0.5 - cs.height * (0.5 - ap.y);
                 break;
-            case ccui.RelativeLayoutParameter.PARENT_LEFT_BOTTOM:
+            case ccui.RelativeLayoutParameter.Type.PARENT_LEFT_BOTTOM:
                 this._finalPositionX = ap.x * cs.width;
                 this._finalPositionY = ap.y * cs.height;
                 break;
-            case ccui.RelativeLayoutParameter.PARENT_BOTTOM_CENTER_HORIZONTAL:
+            case ccui.RelativeLayoutParameter.Type.PARENT_BOTTOM_CENTER_HORIZONTAL:
                 this._finalPositionX = layoutSize.width * 0.5 - cs.width * (0.5 - ap.x);
                 this._finalPositionY = ap.y * cs.height;
                 break;
-            case ccui.RelativeLayoutParameter.PARENT_RIGHT_BOTTOM:
+            case ccui.RelativeLayoutParameter.Type.PARENT_RIGHT_BOTTOM:
                 this._finalPositionX = layoutSize.width - ((1.0 - ap.x) * cs.width);
                 this._finalPositionY = ap.y * cs.height;
                 break;
 
-            case ccui.RelativeLayoutParameter.LOCATION_ABOVE_LEFTALIGN:
+            case ccui.RelativeLayoutParameter.Type.LOCATION_ABOVE_LEFTALIGN:
                 if (relativeWidget){
                     if (this._relativeWidgetLP && !this._relativeWidgetLP._put)
                         return false;
@@ -268,7 +268,7 @@ ccui.relativeLayoutManager = /** @lends ccui.relativeLayoutManager# */{
                     this._finalPositionX = relativeWidget.getLeftBoundary() + ap.x * cs.width;
                 }
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_ABOVE_CENTER:
+            case ccui.RelativeLayoutParameter.Type.LOCATION_ABOVE_CENTER:
                 if (relativeWidget){
                     if (this._relativeWidgetLP && !this._relativeWidgetLP._put)
                         return false;
@@ -277,7 +277,7 @@ ccui.relativeLayoutManager = /** @lends ccui.relativeLayoutManager# */{
                     this._finalPositionX = relativeWidget.getLeftBoundary() + rbs.width * 0.5 + ap.x * cs.width - cs.width * 0.5;
                 }
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_ABOVE_RIGHTALIGN:
+            case ccui.RelativeLayoutParameter.Type.LOCATION_ABOVE_RIGHTALIGN:
                 if (relativeWidget) {
                     if (this._relativeWidgetLP && !this._relativeWidgetLP._put)
                         return false;
@@ -285,7 +285,7 @@ ccui.relativeLayoutManager = /** @lends ccui.relativeLayoutManager# */{
                     this._finalPositionX = relativeWidget.getRightBoundary() - (1.0 - ap.x) * cs.width;
                 }
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_LEFT_OF_TOPALIGN:
+            case ccui.RelativeLayoutParameter.Type.LOCATION_LEFT_OF_TOPALIGN:
                 if (relativeWidget){
                     if (this._relativeWidgetLP && !this._relativeWidgetLP._put)
                         return false;
@@ -293,7 +293,7 @@ ccui.relativeLayoutManager = /** @lends ccui.relativeLayoutManager# */{
                     this._finalPositionX = relativeWidget.getLeftBoundary() - (1.0 - ap.x) * cs.width;
                 }
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_LEFT_OF_CENTER:
+            case ccui.RelativeLayoutParameter.Type.LOCATION_LEFT_OF_CENTER:
                 if (relativeWidget) {
                     if (this._relativeWidgetLP && !this._relativeWidgetLP._put)
                         return false;
@@ -302,7 +302,7 @@ ccui.relativeLayoutManager = /** @lends ccui.relativeLayoutManager# */{
                     this._finalPositionY = relativeWidget.getBottomBoundary() + rbs.height * 0.5 + ap.y * cs.height - cs.height * 0.5;
                 }
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_LEFT_OF_BOTTOMALIGN:
+            case ccui.RelativeLayoutParameter.Type.LOCATION_LEFT_OF_BOTTOMALIGN:
                 if (relativeWidget) {
                     if (this._relativeWidgetLP && !this._relativeWidgetLP._put)
                         return false;
@@ -310,7 +310,7 @@ ccui.relativeLayoutManager = /** @lends ccui.relativeLayoutManager# */{
                     this._finalPositionX = relativeWidget.getLeftBoundary() - (1.0 - ap.x) * cs.width;
                 }
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_RIGHT_OF_TOPALIGN:
+            case ccui.RelativeLayoutParameter.Type.LOCATION_RIGHT_OF_TOPALIGN:
                 if (relativeWidget){
                     if (this._relativeWidgetLP && !this._relativeWidgetLP._put)
                         return false;
@@ -318,7 +318,7 @@ ccui.relativeLayoutManager = /** @lends ccui.relativeLayoutManager# */{
                     this._finalPositionX = relativeWidget.getRightBoundary() + ap.x * cs.width;
                 }
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_RIGHT_OF_CENTER:
+            case ccui.RelativeLayoutParameter.Type.LOCATION_RIGHT_OF_CENTER:
                 if (relativeWidget){
                     if (this._relativeWidgetLP && !this._relativeWidgetLP._put)
                         return false;
@@ -328,7 +328,7 @@ ccui.relativeLayoutManager = /** @lends ccui.relativeLayoutManager# */{
                     this._finalPositionY = relativeWidget.getBottomBoundary() + rbs.height * 0.5 + ap.y * cs.height - cs.height * 0.5;
                 }
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_RIGHT_OF_BOTTOMALIGN:
+            case ccui.RelativeLayoutParameter.Type.LOCATION_RIGHT_OF_BOTTOMALIGN:
                 if (relativeWidget){
                     if (this._relativeWidgetLP && !this._relativeWidgetLP._put)
                         return false;
@@ -336,7 +336,7 @@ ccui.relativeLayoutManager = /** @lends ccui.relativeLayoutManager# */{
                     this._finalPositionX = relativeWidget.getRightBoundary() + ap.x * cs.width;
                 }
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_BELOW_LEFTALIGN:
+            case ccui.RelativeLayoutParameter.Type.LOCATION_BELOW_LEFTALIGN:
                 if (relativeWidget){
                     if (this._relativeWidgetLP && !this._relativeWidgetLP._put)
                         return false;
@@ -344,7 +344,7 @@ ccui.relativeLayoutManager = /** @lends ccui.relativeLayoutManager# */{
                     this._finalPositionX = relativeWidget.getLeftBoundary() + ap.x * cs.width;
                 }
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_BELOW_CENTER:
+            case ccui.RelativeLayoutParameter.Type.LOCATION_BELOW_CENTER:
                 if (relativeWidget) {
                     if (this._relativeWidgetLP && !this._relativeWidgetLP._put)
                         return false;
@@ -353,7 +353,7 @@ ccui.relativeLayoutManager = /** @lends ccui.relativeLayoutManager# */{
                     this._finalPositionX = relativeWidget.getLeftBoundary() + rbs.width * 0.5 + ap.x * cs.width - cs.width * 0.5;
                 }
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_BELOW_RIGHTALIGN:
+            case ccui.RelativeLayoutParameter.Type.LOCATION_BELOW_RIGHTALIGN:
                 if (relativeWidget) {
                     if (this._relativeWidgetLP && !this._relativeWidgetLP._put)
                         return false;
@@ -375,79 +375,79 @@ ccui.relativeLayoutManager = /** @lends ccui.relativeLayoutManager# */{
 
         //handle margin
         switch (align) {
-            case ccui.RelativeLayoutParameter.NONE:
-            case ccui.RelativeLayoutParameter.PARENT_TOP_LEFT:
+            case ccui.RelativeLayoutParameter.Type.NONE:
+            case ccui.RelativeLayoutParameter.Type.PARENT_TOP_LEFT:
                 this._finalPositionX += mg.left;
                 this._finalPositionY -= mg.top;
                 break;
-            case ccui.RelativeLayoutParameter.PARENT_TOP_CENTER_HORIZONTAL:
+            case ccui.RelativeLayoutParameter.Type.PARENT_TOP_CENTER_HORIZONTAL:
                 this._finalPositionY -= mg.top;
                 break;
-            case ccui.RelativeLayoutParameter.PARENT_TOP_RIGHT:
-                this._finalPositionX -= mg.right;
-                this._finalPositionY -= mg.top;
-                break;
-            case ccui.RelativeLayoutParameter.PARENT_LEFT_CENTER_VERTICAL:
-                this._finalPositionX += mg.left;
-                break;
-            case ccui.RelativeLayoutParameter.CENTER_IN_PARENT:
-                break;
-            case ccui.RelativeLayoutParameter.PARENT_RIGHT_CENTER_VERTICAL:
-                this._finalPositionX -= mg.right;
-                break;
-            case ccui.RelativeLayoutParameter.PARENT_LEFT_BOTTOM:
-                this._finalPositionX += mg.left;
-                this._finalPositionY += mg.bottom;
-                break;
-            case ccui.RelativeLayoutParameter.PARENT_BOTTOM_CENTER_HORIZONTAL:
-                this._finalPositionY += mg.bottom;
-                break;
-            case ccui.RelativeLayoutParameter.PARENT_RIGHT_BOTTOM:
-                this._finalPositionX -= mg.right;
-                this._finalPositionY += mg.bottom;
-                break;
-            case ccui.RelativeLayoutParameter.LOCATION_ABOVE_LEFTALIGN:
-                this._finalPositionY += mg.bottom;
-                this._finalPositionX += mg.left;
-                break;
-            case ccui.RelativeLayoutParameter.LOCATION_ABOVE_RIGHTALIGN:
-                this._finalPositionY += mg.bottom;
-                this._finalPositionX -= mg.right;
-                break;
-            case ccui.RelativeLayoutParameter.LOCATION_ABOVE_CENTER:
-                this._finalPositionY += mg.bottom;
-                break;
-            case ccui.RelativeLayoutParameter.LOCATION_LEFT_OF_TOPALIGN:
+            case ccui.RelativeLayoutParameter.Type.PARENT_TOP_RIGHT:
                 this._finalPositionX -= mg.right;
                 this._finalPositionY -= mg.top;
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_LEFT_OF_BOTTOMALIGN:
-                this._finalPositionX -= mg.right;
-                this._finalPositionY += mg.bottom;
-                break;
-            case ccui.RelativeLayoutParameter.LOCATION_LEFT_OF_CENTER:
-                this._finalPositionX -= mg.right;
-                break;
-            case ccui.RelativeLayoutParameter.LOCATION_RIGHT_OF_TOPALIGN:
+            case ccui.RelativeLayoutParameter.Type.PARENT_LEFT_CENTER_VERTICAL:
                 this._finalPositionX += mg.left;
-                this._finalPositionY -= mg.top;
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_RIGHT_OF_BOTTOMALIGN:
+            case ccui.RelativeLayoutParameter.Type.CENTER_IN_PARENT:
+                break;
+            case ccui.RelativeLayoutParameter.Type.PARENT_RIGHT_CENTER_VERTICAL:
+                this._finalPositionX -= mg.right;
+                break;
+            case ccui.RelativeLayoutParameter.Type.PARENT_LEFT_BOTTOM:
                 this._finalPositionX += mg.left;
                 this._finalPositionY += mg.bottom;
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_RIGHT_OF_CENTER:
+            case ccui.RelativeLayoutParameter.Type.PARENT_BOTTOM_CENTER_HORIZONTAL:
+                this._finalPositionY += mg.bottom;
+                break;
+            case ccui.RelativeLayoutParameter.Type.PARENT_RIGHT_BOTTOM:
+                this._finalPositionX -= mg.right;
+                this._finalPositionY += mg.bottom;
+                break;
+            case ccui.RelativeLayoutParameter.Type.LOCATION_ABOVE_LEFTALIGN:
+                this._finalPositionY += mg.bottom;
                 this._finalPositionX += mg.left;
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_BELOW_LEFTALIGN:
+            case ccui.RelativeLayoutParameter.Type.LOCATION_ABOVE_RIGHTALIGN:
+                this._finalPositionY += mg.bottom;
+                this._finalPositionX -= mg.right;
+                break;
+            case ccui.RelativeLayoutParameter.Type.LOCATION_ABOVE_CENTER:
+                this._finalPositionY += mg.bottom;
+                break;
+            case ccui.RelativeLayoutParameter.Type.LOCATION_LEFT_OF_TOPALIGN:
+                this._finalPositionX -= mg.right;
+                this._finalPositionY -= mg.top;
+                break;
+            case ccui.RelativeLayoutParameter.Type.LOCATION_LEFT_OF_BOTTOMALIGN:
+                this._finalPositionX -= mg.right;
+                this._finalPositionY += mg.bottom;
+                break;
+            case ccui.RelativeLayoutParameter.Type.LOCATION_LEFT_OF_CENTER:
+                this._finalPositionX -= mg.right;
+                break;
+            case ccui.RelativeLayoutParameter.Type.LOCATION_RIGHT_OF_TOPALIGN:
+                this._finalPositionX += mg.left;
+                this._finalPositionY -= mg.top;
+                break;
+            case ccui.RelativeLayoutParameter.Type.LOCATION_RIGHT_OF_BOTTOMALIGN:
+                this._finalPositionX += mg.left;
+                this._finalPositionY += mg.bottom;
+                break;
+            case ccui.RelativeLayoutParameter.Type.LOCATION_RIGHT_OF_CENTER:
+                this._finalPositionX += mg.left;
+                break;
+            case ccui.RelativeLayoutParameter.Type.LOCATION_BELOW_LEFTALIGN:
                 this._finalPositionY -= mg.top;
                 this._finalPositionX += mg.left;
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_BELOW_RIGHTALIGN:
+            case ccui.RelativeLayoutParameter.Type.LOCATION_BELOW_RIGHTALIGN:
                 this._finalPositionY -= mg.top;
                 this._finalPositionX -= mg.right;
                 break;
-            case ccui.RelativeLayoutParameter.LOCATION_BELOW_CENTER:
+            case ccui.RelativeLayoutParameter.Type.LOCATION_BELOW_CENTER:
                 this._finalPositionY -= mg.top;
                 break;
             default:

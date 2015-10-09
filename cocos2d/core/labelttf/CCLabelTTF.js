@@ -37,10 +37,10 @@
  * @param {String|cc.FontDefinition} [fontName="Arial"]
  * @param {Number} [fontSize=16]
  * @param {cc.Size} [dimensions=cc.size(0,0)]
- * @param {Number} [hAlignment=cc.TEXT_ALIGNMENT_LEFT]
- * @param {Number} [vAlignment=cc.VERTICAL_TEXT_ALIGNMENT_TOP]
+ * @param {cc.TextAlignment} [hAlignment=cc.TextAlignment.LEFT]
+ * @param {cc.VerticalTextAlignment} [vAlignment=cc.VerticalTextAlignment.TOP]
  * @example
- * var myLabel = new cc.LabelTTF('label text',  'Times New Roman', 32, cc.size(320,32), cc.TEXT_ALIGNMENT_LEFT);
+ * var myLabel = new cc.LabelTTF('label text',  'Times New Roman', 32, cc.size(320,32), cc.TextAlignment.LEFT);
  *
  * var fontDef = new cc.FontDefinition();
  * fontDef.fontName = "Arial";
@@ -48,8 +48,8 @@
  * var myLabel = new cc.LabelTTF('label text',  fontDef);
  *
  * @property {String}       string          - Content string of label
- * @property {Number}       textAlign       - Horizontal Alignment of label: cc.TEXT_ALIGNMENT_LEFT|cc.TEXT_ALIGNMENT_CENTER|cc.TEXT_ALIGNMENT_RIGHT
- * @property {Number}       verticalAlign   - Vertical Alignment of label: cc.VERTICAL_TEXT_ALIGNMENT_TOP|cc.VERTICAL_TEXT_ALIGNMENT_CENTER|cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM
+ * @property {cc.TextAlignment} textAlign   - Horizontal Alignment of label: cc.TextAlignment.LEFT|cc.TextAlignment.CENTER|cc.TextAlignment.RIGHT
+ * @property {cc.VerticalTextAlignment} verticalAlign - Vertical Alignment of label: cc.VerticalTextAlignment.TOP|cc.VerticalTextAlignment.CENTER|cc.VerticalTextAlignment.BOTTOM
  * @property {Number}       fontSize        - Font size of label
  * @property {String}       fontName        - Font name of label
  * @property {String}       font            - The label font with a style string: e.g. "18px Verdana"
@@ -65,8 +65,8 @@
  */
 cc.LabelTTF = cc.Sprite.extend(/** @lends cc.LabelTTF# */{
     _dimensions: null,
-    _hAlignment: cc.TEXT_ALIGNMENT_CENTER,
-    _vAlignment: cc.VERTICAL_TEXT_ALIGNMENT_TOP,
+    _hAlignment: cc.TextAlignment.CENTER,
+    _vAlignment: cc.VerticalTextAlignment.TOP,
     _fontName: null,
     _fontSize: 0.0,
     _string: "",
@@ -120,8 +120,8 @@ cc.LabelTTF = cc.Sprite.extend(/** @lends cc.LabelTTF# */{
 
         fontSize = fontSize || 16;
         dimensions = dimensions || cc.size(0, 0/*fontSize*/);
-        hAlignment = hAlignment || cc.TEXT_ALIGNMENT_LEFT;
-        vAlignment = vAlignment || cc.VERTICAL_TEXT_ALIGNMENT_TOP;
+        hAlignment = hAlignment || cc.TextAlignment.LEFT;
+        vAlignment = vAlignment || cc.VerticalTextAlignment.TOP;
 
         this._opacityModifyRGB = false;
         this._dimensions = cc.size(dimensions.width, dimensions.height);
@@ -147,8 +147,8 @@ cc.LabelTTF = cc.Sprite.extend(/** @lends cc.LabelTTF# */{
         cc.Sprite.prototype.ctor.call(this);
 
         this._dimensions = cc.size(0, 0);
-        this._hAlignment = cc.TEXT_ALIGNMENT_LEFT;
-        this._vAlignment = cc.VERTICAL_TEXT_ALIGNMENT_TOP;
+        this._hAlignment = cc.TextAlignment.LEFT;
+        this._vAlignment = cc.VerticalTextAlignment.TOP;
         this._opacityModifyRGB = false;
         this._fontName = "Arial";
 
@@ -205,7 +205,7 @@ cc.LabelTTF = cc.Sprite.extend(/** @lends cc.LabelTTF# */{
 
     /**
      * Returns Horizontal Alignment of cc.LabelTTF
-     * @return {cc.TEXT_ALIGNMENT_LEFT|cc.TEXT_ALIGNMENT_CENTER|cc.TEXT_ALIGNMENT_RIGHT}
+     * @return {cc.TextAlignment}
      */
     getHorizontalAlignment: function () {
         return this._hAlignment;
@@ -213,7 +213,7 @@ cc.LabelTTF = cc.Sprite.extend(/** @lends cc.LabelTTF# */{
 
     /**
      * Returns Vertical Alignment of cc.LabelTTF
-     * @return {cc.VERTICAL_TEXT_ALIGNMENT_TOP|cc.VERTICAL_TEXT_ALIGNMENT_CENTER|cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM}
+     * @return {cc.VerticalTextAlignment}
      */
     getVerticalAlignment: function () {
         return this._vAlignment;
@@ -603,7 +603,7 @@ cc.LabelTTF = cc.Sprite.extend(/** @lends cc.LabelTTF# */{
 
     /**
      * Sets Horizontal Alignment of cc.LabelTTF
-     * @param {cc.TEXT_ALIGNMENT_LEFT|cc.TEXT_ALIGNMENT_CENTER|cc.TEXT_ALIGNMENT_RIGHT} alignment Horizontal Alignment
+     * @param {cc.TextAlignment} alignment Horizontal Alignment
      */
     setHorizontalAlignment: function (alignment) {
         if (alignment !== this._hAlignment) {
@@ -615,7 +615,7 @@ cc.LabelTTF = cc.Sprite.extend(/** @lends cc.LabelTTF# */{
 
     /**
      * Sets Vertical Alignment of cc.LabelTTF
-     * @param {cc.VERTICAL_TEXT_ALIGNMENT_TOP|cc.VERTICAL_TEXT_ALIGNMENT_CENTER|cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM} verticalAlignment
+     * @param {cc.VerticalTextAlignment} verticalAlignment
      */
     setVerticalAlignment: function (verticalAlignment) {
         if (verticalAlignment !== this._vAlignment) {
@@ -798,8 +798,8 @@ cc.LabelTTF._fontStyleRE = /^(\d+)px\s+['"]?([\w\s\d]+)['"]?$/;
  * @param {String|cc.FontDefinition} [fontName="Arial"]
  * @param {Number} [fontSize=16]
  * @param {cc.Size} [dimensions=cc.size(0,0)]
- * @param {Number} [hAlignment=cc.TEXT_ALIGNMENT_LEFT]
- * @param {Number} [vAlignment=cc.VERTICAL_TEXT_ALIGNMENT_TOP]
+ * @param {cc.TextAlignment} [hAlignment=cc.TextAlignment.LEFT]
+ * @param {cc.VerticalTextAlignment} [vAlignment=cc.VerticalTextAlignment.TOP]
  * @return {cc.LabelTTF|Null}
  */
 cc.LabelTTF.create = function (text, fontName, fontSize, dimensions, hAlignment, vAlignment) {

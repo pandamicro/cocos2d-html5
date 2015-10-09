@@ -319,7 +319,7 @@ ccui.RelativeLayoutParameter = ccui.LayoutParameter.extend(/** @lends ccui.Relat
      */
     ctor: function () {
         ccui.LayoutParameter.prototype.ctor.call(this);
-        this._relativeAlign = ccui.RelativeLayoutParameter.NONE;
+        this._relativeAlign = ccui.RelativeLayoutParameter.Type.NONE;
         this._relativeWidgetName = "";
         this._relativeLayoutName = "";
         this._put = false;
@@ -400,141 +400,143 @@ ccui.RelativeLayoutParameter.create = function () {
 
 // Constants
 //Relative layout parameter RelativeAlign
-/**
- * The none of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.NONE = 0;
-/**
- * The parent's top left of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.PARENT_TOP_LEFT = 1;
-/**
- * The parent's top center horizontal of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.PARENT_TOP_CENTER_HORIZONTAL = 2;
-/**
- * The parent's top right of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.PARENT_TOP_RIGHT = 3;
-/**
- * The parent's left center vertical of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.PARENT_LEFT_CENTER_VERTICAL = 4;
+ccui.RelativeLayoutParameter.Type = cc.Enum({
+    /**
+     * The none of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    NONE: 0,
+    /**
+     * The parent's top left of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    PARENT_TOP_LEFT: 1,
+    /**
+     * The parent's top center horizontal of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    PARENT_TOP_CENTER_HORIZONTAL: 2,
+    /**
+     * The parent's top right of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    PARENT_TOP_RIGHT: 3,
+    /**
+     * The parent's left center vertical of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    PARENT_LEFT_CENTER_VERTICAL: 4,
 
-/**
- * The center in parent of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.CENTER_IN_PARENT = 5;
+    /**
+     * The center in parent of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    CENTER_IN_PARENT: 5,
 
-/**
- * The parent's right center vertical of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.PARENT_RIGHT_CENTER_VERTICAL = 6;
-/**
- * The parent's left bottom of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.PARENT_LEFT_BOTTOM = 7;
-/**
- * The parent's bottom center horizontal of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.PARENT_BOTTOM_CENTER_HORIZONTAL = 8;
-/**
- * The parent's right bottom of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.PARENT_RIGHT_BOTTOM = 9;
+    /**
+     * The parent's right center vertical of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    PARENT_RIGHT_CENTER_VERTICAL: 6,
+    /**
+     * The parent's left bottom of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    PARENT_LEFT_BOTTOM: 7,
+    /**
+     * The parent's bottom center horizontal of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    PARENT_BOTTOM_CENTER_HORIZONTAL: 8,
+    /**
+     * The parent's right bottom of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    PARENT_RIGHT_BOTTOM: 9,
 
-/**
- * The location above left align of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.LOCATION_ABOVE_LEFTALIGN = 10;
-/**
- * The location above center of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.LOCATION_ABOVE_CENTER = 11;
-/**
- * The location above right align of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.LOCATION_ABOVE_RIGHTALIGN = 12;
-/**
- * The location left of top align of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.LOCATION_LEFT_OF_TOPALIGN = 13;
-/**
- * The location left of center of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.LOCATION_LEFT_OF_CENTER = 14;
-/**
- * The location left of bottom align of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.LOCATION_LEFT_OF_BOTTOMALIGN = 15;
-/**
- * The location right of top align of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.LOCATION_RIGHT_OF_TOPALIGN = 16;
-/**
- * The location right of center of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.LOCATION_RIGHT_OF_CENTER = 17;
-/**
- * The location right of bottom align of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.LOCATION_RIGHT_OF_BOTTOMALIGN = 18;
-/**
- * The location below left align of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.LOCATION_BELOW_LEFTALIGN = 19;
-/**
- * The location below center of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.LOCATION_BELOW_CENTER = 20;
-/**
- * The location below right align of ccui.RelativeLayoutParameter's relative align.
- * @constant
- * @type {number}
- */
-ccui.RelativeLayoutParameter.LOCATION_BELOW_RIGHTALIGN = 21;
+    /**
+     * The location above left align of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    LOCATION_ABOVE_LEFTALIGN: 10,
+    /**
+     * The location above center of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    LOCATION_ABOVE_CENTER: 11,
+    /**
+     * The location above right align of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    LOCATION_ABOVE_RIGHTALIGN: 12,
+    /**
+     * The location left of top align of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    LOCATION_LEFT_OF_TOPALIGN: 13,
+    /**
+     * The location left of center of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    LOCATION_LEFT_OF_CENTER: 14,
+    /**
+     * The location left of bottom align of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    LOCATION_LEFT_OF_BOTTOMALIGN: 15,
+    /**
+     * The location right of top align of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    LOCATION_RIGHT_OF_TOPALIGN: 16,
+    /**
+     * The location right of center of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    LOCATION_RIGHT_OF_CENTER: 17,
+    /**
+     * The location right of bottom align of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    LOCATION_RIGHT_OF_BOTTOMALIGN: 18,
+    /**
+     * The location below left align of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    LOCATION_BELOW_LEFTALIGN: 19,
+    /**
+     * The location below center of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    LOCATION_BELOW_CENTER: 20,
+    /**
+     * The location below right align of ccui.RelativeLayoutParameter's relative align.
+     * @constant
+     * @type {number}
+     */
+    LOCATION_BELOW_RIGHTALIGN: 21,
+});
 
 /**
  * @ignore

@@ -66,13 +66,13 @@ cc.LABEL_AUTOMATIC_WIDTH = -1;
  * @extends cc.SpriteBatchNode
  *
  * @property {String}   string          - Content string of label
- * @property {Number}   textAlign       - Horizontal Alignment of label, cc.TEXT_ALIGNMENT_LEFT|cc.TEXT_ALIGNMENT_CENTER|cc.TEXT_ALIGNMENT_RIGHT
+ * @property {cc.TextAlignment} textAlign - Horizontal Alignment of label
  * @property {Number}   boundingWidth   - Width of the bounding box of label, the real content width is limited by boundingWidth
  *
  * @param {String} str
  * @param {String} fntFile
  * @param {Number} [width=-1]
- * @param {Number} [alignment=cc.TEXT_ALIGNMENT_LEFT]
+ * @param {cc.TextAlignment} [alignment=cc.TextAlignment.LEFT]
  * @param {cc.Point} [imageOffset=cc.p(0,0)]
  *
  * @example
@@ -80,10 +80,10 @@ cc.LABEL_AUTOMATIC_WIDTH = -1;
  * var label1 = new cc.LabelBMFont("Test case", "test.fnt");
  *
  * // Example 02
- * var label2 = new cc.LabelBMFont("test case", "test.fnt", 200, cc.TEXT_ALIGNMENT_LEFT);
+ * var label2 = new cc.LabelBMFont("test case", "test.fnt", 200, cc.TextAlignment.LEFT);
  *
  * // Example 03
- * var label3 = new cc.LabelBMFont("This is a \n test case", "test.fnt", 200, cc.TEXT_ALIGNMENT_LEFT, cc.p(0,0));
+ * var label3 = new cc.LabelBMFont("This is a \n test case", "test.fnt", 200, cc.TextAlignment.LEFT, cc.p(0,0));
  */
 cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
     //property string is Getter and Setter.
@@ -101,7 +101,7 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
     _initialString: "",
 
     // alignment of all lines
-    _alignment: cc.TEXT_ALIGNMENT_CENTER,
+    _alignment: cc.TextAlignment.CENTER,
 
     // max width until a line break is added
     _width: -1,
@@ -147,7 +147,7 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
      * @param {String} str
      * @param {String} fntFile
      * @param {Number} [width=-1]
-     * @param {Number} [alignment=cc.TEXT_ALIGNMENT_LEFT]
+     * @param {cc.TextAlignment} [alignment=cc.TextAlignment.LEFT]
      * @param {cc.Point} [imageOffset=cc.p(0,0)]
      */
     ctor: function (str, fntFile, width, alignment, imageOffset) {
@@ -218,7 +218,7 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
      * @param {String} str
      * @param {String} fntFile
      * @param {Number} [width=-1]
-     * @param {Number} [alignment=cc.TEXT_ALIGNMENT_LEFT]
+     * @param {cc.TextAlignment} [alignment=cc.TextAlignment.LEFT]
      * @param {cc.Point} [imageOffset=cc.p(0,0)]
      * @return {Boolean}
      */
@@ -260,7 +260,7 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
         }
 
         if (self.initWithTexture(texture, theString.length)) {
-            self._alignment = alignment || cc.TEXT_ALIGNMENT_LEFT;
+            self._alignment = alignment || cc.TextAlignment.LEFT;
             self._imageOffset = imageOffset || cc.p(0, 0);
             self._width = (width == null) ? -1 : width;
 
@@ -575,7 +575,7 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
         }
 
         // Step 2: Make alignment
-        if (self._alignment !== cc.TEXT_ALIGNMENT_LEFT) {
+        if (self._alignment !== cc.TextAlignment.LEFT) {
             i = 0;
 
             var lineNumber = 0;
@@ -601,10 +601,10 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
 
                     var shift = 0;
                     switch (self._alignment) {
-                        case cc.TEXT_ALIGNMENT_CENTER:
+                        case cc.TextAlignment.CENTER:
                             shift = self.width / 2 - lineWidth / 2;
                             break;
-                        case cc.TEXT_ALIGNMENT_RIGHT:
+                        case cc.TextAlignment.RIGHT:
                             shift = self.width - lineWidth;
                             break;
                         default:
@@ -857,7 +857,7 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
  * @param {String} str
  * @param {String} fntFile
  * @param {Number} [width=-1]
- * @param {Number} [alignment=cc.TEXT_ALIGNMENT_LEFT]
+ * @param {cc.TextAlignment} [alignment=cc.TextAlignment.LEFT]
  * @param {cc.Point} [imageOffset=cc.p(0,0)]
  * @return {cc.LabelBMFont|Null}
  */

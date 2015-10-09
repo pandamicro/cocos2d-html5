@@ -280,7 +280,7 @@ ccui.PageView = ccui.Layout.extend(/** @lends ccui.PageView# */{
     },
 
     /**
-     * Does nothing. ccui.PageView's layout type is ccui.Layout.ABSOLUTE.
+     * Does nothing. ccui.PageView's layout type is ccui.Layout.LayoutType.ABSOLUTE.
      * @override
      * @param {Number} type
      */
@@ -288,11 +288,11 @@ ccui.PageView = ccui.Layout.extend(/** @lends ccui.PageView# */{
     },
 
     /**
-     * Returns the layout type of ccui.PageView. it's always ccui.Layout.ABSOLUTE.
+     * Returns the layout type of ccui.PageView. it's always ccui.Layout.LayoutType.ABSOLUTE.
      * @returns {number}
      */
     getLayoutType: function(){
-        return ccui.Layout.ABSOLUTE;
+        return ccui.Layout.LayoutType.ABSOLUTE;
     },
 
     _autoScroll: function(dt){

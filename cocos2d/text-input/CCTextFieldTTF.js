@@ -99,7 +99,7 @@ cc.TextFieldDelegate = cc.Class.extend(/** @lends cc.TextFieldDelegate# */{
  * @example
  * //example
  * // When five parameters
- * var textField = new cc.TextFieldTTF("<click here for input>", cc.size(100,50), cc.TEXT_ALIGNMENT_LEFT,"Arial", 32);
+ * var textField = new cc.TextFieldTTF("<click here for input>", cc.size(100,50), cc.TextAlignment.LEFT,"Arial", 32);
  * // When three parameters
  * var textField = new cc.TextFieldTTF("<click here for input>", "Arial", 32);
  */
@@ -219,7 +219,7 @@ cc.TextFieldTTF = cc.LabelTTF.extend(/** @lends cc.TextFieldTTF# */{
      * //example
      * var  textField = new cc.TextFieldTTF();
      * // When five parameters
-     * textField.initWithPlaceHolder("<click here for input>", cc.size(100,50), cc.TEXT_ALIGNMENT_LEFT,"Arial", 32);
+     * textField.initWithPlaceHolder("<click here for input>", cc.size(100,50), cc.TextAlignment.LEFT,"Arial", 32);
      * // When three parameters
      * textField.initWithPlaceHolder("<click here for input>", "Arial", 32);
      */

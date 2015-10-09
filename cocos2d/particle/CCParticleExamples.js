@@ -53,7 +53,7 @@ cc.ParticleFire = cc.ParticleSystem.extend(/** @lends cc.ParticleFire# */{
             this.setDuration(cc.ParticleSystem.DURATION_INFINITY);
 
             // Gravity Mode
-            this.setEmitterMode(cc.ParticleSystem.MODE_GRAVITY);
+            this.setEmitterMode(cc.ParticleSystem.Mode.GRAVITY);
 
 
             // Gravity Mode: gravity
@@ -141,7 +141,7 @@ cc.ParticleFireworks = cc.ParticleSystem.extend(/** @lends cc.ParticleFireworks#
             this.setDuration(cc.ParticleSystem.DURATION_INFINITY);
 
             // Gravity Mode
-            this.setEmitterMode(cc.ParticleSystem.MODE_GRAVITY);
+            this.setEmitterMode(cc.ParticleSystem.Mode.GRAVITY);
 
             // Gravity Mode: gravity
             this.setGravity(cc.p(0, -90));
@@ -229,7 +229,7 @@ cc.ParticleSun = cc.ParticleSystem.extend(/** @lends cc.ParticleSun# */{
             this.setDuration(cc.ParticleSystem.DURATION_INFINITY);
 
             // Gravity Mode
-            this.setEmitterMode(cc.ParticleSystem.MODE_GRAVITY);
+            this.setEmitterMode(cc.ParticleSystem.Mode.GRAVITY);
 
             // Gravity Mode: gravity
             this.setGravity(cc.p(0, 0));
@@ -314,7 +314,7 @@ cc.ParticleGalaxy = cc.ParticleSystem.extend(/** @lends cc.ParticleGalaxy# */{
             this.setDuration(cc.ParticleSystem.DURATION_INFINITY);
 
             // Gravity Mode
-            this.setEmitterMode(cc.ParticleSystem.MODE_GRAVITY);
+            this.setEmitterMode(cc.ParticleSystem.Mode.GRAVITY);
 
             // Gravity Mode: gravity
             this.setGravity(cc.p(0, 0));
@@ -403,7 +403,7 @@ cc.ParticleFlower = cc.ParticleSystem.extend(/** @lends cc.ParticleFlower# */{
             this.setDuration(cc.ParticleSystem.DURATION_INFINITY);
 
             // Gravity Mode
-            this.setEmitterMode(cc.ParticleSystem.MODE_GRAVITY);
+            this.setEmitterMode(cc.ParticleSystem.Mode.GRAVITY);
 
             // Gravity Mode: gravity
             this.setGravity(cc.p(0, 0));
@@ -494,7 +494,7 @@ cc.ParticleMeteor = cc.ParticleSystem.extend(/** @lends cc.ParticleMeteor# */{
             this.setDuration(cc.ParticleSystem.DURATION_INFINITY);
 
             // Gravity Mode
-            this.setEmitterMode(cc.ParticleSystem.MODE_GRAVITY);
+            this.setEmitterMode(cc.ParticleSystem.Mode.GRAVITY);
 
             // Gravity Mode: gravity
             this.setGravity(cc.p(-200, 200));
@@ -585,7 +585,7 @@ cc.ParticleSpiral = cc.ParticleSystem.extend(/** @lends cc.ParticleSpiral# */{
             this.setDuration(cc.ParticleSystem.DURATION_INFINITY);
 
             // Gravity Mode
-            this.setEmitterMode(cc.ParticleSystem.MODE_GRAVITY);
+            this.setEmitterMode(cc.ParticleSystem.Mode.GRAVITY);
 
             // Gravity Mode: gravity
             this.setGravity(cc.p(0, 0));
@@ -674,7 +674,7 @@ cc.ParticleExplosion = cc.ParticleSystem.extend(/** @lends cc.ParticleExplosion#
             // duration
             this.setDuration(0.1);
 
-            this.setEmitterMode(cc.ParticleSystem.MODE_GRAVITY);
+            this.setEmitterMode(cc.ParticleSystem.Mode.GRAVITY);
 
             // Gravity Mode: gravity
             this.setGravity(cc.p(0, 0));
@@ -765,7 +765,7 @@ cc.ParticleSmoke = cc.ParticleSystem.extend(/** @lends cc.ParticleSmoke# */{
             this.setDuration(cc.ParticleSystem.DURATION_INFINITY);
 
             // Emitter mode: Gravity Mode
-            this.setEmitterMode(cc.ParticleSystem.MODE_GRAVITY);
+            this.setEmitterMode(cc.ParticleSystem.Mode.GRAVITY);
 
             // Gravity Mode: gravity
             this.setGravity(cc.p(0, 0));
@@ -852,7 +852,7 @@ cc.ParticleSnow = cc.ParticleSystem.extend(/** @lends cc.ParticleSnow# */{
             this.setDuration(cc.ParticleSystem.DURATION_INFINITY);
 
             // set gravity mode.
-            this.setEmitterMode(cc.ParticleSystem.MODE_GRAVITY);
+            this.setEmitterMode(cc.ParticleSystem.Mode.GRAVITY);
 
             // Gravity Mode: gravity
             this.setGravity(cc.p(0, -1));
@@ -943,7 +943,7 @@ cc.ParticleRain = cc.ParticleSystem.extend(/** @lends cc.ParticleRain# */{
             // duration
             this.setDuration(cc.ParticleSystem.DURATION_INFINITY);
 
-            this.setEmitterMode(cc.ParticleSystem.MODE_GRAVITY);
+            this.setEmitterMode(cc.ParticleSystem.Mode.GRAVITY);
 
             // Gravity Mode: gravity
             this.setGravity(cc.p(10, -10));
