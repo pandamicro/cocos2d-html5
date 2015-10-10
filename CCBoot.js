@@ -117,28 +117,6 @@ cc.newElement = function (x) {
 
 cc.isEditor = typeof Editor !== 'undefined';
 
-// if global_defs not declared by uglify, declare them globally
-// (use eval to ignore uglify)
-if (typeof CC_EDITOR === 'undefined') {
-    eval('CC_EDITOR=cc.isEditor');
-}
-if (typeof CC_DEV === 'undefined') {
-    eval('CC_DEV=CC_EDITOR');
-}
-if (typeof CC_TEST === 'undefined') {
-    if (CC_EDITOR) {
-        eval('CC_TEST=typeof describe!=="undefined"');
-    }
-    else {
-        eval('CC_TEST=typeof QUnit!=="undefined"');
-    }
-}
-if (CC_TEST) {
-    // contains internal apis for unit tests
-    // @expose
-    cc._Test = {};
-}
-
 /**
  * Iterate over an object or an array, executing a function for each matched element.
  * @param {object|array} obj
@@ -897,5 +875,3 @@ cc._urlRegExp = new RegExp(
         "(?:/\\S*)?" +
     "$", "i"
 );
-
-require('../cocos2d/core/platform/js');

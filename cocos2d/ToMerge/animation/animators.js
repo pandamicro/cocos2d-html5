@@ -33,12 +33,12 @@ animProto.update = function (deltaTime) {
 
 animProto.onPlay = function () {
     if (CC_EDITOR) {
-        if (Fire.engine._isPlaying) {
-            Fire.engine._animationManager.addAnimator(this);
+        if (cc.engine._isPlaying) {
+            cc.engine._animationManager.addAnimator(this);
         }
     }
     else {
-        Fire.engine._animationManager.addAnimator(this);
+        cc.engine._animationManager.addAnimator(this);
     }
 };
 
@@ -46,12 +46,12 @@ animProto.onStop = function () {
     this.playingAnims.length = 0;
 
     if (CC_EDITOR) {
-        if (Fire.engine._isPlaying) {
-            Fire.engine._animationManager.removeAnimator(this);
+        if (cc.engine._isPlaying) {
+            cc.engine._animationManager.removeAnimator(this);
         }
     }
     else {
-        Fire.engine._animationManager.removeAnimator(this);
+        cc.engine._animationManager.removeAnimator(this);
     }
 };
 
@@ -74,12 +74,6 @@ function computeNullRatios (keyFrames) {
     var len = keyFrames.length;
     for (var i = 0; i < len; i++) {
         var frame = keyFrames[i];
-        // 兼容旧的命名
-        if ('offset' in frame) {
-            cc.warn('[animate] offset is deprecated, use ratio instead please.');
-            frame.ratio = frame.offset;
-        }
-        //
         var ratio = frame.ratio;
         if (i === 0 && typeof ratio !== "number") {
             // 如果一开始就没有 ratio，则默认从 0 开始

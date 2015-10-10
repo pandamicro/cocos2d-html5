@@ -34,7 +34,7 @@ test('computeNullRatios', function () {
 });
 
 //asyncTest('EntityAnimator.animate', function () {
-//    Fire.engine.play();
+//    cc.engine.play();
 //
 //    var EntityAnimator = Fire._Test.EntityAnimator;
 //    var entity = new Entity();
@@ -126,7 +126,7 @@ test('DynamicAnimCurve', function () {
 });
 
 //test('AnimationNode', function () {
-//    Fire.engine.play();
+//    cc.engine.play();
 //
 //    var entity = new Entity();
 //    entity.transform.position = v2(321, 891);
@@ -170,7 +170,7 @@ test('DynamicAnimCurve', function () {
 //});
 
 //test('wrapMode', function () {
-//    Fire.engine.play();
+//    cc.engine.play();
 //
 //    var entity = new Entity();
 //

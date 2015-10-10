@@ -29,7 +29,7 @@ js.get(cc, "inject", function () {
 js.get(cc, "extend", function () {
     cc.warn(INFO, 'cc.extend', 'cc.js.mixin');
     return js.mixin;
-};
+});
 
 /**
  * Create new DOM element by tag name
@@ -41,7 +41,7 @@ js.get(cc, "extend", function () {
 js.get(cc, "newElement", function () {
     cc.warn(INFO, 'cc.newElement', 'document.createElement');
     return document.createElement;
-};
+});
 
 /**
  * Check the obj whether is function or not
@@ -54,7 +54,7 @@ js.get(cc, "newElement", function () {
 js.get(cc, "isFunction", function () {
     cc.warn(INFO, 'cc.isFunction', 'cc.js.isFunction');
     return js.isFunction;
-};
+});
 
 /**
  * Check the obj whether is number or not
@@ -67,7 +67,7 @@ js.get(cc, "isFunction", function () {
 js.get(cc, "isNumber", function () {
     cc.warn(INFO, 'cc.isNumber', 'cc.js.isNumber');
     return js.isNumber;
-};
+});
 
 /**
  * Check the obj whether is string or not
@@ -80,7 +80,7 @@ js.get(cc, "isNumber", function () {
 js.get(cc, "isString", function () {
     cc.warn(INFO, 'cc.isString', 'cc.js.isString');
     return js.isString;
-};
+});
 
 /**
  * Check the obj whether is array or not
@@ -93,7 +93,7 @@ js.get(cc, "isString", function () {
 js.get(cc, "isArray", function () {
     cc.warn(INFO, 'cc.isArray', 'cc.js.isArray');
     return js.isArray;
-};
+});
 
 /**
  * Check the obj whether is undefined or not
@@ -106,7 +106,7 @@ js.get(cc, "isArray", function () {
 js.get(cc, "isUndefined", function () {
     cc.warn(INFO, 'cc.isUndefined', 'cc.js.isUndefined');
     return js.isUndefined;
-};
+});
 
 /**
  * Check the obj whether is object or not
@@ -119,7 +119,7 @@ js.get(cc, "isUndefined", function () {
 js.get(cc, "isObject", function () {
     cc.warn(INFO, 'cc.isObject', 'cc.js.isObject');
     return js.isObject;
-};
+});
 
 function deprecateEnum (obj, oldPath, newPath, hasTypePrefixBefore) {
     hasTypePrefixBefore = hasTypePrefixBefore !== false;

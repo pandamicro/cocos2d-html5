@@ -4,15 +4,14 @@ var requireDir = require('require-dir');
 // specify game project paths for tasks.
 global.paths = {
     src: './src',
-    jsEntry: './gulp/browserify-entry',
+    jsEntry: './index',
     outDir: './bin',
     outFile: 'cocos2d.js',
 
     test: {
-        src: 'qunit/unit/**/*.js',
-        runner: 'qunit/lib/qunit-runner.html',
+        src: 'test/qunit/unit/**/*.js',
+        runner: 'test/qunit/lib/qunit-runner.html',
         lib: [
-            'gulp/cc-config.js',
             'bin/cocos2d.test.js',
         ]
     },

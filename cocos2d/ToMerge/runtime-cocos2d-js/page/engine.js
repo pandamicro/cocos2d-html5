@@ -1,7 +1,7 @@
 
 var EngineWrapper = cc.FireClass({
     name: 'Runtime.EngineWrapper',
-    extends: Fire.Runtime.EngineWrapper,
+    extends: cc.Runtime.EngineWrapper,
     constructor: function () {
         this._scene = null;
     },
@@ -93,7 +93,7 @@ var EngineWrapper = cc.FireClass({
                 'showFPS'       : false,
                 'frameRate'     : 60,
                 'id'            : id,
-                'renderMode'    : Fire.isEditor ? 2 : config.renderMode,                 // 0: auto, 1:Canvas, 2:Webgl
+                'renderMode'    : cc.isEditor ? 2 : config.renderMode,                 // 0: auto, 1:Canvas, 2:Webgl
                 'jsList'        : []
             };
         }
@@ -195,7 +195,7 @@ var EngineWrapper = cc.FireClass({
 
             self._needRender = false;
 
-            var engine = Fire.engine;
+            var engine = cc.engine;
 
             engine.emit('post-update');
 
@@ -247,7 +247,7 @@ var EngineWrapper = cc.FireClass({
             // if intersect aabb success, then try intersect obb
             if (rect.intersects(bounds)) {
                 bounds = child.getWorldOrientedBounds();
-                var polygon = new Fire.Polygon(bounds);
+                var polygon = new cc.Polygon(bounds);
 
                 if (Editor.Intersection.rectPolygon(rect, polygon)) {
                     list.push(child.targetN);
