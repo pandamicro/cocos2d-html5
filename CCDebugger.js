@@ -293,6 +293,7 @@ cc._initDebugSetting = function (mode) {
             locLog("ERROR :  " + cc.formatStr.apply(cc, arguments));
         };
         cc.assert = function(cond, msg) {
+            'use strict';
             if (!cond && msg) {
                 for (var i = 2; i < arguments.length; i++)
                     msg = msg.replace(/(%s)|(%d)/, cc._formatString(arguments[i]));
@@ -305,16 +306,29 @@ cc._initDebugSetting = function (mode) {
             };
         }
         if(mode === ccGame.DEBUG_MODE_INFO_FOR_WEB_PAGE){
-            cc.log = function(){
+            cc.log = cc.info = function(){
                 locLog(cc.formatStr.apply(cc, arguments));
             };
         }
     } else if(console && console.log.apply){//console is null when user doesn't open dev tool on IE9
         //log to console
 
-        cc.error = function(){
-            return console.error.apply(console, arguments);
-        };
+        /**
+         * Outputs an error message to the Fireball Console (editor) or Web Console (runtime).
+         * - In Fireball, error is red.
+         * - In Chrome, error have a red icon along with red message text.
+         * @param {any|string} obj - A JavaScript string containing zero or more substitution strings.
+         * @param {any} ...subst - JavaScript objects with which to replace substitution strings within msg. This gives you additional control over the format of the output.
+         */
+        if (console.error.bind) {
+            // use bind to avoid pollute call stacks
+            cc.error = console.error.bind(console);
+        }
+        else {
+            cc.error = function(){
+                return console.error.apply(console, arguments);
+            };
+        }
         cc.assert = function (cond, msg) {
             if (!cond && msg) {
                 for (var i = 2; i < arguments.length; i++)
@@ -323,13 +337,39 @@ cc._initDebugSetting = function (mode) {
             }
         };
         if(mode !== ccGame.DEBUG_MODE_ERROR)
+            /**
+             * Outputs a warning message to the Fireball Console (editor) or Web Console (runtime).
+             * - In Fireball, warning is yellow.
+             * - In Chrome, warning have a yellow warning icon with the message text.
+             * @param {any|string} obj - A JavaScript string containing zero or more substitution strings.
+             * @param {any} ...subst - JavaScript objects with which to replace substitution strings within msg. This gives you additional control over the format of the output.
+             */
             cc.warn = function(){
                 return console.warn.apply(console, arguments);
             };
-        if(mode === ccGame.DEBUG_MODE_INFO)
-            cc.log = function(){
+        if(mode === ccGame.DEBUG_MODE_INFO) {
+            /**
+             * Outputs a message to the Fireball Console (editor) or Web Console (runtime).
+             * @param {any|string} obj - A JavaScript string containing zero or more substitution strings.
+             * @param {any} ...subst - JavaScript objects with which to replace substitution strings within msg. This gives you additional control over the format of the output.
+             */
+            cc.log = function () {
                 return console.log.apply(console, arguments);
             };
+            /**
+             * Outputs an informational message to the Fireball Console (editor) or Web Console (runtime).
+             * - In Fireball, info is blue.
+             * - In Firefox and Chrome, a small "i" icon is displayed next to these items in the Web Console's log.
+             * @param {any|string} obj - A JavaScript string containing zero or more substitution strings.
+             * @param {any} ...subst - JavaScript objects with which to replace substitution strings within msg. This gives you additional control over the format of the output.
+             */
+            cc.info = function () {
+                (console.info || console.log).apply(console, arguments);
+            };
+        }
     }
+    cc.throw = function (error) {
+        cc.error(error.stack || error);
+    };
 };
 //+++++++++++++++++++++++++something about log end+++++++++++++++++++++++++++++

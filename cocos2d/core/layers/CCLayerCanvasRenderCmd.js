@@ -368,7 +368,7 @@
         this._endStopStr = null;
     };
     var proto = cc.LayerGradient.CanvasRenderCmd.prototype = Object.create(cc.LayerColor.CanvasRenderCmd.prototype);
-    cc.inject(cc.LayerGradient.RenderCmd, proto);
+    cc.js.mixin(cc.LayerGradient.RenderCmd, proto);
     proto.constructor = cc.LayerGradient.CanvasRenderCmd;
 
     proto.rendering = function (ctx, scaleX, scaleY) {

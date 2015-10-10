@@ -53,6 +53,6 @@
     };
 
     var proto = ccs.Skin.CanvasRenderCmd.prototype = Object.create(cc.Sprite.CanvasRenderCmd.prototype);
-    cc.inject(ccs.Skin.RenderCmd, proto);
+    cc.js.mixin(ccs.Skin.RenderCmd, proto);
     proto.constructor = ccs.Skin.CanvasRenderCmd;
 })();

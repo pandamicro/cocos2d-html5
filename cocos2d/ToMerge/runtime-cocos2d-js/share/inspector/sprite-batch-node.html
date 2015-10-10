@@ -1,0 +1,38 @@
+<link rel="import" href="packages://inspector/share/node-header.html">
+<link rel="import" href="packages://inspector/share/mixins-section.html">
+<link rel="import" href="node-section.html">
+
+<dom-module id="runtime-sprite-batch-node-wrapper-inspector">
+    <link rel="import" type="css" href="packages://inspector/share/common.css">
+
+    <template>
+        <inspector-node-header
+            target="{{target}}"
+        >
+        </inspector-node-header>
+
+        <div class="props flex-1">
+            <inspector-runtime-node-section target="{{target}}">
+            </inspector-runtime-node-section>
+
+            <editor-section text="Sprite">
+                <editor-prop prop="{{target.texture_}}"></editor-prop>
+            </editor-section>
+
+            <inspector-mixins-section target="{{target}}">
+            </inspector-mixins-section>
+        </div>
+    </template>
+
+    <script>
+        Editor.registerElement({
+            properties: {
+                target: {
+                    type: Object,
+                    value: null,
+                    notify: true,
+                },
+            },
+        });
+    </script>
+</dom-module>

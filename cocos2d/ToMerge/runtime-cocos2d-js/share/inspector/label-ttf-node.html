@@ -1,0 +1,45 @@
+<link rel="import" href="packages://inspector/share/node-header.html">
+<link rel="import" href="packages://inspector/share/mixins-section.html">
+<link rel="import" href="node-section.html">
+
+<dom-module id="runtime-label-ttfwrapper-inspector">
+    <link rel="import" type="css" href="packages://inspector/share/common.css">
+
+    <template>
+        <inspector-node-header
+            target="{{target}}"
+        >
+        </inspector-node-header>
+
+        <div class="props flex-1">
+            <inspector-runtime-node-section target="{{target}}">
+            </inspector-runtime-node-section>
+
+            <editor-section text="Label">
+                <editor-prop prop="{{target.text}}"></editor-prop>
+                <editor-prop prop="{{target.font}}"></editor-prop>
+                <editor-prop prop="{{target.fontFamily}}"></editor-prop>
+                <editor-prop prop="{{target.fontSize}}"></editor-prop>
+                <editor-prop prop="{{target.lineHeight}}"></editor-prop>
+                <editor-prop prop="{{target.boundingBox}}"></editor-prop>
+                <editor-prop prop="{{target.align}}"></editor-prop>
+                <editor-prop prop="{{target.verticalAlign}}"></editor-prop>
+            </editor-section>
+
+            <inspector-mixins-section target="{{target}}">
+            </inspector-mixins-section>
+        </div>
+    </template>
+
+    <script>
+        Editor.registerElement({
+            properties: {
+                target: {
+                    type: Object,
+                    value: null,
+                    notify: true,
+                },
+            },
+        });
+    </script>
+</dom-module>

@@ -30,7 +30,7 @@
         this.setShaderProgram(cc.shaderCache.programForKey(cc.LabelTTF._SHADER_PROGRAM));
     };
     var proto = cc.LabelTTF.WebGLRenderCmd.prototype = Object.create(cc.Sprite.WebGLRenderCmd.prototype);
-    cc.inject(cc.LabelTTF.CacheRenderCmd.prototype, proto);
+    cc.js.mixin(cc.LabelTTF.CacheRenderCmd.prototype, proto);
     proto.constructor = cc.LabelTTF.WebGLRenderCmd;
     proto._updateColor = function () {
         this._updateTexture();
