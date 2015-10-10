@@ -65,9 +65,9 @@
         context.vertexAttribPointer(cc.VERTEX_ATTRIB_COLOR, 4, context.UNSIGNED_BYTE, true, locVertexDataLen, 8);
         context.vertexAttribPointer(cc.VERTEX_ATTRIB_TEX_COORDS, 2, context.FLOAT, false, locVertexDataLen, 12);
 
-        if (node._type === cc.ProgressTimer.TYPE_RADIAL)
+        if (node._type === cc.ProgressTimer.Type.RADIAL)
             context.drawArrays(context.TRIANGLE_FAN, 0, this._vertexDataCount);
-        else if (node._type === cc.ProgressTimer.TYPE_BAR) {
+        else if (node._type === cc.ProgressTimer.Type.BAR) {
             if (!node._reverseDirection)
                 context.drawArrays(context.TRIANGLE_STRIP, 0, this._vertexDataCount);
             else {
@@ -175,9 +175,9 @@
     proto._updateProgress = function(){
         var node = this._node;
         var locType = node._type;
-        if(locType === cc.ProgressTimer.TYPE_RADIAL)
+        if(locType === cc.ProgressTimer.Type.RADIAL)
             this._updateRadial();
-        else if(locType === cc.ProgressTimer.TYPE_BAR)
+        else if(locType === cc.ProgressTimer.Type.BAR)
             this._updateBar();
         this._vertexDataDirty = true;
     };

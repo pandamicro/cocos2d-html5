@@ -215,47 +215,47 @@ cc.colorToHex = function (color) {
     return "#" + (color.r < 16 ? ("0" + hR) : hR) + (color.g < 16 ? ("0" + hG) : hG) + (color.b < 16 ? ("0" + hB) : hB);
 };
 
-/**
- * text alignment : left
- * @constant
- * @type Number
- */
-cc.TEXT_ALIGNMENT_LEFT = 0;
+cc.TextAlignment = cc.Enum({
+    /**
+     * text alignment : left
+     * @constant
+     * @type Number
+     */
+    LEFT: 0,
+    /**
+     * text alignment : center
+     * @constant
+     * @type Number
+     */
+    CENTER: 1,
+    /**
+     * text alignment : right
+     * @constant
+     * @type Number
+     */
+    RIGHT: 2
+});
 
-/**
- * text alignment : center
- * @constant
- * @type Number
- */
-cc.TEXT_ALIGNMENT_CENTER = 1;
-
-/**
- * text alignment : right
- * @constant
- * @type Number
- */
-cc.TEXT_ALIGNMENT_RIGHT = 2;
-
-/**
- * text alignment : top
- * @constant
- * @type Number
- */
-cc.VERTICAL_TEXT_ALIGNMENT_TOP = 0;
-
-/**
- * text alignment : center
- * @constant
- * @type Number
- */
-cc.VERTICAL_TEXT_ALIGNMENT_CENTER = 1;
-
-/**
- * text alignment : bottom
- * @constant
- * @type Number
- */
-cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM = 2;
+cc.VerticalTextAlignment = cc.Enum({
+    /**
+     * text alignment : top
+     * @constant
+     * @type Number
+     */
+    TOP: 0,
+    /**
+     * text alignment : center
+     * @constant
+     * @type Number
+     */
+    CENTER: 1,
+    /**
+     * text alignment : bottom
+     * @constant
+     * @type Number
+     */
+    BOTTOM: 2
+});
 
 cc._Dictionary = cc.Class.extend({
     _keyMapTb: null,
@@ -362,8 +362,8 @@ cc.FontDefinition = function (properties) {
     var _t = this;
     _t.fontName = "Arial";
     _t.fontSize = 12;
-    _t.textAlign = cc.TEXT_ALIGNMENT_CENTER;
-    _t.verticalAlign = cc.VERTICAL_TEXT_ALIGNMENT_TOP;
+    _t.textAlign = cc.TextAlignment.CENTER;
+    _t.verticalAlign = cc.VerticalTextAlignment.TOP;
     _t.fillStyle = cc.color(255, 255, 255, 255);
     _t.boundingWidth = 0;
     _t.boundingHeight = 0;

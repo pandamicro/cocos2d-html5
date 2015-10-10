@@ -30,7 +30,7 @@
  * @example
  * var listView = new ccui.ListView();
  * // set list view ex direction
- * listView.setDirection(ccui.ScrollView.DIR_VERTICAL);
+ * listView.setDirection(ccui.ScrollView.Dir.VERTICAL);
  * listView.setTouchEnabled(true);
  * listView.setBounceEnabled(true);
  * listView.setBackGroundImage("res/cocosui/green_edit.png");
@@ -72,7 +72,7 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
      */
     init: function () {
         if (ccui.ScrollView.prototype.init.call(this)) {
-            this.setLayoutType(ccui.Layout.LINEAR_VERTICAL);
+            this.setLayoutType(ccui.Layout.LayoutType.LINEAR_VERTICAL);
             return true;
         }
         return false;
@@ -94,7 +94,7 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
     _updateInnerContainerSize: function () {
         var locItems = this._items, length, i;
         switch (this.direction) {
-            case ccui.ScrollView.DIR_VERTICAL:
+            case ccui.ScrollView.Dir.VERTICAL:
                 length = locItems.length;
                 var totalHeight = (length - 1) * this._itemsMargin;
                 for (i = 0; i < length; i++) {
@@ -102,7 +102,7 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
                 }
                 this.setInnerContainerSize(cc.size(this._contentSize.width, totalHeight));
                 break;
-            case ccui.ScrollView.DIR_HORIZONTAL:
+            case ccui.ScrollView.Dir.HORIZONTAL:
                 length = locItems.length;
                 var totalWidth = (length - 1) * this._itemsMargin;
                 for (i = 0; i < length; i++) {
@@ -126,10 +126,10 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
         }
         var itemIndex = this.getIndex(item);
         switch (this.direction) {
-            case ccui.ScrollView.DIR_VERTICAL:
+            case ccui.ScrollView.Dir.VERTICAL:
                 this._remedyVerticalLayoutParameter(linearLayoutParameter, itemIndex);
                 break;
-            case ccui.ScrollView.DIR_HORIZONTAL:
+            case ccui.ScrollView.Dir.HORIZONTAL:
                 this._remedyHorizontalLayoutParameter(linearLayoutParameter, itemIndex);
                 break;
             default:
@@ -370,17 +370,17 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
 
     /**
      * Changes scroll direction of ccui.ListView.
-     * @param {ccui.ScrollView.DIR_NONE | ccui.ScrollView.DIR_VERTICAL | ccui.ScrollView.DIR_HORIZONTAL | ccui.ScrollView.DIR_BOTH} dir
+     * @param {ccui.ScrollView.Dir} dir
      */
     setDirection: function (dir) {
         switch (dir) {
-            case ccui.ScrollView.DIR_VERTICAL:
-                this.setLayoutType(ccui.Layout.LINEAR_VERTICAL);
+            case ccui.ScrollView.Dir.VERTICAL:
+                this.setLayoutType(ccui.Layout.LayoutType.LINEAR_VERTICAL);
                 break;
-            case ccui.ScrollView.DIR_HORIZONTAL:
-                this.setLayoutType(ccui.Layout.LINEAR_HORIZONTAL);
+            case ccui.ScrollView.Dir.HORIZONTAL:
+                this.setLayoutType(ccui.Layout.LayoutType.LINEAR_HORIZONTAL);
                 break;
-            case ccui.ScrollView.DIR_BOTH:
+            case ccui.ScrollView.Dir.BOTH:
                 return;
             default:
                 return;

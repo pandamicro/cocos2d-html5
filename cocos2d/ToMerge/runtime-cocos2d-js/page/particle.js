@@ -63,13 +63,13 @@ var defaultValues = {
     startColorVariance: [0,0,0,0],
     endColor: [1,1,1,0],
     endColorVariance: [0,0,0,0],
-    positionType: Runtime.ParticlePositionType.Free,
+    positionType: cc.ParticleSystem.Type.FREE,
     sourcePositionVariance: [0,0],
     startSpin: 0,
     startSpinVariance: 0,
     endSpin: 0,
     endSpinVariance: 0,
-    emitterMode: Runtime.ParticleEmitMode.Gravity,
+    emitterMode: cc.ParticleSystem.Mode.GRAVITY,
 
     gravity: [0,0],
     speed: 180,
@@ -459,7 +459,7 @@ var ParticleWrapper = cc.FireClass({
             type: cc.Vec2
         },
 
-        // Runtime.ParticlePositionType.Free | Runtime.ParticlePositionType.Grouped
+        // cc.ParticleSystem.Type.FREE | cc.ParticleSystem.Type.GROUPED
         positionType: {
             get: function () {
                 return this.targetN.positionType;
@@ -475,8 +475,8 @@ var ParticleWrapper = cc.FireClass({
             type: Runtime.ParticlePositionType
         },
 
-        // Runtime.ParticleEmitMode.Gravity: uses gravity, speed, radial and tangential acceleration;
-        // Runtime.ParticleEmitMode.Radius : uses radius movement + rotation.
+        // cc.ParticleSystem.Mode.GRAVITY: uses gravity, speed, radial and tangential acceleration;
+        // cc.ParticleSystem.Mode.RADIUS : uses radius movement + rotation.
         emitterMode: {
             get: function () {
                 return this.targetN.emitterMode;
@@ -489,11 +489,11 @@ var ParticleWrapper = cc.FireClass({
                     cc.error('The new emitterMode must not be NaN');
                 }
             },
-            type: Runtime.ParticleEmitMode
+            type: cc.ParticleSystem.Mode
         },
 
 
-        // Runtime.ParticleEmitMode.Gravity
+        // cc.ParticleSystem.Mode.GRAVITY
 
         gravity: {
             get: function () {
@@ -610,7 +610,7 @@ var ParticleWrapper = cc.FireClass({
         },
 
 
-        // Runtime.ParticleEmitMode.Radius
+        // cc.ParticleSystem.Mode.RADIUS
 
         startRadius: {
             get: function () {
@@ -813,7 +813,7 @@ var ParticleWrapper = cc.FireClass({
 
             object.emitterMode = this.emitterMode;
 
-            var modeProperties = object.emitterMode === Runtime.ParticleEmitMode.Gravity ? gravityModeProperties : radiusModeProperties;
+            var modeProperties = object.emitterMode === cc.ParticleSystem.Mode.GRAVITY ? gravityModeProperties : radiusModeProperties;
             var properties = shareProperties.concat(modeProperties);
 
             properties.forEach(function (property) {
@@ -835,7 +835,7 @@ var ParticleWrapper = cc.FireClass({
         var object = this._serializeObject;
         if (this.custom && object) {
 
-            var modeProperties = object.emitterMode === Runtime.ParticleEmitMode.Gravity ? gravityModeProperties : radiusModeProperties;
+            var modeProperties = object.emitterMode === cc.ParticleSystem.Mode.GRAVITY ? gravityModeProperties : radiusModeProperties;
             var properties = shareProperties.concat(modeProperties);
 
             var oldTarget = this.targetN;

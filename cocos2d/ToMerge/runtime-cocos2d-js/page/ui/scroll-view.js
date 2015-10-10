@@ -20,7 +20,7 @@ var ScrollViewWrapper = cc.FireClass({
                     cc.error('The new direction must be number');
                 }
             },
-            type: Runtime.ScrollDirection
+            type: ccui.ScrollView.Dir
         },
 
         bounce: {
@@ -55,8 +55,8 @@ var ScrollViewWrapper = cc.FireClass({
         },
 
         _direction: {
-            default: Runtime.ScrollDirection.None,
-            type: Runtime.ScrollDirection
+            default: ccui.ScrollView.Dir.NONE,
+            type: ccui.ScrollView.Dir
         },
 
         _bounce: {

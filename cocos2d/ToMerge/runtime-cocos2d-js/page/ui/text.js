@@ -81,7 +81,7 @@ var TextWrapper = cc.FireClass({
                     cc.error('The new textAlign must be number');
                 }
             },
-            type: Runtime.TextAlign
+            type: cc.TextAlignment
         },
 
         verticalAlign: {
@@ -96,7 +96,7 @@ var TextWrapper = cc.FireClass({
                     cc.error('The new verticalAlign must be number');
                 }
             },
-            type: Runtime.TextVerticalAlign
+            type: cc.VerticalTextAlignment
         },
 
         boundingBox: {
@@ -128,11 +128,11 @@ var TextWrapper = cc.FireClass({
         },
 
         _align: {
-            default: Runtime.TextAlign.Center
+            default: cc.TextAlignment.CENTER
         },
 
         _verticalAlign: {
-            default: Runtime.TextVerticalAlign.Center
+            default: cc.VerticalTextAlignment.CENTER
         },
 
         _boundingBox: {

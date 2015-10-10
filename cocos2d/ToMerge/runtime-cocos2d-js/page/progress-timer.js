@@ -12,8 +12,8 @@ var ProgressTimerWrapper = cc.FireClass({
     properties: {
 
         _type: {
-            default: Runtime.ProgressTimerType.Radial,
-            type: Runtime.ProgressTimerType
+            default: cc.ProgressTimer.Type.RADIAL,
+            type: cc.ProgressTimer.Type
         },
 
         type: {
@@ -28,7 +28,7 @@ var ProgressTimerWrapper = cc.FireClass({
                     cc.error('The new type must not be NaN');
                 }
             },
-            type: Runtime.ProgressTimerType
+            type: cc.ProgressTimer.Type
         },
 
         _percentage: {
