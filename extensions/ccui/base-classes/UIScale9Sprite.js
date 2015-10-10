@@ -153,7 +153,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         var bottomHeight = locBottomLeftContentSize.height;
         var centerOffset = cc.p(this._offset.x * horizontalScale, this._offset.y*verticalScale);
 
-        if (cc._renderType === cc._RENDER_TYPE_WEBGL) {
+        if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
             //browser is in canvas mode, need to manually control rounding to prevent overlapping pixels
             var roundedRescaledWidth = Math.round(rescaledWidth);
             if (rescaledWidth !== roundedRescaledWidth) {
@@ -530,7 +530,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
                 // the texture is rotated on Canvas render mode, so isRotated always is false.
                 var preferredSize = this._preferredSize, restorePreferredSize = preferredSize.width !== 0 && preferredSize.height !== 0;
                 if (restorePreferredSize) preferredSize = cc.size(preferredSize.width, preferredSize.height);
-                this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc._renderType === cc._RENDER_TYPE_WEBGL && sender.isRotated(), this._capInsets);
+                this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc._renderType === cc.game.RENDER_TYPE_WEBGL && sender.isRotated(), this._capInsets);
                 if (restorePreferredSize)this.setPreferredSize(preferredSize);
                 this._positionsAreDirty = true;
                 this.dispatchEvent("load");
@@ -538,7 +538,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         }
         var batchNode = new cc.SpriteBatchNode(spriteFrame.getTexture(), 9);
         // the texture is rotated on Canvas render mode, so isRotated always is false.
-        return this.initWithBatchNode(batchNode, spriteFrame.getRect(), cc._renderType === cc._RENDER_TYPE_WEBGL && spriteFrame.isRotated(), capInsets);
+        return this.initWithBatchNode(batchNode, spriteFrame.getRect(), cc._renderType === cc.game.RENDER_TYPE_WEBGL && spriteFrame.isRotated(), capInsets);
     },
 
     /**
@@ -855,14 +855,26 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         var rect = spriteRect;
         var size = originalSize;
 
-        this._capInsets = capInsets;
+        var tmpTexture = this._scale9Image.getTexture();
+        var locLoaded = tmpTexture && tmpTexture.isLoaded();
+        this._textureLoaded = locLoaded;
+        if(!locLoaded){
+            tmpTexture.addEventListener("load", function(sender){
+                this._positionsAreDirty = true;
+                this.updateWithSprite(sprite, spriteRect, spriteFrameRotated, offset, originalSize, capInsets);
+                this.setVisible(true);
+                this.dispatchEvent("load");
+            }, this);
+            this.setVisible(false);
+            return true;
+        }
         if(cc._rectEqualToZero(rect)) {
-            var textureSize = this._scale9Image.getTexture().getContentSize();
+            var textureSize = tmpTexture.getContentSize();
             rect = cc.rect(0, 0, textureSize.width, textureSize.height);
         }
         if(size.width === 0 && size.height === 0)
             size = cc.size(rect.width, rect.height);
-
+        this._capInsets = capInsets;
         this._spriteRect = rect;
         this._offset = offset;
         this._spriteFrameRotated = spriteFrameRotated;
@@ -872,7 +884,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         if(this._scale9Enabled)
             this.createSlicedSprites();
         else
-            this._scale9Image.initWithTexture(this._scale9Image.getTexture(), this._spriteRect, this._spriteFrameRotated);
+            this._scale9Image.initWithTexture(tmpTexture, this._spriteRect, this._spriteFrameRotated);
 
         this.setState(this._brightState);
         this.setContentSize(size);
@@ -895,6 +907,20 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         var sprite = new cc.Sprite(batchNode.getTexture());
         var pos = cc.p(0,0);
         var originalSize = cc.size(originalRect.width,originalRect.height);
+
+        var tmpTexture = batchNode.getTexture();
+        var locLoaded = tmpTexture.isLoaded();
+        this._textureLoaded = locLoaded;
+        if(!locLoaded){
+            tmpTexture.addEventListener("load", function(sender){
+                this._positionsAreDirty = true;
+                this.updateWithBatchNode(batchNode, originalRect, rotated, capInsets);
+                this.setVisible(true);
+                this.dispatchEvent("load");
+            }, this);
+            this.setVisible(false);
+            return true;
+        }
         return this.updateWithSprite(sprite, originalRect, rotated, pos, originalSize, capInsets);
     },
 
@@ -912,7 +938,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
                 // the texture is rotated on Canvas render mode, so isRotated always is false.
                 var preferredSize = this._preferredSize, restorePreferredSize = preferredSize.width !== 0 && preferredSize.height !== 0;
                 if (restorePreferredSize) preferredSize = cc.size(preferredSize.width, preferredSize.height);
-                this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc._renderType === cc._RENDER_TYPE_WEBGL && sender.isRotated(), this._capInsets);
+                this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc._renderType === cc.game.RENDER_TYPE_WEBGL && sender.isRotated(), this._capInsets);
                 if (restorePreferredSize)this.setPreferredSize(preferredSize);
                 this._positionsAreDirty = true;
                 this.dispatchEvent("load");
@@ -1081,7 +1107,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
     },
 
     _createRenderCmd: function(){
-        if(cc._renderType === cc._RENDER_TYPE_CANVAS)
+        if(cc._renderType === cc.game.RENDER_TYPE_CANVAS)
             return new ccui.Scale9Sprite.CanvasRenderCmd(this);
         else
             return new ccui.Scale9Sprite.WebGLRenderCmd(this);
