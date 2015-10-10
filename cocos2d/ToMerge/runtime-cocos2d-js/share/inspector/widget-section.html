@@ -1,0 +1,99 @@
+<dom-module id="inspector-runtime-widget-section">
+    <style>
+    </style>
+
+    <template>
+        <editor-section text="Widget">
+            <editor-prop prop="{{target.enabled}}"></editor-prop>
+            <editor-prop prop="{{target.touchEnabled}}"></editor-prop>
+        </editor-section>
+
+        <template is="dom-if" if="[[target.canDoAnchor.value]]">
+            <editor-section text="Anchor">
+                <template is="dom-if" if="[[_isRelativeLayout(target.widgetLayoutType.value)]]">
+                    <editor-prop prop="{{target.anchorAlign}}"></editor-prop>
+                </template>
+                <template is="dom-if" if="[[_isAnchorLeft(target.anchorAlign.value, target.widgetLayoutType.value)]]">
+                    <editor-prop prop="{{target.anchorLeft}}"></editor-prop>
+                </template>
+                <template is="dom-if" if="[[_isAnchorRight(target.anchorAlign.value, target.widgetLayoutType.value)]]">
+                    <editor-prop prop="{{target.anchorRight}}"></editor-prop>
+                </template>
+                <template is="dom-if" if="[[_isAnchorTop(target.anchorAlign.value, target.widgetLayoutType.value)]]">
+                    <editor-prop prop="{{target.anchorTop}}"></editor-prop>
+                </template>
+                <template is="dom-if" if="[[_isAnchorBottom(target.anchorAlign.value, target.widgetLayoutType.value)]]">
+                    <editor-prop prop="{{target.anchorBottom}}"></editor-prop>
+                </template>
+            </editor-section>
+        </template>
+    </template>
+
+    <script>
+        Editor.registerElement({
+            properties: {
+                target: {
+                    type: Object,
+                    value: null,
+                    notify: true,
+                },
+            },
+
+            _isRelativeLayout: function (layoutType) {
+                return layoutType === 3;
+            },
+
+            _isAnchorLeft: function (align, layoutType) {
+                if (layoutType === 3) {
+                    return align === 1 ||
+                           align === 4 ||
+                           align === 7;
+                }
+                else if (layoutType === 0) {
+                    return false;
+                }
+
+                return true;
+            },
+
+            _isAnchorRight: function (align, layoutType) {
+                if (layoutType === 3) {
+                    return align === 3 ||
+                           align === 6 ||
+                           align === 9;
+                }
+                else if (layoutType === 0) {
+                    return false;
+                }
+
+                return true;
+            },
+
+            _isAnchorTop: function (align, layoutType) {
+                if (layoutType === 3) {
+                    return align === 1 ||
+                           align === 2 ||
+                           align === 3;
+                }
+                else if (layoutType === 0) {
+                    return false;
+                }
+
+                return true;
+            },
+
+            _isAnchorBottom: function (align, layoutType) {
+                if (layoutType === 3) {
+                    return align === 7 ||
+                           align === 8 ||
+                           align === 9;
+                }
+                else if (layoutType === 0) {
+                    return false;
+                }
+
+                return true;
+            }
+        });
+    </script>
+</dom-module>

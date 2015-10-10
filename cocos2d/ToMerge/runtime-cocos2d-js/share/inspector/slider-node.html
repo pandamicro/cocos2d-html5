@@ -1,0 +1,51 @@
+<link rel="import" href="packages://inspector/share/node-header.html">
+<link rel="import" href="packages://inspector/share/mixins-section.html">
+<link rel="import" href="node-size-scale9-section.html">
+<link rel="import" href="widget-section.html">
+<link rel="import" href="scale9-section.html">
+
+<dom-module id="runtime-slider-wrapper-inspector">
+    <link rel="import" type="css" href="packages://inspector/share/common.css">
+
+    <template>
+        <inspector-node-header
+            target="{{target}}"
+        >
+        </inspector-node-header>
+
+        <div class="props flex-1">
+            <inspector-runtime-node-size-scale9-section target="{{target}}">
+            </inspector-runtime-node-size-scale9-section>
+
+            <inspector-runtime-widget-section target="{{target}}">
+            </inspector-runtime-widget-section>
+
+            <inspector-runtime-scale9-section target="{{target}}">
+            </inspector-runtime-scale9-section>
+
+            <editor-section text="Slider">
+                <editor-prop name="Background Bar" prop="{{target.bgBar_}}"></editor-prop>
+                <editor-prop name="Foreground Bar" prop="{{target.fgBar_}}"></editor-prop>
+                <editor-prop name="Control" prop="{{target.control_}}"></editor-prop>
+                <editor-prop name="Control Pressed" prop="{{target.controlPressed_}}"></editor-prop>
+                <editor-prop name="Control Disabled" prop="{{target.controlDisabled_}}"></editor-prop>
+                <editor-prop name="Percent" prop="{{target.percent}}"></editor-prop>
+            </editor-section>
+
+            <inspector-mixins-section target="{{target}}">
+            </inspector-mixins-section>
+        </div>
+    </template>
+
+    <script>
+        Editor.registerElement({
+            properties: {
+                target: {
+                    type: Object,
+                    value: null,
+                    notify: true,
+                },
+            },
+        });
+    </script>
+</dom-module>
