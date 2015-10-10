@@ -228,62 +228,62 @@ var ParticleWrapper = cc.FireClass({
 
         startColor: {
             get: function () {
-                return cc.FireColor.fromCCColor(this.targetN.startColor);
+                return cc.Color.fromCCColor(this.targetN.startColor);
             },
             set: function (value) {
-                if ( value instanceof cc.FireColor ) {
+                if ( value instanceof cc.Color ) {
                     this.targetN.startColor = value.toCCColor();
                 }
                 else {
-                    cc.error('The new startColor must be cc.FireColor');
+                    cc.error('The new startColor must be cc.Color');
                 }
             },
-            type: cc.FireColor
+            type: cc.Color
         },
 
         startColorVariance: {
             get: function () {
-                return cc.FireColor.fromCCColor(this.targetN.startColorVar);
+                return cc.Color.fromCCColor(this.targetN.startColorVar);
             },
             set: function (value) {
-                if ( value instanceof cc.FireColor ) {
+                if ( value instanceof cc.Color ) {
                     this.targetN.startColorVar = value.toCCColor();
                 }
                 else {
-                    cc.error('The new startColorVariance must be cc.FireColor');
+                    cc.error('The new startColorVariance must be cc.Color');
                 }
             },
-            type: cc.FireColor
+            type: cc.Color
         },
 
         endColor: {
             get: function () {
-                return cc.FireColor.fromCCColor(this.targetN.endColor);
+                return cc.Color.fromCCColor(this.targetN.endColor);
             },
             set: function (value) {
-                if ( value instanceof cc.FireColor ) {
+                if ( value instanceof cc.Color ) {
                     this.targetN.endColor = value.toCCColor();
                 }
                 else {
-                    cc.error('The new endColor must be cc.FireColor');
+                    cc.error('The new endColor must be cc.Color');
                 }
             },
-            type: cc.FireColor
+            type: cc.Color
         },
 
         endColorVariance: {
             get: function () {
-                return cc.FireColor.fromCCColor(this.targetN.endColorVar);
+                return cc.Color.fromCCColor(this.targetN.endColorVar);
             },
             set: function (value) {
-                if ( value instanceof cc.FireColor ) {
+                if ( value instanceof cc.Color ) {
                     this.targetN.endColorVar = value.toCCColor();
                 }
                 else {
-                    cc.error('The new endColorVariance must be cc.FireColor');
+                    cc.error('The new endColorVariance must be cc.Color');
                 }
             },
-            type: cc.FireColor
+            type: cc.Color
         },
 
 
@@ -733,7 +733,7 @@ var ParticleWrapper = cc.FireClass({
     _serializeToObject: function (object, property) {
         var value = this[property];
 
-        if (value instanceof cc.FireColor) {
+        if (value instanceof cc.Color) {
             object[property] = [value.r, value.g, value.b, value.a];
         }
         else if (value instanceof cc.Vec2) {
@@ -754,8 +754,8 @@ var ParticleWrapper = cc.FireClass({
 
         var attr = cc.FireClass.attr(ParticleWrapper, property);
 
-        if (attr.ctor === cc.FireColor) {
-            this[property] = value ? new cc.FireColor(value[0], value[1], value[2], value[3]) : cc.FireColor.white;;
+        if (attr.ctor === cc.Color) {
+            this[property] = value ? new cc.Color(value[0], value[1], value[2], value[3]) : cc.Color.white;;
         }
         else if(attr.ctor === cc.Vec2) {
             this[property] = value ? new cc.Vec2(value[0], value[1]) : cc.Vec2.zero;

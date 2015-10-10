@@ -1,5 +1,5 @@
 var ValueType = require('./CCValueType');
-var JS = require('../js');
+var JS = require('../platform/js');
 
 var Color = (function () {
 
@@ -16,16 +16,16 @@ var Color = (function () {
      * @param {number} [r=0] - red component of the color
      * @param {number} [g=0] - green component of the color
      * @param {number} [b=0] - blue component of the color
-     * @param {number} [a=1] - alpha component of the color
+     * @param {number} [a=255] - alpha component of the color
      */
     function Color( r, g, b, a ) {
-        this.r = typeof r === 'number' ? r : 0.0;
-        this.g = typeof g === 'number' ? g : 0.0;
-        this.b = typeof b === 'number' ? b : 0.0;
-        this.a = typeof a === 'number' ? a : 1.0;
+        this.r = typeof r === 'number' ? r : 0;
+        this.g = typeof g === 'number' ? g : 0;
+        this.b = typeof b === 'number' ? b : 0;
+        this.a = typeof a === 'number' ? a : 255;
     }
     JS.extend(Color, ValueType);
-    require('../CCFireClass').fastDefine('cc.FireColor', Color, ['r', 'g', 'b', 'a']);
+    require('../platform/CCFireClass').fastDefine('cc.Color', Color, ['r', 'g', 'b', 'a']);
 
     var DefaultColors = {
         // color: [r, g, b, a]
@@ -34,13 +34,13 @@ var Color = (function () {
          * @type Color
          * @static
          */
-        white:      [1, 1, 1, 1],
+        white:      [255, 255, 255, 255],
         /**
          * @property black
          * @type Color
          * @static
          */
-        black:      [0, 0, 0, 1],
+        black:      [0, 0, 0, 255],
         /**
          * @property transparent
          * @type Color
@@ -52,43 +52,43 @@ var Color = (function () {
          * @type Color
          * @static
          */
-        gray:       [0.5, 0.5, 0.5],
+        gray:       [127.5, 127.5, 127.5],
         /**
          * @property red
          * @type Color
          * @static
          */
-        red:        [1, 0, 0],
+        red:        [255, 0, 0],
         /**
          * @property green
          * @type Color
          * @static
          */
-        green:      [0, 1, 0],
+        green:      [0, 255, 0],
         /**
          * @property blue
          * @type Color
          * @static
          */
-        blue:       [0, 0, 1],
+        blue:       [0, 0, 255],
         /**
          * @property yellow
          * @type Color
          * @static
          */
-        yellow:     [1, 235/255, 4/255],
+        yellow:     [255, 235, 4],
         /**
          * @property cyan
          * @type Color
          * @static
          */
-        cyan:       [0, 1, 1],
+        cyan:       [0, 255, 255],
         /**
          * @property magenta
          * @type Color
          * @static
          */
-        magenta:    [1, 0, 1]
+        magenta:    [255, 0, 255]
     };
     for (var colorName in DefaultColors) {
         var colorGetter = (function (r, g, b, a) {
@@ -147,10 +147,10 @@ var Color = (function () {
      */
     Color.prototype.toString = function () {
         return "rgba(" +
-            this.r.toFixed(2) + ", " +
-            this.g.toFixed(2) + ", " +
-            this.b.toFixed(2) + ", " +
-            this.a.toFixed(2) + ")"
+            this.r.toFixed() + ", " +
+            this.g.toFixed() + ", " +
+            this.b.toFixed() + ", " +
+            this.a.toFixed() + ")"
         ;
     };
 
@@ -199,17 +199,17 @@ var Color = (function () {
     Color.prototype.toCSS = function ( opt ) {
         if ( opt === 'rgba' ) {
             return "rgba(" +
-                (this.r * 255 | 0 ) + "," +
-                (this.g * 255 | 0 ) + "," +
-                (this.b * 255 | 0 ) + "," +
-                this.a.toFixed(2) + ")"
+                (this.r | 0 ) + "," +
+                (this.g | 0 ) + "," +
+                (this.b | 0 ) + "," +
+                (this.a / 255).toFixed(2) + ")"
             ;
         }
         else if ( opt === 'rgb' ) {
             return "rgb(" +
-                (this.r * 255 | 0 ) + "," +
-                (this.g * 255 | 0 ) + "," +
-                (this.b * 255 | 0 ) + ")"
+                (this.r | 0 ) + "," +
+                (this.g | 0 ) + "," +
+                (this.b | 0 ) + ")"
             ;
         }
         else {
@@ -222,10 +222,10 @@ var Color = (function () {
      * @method clamp
      */
     Color.prototype.clamp = function () {
-        this.r = cc.clamp01(this.r);
-        this.g = cc.clamp01(this.g);
-        this.b = cc.clamp01(this.b);
-        this.a = cc.clamp01(this.a);
+        this.r = cc.clampf(this.r, 0, 255);
+        this.g = cc.clampf(this.g, 0, 255);
+        this.b = cc.clampf(this.b, 0, 255);
+        this.a = cc.clampf(this.a, 0, 255);
     };
 
     /**
@@ -236,9 +236,9 @@ var Color = (function () {
      */
     Color.prototype.fromHEX = function (hexString) {
         var hex = parseInt(((hexString.indexOf('#') > -1) ? hexString.substring(1) : hexString), 16);
-        this.r = (hex >> 16)/255;
-        this.g = ((hex & 0x00FF00) >> 8)/255;
-        this.b = ((hex & 0x0000FF))/255;
+        this.r = (hex >> 16);
+        this.g = ((hex & 0x00FF00) >> 8);
+        this.b = ((hex & 0x0000FF));
         return this;
     };
 
@@ -249,9 +249,9 @@ var Color = (function () {
      */
     Color.prototype.toHEX = function ( fmt ) {
         var hex = [
-            (this.r * 255 | 0 ).toString(16),
-            (this.g * 255 | 0 ).toString(16),
-            (this.b * 255 | 0 ).toString(16),
+            (this.r | 0 ).toString(16),
+            (this.g | 0 ).toString(16),
+            (this.b | 0 ).toString(16),
         ];
         var i = -1;
         if ( fmt === '#rgb' ) {
@@ -277,9 +277,9 @@ var Color = (function () {
      * @return {number}
      */
     Color.prototype.toRGBValue = function () {
-        return (cc.clamp01(this.r) * 255 << 16) +
-               (cc.clamp01(this.g) * 255 << 8) +
-               (cc.clamp01(this.b) * 255);
+        return (cc.clampf(this.r, 0, 255) << 16) +
+               (cc.clampf(this.g, 0, 255) << 8) +
+               (cc.clampf(this.b, 0, 255));
     };
 
     /**
@@ -310,13 +310,16 @@ var Color = (function () {
 })();
 
 /**
- * @param {Number} r - red, must be [0.0, 1.0]
- * @param {Number} g - red, must be [0.0, 1.0]
- * @param {Number} b - red, must be [0.0, 1.0]
+ * @param {Number} r - red, must be [0, 255]
+ * @param {Number} g - red, must be [0, 255]
+ * @param {Number} b - red, must be [0, 255]
  * @return {Object} - {h: number, s: number, v: number}
  * @function
  */
 Color.rgb2hsv = function ( r, g, b ) {
+    r = r / 255;
+    g = g / 255;
+    b = b / 255;
     var hsv = { h: 0, s: 0, v: 0 };
     var max = Math.max(r,g,b);
     var min = Math.min(r,g,b);
@@ -339,7 +342,7 @@ Color.rgb2hsv = function ( r, g, b ) {
  * @param {Number} h
  * @param {Number} s
  * @param {Number} v
- * @return {Object} - {r: number, g: number, b: number}}, rgb will be in [0.0, 1.0]
+ * @return {Object} - {r: number, g: number, b: number}}, rgb will be in [0, 255]
  * @function
  */
 Color.hsv2rgb = function ( h, s, v ) {
@@ -400,25 +403,87 @@ Color.hsv2rgb = function ( h, s, v ) {
             }
         }
     }
+    rgb.r *= 255;
+    rgb.g *= 255;
+    rgb.b *= 255;
     return rgb;
 };
 
-cc.FireColor = Color;
+cc.Color = Color;
 
 /**
- * The convenience method to create a new <% crosslink cc.FireColor Color %>
+ * The convenience method to create a new <% crosslink cc.Color color %>
+ * @example
+ *
+ * // 1. All channels seperately as parameters
+ * var color1 = cc.color(255, 255, 255, 255);
+ *
+ * // 2. Convert a hex string to a color
+ * var color2 = cc.color("#000000");
+ *
+ * // 3. An color object as parameter
+ * var color3 = cc.color({r: 255, g: 255, b: 255, a: 255});
+ *
+ * Alpha channel is optional. Default value is 255
  * @method color
  * @param {number} [r=0]
  * @param {number} [g=0]
  * @param {number} [b=0]
- * @param {number} [a=1]
+ * @param {number} [a=255]
  * @return {Color}
  */
-cc.fireColor = function color (r, g, b, a) {
-    if (Array.isArray(r)) {
-        return new Color(r[0], r[1], r[2], r[3]);
+cc.color = function color (r, g, b, a) {
+    if (r === undefined) {
+        return new cc.Color(0, 0, 0, 255);
     }
-    else {
-        return new Color(r, g, b, a);
+    if (JS.isString(r)) {
+        var result = new cc.Color();
+        return result.fromHEX(r);
     }
+    if (cc.isObject(r)) {
+        return new cc.Color(r.r, r.g, r.b, r.a);
+    }
+    return  new cc.Color(r, g, b, a);
+};
+
+
+// Functional style API, for backward compatibility
+
+/**
+ * returns true if both ccColor3B are equal. Otherwise it returns false.
+ * @function
+ * @param {cc.Color} color1
+ * @param {cc.Color} color2
+ * @return {Boolean}  true if both ccColor3B are equal. Otherwise it returns false.
+ */
+cc.colorEqual = function (color1, color2) {
+    return color1.r === color2.r && color1.g === color2.g && color1.b === color2.b;
+};
+
+/**
+ * convert a string of color for style to Color.
+ * e.g. "#ff06ff"  to : cc.color(255,6,255)
+ * @function
+ * @param {String} hex
+ * @return {cc.Color}
+ */
+cc.hexToColor = function (hex) {
+    hex = hex.replace(/^#?/, "0x");
+    var c = parseInt(hex);
+    var r = (c >> 16);
+    var g = ((c & 0x00FF00) >> 8);
+    var b = ((c & 0x0000FF));
+    return cc.color(r, g, b);
+};
+
+/**
+ * convert Color to a string of color for style.
+ * e.g.  cc.color(255,6,255)  to : "#ff06ff"
+ * @function
+ * @param {cc.Color} color
+ * @return {String}
+ */
+cc.colorToHex = function (color) {
+    var hR = color.r.toString(16), hG = color.g.toString(16), hB = color.b.toString(16);
+    return "#" + (color.r < 16 ? ("0" + hR) : hR) + (color.g < 16 ? ("0" + hG) : hG) + (color.b < 16 ? ("0" + hB) : hB);
 };

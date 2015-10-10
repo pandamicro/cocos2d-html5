@@ -1,6 +1,6 @@
 var Vec2 = cc.Vec2;
-var Rect = cc.FireRect;
-var Color = cc.FireColor;
+var Rect = cc.Rect;
+var Color = cc.Color;
 var Helpers = Fire.Runtime.Helpers;
 
 /**
@@ -264,7 +264,7 @@ var NodeWrapper = cc.FireClass({
                     this.targetN.opacity = color.a;
                 }
                 else {
-                    cc.error('The new color must be cc.FireColor');
+                    cc.error('The new color must be cc.Color');
                 }
             },
         },
@@ -403,8 +403,8 @@ var NodeWrapper = cc.FireClass({
      * Returns a "world" axis aligned bounding box(AABB) of the renderer.
      *
      * @method getWorldBounds
-     * @param {cc.FireRect} [out] - optional, the receiving rect
-     * @return {cc.FireRect} - the rect represented in world position
+     * @param {cc.Rect} [out] - optional, the receiving rect
+     * @return {cc.Rect} - the rect represented in world position
      */
     getWorldBounds: function (out) {
         var size = this.size;

@@ -103,15 +103,15 @@ var ButtonWrapper = cc.FireClass({
         fontColor: {
             get: function () {
                 var color = this.targetN.titleColor;
-                return color ? cc.FireColor.fromCCColor(color) : cc.FireColor.white;
+                return color ? cc.Color.fromCCColor(color) : cc.Color.white;
             },
             set: function (value) {
-                if (value instanceof cc.FireColor) {
+                if (value instanceof cc.Color) {
                     var color = value.toCCColor();
                     this.targetN.titleColor = color;
                 }
                 else {
-                    cc.error('The new fontColor must be cc.FireColor');
+                    cc.error('The new fontColor must be cc.Color');
                 }
             },
         },
@@ -172,7 +172,7 @@ var ButtonWrapper = cc.FireClass({
 
         var color = this._fontColor;
         if (color) {
-            color = new cc.FireColor(this._fontColor[0], this._fontColor[1], this._fontColor[2], this._fontColor[3]);
+            color = new cc.Color(this._fontColor[0], this._fontColor[1], this._fontColor[2], this._fontColor[3]);
             node.titleColor = color.toCCColor();
         }
 

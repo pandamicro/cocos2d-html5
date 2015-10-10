@@ -28,7 +28,6 @@ require('./js');
 require('./CCEnum');
 require('./CCFireClass');
 require('./CCObject');
-require('./value-types');
 require('./callbacks-invoker');
 require('./url');
 require('./deserialize');

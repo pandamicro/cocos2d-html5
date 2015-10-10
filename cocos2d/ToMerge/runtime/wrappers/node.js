@@ -4,7 +4,7 @@
 
 var JS = cc.js;
 var Vec2 = cc.Vec2;
-var Rect = cc.FireRect;
+var Rect = cc.Rect;
 var Utils = require('./utils');
 var NYI = Utils.NYI;
 var NYI_Accessor = Utils.NYI_Accessor;
@@ -566,8 +566,8 @@ var NodeWrapper = cc.FireClass({
      * Returns a "world" axis aligned bounding box(AABB) of the renderer.
      *
      * @method getWorldBounds
-     * @param {cc.FireRect} [out] - optional, the receiving rect
-     * @return {cc.FireRect} - the rect represented in world position
+     * @param {cc.Rect} [out] - optional, the receiving rect
+     * @return {cc.Rect} - the rect represented in world position
      */
     getWorldBounds: function (out) {
         if (CC_EDITOR) {

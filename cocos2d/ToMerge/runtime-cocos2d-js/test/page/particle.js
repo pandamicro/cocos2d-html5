@@ -19,10 +19,10 @@ describe( 'test Particle wrapper', function () {
         wrapper.emissionRate = 40;
         wrapper.life = 50;
         wrapper.lifeVariance = 60;
-        wrapper.startColor = new cc.FireColor(1, 0, 1, 1);
-        wrapper.startColorVariance = new cc.FireColor(1, 0, 1, 1);
-        wrapper.endColor = new cc.FireColor(1, 0, 1, 1);
-        wrapper.endColorVariance =  new cc.FireColor(1, 0, 1, 1);
+        wrapper.startColor = new cc.Color(1, 0, 1, 1);
+        wrapper.startColorVariance = new cc.Color(1, 0, 1, 1);
+        wrapper.endColor = new cc.Color(1, 0, 1, 1);
+        wrapper.endColorVariance =  new cc.Color(1, 0, 1, 1);
         wrapper.angle = 110;
         wrapper.angleVariance = 120;
         wrapper.startSize = 130;

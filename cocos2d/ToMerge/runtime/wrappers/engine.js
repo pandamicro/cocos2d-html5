@@ -297,7 +297,7 @@ var EngineWrapper = cc.FireClass({
     /**
      * Pick nodes that lie within a specified screen rectangle.
      * @method getIntersectionList
-     * @param {Rect} rect - An rectangle specified with world coordinates.
+     * @param {cc.Rect} rect - An rectangle specified with world coordinates.
      * @return {RuntimeNode[]}
      */
     getIntersectionList: NYI,
