@@ -432,7 +432,7 @@ ccui.LoadingBar.Type = cc.Enum({
      * @constant
      * @type {number}
      */
-    RIGHT: 1,
+    RIGHT: 1
 });
 
 /**

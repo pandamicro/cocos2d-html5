@@ -1529,7 +1529,7 @@ ccui.Layout.LayoutType = cc.Enum({
      * @type {number}
      * @constant
      */
-    RELATIVE: 3,
+    RELATIVE: 3
 });
 
 //Layout clipping type

@@ -234,8 +234,8 @@ require('./cocos2d/core/utils/CCPath');
 //+++++++++++++++++++++++++Engine initialization function begin+++++++++++++++++++++++++++
 (function () {
 
-//to make sure the cc.log, cc.warn, cc.error, cc.throw and cc.assert would not throw error before init by debugger mode.
-cc.log = cc.warn = cc.error = cc.throw = cc.assert = function () {
+//to make sure the cc.log, cc.warn, cc.error, cc._throw and cc.assert would not throw error before init by debugger mode.
+cc.log = cc.warn = cc.error = cc._throw = cc.assert = function () {
 };
 
 var _config = null,

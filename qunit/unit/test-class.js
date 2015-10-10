@@ -339,9 +339,9 @@ test('statics', function () {
 });
 
 test('try catch', function () {
-    var originThrow = cc.throw;
+    var originThrow = cc._throw;
 
-    cc.throw = Callback().enable();
+    cc._throw = Callback().enable();
     var Animal = cc.FireClass({
         constructor: function () {
             null.foo();
@@ -349,9 +349,9 @@ test('try catch', function () {
     });
     var animal = new Animal();
     ok(animal, 'should create new instance even if an exception occurs');
-    cc.throw.once('should throw exception');
+    cc._throw.once('should throw exception');
 
-    cc.throw = originThrow;
+    cc._throw = originThrow;
 });
 
 test('property notify', function () {

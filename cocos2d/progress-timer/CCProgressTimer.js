@@ -343,5 +343,5 @@ cc.ProgressTimer.Type = cc.Enum({
      * @type Number
      * @constant
      */
-    BAR: 1,
+    BAR: 1
 });

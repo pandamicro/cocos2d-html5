@@ -2273,7 +2273,7 @@ cc.ParticleSystem.Mode = cc.Enum({
      * @constant
      * @type Number
      */
-    RADIUS: 1,
+    RADIUS: 1
 });
 
 cc.ParticleSystem.Type = cc.Enum({

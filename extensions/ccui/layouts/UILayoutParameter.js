@@ -535,7 +535,7 @@ ccui.RelativeLayoutParameter.Type = cc.Enum({
      * @constant
      * @type {number}
      */
-    LOCATION_BELOW_RIGHTALIGN: 21,
+    LOCATION_BELOW_RIGHTALIGN: 21
 });
 
 /**
