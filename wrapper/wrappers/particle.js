@@ -784,7 +784,7 @@ var ParticleWrapper = cc.FireClass({
             return false;
         }
 
-        var canvasObj = cc.newElement("canvas");
+        var canvasObj = document.createElement("canvas");
         if(imageFormat === cc.FMT_PNG){
             var myPngObj = new cc.PNGReader(buffer);
             myPngObj.render(canvasObj);

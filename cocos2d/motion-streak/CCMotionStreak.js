@@ -251,7 +251,7 @@ cc.MotionStreak = cc.Node.extend(/** @lends cc.MotionStreak# */{
         if(!texture)
             throw new Error("cc.MotionStreak.initWithFade(): Invalid filename or texture");
 
-        if (cc.isString(texture))
+        if (cc.js.isString(texture))
             texture = cc.textureCache.addImage(texture);
 
         cc.Node.prototype.setPosition.call(this, cc.p(0,0));
@@ -326,8 +326,8 @@ cc.MotionStreak = cc.Node.extend(/** @lends cc.MotionStreak# */{
     /**
      * Set the position. <br />
      *
-     * @param {cc.Point|Number} position
-     * @param {Number} [yValue=undefined] If not exists, the first parameter must be cc.Point.
+     * @param {cc.Vec2|Number} position
+     * @param {Number} [yValue=undefined] If not exists, the first parameter must be cc.Vec2.
      */
     setPosition:function (position, yValue) {
         this.startingPositionInitialized = true;

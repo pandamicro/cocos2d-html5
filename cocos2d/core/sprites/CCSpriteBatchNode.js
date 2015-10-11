@@ -68,7 +68,7 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
 
         var texture2D;
         capacity = capacity || cc.SpriteBatchNode.DEFAULT_CAPACITY;
-        if (cc.isString(fileImage)) {
+        if (cc.js.isString(fileImage)) {
             texture2D = cc.textureCache.getTextureForKey(fileImage);
             if (!texture2D)
                 texture2D = cc.textureCache.addImage(fileImage);

@@ -602,13 +602,13 @@ if (cc._renderType === cc.game.RENDER_TYPE_CANVAS) {
     };
 
 } else {
-    cc.assert(cc.isFunction(cc._tmp.WebGLTexture2D), cc._LogInfos.MissingFile, "TexturesWebGL.js");
+    cc.assert(cc.js.isFunction(cc._tmp.WebGLTexture2D), cc._LogInfos.MissingFile, "TexturesWebGL.js");
     cc._tmp.WebGLTexture2D();
     delete cc._tmp.WebGLTexture2D;
 }
 
 cc.EventHelper.prototype.apply(cc.Texture2D.prototype);
 
-cc.assert(cc.isFunction(cc._tmp.PrototypeTexture2D), cc._LogInfos.MissingFile, "TexturesPropertyDefine.js");
+cc.assert(cc.js.isFunction(cc._tmp.PrototypeTexture2D), cc._LogInfos.MissingFile, "TexturesPropertyDefine.js");
 cc._tmp.PrototypeTexture2D();
 delete cc._tmp.PrototypeTexture2D;

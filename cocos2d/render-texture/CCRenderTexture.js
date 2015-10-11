@@ -158,7 +158,7 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
 
     /**
      * Used for grab part of screen to a texture.
-     * @param {cc.Point} rtBegin
+     * @param {cc.Vec2} rtBegin
      * @param {cc.Rect} fullRect
      * @param {cc.Rect} fullViewport
      */

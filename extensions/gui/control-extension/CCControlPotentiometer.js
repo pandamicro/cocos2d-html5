@@ -38,7 +38,7 @@
  * @property {Number}           maxValue        - The maximum value of the potentionmeter
  * @property {cc.ProgressTimer} progressTimer   - The progress timer of the potentionmeter
  * @property {cc.Sprite}        thumbSprite     - The thumb sprite of the potentionmeter
- * @property {cc.Point}         prevLocation    - The previous location of the potentionmeter
+ * @property {cc.Vec2}         prevLocation    - The previous location of the potentionmeter
  */
 cc.ControlPotentiometer = cc.Control.extend(/** @lends cc.ControlPotentiometer# */{
     _thumbSprite:null,
@@ -188,8 +188,8 @@ cc.ControlPotentiometer = cc.Control.extend(/** @lends cc.ControlPotentiometer# 
 
     /**
      * the distance between the point1 and point2
-     * @param {cc.Point} point1
-     * @param {cc.Point}  point2
+     * @param {cc.Vec2} point1
+     * @param {cc.Vec2}  point2
      * @return {Number}
      */
     distanceBetweenPointAndPoint:function (point1, point2) {
@@ -200,10 +200,10 @@ cc.ControlPotentiometer = cc.Control.extend(/** @lends cc.ControlPotentiometer# 
 
     /**
      * the angle in degree between line1 and line2.
-     * @param {cc.Point}  beginLineA
-     * @param {cc.Point}  endLineA
-     * @param {cc.Point}  beginLineB
-     * @param {cc.Point}  endLineB
+     * @param {cc.Vec2}  beginLineA
+     * @param {cc.Vec2}  endLineA
+     * @param {cc.Vec2}  beginLineB
+     * @param {cc.Vec2}  endLineB
      * @return {Number}
      */
     angleInDegreesBetweenLineFromPoint_toPoint_toLineFromPoint_toPoint:function (beginLineA, endLineA, beginLineB, endLineB) {

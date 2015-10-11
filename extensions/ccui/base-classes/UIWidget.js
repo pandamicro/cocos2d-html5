@@ -416,7 +416,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
 
     /**
      * Changes the percent that is widget's percent size
-     * @param {cc.Point} percent that is widget's percent size, width and height value from 0 to 1.
+     * @param {cc.Vec2} percent that is widget's percent size, width and height value from 0 to 1.
      */
     setSizePercent: function (percent) {
         if(this._usingLayoutComponent){
@@ -599,7 +599,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
 
     /**
      * Returns size percent of ccui.Widget
-     * @returns {cc.Point}
+     * @returns {cc.Vec2}
      */
     getSizePercent: function () {
         if(this._usingLayoutComponent){
@@ -617,7 +617,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
 
     /**
      *  Gets world position of ccui.Widget.
-     * @returns {cc.Point} world position of ccui.Widget.
+     * @returns {cc.Vec2} world position of ccui.Widget.
      */
     getWorldPosition: function () {
         return this.convertToWorldSpace(cc.p(this._anchorPoint.x * this._contentSize.width, this._anchorPoint.y * this._contentSize.height));
@@ -1000,7 +1000,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
 
     /**
      * A call back function called when widget is selected, and on touch canceled.
-     * @param {cc.Point} touchPoint
+     * @param {cc.Vec2} touchPoint
      */
     onTouchCancelled: function (touchPoint) {
         this.setHighlighted(false);
@@ -1009,7 +1009,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
 
     /**
      * A call back function called when widget is selected, and on touch long clicked.
-     * @param {cc.Point} touchPoint
+     * @param {cc.Vec2} touchPoint
      */
     onTouchLongClicked: function (touchPoint) {
         this.longClickEvent();
@@ -1070,7 +1070,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
 
     /**
      * Checks a point if is in widget's space
-     * @param {cc.Point} pt
+     * @param {cc.Vec2} pt
      * @returns {boolean} true if the point is in widget's space, false otherwise.
      */
     hitTest: function (pt) {
@@ -1080,7 +1080,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
 
     /**
      * returns whether clipping parent widget contains point.
-     * @param {cc.Point} pt location point
+     * @param {cc.Vec2} pt location point
      * @returns {Boolean}
      */
     isClippingParentContainsPoint: function(pt){
@@ -1113,7 +1113,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
      * Calls the checkChildInfo of widget's parent, its subclass will override it.
      * @param {number} handleState
      * @param {ccui.Widget} sender
-     * @param {cc.Point} touchPoint
+     * @param {cc.Vec2} touchPoint
      */
     checkChildInfo: function (handleState, sender, touchPoint) {
         var widgetParent = this.getWidgetParent();
@@ -1125,7 +1125,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
      * Changes the position (x,y) of the widget .
      * The original point (0,0) is at the left-bottom corner of screen.
      * @override
-     * @param {cc.Point|Number} pos
+     * @param {cc.Vec2|Number} pos
      * @param {Number} [posY]
      */
     setPosition: function (pos, posY) {
@@ -1183,7 +1183,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
 
     /**
      * Changes the position (x,y) of the widget
-     * @param {cc.Point} percent
+     * @param {cc.Vec2} percent
      */
     setPositionPercent: function (percent) {
         if (this._usingLayoutComponent){
@@ -1219,7 +1219,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
 
     /**
      * Gets the percent (x,y) of the widget
-     * @returns {cc.Point} The percent (x,y) of the widget in OpenGL coordinates
+     * @returns {cc.Vec2} The percent (x,y) of the widget in OpenGL coordinates
      */
     getPositionPercent: function () {
         if (this._usingLayoutComponent) {
@@ -1374,7 +1374,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
 
     /**
      * Gets the position of touch began event.
-     * @returns {cc.Point}
+     * @returns {cc.Vec2}
      */
     getTouchBeganPosition: function(){
          return cc.p(this._touchBeganPosition);
@@ -1382,7 +1382,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
 
     /**
      * Gets the position of touch moved event
-     * @returns {cc.Point}
+     * @returns {cc.Vec2}
      */
     getTouchMovePosition: function(){
         return cc.p(this._touchMovePosition);
@@ -1390,7 +1390,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
 
     /**
      * Gets the position of touch end event
-     * @returns {cc.Point}
+     * @returns {cc.Vec2}
      */
     getTouchEndPosition:function(){
         return cc.p(this._touchEndPosition);
@@ -1564,7 +1564,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
     /**
      * Gets the touch end point of widget when widget is selected.
      * @deprecated since v3.0, please use getTouchEndPosition instead.
-     * @returns {cc.Point} the touch end point.
+     * @returns {cc.Vec2} the touch end point.
      */
     getTouchEndPos: function () {
         cc.log("getTouchEndPos is deprecated. Please use getTouchEndPosition instead.");
@@ -1574,7 +1574,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
     /**
      *Gets the touch move point of widget when widget is selected.
      * @deprecated since v3.0, please use getTouchMovePosition instead.
-     * @returns {cc.Point} the touch move point.
+     * @returns {cc.Vec2} the touch move point.
      */
     getTouchMovePos: function () {
         cc.log("getTouchMovePos is deprecated. Please use getTouchMovePosition instead.");
@@ -1584,7 +1584,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
     /**
      * Checks a point if in parent's area.
      * @deprecated since v3.0, please use isClippingParentContainsPoint instead.
-     * @param {cc.Point} pt
+     * @param {cc.Vec2} pt
      * @returns {Boolean}
      */
     clippingParentAreaContainPoint: function (pt) {
@@ -1595,7 +1595,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
     /**
      * Gets the touch began point of widget when widget is selected.
      * @deprecated since v3.0, please use getTouchBeganPosition instead.
-     * @returns {cc.Point} the touch began point.
+     * @returns {cc.Vec2} the touch began point.
      */
     getTouchStartPos: function () {
         cc.log("getTouchStartPos is deprecated. Please use getTouchBeganPosition instead.");

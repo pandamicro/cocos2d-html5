@@ -75,7 +75,7 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
 
     /**
      * draws a point given x and y coordinate measured in points
-     * @param {cc.Point} point
+     * @param {cc.Vec2} point
      */
     drawPoint:function (point) {
         this.lazy_init();
@@ -138,8 +138,8 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
 
     /**
      * draws a line given the origin and destination point measured in points
-     * @param {cc.Point} origin
-     * @param {cc.Point} destination
+     * @param {cc.Vec2} origin
+     * @param {cc.Vec2} destination
      */
     drawLine:function (origin, destination) {
         this.lazy_init();
@@ -163,8 +163,8 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
 
     /**
      * draws a rectangle given the origin and destination point measured in points.
-     * @param {cc.Point} origin
-     * @param {cc.Point} destination
+     * @param {cc.Vec2} origin
+     * @param {cc.Vec2} destination
      */
     drawRect:function (origin, destination) {
         this.drawLine(cc.p(origin.x, origin.y), cc.p(destination.x, origin.y));
@@ -175,8 +175,8 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
 
     /**
      * draws a solid rectangle given the origin and destination point measured in points.
-     * @param {cc.Point} origin
-     * @param {cc.Point} destination
+     * @param {cc.Vec2} origin
+     * @param {cc.Vec2} destination
      * @param {cc.Color} color
      */
     drawSolidRect:function (origin, destination, color) {
@@ -191,8 +191,8 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
     },
 
     /**
-     * draws a polygon given a pointer to cc.Point coordiantes and the number of vertices measured in points.
-     * @param {Array} vertices a pointer to cc.Point coordiantes
+     * draws a polygon given a pointer to cc.Vec2 coordiantes and the number of vertices measured in points.
+     * @param {Array} vertices a pointer to cc.Vec2 coordiantes
      * @param {Number} numOfVertices the number of vertices measured in points
      * @param {Boolean} closePolygon The polygon can be closed or open
      */
@@ -248,7 +248,7 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
 
     /**
      * draws a circle given the center, radius and number of segments.
-     * @param {cc.Point} center center of circle
+     * @param {cc.Vec2} center center of circle
      * @param {Number} radius
      * @param {Number} angle angle in radians
      * @param {Number} segments
@@ -297,9 +297,9 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
 
     /**
      * draws a quad bezier path
-     * @param {cc.Point} origin
-     * @param {cc.Point} control
-     * @param {cc.Point} destination
+     * @param {cc.Vec2} origin
+     * @param {cc.Vec2} control
+     * @param {cc.Vec2} destination
      * @param {Number} segments
      */
     drawQuadBezier:function (origin, control, destination, segments) {
@@ -335,10 +335,10 @@ cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# 
 
     /**
      * draws a cubic bezier path
-     * @param {cc.Point} origin
-     * @param {cc.Point} control1
-     * @param {cc.Point} control2
-     * @param {cc.Point} destination
+     * @param {cc.Vec2} origin
+     * @param {cc.Vec2} control1
+     * @param {cc.Vec2} control2
+     * @param {cc.Vec2} destination
      * @param {Number} segments
      */
     drawCubicBezier:function (origin, control1, control2, destination, segments) {

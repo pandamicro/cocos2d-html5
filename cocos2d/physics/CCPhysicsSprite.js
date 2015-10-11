@@ -71,7 +71,7 @@
 
             if (fileName === undefined) {
                 cc.PhysicsSprite.prototype.init.call(this);
-            }else if (cc.isString(fileName)) {
+            }else if (cc.js.isString(fileName)) {
                 if (fileName[0] === "#") {
                     //init with a sprite frame name
                     var frameName = fileName.substr(1, fileName.length - 1);
@@ -81,7 +81,7 @@
                     //init  with filename and rect
                     this.init(fileName, rect);
                 }
-            }else if (cc.isObject(fileName)) {
+            }else if (cc.js.isObject(fileName)) {
                 if (fileName instanceof cc.Texture2D) {
                     //init  with texture and rect
                     this.initWithTexture(fileName, rect);
@@ -133,7 +133,7 @@
 
         /**
          * get position
-         * @return {cc.Point}
+         * @return {cc.Vec2}
          */
         getPosition:function () {
             var pos = this._body.GetPosition();
@@ -143,7 +143,7 @@
 
         /**
          * set position
-         * @param {cc.Point} p
+         * @param {cc.Vec2} p
          */
         setPosition:function (p) {
             var angle = this._body.GetAngle();
@@ -242,7 +242,7 @@
 
             if (fileName === undefined) {
                 cc.PhysicsSprite.prototype.init.call(this);
-            }else if (cc.isString(fileName)) {
+            }else if (cc.js.isString(fileName)) {
                 if (fileName[0] === "#") {
                     //init with a sprite frame name
                     var frameName = fileName.substr(1, fileName.length - 1);
@@ -252,7 +252,7 @@
                     //init  with filename and rect
                     this.init(fileName, rect);
                 }
-            }else if (cc.isObject(fileName)) {
+            }else if (cc.js.isObject(fileName)) {
                 if (fileName instanceof cc.Texture2D) {
                     //init  with texture and rect
                     this.initWithTexture(fileName, rect);
@@ -288,7 +288,7 @@
 
         /**
          * get position
-         * @return {cc.Point}
+         * @return {cc.Vec2}
          */
         getPosition:function () {
             var locBody = this._body;
@@ -313,7 +313,7 @@
 
         /**
          * set position
-         * @param {cc.Point|Number}newPosOrxValue
+         * @param {cc.Vec2|Number}newPosOrxValue
          * @param {Number}yValue
          */
         setPosition:function (newPosOrxValue, yValue) {

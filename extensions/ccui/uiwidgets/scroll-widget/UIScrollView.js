@@ -1233,7 +1233,7 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
 
     /**
      * Scroll inner container to both direction percent position of ScrollView.
-     * @param {cc.Point} percent
+     * @param {cc.Vec2} percent
      * @param {Number} time
      * @param {Boolean} attenuated
      */
@@ -1340,7 +1340,7 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
 
     /**
      * Move inner container to both direction percent position of ScrollView.
-     * @param {cc.Point} percent The destination vertical percent, accept value between 0 - 100
+     * @param {cc.Vec2} percent The destination vertical percent, accept value between 0 - 100
      */
     jumpToPercentBothDirection: function (percent) {
         if (this.direction !== ccui.ScrollView.Dir.BOTH)

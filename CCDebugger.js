@@ -43,6 +43,7 @@ cc._LogInfos = {
     Director_pushScene: "the scene should not null",
 
     arrayVerifyType: "element type is wrong!",
+    deprecated: '"%s" is deprecated, please use "%s" instead.',
 
     Scheduler_scheduleCallbackForTarget: "CCSheduler#scheduleCallback. Callback already scheduled. Updating interval from:%s to %s",
     Scheduler_scheduleCallbackForTarget_2: "cc.scheduler.scheduleCallbackForTarget(): callback_fn should be non-null.",
@@ -266,7 +267,7 @@ cc._logToWebPage = function (msg) {
 
 //to make sure the cc.log, cc.warn, cc.error and cc.assert would not throw error before init by debugger mode.
 cc._formatString = function (arg) {
-    if (cc.isObject(arg)) {
+    if (cc.js.isObject(arg)) {
         try {
             return JSON.stringify(arg);
         } catch (err) {

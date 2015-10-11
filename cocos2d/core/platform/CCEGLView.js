@@ -281,7 +281,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
      * @param {Function|null} callback The callback function
      */
     setResizeCallback: function (callback) {
-        if (cc.isFunction(callback) || callback == null) {
+        if (cc.js.isFunction(callback) || callback == null) {
             this._resizeCallback = callback;
         }
     },
@@ -529,7 +529,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns the visible origin of the view port.
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getVisibleOrigin: function () {
         return cc.p(this._visibleRect.x,this._visibleRect.y);
@@ -537,7 +537,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns the visible origin of the view port.
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getVisibleOriginInPixel: function () {
         return cc.p(this._visibleRect.x * this._scaleX, 
@@ -811,7 +811,7 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
      * @param {Number} tx The X axis translation
      * @param {Number} ty The Y axis translation
      * @param {Object} relatedPos The related position object including "left", "top", "width", "height" informations
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     convertToLocationInView: function (tx, ty, relatedPos) {
         return {x: this._devicePixelRatio * (tx - relatedPos.left), y: this._devicePixelRatio * (relatedPos.top + relatedPos.height - ty)};

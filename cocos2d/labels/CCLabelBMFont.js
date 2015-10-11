@@ -73,7 +73,7 @@ cc.LABEL_AUTOMATIC_WIDTH = -1;
  * @param {String} fntFile
  * @param {Number} [width=-1]
  * @param {cc.TextAlignment} [alignment=cc.TextAlignment.LEFT]
- * @param {cc.Point} [imageOffset=cc.p(0,0)]
+ * @param {cc.Vec2} [imageOffset=cc.p(0,0)]
  *
  * @example
  * // Example 01
@@ -148,7 +148,7 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
      * @param {String} fntFile
      * @param {Number} [width=-1]
      * @param {cc.TextAlignment} [alignment=cc.TextAlignment.LEFT]
-     * @param {cc.Point} [imageOffset=cc.p(0,0)]
+     * @param {cc.Vec2} [imageOffset=cc.p(0,0)]
      */
     ctor: function (str, fntFile, width, alignment, imageOffset) {
         cc.SpriteBatchNode.prototype.ctor.call(this);
@@ -219,7 +219,7 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
      * @param {String} fntFile
      * @param {Number} [width=-1]
      * @param {cc.TextAlignment} [alignment=cc.TextAlignment.LEFT]
-     * @param {cc.Point} [imageOffset=cc.p(0,0)]
+     * @param {cc.Vec2} [imageOffset=cc.p(0,0)]
      * @return {Boolean}
      */
     initWithString: function (str, fntFile, width, alignment, imageOffset) {
@@ -422,7 +422,7 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
         newString = String(newString);
         if (needUpdateLabel == null)
             needUpdateLabel = true;
-        if (newString == null || !cc.isString(newString))
+        if (newString == null || !cc.js.isString(newString))
             newString = newString + "";
 
         this._initialString = newString;
@@ -757,7 +757,7 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
      * Set the AnchorPoint of the labelBMFont. <br />
      * In order to change the location of label.
      * @override
-     * @param {cc.Point|Number} point The anchor point of labelBMFont or The anchor point.x of labelBMFont.
+     * @param {cc.Vec2|Number} point The anchor point of labelBMFont or The anchor point.x of labelBMFont.
      * @param {Number} [y] The anchor point.y of labelBMFont.
      */
     setAnchorPoint: function (point, y) {
@@ -858,7 +858,7 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
  * @param {String} fntFile
  * @param {Number} [width=-1]
  * @param {cc.TextAlignment} [alignment=cc.TextAlignment.LEFT]
- * @param {cc.Point} [imageOffset=cc.p(0,0)]
+ * @param {cc.Vec2} [imageOffset=cc.p(0,0)]
  * @return {cc.LabelBMFont|Null}
  */
 cc.LabelBMFont.create = function (str, fntFile, width, alignment, imageOffset) {

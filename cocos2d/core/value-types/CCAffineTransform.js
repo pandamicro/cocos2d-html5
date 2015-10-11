@@ -66,10 +66,10 @@ cc.affineTransformMake = function (a, b, c, d, tx, ty) {
  * Apply the affine transformation on a point.
  * @function
  * 
- * @param {cc.Point|Number} point or x
+ * @param {cc.Vec2|Number} point or x
  * @param {cc.AffineTransform|Number} transOrY transform matrix or y
  * @param {cc.AffineTransform} t transform matrix or y
- * @return {cc.Point}
+ * @return {cc.Vec2}
  */
 cc.pointApplyAffineTransform = function (point, transOrY, t) {
     var x, y;

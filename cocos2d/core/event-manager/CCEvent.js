@@ -216,7 +216,7 @@ cc.EventMouse = cc.Event.extend(/** @lends cc.EventMouse# */{
 
 	/**
 	 * Returns cursor location
-	 * @return {cc.Point} location
+	 * @return {cc.Vec2} location
 	 */
     getLocation: function () {
         return {x: this._x, y: this._y};
@@ -224,7 +224,7 @@ cc.EventMouse = cc.Event.extend(/** @lends cc.EventMouse# */{
 
 	/**
 	 * Returns the current cursor location in screen coordinates
-	 * @return {cc.Point}
+	 * @return {cc.Vec2}
 	 */
 	getLocationInView: function() {
 		return {x: this._x, y: cc.view._designResolutionSize.height - this._y};
@@ -237,7 +237,7 @@ cc.EventMouse = cc.Event.extend(/** @lends cc.EventMouse# */{
 
     /**
      * Returns the delta distance from the previous location to current location
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getDelta: function () {
         return {x: this._x - this._prevX, y: this._y - this._prevY};

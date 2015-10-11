@@ -40,7 +40,7 @@ ccs.objectFactory = /** @lends ccs.objectFactory# */{
         var o = null;
         var t = this._typeMap[className];
         if (t) {
-            if(cc.isFunction(t._fun))
+            if(cc.js.isFunction(t._fun))
                 o = new t._fun();
             else
                 o = t._fun;

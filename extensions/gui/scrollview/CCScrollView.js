@@ -62,8 +62,8 @@ cc.ScrollViewDelegate = cc.Class.extend({
  * @class
  * @extends cc.Layer
  *
- * @property {cc.Point}                 minOffset   - <@readonly> The current container's minimum offset
- * @property {cc.Point}                 maxOffset   - <@readonly> The current container's maximum offset
+ * @property {cc.Vec2}                 minOffset   - <@readonly> The current container's minimum offset
+ * @property {cc.Vec2}                 maxOffset   - <@readonly> The current container's maximum offset
  * @property {Boolean}                  bounceable  - Indicate whether the scroll view is bounceable
  * @property {cc.Size}                  viewSize    - The size of the scroll view
  * @property {cc.Layer}                 container   - The inside container of the scroll view
@@ -168,7 +168,7 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
     /**
      * Sets a new content offset. It ignores max/min offset. It just sets what's given. (just like UIKit's UIScrollView)
      *
-     * @param {cc.Point} offset new offset
+     * @param {cc.Vec2} offset new offset
      * @param {Number} [animated=] If true, the view will scroll to the new offset
      */
     setContentOffset: function (offset, animated) {
@@ -201,7 +201,7 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
      * <p>Sets a new content offset. It ignores max/min offset. It just sets what's given. (just like UIKit's UIScrollView) <br/>
      * You can override the animation duration with this method.
      * </p>
-     * @param {cc.Point} offset new offset
+     * @param {cc.Vec2} offset new offset
      * @param {Number} dt animation duration
      */
     setContentOffsetInDuration:function (offset, dt) {
@@ -270,7 +270,7 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
 
     /**
      * Returns the current container's minimum offset. You may want this while you animate scrolling by yourself
-     * @return {cc.Point} Returns the current container's minimum offset.
+     * @return {cc.Vec2} Returns the current container's minimum offset.
      */
     minContainerOffset:function () {
         var locContainer = this._container;
@@ -281,7 +281,7 @@ cc.ScrollView = cc.Layer.extend(/** @lends cc.ScrollView# */{
 
     /**
      * Returns the current container's maximum offset. You may want this while you animate scrolling by yourself
-     * @return {cc.Point} Returns the current container's maximum offset.
+     * @return {cc.Vec2} Returns the current container's maximum offset.
      */
     maxContainerOffset:function () {
         return cc.p(0.0, 0.0);

@@ -174,8 +174,8 @@ cc.DrawNodeCanvas = cc.Node.extend(/** @lends cc.DrawNode# */{                  
 
     /**
      * draws a rectangle given the origin and destination point measured in points.
-     * @param {cc.Point} origin
-     * @param {cc.Point} destination
+     * @param {cc.Vec2} origin
+     * @param {cc.Vec2} destination
      * @param {cc.Color} fillColor
      * @param {Number} lineWidth
      * @param {cc.Color} lineColor
@@ -211,7 +211,7 @@ cc.DrawNodeCanvas = cc.Node.extend(/** @lends cc.DrawNode# */{                  
     /**
      * draws a circle given the center, radius and number of segments.
      * @override
-     * @param {cc.Point} center center of circle
+     * @param {cc.Vec2} center center of circle
      * @param {Number} radius
      * @param {Number} angle angle in radians
      * @param {Number} segments
@@ -249,9 +249,9 @@ cc.DrawNodeCanvas = cc.Node.extend(/** @lends cc.DrawNode# */{                  
     /**
      * draws a quad bezier path
      * @override
-     * @param {cc.Point} origin
-     * @param {cc.Point} control
-     * @param {cc.Point} destination
+     * @param {cc.Vec2} origin
+     * @param {cc.Vec2} control
+     * @param {cc.Vec2} destination
      * @param {Number} segments
      * @param {Number} lineWidth
      * @param {cc.Color} color
@@ -283,10 +283,10 @@ cc.DrawNodeCanvas = cc.Node.extend(/** @lends cc.DrawNode# */{                  
     /**
      * draws a cubic bezier path
      * @override
-     * @param {cc.Point} origin
-     * @param {cc.Point} control1
-     * @param {cc.Point} control2
-     * @param {cc.Point} destination
+     * @param {cc.Vec2} origin
+     * @param {cc.Vec2} control1
+     * @param {cc.Vec2} control2
+     * @param {cc.Vec2} destination
      * @param {Number} segments
      * @param {Number} lineWidth
      * @param {cc.Color} color
@@ -375,7 +375,7 @@ cc.DrawNodeCanvas = cc.Node.extend(/** @lends cc.DrawNode# */{                  
 
     /**
      * draw a dot at a position, with a given radius and color
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @param {Number} radius
      * @param {cc.Color} color
      */
@@ -409,8 +409,8 @@ cc.DrawNodeCanvas = cc.Node.extend(/** @lends cc.DrawNode# */{                  
 
     /**
      * draw a segment with a radius and color
-     * @param {cc.Point} from
-     * @param {cc.Point} to
+     * @param {cc.Vec2} from
+     * @param {cc.Vec2} to
      * @param {Number} lineWidth
      * @param {cc.Color} color
      */

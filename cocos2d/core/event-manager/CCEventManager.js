@@ -657,7 +657,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
     addListener: function (listener, nodeOrPriority) {
         cc.assert(listener && nodeOrPriority, cc._LogInfos.eventManager_addListener_2);
         if(!(listener instanceof cc.EventListener)){
-            cc.assert(!cc.isNumber(nodeOrPriority), cc._LogInfos.eventManager_addListener_3);
+            cc.assert(!cc.js.isNumber(nodeOrPriority), cc._LogInfos.eventManager_addListener_3);
             listener = cc.EventListener.create(listener);
         } else {
             if(listener._isRegistered()){
@@ -669,7 +669,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
         if (!listener.checkAvailable())
             return;
 
-        if (cc.isNumber(nodeOrPriority)) {
+        if (cc.js.isNumber(nodeOrPriority)) {
             if (nodeOrPriority === 0) {
                 cc.log(cc._LogInfos.eventManager_addListener);
                 return;

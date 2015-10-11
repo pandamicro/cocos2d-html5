@@ -229,7 +229,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
         var docElem = document.documentElement;
         var win = window;
         var box = null;
-        if (cc.isFunction(element.getBoundingClientRect)) {
+        if (cc.js.isFunction(element.getBoundingClientRect)) {
             box = element.getBoundingClientRect();
         } else {
             if (element instanceof HTMLCanvasElement) {
@@ -305,7 +305,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
      * @function
      * @param {Number} tx
      * @param {Number} ty
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @return {cc.Touch}
      */
     getTouchByXY: function(tx, ty, pos){
@@ -320,8 +320,8 @@ cc.inputManager = /** @lends cc.inputManager# */{
 
     /**
      * @function
-     * @param {cc.Point} location
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} location
+     * @param {cc.Vec2} pos
      * @param {Number} eventType
      * @returns {cc.EventMouse}
      */
@@ -339,8 +339,8 @@ cc.inputManager = /** @lends cc.inputManager# */{
     /**
      * @function
      * @param {Touch} event
-     * @param {cc.Point} pos
-     * @return {cc.Point}
+     * @param {cc.Vec2} pos
+     * @return {cc.Vec2}
      */
     getPointByEvent: function(event, pos){
         if (event.pageX != null)  //not avalable in <= IE8
@@ -354,7 +354,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
     /**
      * @function
      * @param {Touch} event
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @returns {Array}
      */
     getTouchesByEvent: function(event, pos){

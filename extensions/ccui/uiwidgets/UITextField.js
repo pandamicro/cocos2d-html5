@@ -306,7 +306,7 @@ ccui.TextField = ccui.Widget.extend(/** @lends ccui.TextField# */{
 
     /**
      * Checks a point if is in ccui.TextField's space
-     * @param {cc.Point} pt
+     * @param {cc.Vec2} pt
      * @returns {boolean}
      */
     hitTest: function(pt){
@@ -479,7 +479,7 @@ ccui.TextField = ccui.Widget.extend(/** @lends ccui.TextField# */{
 
     /**
      * The touch began event callback handler.
-     * @param {cc.Point} touchPoint
+     * @param {cc.Vec2} touchPoint
      */
     onTouchBegan: function (touchPoint, unusedEvent) {
         var self = this;

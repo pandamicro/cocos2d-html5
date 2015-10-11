@@ -642,7 +642,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      *     and Passing two numbers (x,y) is more efficient than passing CCPoint object.
      * </p>
      * @function
-     * @param {cc.Point|Number} newPosOrxValue The position (x,y) of the node in coordinates or the X coordinate for position
+     * @param {cc.Vec2|Number} newPosOrxValue The position (x,y) of the node in coordinates or the X coordinate for position
      * @param {Number} [yValue] Y coordinate for position
      * @example
      *    var size = cc.winSize;
@@ -671,7 +671,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * The positions in pixels is calculated like the following:                                            <br/>
      *   _position = _normalizedPosition * parent.getContentSize()
      * </p>
-     * @param {cc.Point|Number} posOrX
+     * @param {cc.Vec2|Number} posOrX
      * @param {Number} [y]
      */
     setNormalizedPosition: function(posOrX, y){
@@ -690,7 +690,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
     /**
      * <p>Returns a copy of the position (x,y) of the node in cocos2d coordinates. (0,0) is the left-bottom corner.</p>
      * @function
-     * @return {cc.Point} The position (x,y) of the node in OpenGL coordinates
+     * @return {cc.Vec2} The position (x,y) of the node in OpenGL coordinates
      */
     getPosition: function () {
         return cc.p(this._position);
@@ -698,7 +698,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
 
     /**
      * returns the normalized position
-     * @returns {cc.Point}
+     * @returns {cc.Vec2}
      */
     getNormalizedPosition: function(){
         return cc.p(this._normalizedPosition);
@@ -800,7 +800,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      *  But you can use values higher than (1,1) and lower than (0,0) too.  <br/>
      *  The default anchor point is (0.5,0.5), so it starts at the center of the node. <br/></p>
      * @function
-     * @return {cc.Point}  The anchor point of node.
+     * @return {cc.Vec2}  The anchor point of node.
      */
     getAnchorPoint: function () {
         return cc.p(this._anchorPoint);
@@ -817,7 +817,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      *     The default anchor point is (0.5,0.5), so it starts at the center of the node.
      * </p>
      * @function
-     * @param {cc.Point|Number} point The anchor point of node or The x axis anchor of node.
+     * @param {cc.Vec2|Number} point The anchor point of node or The x axis anchor of node.
      * @param {Number} [y] The y axis anchor of node.
      */
     setAnchorPoint: function (point, y) {
@@ -858,7 +858,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * you can only read it. If you wish to modify it, use setAnchorPoint
      * @see cc.Node#getAnchorPoint
      * @function
-     * @return {cc.Point} The anchor point in absolute pixels.
+     * @return {cc.Vec2} The anchor point in absolute pixels.
      */
     getAnchorPointInPoints: function () {
         return this._renderCmd.getAnchorPointInPoints();
@@ -1251,13 +1251,13 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
     addChild: function (child, localZOrder, tag) {
         localZOrder = localZOrder === undefined ? child._localZOrder : localZOrder;
         var name, setTag = false;
-        if(cc.isUndefined(tag)){
+        if(cc.js.isUndefined(tag)){
             tag = undefined;
             name = child._name;
-        } else if(cc.isString(tag)){
+        } else if(cc.js.isString(tag)){
             name = tag;
             tag = undefined;
-        } else if(cc.isNumber(tag)){
+        } else if(cc.js.isNumber(tag)){
             setTag = true;
             name = "";
         }
@@ -1937,8 +1937,8 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
     /**
      * Converts a Point to node (local) space coordinates. The result is in Points.
      * @function
-     * @param {cc.Point} worldPoint
-     * @return {cc.Point}
+     * @param {cc.Vec2} worldPoint
+     * @return {cc.Vec2}
      */
     convertToNodeSpace: function (worldPoint) {
         return cc.pointApplyAffineTransform(worldPoint, this.getWorldToNodeTransform());
@@ -1947,8 +1947,8 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
     /**
      * Converts a Point to world space coordinates. The result is in Points.
      * @function
-     * @param {cc.Point} nodePoint
-     * @return {cc.Point}
+     * @param {cc.Vec2} nodePoint
+     * @return {cc.Vec2}
      */
     convertToWorldSpace: function (nodePoint) {
         nodePoint = nodePoint || cc.p(0,0);
@@ -1959,8 +1959,8 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * Converts a Point to node (local) space coordinates. The result is in Points.<br/>
      * treating the returned/received node point as anchor relative.
      * @function
-     * @param {cc.Point} worldPoint
-     * @return {cc.Point}
+     * @param {cc.Vec2} worldPoint
+     * @return {cc.Vec2}
      */
     convertToNodeSpaceAR: function (worldPoint) {
         return cc.pSub(this.convertToNodeSpace(worldPoint), this._renderCmd.getAnchorPointInPoints());
@@ -1970,8 +1970,8 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * Converts a local Point to world space coordinates.The result is in Points.<br/>
      * treating the returned/received node point as anchor relative.
      * @function
-     * @param {cc.Point} nodePoint
-     * @return {cc.Point}
+     * @param {cc.Vec2} nodePoint
+     * @return {cc.Vec2}
      */
     convertToWorldSpaceAR: function (nodePoint) {
         nodePoint = nodePoint || cc.p(0,0);
@@ -1984,10 +1984,10 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
         return cc.director.convertToUI(worldPoint);
     },
 
-    /** convenience methods which take a cc.Touch instead of cc.Point
+    /** convenience methods which take a cc.Touch instead of cc.Vec2
      * @function
      * @param {cc.Touch} touch The touch object
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     convertTouchToNodeSpace: function (touch) {
         var point = touch.getLocation();
@@ -1998,7 +1998,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * converts a cc.Touch (world coordinates) into a local coordinate. This method is AR (Anchor Relative).
      * @function
      * @param {cc.Touch} touch The touch object
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     convertTouchToNodeSpaceAR: function (touch) {
         var point = cc.director.convertToGL(touch.getLocation());
@@ -2569,6 +2569,6 @@ cc.Node.create = function () {
 
 cc.Node._stateCallbackType = {onEnter: 1, onExit: 2, cleanup: 3, onEnterTransitionDidFinish: 4, updateTransform: 5, onExitTransitionDidStart: 6, sortAllChildren: 7};
 
-cc.assert(cc.isFunction(cc._tmp.PrototypeCCNode), cc._LogInfos.MissingFile, "BaseNodesPropertyDefine.js");
+cc.assert(cc.js.isFunction(cc._tmp.PrototypeCCNode), cc._LogInfos.MissingFile, "BaseNodesPropertyDefine.js");
 cc._tmp.PrototypeCCNode();
 delete cc._tmp.PrototypeCCNode;

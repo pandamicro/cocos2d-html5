@@ -306,7 +306,7 @@ cc.LayerColor.create = function (color, width, height) {
  *
  * @param {cc.Color} start Starting color
  * @param {cc.Color} end Ending color
- * @param {cc.Point} [v=cc.p(0, -1)] A vector defines the gradient direction, default direction is from top to bottom
+ * @param {cc.Vec2} [v=cc.p(0, -1)] A vector defines the gradient direction, default direction is from top to bottom
  *
  * @property {cc.Color} startColor              - Start color of the color gradient
  * @property {cc.Color} endColor                - End color of the color gradient
@@ -328,7 +328,7 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
      * Constructor of cc.LayerGradient
      * @param {cc.Color} start
      * @param {cc.Color} end
-     * @param {cc.Point} [v=cc.p(0, -1)]
+     * @param {cc.Vec2} [v=cc.p(0, -1)]
      * @param {Array|Null} stops
      *
      * @example Using ColorStops argument:
@@ -361,7 +361,7 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
      * Initialization of the layer, please do not call this function by yourself, you should pass the parameters to constructor to initialize a layer
      * @param {cc.Color} start starting color
      * @param {cc.Color} end
-     * @param {cc.Point|Null} v
+     * @param {cc.Vec2|Null} v
      * @param {Array|Null} stops
      * @return {Boolean}
      */
@@ -510,7 +510,7 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
 
     /**
      * Sets the direction vector of the gradient
-     * @param {cc.Point} Var
+     * @param {cc.Vec2} Var
      */
     setVector: function (Var) {
         this._alongVector.x = Var.x;
@@ -520,7 +520,7 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
 
     /**
      * Returns the direction vector of the gradient
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getVector: function () {
         return cc.p(this._alongVector.x, this._alongVector.y);
@@ -587,7 +587,7 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
  * @see cc.layerGradient
  * @param {cc.Color} start starting color
  * @param {cc.Color} end ending color
- * @param {cc.Point|Null} v
+ * @param {cc.Vec2|Null} v
  * @param {Array|NULL} stops
  * @return {cc.LayerGradient}
  */
