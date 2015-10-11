@@ -38,7 +38,7 @@ var LayoutWrapper = cc.FireClass({
                     cc.error('The new layoutType must be number');
                 }
             },
-            type: ccui.Layout.LayoutType
+            type: ccui.Layout.Type
         },
 
         _layoutType: {

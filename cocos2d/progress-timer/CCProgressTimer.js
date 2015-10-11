@@ -330,18 +330,15 @@ cc.ProgressTimer.TEXTURE_COORDS_COUNT = 4;
  */
 cc.ProgressTimer.TEXTURE_COORDS = 0x4b;
 
+/**
+ * Enum for type of ProgressTimer
+ * @readonly
+ * @enum {number}
+ */
 cc.ProgressTimer.Type = cc.Enum({
     /**
      * Radial Counter-Clockwise
-     * @type Number
-     * @constant
      */
     RADIAL: 0,
-
-    /**
-     * Bar
-     * @type Number
-     * @constant
-     */
     BAR: 1
 });

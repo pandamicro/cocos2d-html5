@@ -2,43 +2,25 @@
 var canvasCtxToGetPixel = null;
 
 /**
- * @class WrapMode
- * @static
- * @namespace Texture
+ * The wrap mode
+ * @readonly
+ * @enum {number}
+ * @memberof Texture
  */
 var WrapMode = cc.Enum({
-    /**
-     * @property Repeat
-     * @type number
-     */
     Repeat: -1,
-    /**
-     * @property Clamp
-     * @type number
-     */
     Clamp: -1
 });
 
 /**
- * @class FilterMode
- * @static
- * @namespace Texture
+ * The filter mode
+ * @readonly
+ * @enum {number}
+ * @memberof Texture
  */
 var FilterMode = cc.Enum({
-    /**
-     * @property Point
-     * @type number
-     */
     Point: -1,
-    /**
-     * @property Bilinear
-     * @type number
-     */
     Bilinear: -1,
-    /**
-     * @property Trilinear
-     * @type number
-     */
     Trilinear: -1
 });
 

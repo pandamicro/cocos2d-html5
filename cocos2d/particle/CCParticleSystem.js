@@ -2261,41 +2261,37 @@ cc.ParticleSystem.START_SIZE_EQUAL_TO_END_SIZE = -1;
  */
 cc.ParticleSystem.START_RADIUS_EQUAL_TO_END_RADIUS = -1;
 
+/**
+ * Enum for particle mode
+ * @readonly
+ * @enum {number}
+ */
 cc.ParticleSystem.Mode = cc.Enum({
-    /**
-     * Gravity mode (A mode)
-     * @constant
-     * @type Number
-     */
+    /** The gravity mode (A mode) */
     GRAVITY: 0,
-    /**
-     * Radius mode (B mode)
-     * @constant
-     * @type Number
-     */
+    /** The radius mode (B mode) */
     RADIUS: 1
 });
 
+/**
+ * Enum for particle type
+ * @readonly
+ * @enum {number}
+ */
 cc.ParticleSystem.Type = cc.Enum({
     /**
      * Living particles are attached to the world and are unaffected by emitter repositioning.
-     * @constant
-     * @type Number
      */
     FREE: 0,
 
     /**
      * Living particles are attached to the world but will follow the emitter repositioning.<br/>
      * Use case: Attach an emitter to an sprite, and you want that the emitter follows the sprite.
-     * @constant
-     * @type Number
      */
     RELATIVE: 1,
 
     /**
      * Living particles are attached to the emitter and are translated along with it.
-     * @constant
-     * @type Number
      */
     GROUPED: 2
 });

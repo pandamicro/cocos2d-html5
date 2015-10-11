@@ -93,8 +93,8 @@ var WidgetWrapper = cc.FireClass({
         },
 
         widgetLayoutType: {
-            default: ccui.Layout.LayoutType.RELATIVE,
-            type: ccui.Layout.LayoutType,
+            default: ccui.Layout.Type.RELATIVE,
+            type: ccui.Layout.Type,
 
             notify: function (oldValue) {
                 if (oldValue === this.widgetLayoutType) return;
@@ -155,7 +155,7 @@ var WidgetWrapper = cc.FireClass({
 
         var parameter;
 
-        if (this.widgetLayoutType === ccui.Layout.LayoutType.RELATIVE) {
+        if (this.widgetLayoutType === ccui.Layout.Type.RELATIVE) {
             parameter = new ccui.RelativeLayoutParameter();
             parameter.setAlign(this.anchorAlign);
         }

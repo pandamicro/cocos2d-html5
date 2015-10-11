@@ -418,19 +418,19 @@ ccui.LoadingBar.create = function (textureName, percentage) {
 };
 
 // Constants
-//loadingBar Type
 
+/**
+ * Enum for loadingBar Type
+ * @readonly
+ * @enum {number}
+ */
 ccui.LoadingBar.Type = cc.Enum({
     /**
      * The left direction of ccui.LoadingBar.
-     * @constant
-     * @type {number}
      */
     LEFT: 0,
     /**
      * The right direction of ccui.LoadingBar.
-     * @constant
-     * @type {number}
      */
     RIGHT: 1
 });

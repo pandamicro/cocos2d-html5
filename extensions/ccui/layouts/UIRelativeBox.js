@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 /**
- * The Relative box for Cocos UI layout.  Its layout type is ccui.Layout.LayoutType.RELATIVE.
+ * The Relative box for Cocos UI layout.  Its layout type is ccui.Layout.Type.RELATIVE.
  * @class
  * @extends ccui.Layout
  */
@@ -48,7 +48,7 @@ ccui.RelativeBox = ccui.Layout.extend(/** @lends ccui.RelativeBox# */{
      */
     init: function(){
         if(ccui.Layout.prototype.init.call(this)){
-            this.setLayoutType(ccui.Layout.LayoutType.RELATIVE);
+            this.setLayoutType(ccui.Layout.Type.RELATIVE);
             return true;
         }
         return false;

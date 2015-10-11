@@ -1,51 +1,20 @@
 
 var TextAlign = cc.TextAlignment;
 
+/**
+ * Enum for text anchor
+ * @readonly
+ * @enum {number}
+ */
 var TextAnchor = cc.Enum({
-    /**
-     * @property TopLeft
-     * @type {number}
-     */
     TopLeft: -1,
-    /**
-     * @property TopCenter
-     * @type {number}
-     */
     TopCenter: -1,
-    /**
-     * @property TopRight
-     * @type {number}
-     */
     TopRight: -1,
-    /**
-     * @property MiddleLeft
-     * @type {number}
-     */
     MiddleLeft: -1,
-    /**
-     * @property MiddleCenter
-     * @type {number}
-     */
     MiddleCenter: -1,
-    /**
-     * @property MiddleRight
-     * @type {number}
-     */
     MiddleRight: -1,
-    /**
-     * @property BottomLeft
-     * @type {number}
-     */
     BottomLeft: -1,
-    /**
-     * @property BottomCenter
-     * @type {number}
-     */
     BottomCenter: -1,
-    /**
-     * @property BottomRight
-     * @type {number}
-     */
     BottomRight: -1,
 });
 

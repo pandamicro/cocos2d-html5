@@ -214,45 +214,25 @@ cc.tex2 = function (u, v) {
     return new cc.Tex2F(u, v);
 };
 
+/**
+ * Enum for text alignment
+ * @readonly
+ * @enum {number}
+ */
 cc.TextAlignment = cc.Enum({
-    /**
-     * text alignment : left
-     * @constant
-     * @type Number
-     */
     LEFT: 0,
-    /**
-     * text alignment : center
-     * @constant
-     * @type Number
-     */
     CENTER: 1,
-    /**
-     * text alignment : right
-     * @constant
-     * @type Number
-     */
     RIGHT: 2
 });
 
+/**
+ * Enum for vertical text alignment
+ * @readonly
+ * @enum {number}
+ */
 cc.VerticalTextAlignment = cc.Enum({
-    /**
-     * text alignment : top
-     * @constant
-     * @type Number
-     */
     TOP: 0,
-    /**
-     * text alignment : center
-     * @constant
-     * @type Number
-     */
     CENTER: 1,
-    /**
-     * text alignment : bottom
-     * @constant
-     * @type Number
-     */
     BOTTOM: 2
 });
 

@@ -132,8 +132,8 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
      * @returns {ccui.Widget}
      */
     findNextFocusedWidget: function(direction, current){
-        if (this.getLayoutType() === ccui.Layout.LayoutType.LINEAR_VERTICAL
-            || this.getLayoutType() === ccui.Layout.LayoutType.LINEAR_HORIZONTAL) {
+        if (this.getLayoutType() === ccui.Layout.Type.LINEAR_VERTICAL
+            || this.getLayoutType() === ccui.Layout.Type.LINEAR_HORIZONTAL) {
             return this._innerContainer.findNextFocusedWidget(direction, current);
         } else
             return ccui.Widget.prototype.findNextFocusedWidget.call(this, direction, current);
@@ -1531,100 +1531,100 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
     _scrollToTopEvent: function () {
         if(this._scrollViewEventSelector){
             if (this._scrollViewEventListener)
-                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.EVENT_SCROLL_TO_TOP);
+                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.Event.SCROLL_TO_TOP);
             else
-                this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_SCROLL_TO_TOP);
+                this._scrollViewEventSelector(this, ccui.ScrollView.Event.SCROLL_TO_TOP);
         }
         if(this._ccEventCallback)
-            this._ccEventCallback(this, ccui.ScrollView.EVENT_SCROLL_TO_TOP);
+            this._ccEventCallback(this, ccui.ScrollView.Event.SCROLL_TO_TOP);
     },
 
     _scrollToBottomEvent: function () {
         if(this._scrollViewEventSelector){
             if (this._scrollViewEventListener)
-                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.EVENT_SCROLL_TO_BOTTOM);
+                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.Event.SCROLL_TO_BOTTOM);
             else
-                this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_SCROLL_TO_BOTTOM);
+                this._scrollViewEventSelector(this, ccui.ScrollView.Event.SCROLL_TO_BOTTOM);
         }
         if(this._ccEventCallback)
-            this._ccEventCallback(this, ccui.ScrollView.EVENT_SCROLL_TO_BOTTOM);
+            this._ccEventCallback(this, ccui.ScrollView.Event.SCROLL_TO_BOTTOM);
     },
 
     _scrollToLeftEvent: function () {
         if(this._scrollViewEventSelector){
             if (this._scrollViewEventListener)
-                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.EVENT_SCROLL_TO_LEFT);
+                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.Event.SCROLL_TO_LEFT);
             else
-                this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_SCROLL_TO_LEFT);
+                this._scrollViewEventSelector(this, ccui.ScrollView.Event.SCROLL_TO_LEFT);
         }
         if(this._ccEventCallback)
-            this._ccEventCallback(this, ccui.ScrollView.EVENT_SCROLL_TO_LEFT);
+            this._ccEventCallback(this, ccui.ScrollView.Event.SCROLL_TO_LEFT);
     },
 
     _scrollToRightEvent: function () {
         if(this._scrollViewEventSelector){
             if (this._scrollViewEventListener)
-                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.EVENT_SCROLL_TO_RIGHT);
+                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.Event.SCROLL_TO_RIGHT);
             else
-                this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_SCROLL_TO_RIGHT);
+                this._scrollViewEventSelector(this, ccui.ScrollView.Event.SCROLL_TO_RIGHT);
         }
         if(this._ccEventCallback)
-            this._ccEventCallback(this, ccui.ScrollView.EVENT_SCROLL_TO_RIGHT);
+            this._ccEventCallback(this, ccui.ScrollView.Event.SCROLL_TO_RIGHT);
     },
 
     _scrollingEvent: function () {
         if(this._scrollViewEventSelector){
             if (this._scrollViewEventListener)
-                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.EVENT_SCROLLING);
+                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.Event.SCROLLING);
             else
-                this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_SCROLLING);
+                this._scrollViewEventSelector(this, ccui.ScrollView.Event.SCROLLING);
         }
         if(this._ccEventCallback)
-            this._ccEventCallback(this, ccui.ScrollView.EVENT_SCROLLING);
+            this._ccEventCallback(this, ccui.ScrollView.Event.SCROLLING);
     },
 
     _bounceTopEvent: function () {
         if(this._scrollViewEventSelector){
             if (this._scrollViewEventListener)
-                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.EVENT_BOUNCE_TOP);
+                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.Event.BOUNCE_TOP);
             else
-                this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_BOUNCE_TOP);
+                this._scrollViewEventSelector(this, ccui.ScrollView.Event.BOUNCE_TOP);
         }
         if(this._ccEventCallback)
-            this._ccEventCallback(this, ccui.ScrollView.EVENT_BOUNCE_TOP);
+            this._ccEventCallback(this, ccui.ScrollView.Event.BOUNCE_TOP);
     },
 
     _bounceBottomEvent: function () {
         if(this._scrollViewEventSelector){
             if (this._scrollViewEventListener)
-                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.EVENT_BOUNCE_BOTTOM);
+                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.Event.BOUNCE_BOTTOM);
             else
-                this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_BOUNCE_BOTTOM);
+                this._scrollViewEventSelector(this, ccui.ScrollView.Event.BOUNCE_BOTTOM);
         }
         if(this._ccEventCallback)
-            this._ccEventCallback(this, ccui.ScrollView.EVENT_BOUNCE_BOTTOM);
+            this._ccEventCallback(this, ccui.ScrollView.Event.BOUNCE_BOTTOM);
     },
 
     _bounceLeftEvent: function () {
         if(this._scrollViewEventSelector){
             if (this._scrollViewEventListener)
-                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.EVENT_BOUNCE_LEFT);
+                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.Event.BOUNCE_LEFT);
             else
-                this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_BOUNCE_LEFT);
+                this._scrollViewEventSelector(this, ccui.ScrollView.Event.BOUNCE_LEFT);
         }
         if(this._ccEventCallback)
-            this._ccEventCallback(this, ccui.ScrollView.EVENT_BOUNCE_LEFT);
+            this._ccEventCallback(this, ccui.ScrollView.Event.BOUNCE_LEFT);
     },
 
     _bounceRightEvent: function () {
         if(this._scrollViewEventSelector){
             if (this._scrollViewEventListener)
-                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.EVENT_BOUNCE_RIGHT);
+                this._scrollViewEventSelector.call(this._scrollViewEventListener, this, ccui.ScrollView.Event.BOUNCE_RIGHT);
             else
-                this._scrollViewEventSelector(this, ccui.ScrollView.EVENT_BOUNCE_RIGHT);
+                this._scrollViewEventSelector(this, ccui.ScrollView.Event.BOUNCE_RIGHT);
         }
         if(this._ccEventCallback)
-            this._ccEventCallback(this, ccui.ScrollView.EVENT_BOUNCE_RIGHT);
+            this._ccEventCallback(this, ccui.ScrollView.Event.BOUNCE_RIGHT);
     },
 
     /**
@@ -1706,7 +1706,7 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
 
     /**
      * Sets LayoutType of ccui.ScrollView.
-     * @param {ccui.Layout.LayoutType} type
+     * @param {ccui.Layout.Type} type
      */
     setLayoutType: function (type) {
         this._innerContainer.setLayoutType(type);
@@ -1714,7 +1714,7 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
 
     /**
      * Returns the layout type of ccui.ScrollView.
-     * @returns {ccui.Layout.LayoutType}
+     * @returns {ccui.Layout.Type}
      */
     getLayoutType: function () {
         return this._innerContainer.getLayoutType();
@@ -1834,89 +1834,74 @@ ccui.ScrollView.create = function () {
 };
 
 // Constants
-//ScrollView direction
+
+/**
+ * Enum for ScrollView direction
+ * @readonly
+ * @enum {number}
+ */
 ccui.ScrollView.Dir = cc.Enum({
     /**
      * The none flag of ccui.ScrollView's direction.
-     * @constant
-     * @type {number}
      */
     NONE: 0,
     /**
      * The vertical flag of ccui.ScrollView's direction.
-     * @constant
-     * @type {number}
      */
     VERTICAL: 1,
     /**
      * The horizontal flag of ccui.ScrollView's direction.
-     * @constant
-     * @type {number}
      */
     HORIZONTAL: 2,
     /**
      * The both flag of ccui.ScrollView's direction.
-     * @constant
-     * @type {number}
      */
     BOTH: 3
 });
 
-//ScrollView event
 /**
- * The flag scroll to top of ccui.ScrollView's event.
- * @constant
- * @type {number}
+ * The event types of ccui.ScrollView.
+ * @readonly
+ * @enum {number}
  */
-ccui.ScrollView.EVENT_SCROLL_TO_TOP = 0;
-/**
- * The flag scroll to bottom of ccui.ScrollView's event.
- * @constant
- * @type {number}
- */
-ccui.ScrollView.EVENT_SCROLL_TO_BOTTOM = 1;
-/**
- * The flag scroll to left of ccui.ScrollView's event.
- * @constant
- * @type {number}
- */
-ccui.ScrollView.EVENT_SCROLL_TO_LEFT = 2;
-/**
- * The flag scroll to right of ccui.ScrollView's event.
- * @constant
- * @type {number}
- */
-ccui.ScrollView.EVENT_SCROLL_TO_RIGHT = 3;
-/**
- * The scrolling flag of ccui.ScrollView's event.
- * @constant
- * @type {number}
- */
-ccui.ScrollView.EVENT_SCROLLING = 4;
-/**
- * The flag bounce top of ccui.ScrollView's event.
- * @constant
- * @type {number}
- */
-ccui.ScrollView.EVENT_BOUNCE_TOP = 5;
-/**
- * The flag bounce bottom of ccui.ScrollView's event.
- * @constant
- * @type {number}
- */
-ccui.ScrollView.EVENT_BOUNCE_BOTTOM = 6;
-/**
- * The flag bounce left of ccui.ScrollView's event.
- * @constant
- * @type {number}
- */
-ccui.ScrollView.EVENT_BOUNCE_LEFT = 7;
-/**
- * The flag bounce right of ccui.ScrollView's event.
- * @constant
- * @type {number}
- */
-ccui.ScrollView.EVENT_BOUNCE_RIGHT = 8;
+ccui.ScrollView.Event = cc.Enum({
+    /**
+     * The flag scroll to top of ccui.ScrollView's event.
+     */
+    SCROLL_TO_TOP: 0,
+    /**
+     * The flag scroll to bottom of ccui.ScrollView's event.
+     */
+    SCROLL_TO_BOTTOM: 1,
+    /**
+     * The flag scroll to left of ccui.ScrollView's event.
+     */
+    SCROLL_TO_LEFT: 2,
+    /**
+     * The flag scroll to right of ccui.ScrollView's event.
+     */
+    SCROLL_TO_RIGHT: 3,
+    /**
+     * The scrolling flag of ccui.ScrollView's event.
+     */
+    SCROLLING: 4,
+    /**
+     * The flag bounce top of ccui.ScrollView's event.
+     */
+    BOUNCE_TOP: 5,
+    /**
+     * The flag bounce bottom of ccui.ScrollView's event.
+     */
+    BOUNCE_BOTTOM: 6,
+    /**
+     * The flag bounce left of ccui.ScrollView's event.
+     */
+    BOUNCE_LEFT: 7,
+    /**
+     * The flag bounce right of ccui.ScrollView's event.
+     */
+    BOUNCE_RIGHT: 8
+});
 
 /**
  * The auto scroll max speed of ccui.ScrollView.

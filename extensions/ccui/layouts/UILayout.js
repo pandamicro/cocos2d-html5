@@ -31,7 +31,7 @@
  *
  * @property {Boolean}                  clippingEnabled - Indicate whether clipping is enabled
  * @property {ccui.Layout.CLIPPING_STENCIL|ccui.Layout.CLIPPING_SCISSOR}   clippingType
- * @property {ccui.Layout.LayoutType}  layoutType
+ * @property {ccui.Layout.Type}  layoutType
  */
 ccui.Layout = ccui.Widget.extend(/** @lends ccui.Layout# */{
     _clippingEnabled: false,
@@ -78,7 +78,7 @@ ccui.Layout = ccui.Widget.extend(/** @lends ccui.Layout# */{
      * var uiLayout = new ccui.Layout();
      */
     ctor: function () {
-        this._layoutType = ccui.Layout.LayoutType.ABSOLUTE;
+        this._layoutType = ccui.Layout.Type.ABSOLUTE;
         this._widgetType = ccui.Widget.TYPE_CONTAINER;
         this._clippingType = ccui.Layout.CLIPPING_STENCIL;
         this._colorType = ccui.Layout.BG_COLOR_NONE;
@@ -175,7 +175,7 @@ ccui.Layout = ccui.Widget.extend(/** @lends ccui.Layout# */{
             parent._isFocusPassing = true;
             return parent.findNextFocusedWidget(direction, this);
         } else if(current.isFocused() || current instanceof ccui.Layout) {
-            if (this._layoutType === ccui.Layout.LayoutType.LINEAR_HORIZONTAL) {
+            if (this._layoutType === ccui.Layout.Type.LINEAR_HORIZONTAL) {
                 switch (direction){
                     case ccui.Widget.LEFT:
                         return this._getPreviousFocusedWidget(direction, current);
@@ -197,7 +197,7 @@ ccui.Layout = ccui.Widget.extend(/** @lends ccui.Layout# */{
                         cc.assert(0, "Invalid Focus Direction");
                         return current;
                 }
-            } else if (this._layoutType === ccui.Layout.LayoutType.LINEAR_VERTICAL) {
+            } else if (this._layoutType === ccui.Layout.Type.LINEAR_VERTICAL) {
                 switch (direction){
                     case ccui.Widget.LEFT:
                     case ccui.Widget.RIGHT:
@@ -561,15 +561,15 @@ ccui.Layout = ccui.Widget.extend(/** @lends ccui.Layout# */{
             return;
         }
         switch (this._layoutType) {
-            case ccui.Layout.LayoutType.ABSOLUTE:
+            case ccui.Layout.Type.ABSOLUTE:
                 break;
-            case ccui.Layout.LayoutType.LINEAR_HORIZONTAL:
-            case ccui.Layout.LayoutType.LINEAR_VERTICAL:
+            case ccui.Layout.Type.LINEAR_HORIZONTAL:
+            case ccui.Layout.Type.LINEAR_VERTICAL:
                 var layoutParameter = locChild.getLayoutParameter(ccui.LayoutParameter.LINEAR);
                 if (!layoutParameter)
                     locChild.setLayoutParameter(new ccui.LinearLayoutParameter());
                 break;
-            case ccui.Layout.LayoutType.RELATIVE:
+            case ccui.Layout.Type.RELATIVE:
                 var layoutParameter = locChild.getLayoutParameter(ccui.LayoutParameter.RELATIVE);
                 if (!layoutParameter)
                     locChild.setLayoutParameter(new ccui.RelativeLayoutParameter());
@@ -824,7 +824,7 @@ ccui.Layout = ccui.Widget.extend(/** @lends ccui.Layout# */{
 
     /**
      * Sets LayoutType to ccui.Layout, LayoutManager will do layout by layout type..
-     * @param {ccui.Layout.LayoutType} type
+     * @param {ccui.Layout.Type} type
      */
     setLayoutType: function (type) {
         this._layoutType = type;
@@ -913,10 +913,10 @@ ccui.Layout = ccui.Widget.extend(/** @lends ccui.Layout# */{
 
         //substract extra size
         var type = this.getLayoutType();
-        if (type === ccui.Layout.LayoutType.LINEAR_HORIZONTAL)
+        if (type === ccui.Layout.Type.LINEAR_HORIZONTAL)
             layoutSize.height = layoutSize.height - layoutSize.height/widgetCount * (widgetCount-1);
 
-        if (type === ccui.Layout.LayoutType.LINEAR_VERTICAL)
+        if (type === ccui.Layout.Type.LINEAR_VERTICAL)
             layoutSize.width = layoutSize.width - layoutSize.width/widgetCount * (widgetCount-1);
         return layoutSize;
     },
@@ -1292,7 +1292,7 @@ ccui.Layout = ccui.Widget.extend(/** @lends ccui.Layout# */{
 
         var container = parent.getChildren();
         var index = container.indexOf(widget);
-        if (parent.getLayoutType() === ccui.Layout.LayoutType.LINEAR_HORIZONTAL) {
+        if (parent.getLayoutType() === ccui.Layout.Type.LINEAR_HORIZONTAL) {
             if (direction === ccui.Widget.LEFT) {
                 if (index === 0)
                     return this._isLastWidgetInContainer(parent, direction);
@@ -1310,7 +1310,7 @@ ccui.Layout = ccui.Widget.extend(/** @lends ccui.Layout# */{
 
             if (direction === ccui.Widget.UP)
                 return this._isLastWidgetInContainer(parent, direction);
-        } else if(parent.getLayoutType() === ccui.Layout.LayoutType.LINEAR_VERTICAL){
+        } else if(parent.getLayoutType() === ccui.Layout.Type.LINEAR_VERTICAL){
             if (direction === ccui.Widget.UP){
                 if (index === 0)
                     return this._isLastWidgetInContainer(parent, direction);
@@ -1347,13 +1347,13 @@ ccui.Layout = ccui.Widget.extend(/** @lends ccui.Layout# */{
             return false;
         if (parent.isLoopFocus()) {
             var layoutType = parent.getLayoutType();
-            if (layoutType === ccui.Layout.LayoutType.LINEAR_HORIZONTAL) {
+            if (layoutType === ccui.Layout.Type.LINEAR_HORIZONTAL) {
                 if (direction === ccui.Widget.LEFT || direction === ccui.Widget.RIGHT)
                     return true;
                 else
                     return this._isWidgetAncestorSupportLoopFocus(parent, direction);
             }
-            if (layoutType === ccui.Layout.LayoutType.LINEAR_VERTICAL){
+            if (layoutType === ccui.Layout.Type.LINEAR_VERTICAL){
                 if (direction === ccui.Widget.DOWN || direction === ccui.Widget.UP)
                     return true;
                 else
@@ -1503,31 +1503,26 @@ ccui.Layout.BG_COLOR_SOLID = 1;
  */
 ccui.Layout.BG_COLOR_GRADIENT = 2;
 
-//Layout type
-
-ccui.Layout.LayoutType = cc.Enum({
+/**
+ * Enum for layout type
+ * @readonly
+ * @enum {number}
+ */
+ccui.Layout.Type = cc.Enum({
     /**
      * The absolute of ccui.Layout's layout type.
-     * @type {number}
-     * @constant
      */
     ABSOLUTE: 0,
     /**
      * The vertical of ccui.Layout's layout type.
-     * @type {number}
-     * @constant
      */
     LINEAR_VERTICAL: 1,
     /**
      * The horizontal of ccui.Layout's layout type.
-     * @type {number}
-     * @constant
      */
     LINEAR_HORIZONTAL: 2,
     /**
      * The relative of ccui.Layout's layout type.
-     * @type {number}
-     * @constant
      */
     RELATIVE: 3
 });

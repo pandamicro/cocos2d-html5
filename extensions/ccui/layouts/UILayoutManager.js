@@ -29,11 +29,11 @@
  */
 ccui.getLayoutManager = function (type) {
     switch (type) {
-        case ccui.Layout.LayoutType.LINEAR_VERTICAL:
+        case ccui.Layout.Type.LINEAR_VERTICAL:
             return ccui.linearVerticalLayoutManager;
-        case ccui.Layout.LayoutType.LINEAR_HORIZONTAL:
+        case ccui.Layout.Type.LINEAR_HORIZONTAL:
             return ccui.linearHorizontalLayoutManager;
-        case ccui.Layout.LayoutType.RELATIVE:
+        case ccui.Layout.Type.RELATIVE:
             return ccui.relativeLayoutManager;
     }
     return null;
