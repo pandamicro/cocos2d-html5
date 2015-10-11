@@ -21,7 +21,7 @@
         });
         MyNodeWrapper = cc.FireClass({
             name: 'MyNodeWrapper',
-            extends: Fire.Runtime.NodeWrapper,
+            extends: cc.Runtime.NodeWrapper,
             properties: {
                 childrenN: {
                     get: function () {
@@ -61,7 +61,7 @@
         });
         MySceneWrapper = cc.FireClass({
             name: 'MySceneWrapper',
-            extends: Fire.Runtime.SceneWrapper,
+            extends: cc.Runtime.SceneWrapper,
             properties: {
                 childrenN: {
                     get: function () {
@@ -75,8 +75,8 @@
             }
         });
 
-        Fire.Runtime.registerNodeType(MyNode, MyNodeWrapper);
-        Fire.Runtime.registerNodeType(MyScene, MySceneWrapper);
+        cc.Runtime.registerNodeType(MyNode, MyNodeWrapper);
+        cc.Runtime.registerNodeType(MyScene, MySceneWrapper);
         currentScene = new MyScene();
 
         SpriteNeedsDeferredLoad = cc.FireClass({
@@ -91,23 +91,23 @@
                 },
                 trimX: {
                     default: 0,
-                    type: Fire.Integer
+                    type: 'Integer'
                 },
                 trimY: {
                     default: 0,
-                    type: Fire.Integer
+                    type: 'Integer'
                 },
                 width: {
                     default: 0,
-                    type: Fire.Integer
+                    type: 'Integer'
                 },
                 height: {
                     default: 0,
-                    type: Fire.Integer
+                    type: 'Integer'
                 },
                 texture: {
                     default: null,
-                    type: Fire.Texture,
+                    type: cc.TextureAsset,
                     visible: false
                 },
                 rotated: {
@@ -116,12 +116,12 @@
                 },
                 x: {
                     default: 0,
-                    type: Fire.Integer,
+                    type: 'Integer',
                     visible: false
                 },
                 y: {
                     default: 0,
-                    type: Fire.Integer,
+                    type: 'Integer',
                     visible: false
                 }
             }
@@ -137,12 +137,12 @@
                 },
                 width: {
                     default: 0,
-                    type: Fire.Integer,
+                    type: 'Integer',
                     readonly: true
                 },
                 height: {
                     default: 0,
-                    type: Fire.Integer,
+                    type: 'Integer',
                     readonly: true
                 }
             }
@@ -151,7 +151,7 @@
         ScriptToMix = cc.FireClass({
             name: '2154648724566',
             extends: cc.FireClass({
-                extends: Fire.Behavior,
+                extends: cc.Behavior,
                 onLoad: function () {
                     this.realAge = 30;
                 },
@@ -188,8 +188,8 @@
     module('test scene serialization', {
         setup: function () {
             SetupEngine.setup();
-            originGetCurrentSceneN = Fire.engine.getCurrentSceneN;
-            Fire.engine.getCurrentSceneN = function () {
+            originGetCurrentSceneN = cc.engine.getCurrentSceneN;
+            cc.engine.getCurrentSceneN = function () {
                 return currentScene;
             };
             defineTypes();
@@ -197,7 +197,7 @@
         teardown: function () {
             cc.js.unregisterClass(MySceneWrapper, MyNodeWrapper, SpriteNeedsDeferredLoad, TextureNeedsDeferredLoad,
                 ScriptToMix);
-            Fire.engine.getCurrentSceneN = originGetCurrentSceneN;
+            cc.engine.getCurrentSceneN = originGetCurrentSceneN;
             SetupEngine.teardown();
         }
     });
@@ -215,7 +215,7 @@
             var sprite = asset;
             var texture = sprite.texture;
 
-            var wrapper = Fire.engine.getCurrentScene();
+            var wrapper = cc.engine.getCurrentScene();
             var actual = Editor.serialize(wrapper, {stringify: false});
             var expect = {
                 "__type__": "MySceneWrapper",
@@ -235,7 +235,7 @@
             node2.asset = texture;
             node1.children.push(node2);
 
-            Fire.mixin(node1, ScriptToMix);
+            cc.mixin(node1, ScriptToMix);
             node1.onLoad();
             node1.age = 30;
             node1.target = cc(node2);

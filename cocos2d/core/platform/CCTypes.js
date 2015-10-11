@@ -111,8 +111,8 @@ cc.FontDefinition = function (properties) {
     var _t = this;
     _t.fontName = "Arial";
     _t.fontSize = 12;
-    _t.textAlign = cc.TEXT_ALIGNMENT_CENTER;
-    _t.verticalAlign = cc.VERTICAL_TEXT_ALIGNMENT_TOP;
+    _t.textAlign = cc.TextAlignment.CENTER;
+    _t.verticalAlign = cc.VerticalTextAlignment.TOP;
     _t.fillStyle = cc.color(255, 255, 255, 255);
     _t.boundingWidth = 0;
     _t.boundingHeight = 0;
@@ -214,6 +214,28 @@ cc.tex2 = function (u, v) {
     return new cc.Tex2F(u, v);
 };
 
+/**
+ * Enum for text alignment
+ * @readonly
+ * @enum {number}
+ */
+cc.TextAlignment = cc.Enum({
+    LEFT: 0,
+    CENTER: 1,
+    RIGHT: 2
+});
+
+/**
+ * Enum for vertical text alignment
+ * @readonly
+ * @enum {number}
+ */
+cc.VerticalTextAlignment = cc.Enum({
+    TOP: 0,
+    CENTER: 1,
+    BOTTOM: 2
+});
+
 cc._Dictionary = cc.Class.extend({
     _keyMapTb: null,
     _valueMapTb: null,
@@ -293,3 +315,14 @@ cc._Dictionary = cc.Class.extend({
         return this.allKeys().length;
     }
 });
+
+if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
+    cc.assert(cc.isFunction(cc._tmp.WebGLColor), cc._LogInfos.MissingFile, "CCTypesWebGL.js");
+    cc._tmp.WebGLColor();
+    delete cc._tmp.WebGLColor;
+}
+
+cc.assert(cc.isFunction(cc._tmp.PrototypeColor), cc._LogInfos.MissingFile, "CCTypesPropertyDefine.js");
+cc._tmp.PrototypeColor();
+delete cc._tmp.PrototypeColor;
+

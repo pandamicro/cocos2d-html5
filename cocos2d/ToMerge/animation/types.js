@@ -12,43 +12,33 @@ var WrapModeMask = {
 
 /**
  * Specifies how time is treated when it is outside of the keyframe range of an Animation.
- * @enum WrapMode
+ * @readonly
+ * @enum {number}
+ * @memberof cc
  */
 var WrapMode = cc.Enum({
 
     /**
      * !#en Reads the default wrap mode set higher up.
      * !#zh 向 Animation Component 或者 AnimationClip 查找 wrapMode
-     *
-     * @property Default
-     * @type {number}
      */
     Default: 0,
 
     /**
      * !#en All iterations are played as specified.
      * !#zh 动画只播放一遍
-     *
-     * @property Normal
-     * @type {number}
      */
     Normal: 1,
 
     /**
      * !#en All iterations are played in the reverse direction from the way they are specified.
      * !#zh 从最后一帧或结束位置开始反向播放，到第一帧或开始位置停止
-     *
-     * @property Reverse
-     * @type {number}
      */
     Reverse: WrapModeMask.Reverse,
 
     /**
      * !#en When time reaches the end of the animation, time will continue at the beginning.
      * !#zh 循环播放
-     *
-     * @property Loop
-     * @type {number}
      */
     Loop: WrapModeMask.Loop,
 
@@ -56,9 +46,6 @@ var WrapMode = cc.Enum({
      * !#en All iterations are played in the reverse direction from the way they are specified.
      * And when time reaches the start of the animation, time will continue at the ending.
      * !#zh 反向循环播放
-     *
-     * @property LoopReverse
-     * @type {number}
      */
     LoopReverse: WrapModeMask.Loop | WrapModeMask.Reverse,
 
@@ -66,9 +53,6 @@ var WrapMode = cc.Enum({
      * !#en Even iterations are played as specified, odd iterations are played in the reverse direction from the way they
      * are specified.
      * !#zh 从第一帧播放到最后一帧，然后反向播放回第一帧，到第一帧后再正向播放，如此循环
-     *
-     * @property PingPong
-     * @type {number}
      */
     PingPong: WrapModeMask.PingPong,
 
@@ -76,9 +60,6 @@ var WrapMode = cc.Enum({
      * !#en Even iterations are played in the reverse direction from the way they are specified, odd iterations are played
      * as specified.
      * !#zh 从最后一帧开始反向播放，其他同 PingPong
-     *
-     * @property PingPongReverse
-     * @type {number}
      */
     PingPongReverse: WrapModeMask.PingPong | WrapModeMask.Reverse
 });

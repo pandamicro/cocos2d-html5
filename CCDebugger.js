@@ -368,7 +368,7 @@ cc._initDebugSetting = function (mode) {
             };
         }
     }
-    cc.throw = function (error) {
+    cc._throw = function (error) {
         cc.error(error.stack || error);
     };
 };

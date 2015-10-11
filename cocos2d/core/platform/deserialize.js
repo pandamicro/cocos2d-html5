@@ -79,7 +79,7 @@ W2NMapper.prototype.concat = function (other) {
 /**
  * !#en Contains information collected during deserialization
  * !#zh 包含反序列化时的一些信息
- * @class _DeserializeInfo
+ * @class Details
  * @constructor
  */
 var Details = function () {
@@ -534,7 +534,7 @@ var _Deserializer = (function () {
  *
  * @method deserialize
  * @param {(string|object)} data - the serialized cc.Asset json string or json object.
- * @param {_DeserializeInfo} [result] - additional loading result
+ * @param {deserialize.Details} [result] - additional loading result
  * @param {object} [options]
  * @return {object} the main data(asset)
  */

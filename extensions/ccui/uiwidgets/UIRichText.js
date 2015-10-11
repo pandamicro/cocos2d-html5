@@ -280,8 +280,8 @@ ccui.RichText = ccui.Widget.extend(/** @lends ccui.RichText# */{
         this._elementRenders = [];
         this._leftSpaceWidth = 0;
         this._verticalSpace = 0;
-        this._textHorizontalAlignment = cc.TEXT_ALIGNMENT_LEFT;
-        this._textVerticalAlignment = cc.VERTICAL_TEXT_ALIGNMENT_TOP;
+        this._textHorizontalAlignment = cc.TextAlignment.LEFT;
+        this._textVerticalAlignment = cc.VerticalTextAlignment.TOP;
     },
 
     _initRenderer: function () {
@@ -492,11 +492,11 @@ ccui.RichText = ccui.Widget.extend(/** @lends ccui.RichText# */{
             }
 
             //Text flow horizontal alignment:
-            if(this._textHorizontalAlignment !== cc.TEXT_ALIGNMENT_LEFT) {
+            if(this._textHorizontalAlignment !== cc.TextAlignment.LEFT) {
                 offsetX = 0;
-                if (this._textHorizontalAlignment === cc.TEXT_ALIGNMENT_RIGHT)
+                if (this._textHorizontalAlignment === cc.TextAlignment.RIGHT)
                     offsetX = this._contentSize.width - nextPosX;
-                else if (this._textHorizontalAlignment === cc.TEXT_ALIGNMENT_CENTER)
+                else if (this._textHorizontalAlignment === cc.TextAlignment.CENTER)
                     offsetX = (this._contentSize.width - nextPosX) / 2;
 
                 for (j = 0; j < row.length; j++)
@@ -533,17 +533,17 @@ ccui.RichText = ccui.Widget.extend(/** @lends ccui.RichText# */{
                     nextPosX += l.getContentSize().width;
                 }
                 //Text flow alignment(s)
-                if( this._textHorizontalAlignment !== cc.TEXT_ALIGNMENT_LEFT || this._textVerticalAlignment !== cc.VERTICAL_TEXT_ALIGNMENT_TOP) {
+                if( this._textHorizontalAlignment !== cc.TextAlignment.LEFT || this._textVerticalAlignment !== cc.VerticalTextAlignment.TOP) {
                     offsetX = 0;
-                    if (this._textHorizontalAlignment === cc.TEXT_ALIGNMENT_RIGHT)
+                    if (this._textHorizontalAlignment === cc.TextAlignment.RIGHT)
                         offsetX = this._contentSize.width - nextPosX;
-                    else if (this._textHorizontalAlignment === cc.TEXT_ALIGNMENT_CENTER)
+                    else if (this._textHorizontalAlignment === cc.TextAlignment.CENTER)
                         offsetX = (this._contentSize.width - nextPosX) / 2;
 
                     var offsetY = 0;
-                    if (this._textVerticalAlignment === cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM)
+                    if (this._textVerticalAlignment === cc.VerticalTextAlignment.BOTTOM)
                         offsetY = this._customSize.height - newContentSizeHeight;
-                    else if (this._textVerticalAlignment === cc.VERTICAL_TEXT_ALIGNMENT_CENTER)
+                    else if (this._textVerticalAlignment === cc.VerticalTextAlignment.CENTER)
                         offsetY = (this._customSize.height - newContentSizeHeight) / 2;
 
                     for (j = 0; j < row.length; j++) {
@@ -685,7 +685,7 @@ ccui.RichText = ccui.Widget.extend(/** @lends ccui.RichText# */{
      * var richText = new ccui.RichText();
      * richText.setTextHorizontalAlignment(cc.Text_ALIGNMENT_RIGHT);
      *
-     * @param {Number} value - example cc.TEXT_ALIGNMENT_RIGHT
+     * @param {cc.TextAlignment} value - example cc.TextAlignment.RIGHT
      */
     setTextHorizontalAlignment: function(value){
         if(value !== this._textHorizontalAlignment) {
@@ -699,9 +699,9 @@ ccui.RichText = ccui.Widget.extend(/** @lends ccui.RichText# */{
      *
      * @example
      * var richText = new ccui.RichText();
-     * richText.setTextVerticalAlignment(cc.VERTICAL_TEXT_ALIGNMENT_CENTER);
+     * richText.setTextVerticalAlignment(cc.VerticalTextAlignment.CENTER);
      *
-     * @param {Number} value - example cc.VERTICAL_TEXT_ALIGNMENT_CENTER
+     * @param {Number} value - example cc.VerticalTextAlignment.CENTER
      */
     setTextVerticalAlignment: function(value){
         if(value !== this._textVerticalAlignment) {

@@ -232,7 +232,7 @@
                 cc.log("%s need to be preloaded", path);
             node = new cc.ParticleSystem(path);
             self.generalAttributes(node, json);
-            node.setPositionType(cc.ParticleSystem.TYPE_GROUPED);
+            node.setPositionType(cc.ParticleSystem.Type.GROUPED);
             !cc.sys.isNative && node.setDrawMode(cc.ParticleSystem.TEXTURE_MODE);
 
             var blendData = json["BlendFunc"];
@@ -996,7 +996,7 @@
         var verticalType = getParam(json["VerticalType"], "Align_Left");
         var horizontalType = getParam(json["HorizontalType"], "Align_Top");
         if(!directionType){
-            widget.setDirection(ccui.ScrollView.DIR_HORIZONTAL);
+            widget.setDirection(ccui.ScrollView.Dir.HORIZONTAL);
             if(verticalType === "Align_Bottom")
                 widget.setGravity(ccui.ListView.GRAVITY_BOTTOM);
             else if(verticalType === "Align_VerticalCenter")
@@ -1004,7 +1004,7 @@
             else
                 widget.setGravity(ccui.ListView.GRAVITY_TOP);
         }else if(directionType === "Vertical"){
-            widget.setDirection(ccui.ScrollView.DIR_VERTICAL);
+            widget.setDirection(ccui.ScrollView.Dir.VERTICAL);
             if (horizontalType === "")
                 widget.setGravity(ccui.ListView.GRAVITY_LEFT);
             else if (horizontalType === "Align_Right")
