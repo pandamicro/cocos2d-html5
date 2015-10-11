@@ -238,9 +238,7 @@ require('./cocos2d/core/utils/CCPath');
 cc.log = cc.warn = cc.error = cc.throw = cc.assert = function () {
 };
 
-var _config = null,
-    //cache for js and module that has added into jsList to be loaded.
-    _jsAddedCache = {},
+var _jsAddedCache = {}, //cache for js and module that has added into jsList to be loaded.
     _engineInitCalled = false,
     _engineLoadedCallback = null;
 
@@ -343,7 +341,7 @@ function _load(config) {
 
 function _windowLoaded() {
     this.removeEventListener('load', _windowLoaded, false);
-    _load(_config);
+    _load(cc.game.config);
 }
 
 cc.initEngine = function (config, cb) {
@@ -358,10 +356,19 @@ cc.initEngine = function (config, cb) {
 
     _engineLoadedCallback = cb;
 
-    _config = config ? config : {};
-    _determineRenderType(_config);
+    // Given config, initialize with it
+    if (config) {
+        cc.game.config = config;
+    }
+    // No config given and no config set before, load it
+    else if (!cc.game.config) {
+        cc.game._loadConfig();
+    }
+    config = cc.game.config;
 
-    document.body ? _load(_config) : cc._addEventListener(window, 'load', _windowLoaded, false);
+    _determineRenderType(config);
+
+    document.body ? _load(config) : cc._addEventListener(window, 'load', _windowLoaded, false);
     _engineInitCalled = true;
 }
 
@@ -409,6 +416,7 @@ cc.game = /** @lends cc.game# */{
         frameRate: "frameRate",
         id: "id",
         renderMode: "renderMode",
+        registerSystemEvent: "registerSystemEvent",
         jsList: "jsList"
     },
 
@@ -635,20 +643,38 @@ cc.game = /** @lends cc.game# */{
     },
 
     /**
-     * Run game.
+     * Run game with configuration object and onStart function.
+     * @param {Object|Function} [config] Pass configuration object or onStart function
+     * @param {onStart} [onStart] onStart function to be executed after game initialized
      */
-    run: function (id) {
-        if (id) {
-            this.config[cc.game.CONFIG_KEY.id] = id;
+    run: function (config, onStart) {
+        if (cc.isFunction(config)) {
+            cc.game.onStart = config;
         }
+        else {
+            if (config) {
+                cc.game.config = config;
+            }
+            if (cc.isFunction(onStart)) {
+                cc.game.onStart = onStart;
+            }
+        }
+        
         this.prepare(cc.game.onStart.bind(cc.game));
     },
 
     _loadConfig: function () {
         // Load config
+        // Already loaded
+        if (cc.game.config) {
+            return;
+        }
+        // Load from document.ccConfig
         if (document["ccConfig"]) {
             this._initConfig(document["ccConfig"]);
-        } else {
+        }
+        // Load from project.json 
+        else {
             try {
                 var cocos_script = document.getElementsByTagName('script');
                 for(var i = 0; i < cocos_script.length; i++){
@@ -684,12 +710,15 @@ cc.game = /** @lends cc.game# */{
             modules = config[CONFIG_KEY.modules];
 
         // Configs adjustment
+        config[CONFIG_KEY.showFPS] = config[CONFIG_KEY.showFPS] || false;
         config[CONFIG_KEY.engineDir] = config[CONFIG_KEY.engineDir] || "frameworks/cocos2d-html5";
         if (config[CONFIG_KEY.debugMode] == null)
             config[CONFIG_KEY.debugMode] = 0;
         config[CONFIG_KEY.frameRate] = config[CONFIG_KEY.frameRate] || 60;
         if (config[CONFIG_KEY.renderMode] == null)
-            config[CONFIG_KEY.renderMode] = 1;
+            config[CONFIG_KEY.renderMode] = 0;
+        if (config[CONFIG_KEY.registerSystemEvent] == null)
+            config[CONFIG_KEY.registerSystemEvent] = true;
         if (modules && modules.indexOf("core") < 0) modules.splice(0, 0, "core");
 
         modules && (config[CONFIG_KEY.modules] = modules);
@@ -710,8 +739,8 @@ cc.game = /** @lends cc.game# */{
             localCanvas, localContainer, localConStyle;
 
         if (!el) {
-            width = width || 480;
-            height = height || 320;
+            width = width || 640;
+            height = height || 480;
             this.canvas = cc._canvas = localCanvas = document.createElement("CANVAS");
             this.container = cc.container = localContainer = document.createElement("DIV");
             localContainer.setAttribute('id', 'Cocos2dGameContainer');
@@ -781,7 +810,8 @@ cc.game = /** @lends cc.game# */{
         var win = window, self = this, hidden, visibilityChange, _undef = "undefined";
 
         // register system events
-        cc.inputManager.registerSystemEvent(this.canvas);
+        if (this.config[this.CONFIG_KEY.registerSystemEvent])
+            cc.inputManager.registerSystemEvent(this.canvas);
 
         if (!cc.isUndefined(document.hidden)) {
             hidden = "hidden";

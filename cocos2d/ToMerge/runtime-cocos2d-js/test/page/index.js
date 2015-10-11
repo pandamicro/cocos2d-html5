@@ -45,16 +45,14 @@ describe('test wrappers', function () {
         "asset"
     ];
 
-    var canvas = document.getElementById('gameCanvas');
-
     var option = {
         width:  400,
         height: 400,
-        canvas: canvas
+        id: 'gameCanvas'
     };
 
     it('init runtime', function(done) {
-        Fire.engine.initRuntime(option, function () {
+        cc.initEngine(option, function () {
             pageTests.forEach( function (test) {
                 require( Path.join(__dirname, 'page', test + '.js' ) );
             });

@@ -9,7 +9,7 @@ var EngineWrapper = cc.FireClass({
     properties: {
         canvasSize: {
             get: function () {
-                var size = cc.view.getFrameSize()
+                var size = cc.view.getCanvasSize();
                 return new cc.Vec2(size.width, size.height);
             },
             set: function (value) {
@@ -18,11 +18,11 @@ var EngineWrapper = cc.FireClass({
 
                 var view = cc.view;
 
-                cc._canvas.width = width * view.getDevicePixelRatio();
-                cc._canvas.height = height * view.getDevicePixelRatio();
+                cc.game.canvas.width = width * view.getDevicePixelRatio();
+                cc.game.canvas.height = height * view.getDevicePixelRatio();
 
-                cc._canvas.style.width = width;
-                cc._canvas.style.height = height;
+                cc.game.canvas.style.width = width;
+                cc.game.canvas.style.height = height;
 
                 // reset container style
                 this.resetContainerStyle();
@@ -72,35 +72,20 @@ var EngineWrapper = cc.FireClass({
     },
 
     initRuntime: function (options, callback) {
-        var width  = options.width  || 640;
-        var height = options.height || 480;
-        var canvas = options.canvas;
-        var id     = 'gameCanvas';
-
-        if (canvas) {
-            if ( canvas.id ) id = canvas.id;
-            else canvas.id = id;
-        }
-
         var self = this;
 
-        if (typeof document !== 'undefined') {
-            var config = document.ccConfig || {};
+        var config = {
+            'width'                 : options.width,
+            'height'                : options.height,
+            'showFPS'               : false,
+            'frameRate'             : 60,
+            'id'                    : options.id,
+            'renderMode'            : Fire.isEditor ? 2 : options.renderMode,                 // 0: auto, 1:Canvas, 2:Webgl
+            'registerSystemEvent'   : Fire.isEditor ? false : true,
+            'jsList'                : []
+        };
 
-            document.ccConfig = {
-                'width'         : width,
-                'height'        : height,
-                'showFPS'       : false,
-                'frameRate'     : 60,
-                'id'            : id,
-                'renderMode'    : Fire.isEditor ? 2 : config.renderMode,                 // 0: auto, 1:Canvas, 2:Webgl
-                'jsList'        : []
-            };
-        }
-
-        cc.game._initConfig();
-
-        cc.game.onStart = function () {
+        cc.game.run(config, function () {
             var scene = new cc.Scene();
 
             // scene anchor point need be 0,0
@@ -108,13 +93,13 @@ var EngineWrapper = cc.FireClass({
 
             if (CC_EDITOR) {
                 cc.view.enableRetina(false);
-                canvas.style.imageRendering = "pixelated";
+                cc.game.canvas.style.imageRendering = "pixelated";
                 cc.director.setClearColor(cc.color(0,0,0,0));
             }
 
             cc.view.setDesignResolutionSize(options.designWidth, options.designHeight, cc.ResolutionPolicy.SHOW_ALL);
 
-            if (cc._canvas) {
+            if (cc.game.canvas) {
                 self.canvasSize = new cc.Vec2(width, height);
             }
 
@@ -126,8 +111,8 @@ var EngineWrapper = cc.FireClass({
 
             if (CC_EDITOR) {
                 // set cocos canvas tabindex to -1 in edit mode
-                cc._canvas.setAttribute('tabindex', -1);
-                cc._canvas.style.backgroundColor = '';
+                cc.game.canvas.setAttribute('tabindex', -1);
+                cc.game.canvas.style.backgroundColor = '';
                 if (cc.imeDispatcher._domInputControl)
                     cc.imeDispatcher._domInputControl.setAttribute('tabindex', -1);
 
@@ -137,24 +122,16 @@ var EngineWrapper = cc.FireClass({
             if (callback) {
                 callback();
             }
-        };
-
-        if (CC_EDITOR) {
-            // dont register event otherwise cocos will block event's propagation in edit mode.
-            this._dontRegisterSystemEvent();
-        }
-
-        cc.game.run();
-
+        });
     },
 
     playRuntime: function () {
         if (CC_EDITOR) {
-            this._registerCocosSystemEvent(cc._canvas);
+            this._registerCocosSystemEvent(cc.game.canvas);
 
             // reset cocos tabindex in playing mode
-            cc._canvas.setAttribute('tabindex', 99);
-            cc._canvas.style.backgroundColor = 'black';
+            cc.game.canvas.setAttribute('tabindex', 99);
+            cc.game.canvas.style.backgroundColor = 'black';
             if (cc.imeDispatcher._domInputControl)
                 cc.imeDispatcher._domInputControl.setAttribute('tabindex', 2);
         }
