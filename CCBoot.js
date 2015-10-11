@@ -32,8 +32,7 @@ var cc = cc || {};
 cc._tmp = cc._tmp || {};
 cc._LogInfos = {};
 
-/** @expose */
-window._p = window;
+var _p = window;
 /** @expose */
 _p.gl;
 /** @expose */
@@ -55,7 +54,7 @@ _p = Object.prototype;
 _p._super;
 /** @expose */
 _p.ctor;
-delete window._p;
+_p = null;
 
 /**
  * Device oriented vertically, home button on the bottom
@@ -116,28 +115,6 @@ cc.newElement = function (x) {
 };
 
 cc.isEditor = typeof Editor !== 'undefined';
-
-// if global_defs not declared by uglify, declare them globally
-// (use eval to ignore uglify)
-if (typeof CC_EDITOR === 'undefined') {
-    eval('CC_EDITOR=cc.isEditor');
-}
-if (typeof CC_DEV === 'undefined') {
-    eval('CC_DEV=CC_EDITOR');
-}
-if (typeof CC_TEST === 'undefined') {
-    if (CC_EDITOR) {
-        eval('CC_TEST=typeof describe!=="undefined"');
-    }
-    else {
-        eval('CC_TEST=typeof QUnit!=="undefined"');
-    }
-}
-if (CC_TEST) {
-    // contains internal apis for unit tests
-    // @expose
-    cc._Test = {};
-}
 
 /**
  * Iterate over an object or an array, executing a function for each matched element.
@@ -225,17 +202,17 @@ cc.formatStr = function(){
 
 var FireUrl = CC_EDITOR && !CC_TEST && require('fire-url');
 
-require('./cocos2d/core/utils/Async');
-require('./cocos2d/core/platform/CCLoader');
-require('./cocos2d/core/platform/CCSys');
-require('./cocos2d/core/utils/CCPath');
+require('../cocos2d/core/utils/Async');
+require('../cocos2d/core/platform/CCLoader');
+require('../cocos2d/core/platform/CCSys');
+require('../cocos2d/core/utils/CCPath');
 
 
 //+++++++++++++++++++++++++Engine initialization function begin+++++++++++++++++++++++++++
 (function () {
 
-//to make sure the cc.log, cc.warn, cc.error, cc.throw and cc.assert would not throw error before init by debugger mode.
-cc.log = cc.warn = cc.error = cc.throw = cc.assert = function () {
+//to make sure the cc.log, cc.warn, cc.error, cc._throw and cc.assert would not throw error before init by debugger mode.
+cc.log = cc.warn = cc.error = cc._throw = cc.assert = function () {
 };
 
 var _config = null,
@@ -897,5 +874,3 @@ cc._urlRegExp = new RegExp(
         "(?:/\\S*)?" +
     "$", "i"
 );
-
-require('../cocos2d/core/platform/js');

@@ -168,18 +168,18 @@ cc.LabelTTF._firsrEnglish = /^[a-zA-Z0-9ÄÖÜäöüßéèçàùêâîôû]/;
         var lineHeight = node.getLineHeight();
         var transformTop = (lineHeight - this._fontClientHeight) / 2;
 
-        if (locHAlignment === cc.TEXT_ALIGNMENT_RIGHT)
+        if (locHAlignment === cc.TextAlignment.RIGHT)
             xOffset += locContentWidth;
-        else if (locHAlignment === cc.TEXT_ALIGNMENT_CENTER)
+        else if (locHAlignment === cc.TextAlignment.CENTER)
             xOffset += locContentWidth / 2;
         else
             xOffset += 0;
 
         if (this._isMultiLine) {
             var locStrLen = this._strings.length;
-            if (locVAlignment === cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM)
+            if (locVAlignment === cc.VerticalTextAlignment.BOTTOM)
                 yOffset = lineHeight - transformTop * 2 + locContentSizeHeight - lineHeight * locStrLen;
-            else if (locVAlignment === cc.VERTICAL_TEXT_ALIGNMENT_CENTER)
+            else if (locVAlignment === cc.VerticalTextAlignment.CENTER)
                 yOffset = (lineHeight - transformTop * 2) / 2 + (locContentSizeHeight - lineHeight * locStrLen) / 2;
 
             for (var i = 0; i < locStrLen; i++) {
@@ -187,9 +187,9 @@ cc.LabelTTF._firsrEnglish = /^[a-zA-Z0-9ÄÖÜäöüßéèçàùêâîôû]/;
                 OffsetYArray.push(tmpOffsetY);
             }
         } else {
-            if (locVAlignment === cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM) {
+            if (locVAlignment === cc.VerticalTextAlignment.BOTTOM) {
                 //do nothing
-            } else if (locVAlignment === cc.VERTICAL_TEXT_ALIGNMENT_TOP) {
+            } else if (locVAlignment === cc.VerticalTextAlignment.TOP) {
                 yOffset -= locContentSizeHeight;
             } else {
                 yOffset -= locContentSizeHeight * 0.5;

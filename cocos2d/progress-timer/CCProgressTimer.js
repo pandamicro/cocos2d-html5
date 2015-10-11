@@ -41,7 +41,7 @@
  *                                              you want a bottom to top then set the midpoint all the way to cc.p(x,0)<br/>
  *                                              you want a top to bottom then set the midpoint all the way to cc.p(x,1)</p>
  * @property {cc.Point}     barChangeRate   - This allows the bar type to move the component at a specific rate.
- * @property {enum}         type            - Type of the progress timer: cc.ProgressTimer.TYPE_RADIAL|cc.ProgressTimer.TYPE_BAR.
+ * @property {cc.ProgressTimer.Type} type   - Type of the progress timer.
  * @property {Number}       percentage      - Percentage to change progress, from 0 to 100.
  * @property {cc.Sprite}    sprite          - The sprite to show the progress percentage.
  * @property {Boolean}      reverseDir      - Indicate whether the direction is reversed.
@@ -65,7 +65,7 @@ cc.ProgressTimer = cc.Node.extend(/** @lends cc.ProgressTimer# */{
     ctor: function(sprite){
         cc.Node.prototype.ctor.call(this);
 
-        this._type = cc.ProgressTimer.TYPE_RADIAL;
+        this._type = cc.ProgressTimer.Type.RADIAL;
         this._percentage = 0.0;
         this._midPoint = cc.p(0, 0);
         this._barChangeRate = cc.p(0, 0);
@@ -118,7 +118,7 @@ cc.ProgressTimer = cc.Node.extend(/** @lends cc.ProgressTimer# */{
 
     /**
      *  Change the percentage to change progress
-     * @return {cc.ProgressTimer.TYPE_RADIAL|cc.ProgressTimer.TYPE_BAR}
+     * @return {cc.ProgressTimer.Type}
      */
     getType:function () {
         return this._type;
@@ -237,7 +237,7 @@ cc.ProgressTimer = cc.Node.extend(/** @lends cc.ProgressTimer# */{
     /**
      * set Progress type of cc.ProgressTimer
      * @function
-     * @param {cc.ProgressTimer.TYPE_RADIAL|cc.ProgressTimer.TYPE_BAR} type
+     * @param {cc.ProgressTimer.Type} type
      */
     setType: function(type){
         if (type !== this._type){
@@ -268,7 +268,7 @@ cc.ProgressTimer = cc.Node.extend(/** @lends cc.ProgressTimer# */{
         this.percentage = 0;
         this.setAnchorPoint(0.5,0.5);
 
-        this._type = cc.ProgressTimer.TYPE_RADIAL;
+        this._type = cc.ProgressTimer.Type.RADIAL;
         this._reverseDirection = false;
         this.midPoint = cc.p(0.5, 0.5);
         this.barChangeRate = cc.p(1, 1);
@@ -331,15 +331,14 @@ cc.ProgressTimer.TEXTURE_COORDS_COUNT = 4;
 cc.ProgressTimer.TEXTURE_COORDS = 0x4b;
 
 /**
- * Radial Counter-Clockwise
- * @type Number
- * @constant
+ * Enum for type of ProgressTimer
+ * @readonly
+ * @enum {number}
  */
-cc.ProgressTimer.TYPE_RADIAL = 0;
-
-/**
- * Bar
- * @type Number
- * @constant
- */
-cc.ProgressTimer.TYPE_BAR = 1;
+cc.ProgressTimer.Type = cc.Enum({
+    /**
+     * Radial Counter-Clockwise
+     */
+    RADIAL: 0,
+    BAR: 1
+});

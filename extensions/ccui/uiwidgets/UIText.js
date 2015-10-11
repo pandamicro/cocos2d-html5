@@ -35,8 +35,8 @@
  * @property {String}   font                - The label font with a style string: e.g. "18px Verdana"
  * @property {String}   fontName            - The label font name
  * @property {Number}   fontSize            - The label font size
- * @property {Number}   textAlign           - Horizontal Alignment of label, cc.TEXT_ALIGNMENT_LEFT|cc.TEXT_ALIGNMENT_CENTER|cc.TEXT_ALIGNMENT_RIGHT
- * @property {Number}   verticalAlign       - Vertical Alignment of label: cc.VERTICAL_TEXT_ALIGNMENT_TOP|cc.VERTICAL_TEXT_ALIGNMENT_CENTER|cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM
+ * @property {cc.TextAlignment} textAlign   - Horizontal Alignment of label
+ * @property {cc.VerticalTextAlignment} verticalAlign - Vertical Alignment of label
  * @property {Boolean}  touchScaleEnabled   - Indicate whether the label will scale when touching
  */
 ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
@@ -230,7 +230,7 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
 
     /**
      * Sets Horizontal Alignment of cc.LabelTTF
-     * @param {cc.TEXT_ALIGNMENT_LEFT|cc.TEXT_ALIGNMENT_CENTER|cc.TEXT_ALIGNMENT_RIGHT} alignment Horizontal Alignment
+     * @param {cc.TextAlignment} alignment Horizontal Alignment
      */
     setTextHorizontalAlignment: function (alignment) {
         this._labelRenderer.setHorizontalAlignment(alignment);
@@ -240,7 +240,7 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
 
     /**
      * Returns Horizontal Alignment of label
-     * @returns {TEXT_ALIGNMENT_LEFT|TEXT_ALIGNMENT_CENTER|TEXT_ALIGNMENT_RIGHT}
+     * @returns {cc.TextAlignment}
      */
     getTextHorizontalAlignment: function () {
         return this._labelRenderer.getHorizontalAlignment();
@@ -248,7 +248,7 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
 
     /**
      * Sets Vertical Alignment of label
-     * @param {cc.VERTICAL_TEXT_ALIGNMENT_TOP|cc.VERTICAL_TEXT_ALIGNMENT_CENTER|cc.VERTICAL_TEXT_ALIGNMENT_BOTTOM} alignment
+     * @param {cc.VerticalTextAlignment} alignment
      */
     setTextVerticalAlignment: function (alignment) {
         this._labelRenderer.setVerticalAlignment(alignment);
@@ -258,7 +258,7 @@ ccui.Text = ccui.Widget.extend(/** @lends ccui.Text# */{
 
     /**
      * Gets text vertical alignment.
-     * @returns {VERTICAL_TEXT_ALIGNMENT_TOP|VERTICAL_TEXT_ALIGNMENT_CENTER|VERTICAL_TEXT_ALIGNMENT_BOTTOM}
+     * @returns {cc.VerticalTextAlignment}
      */
     getTextVerticalAlignment: function () {
         return this._labelRenderer.getVerticalAlignment();

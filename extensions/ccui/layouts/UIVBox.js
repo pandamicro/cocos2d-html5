@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 /**
- * The vertical box of Cocos UI. Its layout type is ccui.Layout.LINEAR_VERTICAL.
+ * The vertical box of Cocos UI. Its layout type is ccui.Layout.Type.LINEAR_VERTICAL.
  * @class
  * @extends ccui.Layout
  */
@@ -49,7 +49,7 @@ ccui.VBox = ccui.Layout.extend(/** @lends ccui.VBox# */{
      */
     init: function(){
         if(ccui.Layout.prototype.init.call(this)){
-            this.setLayoutType(ccui.Layout.LINEAR_VERTICAL);
+            this.setLayoutType(ccui.Layout.Type.LINEAR_VERTICAL);
             return true;
         }
         return false;
