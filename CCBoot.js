@@ -32,8 +32,7 @@ var cc = cc || {};
 cc._tmp = cc._tmp || {};
 cc._LogInfos = {};
 
-/** @expose */
-window._p = window;
+var _p = window;
 /** @expose */
 _p.gl;
 /** @expose */
@@ -55,7 +54,7 @@ _p = Object.prototype;
 _p._super;
 /** @expose */
 _p.ctor;
-delete window._p;
+_p = null;
 
 /**
  * Device oriented vertically, home button on the bottom
@@ -203,10 +202,10 @@ cc.formatStr = function(){
 
 var FireUrl = CC_EDITOR && !CC_TEST && require('fire-url');
 
-require('./cocos2d/core/utils/Async');
-require('./cocos2d/core/platform/CCLoader');
-require('./cocos2d/core/platform/CCSys');
-require('./cocos2d/core/utils/CCPath');
+require('../cocos2d/core/utils/Async');
+require('../cocos2d/core/platform/CCLoader');
+require('../cocos2d/core/platform/CCSys');
+require('../cocos2d/core/utils/CCPath');
 
 
 //+++++++++++++++++++++++++Engine initialization function begin+++++++++++++++++++++++++++
