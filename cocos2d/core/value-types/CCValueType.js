@@ -1,4 +1,4 @@
-var JS = require('../js');
+var JS = require('../platform/js');
 
 /**
  * The base class of all value types.

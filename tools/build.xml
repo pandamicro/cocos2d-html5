@@ -14,8 +14,6 @@
                 <file name="cocos2d/core/utils/BinaryLoader.js"/>
                 <file name="cocos2d/core/platform/CCClass.js"/>
                 <file name="cocos2d/core/platform/CCCommon.js"/>
-                <file name="cocos2d/core/cocoa/CCGeometry.js"/>
-                <file name="cocos2d/core/platform/CCTypesPropertyDefine.js"/>
                 <file name="cocos2d/core/platform/CCSAXParser.js"/>
                 <file name="cocos2d/core/platform/CCLoaders.js"/>
                 <file name="cocos2d/core/platform/CCConfig.js"/>
@@ -28,7 +26,7 @@
                 <file name="cocos2d/core/platform/CCVisibleRect.js"/>
                 <file name="cocos2d/core/platform/CCInputManager.js"/>
                 <file name="cocos2d/core/platform/CCInputExtension.js"/>
-                <file name="cocos2d/core/cocoa/CCAffineTransform.js"/>
+                <file name="cocos2d/core/value-types/CCAffineTransform.js"/>
                 <file name="cocos2d/core/support/CCPointExtension.js"/>
                 <file name="cocos2d/core/support/CCVertex.js"/>
                 <file name="cocos2d/core/support/TransformUtils.js"/>
@@ -306,18 +304,16 @@
             <sources dir="./../">
                 <file name="CCBoot.js"/>
                 <file name="cocos2d/core/platform/CCClass.js"/>
-                <file name="cocos2d/core/cocoa/CCGeometry.js"/>
                 <file name="cocos2d/core/platform/CCSAXParser.js"/>
                 <file name="cocos2d/core/platform/CCLoaders.js"/>
                 <file name="cocos2d/core/platform/CCConfig.js"/>
                 <file name="cocos2d/core/platform/miniFramework.js"/>
                 <file name="cocos2d/core/platform/CCMacro.js"/>
-                <file name="cocos2d/core/platform/CCTypesPropertyDefine.js"/>
                 <file name="cocos2d/core/platform/CCTypes.js"/>
                 <file name="cocos2d/core/platform/CCEGLView.js"/>
                 <file name="cocos2d/core/platform/CCVisibleRect.js"/>
                 <file name="cocos2d/core/platform/CCInputManager.js"/>
-                <file name="cocos2d/core/cocoa/CCAffineTransform.js"/>
+                <file name="cocos2d/core/value-types/CCAffineTransform.js"/>
                 <file name="cocos2d/core/support/CCPointExtension.js"/>
                 <file name="cocos2d/core/event-manager/CCTouch.js"/>
                 <file name="cocos2d/core/event-manager/CCEvent.js"/>

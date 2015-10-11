@@ -7,8 +7,8 @@ cc.isUnitTest = true;
 var CCObject = cc.Object;
 var Asset = cc.Asset;
 var Vec2 = cc.Vec2;
-var Rect = cc.FireRect;
-var Color = cc.FireColor;
+var Rect = cc.Rect;
+var Color = cc.Color;
 var Texture = cc.Texture;
 //var Sprite = cc.Sprite;
 //var Atlas = cc.Atlas;
@@ -220,9 +220,9 @@ if (!cc.TextureAsset) {
                 }
                 catch (e) {
                     cc.error("An error has occurred. This is most likely due to security restrictions on reading canvas pixel data with local or cross-domain images.");
-                    return cc.FireColor.transparent;
+                    return cc.Color.transparent;
                 }
-                var result = new cc.FireColor();
+                var result = new cc.Color();
                 result.r = imgBytes[0] / 255;
                 result.g = imgBytes[1] / 255;
                 result.b = imgBytes[2] / 255;

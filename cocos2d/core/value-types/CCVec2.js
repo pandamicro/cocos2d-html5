@@ -1,11 +1,12 @@
 var ValueType = require('./CCValueType');
-var JS = require('../js');
+var JS = require('../platform/js');
+var FireClass = require('../platform/CCFireClass');
 
 /**
  * Representation of 2D vectors and points.
  *
- * see {% crosslink cc.v2 cc.v2 %}
- * @class Vec2
+ * see {% crosslink cc.Vec2 cc.v2 %}
+ * @class cc.Vec2
  * @extends ValueType
  * @constructor
  * @param {number} [x=0]
@@ -16,7 +17,7 @@ function Vec2 (x, y) {
     this.y = (typeof y === 'number' ? y : 0.0);
 }
 JS.extend(Vec2, ValueType);
-require('../CCFireClass').fastDefine('cc.Vec2', Vec2, ['x', 'y']);
+FireClass.fastDefine('cc.Vec2', Vec2, ['x', 'y']);
 
 JS.mixin(Vec2.prototype, {
 
@@ -92,7 +93,7 @@ JS.mixin(Vec2.prototype, {
     },
 
     /**
-     * Adds tow vectors, and returns the new result.
+     * Adds two vectors, and returns the new result.
      * @method add
      * @param {Vec2} vector
      * @param {Vec2} [out] - optional, the receiving vector
@@ -433,6 +434,7 @@ JS.get(Vec2, 'right', function () {
 });
 
 cc.Vec2 = Vec2;
+var proto = Vec2.prototype;
 
 /**
  * @module cc
@@ -440,15 +442,44 @@ cc.Vec2 = Vec2;
 /**
  * The convenience method to create a new {% crosslink Vec2 Vec2 %}
  * @method v2
- * @param {Number[]|Number} [x=0]
+ * @param {Number|Object} [x=0]
  * @param {Number} [y=0]
  * @return {Vec2}
  */
 cc.v2 = function v2 (x, y) {
-    if (Array.isArray(x)) {
-        return new Vec2(x[0], x[1]);
+    if (x === undefined) {
+        return new Vec2(0, 0);
     }
-    else {
-        return new Vec2(x, y);
+    if (y === undefined) {
+        return new Vec2(x.x, x.y);
     }
+    return new Vec2(x, y);
+};
+
+/**
+ * Helper function that creates a cc.Vec2.
+ * @function
+ * @param {Number|Object} [x=0] a Number or a size object
+ * @param {Number} [y=0]
+ * @return {cc.Vec2}
+ * @example
+ * var point1 = cc.p();
+ * var point2 = cc.p(100, 100);
+ * var point3 = cc.p(point2);
+ * var point4 = cc.p({x: 100, y: 100});
+ */
+cc.p = cc.v2;
+
+
+// Functional style API, for backward compatibility
+
+/**
+ * Check whether a point's value equals to another
+ * @function
+ * @param {cc.Point} point1
+ * @param {cc.Point} point2
+ * @return {Boolean}
+ */
+cc.pointEqualToPoint = function (point1, point2) {
+    return point1 && point2 && (point1.x === point2.x) && (point1.y === point2.y);
 };

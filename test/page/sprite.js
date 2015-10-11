@@ -49,7 +49,7 @@ describe( 'test sprite wrapper', function () {
         wrapper.position = new cc.Vec2(100, 100);
         wrapper.rotation = 78;
         wrapper.scale    = new cc.Vec2(3, 1);
-        wrapper.color    = new cc.FireColor(0.3, 0.2, 0.9, 1);
+        wrapper.color    = new cc.Color(0.3, 0.2, 0.9, 1);
 
         wrapper.name = 'sprite';
 

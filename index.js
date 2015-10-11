@@ -81,6 +81,7 @@ require('./bin/modular-cocos2d');
 // EXTENDS FOR FIREBALL
 
 require('./cocos2d/core/platform');
+require('./cocos2d/core/value-types');
 require('./cocos2d/core/assets');
 
 if (cc.sys.isBrowser) {
