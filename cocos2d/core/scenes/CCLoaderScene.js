@@ -106,7 +106,7 @@ cc.LoaderScene = cc.Scene.extend({
      * @param {Object} target
      */
     initWithResources: function (resources, cb, target) {
-        if(cc.isString(resources))
+        if(cc.js.isString(resources))
             resources = [resources];
         this.resources = resources || [];
         this.cb = cb;

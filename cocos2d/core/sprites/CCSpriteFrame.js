@@ -38,7 +38,7 @@
  * @param {String|cc.Texture2D} filename
  * @param {cc.Rect} rect If parameters' length equal 2, rect in points, else rect in pixels
  * @param {Boolean} [rotated] Whether the frame is rotated in the texture
- * @param {cc.Point} [offset] The offset of the frame in the texture
+ * @param {cc.Vec2} [offset] The offset of the frame in the texture
  * @param {cc.Size} [originalSize] The size of the frame in the texture
  *
  * @example
@@ -165,7 +165,7 @@ cc.SpriteFrame = cc.Class.extend(/** @lends cc.SpriteFrame# */{
 
     /**
      * Returns the offset of the sprite frame in the texture in pixel
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getOffsetInPixels:function () {
         return cc.p(this._offsetInPixels);
@@ -173,7 +173,7 @@ cc.SpriteFrame = cc.Class.extend(/** @lends cc.SpriteFrame# */{
 
     /**
      * Sets the offset of the sprite frame in the texture in pixel
-     * @param {cc.Point} offsetInPixels
+     * @param {cc.Vec2} offsetInPixels
      */
     setOffsetInPixels:function (offsetInPixels) {
         this._offsetInPixels.x = offsetInPixels.x;
@@ -274,7 +274,7 @@ cc.SpriteFrame = cc.Class.extend(/** @lends cc.SpriteFrame# */{
 
     /**
      * Returns the offset of the frame in the texture
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getOffset:function () {
         return cc.p(this._offset);
@@ -282,7 +282,7 @@ cc.SpriteFrame = cc.Class.extend(/** @lends cc.SpriteFrame# */{
 
     /**
      * Sets the offset of the frame in the texture
-     * @param {cc.Point} offsets
+     * @param {cc.Vec2} offsets
      */
     setOffset:function (offsets) {
         this._offset.x = offsets.x;
@@ -325,7 +325,7 @@ cc.SpriteFrame = cc.Class.extend(/** @lends cc.SpriteFrame# */{
      * @param {String|cc.Texture2D} texture
      * @param {cc.Rect} rect if parameters' length equal 2, rect in points, else rect in pixels
      * @param {Boolean} [rotated=false]
-     * @param {cc.Point} [offset=cc.p(0,0)]
+     * @param {cc.Vec2} [offset=cc.p(0,0)]
      * @param {cc.Size} [originalSize=rect.size]
      * @return {Boolean}
      */
@@ -337,7 +337,7 @@ cc.SpriteFrame = cc.Class.extend(/** @lends cc.SpriteFrame# */{
         originalSize = originalSize || rect;
         rotated = rotated || false;
 
-        if (cc.isString(texture)){
+        if (cc.js.isString(texture)){
             this._texture = null;
             this._textureFilename = texture;
         } else if (texture instanceof cc.Texture2D){
@@ -389,7 +389,7 @@ cc.EventHelper.prototype.apply(cc.SpriteFrame.prototype);
  * @param {String|cc.Texture2D} filename
  * @param {cc.Rect} rect if parameters' length equal 2, rect in points, else rect in pixels
  * @param {Boolean} rotated
- * @param {cc.Point} offset
+ * @param {cc.Vec2} offset
  * @param {cc.Size} originalSize
  * @return {cc.SpriteFrame}
  */

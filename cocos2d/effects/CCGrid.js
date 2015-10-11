@@ -141,7 +141,7 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
 
     /**
      * get pixels between the grids
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getStep:function () {
         return cc.p(this._step.x, this._step.y);
@@ -149,7 +149,7 @@ cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
 
     /**
      * set pixels between the grids
-     * @param {cc.Point} step
+     * @param {cc.Vec2} step
      */
     setStep:function (step) {
         this._step.x = step.x;
@@ -366,7 +366,7 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
     /**
      * returns the vertex at a given position      <br/>
      * It will be deprecated in future, please use getVertex instead.
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @return {cc.Vertex3F}
      */
     vertex:function (pos) {
@@ -375,7 +375,7 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
 
     /**
      * returns the vertex at a given position
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @return {cc.Vertex3F}
      */
     getVertex: function(pos){
@@ -389,7 +389,7 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
     /**
      * returns the original (non-transformed) vertex at a given position             <br/>
      * It will be deprecated in future, please use getOriginalVertex instead.
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @return {cc.Vertex3F}
      */
     originalVertex:function (pos) {
@@ -398,7 +398,7 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
 
     /**
      * returns the original (non-transformed) vertex at a given position
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @return {cc.Vertex3F}
      */
     getOriginalVertex: function(pos) {
@@ -411,7 +411,7 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
 
     /**
      * sets a new vertex at a given position
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @param {cc.Vertex3F} vertex
      */
     setVertex:function (pos, vertex) {
@@ -627,7 +627,7 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
     /**
      * returns the tile at the given position    <br/>
      * It will be deprecated in future, please use getTile instead.
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @return {cc.Quad3}
      */
     tile:function (pos) {
@@ -636,7 +636,7 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
 
     /**
      * returns the tile at the given position
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @return {cc.Quad3}
      */
     getTile: function(pos){
@@ -653,7 +653,7 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
 
     /**
      * returns the original tile (untransformed) at the given position
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @return {cc.Quad3}
      */
     getOriginalTile:function (pos) {
@@ -671,7 +671,7 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
     /**
      * returns the original tile (untransformed) at the given position.      <br/>
      * It will be deprecated in future, please use getOriginalTile instead.
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @return {cc.Quad3}
      */
     originalTile: function(pos) {
@@ -680,7 +680,7 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
 
     /**
      * sets a new tile
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @param {cc.Quad3} coords
      */
     setTile:function (pos, coords) {

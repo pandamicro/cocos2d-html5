@@ -28,7 +28,7 @@
         cc.Node.WebGLRenderCmd.call(this, renderableObject);
         this._needDraw = true;
 
-        this._realAnchorPointInPoints = new cc.Point(0,0);
+        this._realAnchorPointInPoints = new cc.Vec2(0,0);
     };
 
     var proto = ccs.Armature.WebGLRenderCmd.prototype = Object.create(cc.Node.WebGLRenderCmd.prototype);

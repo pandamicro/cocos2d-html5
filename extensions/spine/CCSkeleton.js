@@ -181,8 +181,8 @@ sp.Skeleton = cc.Node.extend(/** @lends sp.Skeleton# */{
         var argSkeletonFile = skeletonDataFile, argAtlasFile = atlasFile,
             skeletonData, atlas, ownsSkeletonData;
 
-        if (cc.isString(argSkeletonFile)) {
-            if (cc.isString(argAtlasFile)) {
+        if (cc.js.isString(argSkeletonFile)) {
+            if (cc.js.isString(argAtlasFile)) {
                 var data = cc.loader.getRes(argAtlasFile);
                 sp._atlasLoader.setAtlasFile(argAtlasFile);
                 atlas = new spine.Atlas(data, sp._atlasLoader);

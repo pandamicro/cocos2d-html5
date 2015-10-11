@@ -41,7 +41,7 @@ cc.PointObject = cc.Class.extend(/** @lends cc.PointObject# */{
 
     /**
      * Gets the ratio.
-     * @return  {cc.Point} Not point, this is ratio.
+     * @return  {cc.Vec2} Not point, this is ratio.
      */
     getRatio:function () {
         return this._ratio;
@@ -49,7 +49,7 @@ cc.PointObject = cc.Class.extend(/** @lends cc.PointObject# */{
 
     /**
      * Set the ratio.
-     * @param  {cc.Point} value
+     * @param  {cc.Vec2} value
      */
     setRatio:function (value) {
         this._ratio = value;
@@ -57,7 +57,7 @@ cc.PointObject = cc.Class.extend(/** @lends cc.PointObject# */{
 
     /**
      * Gets the offset.
-     * @return  {cc.Point}
+     * @return  {cc.Vec2}
      */
     getOffset:function () {
         return this._offset;
@@ -65,7 +65,7 @@ cc.PointObject = cc.Class.extend(/** @lends cc.PointObject# */{
 
     /**
      * Set the offset.
-     * @param {cc.Point} value
+     * @param {cc.Vec2} value
      */
     setOffset:function (value) {
         this._offset = value;
@@ -89,8 +89,8 @@ cc.PointObject = cc.Class.extend(/** @lends cc.PointObject# */{
 
     /**
      * initializes cc.PointObject
-     * @param  {cc.Point} ratio Not point, this is a ratio.
-     * @param  {cc.Point} offset
+     * @param  {cc.Vec2} ratio Not point, this is a ratio.
+     * @param  {cc.Vec2} offset
      * @return {Boolean}
      */
     initWithCCPoint:function (ratio, offset) {
@@ -103,8 +103,8 @@ cc.PointObject = cc.Class.extend(/** @lends cc.PointObject# */{
 
 /**
  * Create a object to stored parallax data.
- * @param {cc.Point} ratio
- * @param {cc.Point} offset
+ * @param {cc.Vec2} ratio
+ * @param {cc.Vec2} offset
  * @return {cc.PointObject}
  * @deprecated since v3.0 please use new cc.PointObject() instead.
  */
@@ -156,8 +156,8 @@ cc.ParallaxNode = cc.Node.extend(/** @lends cc.ParallaxNode# */{
      * It returns self, so you can chain several addChilds.
      * @param {cc.Node} child
      * @param {Number} z
-     * @param {cc.Point} ratio
-     * @param {cc.Point} offset
+     * @param {cc.Vec2} ratio
+     * @param {cc.Vec2} offset
      * @example
      * //example
      * voidNode.addChild(background, -1, cc.p(0.4, 0.5), cc.p(0,0));

@@ -43,7 +43,7 @@
  * @property {cc.Sprite}    overlay     - <@readonly> The overlay sprite
  * @property {cc.Sprite}    shadow      - <@readonly> The shadow sprite
  * @property {cc.Sprite}    slider      - <@readonly> The slider sprite
- * @property {cc.Point}     startPos    - <@readonly> The start position of the picker
+ * @property {cc.Vec2}     startPos    - <@readonly> The start position of the picker
  */
 cc.ControlSaturationBrightnessPicker = cc.Control.extend(/** @lends cc.ControlSaturationBrightnessPicker# */{
     _saturation:0,
@@ -62,7 +62,7 @@ cc.ControlSaturationBrightnessPicker = cc.Control.extend(/** @lends cc.ControlSa
     /**
      * The constructor of cc.ControlSaturationBrightnessPicker
      * @param {cc.Node} target
-     * @param {cc.Point} pos position
+     * @param {cc.Vec2} pos position
      */
     ctor:function (target, pos) {
         cc.Control.prototype.ctor.call(this);
@@ -249,7 +249,7 @@ _p = null;
 /**
  * Creates a cc.ControlSaturationBrightnessPicker
  * @param {cc.Node} target
- * @param {cc.Point} pos position
+ * @param {cc.Vec2} pos position
  * @returns {ControlSaturationBrightnessPicker}
  */
 cc.ControlSaturationBrightnessPicker.create = function (target, pos) {

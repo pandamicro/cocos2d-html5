@@ -32,7 +32,7 @@
  * @class
  * @extends cc.Node
  *
- * @property {cc.Point}     midPoint        <p>- Midpoint is used to modify the progress start position.<br/>
+ * @property {cc.Vec2}     midPoint        <p>- Midpoint is used to modify the progress start position.<br/>
  *                                          If you're using radials type then the midpoint changes the center point<br/>
  *                                          If you're using bar type the the midpoint changes the bar growth<br/>
  *                                              it expands from the center but clamps to the sprites edge so:<br/>
@@ -40,7 +40,7 @@
  *                                              you want a right to left then set the midpoint all the way to cc.p(1,y)<br/>
  *                                              you want a bottom to top then set the midpoint all the way to cc.p(x,0)<br/>
  *                                              you want a top to bottom then set the midpoint all the way to cc.p(x,1)</p>
- * @property {cc.Point}     barChangeRate   - This allows the bar type to move the component at a specific rate.
+ * @property {cc.Vec2}     barChangeRate   - This allows the bar type to move the component at a specific rate.
  * @property {cc.ProgressTimer.Type} type   - Type of the progress timer.
  * @property {Number}       percentage      - Percentage to change progress, from 0 to 100.
  * @property {cc.Sprite}    sprite          - The sprite to show the progress percentage.
@@ -84,7 +84,7 @@ cc.ProgressTimer = cc.Node.extend(/** @lends cc.ProgressTimer# */{
      *        you want a right to left then set the midpoint all the way to cc.p(1,y)
      *        you want a bottom to top then set the midpoint all the way to cc.p(x,0)
      *        you want a top to bottom then set the midpoint all the way to cc.p(x,1)
-     *  @return {cc.Point}
+     *  @return {cc.Vec2}
      */
     getMidpoint:function () {
         return cc.p(this._midPoint.x, this._midPoint.y);
@@ -92,7 +92,7 @@ cc.ProgressTimer = cc.Node.extend(/** @lends cc.ProgressTimer# */{
 
     /**
      * Midpoint setter
-     * @param {cc.Point} mpoint
+     * @param {cc.Vec2} mpoint
      */
     setMidpoint:function (mpoint) {
         this._midPoint = cc.pClamp(mpoint, cc.p(0, 0), cc.p(1, 1));
@@ -103,14 +103,14 @@ cc.ProgressTimer = cc.Node.extend(/** @lends cc.ProgressTimer# */{
      *    Set the component to 0 to make sure it stays at 100%.
      *    For example you want a left to right bar but not have the height stay 100%
      *    Set the rate to be cc.p(0,1); and set the midpoint to = cc.p(0,.5f);
-     *  @return {cc.Point}
+     *  @return {cc.Vec2}
      */
     getBarChangeRate:function () {
         return cc.p(this._barChangeRate.x, this._barChangeRate.y);
     },
 
     /**
-     * @param {cc.Point} barChangeRate
+     * @param {cc.Vec2} barChangeRate
      */
     setBarChangeRate:function (barChangeRate) {
         this._barChangeRate = cc.pClamp(barChangeRate, cc.p(0, 0), cc.p(1, 1));

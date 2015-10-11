@@ -317,7 +317,7 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
      * You can remove either by calling: <br/>
      * - layer.removeChild(sprite, cleanup); <br/>
      * - or layer.removeTileAt(ccp(x,y)); </p>
-     * @param {cc.Point|Number} pos or x
+     * @param {cc.Vec2|Number} pos or x
      * @param {Number} [y]
      * @return {cc.Sprite}
      */
@@ -365,7 +365,7 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
      * Returns the tile gid at a given tile coordinate. <br />
      * if it returns 0, it means that the tile is empty. <br />
      * This method requires the the tile map has not been previously released (eg. don't call layer.releaseMap())<br />
-     * @param {cc.Point|Number} pos or x
+     * @param {cc.Vec2|Number} pos or x
      * @param {Number} [y]
      * @return {Number}
      */
@@ -392,7 +392,7 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
 
     /**
      *  lipped tiles can be changed dynamically
-     * @param {cc.Point|Number} pos or x
+     * @param {cc.Vec2|Number} pos or x
      * @param {Number} [y]
      * @return {Number}
      */
@@ -422,7 +422,7 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
      * The Tile GID can be obtained by using the method "tileGIDAt" or by using the TMX editor . Tileset Mgr +1.<br />
      * If a tile is already placed at that position, then it will be removed.</p>
      * @param {Number} gid
-     * @param {cc.Point|Number} posOrX position or x
+     * @param {cc.Vec2|Number} posOrX position or x
      * @param {Number} flagsOrY flags or y
      * @param {Number} [flags]
      */
@@ -479,7 +479,7 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
 
     /**
      * Removes a tile at given tile coordinate
-     * @param {cc.Point|Number} pos position or x
+     * @param {cc.Vec2|Number} pos position or x
      * @param {Number} [y]
      */
     removeTileAt:function (pos, y) {
@@ -533,9 +533,9 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
 
     /**
      * Returns the position in pixels of a given tile coordinate
-     * @param {cc.Point|Number} pos position or x
+     * @param {cc.Vec2|Number} pos position or x
      * @param {Number} [y]
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getPositionAt:function (pos, y) {
         if (y !== undefined)
@@ -865,7 +865,7 @@ cc.TMXLayer = cc.SpriteBatchNode.extend(/** @lends cc.TMXLayer# */{
                     break;
             }
         }
-        if(!cc.isNumber(item))
+        if(!cc.js.isNumber(item))
             cc.log("cc.TMXLayer._atlasIndexForExistantZ(): TMX atlas index not found. Shall not happen");
         return i;
     },

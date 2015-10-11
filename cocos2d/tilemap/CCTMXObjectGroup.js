@@ -53,7 +53,7 @@ cc.TMXObjectGroup = cc.Class.extend(/** @lends cc.TMXObjectGroup# */{
 
     /**
      * Offset position of child objects
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getPositionOffset:function () {
         return cc.p(this._positionOffset);
@@ -61,7 +61,7 @@ cc.TMXObjectGroup = cc.Class.extend(/** @lends cc.TMXObjectGroup# */{
 
     /**
      * Offset position of child objects
-     * @param {cc.Point} offset
+     * @param {cc.Vec2} offset
      */
     setPositionOffset:function (offset) {
         this._positionOffset.x = offset.x;

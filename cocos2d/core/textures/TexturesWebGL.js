@@ -319,7 +319,7 @@ cc._tmp.WebGLTexture2D = function () {
 
         /**
          * draws a texture at a given point
-         * @param {cc.Point} point
+         * @param {cc.Vec2} point
          */
         drawAtPoint: function (point) {
             var self = this;

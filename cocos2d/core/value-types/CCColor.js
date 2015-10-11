@@ -440,7 +440,7 @@ cc.color = function color (r, g, b, a) {
         var result = new cc.Color();
         return result.fromHEX(r);
     }
-    if (cc.isObject(r)) {
+    if (cc.js.isObject(r)) {
         return new cc.Color(r.r, r.g, r.b, r.a);
     }
     return  new cc.Color(r, g, b, a);

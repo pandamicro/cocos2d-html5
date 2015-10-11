@@ -355,7 +355,7 @@ cc.rectGetMinY = function (rect) {
  * Check whether a rect contains a point
  * @function
  * @param {cc.Rect} rect
- * @param {cc.Point} point
+ * @param {cc.Vec2} point
  * @return {Boolean}
  */
 cc.rectContainsPoint = function (rect, point) {

@@ -59,7 +59,7 @@ cc.DOM._addMethods = function (node) {
 cc.DOM.methods = /** @lends cc.DOM# */{
     /**
      * Replace the set position of ccNode
-     * @param {cc.Point|Number} x
+     * @param {cc.Vec2|Number} x
      * @param {Number} y
      */
     setPosition:function (x, y) {
@@ -133,7 +133,7 @@ cc.DOM.methods = /** @lends cc.DOM# */{
 
     /**
      * replace set anchorpoint of ccNode
-     * @param {cc.Point|Number} point The anchor point of node or The anchor point.x of node.
+     * @param {cc.Vec2|Number} point The anchor point of node or The anchor point.x of node.
      * @param {Number} [y] The anchor point.y of node.
      */
     setAnchorPoint:function (point, y) {

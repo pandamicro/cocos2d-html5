@@ -45,7 +45,7 @@ cc.Touch = cc.Class.extend(/** @lends cc.Touch# */{
 
     /**
      * Returns the current touch location in OpenGL coordinates
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getLocation:function () {
         //TODO
@@ -71,7 +71,7 @@ cc.Touch = cc.Class.extend(/** @lends cc.Touch# */{
 
     /**
      * Returns the previous touch location in OpenGL coordinates
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getPreviousLocation:function () {
         //TODO
@@ -81,7 +81,7 @@ cc.Touch = cc.Class.extend(/** @lends cc.Touch# */{
 
     /**
      * Returns the start touch location in OpenGL coordinates
-     * @returns {cc.Point}
+     * @returns {cc.Vec2}
      */
     getStartLocation: function() {
         //TODO
@@ -91,7 +91,7 @@ cc.Touch = cc.Class.extend(/** @lends cc.Touch# */{
 
     /**
      * Returns the delta distance from the previous touche to the current one in screen coordinates
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getDelta:function () {
         return cc.pSub(this._point, this._prevPoint);
@@ -99,7 +99,7 @@ cc.Touch = cc.Class.extend(/** @lends cc.Touch# */{
 
     /**
      * Returns the current touch location in screen coordinates
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getLocationInView: function() {
         return {x: this._point.x, y: this._point.y};
@@ -107,7 +107,7 @@ cc.Touch = cc.Class.extend(/** @lends cc.Touch# */{
 
     /**
      * Returns the previous touch location in screen coordinates
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getPreviousLocationInView: function(){
         return {x: this._prevPoint.x, y: this._prevPoint.y};
@@ -115,7 +115,7 @@ cc.Touch = cc.Class.extend(/** @lends cc.Touch# */{
 
     /**
      * Returns the start touch location in screen coordinates
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getStartLocationInView: function(){
         return {x: this._startPoint.x, y: this._startPoint.y};

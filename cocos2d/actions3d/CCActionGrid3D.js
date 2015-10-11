@@ -401,7 +401,7 @@ cc.FlipY3D.create = cc.flipY3D;
  * @extends cc.Grid3DAction
  * @param {Number} duration
  * @param {cc.Size} gridSize
- * @param {cc.Point} position
+ * @param {cc.Vec2} position
  * @param {Number} radius
  */
 cc.Lens3D = cc.Grid3DAction.extend(/** @lends cc.Lens3D# */{
@@ -419,7 +419,7 @@ cc.Lens3D = cc.Grid3DAction.extend(/** @lends cc.Lens3D# */{
 	 * creates a lens 3d action with center position, radius.
 	 * @param {Number} duration
 	 * @param {cc.Size} gridSize
-	 * @param {cc.Point} position
+	 * @param {cc.Vec2} position
 	 * @param {Number} radius
 	 */
     ctor:function (duration, gridSize, position, radius) {
@@ -455,7 +455,7 @@ cc.Lens3D = cc.Grid3DAction.extend(/** @lends cc.Lens3D# */{
 
     /**
      * get Position
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getPosition:function () {
         return this._position;
@@ -463,7 +463,7 @@ cc.Lens3D = cc.Grid3DAction.extend(/** @lends cc.Lens3D# */{
 
     /**
      * set Position
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      */
     setPosition:function (position) {
         if (!cc.pointEqualToPoint(position, this._position)) {
@@ -477,7 +477,7 @@ cc.Lens3D = cc.Grid3DAction.extend(/** @lends cc.Lens3D# */{
      * initializes the action with center position, radius, a grid size and duration
      * @param {Number} duration
      * @param {cc.Size} gridSize
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      * @param {Number} radius
      * @return {Boolean}
      */
@@ -545,7 +545,7 @@ cc.Lens3D = cc.Grid3DAction.extend(/** @lends cc.Lens3D# */{
  * @function
  * @param {Number} duration
  * @param {cc.Size} gridSize
- * @param {cc.Point} position
+ * @param {cc.Vec2} position
  * @param {Number} radius
  * @return {cc.Lens3D}
  */
@@ -558,7 +558,7 @@ cc.lens3D = function (duration, gridSize, position, radius) {
  * creates a lens 3d action with center position, radius
  * @param {Number} duration
  * @param {cc.Size} gridSize
- * @param {cc.Point} position
+ * @param {cc.Vec2} position
  * @param {Number} radius
  * @return {cc.Lens3D}
  * @static
@@ -573,7 +573,7 @@ cc.Lens3D.create = cc.lens3D;
  * @extends cc.Grid3DAction
  * @param {Number} duration
  * @param {cc.Size} gridSize
- * @param {cc.Point} position
+ * @param {cc.Vec2} position
  * @param {Number} radius
  * @param {Number} waves
  * @param {Number} amplitude
@@ -591,7 +591,7 @@ cc.Ripple3D = cc.Grid3DAction.extend(/** @lends cc.Ripple3D# */{
 	 * creates a ripple 3d action with radius, number of waves, amplitude.
 	 * @param {Number} duration
 	 * @param {cc.Size} gridSize
-	 * @param {cc.Point} position
+	 * @param {cc.Vec2} position
 	 * @param {Number} radius
 	 * @param {Number} waves
 	 * @param {Number} amplitude
@@ -605,7 +605,7 @@ cc.Ripple3D = cc.Grid3DAction.extend(/** @lends cc.Ripple3D# */{
 
     /**
      * get center position
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getPosition:function () {
         return this._position;
@@ -613,7 +613,7 @@ cc.Ripple3D = cc.Grid3DAction.extend(/** @lends cc.Ripple3D# */{
 
     /**
      * set center position
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      */
     setPosition:function (position) {
         this._position.x = position.x;
@@ -656,7 +656,7 @@ cc.Ripple3D = cc.Grid3DAction.extend(/** @lends cc.Ripple3D# */{
      * initializes the action with radius, number of waves, amplitude, a grid size and duration
      * @param {Number} duration
      * @param {cc.Size} gridSize
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      * @param {Number} radius
      * @param {Number} waves
      * @param {Number} amplitude
@@ -710,7 +710,7 @@ cc.Ripple3D = cc.Grid3DAction.extend(/** @lends cc.Ripple3D# */{
  * @function
  * @param {Number} duration
  * @param {cc.Size} gridSize
- * @param {cc.Point} position
+ * @param {cc.Vec2} position
  * @param {Number} radius
  * @param {Number} waves
  * @param {Number} amplitude
@@ -725,7 +725,7 @@ cc.ripple3D = function (duration, gridSize, position, radius, waves, amplitude) 
  * creates a ripple 3d action with radius, number of waves, amplitude
  * @param {Number} duration
  * @param {cc.Size} gridSize
- * @param {cc.Point} position
+ * @param {cc.Vec2} position
  * @param {Number} radius
  * @param {Number} waves
  * @param {Number} amplitude
@@ -1106,7 +1106,7 @@ cc.Waves.create = cc.waves;
  * @extends cc.Grid3DAction
  * @param {Number} duration
  * @param {cc.Size} gridSize
- * @param {cc.Point} position
+ * @param {cc.Vec2} position
  * @param {Number} twirls
  * @param {Number} amplitude
  */
@@ -1122,7 +1122,7 @@ cc.Twirl = cc.Grid3DAction.extend(/** @lends cc.Twirl# */{
 	 * Create a grid 3d action with center position, number of twirls, amplitude, a grid size and duration.
 	 * @param {Number} duration
 	 * @param {cc.Size} gridSize
-	 * @param {cc.Point} position
+	 * @param {cc.Vec2} position
 	 * @param {Number} twirls
 	 * @param {Number} amplitude
 	 */
@@ -1135,7 +1135,7 @@ cc.Twirl = cc.Grid3DAction.extend(/** @lends cc.Twirl# */{
 
     /**
      * get twirl center
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getPosition:function () {
         return this._position;
@@ -1143,7 +1143,7 @@ cc.Twirl = cc.Grid3DAction.extend(/** @lends cc.Twirl# */{
 
     /**
      * set twirl center
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      */
     setPosition:function (position) {
         this._position.x = position.x;
@@ -1233,7 +1233,7 @@ cc.Twirl = cc.Grid3DAction.extend(/** @lends cc.Twirl# */{
  * @function
  * @param {Number} duration
  * @param {cc.Size} gridSize
- * @param {cc.Point} position
+ * @param {cc.Vec2} position
  * @param {Number} twirls
  * @param {Number} amplitude
  * @return {cc.Twirl}
@@ -1247,7 +1247,7 @@ cc.twirl = function (duration, gridSize, position, twirls, amplitude) {
  * creates the action with center position, number of twirls, amplitude, a grid size and duration
  * @param {Number} duration
  * @param {cc.Size} gridSize
- * @param {cc.Point} position
+ * @param {cc.Vec2} position
  * @param {Number} twirls
  * @param {Number} amplitude
  * @return {cc.Twirl}

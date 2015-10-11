@@ -1298,7 +1298,7 @@ cc.RotateBy.create = cc.rotateBy;
  * @class
  * @extends cc.ActionInterval
  * @param {Number} duration duration in seconds
- * @param {cc.Point|Number} deltaPos
+ * @param {cc.Vec2|Number} deltaPos
  * @param {Number} [deltaY]
  * @example
  * var actionTo = cc.moveBy(2, cc.p(windowSize.width - 40, windowSize.height - 40));
@@ -1311,7 +1311,7 @@ cc.MoveBy = cc.ActionInterval.extend(/** @lends cc.MoveBy# */{
 	/**
      * Constructor function, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
 	 * @param {Number} duration duration in seconds
-	 * @param {cc.Point|Number} deltaPos
+	 * @param {cc.Vec2|Number} deltaPos
 	 * @param {Number} [deltaY]
 	 */
     ctor:function (duration, deltaPos, deltaY) {
@@ -1327,7 +1327,7 @@ cc.MoveBy = cc.ActionInterval.extend(/** @lends cc.MoveBy# */{
     /**
      * Initializes the action.
      * @param {Number} duration duration in seconds
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      * @param {Number} [y]
      * @return {Boolean}
      */
@@ -1415,7 +1415,7 @@ cc.MoveBy = cc.ActionInterval.extend(/** @lends cc.MoveBy# */{
  * Relative to its coordinate moves a certain distance.
  * @function
  * @param {Number} duration duration in seconds
- * @param {cc.Point|Number} deltaPos
+ * @param {cc.Vec2|Number} deltaPos
  * @param {Number} deltaY
  * @return {cc.MoveBy}
  * @example
@@ -1431,7 +1431,7 @@ cc.moveBy = function (duration, deltaPos, deltaY) {
  * @static
  * @deprecated since v3.0 please use cc.moveBy instead.
  * @param {Number} duration duration in seconds
- * @param {cc.Point|Number} deltaPos
+ * @param {cc.Vec2|Number} deltaPos
  * @param {Number} deltaY
  * @return {cc.MoveBy}
  */
@@ -1445,7 +1445,7 @@ cc.MoveBy.create = cc.moveBy;
  * @class
  * @extends cc.MoveBy
  * @param {Number} duration duration in seconds
- * @param {cc.Point|Number} position
+ * @param {cc.Vec2|Number} position
  * @param {Number} y
  * @example
  * var actionBy = new cc.MoveTo(2, cc.p(80, 80));
@@ -1456,7 +1456,7 @@ cc.MoveTo = cc.MoveBy.extend(/** @lends cc.MoveTo# */{
 	/**
      * Constructor function, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
 	 * @param {Number} duration duration in seconds
-	 * @param {cc.Point|Number} position
+	 * @param {cc.Vec2|Number} position
 	 * @param {Number} y
 	 */
     ctor:function (duration, position, y) {
@@ -1469,7 +1469,7 @@ cc.MoveTo = cc.MoveBy.extend(/** @lends cc.MoveTo# */{
     /**
      * Initializes the action.
      * @param {Number} duration  duration in seconds
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      * @param {Number} y
      * @return {Boolean}
      */
@@ -1514,7 +1514,7 @@ cc.MoveTo = cc.MoveBy.extend(/** @lends cc.MoveTo# */{
  * Moving to the specified coordinates.
  * @function
  * @param {Number} duration duration in seconds
- * @param {cc.Point} position
+ * @param {cc.Vec2} position
  * @param {Number} y
  * @return {cc.MoveBy}
  * @example
@@ -1530,7 +1530,7 @@ cc.moveTo = function (duration, position, y) {
  * @static
  * @deprecated since v3.0 <br /> Please use cc.moveTo instead.
  * @param {Number} duration duration in seconds
- * @param {cc.Point} position
+ * @param {cc.Vec2} position
  * @param {Number} y
  * @return {cc.MoveBy}
  */
@@ -1766,7 +1766,7 @@ cc.SkewBy.create = cc.skewBy;
  * @class
  * @extends cc.ActionInterval
  * @param {Number} duration
- * @param {cc.Point|Number} position
+ * @param {cc.Vec2|Number} position
  * @param {Number} [y]
  * @param {Number} height
  * @param {Number} jumps
@@ -1784,7 +1784,7 @@ cc.JumpBy = cc.ActionInterval.extend(/** @lends cc.JumpBy# */{
 	/**
      * Constructor function, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
 	 * @param {Number} duration
-	 * @param {cc.Point|Number} position
+	 * @param {cc.Vec2|Number} position
 	 * @param {Number} [y]
 	 * @param {Number} height
 	 * @param {Number} jumps
@@ -1800,7 +1800,7 @@ cc.JumpBy = cc.ActionInterval.extend(/** @lends cc.JumpBy# */{
     /**
      * Initializes the action.
      * @param {Number} duration
-     * @param {cc.Point|Number} position
+     * @param {cc.Vec2|Number} position
      * @param {Number} [y]
      * @param {Number} height
      * @param {Number} jumps
@@ -1899,7 +1899,7 @@ cc.JumpBy = cc.ActionInterval.extend(/** @lends cc.JumpBy# */{
  * Relative to its movement.
  * @function
  * @param {Number} duration
- * @param {cc.Point|Number} position
+ * @param {cc.Vec2|Number} position
  * @param {Number} [y]
  * @param {Number} height
  * @param {Number} jumps
@@ -1919,7 +1919,7 @@ cc.jumpBy = function (duration, position, y, height, jumps) {
  * @static
  * @deprecated since v3.0 please use cc.jumpBy instead.
  * @param {Number} duration
- * @param {cc.Point|Number} position
+ * @param {cc.Vec2|Number} position
  * @param {Number} [y]
  * @param {Number} height
  * @param {Number} jumps
@@ -1933,7 +1933,7 @@ cc.JumpBy.create = cc.jumpBy;
  * @class
  * @extends cc.JumpBy
  * @param {Number} duration
- * @param {cc.Point|Number} position
+ * @param {cc.Vec2|Number} position
  * @param {Number} [y]
  * @param {Number} height
  * @param {Number} jumps
@@ -1947,7 +1947,7 @@ cc.JumpTo = cc.JumpBy.extend(/** @lends cc.JumpTo# */{
     /**
      * Constructor function, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
      * @param {Number} duration
-     * @param {cc.Point|Number} position
+     * @param {cc.Vec2|Number} position
      * @param {Number} [y]
      * @param {Number} height
      * @param {Number} jumps
@@ -1961,7 +1961,7 @@ cc.JumpTo = cc.JumpBy.extend(/** @lends cc.JumpTo# */{
     /**
      * Initializes the action.
      * @param {Number} duration
-     * @param {cc.Point|Number} position
+     * @param {cc.Vec2|Number} position
      * @param {Number} [y]
      * @param {Number} height
      * @param {Number} jumps
@@ -2009,7 +2009,7 @@ cc.JumpTo = cc.JumpBy.extend(/** @lends cc.JumpTo# */{
  * Jump to the specified location.
  * @function
  * @param {Number} duration
- * @param {cc.Point|Number} position
+ * @param {cc.Vec2|Number} position
  * @param {Number} [y]
  * @param {Number} height
  * @param {Number} jumps
@@ -2029,7 +2029,7 @@ cc.jumpTo = function (duration, position, y, height, jumps) {
  * @static
  * @deprecated since v3.0 please use cc.jumpTo instead.
  * @param {Number} duration
- * @param {cc.Point|Number} position
+ * @param {cc.Vec2|Number} position
  * @param {Number} [y]
  * @param {Number} height
  * @param {Number} jumps

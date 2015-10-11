@@ -252,8 +252,8 @@ cc.ShatteredTiles3D.create = cc.shatteredTiles3D;
  * A Tile composed of position, startPosition and delta.
  * @Class
  * @constructor
- * @param {cc.Point} [position=cc.p(0,0)]
- * @param {cc.Point} [startPosition=cc.p(0,0)]
+ * @param {cc.Vec2} [position=cc.p(0,0)]
+ * @param {cc.Vec2} [startPosition=cc.p(0,0)]
  * @param {cc.Size} [delta=cc.p(0,0)]
  */
 cc.Tile = function (position, startPosition, delta) {
@@ -336,7 +336,7 @@ cc.ShuffleTiles = cc.TiledGrid3DAction.extend(/** @lends cc.ShuffleTiles# */{
 
     /**
      * Place Tile
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @param {cc.Tile} tile
      */
     placeTile:function (pos, tile) {
@@ -451,7 +451,7 @@ cc.ShuffleTiles.create = cc.shuffleTiles;
 cc.FadeOutTRTiles = cc.TiledGrid3DAction.extend(/** @lends cc.FadeOutTRTiles# */{
     /**
      * Test function
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @param {Number} time
      */
     testFunc:function (pos, time) {
@@ -465,7 +465,7 @@ cc.FadeOutTRTiles = cc.TiledGrid3DAction.extend(/** @lends cc.FadeOutTRTiles# */
 
     /**
      * Turn on Tile
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      */
     turnOnTile:function (pos) {
         this.setTile(pos, this.originalTile(pos));
@@ -473,7 +473,7 @@ cc.FadeOutTRTiles = cc.TiledGrid3DAction.extend(/** @lends cc.FadeOutTRTiles# */
 
     /**
      * Turn Off Tile
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      */
     turnOffTile:function (pos) {
         this.setTile(pos, new cc.Quad3());
@@ -481,7 +481,7 @@ cc.FadeOutTRTiles = cc.TiledGrid3DAction.extend(/** @lends cc.FadeOutTRTiles# */
 
     /**
      * Transform tile
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @param {Number} distance
      */
     transformTile:function (pos, distance) {
@@ -559,7 +559,7 @@ cc.FadeOutTRTiles.create = cc.fadeOutTRTiles;
 cc.FadeOutBLTiles = cc.FadeOutTRTiles.extend(/** @lends cc.FadeOutBLTiles# */{
     /**
      * Test function
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @param {Number} time
      */
     testFunc:function (pos, time) {
@@ -607,7 +607,7 @@ cc.FadeOutBLTiles.create = cc.fadeOutBLTiles;
 cc.FadeOutUpTiles = cc.FadeOutTRTiles.extend(/** @lends cc.FadeOutUpTiles# */{
     /**
      * Test function
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @param {Number} time
      */
     testFunc:function (pos, time) {
@@ -663,7 +663,7 @@ cc.FadeOutUpTiles.create = cc.fadeOutUpTiles;
 cc.FadeOutDownTiles = cc.FadeOutUpTiles.extend(/** @lends cc.FadeOutDownTiles# */{
     /**
      * Test function
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      * @param {Number} time
      */
     testFunc:function (pos, time) {
@@ -764,7 +764,7 @@ cc.TurnOffTiles = cc.TiledGrid3DAction.extend(/** @lends cc.TurnOffTiles# */{
 
     /**
      * Turn on tile.
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      */
     turnOnTile:function (pos) {
         this.setTile(pos, this.originalTile(pos));
@@ -772,7 +772,7 @@ cc.TurnOffTiles = cc.TiledGrid3DAction.extend(/** @lends cc.TurnOffTiles# */{
 
     /**
      * Turn off title.
-     * @param {cc.Point} pos
+     * @param {cc.Vec2} pos
      */
     turnOffTile:function (pos) {
         this.setTile(pos, new cc.Quad3());

@@ -169,11 +169,11 @@ cc.ControlSwitch.create = function (maskSprite, onSprite, offSprite, thumbSprite
  * @extends cc.Sprite
  *
  * @property {Number}           sliderX         - Slider's x position
- * @property {cc.Point}         onPos           - The position of slider when switch is on
- * @property {cc.Point}         offPos          - The position of slider when switch is off
+ * @property {cc.Vec2}         onPos           - The position of slider when switch is on
+ * @property {cc.Vec2}         offPos          - The position of slider when switch is off
  * @property {cc.Texture2D}     maskTexture     - The texture of the mask
- * @property {cc.Point}         texturePos      - The position of the texture
- * @property {cc.Point}         maskPos         - The position of the mask
+ * @property {cc.Vec2}         texturePos      - The position of the texture
+ * @property {cc.Vec2}         maskPos         - The position of the mask
  * @property {cc.Sprite}        onSprite        - The sprite of switch on
  * @property {cc.Sprite}        offSprite       - The sprite of switch off
  * @property {cc.Sprite}        thumbSprite     - The thumb sprite of the switch control

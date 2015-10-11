@@ -28,15 +28,15 @@
  * cc.visibleRect is a singleton object which defines the actual visible rect of the current view,
  * it should represent the same rect as cc.view.getViewportRect()
  *
- * @property {cc.Point}     topLeft         - Top left coordinate of the screen related to the game scene
- * @property {cc.Point}     topRight        - Top right coordinate of the screen related to the game scene
- * @property {cc.Point}     top             - Top center coordinate of the screen related to the game scene
- * @property {cc.Point}     bottomLeft      - Bottom left coordinate of the screen related to the game scene
- * @property {cc.Point}     bottomRight     - Bottom right coordinate of the screen related to the game scene
- * @property {cc.Point}     bottom          - Bottom center coordinate of the screen related to the game scene
- * @property {cc.Point}     center          - Center coordinate of the screen related to the game scene
- * @property {cc.Point}     left            - Left center coordinate of the screen related to the game scene
- * @property {cc.Point}     right           - Right center coordinate of the screen related to the game scene
+ * @property {cc.Vec2}      topLeft         - Top left coordinate of the screen related to the game scene
+ * @property {cc.Vec2}      topRight        - Top right coordinate of the screen related to the game scene
+ * @property {cc.Vec2}      top             - Top center coordinate of the screen related to the game scene
+ * @property {cc.Vec2}      bottomLeft      - Bottom left coordinate of the screen related to the game scene
+ * @property {cc.Vec2}      bottomRight     - Bottom right coordinate of the screen related to the game scene
+ * @property {cc.Vec2}      bottom          - Bottom center coordinate of the screen related to the game scene
+ * @property {cc.Vec2}      center          - Center coordinate of the screen related to the game scene
+ * @property {cc.Vec2}      left            - Left center coordinate of the screen related to the game scene
+ * @property {cc.Vec2}      right           - Right center coordinate of the screen related to the game scene
  * @property {Number}       width           - Width of the screen
  * @property {Number}       height          - Height of the screen
  *

@@ -115,11 +115,11 @@ if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
     cc.color = function (r, g, b, a, arrayBuffer, offset) {
         if (r === undefined)
             return new cc.Color(0, 0, 0, 255, arrayBuffer, offset);
-        if (cc.isString(r)) {
+        if (cc.js.isString(r)) {
             var color = cc.hexToColor(r);
             return new cc.Color(color.r, color.g, color.b, color.a);
         }
-        if (cc.isObject(r))
+        if (cc.js.isObject(r))
             return new cc.Color(r.r, r.g, r.b, r.a, r.arrayBuffer, r.offset);
         return new cc.Color(r, g, b, a, arrayBuffer, offset);
     };
