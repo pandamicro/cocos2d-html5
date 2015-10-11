@@ -125,11 +125,11 @@ describe( 'test node wrapper', function () {
 
     it( 'color', function () {
 
-        wrapper.color = new cc.FireColor(1.0, 0.5, 0.9, 0.3);
+        wrapper.color = new cc.Color(1.0, 0.5, 0.9, 0.3);
 
-        assert( wrapper.color instanceof cc.FireColor );
+        assert( wrapper.color instanceof cc.Color );
 
-        // When convert cc.FireColor to cc.Color, it will cut off the decimals.
+        // When convert cc.Color to cc.Color, it will cut off the decimals.
         // So the test will fail.
 
         // expect( wrapper.color.r ).equal( 1.0 );
@@ -197,7 +197,7 @@ describe( 'test node wrapper', function () {
 
         wrapper.position = new cc.Vec2(11, 22);
         wrapper.scale    = new cc.Vec2(2, 3);
-        wrapper.color    = new cc.FireColor(1.0, 0.5, 0.9, 0.3);
+        wrapper.color    = new cc.Color(1.0, 0.5, 0.9, 0.3);
         wrapper.rotation = 11;
         wrapper.anchorPoint = new cc.Vec2(1, 0);
 

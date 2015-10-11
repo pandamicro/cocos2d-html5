@@ -120,3 +120,18 @@ js.get(cc, "isObject", function () {
     cc.warn(INFO, 'cc.isObject', 'cc.js.isObject');
     return js.isObject;
 };
+
+
+/**
+ * cc.Point is the class for point object, please do not use its constructor to create points, use cc.p() alias function instead.
+ * @class cc.Point
+ * @memberof cc
+ * @deprecated
+ * @param {Number} x
+ * @param {Number} y
+ * @see cc.Vec2
+ */
+js.get(cc, "Point", function () {
+    cc.warn(INFO, 'cc.Point', 'cc.Vec2');
+    return cc.Vec2;
+};

@@ -1,4 +1,4 @@
-var Color = cc.FireColor;
+var Color = cc.Color;
 
 Color.prototype.toCCColor = function () {
     return {
@@ -9,7 +9,7 @@ Color.prototype.toCCColor = function () {
     };
 };
 
-cc.FireColor.fromCCColor = function (color) {
+cc.Color.fromCCColor = function (color) {
     return new Color(
         color.r / 255,
         color.g / 255,

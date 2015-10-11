@@ -27,29 +27,9 @@
 var cc = cc || {};
 cc._tmp = cc._tmp || {};
 
-cc._tmp.WebGLColor = function () {
+if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
+
     //redefine some types with ArrayBuffer for WebGL
-    /**
-     * @class cc.Color
-     * @param {Number} r
-     * @param {Number}g
-     * @param {Number} b
-     * @param {Number} a
-     * @param {Array} arrayBuffer
-     * @param {Number} offset
-     * @returns {cc.Color}
-     */
-    cc.color = function (r, g, b, a, arrayBuffer, offset) {
-        if (r === undefined)
-            return new cc.Color(0, 0, 0, 255, arrayBuffer, offset);
-        if (cc.isString(r)) {
-            var color = cc.hexToColor(r);
-            return new cc.Color(color.r, color.g, color.b, color.a);
-        }
-        if (cc.isObject(r))
-            return new cc.Color(r.r, r.g, r.b, r.a, r.arrayBuffer, r.offset);
-        return new cc.Color(r, g, b, a, arrayBuffer, offset);
-    };
     //redefine cc.Color
     /**
      * @class cc.Color
@@ -121,6 +101,28 @@ cc._tmp.WebGLColor = function () {
     /** @expose */
     _p.a;
     cc.defineGetterSetter(_p, "a", _p._getA, _p._setA);
+    
+    /**
+     * @class cc.Color
+     * @param {Number} r
+     * @param {Number}g
+     * @param {Number} b
+     * @param {Number} a
+     * @param {Array} arrayBuffer
+     * @param {Number} offset
+     * @returns {cc.Color}
+     */
+    cc.color = function (r, g, b, a, arrayBuffer, offset) {
+        if (r === undefined)
+            return new cc.Color(0, 0, 0, 255, arrayBuffer, offset);
+        if (cc.isString(r)) {
+            var color = cc.hexToColor(r);
+            return new cc.Color(color.r, color.g, color.b, color.a);
+        }
+        if (cc.isObject(r))
+            return new cc.Color(r.r, r.g, r.b, r.a, r.arrayBuffer, r.offset);
+        return new cc.Color(r, g, b, a, arrayBuffer, offset);
+    };
 
     //redefine cc.Vertex2F
     /**
@@ -685,4 +687,4 @@ cc._tmp.WebGLColor = function () {
     /** @expose */
     _p.c;
     cc.defineGetterSetter(_p, "c", _p._getC, _p._setC);
-};
+}
