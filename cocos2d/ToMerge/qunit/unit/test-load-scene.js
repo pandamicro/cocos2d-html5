@@ -188,7 +188,7 @@
     module('test scene serialization', {
         setup: function () {
             SetupEngine.setup();
-            originGetCurrentSceneN = cc.engine.getCurrentSceneN;
+            originGetCurrentSceneN = cc.director.getRunningScene();
             cc.engine.getCurrentSceneN = function () {
                 return currentScene;
             };
@@ -215,7 +215,7 @@
             var sprite = asset;
             var texture = sprite.texture;
 
-            var wrapper = cc.engine.getCurrentScene();
+            var wrapper = cc(cc.director.getRunningScene());
             var actual = Editor.serialize(wrapper, {stringify: false});
             var expect = {
                 "__type__": "MySceneWrapper",

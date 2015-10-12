@@ -335,23 +335,11 @@ cc.Runtime.registerNodeType(TestNode, TestWrapper);
 
 var EngineWrapper = cc.FireClass({
     extends: cc.Runtime.EngineWrapper,
-    initRuntime: function () {},
     constructor: function () {
         this._scene = null;
     },
-    initRuntime: function () {},
-    playRuntime: function () {},
-    pauseRuntime: function () {},
-    resumeRuntime: function () {},
-    stopRuntime: function () {},
     tick: function () {},
-    tickInEditMode: function () {},
-    _setCurrentSceneN: function (scene) {
-        this._scene = scene;
-    },
-    getCurrentSceneN: function () {
-        return this._scene;
-    }
+    tickInEditMode: function () {}
 });
 
 /**
@@ -377,7 +365,7 @@ var TestScript = cc.FireClass({
 var Engine = cc.engine;
 Engine._reset = function (w, h) {
     if (!Engine.isInitialized && !Engine._isInitializing) {
-        Engine.init({
+        cc.game.run({
             width: w,
             height: h
         });

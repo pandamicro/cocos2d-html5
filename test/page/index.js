@@ -45,16 +45,26 @@ describe('test wrappers', function () {
         "asset"
     ];
 
-    var canvas = document.getElementById('gameCanvas');
-
     var option = {
         width:  400,
         height: 400,
-        canvas: canvas
+        id: 'gameCanvas'
     };
 
     it('init runtime', function(done) {
-        cc.engine.initRuntime(option, function () {
+        cc.game.run(option, function () {
+            cc.view.resizeWithBrowserSize(true);
+
+            var scene = new cc.Scene();
+
+            // scene anchor point need be 0,0
+            scene.setAnchorPoint(0.0, 0.0);
+
+            cc.view.setFrameSize(width, height);
+
+            cc.director.runScene(scene);
+            cc.game.pause();
+
             pageTests.forEach( function (test) {
                 require( Path.join(__dirname, 'page', test + '.js' ) );
             });
