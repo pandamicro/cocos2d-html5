@@ -371,7 +371,7 @@ ccs.DisplayManager = ccs.Class.extend(/** @lends ccs.DisplayManager */{
 
     /**
      * Check if the position is inside the bone.
-     * @param {cc.Point|Number} point
+     * @param {cc.Vec2|Number} point
      * @param {Number} [y]
      * @returns {boolean}
      */

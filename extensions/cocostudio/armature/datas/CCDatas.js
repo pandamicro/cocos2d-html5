@@ -765,10 +765,10 @@ ccs.ContourData.prototype.init = function(){
 
 /**
  * add a vertex object to vertex list
- * @param {cc.Point} p
+ * @param {cc.Vec2} p
  */
 ccs.ContourData.prototype.addVertex = function(p){
-    //var v = new ccs.ContourVertex2(p.x, p.y);              //ccs.ContourVertex2 is same as cc.Point, so we needn't create a ccs.ContourVertex2 object
+    //var v = new ccs.ContourVertex2(p.x, p.y);              //ccs.ContourVertex2 is same as cc.Vec2, so we needn't create a ccs.ContourVertex2 object
     this.vertexList.push(p);
 };
 

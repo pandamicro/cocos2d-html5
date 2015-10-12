@@ -374,7 +374,7 @@ if (cc._renderType === cc.game.RENDER_TYPE_CANVAS) {
     _p = null;
 
 } else {
-    cc.assert(cc.isFunction(cc._tmp.WebGLTextureCache), cc._LogInfos.MissingFile, "TexturesWebGL.js");
+    cc.assert(cc.js.isFunction(cc._tmp.WebGLTextureCache), cc._LogInfos.MissingFile, "TexturesWebGL.js");
     cc._tmp.WebGLTextureCache();
     delete cc._tmp.WebGLTextureCache;
 }

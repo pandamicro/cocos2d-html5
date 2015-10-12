@@ -467,7 +467,7 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
     /**
      * test the point whether location in loadingBar's bounding box.
      * @override
-     * @param {cc.Point} pt
+     * @param {cc.Vec2} pt
      * @returns {boolean}
      */
     hitTest: function(pt){
@@ -508,7 +508,7 @@ ccui.Slider = ccui.Widget.extend(/** @lends ccui.Slider# */{
 
     /**
      * Returns percent with ball's position.
-     * @param {cc.Point} px
+     * @param {cc.Vec2} px
      * @returns {number}
      */
     _getPercentWithBallPos: function (px) {

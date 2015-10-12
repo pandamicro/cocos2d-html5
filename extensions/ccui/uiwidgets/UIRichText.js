@@ -314,7 +314,7 @@ ccui.RichText = ccui.Widget.extend(/** @lends ccui.RichText# */{
      * @param {ccui.RichElement} element
      */
     removeElement: function (element) {
-        if (cc.isNumber(element))
+        if (cc.js.isNumber(element))
             this._richElements.splice(element, 1);
          else
             cc.arrayRemoveObject(this._richElements, element);
@@ -590,7 +590,7 @@ ccui.RichText = ccui.Widget.extend(/** @lends ccui.RichText# */{
     /**
      * Sets anchor point
      * @override
-     * @param {cc.Point} pt
+     * @param {cc.Vec2} pt
      */
     setAnchorPoint: function (pt) {
         ccui.Widget.prototype.setAnchorPoint.call(this, pt);

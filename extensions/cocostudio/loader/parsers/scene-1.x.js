@@ -48,25 +48,25 @@
         },
 
         setPropertyFromJsonDict: function(node, json){
-            var x = (cc.isUndefined(json["x"]))?0:json["x"];
-            var y = (cc.isUndefined(json["y"]))?0:json["y"];
+            var x = (cc.js.isUndefined(json["x"]))?0:json["x"];
+            var y = (cc.js.isUndefined(json["y"]))?0:json["y"];
             node.setPosition(x, y);
 
-            var bVisible = Boolean((cc.isUndefined(json["visible"]))?1:json["visible"]);
+            var bVisible = Boolean((cc.js.isUndefined(json["visible"]))?1:json["visible"]);
             node.setVisible(bVisible);
 
-            var nTag = (cc.isUndefined(json["objecttag"]))?-1:json["objecttag"];
+            var nTag = (cc.js.isUndefined(json["objecttag"]))?-1:json["objecttag"];
             node.setTag(nTag);
 
-            var nZorder = (cc.isUndefined(json["zorder"]))?0:json["zorder"];
+            var nZorder = (cc.js.isUndefined(json["zorder"]))?0:json["zorder"];
             node.setLocalZOrder(nZorder);
 
-            var fScaleX = (cc.isUndefined(json["scalex"]))?1:json["scalex"];
-            var fScaleY = (cc.isUndefined(json["scaley"]))?1:json["scaley"];
+            var fScaleX = (cc.js.isUndefined(json["scalex"]))?1:json["scalex"];
+            var fScaleY = (cc.js.isUndefined(json["scaley"]))?1:json["scaley"];
             node.setScaleX(fScaleX);
             node.setScaleY(fScaleY);
 
-            var fRotationZ = (cc.isUndefined(json["rotation"]))?0:json["rotation"];
+            var fRotationZ = (cc.js.isUndefined(json["rotation"]))?0:json["rotation"];
             node.setRotation(fRotationZ);
 
             var sName = json["name"] || "";

@@ -50,8 +50,8 @@
  * Structure that contains the values of each particle
  * @Class
  * @Construct
- * @param {cc.Point} [pos=cc.p(0,0)] Position of particle
- * @param {cc.Point} [startPos=cc.p(0,0)]
+ * @param {cc.Vec2} [pos=cc.p(0,0)] Position of particle
+ * @param {cc.Vec2} [startPos=cc.p(0,0)]
  * @param {cc.Color} [color= cc.color(0, 0, 0, 255)]
  * @param {cc.Color} [deltaColor=cc.color(0, 0, 0, 255)]
  * @param {cc.Size} [size=0]
@@ -84,7 +84,7 @@ cc.Particle = function (pos, startPos, color, deltaColor, size, deltaSize, rotat
  * Mode A: gravity, direction, radial accel, tangential accel
  * @Class
  * @Construct
- * @param {cc.Point} dir direction of particle
+ * @param {cc.Vec2} dir direction of particle
  * @param {Number} radialAccel
  * @param {Number} tangentialAccel
  */
@@ -167,8 +167,8 @@ cc.Particle.TemporaryPoints = [
  * @property {Number}               atlasIndex          - Index of system in batch node array.
  * @property {Number}               particleCount       - Current quantity of particles that are being simulated.
  * @property {Number}               duration            - How many seconds the emitter wil run. -1 means 'forever'
- * @property {cc.Point}             sourcePos           - Source position of the emitter.
- * @property {cc.Point}             posVar              - Variation of source position.
+ * @property {cc.Vec2}             sourcePos           - Source position of the emitter.
+ * @property {cc.Vec2}             posVar              - Variation of source position.
  * @property {Number}               life                - Life of each particle setter.
  * @property {Number}               lifeVar             - Variation of life.
  * @property {Number}               angle               - Angle of each particle setter.
@@ -181,9 +181,9 @@ cc.Particle.TemporaryPoints = [
  * @property {Number}               startSpinVar        - Variation of start angle.
  * @property {Number}               endSpin             - End angle of each particle.
  * @property {Number}               endSpinVar          - Variation of end angle.
- * @property {cc.Point}             gravity             - Gravity of the emitter.
- * @property {cc.Point}             speed               - Speed of the emitter.
- * @property {cc.Point}             speedVar            - Variation of the speed.
+ * @property {cc.Vec2}             gravity             - Gravity of the emitter.
+ * @property {cc.Vec2}             speed               - Speed of the emitter.
+ * @property {cc.Vec2}             speedVar            - Variation of the speed.
  * @property {Number}               tangentialAccel     - Tangential acceleration of each particle. Only available in 'Gravity' mode.
  * @property {Number}               tangentialAccelVar  - Variation of the tangential acceleration.
  * @property {Number}               tangentialAccel     - Radial acceleration of each particle. Only available in 'Gravity' mode.
@@ -337,13 +337,13 @@ cc.ParticleSystem = cc.Node.extend(/** @lends cc.ParticleSystem# */{
 
         this._textureLoaded = true;
 
-        if (!plistFile || cc.isNumber(plistFile)) {
+        if (!plistFile || cc.js.isNumber(plistFile)) {
             var ton = plistFile || 100;
             this.setDrawMode(cc.ParticleSystem.TEXTURE_MODE);
             this.initWithTotalParticles(ton);
-        } else if (cc.isString(plistFile)) {
+        } else if (cc.js.isString(plistFile)) {
             this.initWithFile(plistFile);
-        } else if (cc.isObject(plistFile)) {
+        } else if (cc.js.isObject(plistFile)) {
             this.initWithDictionary(plistFile, "");
         }
     },
@@ -480,7 +480,7 @@ cc.ParticleSystem = cc.Node.extend(/** @lends cc.ParticleSystem# */{
 
     /**
      * Return sourcePosition of the emitter
-     * @return {cc.Point | Object}
+     * @return {cc.Vec2 | Object}
      */
     getSourcePosition:function () {
         return {x: this._sourcePosition.x, y: this._sourcePosition.y};
@@ -496,7 +496,7 @@ cc.ParticleSystem = cc.Node.extend(/** @lends cc.ParticleSystem# */{
 
     /**
      * Return Position variance of the emitter
-     * @return {cc.Point | Object}
+     * @return {cc.Vec2 | Object}
      */
     getPosVar:function () {
         return {x: this._posVar.x, y: this._posVar.y};
@@ -504,7 +504,7 @@ cc.ParticleSystem = cc.Node.extend(/** @lends cc.ParticleSystem# */{
 
     /**
      * Position variance of the emitter setter
-     * @param {cc.Point} posVar
+     * @param {cc.Vec2} posVar
      */
     setPosVar:function (posVar) {
         this._posVar = posVar;
@@ -577,7 +577,7 @@ cc.ParticleSystem = cc.Node.extend(/** @lends cc.ParticleSystem# */{
     // mode A
     /**
      * Return Gravity of emitter
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getGravity:function () {
         if(this.emitterMode !== cc.ParticleSystem.Mode.GRAVITY)
@@ -588,7 +588,7 @@ cc.ParticleSystem = cc.Node.extend(/** @lends cc.ParticleSystem# */{
 
     /**
      * Gravity of emitter setter
-     * @param {cc.Point} gravity
+     * @param {cc.Vec2} gravity
      */
     setGravity:function (gravity) {
         if(this.emitterMode !== cc.ParticleSystem.Mode.GRAVITY)
@@ -1681,7 +1681,7 @@ cc.ParticleSystem = cc.Node.extend(/** @lends cc.ParticleSystem# */{
     /**
      * should be overridden by subclasses
      * @param {cc.Particle} particle
-     * @param {cc.Point} newPosition
+     * @param {cc.Vec2} newPosition
      */
     updateQuadWithParticle:function (particle, newPosition) {
         this._renderCmd.updateQuadWithParticle(particle, newPosition);
@@ -2158,7 +2158,7 @@ cc.ParticleSystem.createWithTotalParticles = cc.ParticleSystem.create;
  * Mode A:Gravity + Tangential Accel + Radial Accel
  * @Class
  * @Construct
- * @param {cc.Point} [gravity=] Gravity value.
+ * @param {cc.Vec2} [gravity=] Gravity value.
  * @param {Number} [speed=0] speed of each particle.
  * @param {Number} [speedVar=0] speed variance of each particle.
  * @param {Number} [tangentialAccel=0] tangential acceleration of each particle.

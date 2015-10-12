@@ -44,7 +44,7 @@ cc.Node.RenderCmd = function(renderable){
 
     this._node = renderable;
     this._needDraw = false;
-    this._anchorPointInPoints = new cc.Point(0,0);
+    this._anchorPointInPoints = new cc.Vec2(0,0);
 
     this._transform = {a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0};
     this._worldTransform = {a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0};

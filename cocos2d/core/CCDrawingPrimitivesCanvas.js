@@ -49,7 +49,7 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
     /**
      * draws a point given x and y coordinate measured in points
      * @override
-     * @param {cc.Point} point
+     * @param {cc.Vec2} point
      * @param {Number} size
      */
     drawPoint:function (point, size) {
@@ -91,8 +91,8 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
     /**
      * draws a line given the origin and destination point measured in points
      * @override
-     * @param {cc.Point} origin
-     * @param {cc.Point} destination
+     * @param {cc.Vec2} origin
+     * @param {cc.Vec2} destination
      */
     drawLine:function (origin, destination) {
         var locContext = this._renderContext.getContext(), locScaleX = cc.view.getScaleX(), locScaleY = cc.view.getScaleY();
@@ -105,8 +105,8 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
 
     /**
      * draws a rectangle given the origin and destination point measured in points.
-     * @param {cc.Point} origin
-     * @param {cc.Point} destination
+     * @param {cc.Vec2} origin
+     * @param {cc.Vec2} destination
      */
     drawRect:function (origin, destination) {
         //todo need optimize for performance
@@ -118,8 +118,8 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
 
     /**
      * draws a solid rectangle given the origin and destination point measured in points.
-     * @param {cc.Point} origin
-     * @param {cc.Point} destination
+     * @param {cc.Vec2} origin
+     * @param {cc.Vec2} destination
      * @param {cc.Color} color
      */
     drawSolidRect:function (origin, destination, color) {
@@ -134,9 +134,9 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
     },
 
     /**
-     * draws a polygon given a pointer to cc.Point coordinates and the number of vertices measured in points.
+     * draws a polygon given a pointer to cc.Vec2 coordinates and the number of vertices measured in points.
      * @override
-     * @param {Array} vertices a pointer to cc.Point coordinates
+     * @param {Array} vertices a pointer to cc.Vec2 coordinates
      * @param {Number} numOfVertices the number of vertices measured in points
      * @param {Boolean} closePolygon The polygon can be closed or open
      * @param {Boolean} [fill=] The polygon can be closed or open and optionally filled with current color
@@ -180,7 +180,7 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
     /**
      * draws a circle given the center, radius and number of segments.
      * @override
-     * @param {cc.Point} center center of circle
+     * @param {cc.Vec2} center center of circle
      * @param {Number} radius
      * @param {Number} angle angle in radians
      * @param {Number} segments
@@ -202,9 +202,9 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
     /**
      * draws a quad bezier path
      * @override
-     * @param {cc.Point} origin
-     * @param {cc.Point} control
-     * @param {cc.Point} destination
+     * @param {cc.Vec2} origin
+     * @param {cc.Vec2} control
+     * @param {cc.Vec2} destination
      * @param {Number} segments
      */
     drawQuadBezier:function (origin, control, destination, segments) {
@@ -227,10 +227,10 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
     /**
      * draws a cubic bezier path
      * @override
-     * @param {cc.Point} origin
-     * @param {cc.Point} control1
-     * @param {cc.Point} control2
-     * @param {cc.Point} destination
+     * @param {cc.Vec2} origin
+     * @param {cc.Vec2} control1
+     * @param {cc.Vec2} control2
+     * @param {cc.Vec2} destination
      * @param {Number} segments
      */
     drawCubicBezier:function (origin, control1, control2, destination, segments) {
@@ -303,9 +303,9 @@ cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas
      * draw an image
      * @override
      * @param {HTMLImageElement|HTMLCanvasElement} image
-     * @param {cc.Point} sourcePoint
+     * @param {cc.Vec2} sourcePoint
      * @param {cc.Size} sourceSize
-     * @param {cc.Point} destPoint
+     * @param {cc.Vec2} destPoint
      * @param {cc.Size} destSize
      */
     drawImage:function (image, sourcePoint, sourceSize, destPoint, destSize) {

@@ -522,7 +522,7 @@ cc.FlipY.create = cc.flipY;
  * Places the node in a certain position
  * @class
  * @extends cc.ActionInstant
- * @param {cc.Point|Number} pos
+ * @param {cc.Vec2|Number} pos
  * @param {Number} [y]
  * @example
  * var placeAction = new cc.Place(cc.p(200, 200));
@@ -535,7 +535,7 @@ cc.Place = cc.ActionInstant.extend(/** @lends cc.Place# */{
 	/**
      * Constructor function, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function. <br />
 	 * Creates a Place action with a position.
-	 * @param {cc.Point|Number} pos
+	 * @param {cc.Vec2|Number} pos
 	 * @param {Number} [y]
 	 */
     ctor:function(pos, y){
@@ -589,7 +589,7 @@ cc.Place = cc.ActionInstant.extend(/** @lends cc.Place# */{
 /**
  * Creates a Place action with a position.
  * @function
- * @param {cc.Point|Number} pos
+ * @param {cc.Vec2|Number} pos
  * @param {Number} [y]
  * @return {cc.Place}
  * @example
@@ -606,7 +606,7 @@ cc.place = function (pos, y) {
  * Creates a Place action with a position.
  * @static
  * @deprecated since v3.0 <br /> Please use cc.place instead.
- * @param {cc.Point|Number} pos
+ * @param {cc.Vec2|Number} pos
  * @param {Number} [y]
  * @return {cc.Place}
  */

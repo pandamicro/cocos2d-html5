@@ -476,8 +476,8 @@ cc.p = cc.v2;
 /**
  * Check whether a point's value equals to another
  * @function
- * @param {cc.Point} point1
- * @param {cc.Point} point2
+ * @param {cc.Vec2} point1
+ * @param {cc.Vec2} point2
  * @return {Boolean}
  */
 cc.pointEqualToPoint = function (point1, point2) {

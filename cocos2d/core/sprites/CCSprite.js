@@ -217,7 +217,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
 
     /**
      * Returns the offset position of the sprite. Calculated automatically by editors like Zwoptex.
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getOffsetPosition:function () {
         return cc.p(this._offsetPosition);
@@ -553,7 +553,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
 	_softInit: function (fileName, rect, rotated) {
 		if (fileName === undefined)
 			cc.Sprite.prototype.init.call(this);
-		else if (cc.isString(fileName)) {
+		else if (cc.js.isString(fileName)) {
 			if (fileName[0] === "#") {
 				// Init with a sprite frame name
 				var frameName = fileName.substr(1, fileName.length - 1);
@@ -823,7 +823,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      */
     setSpriteFrame: function (newFrame) {
         var _t = this;
-        if(cc.isString(newFrame)){
+        if(cc.js.isString(newFrame)){
             newFrame = cc.spriteFrameCache.getSpriteFrame(newFrame);
             cc.assert(newFrame, cc._LogInfos.Sprite_setSpriteFrame)
         }
@@ -938,7 +938,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
             return this._renderCmd._setTexture(null);
 
         //CCSprite.cpp 327 and 338
-        var isFileName = cc.isString(texture);
+        var isFileName = cc.js.isString(texture);
 
         if(isFileName)
             texture = cc.textureCache.addImage(texture);
@@ -1022,6 +1022,6 @@ cc.Sprite.INDEX_NOT_INITIALIZED = -1;
 
 cc.EventHelper.prototype.apply(cc.Sprite.prototype);
 
-cc.assert(cc.isFunction(cc._tmp.PrototypeSprite), cc._LogInfos.MissingFile, "SpritesPropertyDefine.js");
+cc.assert(cc.js.isFunction(cc._tmp.PrototypeSprite), cc._LogInfos.MissingFile, "SpritesPropertyDefine.js");
 cc._tmp.PrototypeSprite();
 delete cc._tmp.PrototypeSprite;

@@ -81,7 +81,7 @@ cc.UINT_MAX = 0xffffffff;
  * @deprecated since v3.0
  */
 cc.swap = function (x, y, ref) {
-    if (cc.isObject(ref) && !cc.isUndefined(ref.x) && !cc.isUndefined(ref.y)) {
+    if (cc.js.isObject(ref) && !cc.js.isUndefined(ref.x) && !cc.js.isUndefined(ref.y)) {
         var tmp = ref[x];
         ref[x] = ref[y];
         ref[y] = tmp;
@@ -252,8 +252,8 @@ cc.contentScaleFactor = cc.IS_RETINA_DISPLAY_SUPPORTED ? function () {
 
 /**
  * Converts a Point in points to pixels
- * @param {cc.Point} points
- * @return {cc.Point}
+ * @param {cc.Vec2} points
+ * @return {cc.Vec2}
  * @function
  */
 cc.pointPointsToPixels = function (points) {
@@ -264,7 +264,7 @@ cc.pointPointsToPixels = function (points) {
 /**
  * Converts a Point in pixels to points
  * @param {cc.Rect} pixels
- * @return {cc.Point}
+ * @return {cc.Vec2}
  * @function
  */
 cc.pointPixelsToPoints = function (pixels) {

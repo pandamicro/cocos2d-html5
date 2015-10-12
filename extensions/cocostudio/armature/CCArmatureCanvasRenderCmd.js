@@ -46,7 +46,7 @@
         cc.Node.CanvasRenderCmd.call(this, renderableObject);
         this._needDraw = true;
 
-        this._realAnchorPointInPoints = new cc.Point(0,0);
+        this._realAnchorPointInPoints = new cc.Vec2(0,0);
         this._startRenderCmd = new cc.CustomRenderCmd(this, this._startCmdCallback);
         this._RestoreRenderCmd = new cc.CustomRenderCmd(this, this._RestoreCmdCallback);
     };

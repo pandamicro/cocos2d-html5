@@ -38,13 +38,13 @@
  * s(-ttt + 2tt - t)P1 + s(-ttt + tt)P2 + (2ttt - 3tt + 1)P2 + s(ttt - 2tt + t)P3 + (-2ttt + 3tt)P3 + s(ttt - tt)P4
  *
  * @function
- * @param {cc.Point} p0
- * @param {cc.Point} p1
- * @param {cc.Point} p2
- * @param {cc.Point} p3
+ * @param {cc.Vec2} p0
+ * @param {cc.Vec2} p1
+ * @param {cc.Vec2} p2
+ * @param {cc.Vec2} p3
  * @param {Number} tension
  * @param {Number} t
- * @return {cc.Point}
+ * @return {cc.Vec2}
  */
 cc.cardinalSplineAt = function (p0, p1, p2, p3, tension, t) {
     var t2 = t * t;
@@ -269,7 +269,7 @@ cc.CardinalSplineTo = cc.ActionInterval.extend(/** @lends cc.CardinalSplineTo# *
     /**
      * update position of target
      *
-     * @param {cc.Point} newPos
+     * @param {cc.Vec2} newPos
      */
     updatePosition:function (newPos) {
         this.target.setPosition(newPos);
@@ -412,7 +412,7 @@ cc.CardinalSplineBy = cc.CardinalSplineTo.extend(/** @lends cc.CardinalSplineBy#
     /**
      * update position of target
      *
-     * @param {cc.Point} newPos
+     * @param {cc.Vec2} newPos
      */
     updatePosition:function (newPos) {
         var pos = this._startPosition;

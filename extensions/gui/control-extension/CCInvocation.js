@@ -54,7 +54,7 @@ cc.Invocation = cc.Class.extend(/** @lends cc.Invocation# */{
 
     invoke:function(sender){
         if (this._target && this._action) {
-            if (cc.isString(this._action)) {
+            if (cc.js.isString(this._action)) {
                 this._target[this._action](sender, this._controlEvent);
             } else{
                 this._action.call(this._target, sender, this._controlEvent);

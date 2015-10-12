@@ -379,7 +379,7 @@ cc.BuilderAnimationManager = cc.Class.extend({
     runAnimations:function (name, tweenDuration) {
         tweenDuration = tweenDuration || 0;
         var nSeqId;
-        if(cc.isString(name))
+        if(cc.js.isString(name))
             nSeqId = this._getSequenceId(name);
         else
             nSeqId = name;

@@ -753,7 +753,7 @@ ccui.Layout = ccui.Widget.extend(/** @lends ccui.Layout# */{
 
     /**
      * Sets background color vector for layout, if color type is Layout.COLOR_GRADIENT
-     * @param {cc.Point} vector
+     * @param {cc.Vec2} vector
      */
     setBackGroundColorVector: function (vector) {
         this._alongVector.x = vector.x;
@@ -765,7 +765,7 @@ ccui.Layout = ccui.Widget.extend(/** @lends ccui.Layout# */{
 
     /**
      *  Gets background color vector of ccui.Layout, if color type is Layout.COLOR_GRADIENT
-     * @returns {cc.Point}
+     * @returns {cc.Vec2}
      */
     getBackGroundColorVector: function () {
         return this._alongVector;
@@ -1136,7 +1136,7 @@ ccui.Layout = ccui.Widget.extend(/** @lends ccui.Layout# */{
     /**
      * get the center point of a widget in world space
      * @param {ccui.Widget} widget
-     * @returns {cc.Point}
+     * @returns {cc.Vec2}
      * @private
      */
     _getWorldCenterPoint: function(widget){

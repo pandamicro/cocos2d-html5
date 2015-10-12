@@ -41,7 +41,7 @@
  * @property {Number}       huePercent  - The hue value in percentage
  * @property {cc.Sprite}    background  - <@readonly> The background sprite
  * @property {cc.Sprite}    slider      - <@readonly> The slider sprite
- * @property {cc.Point}     startPos    - <@readonly> The start position of the picker
+ * @property {cc.Vec2}     startPos    - <@readonly> The start position of the picker
  */
 cc.ControlHuePicker = cc.Control.extend(/** @lends cc.ControlHuePicker# */{
     _hue:0,
@@ -54,7 +54,7 @@ cc.ControlHuePicker = cc.Control.extend(/** @lends cc.ControlHuePicker# */{
     /**
      * The constructor of cc.ControlHuePicker
      * @param {cc.Node} target
-     * @param {cc.Point} pos position
+     * @param {cc.Vec2} pos position
      */
     ctor:function(target, pos) {
         cc.Control.prototype.ctor.call(this);

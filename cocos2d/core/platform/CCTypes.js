@@ -317,12 +317,12 @@ cc._Dictionary = cc.Class.extend({
 });
 
 if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
-    cc.assert(cc.isFunction(cc._tmp.WebGLColor), cc._LogInfos.MissingFile, "CCTypesWebGL.js");
+    cc.assert(cc.js.isFunction(cc._tmp.WebGLColor), cc._LogInfos.MissingFile, "CCTypesWebGL.js");
     cc._tmp.WebGLColor();
     delete cc._tmp.WebGLColor;
 }
 
-cc.assert(cc.isFunction(cc._tmp.PrototypeColor), cc._LogInfos.MissingFile, "CCTypesPropertyDefine.js");
+cc.assert(cc.js.isFunction(cc._tmp.PrototypeColor), cc._LogInfos.MissingFile, "CCTypesPropertyDefine.js");
 cc._tmp.PrototypeColor();
 delete cc._tmp.PrototypeColor;
 

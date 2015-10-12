@@ -110,10 +110,6 @@ cc._canvas = null;
 cc.container = null;
 cc._gameDiv = null;
 
-cc.newElement = function (x) {
-    return document.createElement(x);
-};
-
 cc.isEditor = typeof Editor !== 'undefined';
 
 /**
@@ -797,16 +793,16 @@ cc.game = /** @lends cc.game# */{
         if (this.config[this.CONFIG_KEY.registerSystemEvent])
             cc.inputManager.registerSystemEvent(this.canvas);
 
-        if (!cc.isUndefined(document.hidden)) {
+        if (!cc.js.isUndefined(document.hidden)) {
             hidden = "hidden";
             visibilityChange = "visibilitychange";
-        } else if (!cc.isUndefined(document.mozHidden)) {
+        } else if (!cc.js.isUndefined(document.mozHidden)) {
             hidden = "mozHidden";
             visibilityChange = "mozvisibilitychange";
-        } else if (!cc.isUndefined(document.msHidden)) {
+        } else if (!cc.js.isUndefined(document.msHidden)) {
             hidden = "msHidden";
             visibilityChange = "msvisibilitychange";
-        } else if (!cc.isUndefined(document.webkitHidden)) {
+        } else if (!cc.js.isUndefined(document.webkitHidden)) {
             hidden = "webkitHidden";
             visibilityChange = "webkitvisibilitychange";
         }
@@ -858,7 +854,7 @@ cc.game = /** @lends cc.game# */{
 //+++++++++++++++++++++++++something about CCGame end+++++++++++++++++++++++++++++
 
 Function.prototype.bind = Function.prototype.bind || function (oThis) {
-    if (!cc.isFunction(this)) {
+    if (!cc.js.isFunction(this)) {
         // closest thing possible to the ECMAScript 5
         // internal IsCallable function
         throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");

@@ -188,8 +188,8 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
      * Useful to convert (multi) touches coordinates to the current layout (portrait or landscape)<br/>
      * Implementation can be found in CCDirectorWebGL
      * @function
-     * @param {cc.Point} uiPoint
-     * @return {cc.Point}
+     * @param {cc.Vec2} uiPoint
+     * @return {cc.Vec2}
      */
     convertToGL: null,
 
@@ -198,8 +198,8 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
      * Useful to convert node points to window points for calls such as glScissor<br/>
      * Implementation can be found in CCDirectorWebGL
      * @function
-     * @param {cc.Point} glPoint
-     * @return {cc.Point}
+     * @param {cc.Vec2} glPoint
+     * @return {cc.Vec2}
      */
     convertToUI: null,
 
@@ -321,7 +321,7 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
     /**
      * Returns the visible origin of the running scene
      * @function
-     * @return {cc.Point}
+     * @return {cc.Vec2}
      */
     getVisibleOrigin: null,
 

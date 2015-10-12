@@ -94,7 +94,7 @@ cc.ParticleBatchNode = cc.Node.extend(/** @lends cc.ParticleBatchNode# */{
     ctor:function (fileImage, capacity) {
         cc.Node.prototype.ctor.call(this);
         this._blendFunc = {src:cc.BLEND_SRC, dst:cc.BLEND_DST};
-        if (cc.isString(fileImage)) {
+        if (cc.js.isString(fileImage)) {
             this.init(fileImage, capacity);
         } else if (fileImage instanceof cc.Texture2D) {
             this.initWithTexture(fileImage, capacity);

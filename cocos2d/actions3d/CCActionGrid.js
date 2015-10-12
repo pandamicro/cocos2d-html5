@@ -172,7 +172,7 @@ cc.Grid3DAction = cc.GridAction.extend(/** @lends cc.Grid3DAction# */{
     /**
      * returns the vertex than belongs to certain position in the grid.                           <br/>
      * It will be deprecated in future, please use getVertex instead.
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      * @return {cc.Vertex3F}
      */
     vertex:function (position) {
@@ -181,7 +181,7 @@ cc.Grid3DAction = cc.GridAction.extend(/** @lends cc.Grid3DAction# */{
 
     /**
      * returns the vertex than belongs to certain position in the grid
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      * @return {cc.Vertex3F}
      */
     getVertex: function(position){
@@ -191,7 +191,7 @@ cc.Grid3DAction = cc.GridAction.extend(/** @lends cc.Grid3DAction# */{
     /**
      * returns the non-transformed vertex than belongs to certain position in the grid          <br/>
      * It will be deprecated in future, please use getVertex instead.
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      * @return {cc.Vertex3F}
      */
     originalVertex:function (position) {
@@ -200,7 +200,7 @@ cc.Grid3DAction = cc.GridAction.extend(/** @lends cc.Grid3DAction# */{
 
     /**
      * returns the non-transformed vertex that belongs to certain position in the grid
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      * @return {cc.Vertex3F}
      */
     getOriginalVertex:function (position) {
@@ -209,7 +209,7 @@ cc.Grid3DAction = cc.GridAction.extend(/** @lends cc.Grid3DAction# */{
 
     /**
      * sets a new vertex to a certain position of the grid
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      * @param {cc.Vertex3F} vertex
      */
     setVertex:function (position, vertex) {
@@ -248,7 +248,7 @@ cc.TiledGrid3DAction = cc.GridAction.extend(/** @lends cc.TiledGrid3DAction# */{
     /**
      * returns the tile that belongs to a certain position of the grid        <br/>
      * It will be deprecated in future, please use getTile instead.
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      * @return {cc.Quad3}
      */
     tile:function (position) {
@@ -257,7 +257,7 @@ cc.TiledGrid3DAction = cc.GridAction.extend(/** @lends cc.TiledGrid3DAction# */{
 
     /**
      * returns the tile that belongs to a certain position of the grid
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      * @return {cc.Quad3}
      */
     getTile:function (position) {
@@ -267,7 +267,7 @@ cc.TiledGrid3DAction = cc.GridAction.extend(/** @lends cc.TiledGrid3DAction# */{
     /**
      * returns the non-transformed tile that belongs to a certain position of the grid               <br/>
      * It will be deprecated in future, please use getOriginalTile instead.
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      * @return {cc.Quad3}
      */
     originalTile:function (position) {
@@ -276,7 +276,7 @@ cc.TiledGrid3DAction = cc.GridAction.extend(/** @lends cc.TiledGrid3DAction# */{
 
     /**
      * returns the non-transformed tile that belongs to a certain position of the grid
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      * @return {cc.Quad3}
      */
     getOriginalTile:function (position) {
@@ -285,7 +285,7 @@ cc.TiledGrid3DAction = cc.GridAction.extend(/** @lends cc.TiledGrid3DAction# */{
 
     /**
      * sets a new tile to a certain position of the grid
-     * @param {cc.Point} position
+     * @param {cc.Vec2} position
      * @param {cc.Quad3} coords
      */
     setTile:function (position, coords) {
