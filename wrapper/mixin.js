@@ -43,7 +43,7 @@ function mixin (node, typeOrTypename) {
 
     if (CC_EDITOR) {
         // validate
-        if (!cc.FireClass.isFireClass(classToMix)) {
+        if (!cc.FireClass._isFireClass(classToMix)) {
             cc.error('cc.mixin: The class to mixin must be FireClass.');
             return;
         }

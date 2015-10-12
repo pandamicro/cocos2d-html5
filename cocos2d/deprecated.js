@@ -167,4 +167,5 @@ if (CC_DEV) {
     deprecateEnum(ccui.LoadingBar, 'ccui.LoadingBar.TYPE', 'ccui.LoadingBar.Type');
     deprecateEnum(ccui.RelativeLayoutParameter, 'ccui.RelativeLayoutParameter', 'ccui.RelativeLayoutParameter.Type', false);
     deprecateEnum(cc.ProgressTimer, 'cc.ProgressTimer.TYPE', 'cc.ProgressTimer.Type');
+    deprecateEnum(cc.game, 'cc.game.DEBUG_MODE', 'cc.DebugMode');
 }

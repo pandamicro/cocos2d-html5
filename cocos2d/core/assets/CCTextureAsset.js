@@ -1,6 +1,4 @@
 
-var canvasCtxToGetPixel = null;
-
 /**
  * The wrap mode
  * @readonly

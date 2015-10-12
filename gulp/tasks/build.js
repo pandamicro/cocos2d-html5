@@ -145,10 +145,10 @@ function createBundler() {
 //    }
 //}
 
-gulp.task('build-modular-cocos2d', ['clean'], function () {
-    var header = new Buffer('(function (cc) {\n');
+gulp.task('build-modular-cocos2d', function () {
+    var header = new Buffer('(function (cc, ccui) {\n');
     var footer = new Buffer(/*'\n(' + modularity + ')();\n' +*/
-                            '\n}).call(window, cc);\n');
+                            '\n}).call(window, cc, ccui);\n');
 
     function wrap (header, footer) {
         return es.through(function (file) {

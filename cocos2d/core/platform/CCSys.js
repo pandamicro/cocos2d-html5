@@ -1,22 +1,4 @@
 
-var _tmpCanvas1 = document.createElement("canvas"),
-    _tmpCanvas2 = document.createElement("canvas");
-
-cc.create3DContext = function (canvas, opt_attribs) {
-    var names = ["webgl", "experimental-webgl", "webkit-3d", "moz-webgl"];
-    var context = null;
-    for (var ii = 0; ii < names.length; ++ii) {
-        try {
-            context = canvas.getContext(names[ii], opt_attribs);
-        } catch (e) {
-        }
-        if (context) {
-            break;
-        }
-    }
-    return context;
-};
-
 /**
  * System variables
  * @namespace
@@ -424,8 +406,7 @@ sys.isNative = false;
  */
 sys.isBrowser = typeof window === 'object' && typeof document === 'object';
 
-if (cc.isEditor && !sys.isBrowser) {
-    // core level
+if (typeof Editor !== 'undefined' && Editor.isCoreLevel) {
     sys.isMobile = false;
     sys.platform = sys.EDITOR_CORE;
     sys.language = sys.LANGUAGE_UNKNOWN;
@@ -529,7 +510,6 @@ else {
         sys.browserType = browserType;
     })();
 
-
     /**
      * Indicate the running browser version
      * @memberof cc.sys
@@ -560,99 +540,117 @@ else {
         width: ratio * w,
         height: ratio * h
     };
-}
 
-
-sys._checkWebGLRenderMode = function () {
-    if (cc._renderType !== cc.game.RENDER_TYPE_WEBGL)
-        throw new Error("This feature supports WebGL render mode only.");
-};
-
-//Whether or not the Canvas BlendModes are supported.
-sys._supportCanvasNewBlendModes = (function(){
-    var canvas = _tmpCanvas1;
-    canvas.width = 1;
-    canvas.height = 1;
-    var context = canvas.getContext('2d');
-    context.fillStyle = '#000';
-    context.fillRect(0,0,1,1);
-    context.globalCompositeOperation = 'multiply';
-
-    var canvas2 = _tmpCanvas2;
-    canvas2.width = 1;
-    canvas2.height = 1;
-    var context2 = canvas2.getContext('2d');
-    context2.fillStyle = '#fff';
-    context2.fillRect(0,0,1,1);
-    context.drawImage(canvas2, 0, 0, 1, 1);
-
-    return context.getImageData(0,0,1,1).data[0] === 0;
-})();
-
-// Adjust mobile css settings
-if (cc.sys.isMobile) {
-    var fontStyle = document.createElement("style");
-    fontStyle.type = "text/css";
-    document.body.appendChild(fontStyle);
-
-    fontStyle.textContent = "body,canvas,div{ -moz-user-select: none;-webkit-user-select: none;-ms-user-select: none;-khtml-user-select: none;"
-        + "-webkit-tap-highlight-color:rgba(0,0,0,0);}";
-}
-
-/**
- * cc.sys.localStorage is a local storage component.
- * @memberof cc.sys
- * @name localStorage
- * @type {Object}
- */
-try {
-    var localStorage = sys.localStorage = win.localStorage;
-    localStorage.setItem("storage", "");
-    localStorage.removeItem("storage");
-    localStorage = null;
-} catch (e) {
-    var warn = function () {
-        cc.warn("Warning: localStorage isn't enabled. Please confirm browser cookie or privacy option");
+    sys._checkWebGLRenderMode = function () {
+        if (cc._renderType !== cc.game.RENDER_TYPE_WEBGL)
+            throw new Error("This feature supports WebGL render mode only.");
     };
-    sys.localStorage = {
-        getItem : warn,
-        setItem : warn,
-        removeItem : warn,
-        clear : warn
-    };
-}
 
-var _supportCanvas = !!_tmpCanvas1.getContext("2d");
-var _supportWebGL = false;
-var tmpCanvas = document.createElement("CANVAS");
-if (win.WebGLRenderingContext) {
-    try{
-        var context = cc.create3DContext(tmpCanvas, {'stencil': true, 'preserveDrawingBuffer': true });
-        if(context) {
-            _supportWebGL = true;
+    var _tmpCanvas1 = document.createElement("canvas"),
+        _tmpCanvas2 = document.createElement("canvas");
+
+    cc.create3DContext = function (canvas, opt_attribs) {
+        var names = ["webgl", "experimental-webgl", "webkit-3d", "moz-webgl"];
+        var context = null;
+        for (var ii = 0; ii < names.length; ++ii) {
+            try {
+                context = canvas.getContext(names[ii], opt_attribs);
+            } catch (e) {
+            }
+            if (context) {
+                break;
+            }
         }
-    }
-    catch (e) {}
-}
+        return context;
+    };
 
-/**
- * The capabilities of the current platform
- * @memberof cc.sys
- * @name capabilities
- * @type {Object}
- */
-var capabilities = sys.capabilities = {
-    "canvas": _supportCanvas,
-    "opengl": _supportWebGL
-};
-if (docEle['ontouchstart'] !== undefined || doc['ontouchstart'] !== undefined || nav.msPointerEnabled)
-    capabilities["touches"] = true;
-if (docEle['onmouseup'] !== undefined)
-    capabilities["mouse"] = true;
-if (docEle['onkeyup'] !== undefined)
-    capabilities["keyboard"] = true;
-if (win.DeviceMotionEvent || win.DeviceOrientationEvent)
-    capabilities["accelerometer"] = true;
+    //Whether or not the Canvas BlendModes are supported.
+    sys._supportCanvasNewBlendModes = (function(){
+        var canvas = _tmpCanvas1;
+        canvas.width = 1;
+        canvas.height = 1;
+        var context = canvas.getContext('2d');
+        context.fillStyle = '#000';
+        context.fillRect(0,0,1,1);
+        context.globalCompositeOperation = 'multiply';
+
+        var canvas2 = _tmpCanvas2;
+        canvas2.width = 1;
+        canvas2.height = 1;
+        var context2 = canvas2.getContext('2d');
+        context2.fillStyle = '#fff';
+        context2.fillRect(0,0,1,1);
+        context.drawImage(canvas2, 0, 0, 1, 1);
+
+        return context.getImageData(0,0,1,1).data[0] === 0;
+    })();
+
+    // Adjust mobile css settings
+    if (cc.sys.isMobile) {
+        var fontStyle = document.createElement("style");
+        fontStyle.type = "text/css";
+        document.body.appendChild(fontStyle);
+
+        fontStyle.textContent = "body,canvas,div{ -moz-user-select: none;-webkit-user-select: none;-ms-user-select: none;-khtml-user-select: none;"
+                                + "-webkit-tap-highlight-color:rgba(0,0,0,0);}";
+    }
+
+    /**
+     * cc.sys.localStorage is a local storage component.
+     * @memberof cc.sys
+     * @name localStorage
+     * @type {Object}
+     */
+    try {
+        var localStorage = sys.localStorage = win.localStorage;
+        localStorage.setItem("storage", "");
+        localStorage.removeItem("storage");
+        localStorage = null;
+    } catch (e) {
+        var warn = function () {
+            cc.warn("Warning: localStorage isn't enabled. Please confirm browser cookie or privacy option");
+        };
+        sys.localStorage = {
+            getItem : warn,
+            setItem : warn,
+            removeItem : warn,
+            clear : warn
+        };
+    }
+
+    var _supportCanvas = !!_tmpCanvas1.getContext("2d");
+    var _supportWebGL = false;
+    var tmpCanvas = document.createElement("CANVAS");
+    if (win.WebGLRenderingContext) {
+        try{
+            var context = cc.create3DContext(tmpCanvas, {'stencil': true, 'preserveDrawingBuffer': true });
+            if(context) {
+                _supportWebGL = true;
+            }
+        }
+        catch (e) {}
+    }
+
+    /**
+     * The capabilities of the current platform
+     * @memberof cc.sys
+     * @name capabilities
+     * @type {Object}
+     */
+    var capabilities = sys.capabilities = {
+        "canvas": _supportCanvas,
+        "opengl": _supportWebGL
+    };
+    if (docEle['ontouchstart'] !== undefined || doc['ontouchstart'] !== undefined || nav.msPointerEnabled)
+        capabilities["touches"] = true;
+    if (docEle['onmouseup'] !== undefined)
+        capabilities["mouse"] = true;
+    if (docEle['onkeyup'] !== undefined)
+        capabilities["keyboard"] = true;
+    if (win.DeviceMotionEvent || win.DeviceOrientationEvent)
+        capabilities["accelerometer"] = true;
+
+}
 
 /**
  * Forces the garbage collection, only available in JSB

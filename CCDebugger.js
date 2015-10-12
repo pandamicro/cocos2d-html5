@@ -276,18 +276,33 @@ cc._formatString = function (arg) {
     } else
         return arg;
 };
+
+/**
+ * Enum for debug modes.
+ * @readonly
+ * @enum {Number}
+ */
+cc.DebugMode = cc.Enum({
+    NONE: 0,
+    INFO: 1,
+    WARN: 2,
+    ERROR: 3,
+    INFO_FOR_WEB_PAGE: 4,
+    WARN_FOR_WEB_PAGE: 5,
+    ERROR_FOR_WEB_PAGE: 6
+});
+
 /**
  * Init Debug setting.
  * @function
- * @param {Number} mode
+ * @param {cc.DebugMode} mode
  */
 cc._initDebugSetting = function (mode) {
-    var ccGame = cc.game;
-    if(mode === ccGame.DEBUG_MODE_NONE)
+    if(mode === cc.DebugMode.NONE)
         return;
 
     var locLog;
-    if(mode > ccGame.DEBUG_MODE_ERROR){
+    if(mode > cc.DebugMode.ERROR){
         //log to web page
         locLog = cc._logToWebPage.bind(cc);
         cc.error = function(){
@@ -301,12 +316,12 @@ cc._initDebugSetting = function (mode) {
                 locLog("Assert: " + msg);
             }
         };
-        if(mode !== ccGame.DEBUG_MODE_ERROR_FOR_WEB_PAGE){
+        if(mode !== cc.DebugMode.ERROR_FOR_WEB_PAGE){
             cc.warn = function(){
                 locLog("WARN :  " + cc.formatStr.apply(cc, arguments));
             };
         }
-        if(mode === ccGame.DEBUG_MODE_INFO_FOR_WEB_PAGE){
+        if(mode === cc.DebugMode.INFO_FOR_WEB_PAGE){
             cc.log = cc.info = function(){
                 locLog(cc.formatStr.apply(cc, arguments));
             };
@@ -337,7 +352,7 @@ cc._initDebugSetting = function (mode) {
                 throw new Error(msg);
             }
         };
-        if(mode !== ccGame.DEBUG_MODE_ERROR)
+        if(mode !== cc.DebugMode.ERROR)
             /**
              * Outputs a warning message to the Fireball Console (editor) or Web Console (runtime).
              * - In Fireball, warning is yellow.
@@ -348,26 +363,26 @@ cc._initDebugSetting = function (mode) {
             cc.warn = function(){
                 return console.warn.apply(console, arguments);
             };
-        if(mode === ccGame.DEBUG_MODE_INFO) {
-            /**
-             * Outputs a message to the Fireball Console (editor) or Web Console (runtime).
-             * @param {any|string} obj - A JavaScript string containing zero or more substitution strings.
-             * @param {any} ...subst - JavaScript objects with which to replace substitution strings within msg. This gives you additional control over the format of the output.
-             */
-            cc.log = function () {
-                return console.log.apply(console, arguments);
-            };
-            /**
-             * Outputs an informational message to the Fireball Console (editor) or Web Console (runtime).
-             * - In Fireball, info is blue.
-             * - In Firefox and Chrome, a small "i" icon is displayed next to these items in the Web Console's log.
-             * @param {any|string} obj - A JavaScript string containing zero or more substitution strings.
-             * @param {any} ...subst - JavaScript objects with which to replace substitution strings within msg. This gives you additional control over the format of the output.
-             */
-            cc.info = function () {
-                (console.info || console.log).apply(console, arguments);
-            };
-        }
+            if(mode === cc.DebugMode.INFO) {
+                /**
+                 * Outputs a message to the Fireball Console (editor) or Web Console (runtime).
+                 * @param {any|string} obj - A JavaScript string containing zero or more substitution strings.
+                 * @param {any} ...subst - JavaScript objects with which to replace substitution strings within msg. This gives you additional control over the format of the output.
+                 */
+                cc.log = function () {
+                    return console.log.apply(console, arguments);
+                };
+                /**
+                 * Outputs an informational message to the Fireball Console (editor) or Web Console (runtime).
+                 * - In Fireball, info is blue.
+                 * - In Firefox and Chrome, a small "i" icon is displayed next to these items in the Web Console's log.
+                 * @param {any|string} obj - A JavaScript string containing zero or more substitution strings.
+                 * @param {any} ...subst - JavaScript objects with which to replace substitution strings within msg. This gives you additional control over the format of the output.
+                 */
+                cc.info = function () {
+                    (console.info || console.log).apply(console, arguments);
+                };
+            }
     }
     cc._throw = function (error) {
         cc.error(error.stack || error);
