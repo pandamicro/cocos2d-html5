@@ -37,15 +37,6 @@ if (CC_EDITOR) {
 
 JS.mixin(engineProto, {
 
-    /**
-     * Get the wrapper of current running scene.
-     * @method getCurrentScene
-     * @return {SceneWrapper}
-     */
-    getCurrentScene: function () {
-        return cc(this.getCurrentSceneN());
-    },
-
     _initScene: function (sceneWrapper, callback) {
         if (sceneWrapper._needCreate) {
             sceneWrapper.create(callback);
@@ -93,7 +84,7 @@ JS.mixin(engineProto, {
         //Engine._scene = null;
 
         // destroy last scene
-        self._setCurrentSceneN(this._emptySceneN);
+        cc.director.runScene(this._emptySceneN);
 
         if (onBeforeLoadScene) {
             onBeforeLoadScene();
@@ -111,7 +102,7 @@ JS.mixin(engineProto, {
         //// launch scene
         //scene.entities = scene.entities.concat(Engine._dontDestroyEntities);
         //Engine._dontDestroyEntities.length = 0;
-        self._setCurrentSceneN(scene.targetN);
+        cc.director.runScene(scene.targetN);
         //Engine._renderContext.onSceneLaunched(scene);
 
         //editorCallback.onBeforeActivateScene(scene);
@@ -222,7 +213,7 @@ JS.mixin(engineProto, {
     },
 
     //launchNewScene: function () {
-    //    var SceneWrapperImpl = cc.engine.getCurrentScene().constructor;
+    //    var SceneWrapperImpl = cc(cc.director.getRunningScene()).constructor;
     //    var sceneWrapper = new SceneWrapperImpl();
     //    sceneWrapper.createAndAttachNode();
     //    cc.engine._launchScene(sceneWrapper);

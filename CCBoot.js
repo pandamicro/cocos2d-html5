@@ -536,6 +536,13 @@ cc.game = /** @lends cc.game# */{
     },
 
     /**
+     * Check whether the game is paused.
+     */
+    isPaused: function () {
+        return this._paused;
+    },
+
+    /**
      * Restart game.
      */
     restart: function () {
@@ -625,14 +632,14 @@ cc.game = /** @lends cc.game# */{
      * @param {onStart} [onStart] onStart function to be executed after game initialized
      */
     run: function (config, onStart) {
-        if (cc.isFunction(config)) {
+        if (typeof config === 'function') {
             cc.game.onStart = config;
         }
         else {
             if (config) {
                 cc.game.config = config;
             }
-            if (cc.isFunction(onStart)) {
+            if (typeof onStart === 'function') {
                 cc.game.onStart = onStart;
             }
         }

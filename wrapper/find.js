@@ -16,7 +16,7 @@ module.exports = function (path, referenceNode) {
         return null;
     }
     if (!referenceNode) {
-        var scene = cc.engine.getCurrentScene();
+        var scene = cc(cc.director.getRunningScene());
         if (!scene) {
             cc.warn('Can not get current scene.');
             return null;

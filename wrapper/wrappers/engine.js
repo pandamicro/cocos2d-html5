@@ -22,14 +22,9 @@ var NYI_Accessor = Utils.NYI_Accessor;
  * You should override:
  * - initRuntime
  * - playRuntime
- * - stopRuntime
- * - pauseRuntime
- * - resumeRuntime
  * - updateRuntime
  * - animateRuntime
  * - renderRuntime
- * - getCurrentSceneN
- * - _setCurrentSceneN
  * - canvasSize
  * - getIntersectionList
  *
@@ -205,21 +200,6 @@ var EngineWrapper = cc.FireClass({
      * @method playRuntime
      */
     playRuntime: NYI,
-    /**
-     * Stops playback.
-     * @method stopRuntime
-     */
-    stopRuntime: NYI,
-    /**
-     * Pauses playback.
-     * @method pauseRuntime
-     */
-    pauseRuntime: NYI,
-    /**
-     * Resumes playback.
-     * @method resumeRuntime
-     */
-    resumeRuntime: NYI,
 
     /**
      * Update phase, will not invoked in edit mode.
@@ -247,20 +227,6 @@ var EngineWrapper = cc.FireClass({
     //stepRuntime: NYI,
 
     /**
-     * Get the current running runtime scene.
-     * @method getCurrentSceneN
-     * @return {RuntimeNode}
-     */
-    getCurrentSceneN: NYI,
-
-    /**
-     * Set the current running runtime scene.
-     * @method _setCurrentSceneN
-     * @param {RuntimeNode}
-     */
-    _setCurrentSceneN: NYI,
-
-    /**
      * This method will be invoke only if useDefaultMainLoop is true.
      * @method tick
      * @param {number} deltaTime
@@ -284,7 +250,7 @@ var EngineWrapper = cc.FireClass({
     tickInEditMode: function (deltaTime, updateAnimate) {
         if (CC_EDITOR) {
             // invoke updateInEditMode
-            this.getCurrentScene()._callUpdateInEM(deltaTime);
+            cc(cc.director.getRunningScene())._callUpdateInEM(deltaTime);
 
             if (updateAnimate) {
                 this.animateRuntime(deltaTime);
@@ -335,7 +301,7 @@ var EngineWrapper = cc.FireClass({
                 if (CC_EDITOR && Editor.isPageLevel) {
                     cc.Runtime.registerToCore();
                 }
-                //var scene = SceneWrapper.getCurrentSceneN()
+                //var scene = cc.director.getRunningScene()
                 //if (editorCallback.onSceneLoaded) {
                 //    editorCallback.onSceneLoaded(this._scene);
                 //}
@@ -354,7 +320,7 @@ var EngineWrapper = cc.FireClass({
             }
 
             // create empty scene
-            var scene = new (self.getCurrentScene().constructor)();
+            var scene = new (cc(cc.director.getRunningScene()).constructor)();
             scene.createAndAttachNode();
             self._emptySceneN = scene.targetN;
             scene.retain();
@@ -383,7 +349,7 @@ var EngineWrapper = cc.FireClass({
         //     CCObject._clearDeferredDestroyTimer();
         //     editorCallback.onEnginePlayed(true);
         // }
-        this.resumeRuntime();
+        cc.game.resume();
 
         if (CC_EDITOR && !this._useDefaultMainLoop) {
             this._tickStop();
@@ -393,7 +359,7 @@ var EngineWrapper = cc.FireClass({
         // if (CC_EDITOR) {
         //     editorCallback.onEnginePaused();
         // }
-        this.pauseRuntime();
+        cc.game.pause();
 
         if (CC_EDITOR) {
             // start tick for edit mode
@@ -428,7 +394,7 @@ var EngineWrapper = cc.FireClass({
     onStop: function () {
         //CCObject._deferredDestroy();
 
-        this.stopRuntime();
+        cc.game.pause();
 
         // reset states
         this._loadingScene = ''; // TODO: what if loading scene ?

@@ -38,7 +38,7 @@ JS.getset(nodeProto, 'parent',
             else {
                 cc.warn('Can not add "%s" to "%s" which type is "%s".', this.name, value.name, JS.getClassName(value));
                 if (!this.parentN) {
-                    this.parentN = cc.engine.getCurrentSceneN();
+                    this.parentN = cc.director.getRunningScene();
                 }
             }
         }
@@ -72,7 +72,7 @@ JS.get(nodeProto, 'children',
  */
 JS.getset(nodeProto, 'scenePosition',
     function () {
-        var scene = cc.engine && cc.engine.getCurrentScene();
+        var scene = cc(cc.director.getRunningScene());
         if (!scene) {
             cc.error('Can not access scenePosition if no running scene');
             return cc.Vec2.zero;
@@ -81,7 +81,7 @@ JS.getset(nodeProto, 'scenePosition',
         return scene.transformPointToLocal( this.worldPosition );
     },
     function (value) {
-        var scene = cc.engine && cc.engine.getCurrentScene();
+        var scene = cc(cc.director.getRunningScene());
         if (!scene) {
             cc.error('Can not access scenePosition if no running scene');
             return;
@@ -99,7 +99,7 @@ JS.getset(nodeProto, 'scenePosition',
  */
 JS.getset(nodeProto, 'sceneRotation',
     function () {
-        var scene = cc.engine && cc.engine.getCurrentScene();
+        var scene = cc(cc.director.getRunningScene());
         if (!scene) {
             cc.error('Can not access sceneRotation if no running scene');
             return 0;
@@ -108,7 +108,7 @@ JS.getset(nodeProto, 'sceneRotation',
         return this.worldRotation - scene.rotation;
     },
     function (value) {
-        var scene = cc.engine && cc.engine.getCurrentScene();
+        var scene = cc(cc.director.getRunningScene());
         if (!scene) {
             cc.error('Can not access sceneRotation if no running scene');
             return;
@@ -127,7 +127,7 @@ JS.getset(nodeProto, 'sceneRotation',
  */
 JS.getset(nodeProto, 'sceneScale',
     function () {
-        var scene = cc.engine && cc.engine.getCurrentScene();
+        var scene = cc(cc.director.getRunningScene());
         if (!scene) {
             cc.error('Can not access sceneScale if no running scene');
             return cc.Vec2.one;

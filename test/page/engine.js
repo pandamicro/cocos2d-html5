@@ -1,29 +1,29 @@
 describe( 'test engine', function () {
 
     it( 'pause when init runtime', function () {
-        expect(cc.director.isPaused()).to.equal(true);
+        expect(cc.game.isPaused()).to.equal(true);
     });
 
     it( 'play runtime', function () {
         cc.engine.playRuntime();
 
-        expect(cc.director.isPaused()).to.equal(false);
+        expect(cc.game.isPaused()).to.equal(false);
     });
 
     it( 'pause runtime', function () {
-        cc.engine.pauseRuntime();
+        cc.game.pause();
 
-        expect( cc.director.isPaused() ).to.equal(true);
+        expect( cc.game.isPaused() ).to.equal(true);
     });
 
     it( 'resume runtime', function() {
-        cc.engine.resumeRuntime();
+        cc.game.resume();
 
-        expect( cc.director.isPaused() ).to.equal(false);
+        expect( cc.game.isPaused() ).to.equal(false);
     });
 
-    it( 'getCurrentSceneN', function () {
-        assert(cc.engine.getCurrentSceneN());
+    it( 'getRunningScene', function () {
+        assert( cc.director.getRunningScene() );
     });
 });
 

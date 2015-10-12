@@ -452,6 +452,10 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
                 this._nextScene = scene;
             }
         }
+
+        if (this._nextScene) {
+            this.setNextScene();
+        }
     },
 
     /**

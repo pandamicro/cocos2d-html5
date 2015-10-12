@@ -341,17 +341,8 @@ var EngineWrapper = cc.FireClass({
     },
     initRuntime: function () {},
     playRuntime: function () {},
-    pauseRuntime: function () {},
-    resumeRuntime: function () {},
-    stopRuntime: function () {},
     tick: function () {},
-    tickInEditMode: function () {},
-    _setCurrentSceneN: function (scene) {
-        this._scene = scene;
-    },
-    getCurrentSceneN: function () {
-        return this._scene;
-    }
+    tickInEditMode: function () {}
 });
 
 /**

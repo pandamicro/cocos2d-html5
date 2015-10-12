@@ -86,6 +86,8 @@ var EngineWrapper = cc.FireClass({
         };
 
         cc.game.run(config, function () {
+            cc.view.resizeWithBrowserSize(true);
+
             var scene = new cc.Scene();
 
             // scene anchor point need be 0,0
@@ -103,7 +105,7 @@ var EngineWrapper = cc.FireClass({
                 self.canvasSize = new cc.Vec2(width, height);
             }
 
-            self._setCurrentSceneN(scene);
+            cc.director.runScene(scene);
 
             // dont update logic before rendering
             // cc.director.pause();
@@ -127,7 +129,7 @@ var EngineWrapper = cc.FireClass({
 
     playRuntime: function () {
         if (CC_EDITOR) {
-            this._registerCocosSystemEvent(cc.game.canvas);
+            cc.inputManager.registerSystemEvent(cc.game.canvas);
 
             // reset cocos tabindex in playing mode
             cc.game.canvas.setAttribute('tabindex', 99);
@@ -136,19 +138,6 @@ var EngineWrapper = cc.FireClass({
                 cc.imeDispatcher._domInputControl.setAttribute('tabindex', 2);
         }
 
-        cc.director.resume();
-        cc.view.resizeWithBrowserSize(true);
-    },
-
-    stopRuntime: function () {
-
-    },
-
-    pauseRuntime: function () {
-        cc.director.pause();
-    },
-
-    resumeRuntime: function () {
         cc.director.resume();
     },
 
@@ -190,31 +179,8 @@ var EngineWrapper = cc.FireClass({
         }
     },
 
-    _setCurrentSceneN: function (scene) {
-        cc.director.runScene(scene);
-        this._scene = scene;
-
-        if (cc.director.setNextScene)
-            cc.director.setNextScene();
-    },
-
-    getCurrentSceneN: function () {
-        return cc.director.getRunningScene() || this._scene;
-    },
-
-    /**
-     * Cocos will block event's propagation, it's not suitable for edit mode.
-     * So hack cc.inputManager.registerSystemEvent, reregister cocos system event when play runtime.
-     */
-    _dontRegisterSystemEvent: function () {
-        this._registerCocosSystemEvent = cc.inputManager.registerSystemEvent.bind( cc.inputManager );
-
-        cc.inputManager.registerSystemEvent = function () {
-        };
-    },
-
     getIntersectionList: function (rect) {
-        var scene = this.getCurrentScene();
+        var scene = cc(cc.director.getRunningScene());
         var list = [];
 
         scene._deepQueryChildren(function (child) {
