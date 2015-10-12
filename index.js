@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2013-2015 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -26,12 +26,12 @@
 
 require('./polyfill');
 
-// define cc
+// DEFINE CC
 
-var getWrapper;
 var root = typeof global !== 'undefined' ? global : window;
 
 // `cc(node)` takes a runtime node and return its corresponding cc.Runtime.NodeWrapper instance.
+var getWrapper;
 var cc = function (node) {
     return getWrapper(node);
 };
@@ -43,8 +43,8 @@ cc._setWrapperGetter = function (getter) {
 
 // MACROS
 
-// if global_defs not declared by uglify, declare them globally
-// (use eval to ignore uglify)
+// if "global_defs" not preprocessed by uglify, just declare them globally
+// (use eval to prevent the uglify from renaming symbols)
 if (typeof CC_EDITOR === 'undefined') {
     eval('CC_EDITOR=typeof Editor!=="undefined"');
 }
@@ -60,33 +60,37 @@ if (typeof CC_TEST === 'undefined') {
     }
 }
 if (CC_TEST) {
-    // contains internal apis for unit tests
-    // @expose
+    /**
+     * contains internal apis for unit tests
+     * @expose
+     */
     cc._Test = {};
 }
 
-// LOAD ORIGIN COCOS2D COMPILED BY CLOSURE
+var isCoreLevel = CC_EDITOR && Editor.isCoreLevel;
 
-// preload some core modules for cocos
+// PRELOAD SOME MODULES FOR COCOS
+
 require('./cocos2d/core/platform/CCEnum');
 require('./cocos2d/core/platform/js');
+require('./cocos2d/core/value-types');
 
-document.ccConfig = document.ccConfig || {
-    debugMode: CC_DEV,
-    renderMode: 0                 // 0: auto, 1: Canvas, 2: WebGL
-};
+if (!isCoreLevel) {
+    // LOAD ORIGIN COCOS2D COMPILED BY CLOSURE
+    root.ccui = {};
+    require('./bin/modular-cocos2d');
+}
+else {
+    // load modules for editor's core-level which included modular-cocos2d.js
+    require('./CCDebugger');
+    cc._initDebugSetting(1);    // DEBUG_MODE_INFO
+    require('./cocos2d/core/platform/CCSys');
+}
 
-require('./bin/modular-cocos2d');
-
-// EXTENDS FOR FIREBALL
+// LOAD EXTENDS FOR FIREBALL
 
 require('./cocos2d/core/platform');
-require('./cocos2d/core/value-types');
 require('./cocos2d/core/assets');
-
-if (cc.sys.isBrowser) {
-    // engine, runtime...
-}
 
 if (CC_EDITOR) {
     /**
@@ -98,7 +102,7 @@ if (CC_EDITOR) {
     cc._require = require;
 }
 
-if (CC_EDITOR && cc.sys.platform === cc.sys.EDITOR_CORE) {
+if (isCoreLevel) {
     cc.isRuntimeNode = function () {
         return false;
     };
@@ -108,10 +112,10 @@ if (CC_EDITOR && cc.sys.platform === cc.sys.EDITOR_CORE) {
     Editor.versions['cocos2d'] = require('./package.json').version;
 }
 else {
-    require('./cocos2d/deprecated');
-
     //cc.Runtime = require('./runtime/index');
     cc.isRuntimeNode = cc.getWrapperType;   // 由于是借助 wrapper 来判断，所以该方法只有在 wrapper 都注册好后才有效
+
+    require('./cocos2d/deprecated');
 }
 
 module.exports = cc;

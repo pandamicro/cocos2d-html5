@@ -135,7 +135,7 @@ var enumerateObject = function (obj, parent, wrapperToNode) {
     var clone = new klass();
     obj._iN$t = clone;
     objsToClearTmpVar.push(obj);
-    if (cc.FireClass.isFireClass(klass)) {
+    if (cc.FireClass._isFireClass(klass)) {
         var props = klass.__props__;
         for (var p = 0; p < props.length; p++) {
             key = props[p];
@@ -241,7 +241,7 @@ function instantiateObj (obj, parent, wrapperToNode, ownerObj, ownerKey) {
         }
         else {
             var ctor = obj.constructor;
-            if (cc.FireClass.isFireClass(ctor)) {
+            if (cc.FireClass._isFireClass(ctor)) {
                 if (parent && obj instanceof cc.Runtime.NodeWrapper) {
                     if (!obj.isChildOf(parent)) {
                         // 不拷贝其它场景对象，保持原有引用

@@ -355,13 +355,6 @@ cc.initEngine = function (config, cb) {
  * @name cc.game
  */
 cc.game = /** @lends cc.game# */{
-    DEBUG_MODE_NONE: 0,
-    DEBUG_MODE_INFO: 1,
-    DEBUG_MODE_WARN: 2,
-    DEBUG_MODE_ERROR: 3,
-    DEBUG_MODE_INFO_FOR_WEB_PAGE: 4,
-    DEBUG_MODE_WARN_FOR_WEB_PAGE: 5,
-    DEBUG_MODE_ERROR_FOR_WEB_PAGE: 6,
 
     EVENT_HIDE: "game_on_hide",
     EVENT_SHOW: "game_on_show",
