@@ -39,7 +39,7 @@ var NodeWrapper = cc.FireClass({
             if (CC_EDITOR) {
                 var uuid = this.uuid;
                 if (uuid) {
-                    EditorEngine.attachedWrappersForEditor[uuid] = this;
+                    cc.engine.attachedWrappersForEditor[uuid] = this;
                 }
             }
             this.attached();
@@ -676,7 +676,7 @@ var NodeWrapper = cc.FireClass({
         if (CC_EDITOR) {
             var uuid = this.uuid;
             if (uuid) {
-                EditorEngine.attachedWrappersForEditor[uuid] = this;
+                cc.engine.attachedWrappersForEditor[uuid] = this;
             }
         }
         this.attached();

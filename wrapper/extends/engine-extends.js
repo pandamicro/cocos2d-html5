@@ -12,28 +12,6 @@ var SceneWrapper = require('../wrappers/scene');
 var EngineWrapper = require('../wrappers/engine');
 var engineProto = EngineWrapper.prototype;
 
-if (CC_EDITOR) {
-    /**
-     * Returns the wrapper by wrapper id.
-     * @method getInstanceById
-     * @param {String} uuid
-     * @return {cc.Runtime.NodeWrapper}
-     */
-    engineProto.getInstanceById = function (uuid) {
-        return this.attachedWrappersForEditor[uuid] || null;
-    };
-
-    /**
-     * Returns the node by wrapper id.
-     * @method getInstanceByIdN
-     * @param {String} uuid
-     * @return {RuntimeNode}
-     */
-    engineProto.getInstanceByIdN = function (uuid) {
-        var wrapper = this.attachedWrappersForEditor[uuid];
-        return (wrapper && wrapper.targetN) || null;
-    };
-}
 
 JS.mixin(engineProto, {
 
