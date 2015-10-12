@@ -25,125 +25,98 @@
  ****************************************************************************/
 
 /**
- * @constant
- * @type Number
+ * Enum for keyboard return types
+ * @readonly
+ * @enum {number}
  */
-cc.KEYBOARD_RETURNTYPE_DEFAULT = 0;
+cc.KeyboardReturnType = cc.Enum({
+    DEFAULT: 0,
+    DONE: 1,
+    SEND: 2,
+    SEARCH: 3,
+    GO: 4
+});
 
 /**
- * @constant
- * @type Number
+ * The EditBox's InputMode defines the type of text that the user is allowed to enter
+ * @readonly
+ * @enum {number}
+ * @memberof cc.EditBox
  */
-cc.KEYBOARD_RETURNTYPE_DONE = 1;
+var InputMode = cc.Enum({
+
+    ANY: 0,
+
+    /**
+     * The user is allowed to enter an e-mail address.
+     */
+    EMAILADDR: 1,
+
+    /**
+     * The user is allowed to enter an integer value.
+     */
+    NUMERIC: 2,
+
+    /**
+     * The user is allowed to enter a phone number.
+     */
+    PHONENUMBER: 3,
+
+    /**
+     * The user is allowed to enter a URL.
+     */
+    URL: 4,
+
+    /**
+     * The user is allowed to enter a real number value.
+     * This extends kEditBoxInputModeNumeric by allowing a decimal point.
+     */
+    DECIMAL: 5,
+
+    /**
+     * The user is allowed to enter any text, except for line breaks.
+     */
+    SINGLELINE: 6
+});
 
 /**
- * @constant
- * @type Number
+ * Enum for the EditBox's input flags
+ * @readonly
+ * @enum {number}
+ * @memberof cc.EditBox
  */
-cc.KEYBOARD_RETURNTYPE_SEND = 2;
+var InputFlag = cc.Enum({
+    /**
+     * Indicates that the text entered is confidential data that should be
+     * obscured whenever possible. This implies EDIT_BOX_INPUT_FLAG_SENSITIVE.
+     */
+    PASSWORD: 0,
 
-/**
- * @constant
- * @type Number
- */
-cc.KEYBOARD_RETURNTYPE_SEARCH = 3;
+    /**
+     * Indicates that the text entered is sensitive data that the
+     * implementation must never store into a dictionary or table for use
+     * in predictive, auto-completing, or other accelerated input schemes.
+     * A credit card number is an example of sensitive data.
+     */
+    SENSITIVE: 1,
 
-/**
- * @constant
- * @type Number
- */
-cc.KEYBOARD_RETURNTYPE_GO = 4;
+    /**
+     * This flag is a hint to the implementation that during text editing,
+     * the initial letter of each word should be capitalized.
+     */
+    INITIAL_CAPS_WORD: 2,
 
-/**
- * The EditBoxInputMode defines the type of text that the user is allowed * to enter.
- * @constant
- * @type Number
- */
-cc.EDITBOX_INPUT_MODE_ANY = 0;
+    /**
+     * This flag is a hint to the implementation that during text editing,
+     * the initial letter of each sentence should be capitalized.
+     */
+    INITIAL_CAPS_SENTENCE: 3,
 
-/**
- * The user is allowed to enter an e-mail address.
- * @constant
- * @type Number
- */
-cc.EDITBOX_INPUT_MODE_EMAILADDR = 1;
-
-/**
- * The user is allowed to enter an integer value.
- * @constant
- * @type Number
- */
-cc.EDITBOX_INPUT_MODE_NUMERIC = 2;
-
-/**
- * The user is allowed to enter a phone number.
- * @constant
- * @type Number
- */
-cc.EDITBOX_INPUT_MODE_PHONENUMBER = 3;
-
-/**
- * The user is allowed to enter a URL.
- * @constant
- * @type Number
- */
-cc.EDITBOX_INPUT_MODE_URL = 4;
-
-/**
- * The user is allowed to enter a real number value.
- * This extends kEditBoxInputModeNumeric by allowing a decimal point.
- * @constant
- * @type Number
- */
-cc.EDITBOX_INPUT_MODE_DECIMAL = 5;
-
-/**
- * The user is allowed to enter any text, except for line breaks.
- * @constant
- * @type Number
- */
-cc.EDITBOX_INPUT_MODE_SINGLELINE = 6;
-
-/**
- * Indicates that the text entered is confidential data that should be
- * obscured whenever possible. This implies EDIT_BOX_INPUT_FLAG_SENSITIVE.
- * @constant
- * @type Number
- */
-cc.EDITBOX_INPUT_FLAG_PASSWORD = 0;
-
-/**
- * Indicates that the text entered is sensitive data that the
- * implementation must never store into a dictionary or table for use
- * in predictive, auto-completing, or other accelerated input schemes.
- * A credit card number is an example of sensitive data.
- * @constant
- * @type Number
- */
-cc.EDITBOX_INPUT_FLAG_SENSITIVE = 1;
-
-/**
- * This flag is a hint to the implementation that during text editing,
- * the initial letter of each word should be capitalized.
- * @constant
- * @type Number
- */
-cc.EDITBOX_INPUT_FLAG_INITIAL_CAPS_WORD = 2;
-
-/**
- * This flag is a hint to the implementation that during text editing,
- * the initial letter of each sentence should be capitalized.
- * @constant
- * @type Number
- */
-cc.EDITBOX_INPUT_FLAG_INITIAL_CAPS_SENTENCE = 3;
-
-/**
- * Capitalize all characters automatically.
- * @constant
- * @type Number
- */
-cc.EDITBOX_INPUT_FLAG_INITIAL_CAPS_ALL_CHARACTERS = 4;
+    /**
+     * Capitalize all characters automatically.
+     */
+    INITIAL_CAPS_ALL_CHARACTERS: 4
+});
 
 /**
  * @class
@@ -198,9 +171,9 @@ cc.EditBoxDelegate = cc.Class.extend({
  * @property {String}   placeHolderFontName     - <@writeonly> Config font name of place holder
  * @property {Number}   placeHolderFontSize     - <@writeonly> Config font size of place holder
  * @property {cc.Color} placeHolderFontColor    - <@writeonly> Config font color of place holder
- * @property {Number}   inputFlag               - <@writeonly> Input flag of edit box, one of the EditBoxInputFlag constants. e.g.cc.EDITBOX_INPUT_FLAG_PASSWORD
+ * @property {cc.EditBox.InputFlag} inputFlag   - <@writeonly> Input flag of edit box, one of the cc.EditBox.InputFlag constants. e.g.cc.EditBox.InputFlag..PASSWORD
  * @property {Object}   delegate                - <@writeonly> Delegate of edit box
- * @property {Number}   inputMode               - <@writeonly> Input mode of the edit box. Value should be one of the EditBoxInputMode constants.
+ * @property {cc.EditBox.InputMode} inputMode   - <@writeonly> Input mode of the edit box. Value should be one of the cc.EditBox.InputMode constants.
  * @property {Number}   returnType              - <@writeonly> Return type of edit box, value should be one of the KeyboardReturnType constants.
  *
  */
@@ -208,9 +181,9 @@ cc.EditBox = cc.ControlButton.extend({
     _domInputSprite: null,
 
     _delegate: null,
-    _editBoxInputMode: cc.EDITBOX_INPUT_MODE_ANY,
-    _editBoxInputFlag: cc.EDITBOX_INPUT_FLAG_SENSITIVE,
-    _keyboardReturnType: cc.KEYBOARD_RETURNTYPE_DEFAULT,
+    _editBoxInputMode: InputMode.ANY,
+    _editBoxInputFlag: InputFlag.SENSITIVE,
+    _keyboardReturnType: cc.KeyboardReturnType.DEFAULT,
 
     _text: "",
     _placeholderText: "",
@@ -279,7 +252,7 @@ cc.EditBox = cc.ControlButton.extend({
                 this.value = "";
                 this.style.fontSize = selfPointer._edFontSize + "px";
                 this.style.color = cc.colorToHex(selfPointer._textColor);
-                if (selfPointer._editBoxInputFlag === cc.EDITBOX_INPUT_FLAG_PASSWORD)
+                if (selfPointer._editBoxInputFlag === InputFlag.PASSWORD)
                     selfPointer._edTxt.type = "password";
                 else
                     selfPointer._edTxt.type = "text";
@@ -361,7 +334,7 @@ cc.EditBox = cc.ControlButton.extend({
         if (this._edTxt.value !== this._placeholderText) {
             this._edTxt.style.fontFamily = this._edFontName;
             this._edTxt.style.fontSize = this._edFontSize + "px";
-            if (this._editBoxInputFlag === cc.EDITBOX_INPUT_FLAG_PASSWORD)
+            if (this._editBoxInputFlag === InputFlag.PASSWORD)
                 this._edTxt.type = "password";
             else
                 this._edTxt.type = "text";
@@ -391,7 +364,7 @@ cc.EditBox = cc.ControlButton.extend({
             } else {
                 this._edTxt.value = text;
                 this._edTxt.style.color = cc.colorToHex(this._textColor);
-                if (this._editBoxInputFlag === cc.EDITBOX_INPUT_FLAG_PASSWORD)
+                if (this._editBoxInputFlag === InputFlag.PASSWORD)
                     this._edTxt.type = "password";
                 else
                     this._edTxt.type = "text";
@@ -506,12 +479,12 @@ cc.EditBox = cc.ControlButton.extend({
 
     /**
      * Set the input flags that are to be applied to the edit box.
-     * @param {Number} inputFlag One of the EditBoxInputFlag constants.
-     * e.g.cc.EDITBOX_INPUT_FLAG_PASSWORD
+     * @param {cc.EditBox.InputFlag} inputFlag - One of the cc.EditBox.InputFlag constants.
+     * e.g.cc.EditBox.InputFlag..PASSWORD
      */
     setInputFlag: function (inputFlag) {
         this._editBoxInputFlag = inputFlag;
-        if ((this._edTxt.value !== this._placeholderText) && (inputFlag === cc.EDITBOX_INPUT_FLAG_PASSWORD))
+        if ((this._edTxt.value !== this._placeholderText) && (inputFlag === InputFlag.PASSWORD))
             this._edTxt.type = "password";
         else
             this._edTxt.type = "text";
@@ -711,6 +684,5 @@ cc.EditBox.create = function (size, normal9SpriteBg, press9SpriteBg, disabled9Sp
     return new cc.EditBox(size, normal9SpriteBg, press9SpriteBg, disabled9SpriteBg);
 };
 
-
-
-
+cc.EditBox.InputMode = InputMode;
+cc.EditBox.InputFlag = InputFlag;

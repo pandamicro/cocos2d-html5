@@ -12,6 +12,7 @@ module.exports = [
     [cc,   'Layer',          require('./layer'),           'Layer'],
     [cc,   'LayerColor',     require('./layer-color'),     'LayerColor'],
     [cc,   'DrawNode',       require('./draw-node'),       'DrawNode'],
+    [cc,   'EditBox',        require('./edit-box'),        'EditBox'],
 
     [ccui, 'Button',         require('./ui/button'),       'UI/Button'],
     [ccui, 'ImageView',      require('./ui/scale9-sprite'),'UI/Scale9Sprite'],
