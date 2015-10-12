@@ -335,12 +335,9 @@ cc.Runtime.registerNodeType(TestNode, TestWrapper);
 
 var EngineWrapper = cc.FireClass({
     extends: cc.Runtime.EngineWrapper,
-    initRuntime: function () {},
     constructor: function () {
         this._scene = null;
     },
-    initRuntime: function () {},
-    playRuntime: function () {},
     tick: function () {},
     tickInEditMode: function () {}
 });
@@ -368,7 +365,7 @@ var TestScript = cc.FireClass({
 var Engine = cc.engine;
 Engine._reset = function (w, h) {
     if (!Engine.isInitialized && !Engine._isInitializing) {
-        Engine.init({
+        cc.game.run({
             width: w,
             height: h
         });

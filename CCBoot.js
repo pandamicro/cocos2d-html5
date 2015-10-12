@@ -406,6 +406,11 @@ cc.game = /** @lends cc.game# */{
     _frameTime: null,
 
     /**
+     * The outer frame of the game canvas, parent of cc.container
+     * @type {Object}
+     */
+    frame: null,
+    /**
      * The container of game canvas, equals to cc.container
      * @type {Object}
      */
@@ -643,6 +648,30 @@ cc.game = /** @lends cc.game# */{
         this.prepare(cc.game.onStart.bind(cc.game));
     },
 
+    getIntersectionList: function (rect) {
+        var scene = cc(cc.director.getRunningScene());
+        var list = [];
+
+        scene._deepQueryChildren(function (child) {
+
+            var bounds = child.getWorldBounds();
+
+            // if intersect aabb success, then try intersect obb
+            if (rect.intersects(bounds)) {
+                bounds = child.getWorldOrientedBounds();
+                var polygon = new cc.Polygon(bounds);
+
+                if (Editor.Intersection.rectPolygon(rect, polygon)) {
+                    list.push(child.targetN);
+                }
+            }
+
+            return true;
+        });
+
+        return list;
+    },
+
     _loadConfig: function () {
         // Load config
         // Already loaded
@@ -718,13 +747,7 @@ cc.game = /** @lends cc.game# */{
             element = cc.$(el) || cc.$('#' + el),
             localCanvas, localContainer, localConStyle;
 
-        if (!el) {
-            width = width || 640;
-            height = height || 480;
-            this.canvas = cc._canvas = localCanvas = document.createElement("CANVAS");
-            this.container = cc.container = localContainer = document.createElement("DIV");
-            localContainer.setAttribute('id', 'Cocos2dGameContainer');
-        } else if (element.tagName === "CANVAS") {
+        if (element.tagName === "CANVAS") {
             width = width || element.width;
             height = height || element.height;
 
@@ -733,17 +756,20 @@ cc.game = /** @lends cc.game# */{
             this.container = cc.container = localContainer = document.createElement("DIV");
             if (localCanvas.parentNode)
                 localCanvas.parentNode.insertBefore(localContainer, localCanvas);
-            localContainer.setAttribute('id', 'Cocos2dGameContainer');
-        } else {//we must make a new canvas and place into this element
+        } else {
+            //we must make a new canvas and place into this element
             if (element.tagName !== "DIV") {
                 cc.log("Warning: target element is not a DIV or CANVAS");
             }
             width = width || element.clientWidth;
             height = height || element.clientHeight;
             this.canvas = cc._canvas = localCanvas = document.createElement("CANVAS");
-            this.container = cc.container = localContainer = element;
+            this.container = cc.container = localContainer = document.createElement("DIV");
+            element.appendChild(localContainer);
         }
+        localContainer.setAttribute('id', 'Cocos2dGameContainer');
         localContainer.appendChild(localCanvas);
+        this.frame = (localContainer.parentNode === document.body) ? document.documentElement : localContainer.parentNode;
 
         localCanvas.addClass("gameCanvas");
         localCanvas.setAttribute("width", width || 480);
@@ -779,7 +805,7 @@ cc.game = /** @lends cc.game# */{
         }
 
         cc._gameDiv = localContainer;
-        cc._canvas.oncontextmenu = function () {
+        cc.game.canvas.oncontextmenu = function () {
             if (!cc._isContextMenuEnable) return false;
         };
 

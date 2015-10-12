@@ -203,36 +203,33 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
      */
     convertToUI: null,
 
-    /**
-     *  Draw the scene. This method is called every frame. Don't call it manually.
-     */
-    drawScene: function () {
-        var renderer = cc.renderer;
+    gameUpdate: function (deltaTime) {
 
-        // calculate "global" dt
-        this.calculateDeltaTime();
+    },
 
+    engineUpdate: function (deltaTime) {
         //tick before glClear: issue #533
         if (!this._paused) {
-            this._scheduler.update(this._deltaTime);
+            this._scheduler.update(deltaTime);
             cc.eventManager.dispatchEvent(this._eventAfterUpdate);
         }
-
-        renderer.clear();
 
         /* to avoid flickr, nextScene MUST be here: after tick and before draw.
          XXX: Which bug is this one. It seems that it can't be reproduced with v0.9 */
         if (this._nextScene) {
             this.setNextScene();
         }
+    },
 
+    visit: function (deltaTime) {
+        var renderer = cc.renderer;
         if (this._beforeVisitScene)
             this._beforeVisitScene();
 
-        // draw the scene
+        // update the scene
         if (this._runningScene) {
             if (renderer.childrenOrderDirty === true) {
-                cc.renderer.clearRenderCommands();
+                renderer.clearRenderCommands();
                 this._runningScene._renderCmd._curLevel = 0;                          //level start from 0;
                 this._runningScene.visit();
                 renderer.resetFlag();
@@ -240,20 +237,37 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
                 renderer.transform();
         }
 
-        // draw the notifications node
+        // visit the notifications node
         if (this._notificationNode)
             this._notificationNode.visit();
 
         cc.eventManager.dispatchEvent(this._eventAfterVisit);
-        cc.g_NumberOfDraws = 0;
 
         if (this._afterVisitScene)
             this._afterVisitScene();
+    },
 
-        renderer.rendering(cc._renderContext);
+    render: function (deltaTime) {
+        cc.g_NumberOfDraws = 0;
+        cc.renderer.clear();
+
+        cc.renderer.rendering(cc._renderContext);
         this._totalFrames++;
 
         cc.eventManager.dispatchEvent(this._eventAfterDraw);
+    },
+
+    /**
+     *  Draw the scene. This method is called every frame. Don't call it manually.
+     */
+    drawScene: function () {
+        // calculate "global" dt
+        this.calculateDeltaTime();
+
+        this.gameUpdate(this._deltaTime);
+        this.engineUpdate(this._deltaTime);
+        this.visit(this._deltaTime);
+        this.render(this._deltaTime);
 
         this._calculateMPF();
     },
