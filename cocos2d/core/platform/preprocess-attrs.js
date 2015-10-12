@@ -110,7 +110,7 @@ function checkUrl (val, className, propName, url) {
         }
     }
     if (CC_EDITOR) {
-        if (typeof url !== 'function' || !cc.isChildClassOf(url, Attr.RawAsset)) {
+        if (typeof url !== 'function' || !cc.isChildClassOf(url, cc.RawAsset)) {
             return cc.error('The "url" type of "%s.%s" must be child class of cc.RawAsset.', className, propName);
         }
         if (cc.isChildClassOf(url, cc.Asset)) {
@@ -141,7 +141,7 @@ function parseType (val, type, className, propName) {
     }
     if (typeof type === 'function') {
         if (CC_EDITOR) {
-            var isRaw = cc.isChildClassOf(type, Attr.RawAsset) && !cc.isChildClassOf(type, cc.Asset);
+            var isRaw = cc.isChildClassOf(type, cc.RawAsset) && !cc.isChildClassOf(type, cc.Asset);
             if (isRaw) {
                 cc.warn('The "type" attribute of "%s.%s" must be child class of cc.Asset, ' +
                           'otherwise you should use "url: %s" instead', className, propName,
@@ -153,7 +153,7 @@ function parseType (val, type, className, propName) {
 
 function postCheckType (val, type, className, propName) {
     if (typeof type === 'function' && CC_EDITOR) {
-        if (cc.FireClass.isFireClass(type) && val.serializable !== false && !cc.js._getClassId(type, false)) {
+        if (cc.FireClass._isFireClass(type) && val.serializable !== false && !cc.js._getClassId(type, false)) {
             cc.warn('Can not serialize "%s.%s" because the specified type is anonymous, please provide a class name or set the "serializable" attribute of "%s.%s" to "false".', className, propName, className, propName);
         }
     }

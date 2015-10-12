@@ -97,7 +97,9 @@ var CallbacksInvoker = function () {
 };
 JS.extend(CallbacksInvoker, CallbacksHandler);
 
-cc._Test.CallbacksInvoker = CallbacksInvoker;
+if (CC_TEST) {
+    cc._Test.CallbacksInvoker = CallbacksInvoker;
+}
 
 /**
  * @method invoke

@@ -472,7 +472,7 @@ var _Deserializer = (function () {
                 obj._deserialize(serialized.content, self);
                 return obj;
             }
-            if ( cc.FireClass.isFireClass(klass) ) {
+            if ( cc.FireClass._isFireClass(klass) ) {
                 _deserializeFireClass(self, obj, serialized, klass, target);
             }
             else {

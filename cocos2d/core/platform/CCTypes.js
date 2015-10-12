@@ -322,7 +322,3 @@ if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
     delete cc._tmp.WebGLColor;
 }
 
-cc.assert(cc.js.isFunction(cc._tmp.PrototypeColor), cc._LogInfos.MissingFile, "CCTypesPropertyDefine.js");
-cc._tmp.PrototypeColor();
-delete cc._tmp.PrototypeColor;
-

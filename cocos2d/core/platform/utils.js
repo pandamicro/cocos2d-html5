@@ -25,7 +25,7 @@
  ****************************************************************************/
 
 module.exports = {
-    isDomNode: cc.sys.isBrowser && function (obj) {
+    isDomNode: /*cc.sys.isBrowser*/ typeof window === 'object' && function (obj) {
         return (
             typeof Node === "object" ? obj instanceof Node :
             obj && typeof obj === "object" && typeof obj.nodeType === "number" && typeof obj.nodeName === "string"
