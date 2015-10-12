@@ -32,9 +32,9 @@ var Prefab = cc.FireClass({
         var newWrapper = data.w;
 
         // create nodes
-        cc.engine._isCloning = true;
+        cc.game._isCloning = true;
         initNodeAndChildren([data], null, wrapperToNode);
-        cc.engine._isCloning = false;
+        cc.game._isCloning = false;
 
         // reassociate nodes
         wrapperToNode.apply();

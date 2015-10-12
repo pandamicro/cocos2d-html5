@@ -106,7 +106,7 @@ var ParticleWrapper = cc.FireClass({
                         this.targetN.resetSystem();
                         this.targetN.stopSystem();
 
-                        cc.engine.repaintInEditMode();
+                        EditorEngine.repaintInEditMode();
                     }
                 }
             }
@@ -727,7 +727,7 @@ var ParticleWrapper = cc.FireClass({
         this.targetN.resetSystem();
         this.targetN.stopSystem();
 
-        cc.engine.repaintInEditMode();
+        EditorEngine.repaintInEditMode();
     },
 
     _serializeToObject: function (object, property) {

@@ -385,14 +385,17 @@ cc.game = /** @lends cc.game# */{
         registerSystemEvent: "registerSystemEvent",
         jsList: "jsList"
     },
-
-    _prepareCalled: false,//whether the prepare function has been called
-    _checkPrepare: null,
-    _prepared: false,//whether the engine has prepared
+    
+    // states
+    _paused: true,//whether the game is paused
+    _isCloning: false,    // deserializing or instantiating
+    _prepareCalled: false, //whether the prepare function has been called
+    _prepared: false, //whether the engine has prepared
     _rendererInitialized: false,
+
+    _checkPrepare: null,
     _renderContext: null,
     
-    _paused: true,//whether the game is paused
     _intervalId: null,//interval target of main
     
     _lastTime: null,

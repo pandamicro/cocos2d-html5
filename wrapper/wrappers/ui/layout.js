@@ -15,7 +15,7 @@ var LayoutWrapper = cc.FireClass({
                     this.targetN.clippingEnabled = value;
 
                     cc.renderer.childrenOrderDirty = true;
-                    cc.engine.repaintInEditMode();
+                    EditorEngine.repaintInEditMode();
                 }
                 else {
                     cc.error('The new clippingEnabled must be boolean');
@@ -79,7 +79,7 @@ var LayoutWrapper = cc.FireClass({
     doLayout: function () {
         this.targetN.requestDoLayout();
         cc.renderer.childrenOrderDirty = true;
-        cc.engine.repaintInEditMode();
+        EditorEngine.repaintInEditMode();
     },
 
     onBeforeSerialize: function () {
