@@ -89,8 +89,12 @@ test('test inherited FireClass', function() {
             string: 'unknown',
             number: 1,
             boolean: true,
-            emptyObj: {},
-            obj: {}
+            emptyObj: {
+                default: {}
+            },
+            obj: {
+                default: {}
+            }
         }
     });
 
@@ -119,8 +123,12 @@ test('test inherited FireClass', function() {
         string: 'unknown',
         number: 1,
         boolean: true,
-        emptyObj: {},
-        obj: {}
+        emptyObj: {
+            default: {}
+        },
+        obj: {
+            default: {}
+        }
     };
 
     match(asset, expect, 'test');
