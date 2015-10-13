@@ -85,7 +85,7 @@ var WidgetWrapper = cc.FireClass({
 
         anchorAlign: {
             default: ccui.RelativeLayoutParameter.Type.PARENT_TOP_LEFT,
-            type: cc.RelativeLayoutParameter.Type,
+            type: ccui.RelativeLayoutParameter.Type,
 
             notify: function () {
                 this.updateAnchorPositon();

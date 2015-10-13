@@ -36,7 +36,7 @@ test('basic test', function () {
 });
 
 test('emit', function () {
-    var target = new Fire.EventTarget();
+    var target = new cc.FireEventTarget();
     var cb1 = new Callback().enable();
     target.on('fire', cb1);
     cb1.callbackFunction(function (event) {
@@ -49,8 +49,8 @@ test('emit', function () {
 });
 
 test('once', function () {
-    var target = new Fire.EventTarget();
-    var fireEvent = new Fire.Event('fire');
+    var target = new cc.FireEventTarget();
+    var fireEvent = new cc.FireEvent('fire');
     var cb1 = new Callback();
 
     // once
@@ -86,8 +86,8 @@ test('once', function () {
 });
 
 test('test useCapture in on/off', function () {
-    var target = new Fire.EventTarget();
-    var event = new Fire.Event('fire');
+    var target = new cc.FireEventTarget();
+    var event = new cc.FireEvent('fire');
     var cb1 = new Callback().enable();
     var cb2 = new Callback().enable();
 
@@ -106,8 +106,8 @@ test('test useCapture in on/off', function () {
 
 test('test propagation', function () {
     // define hierarchy
-    var node1 = new Fire.EventTarget();
-    var node2 = new Fire.EventTarget();
+    var node1 = new cc.FireEventTarget();
+    var node2 = new cc.FireEventTarget();
     node2.parent = node1;
     node2._getCapturingTargets = function (type, array) {
         for (var target = this.parent; target; target = target.parent) {
@@ -124,7 +124,7 @@ test('test propagation', function () {
         }
     };
 
-    var event = new Fire.Event('fire', true);
+    var event = new cc.FireEvent('fire', true);
     var capture1 = new Callback();
     var capture2 = new Callback();
     var bubble1 = new Callback();
@@ -138,11 +138,11 @@ test('test propagation', function () {
     // dispatched by node1
 
     capture1.callbackFunction(function (event) {
-        strictEqual(event.eventPhase, Fire.Event.AT_TARGET, 'event phase should be target if dispatched by self 1');
+        strictEqual(event.eventPhase, cc.FireEvent.AT_TARGET, 'event phase should be target if dispatched by self 1');
         strictEqual(bubble1.calledCount, 0, 'captures should be invoked before bubbles');
     }).enable();
     bubble1.callbackFunction(function (event) {
-        strictEqual(event.eventPhase, Fire.Event.AT_TARGET, 'event phase should be target if dispatched by self 2');
+        strictEqual(event.eventPhase, cc.FireEvent.AT_TARGET, 'event phase should be target if dispatched by self 2');
     }).enable();
     node1.dispatchEvent(event);
     capture1.once('callback also will be invoked at target phase if registered as capturing');
@@ -151,25 +151,25 @@ test('test propagation', function () {
     // dispatched by node2
 
     capture1.callbackFunction(function (event) {
-        strictEqual(event.eventPhase, Fire.Event.CAPTURING_PHASE, 'event phase should be capturing if dispatched by node2');
+        strictEqual(event.eventPhase, cc.FireEvent.CAPTURING_PHASE, 'event phase should be capturing if dispatched by node2');
         strictEqual(event.target, node2, 'target of capture1 should be node2');
         strictEqual(event.currentTarget, node1, 'current target of capture1 should be node1');
         strictEqual(capture2.calledCount, 0, 'captures1 -> capture2');
     }).enable();
     capture2.callbackFunction(function (event) {
-        strictEqual(event.eventPhase, Fire.Event.AT_TARGET, 'event phase of capture2 should be at target if dispatched by node2');
+        strictEqual(event.eventPhase, cc.FireEvent.AT_TARGET, 'event phase of capture2 should be at target if dispatched by node2');
         strictEqual(event.target, node2, 'target of capture2 should be node2');
         strictEqual(event.currentTarget, node2, 'current target of capture2 should be node2');
         strictEqual(bubble2.calledCount, 0, 'captures2 -> bubble2');
     }).enable();
     bubble2.callbackFunction(function (event) {
-        strictEqual(event.eventPhase, Fire.Event.AT_TARGET, 'event phase of bubble2 should be at target if dispatched by node2');
+        strictEqual(event.eventPhase, cc.FireEvent.AT_TARGET, 'event phase of bubble2 should be at target if dispatched by node2');
         strictEqual(event.target, node2, 'target of bubble2 should be node2');
         strictEqual(event.currentTarget, node2, 'current target of bubble2 should be node2');
         strictEqual(bubble1.calledCount, 0, 'bubble2 -> bubble1');
     }).enable();
     bubble1.callbackFunction(function (event) {
-        strictEqual(event.eventPhase, Fire.Event.BUBBLING_PHASE, 'event phase should be bubble if dispatched by node2');
+        strictEqual(event.eventPhase, cc.FireEvent.BUBBLING_PHASE, 'event phase should be bubble if dispatched by node2');
         strictEqual(event.target, node2, 'target of bubble1 should be node2');
         strictEqual(event.currentTarget, node1, 'current target of bubble1 should be node1');
     }).enable();
@@ -182,8 +182,8 @@ test('test propagation', function () {
 
 test('test stop propagation', function () {
     // define hierarchy
-    var node1 = new Fire.EventTarget();
-    var node2 = new Fire.EventTarget();
+    var node1 = new cc.FireEventTarget();
+    var node2 = new cc.FireEventTarget();
     node2.parent = node1;
     node2._getCapturingTargets = function (type, array) {
         for (var target = this.parent; target; target = target.parent) {
@@ -200,7 +200,7 @@ test('test stop propagation', function () {
         }
     };
 
-    var event = new Fire.Event('fire', true);
+    var event = new cc.FireEvent('fire', true);
     var capture1 = new Callback().enable();
     var capture2 = new Callback().enable();
     var bubble1 = new Callback().enable();
@@ -241,8 +241,8 @@ test('test stop propagation', function () {
 
 test('test stop propagation immediate', function () {
     // define hierarchy
-    var node1 = new Fire.EventTarget();
-    var node2 = new Fire.EventTarget();
+    var node1 = new cc.FireEventTarget();
+    var node2 = new cc.FireEventTarget();
     node2.parent = node1;
     node2._getCapturingTargets = function (type, array) {
         for (var target = this.parent; target; target = target.parent) {
@@ -259,7 +259,7 @@ test('test stop propagation immediate', function () {
         }
     };
 
-    var event = new Fire.Event('fire', true);
+    var event = new cc.FireEvent('fire', true);
     var capture1 = new Callback().enable();
     var capture1_2nd = new Callback().enable();
     var capture2 = new Callback().enable();
@@ -297,8 +297,8 @@ test('test stop propagation immediate', function () {
 
 test('test Event.bubbles', function () {
     // define hierarchy
-    var node1 = new Fire.EventTarget();
-    var node2 = new Fire.EventTarget();
+    var node1 = new cc.FireEventTarget();
+    var node2 = new cc.FireEventTarget();
     node2.parent = node1;
     node2._getBubblingTargets = function (type, array) {
         for (var target = this.parent; target; target = target.parent) {
@@ -311,7 +311,7 @@ test('test Event.bubbles', function () {
     var bubble1 = new Callback();
     node1.on('fire', bubble1, false);
 
-    var event = new Fire.Event('fire');
+    var event = new cc.FireEvent('fire');
     event.bubbles = false;
     bubble1.disable('bubble1 should not be invoked if set event.bubbles to false');
     node2.dispatchEvent(event);
@@ -324,9 +324,9 @@ test('test Event.bubbles', function () {
 
 //test('', function () {
 //    // define hierarchy
-//    var node1 = new Fire.EventTarget();
-//    var node2 = new Fire.EventTarget();
-//    var node3 = new Fire.EventTarget();
+//    var node1 = new cc.FireEventTarget();
+//    var node2 = new cc.FireEventTarget();
+//    var node3 = new cc.FireEventTarget();
 //    node2.parent = node1;
 //    node3.parent = node2;
 //    node3._getCapturingTargets = node2._getCapturingTargets = function (type, array) {
@@ -344,7 +344,7 @@ test('test Event.bubbles', function () {
 //        }
 //    };
 
-//    var event = new Fire.Event('fire');
+//    var event = new cc.FireEvent('fire');
 //    var capture1 = new Callback();
 //    var capture2 = new Callback();
 //    var capture3 = new Callback();

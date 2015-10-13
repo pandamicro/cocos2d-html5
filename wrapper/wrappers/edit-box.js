@@ -39,7 +39,7 @@ var EditBoxWrapper = cc.FireClass({
                 if (value instanceof Vec2) {
                     this.targetN.setPreferredSize(cc.size(value.x, value.y));
                 } else {
-                    cc.error('The value must be Fire.Vec2 -> size.');
+                    cc.error('The value must be cc.Vec2 -> size.');
                 }
             }
         },

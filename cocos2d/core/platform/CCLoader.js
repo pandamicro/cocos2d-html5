@@ -1,3 +1,6 @@
+
+var FireUrl = CC_EDITOR && !CC_TEST && require('fire-url');
+
 /**
  * Loader for resource loading process. It's a singleton object.
  * @class
@@ -556,4 +559,5 @@ cc.loader = (function () {
             for (var key in _aliases)
                 delete _aliases[key];
         }
+    };
 })();

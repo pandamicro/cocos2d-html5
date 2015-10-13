@@ -146,11 +146,11 @@ else {
 var LCMethods = {
     onLoad: {
         tmpl: CallLcmOnceTmpl,
-        flag: cc.CCObject.Flags.IsOnLoadCalled
+        flag: cc.Object.Flags.IsOnLoadCalled
     },
     //start: {
     //    tmpl: CallLcmOnceTmpl,
-    //    flag: cc.CCObject.Flags.IsOnStartCalled
+    //    flag: cc.Object.Flags.IsOnStartCalled
     //},
     onEnter: {
         tmpl: CallLcmTmpl,

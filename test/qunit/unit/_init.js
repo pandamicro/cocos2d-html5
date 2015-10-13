@@ -14,8 +14,8 @@ var Texture = cc.Texture;
 //var Atlas = cc.Atlas;
 //var FontInfo = cc.FontInfo;
 
-var Ticker = Fire._Ticker;
-var Time = Fire.Time;
+var Ticker = cc._Ticker;
+var Time = cc.Time;
 //var Entity = cc.Entity;
 var Engine = cc.engine;
 //var Camera = cc.Camera;
@@ -329,7 +329,9 @@ TestWrapper = cc.FireClass({
         node.name = this._serializeData.name;
         node.scale = this._serializeData.scale;
         return node;
-    }
+    },
+    attached: function () {
+    },
 });
 cc.Runtime.registerNodeType(TestNode, TestWrapper);
 

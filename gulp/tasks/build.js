@@ -162,7 +162,7 @@ gulp.task('build-modular-cocos2d', function () {
         .pipe(gulp.dest(Path.dirname(paths.modularCocos2d)));
 });
 
-gulp.task('build', ['build-modular-cocos2d', 'clean'], function () {
+gulp.task('build', ['build-modular-cocos2d'], function () {
     return rebundle(createBundler());
 });
 
