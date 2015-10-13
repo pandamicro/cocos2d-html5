@@ -644,7 +644,9 @@ cc.game = /** @lends cc.game# */{
         //Engine._scene = null;
 
         // destroy last scene
-        cc.director.runScene(this._emptySceneN);
+        if (CC_EDITOR && cc.engine && cc.engine._emptySceneN) {
+            cc.director.runScene(cc.engine._emptySceneN);
+        }
 
         if (onBeforeLoadScene) {
             onBeforeLoadScene();
