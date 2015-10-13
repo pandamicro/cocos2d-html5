@@ -650,6 +650,8 @@ else {
     if (win.DeviceMotionEvent || win.DeviceOrientationEvent)
         capabilities["accelerometer"] = true;
 
+    delete _tmpCanvas1;
+    delete _tmpCanvas2;
 }
 
 /**

@@ -68,9 +68,9 @@ function instantiate (original) {
     if (original instanceof CCObject) {
         // invoke _instantiate method if supplied
         if (original._instantiate) {
-            cc.engine._isCloning = true;
+            cc.game._isCloning = true;
             clone = original._instantiate();
-            cc.engine._isCloning = false;
+            cc.game._isCloning = false;
             return clone;
         }
         else if (original instanceof cc.Asset) {
@@ -80,9 +80,9 @@ function instantiate (original) {
         }
     }
 
-    cc.engine._isCloning = true;
+    cc.game._isCloning = true;
     clone = doInstantiate(original);
-    cc.engine._isCloning = false;
+    cc.game._isCloning = false;
     return clone;
 }
 

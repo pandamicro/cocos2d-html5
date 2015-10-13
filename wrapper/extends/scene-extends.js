@@ -49,9 +49,9 @@ JS.mixin(sceneProto, {
                     // create scene node
                     self.createAndAttachNode();
                     // create remainder nodes
-                    cc.engine._isCloning = true;
+                    cc.game._isCloning = true;
                     initNodeAndChildren(wrappers, self.targetN, handle.wrapperToNode);
-                    cc.engine._isCloning = false;
+                    cc.game._isCloning = false;
                     // reassociate nodes
                     handle.wrapperToNode.apply();
                     //

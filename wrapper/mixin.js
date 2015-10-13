@@ -140,7 +140,7 @@ function mixin (node, typeOrTypename) {
         }
     }
 
-    if (cc.engine && (cc.engine._isPlaying || !CC_EDITOR) && !cc.engine._isCloning) {
+    if (cc.engine && (cc.engine._isPlaying || !CC_EDITOR) && !cc.game._isCloning) {
         // invoke onLoad
         var onLoad = classToMixProto.onLoad;
         if (onLoad) {

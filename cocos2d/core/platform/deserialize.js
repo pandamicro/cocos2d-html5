@@ -556,9 +556,9 @@ cc.deserialize = function (data, result, options) {
     if (createAssetRefs && !result) {
         result = new Details();
     }
-    cc.engine._isCloning = true;
+    cc.game._isCloning = true;
     var deserializer = new _Deserializer(data, result, target, isEditor, classFinder);
-    cc.engine._isCloning = false;
+    cc.game._isCloning = false;
 
     if (createAssetRefs) {
         result.assignAssetsBy(Editor.serialize.asAsset);
