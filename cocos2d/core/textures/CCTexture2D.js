@@ -564,7 +564,7 @@ cc.game.addEventListener("rendererInited", function () {
          * Be aware that the content of the generated textures will be upside-down! </p>
          * @name cc.Texture2D
          * @class
-         * @extends cc.Class
+         * @extends cc._Class
          *
          * @property {WebGLTexture}     name            - <@readonly> WebGLTexture Object
          * @property {Number}           pixelFormat     - <@readonly> Pixel format of the texture
@@ -576,7 +576,7 @@ cc.game.addEventListener("rendererInited", function () {
          * @property {Number}           maxS            - Texture max S
          * @property {Number}           maxT            - Texture max T
          */
-        cc.Texture2D = cc.Class.extend(/** @lends cc.Texture2D# */proto);
+        cc.Texture2D = cc._Class.extend(/** @lends cc.Texture2D# */proto);
 
         cc.Texture2D._generateGrayTexture = function(texture, rect, renderCanvas){
             if (texture === null)

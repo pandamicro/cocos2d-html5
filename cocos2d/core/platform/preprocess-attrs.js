@@ -85,7 +85,7 @@ function parseWrapper (val, propName, wrapperOf, classname) {
         if (val.type) {
             cc.warn('The "wrapper" attribute of %s.%s can not be used with "type"', classname, propName);
         }
-        if (cc.FireClass.isChildClassOf(wrapperOf, cc.Runtime.NodeWrapper)) {
+        if (cc.Class.isChildClassOf(wrapperOf, cc.Runtime.NodeWrapper)) {
             val.type = wrapperOf;
             return;
         }
@@ -127,7 +127,7 @@ function checkUrl (val, className, propName, url) {
 function parseType (val, type, className, propName) {
     if (Array.isArray(type)) {
         if (CC_EDITOR) {
-            var isArray = require('./CCFireClass').isArray;   // require lazily to avoid circular require() calls
+            var isArray = require('./CCClass').isArray;   // require lazily to avoid circular require() calls
             if (!isArray(val.default)) {
                 cc.warn('The "default" attribute of "%s.%s" must be an array', className, propName);
             }
@@ -153,7 +153,7 @@ function parseType (val, type, className, propName) {
 
 function postCheckType (val, type, className, propName) {
     if (typeof type === 'function' && CC_EDITOR) {
-        if (cc.FireClass._isFireClass(type) && val.serializable !== false && !cc.js._getClassId(type, false)) {
+        if (cc.Class._isCCClass(type) && val.serializable !== false && !cc.js._getClassId(type, false)) {
             cc.warn('Can not serialize "%s.%s" because the specified type is anonymous, please provide a class name or set the "serializable" attribute of "%s.%s" to "false".', className, propName, className, propName);
         }
     }

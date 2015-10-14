@@ -76,11 +76,11 @@ test('nil', function () {
     match(obj, expect);
 });
 
-test('test inherited FireClass', function() {
-    var MyAsset = cc.FireClass({
+test('test inherited CCClass', function() {
+    var MyAsset = cc.Class({
         name: 'MyAsset',
         extends: cc.Asset,
-        constructor: function () {
+        ctor: function () {
             this.array = [1, '2', {a: 3}, [4, [5]], true];
         },
         properties: {
@@ -136,10 +136,10 @@ test('test inherited FireClass', function() {
     cc.js.unregisterClass(MyAsset);
 });
 
-test('test FireClass', function () {
-    var Sprite = cc.FireClass({
+test('test CCClass', function () {
+    var Sprite = cc.Class({
         name: 'Sprite',
-        constructor: function () {
+        ctor: function () {
             this.image = 'sprite.png';
         },
         properties: {
@@ -166,8 +166,8 @@ test('test FireClass', function () {
     cc.js.unregisterClass(Sprite);
 });
 
-test('FireClass which inherited from CCObject', function () {
-    var type = cc.FireClass({
+test('CCClass which inherited from CCObject', function () {
+    var type = cc.Class({
         name: 'cc.MyType',
         extends: CCObject
     });
@@ -212,7 +212,7 @@ test('test circular reference', function () {
 });
 
 test('test serializable attributes', function () {
-    var Sprite = cc.FireClass({
+    var Sprite = cc.Class({
         name: 'Sprite',
         properties: {
             trimThreshold: {
@@ -265,14 +265,14 @@ test('test CCObject reference', function () {
 });
 
 test('main asset', function () {
-    var Scene = cc.FireClass({
+    var Scene = cc.Class({
         name: "Scene",
         properties: {
             entities: [],
         }
     });
 
-    var Entity = cc.FireClass({
+    var Entity = cc.Class({
         name: "Entity"
     });
 
@@ -378,7 +378,7 @@ test('nicify 2 ', function () {
 });
 
 test('url array', function () {
-    var Data = cc.FireClass({
+    var Data = cc.Class({
         name: 'data',
         properties: {
             textures: {
@@ -419,7 +419,7 @@ test('url array', function () {
 });
 
 test('node array', function () {
-    var Data = cc.FireClass({
+    var Data = cc.Class({
         name: 'data',
         properties: {
             nodes: {

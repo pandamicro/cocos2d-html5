@@ -196,7 +196,6 @@ cc.formatStr = function(){
     return str;
 };
 
-require('../CCDebugger');
 require('../cocos2d/core/utils/Async');
 require('../cocos2d/core/platform/CCLoader');
 require('../cocos2d/core/platform/CCSys');
@@ -287,7 +286,7 @@ function _load(config) {
     var self = this;
     var CONFIG_KEY = cc.game.CONFIG_KEY, engineDir = config[CONFIG_KEY.engineDir], loader = cc.loader;
 
-    if (cc.Class) {
+    if (cc._Class) {
         // Single file loaded
         _afterEngineLoaded(config);
     } else {

@@ -1,8 +1,8 @@
 module('register');
 
 test('basic', function() {
-    var MyNode = cc.FireClass();
-    var MyNodeWrapper = cc.FireClass({
+    var MyNode = cc.Class();
+    var MyNodeWrapper = cc.Class({
         extends: cc.Runtime.NodeWrapper
     });
     cc.Runtime.registerNodeType(MyNode, MyNodeWrapper);
@@ -28,8 +28,8 @@ test('basic', function() {
 });
 
 //test('cc.SceneWrapperImpl', function() {
-//    var MyScene = cc.FireClass();
-//    var MySceneWrapper = cc.FireClass({
+//    var MyScene = cc.Class();
+//    var MySceneWrapper = cc.Class({
 //        extends: cc.Runtime.SceneWrapper
 //    });
 //    cc.Runtime.registerNodeType(MyScene, MySceneWrapper);

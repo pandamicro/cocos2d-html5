@@ -26,9 +26,9 @@
 /**
  * Base class of all kinds of events.
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.Event = cc.Class.extend(/** @lends cc.Event# */{
+cc.Event = cc._Class.extend(/** @lends cc.Event# */{
     _type: 0,                                   //  Event type
     _isStopped: false,                         //< whether the event has been stopped.
     _currentTarget: null,                       //< Current target

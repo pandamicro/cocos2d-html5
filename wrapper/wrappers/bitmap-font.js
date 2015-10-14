@@ -41,11 +41,11 @@ var getAnchorPoint = (function () {
 
 var NodeWrapper = require('./node');
 
-var BitmapFontWrapper = cc.FireClass({
+var BitmapFontWrapper = cc.Class({
     name: 'cc.BitmapFontWrapper',
     extends: NodeWrapper,
 
-    constructor: function () {
+    ctor: function () {
     },
 
     properties: {

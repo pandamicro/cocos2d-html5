@@ -1,7 +1,7 @@
 
 var Scale9Wrapper = require('./scale9');
 
-var LoadingBarWrapper = cc.FireClass({
+var LoadingBarWrapper = cc.Class({
     name: 'cc.LoadingBarWrapper',
     extends: Scale9Wrapper,
 

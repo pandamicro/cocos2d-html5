@@ -74,6 +74,7 @@ var isCoreLevel = CC_EDITOR && Editor.isCoreLevel;
 require('./cocos2d/core/platform/CCEnum');
 require('./cocos2d/core/platform/js');
 require('./cocos2d/core/value-types');
+require('./CCDebugger');
 
 if (!isCoreLevel) {
     // LOAD ORIGIN COCOS2D COMPILED BY CLOSURE
@@ -81,8 +82,7 @@ if (!isCoreLevel) {
     require('./bin/modular-cocos2d');
 }
 else {
-    // load modules for editor's core-level which included modular-cocos2d.js
-    require('./CCDebugger');
+    // load modules for editor's core-level which included in modular-cocos2d.js
     cc._initDebugSetting(1);    // DEBUG_MODE_INFO
     require('./cocos2d/core/platform/CCSys');
 }

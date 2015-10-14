@@ -1,7 +1,7 @@
 
 var WidgetWrapper = require('./widget');
 
-var CheckBoxWrapper = cc.FireClass({
+var CheckBoxWrapper = cc.Class({
     name: 'cc.CheckBoxWrapper',
     extends: WidgetWrapper,
 

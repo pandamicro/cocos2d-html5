@@ -24,11 +24,11 @@ var ERR_NaN = 'The %s must not be NaN';
  * @constructor
  * @param {RuntimeNode} node
  */
-var NodeWrapper = cc.FireClass({
+var NodeWrapper = cc.Class({
     name: 'cc.Runtime.NodeWrapper',
     extends: cc.Object,
 
-    constructor: function () {
+    ctor: function () {
         /**
          * The targetN node to wrap.
          * @property targetN

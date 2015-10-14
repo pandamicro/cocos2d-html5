@@ -23,7 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-ccui._FocusNavigationController = cc.Class.extend({
+ccui._FocusNavigationController = cc._Class.extend({
     _keyboardListener: null,
     _firstFocusedWidget: null,
     _enableFocusNavigation: false,

@@ -24,11 +24,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-cc.BuilderAnimationManagerDelegate = cc.Class.extend({
+cc.BuilderAnimationManagerDelegate = cc._Class.extend({
     completedAnimationSequenceNamed:function (name) {}
 });
 
-cc.BuilderAnimationManager = cc.Class.extend({
+cc.BuilderAnimationManager = cc._Class.extend({
     _sequences:null,
     _nodeSequences:null,
     _baseValues:null,

@@ -1,7 +1,7 @@
 
 var LayoutWrapper = require('./layout');
 
-var PageViewWrapper = cc.FireClass({
+var PageViewWrapper = cc.Class({
     name: 'cc.PageViewWrapper',
     extends: LayoutWrapper,
 

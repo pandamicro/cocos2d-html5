@@ -27,12 +27,12 @@
 /**
  * cc.TMXObjectGroup represents the TMX object group.
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  *
  * @property {Array}    properties  - Properties from the group. They can be added using tilemap editors
  * @property {String}   groupName   - Name of the group
  */
-cc.TMXObjectGroup = cc.Class.extend(/** @lends cc.TMXObjectGroup# */{
+cc.TMXObjectGroup = cc._Class.extend(/** @lends cc.TMXObjectGroup# */{
 	properties: null,
     groupName: "",
 

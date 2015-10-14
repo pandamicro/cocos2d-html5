@@ -1,7 +1,7 @@
 
 var LayoutWrapper = require('./layout');
 
-var ScrollViewWrapper = cc.FireClass({
+var ScrollViewWrapper = cc.Class({
     name: 'cc.ScrollViewWrapper',
     extends: LayoutWrapper,
 

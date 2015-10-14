@@ -39,9 +39,9 @@ cc.IMEKeyboardNotificationInfo = function (begin, end, duration) {
 /**
  * Input method editor delegate.
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.IMEDelegate = cc.Class.extend(/** @lends cc.IMEDelegate# */{
+cc.IMEDelegate = cc._Class.extend(/** @lends cc.IMEDelegate# */{
     /**
      * Constructor function, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
      */
@@ -136,7 +136,7 @@ cc.IMEDelegate = cc.Class.extend(/** @lends cc.IMEDelegate# */{
  * @class
  * @name cc.imeDispatcher
  */
-cc.IMEDispatcher = cc.Class.extend(/**  @lends cc.imeDispatcher# */{
+cc.IMEDispatcher = cc._Class.extend(/**  @lends cc.imeDispatcher# */{
     _domInputControl:null,
     impl:null,
     _currentInputString:"",
@@ -498,10 +498,10 @@ cc.IMEDispatcher = cc.Class.extend(/**  @lends cc.imeDispatcher# */{
  * Create the cc.IMEDispatcher.Imp Object. <br />
  * This is the inner class...
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  * @name cc.IMEDispatcher.Impl
  */
-cc.IMEDispatcher.Impl = cc.Class.extend(/** @lends cc.IMEDispatcher.Impl# */{
+cc.IMEDispatcher.Impl = cc._Class.extend(/** @lends cc.IMEDispatcher.Impl# */{
     _delegateWithIme:null,
     _delegateList:null,
     /**

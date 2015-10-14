@@ -1,7 +1,7 @@
 
 var Scale9Wrapper = require('./scale9');
 
-var Scale9SpriteWrapper = cc.FireClass({
+var Scale9SpriteWrapper = cc.Class({
     name: 'cc.Scale9SpriteWrapper',
     extends: Scale9Wrapper,
 

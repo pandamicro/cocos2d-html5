@@ -1,8 +1,8 @@
 module('wrapper');
 
 test('Node', function() {
-    var MyNode = cc.FireClass();
-    var MyNodeWrapper = cc.FireClass({
+    var MyNode = cc.Class();
+    var MyNodeWrapper = cc.Class({
         extends: cc.Runtime.NodeWrapper,
         statics: {
         }
@@ -18,8 +18,8 @@ test('Node', function() {
 
 test('SceneNode', function() {
     var dummyScene;
-    var MyScene = cc.FireClass();
-    var MySceneWrapper = cc.FireClass({
+    var MyScene = cc.Class();
+    var MySceneWrapper = cc.Class({
         extends: cc.Runtime.SceneWrapper,
     });
     //cc.engine.getCurrentSceneNode = function () {
@@ -37,12 +37,12 @@ test('SceneNode', function() {
 });
 
 test('root', function() {
-    var MyNode = cc.FireClass({
-        constructor: function () {
+    var MyNode = cc.Class({
+        ctor: function () {
             this.parent = null;
         }
     });
-    var MyNodeWrapper = cc.FireClass({
+    var MyNodeWrapper = cc.Class({
         extends: cc.Runtime.NodeWrapper,
         properties: {
             parentN: {
@@ -55,8 +55,8 @@ test('root', function() {
             }
         }
     });
-    var MyScene = cc.FireClass();
-    var MySceneWrapper = cc.FireClass({
+    var MyScene = cc.Class();
+    var MySceneWrapper = cc.Class({
         extends: cc.Runtime.SceneWrapper,
     });
     cc.Runtime.registerNodeType(MyNode, MyNodeWrapper);

@@ -35,13 +35,13 @@ cc.ACTION_TAG_INVALID = -1;
  * Base class for cc.Action objects.
  * @class
  *
- * @extends cc.Class
+ * @extends cc._Class
  *
  * @property {cc.Node}  target          - The target will be set with the 'startWithTarget' method. When the 'stop' method is called, target will be set to nil.
  * @property {cc.Node}  originalTarget  - The original target of the action.
  * @property {Number}   tag             - The tag of the action, can be used to find the action.
  */
-cc.Action = cc.Class.extend(/** @lends cc.Action# */{
+cc.Action = cc._Class.extend(/** @lends cc.Action# */{
     //***********variables*************
     originalTarget:null,
     target:null,

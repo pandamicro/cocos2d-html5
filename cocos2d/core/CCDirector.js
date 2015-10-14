@@ -73,7 +73,7 @@ cc.GLToClipTransform = function (transformOut) {
  * @class
  * @name cc.Director
  */
-cc.Director = cc.Class.extend(/** @lends cc.Director# */{
+cc.Director = cc._Class.extend(/** @lends cc.Director# */{
     //Variables
     _landscape: false,
     _nextDeltaTimeZero: false,

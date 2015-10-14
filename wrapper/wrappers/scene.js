@@ -11,10 +11,10 @@ var NodeWrapper = require('./node');
  * @constructor
  * @param {RuntimeNode} node - The root node of current stage.
  */
-var SceneWrapper = cc.FireClass({
+var SceneWrapper = cc.Class({
     name: 'cc.Runtime.SceneWrapper',
     extends: NodeWrapper,
-    constructor: function () {
+    ctor: function () {
         this._dataToDeserialize = null;
     },
 

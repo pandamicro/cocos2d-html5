@@ -2,7 +2,7 @@ var Vec2 = cc.Vec2;
 
 var NodeWrapper = require('./node');
 
-var EditBoxWrapper = cc.FireClass({
+var EditBoxWrapper = cc.Class({
     name: 'cc.EditBoxWrapper',
     extends: NodeWrapper,
 

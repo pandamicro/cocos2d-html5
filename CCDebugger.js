@@ -222,6 +222,14 @@ cc._LogInfos = {
     EventManager__updateListeners_2: "_inDispatch should be 1 here."
 };
 
+if (CC_EDITOR) {
+    cc._LogInfos.Editor = {
+        Class: {
+            callSuperCtor: "cc.Class will automatically call super constructor of %s, you should not call it manually."
+        }
+    };
+}
+
 //+++++++++++++++++++++++++something about log start++++++++++++++++++++++++++++
 cc._logToWebPage = function (msg) {
     if (!cc._canvas)

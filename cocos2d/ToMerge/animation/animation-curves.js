@@ -6,7 +6,7 @@
 // @class AnimCurve
 // @constructor
 //
-var AnimCurve = cc.FireClass({
+var AnimCurve = cc.Class({
     name: 'Fire.AnimCurve',
 
     //
@@ -49,7 +49,7 @@ function binarySearch (array, value) {
 // @constructor
 // @extends AnimCurve
 //
-var DynamicAnimCurve = cc.FireClass({
+var DynamicAnimCurve = cc.Class({
     name: 'Fire.DynamicAnimCurve',
     properties: {
 

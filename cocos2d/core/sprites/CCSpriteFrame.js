@@ -33,7 +33,7 @@
  *    You can modify the frame of a cc.Sprite by doing:<br/>
  * </p>
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  *
  * @param {String|cc.Texture2D} filename
  * @param {cc.Rect} rect If parameters' length equal 2, rect in points, else rect in pixels
@@ -51,7 +51,7 @@
  * var frame1 = new cc.SpriteFrame(texture, cc.rect(0,0,90,128));
  * var frame2 = new cc.SpriteFrame(texture, cc.rect(0,0,90,128),false,0,cc.size(90,128));
  */
-cc.SpriteFrame = cc.Class.extend(/** @lends cc.SpriteFrame# */{
+cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     _offset:null,
     _originalSize:null,
     _rectInPixels:null,

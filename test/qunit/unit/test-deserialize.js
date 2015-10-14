@@ -86,9 +86,9 @@ test('nil', function () {
     var str = '{ "null": null }'
     deepEqual(cc.deserialize(str), obj, 'can deserialize null');
 
-    var MyAsset = cc.FireClass({
+    var MyAsset = cc.Class({
         name: 'MyAsset',
-        constructor: function () {
+        ctor: function () {
             this.foo = 'bar';
         },
         properties: {
@@ -266,9 +266,9 @@ testWithTarget('circular reference by dict', function (useTarget) {
 });
 
 test('target', function () {
-    var MyAsset = cc.FireClass({
+    var MyAsset = cc.Class({
         name: 'MyAsset',
-        constructor: function () {
+        ctor: function () {
             this.tmpVal = 0;
         },
         properties: {
@@ -292,7 +292,7 @@ test('target', function () {
 });
 
 test('custom deserialization', function () {
-    var Asset = cc.FireClass({
+    var Asset = cc.Class({
         name: 'a a b b',
         extend: cc.Object,
         properties: {

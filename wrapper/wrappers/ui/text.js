@@ -2,11 +2,11 @@ var Utils = require('../utils');
 
 var WidgetWrapper = require('./widget');
 
-var TextWrapper = cc.FireClass({
+var TextWrapper = cc.Class({
     name: 'cc.TextWrapper',
     extends: WidgetWrapper,
 
-    constructor: function () {
+    ctor: function () {
         this._boundingBox = [100, 100]
     },
 

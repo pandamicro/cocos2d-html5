@@ -42,7 +42,7 @@ var jsb = jsb || {};
  * Only available in JSB
  * @class
  * @name jsb.fileUtils
- * @extend cc.Class
+ * @extend cc._Class
  */
 jsb.fileUtils = /** @lends jsb.fileUtils# */{
 
@@ -299,7 +299,7 @@ jsb.fileUtils = /** @lends jsb.fileUtils# */{
 /**
  * @class
  */
-jsb.EventAssetsManager = cc.Class.extend(/** @lends jsb.EventAssetsManager# */{
+jsb.EventAssetsManager = cc._Class.extend(/** @lends jsb.EventAssetsManager# */{
 
     /**
      * @function getAssetsManager
@@ -413,7 +413,7 @@ jsb.EventAssetsManager = cc.Class.extend(/** @lends jsb.EventAssetsManager# */{
 /**
  * @class
  */
-jsb.EventListenerAssetsManager = cc.Class.extend(/** @lends jsb.EventListenerAssetsManager# */{
+jsb.EventListenerAssetsManager = cc._Class.extend(/** @lends jsb.EventListenerAssetsManager# */{
 
     /**
      * @function init
@@ -460,7 +460,7 @@ jsb.EventListenerAssetsManager = cc.Class.extend(/** @lends jsb.EventListenerAss
  * please refer to this document to know how to use it: http://www.cocos2d-x.org/docs/manual/framework/html5/v3/assets-manager/en
  * Only available in JSB
  */
-jsb.AssetsManager = cc.Class.extend(/** @lends jsb.AssetsManager# */{
+jsb.AssetsManager = cc._Class.extend(/** @lends jsb.AssetsManager# */{
 
     /**
      * @function getState
@@ -545,7 +545,7 @@ jsb.AssetsManager = cc.Class.extend(/** @lends jsb.AssetsManager# */{
 /**
  * @class
  */
-jsb.Manifest = cc.Class.extend(/** @lends jsb.Manifest# */{
+jsb.Manifest = cc._Class.extend(/** @lends jsb.Manifest# */{
 
     /**
      * @function getManifestFileUrl

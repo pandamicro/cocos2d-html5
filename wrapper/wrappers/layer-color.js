@@ -1,7 +1,7 @@
 
 var LayerWrapper = require('./layer');
 
-var LayerColorWrapper = cc.FireClass({
+var LayerColorWrapper = cc.Class({
     name: 'cc.LayerColorWrapper',
     extends: LayerWrapper,
 

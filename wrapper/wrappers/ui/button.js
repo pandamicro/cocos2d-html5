@@ -2,7 +2,7 @@ var Utils = require('../utils');
 
 var Scale9Wrapper = require('./scale9');
 
-var ButtonWrapper = cc.FireClass({
+var ButtonWrapper = cc.Class({
     name: 'cc.ButtonWrapper',
     extends: Scale9Wrapper,
 

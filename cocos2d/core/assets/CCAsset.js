@@ -12,10 +12,10 @@ var RawAsset = require('./CCRawAsset');
  * @extends RawAsset
  * @constructor
  */
-cc.Asset = cc.FireClass({
+cc.Asset = cc.Class({
     name: 'cc.Asset', extends: RawAsset,
 
-    constructor: function () {
+    ctor: function () {
         /**
          * @property _uuid
          * @type {string}

@@ -31,10 +31,10 @@ var color = cc.fireColor;
 
 if (!cc.SpriteAsset) {
     var Sprite = (function () {
-        var Sprite = cc.FireClass({
+        var Sprite = cc.Class({
             name: 'cc.SpriteAsset',
             extends: cc.Asset,
-            constructor: function () {
+            ctor: function () {
                 var img = arguments[0];
                 if (img) {
                     this.texture = new cc.TextureAsset(img);
@@ -151,10 +151,10 @@ if (!cc.TextureAsset) {
             Bilinear: -1,
             Trilinear: -1
         });
-        var Texture = cc.FireClass({
+        var Texture = cc.Class({
             name: 'cc.TextureAsset',
             extends: cc.Asset,
-            constructor: function () {
+            ctor: function () {
                 var img = arguments[0];
                 if (img) {
                     this.image = img;
@@ -240,7 +240,7 @@ if (!cc.TextureAsset) {
     var canvasCtxToGetPixel = null;
 }
 
-cc.RawTexture = cc.FireClass({
+cc.RawTexture = cc.Class({
     name: 'cc.RawTexture',
     extends: cc.RawAsset
 });
@@ -251,7 +251,7 @@ TestNode = function () {
     this.parent = null;
     this.scale = cc.Vec2.one;
 };
-TestWrapper = cc.FireClass({
+TestWrapper = cc.Class({
     name: 'TestWrapper',
     extends: cc.Runtime.NodeWrapper,
     properties: {
@@ -334,7 +334,7 @@ TestWrapper = cc.FireClass({
 });
 cc.Runtime.registerNodeType(TestNode, TestWrapper);
 
-var TestScript = cc.FireClass({
+var TestScript = cc.Class({
     name: 'TestScript',
     extends: cc.Behavior,
     properties: {

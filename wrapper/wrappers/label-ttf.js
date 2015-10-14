@@ -1,7 +1,7 @@
 var Utils = require('../utils');
 var NodeWrapper = require('./node');
 
-var LabelTTFWrapper = cc.FireClass({
+var LabelTTFWrapper = cc.Class({
     name: 'cc.LabelTTFWrapper',
     extends: NodeWrapper,
 

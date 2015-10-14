@@ -81,10 +81,10 @@
         //notEqual(clonedHashObj.hashCode, hashObj.hashCode, 'should not clone hashCode');
     });
 
-    test('FireClass', function () {
-        var Sprite = cc.FireClass({
+    test('CCClass', function () {
+        var Sprite = cc.Class({
             name: 'Sprite',
-            constructor: function () {
+            ctor: function () {
                 this.image = 'sprite.png';
             },
             properties: {
@@ -148,14 +148,14 @@
         }
         cc.js.extend(Node, TestNode);
         Node.prototype.init = function () {};
-        cc.Runtime.registerNodeType(Node, cc.FireClass({
+        cc.Runtime.registerNodeType(Node, cc.Class({
             extends: TestWrapper,
             createNode: function () {
                 return new Node();
             }
         }));
 
-        var Script = cc.FireClass({
+        var Script = cc.Class({
             name: '2154648724566',
             extends: cc.Behavior,
             init: function () {},
@@ -177,7 +177,7 @@
             TestNode.apply(this, arguments);
         }
         cc.js.extend(Node, TestNode);
-        cc.Runtime.registerNodeType(Node, cc.FireClass({
+        cc.Runtime.registerNodeType(Node, cc.Class({
             extends: TestWrapper,
             properties: {
                 nodeInWrapper: {
@@ -196,7 +196,7 @@
                 otherWrapper: null,
             }
         }));
-        var Script = cc.FireClass({
+        var Script = cc.Class({
             name: '2154648724566',
             extends: cc.Behavior,
             properties: {

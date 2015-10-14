@@ -31,13 +31,13 @@ var FilterMode = cc.Enum({
  * @constructor
  * @param {Image} [img] - the html image element to render
  */
-var Texture = cc.FireClass({
+var Texture = cc.Class({
 
     name: 'cc.TextureAsset',
 
     extends: cc.RawAsset,     // It should be cc.Asset....
 
-    constructor: function () {
+    ctor: function () {
         var img = arguments[0];
         if (img) {
             this.width = img.width;

@@ -4,7 +4,7 @@ module('Serialize');
 
 test('deserialize missing script', function() {
 
-    var MissingScript = cc.FireClass({
+    var MissingScript = cc.Class({
         name: 'MissingScript',
         properties: {
             _$erialized: null
@@ -14,7 +14,7 @@ test('deserialize missing script', function() {
         return cc.js._getClassById(id) || MissingScript;
     };
 
-    var ToMiss = cc.FireClass({
+    var ToMiss = cc.Class({
         name: 'ToMiss',
         properties: {
             ref: null

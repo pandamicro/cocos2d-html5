@@ -10,7 +10,7 @@ var CCObject = require('../platform/CCObject');
  * @extends CCObject
  * @static
  */
-cc.RawAsset = cc.FireClass({
+cc.RawAsset = cc.Class({
     name: 'cc.RawAsset', extends: CCObject,
 
     statics: {

@@ -26,9 +26,9 @@
 /**
  * The base class of component in CocoStudio
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.Component = cc.Class.extend(/** @lends cc.Component# */{
+cc.Component = cc._Class.extend(/** @lends cc.Component# */{
     _owner: null,
     _name: "",
     _enabled: true,

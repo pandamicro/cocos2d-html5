@@ -3,11 +3,11 @@ var NodeWrapper = require('../node');
 
 var desc = Object.getOwnPropertyDescriptor(NodeWrapper.prototype, 'parentN');
 
-var WidgetWrapper = cc.FireClass({
+var WidgetWrapper = cc.Class({
     name: 'cc.WidgetWrapper',
     extends: NodeWrapper,
 
-    constructor: function () {
+    ctor: function () {
         this._ignoreUpdateLayoutParameter = false;
     },
 

@@ -385,7 +385,7 @@ var _Deserializer = (function () {
         var props = klass.__props__;
         for (var p = 0; p < props.length; p++) {
             var propName = props[p];
-            var attrs = cc.FireClass.attr(klass, propName);
+            var attrs = cc.Class.attr(klass, propName);
             // assume all prop in __props__ must have attr
             var rawType = attrs.rawType;
             if (!rawType) {
@@ -472,7 +472,7 @@ var _Deserializer = (function () {
                 obj._deserialize(serialized.content, self);
                 return obj;
             }
-            if ( cc.FireClass._isFireClass(klass) ) {
+            if ( cc.Class._isCCClass(klass) ) {
                 _deserializeFireClass(self, obj, serialized, klass, target);
             }
             else {
@@ -575,7 +575,7 @@ cc.deserialize.applyMixinProps = function (deserializedData, classToMix, target,
     var props = classToMix.__props__;
     for (var p = 0; p < props.length; p++) {
         var propName = props[p];
-        var attrs = cc.FireClass.attr(classToMix, propName);
+        var attrs = cc.Class.attr(classToMix, propName);
         // assume all prop in __props__ must have attr
         if (attrs.serializable === false) {
             continue;   // skip nonSerialized

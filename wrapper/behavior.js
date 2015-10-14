@@ -8,7 +8,7 @@
  * @class Behavior
  * @constructor
  */
-var Behavior = cc.FireClass({
+var Behavior = cc.Class({
     name: 'cc.Behavior',
 
     /**

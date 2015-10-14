@@ -24,21 +24,21 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-cc.NodeLoaderListener = cc.Class.extend({
+cc.NodeLoaderListener = cc._Class.extend({
     onNodeLoaded:function(node,nodeLoader){}
 });
 
-cc.BuilderSelectorResolver = cc.Class.extend({
+cc.BuilderSelectorResolver = cc._Class.extend({
     onResolveCCBCCMenuItemSelector:function(target, selectorName){},
     onResolveCCBCCCallFuncSelector:function(target, selectorName){},
     onResolveCCBCCControlSelector:function(target,selectorName){}
 });
 
-cc.BuilderScriptOwnerProtocol = cc.Class.extend({
+cc.BuilderScriptOwnerProtocol = cc._Class.extend({
     createNew:function(){}
 });
 
-cc.BuilderMemberVariableAssigner = cc.Class.extend({
+cc.BuilderMemberVariableAssigner = cc._Class.extend({
     /**
      * The callback function of assigning member variable.          <br/>
      * @note The member variable must be CCNode or its subclass.

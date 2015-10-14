@@ -1,5 +1,5 @@
 
-var AudioClip = cc.FireClass({
+var AudioClip = cc.Class({
     name: 'cc.AudioClip',
     extends: cc.RawAsset,
 });

@@ -1,7 +1,7 @@
 var NodeWrapper = require('../node');
 var WidgetWrapper = require('./widget');
 
-var LayoutWrapper = cc.FireClass({
+var LayoutWrapper = cc.Class({
     name: 'cc.LayoutWrapper',
     extends: WidgetWrapper,
 

@@ -28,9 +28,9 @@
 /**
  * Base class for cc.Grid
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.GridBase = cc.Class.extend(/** @lends cc.GridBase# */{
+cc.GridBase = cc._Class.extend(/** @lends cc.GridBase# */{
     _active:false,
     _reuseGrid:0,
     _gridSize:null,

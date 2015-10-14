@@ -1,6 +1,6 @@
 var gaf = gaf || {};
 
-gaf.Asset = cc.Class.extend
+gaf.Asset = cc._Class.extend
 ({
     _className: "GAFAsset",
 

@@ -2035,7 +2035,7 @@ cc.ParticleSystem = cc.Node.extend(/** @lends cc.ParticleSystem# */{
 
     /**
      * listen the event that coming to foreground on Android  (An empty function for native)
-     * @param {cc.Class} obj
+     * @param {cc._Class} obj
      */
     listenBackToForeground:function (obj) {
         //do nothing

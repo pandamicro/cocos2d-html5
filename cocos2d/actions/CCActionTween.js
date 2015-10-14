@@ -27,9 +27,9 @@
 /**
  *
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.ActionTweenDelegate = cc.Class.extend(/** @lends cc.ActionTweenDelegate */{
+cc.ActionTweenDelegate = cc._Class.extend(/** @lends cc.ActionTweenDelegate */{
 
     /**
      * Update Tween Action.

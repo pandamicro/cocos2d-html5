@@ -1,10 +1,10 @@
 module('cc.find', SetupEngine);
 
 test('test', function () {
-    var MyScene = cc.FireClass({
+    var MyScene = cc.Class({
         extends: TestNode
     });
-    var MySceneWrapper = cc.FireClass({
+    var MySceneWrapper = cc.Class({
         extends: cc.Runtime.SceneWrapper,
         properties: {
             childrenN: {

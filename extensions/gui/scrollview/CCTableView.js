@@ -133,7 +133,7 @@ cc.TableViewDelegate = cc.ScrollViewDelegate.extend(/** @lends cc.TableViewDeleg
 /**
  * Data source that governs table backend data.
  */
-cc.TableViewDataSource = cc.Class.extend(/** @lends cc.TableViewDataSource# */{
+cc.TableViewDataSource = cc._Class.extend(/** @lends cc.TableViewDataSource# */{
     /**
      * cell size for a given index
      * @param {cc.TableView} table table to hold the instances of Class

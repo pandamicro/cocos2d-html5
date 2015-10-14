@@ -40,14 +40,14 @@ var isPlainEmptyObj = require('./utils').isPlainEmptyObj_DEV;
  * @example
  * ```js
  *  var myClass = function () { this.value = 0.5 };
- *  cc.FireClass.attr(myClass, 'value');         // return undefined
- *  cc.FireClass.attr(myClass, 'value', {}).min = 0;  // assign new attribute table
+ *  cc.Class.attr(myClass, 'value');         // return undefined
+ *  cc.Class.attr(myClass, 'value', {}).min = 0;  // assign new attribute table
  *              //associated with 'value', and set its min = 0
- *  cc.FireClass.attr(myClass, 'value', {       // set values max and default
+ *  cc.Class.attr(myClass, 'value', {       // set values max and default
  *     max: 1,
  *     default: 0.5,
  *  });
- *  cc.FireClass.attr(myClass, 'value');  // return { default: 0.5, min: 0, max: 1 }
+ *  cc.Class.attr(myClass, 'value');  // return { default: 0.5, min: 0, max: 1 }
  * ```
  */
 function attr (constructor, propertyName, attributes) {
@@ -143,7 +143,7 @@ var EditorOnly = {
 function getTypeChecker (type, attrName, objectTypeCtor) {
     if (CC_DEV) {
         return function (constructor, mainPropName) {
-            var mainPropAttrs = cc.FireClass.attr(constructor, mainPropName) || {};
+            var mainPropAttrs = cc.Class.attr(constructor, mainPropName) || {};
             if (mainPropAttrs.type !== type) {
                 cc.warn('Can only indicate one type attribute for %s.%s.', JS.getClassName(constructor),
                     mainPropName);
@@ -196,7 +196,7 @@ function ObjectType (typeCtor) {
         //             var check = getTypeChecker('Object', 'ObjectType', typeCtor);
         //             check(classCtor, mainPropName);
         //             // check ValueType
-        //             var mainPropAttrs = cc.FireClass.attr(classCtor, mainPropName) || {};
+        //             var mainPropAttrs = cc.Class.attr(classCtor, mainPropName) || {};
         //             if (!Array.isArray(mainPropAttrs.default) && typeof typeCtor.prototype.clone === 'function') {
         //                 var typename = JS.getClassName(typeCtor);
         //                 var hasDefault = mainPropAttrs.default === null || mainPropAttrs.default === undefined;
@@ -239,7 +239,7 @@ function RawType (typename) {
                 var found = false;
                 for (var p = 0; p < constructor.__props__.length; p++) {
                     var propName = constructor.__props__[p];
-                    var attrs = cc.FireClass.attr(constructor, propName);
+                    var attrs = cc.Class.attr(constructor, propName);
                     var rawType = attrs.rawType;
                     if (rawType) {
                         var containsUppercase = (rawType.toLowerCase() !== rawType);
@@ -268,12 +268,12 @@ function Nullable (boolPropName, hasValueByDefault) {
             // declare boolean
             constructor.prop(boolPropName, hasValueByDefault, { visible: false });
             // copy attributes from main property
-            var mainPropAttr = cc.FireClass.attr(constructor, mainPropName) || {};
+            var mainPropAttr = cc.Class.attr(constructor, mainPropName) || {};
             if (mainPropAttr.serializable === false) {
-                cc.FireClass.attr(constructor, boolPropName, NonSerialized);
+                cc.Class.attr(constructor, boolPropName, NonSerialized);
             }
             else if (mainPropAttr.editorOnly) {
-                cc.FireClass.attr(constructor, boolPropName, EditorOnly);
+                cc.Class.attr(constructor, boolPropName, EditorOnly);
             }
         }
     };

@@ -32,10 +32,10 @@ cc.PI2 = Math.PI * 2;
 /**
  * Canvas of DrawingPrimitive implement version use for canvasMode
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  * @param {CanvasRenderingContext2D} renderContext
  */
-cc.DrawingPrimitiveCanvas = cc.Class.extend(/** @lends cc.DrawingPrimitiveCanvas# */{
+cc.DrawingPrimitiveCanvas = cc._Class.extend(/** @lends cc.DrawingPrimitiveCanvas# */{
     _cacheArray:[],
     _renderContext:null,
     /**

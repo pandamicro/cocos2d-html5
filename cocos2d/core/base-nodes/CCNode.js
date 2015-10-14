@@ -89,7 +89,7 @@ cc.s_globalOrderOfArrival = 1;
  * -# The grid will render the captured screen <br/></P>
  *
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  *
  * @property {Number}               x                   - x axis position of node
  * @property {Number}               y                   - y axis position of node
@@ -128,7 +128,7 @@ cc.s_globalOrderOfArrival = 1;
  * @property {cc.GLProgram}         shaderProgram       - The shader program currently used for this node
  * @property {Number}               glServerState       - The state of OpenGL server side
  */
-cc.Node = cc.Class.extend(/** @lends cc.Node# */{
+cc.Node = cc._Class.extend(/** @lends cc.Node# */{
     _localZOrder: 0,                                     ///< Local order (relative to its siblings) used to sort the node
     _globalZOrder: 0,                                    ///< Global order used to sort the node
     _vertexZ: 0.0,

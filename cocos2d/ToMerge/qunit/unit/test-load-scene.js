@@ -11,15 +11,15 @@
     var ScriptToMix;
 
     function defineTypes () {
-        MyNode = cc.FireClass({
-            constructor: function () {
+        MyNode = cc.Class({
+            ctor: function () {
                 this.children = [];
                 this.parent = null;
                 this.color = {a:100, r:200 ,g:10, b:0};
                 this.asset = arguments[0];
             }
         });
-        MyNodeWrapper = cc.FireClass({
+        MyNodeWrapper = cc.Class({
             name: 'MyNodeWrapper',
             extends: cc.Runtime.NodeWrapper,
             properties: {
@@ -56,10 +56,10 @@
             }
         });
 
-        MyScene = cc.FireClass({
+        MyScene = cc.Class({
             extends: MyNode
         });
-        MySceneWrapper = cc.FireClass({
+        MySceneWrapper = cc.Class({
             name: 'MySceneWrapper',
             extends: cc.Runtime.SceneWrapper,
             properties: {
@@ -79,7 +79,7 @@
         cc.Runtime.registerNodeType(MyScene, MySceneWrapper);
         currentScene = new MyScene();
 
-        SpriteNeedsDeferredLoad = cc.FireClass({
+        SpriteNeedsDeferredLoad = cc.Class({
             name: 'Test.SpriteNeedsDeferredLoad',
             extends: cc.Asset,
             properties: {
@@ -127,7 +127,7 @@
             }
         });
 
-        TextureNeedsDeferredLoad = cc.FireClass({
+        TextureNeedsDeferredLoad = cc.Class({
             name: 'Test.TextureNeedsDeferredLoad',
             extends: cc.Asset,
             properties: {
@@ -148,9 +148,9 @@
             }
         });
 
-        ScriptToMix = cc.FireClass({
+        ScriptToMix = cc.Class({
             name: '2154648724566',
-            extends: cc.FireClass({
+            extends: cc.Class({
                 extends: cc.Behavior,
                 onLoad: function () {
                     this.realAge = 30;

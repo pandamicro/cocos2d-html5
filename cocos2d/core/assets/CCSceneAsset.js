@@ -1,4 +1,4 @@
-var Scene = cc.FireClass({
+var Scene = cc.Class({
     name: 'cc.SceneAsset',
     extends: cc.Asset,
 

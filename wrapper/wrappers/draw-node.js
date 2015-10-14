@@ -1,6 +1,6 @@
 var NodeWrapper = require('./node');
 
-var DrawNodeWrapper = cc.FireClass({
+var DrawNodeWrapper = cc.Class({
     name: 'cc.DrawNodeWrapper',
     extends: NodeWrapper,
 

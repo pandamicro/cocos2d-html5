@@ -26,9 +26,9 @@
 /**
  * The component container for Cocostudio, it has some components.
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.ComponentContainer = cc.Class.extend(/** @lends cc.ComponentContainer# */{
+cc.ComponentContainer = cc._Class.extend(/** @lends cc.ComponentContainer# */{
     _components:null,
     _owner:null,
 

@@ -28,9 +28,9 @@
 /**
  * The sortable object interface
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.SortableObject = cc.Class.extend(/** @lends cc.SortableObject */{
+cc.SortableObject = cc._Class.extend(/** @lends cc.SortableObject */{
     setObjectID:function (objectId) {
     },
     getObjectID:function () {
@@ -66,9 +66,9 @@ var _compareObject = function (val1, val2) {
 /**
  * Array for object sorting utils
  * @class
- * @extend cc.Class
+ * @extend cc._Class
  */
-cc.ArrayForObjectSorting = cc.Class.extend(/** @lends cc.ArrayForObjectSorting# */{
+cc.ArrayForObjectSorting = cc._Class.extend(/** @lends cc.ArrayForObjectSorting# */{
     _saveObjectArr:null,
 
     ctor:function () {

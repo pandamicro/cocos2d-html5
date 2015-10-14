@@ -120,7 +120,7 @@ ccs._load = (function(){
 
 })();
 
-ccs._parser = cc.Class.extend({
+ccs._parser = cc._Class.extend({
 
     ctor: function(){
         this.parsers = {};

@@ -120,9 +120,9 @@ var InputFlag = cc.Enum({
 
 /**
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.EditBoxDelegate = cc.Class.extend({
+cc.EditBoxDelegate = cc._Class.extend({
     /**
      * This method is called when an edit box gains focus after keyboard is shown.
      * @param {cc.EditBox} sender

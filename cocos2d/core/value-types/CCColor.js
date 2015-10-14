@@ -25,7 +25,7 @@ var Color = (function () {
         this.a = typeof a === 'number' ? a : 255;
     }
     JS.extend(Color, ValueType);
-    require('../platform/CCFireClass').fastDefine('cc.Color', Color, ['r', 'g', 'b', 'a']);
+    require('../platform/CCClass').fastDefine('cc.Color', Color, ['r', 'g', 'b', 'a']);
 
     var DefaultColors = {
         // color: [r, g, b, a]

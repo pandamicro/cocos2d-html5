@@ -236,7 +236,7 @@ cc.VerticalTextAlignment = cc.Enum({
     BOTTOM: 2
 });
 
-cc._Dictionary = cc.Class.extend({
+cc._Dictionary = cc._Class.extend({
     _keyMapTb: null,
     _valueMapTb: null,
     __currId: 0,

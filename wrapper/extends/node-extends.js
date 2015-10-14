@@ -321,7 +321,7 @@ function dumpNodeForInstantiation (node) {
             var props = mixinClass.__props__;
             for (var p = 0; p < props.length; p++) {
                 var propName = props[p];
-                var attrs = cc.FireClass.attr(mixinClass, propName);
+                var attrs = cc.Class.attr(mixinClass, propName);
                 if (attrs.serializable === false) {
                     continue;
                 }

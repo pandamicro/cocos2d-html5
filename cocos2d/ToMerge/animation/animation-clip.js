@@ -1,5 +1,5 @@
 
-var AnimationClip = cc.FireClass({
+var AnimationClip = cc.Class({
     name: 'Fire.AnimationClip',
     extends: cc.Asset,
 

@@ -27,9 +27,9 @@
 /**
  * FBO class that grabs the the contents of the screen
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.Grabber = cc.Class.extend({
+cc.Grabber = cc._Class.extend({
     _FBO:null,
     _oldFBO:null,
     _oldClearColor:null,

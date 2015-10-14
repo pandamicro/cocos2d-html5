@@ -1,7 +1,7 @@
 
 var WidgetWrapper = require('./widget');
 
-var TextBMFontWrapper = cc.FireClass({
+var TextBMFontWrapper = cc.Class({
     name: 'cc.TextBMFontWrapper',
     extends: WidgetWrapper,
 

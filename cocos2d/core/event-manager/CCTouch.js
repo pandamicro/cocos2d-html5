@@ -26,13 +26,13 @@
 /**
  * The touch event class
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  *
  * @param {Number} x
  * @param {Number} y
  * @param {Number} id
  */
-cc.Touch = cc.Class.extend(/** @lends cc.Touch# */{
+cc.Touch = cc._Class.extend(/** @lends cc.Touch# */{
     _point:null,
     _prevPoint:null,
     _id:0,

@@ -26,7 +26,7 @@
 /**
  * @ignore
  */
-cc._EventListenerVector = cc.Class.extend({
+cc._EventListenerVector = cc._Class.extend({
     _fixedListeners: null,
     _sceneGraphListeners: null,
     gt0Index: 0,

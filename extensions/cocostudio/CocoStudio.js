@@ -30,11 +30,11 @@
 var ccs = ccs || {};
 
 /**
- * The same as cc.Class
+ * The same as cc._Class
  * @class
  */
-ccs.Class = ccs.Class || cc.Class;
-ccs.Class.extend = ccs.Class.extend || cc.Class.extend;
+ccs.Class = ccs.Class || cc._Class;
+ccs.Class.extend = ccs.Class.extend || cc._Class.extend;
 
 /**
  * The same as cc.Node

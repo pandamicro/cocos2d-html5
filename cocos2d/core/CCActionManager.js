@@ -26,11 +26,11 @@
 
 /**
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  * @example
  * var element = new cc.HashElement();
  */
-cc.HashElement = cc.Class.extend(/** @lends cc.HashElement# */{
+cc.HashElement = cc._Class.extend(/** @lends cc.HashElement# */{
     actions:null,
     target:null, //ccobject
     actionIndex:0,
@@ -61,11 +61,11 @@ cc.HashElement = cc.Class.extend(/** @lends cc.HashElement# */{
  * - When you want to run an action where the target is different from a CCNode.<br/>
  * - When you want to pause / resume the actions<br/>
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  * @example
  * var mng = new cc.ActionManager();
  */
-cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
+cc.ActionManager = cc._Class.extend(/** @lends cc.ActionManager# */{
     _hashTargets:null,
     _arrayTargets:null,
     _currentTarget:null,

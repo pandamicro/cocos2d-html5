@@ -327,7 +327,7 @@ var AssetLibrary = {
         var rawProp = _tdInfo.rawProp;     // _tdInfo不能用在回调里！
         if (rawProp) {
             // load depends raw objects
-            var attrs = cc.FireClass.attr(asset.constructor, _tdInfo.rawProp);
+            var attrs = cc.Class.attr(asset.constructor, _tdInfo.rawProp);
             var rawType = attrs.rawType;
             ++pendingCount;
             LoadManager.load(url, rawType, asset._rawext, function onRawObjLoaded (error, raw) {

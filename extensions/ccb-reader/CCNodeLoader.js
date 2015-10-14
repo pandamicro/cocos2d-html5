@@ -53,7 +53,7 @@ function BlockCCControlData(selCCControlHandler, target, controlEvents) {
     this.controlEvents = controlEvents;
 }
 
-cc.NodeLoader = cc.Class.extend({
+cc.NodeLoader = cc._Class.extend({
     _customProperties:null,
 
     ctor:function(){

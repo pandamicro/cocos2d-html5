@@ -35,7 +35,7 @@ cc._tmp.WebGLTexture2D = function () {
      * Be aware that the content of the generated textures will be upside-down! </p>
      * @name cc.Texture2D
      * @class
-     * @extends cc.Class
+     * @extends cc._Class
      *
      * @property {WebGLTexture}     name            - <@readonly> WebGLTexture Object
      * @property {Number}           pixelFormat     - <@readonly> Pixel format of the texture
@@ -48,7 +48,7 @@ cc._tmp.WebGLTexture2D = function () {
      * @property {Number}           maxT            - Texture max T
      */
         //Original : Texture2DWebGL
-    cc.Texture2D = cc.Class.extend(/** @lends cc.Texture2D# */{
+    cc.Texture2D = cc._Class.extend(/** @lends cc.Texture2D# */{
         // By default PVR images are treated as if they don't have the alpha channel premultiplied
         _pVRHaveAlphaPremultiplied: true,
         _pixelFormat: null,

@@ -34,7 +34,7 @@
  * Quads can be re-ordered in runtime <br />
  * The TextureAtlas capacity can be increased or decreased in runtime.</p>
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  *
  * @property {Boolean}  dirty           - Indicates whether or not the array buffer of the VBO needs to be updated.
  * @property {Image}    texture         - Image texture for cc.TextureAtlas.
@@ -42,7 +42,7 @@
  * @property {Number}   totalQuads      - <@readonly> Quantity of quads that are going to be drawn.
  * @property {Array}    quads           - <@readonly> Quads that are going to be rendered
  */
-cc.TextureAtlas = cc.Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
+cc.TextureAtlas = cc._Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     dirty: false,
     texture: null,
 

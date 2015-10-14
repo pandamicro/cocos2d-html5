@@ -26,7 +26,7 @@
 
 require('./js');
 require('./CCEnum');
-require('./CCFireClass');
+require('./CCClass');
 require('./CCObject');
 require('./callbacks-invoker');
 require('./url');

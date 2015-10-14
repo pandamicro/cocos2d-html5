@@ -31,9 +31,9 @@
  *      EventListenerTouchOneByOne, EventListenerCustom.
  * </p>
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.EventListener = cc.Class.extend(/** @lends cc.EventListener# */{
+cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
     _onEvent: null,                          // Event callback function
     _type: 0,                                 // Event listener type
     _listenerID: null,                       // Event listener ID
