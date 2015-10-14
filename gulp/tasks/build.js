@@ -180,7 +180,7 @@ gulp.task('compile-cocos2d', function (done) {
 });
 
 gulp.task('build-modular-cocos2d', ['compile-cocos2d'], function () {
-    var header = new Buffer('(function (cc, ccui) {\n');
+    var header = new Buffer('(function (cc, ccui) {');
     var footer = new Buffer(/*'\n(' + modularity + ')();\n' +*/
                             '\n}).call(window, cc, ccui);\n');
 
@@ -194,6 +194,8 @@ gulp.task('build-modular-cocos2d', ['compile-cocos2d'], function () {
         .pipe(wrap(header, footer))
         .pipe(rename(Path.basename(paths.modularCocos2d)))
         .pipe(gulp.dest(Path.dirname(paths.modularCocos2d)));
+    gulp.src(paths.originSourcemap)
+        .pipe(gulp.dest(Path.dirname(paths.modularCocos2d)))
 });
 
 gulp.task('build', ['build-modular-cocos2d'], function () {

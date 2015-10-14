@@ -315,10 +315,3 @@ cc._Dictionary = cc.Class.extend({
         return this.allKeys().length;
     }
 });
-
-if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
-    cc.assert(cc.js.isFunction(cc._tmp.WebGLColor), cc._LogInfos.MissingFile, "CCTypesWebGL.js");
-    cc._tmp.WebGLColor();
-    delete cc._tmp.WebGLColor;
-}
-

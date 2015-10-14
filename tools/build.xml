@@ -5,11 +5,12 @@
              classpath="./compiler/compiler.jar"/>
     <target name="compile">
         <jscomp compilationLevel="simple" warning="quiet"
-                debug="false" output="./../lib/cocos2d-js-v3.9-min.js">
-            <!--sourceMapOutputFile="./../lib/cocos2d-js-v3.9-sourcemap" sourceMapFormat="V3" -->
+                debug="false" output="./../lib/cocos2d-js-v3.9-min.js"
+            sourceMapOutputFile="./../lib/cocos2d-js-v3.9-sourcemap" sourceMapFormat="V3" >
             <sources dir="./../">
                 <file name="Base64Images.js"/>
                 <file name="CCBoot.js"/>
+                <file name="cocos2d/core/event-manager/CCEventHelper.js"/>
                 <file name="cocos2d/core/utils/BinaryLoader.js"/>
                 <file name="cocos2d/core/platform/CCClass.js"/>
                 <file name="cocos2d/core/platform/CCCommon.js"/>
@@ -302,6 +303,7 @@
             <!--sourceMapOutputFile="./../lib/cocos2d-js-v3.9-core-sourcemap" sourceMapFormat="V3" -->
             <sources dir="./../">
                 <file name="CCBoot.js"/>
+                <file name="cocos2d/core/event-manager/CCEventHelper.js"/>
                 <file name="cocos2d/core/platform/CCClass.js"/>
                 <file name="cocos2d/core/platform/CCSAXParser.js"/>
                 <file name="cocos2d/core/platform/CCLoaders.js"/>
