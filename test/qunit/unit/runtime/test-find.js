@@ -17,7 +17,8 @@ test('test', function () {
     cc.Runtime.registerNodeType(MyScene, MySceneWrapper);
 
     var scene = new MyScene();
-    cc.engine._setCurrentSceneN(scene);
+    cc.director.runScene(scene);
+    cc.director.setNextScene();
 
     var ent = new TestNode('');
     scene.children = [ent];

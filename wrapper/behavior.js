@@ -84,7 +84,8 @@ else {
     //     this._FUNC_ = null;
     // };
 
-    CallLcmOnceTmpl = "function () { if (!cc.engine._isPlaying) { return; } for (var i = 0; i < this._mixinContexts.length; i++) { var ctx = this._mixinContexts[i]; if (!(ctx._objFlags & _FLAG_)) { var func = ctx._FUNC_; if (func) { try { func.call(this); } catch (e) { cc._throw(e); } } ctx._objFlags |= _FLAG_; } } this._FUNC_ = null; }";
+    CallLcmOnceTmpl = "function () { for (var i = 0; i < this._mixinContexts.length; i++) { var ctx = this._mixinContexts[i]; if (!(ctx._objFlags & _FLAG_)) { var func = ctx._FUNC_; if (func) { func.call(this); } ctx._objFlags |= _FLAG_; } } this._FUNC_ = null; }";
+
 }
 
 var CallLcmTmpl;
@@ -124,7 +125,8 @@ if (CC_EDITOR) {
     //     }
     // };
 
-    CallLcmTmpl = "function () { if (!cc.engine._isPlaying) { return; } for (var i = 0; i < this._mixinContexts.length; i++) { var ctx = this._mixinContexts[i]; var func = ctx._FUNC_; if (func) { try { func.apply(this, arguments); } catch (e) { cc._throw(e); } } } }";
+    CallLcmInEmTmpl = "function () { for (var i = 0; i < this._mixinContexts.length; i++) { var ctx = this._mixinContexts[i]; var func = ctx._FUNC_; if (func) { try { func.apply(this, arguments); } catch (e) { Fire._throw(e); } } } }";
+
 }
 else {
     // CallLcmTmpl = function () {
@@ -136,7 +138,7 @@ else {
     //         }
     //     }
     // };
-    CallLcmTmpl = "function () { if (!cc.engine._isPlaying) { return; } for (var i = 0; i < this._mixinContexts.length; i++) { var ctx = this._mixinContexts[i]; var func = ctx._FUNC_; if (func) { try { func.apply(this, arguments); } catch (e) { cc._throw(e); } } } }";
+    CallLcmTmpl = "function () { for (var i = 0; i < this._mixinContexts.length; i++) { var ctx = this._mixinContexts[i]; var func = ctx._FUNC_; if (func) { func.apply(this, arguments); } } }";
 
     // CallLcmInEmTmpl = function () {};
     CallLcmInEmTmpl = "function () {}"

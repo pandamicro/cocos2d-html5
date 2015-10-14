@@ -189,7 +189,7 @@
         setup: function () {
             SetupEngine.setup();
             originGetCurrentSceneN = cc.director.getRunningScene();
-            cc.engine.getCurrentSceneN = function () {
+            cc.director.getRunningScene = function () {
                 return currentScene;
             };
             defineTypes();
@@ -197,7 +197,7 @@
         teardown: function () {
             cc.js.unregisterClass(MySceneWrapper, MyNodeWrapper, SpriteNeedsDeferredLoad, TextureNeedsDeferredLoad,
                 ScriptToMix);
-            cc.engine.getCurrentSceneN = originGetCurrentSceneN;
+            cc.director.getRunningScene = originGetCurrentSceneN;
             SetupEngine.teardown();
         }
     });

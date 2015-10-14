@@ -112,7 +112,7 @@ function mixin (node, typeOrTypename) {
         var lcmIndex = LifecycleMethods.indexOf(propName);
         var isLifecycleMethods = lcmIndex !== -1;
         if (isLifecycleMethods) {
-            //if (cc.engine && !cc.engine._isPlaying && CC_EDITOR) {
+            //if (cc.game.isPaused() && CC_EDITOR) {
             //    continue;
             //}
             scriptCtx[propName] = classToMixProto[propName];
@@ -140,7 +140,7 @@ function mixin (node, typeOrTypename) {
         }
     }
 
-    if (cc.engine && (cc.engine._isPlaying || !CC_EDITOR) && !cc.game._isCloning) {
+    if ((!CC_EDITOR || cc.engine._isPlaying) && !cc.game._isCloning) {
         // invoke onLoad
         var onLoad = classToMixProto.onLoad;
         if (onLoad) {

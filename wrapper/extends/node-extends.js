@@ -254,7 +254,7 @@ JS.mixin(nodeProto, {
     },
 
     _onAfterInstantiate: function () {
-        if (cc.engine.isPlaying) {
+        if (CC_EDITOR && cc.engine.isPlaying) {
             this.name += ' (Clone)';
         }
         // invoke onLoad, note that the new node have not added to any parent yet

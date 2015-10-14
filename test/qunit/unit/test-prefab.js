@@ -1,7 +1,7 @@
 
 largeModule('Prefab', {
     setup: function () {
-        Engine._reset();
+        _resetGame();
         AssetLibrary.init('../assets/library');
     }
 });

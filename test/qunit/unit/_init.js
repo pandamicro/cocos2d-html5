@@ -17,7 +17,6 @@ var Texture = cc.Texture;
 var Ticker = cc._Ticker;
 var Time = cc.Time;
 //var Entity = cc.Entity;
-var Engine = cc.engine;
 //var Camera = cc.Camera;
 //var Component = cc.Component;
 var LoadManager = cc._LoadManager;
@@ -335,20 +334,6 @@ TestWrapper = cc.FireClass({
 });
 cc.Runtime.registerNodeType(TestNode, TestWrapper);
 
-var EngineWrapper = cc.FireClass({
-    extends: cc.Runtime.EngineWrapper,
-    constructor: function () {
-        this._scene = null;
-    },
-    tick: function () {},
-    tickInEditMode: function () {}
-});
-
-/**
- * @property {EngineWrapper} engine - The instance of current registered engine.
- */
-cc.engine = new EngineWrapper(true);
-
 var TestScript = cc.FireClass({
     name: 'TestScript',
     extends: cc.Behavior,
@@ -364,35 +349,59 @@ var TestScript = cc.FireClass({
     }
 });
 
-var Engine = cc.engine;
-Engine._reset = function (w, h) {
-    if (!Engine.isInitialized && !Engine._isInitializing) {
+function _resetGame (w, h) {
+    if (!cc.game._prepared && !cc.game._prepareCalled) {
         cc.game.run({
             width: w,
             height: h
         });
     }
-    //else {
-    //    Screen.size = new V2(w, h);
-    //}
+    else {
+        var view = cc.view;
+
+        cc._canvas.width = w * view.getDevicePixelRatio();
+        cc._canvas.height = h * view.getDevicePixelRatio();
+
+        cc._canvas.style.width = w;
+        cc._canvas.style.height = h;
+
+        // reset container style
+        var style = cc.container.style;
+        style.paddingTop = "0px";
+        style.paddingRight = "0px";
+        style.paddingBottom = "0px";
+        style.paddingLeft = "0px";
+        style.borderTop = "0px";
+        style.borderRight = "0px";
+        style.borderBottom = "0px";
+        style.borderLeft = "0px";
+        style.marginTop = "0px";
+        style.marginRight = "0px";
+        style.marginBottom = "0px";
+        style.marginLeft = "0px";
+
+        cc.container.style.width = w;
+        cc.container.style.height = h;
+
+        var size = view.getDesignResolutionSize();
+        view.setDesignResolutionSize(size.width, size.height, view.getResolutionPolicy());
+
+        cc.eventManager.dispatchCustomEvent('canvas-resize');
+    }
     //Engine._launchScene(new cc._Scene());
 
-    Engine.stop();
-};
+    cc.director.pause();
+}
 
 var SetupEngine = {
     setup: function () {
-        Engine.tick = function () {};
-        Engine.tickInEditMode = function () {};
-        Engine._reset(256, 512);
+        _resetGame(256, 512);
         //// check error
         //Engine._renderContext.checkMatchCurrentScene(true);
     },
     teardown: function () {
-        Engine.tick = function () {};
-        Engine.tickInEditMode = function () {};
         //Engine._launchScene(new cc._Scene());
-        Engine.stop();
+        cc.game.pause();
         //// check error
         //Engine._renderContext.checkMatchCurrentScene(true);
     }
@@ -400,9 +409,9 @@ var SetupEngine = {
 
 // force stop to ensure start will only called once
 function asyncEnd () {
-    Engine.stop();
-    Engine.tick = function () {};
-    Engine.tickInEditMode = function () {};
+    cc.game.pause();
+    //Engine.tick = function () {};
+    //Engine.tickInEditMode = function () {};
     start();
 }
 
