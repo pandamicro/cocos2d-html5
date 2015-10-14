@@ -43,7 +43,6 @@ cc.game = /** @lends cc.game# */{
     _prepared: false, //whether the engine has prepared
     _rendererInitialized: false,
 
-    _checkPrepare: null,
     _renderContext: null,
     
     _intervalId: null,//interval target of main
@@ -174,7 +173,6 @@ cc.game = /** @lends cc.game# */{
         // Prepare never called and engine ready
         if (cc._engineLoaded) {
             this._prepareCalled = true;
-            this._checkPrepare && clearInterval(this._checkPrepare);
 
             this._initRenderer(config[CONFIG_KEY.width], config[CONFIG_KEY.height]);
 
@@ -512,13 +510,16 @@ cc.game = /** @lends cc.game# */{
                 'antialias': !cc.sys.isMobile,
                 'alpha': true
             });
-         }
+        }
+        // WebGL context created successfully
         if (this._renderContext) {
+            cc.renderer = cc.rendererWebGL;
             win.gl = this._renderContext; // global variable declared in CCMacro.js
             cc.shaderCache._init();
             cc._drawingUtil = new cc.DrawingPrimitiveWebGL(this._renderContext);
             cc.textureCache._initializingRenderer();
         } else {
+            cc.renderer = cc.rendererCanvas;
             this._renderContext = cc._renderContext = new cc.CanvasContextWrapper(localCanvas.getContext("2d"));
             cc._drawingUtil = cc.DrawingPrimitiveCanvas ? new cc.DrawingPrimitiveCanvas(this._renderContext) : null;
         }
@@ -528,11 +529,18 @@ cc.game = /** @lends cc.game# */{
             if (!cc._isContextMenuEnable) return false;
         };
 
+        this.dispatchEvent("rendererInited", true);
+
         this._rendererInitialized = true;
     },
 
     _initEvents: function () {
         var win = window, self = this, hidden, visibilityChange, _undef = "undefined";
+
+        this._eventHide = this._eventHide || new cc.EventCustom(this.EVENT_HIDE);
+        this._eventHide.setUserData(this);
+        this._eventShow = this._eventShow || new cc.EventCustom(this.EVENT_SHOW);
+        this._eventShow.setUserData(this);
 
         // register system events
         if (this.config[this.CONFIG_KEY.registerSystemEvent])

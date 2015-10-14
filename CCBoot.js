@@ -219,17 +219,16 @@ var _jsAddedCache = {}, //cache for js and module that has added into jsList to 
 cc._engineLoaded = false;
 
 function _determineRenderType(config) {
-    var CONFIG_KEY = cc.game.CONFIG_KEY;
+    var CONFIG_KEY = cc.game.CONFIG_KEY,
+        userRenderMode = parseInt(config[CONFIG_KEY.renderMode]) || 0,
+        shieldOs = [cc.sys.OS_ANDROID],
+        shieldBrowser = [];
 
     // Adjust RenderType
-    config[CONFIG_KEY.renderMode] = parseInt(config[CONFIG_KEY.renderMode]) || 0;
     if (isNaN(userRenderMode) || userRenderMode > 2 || userRenderMode < 0)
         config[CONFIG_KEY.renderMode] = 0;
 
     // Determine RenderType
-    var userRenderMode = config[CONFIG_KEY.renderMode];
-    var shieldOs = [cc.sys.OS_ANDROID];
-    var shieldBrowser = [];
     cc._renderType = cc.game.RENDER_TYPE_CANVAS;
     cc._supportRender = true;
 
@@ -330,8 +329,8 @@ cc.initEngine = function (config, cb) {
 
     _engineLoadedCallback = cb;
 
-    // Given config, initialize with it
-    if (config) {
+    // Config uninitialized and given, initialize with it
+    if (!cc.game.config && config) {
         cc.game.config = config;
     }
     // No config given and no config set before, load it

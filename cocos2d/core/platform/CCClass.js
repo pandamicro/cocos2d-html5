@@ -103,10 +103,6 @@ var ClassManager = {
 	    desc.value = Class;
 	    Object.defineProperty(Class.prototype, 'constructor', desc);
 
-	    // Copy getter/setter
-	    this.__getters__ && (Class.__getters__ = cc.clone(this.__getters__));
-	    this.__setters__ && (Class.__setters__ = cc.clone(this.__setters__));
-
         for(var idx = 0, li = arguments.length; idx < li; ++idx) {
             var prop = arguments[idx];
             for (var name in prop) {
@@ -137,31 +133,6 @@ var ClassManager = {
                     Object.defineProperty(prototype, name, desc);
                 } else {
                     prototype[name] = prop[name];
-                }
-
-                if (isFunc) {
-                    // Override registered getter/setter
-                    var getter, setter, propertyName;
-                    if (this.__getters__ && this.__getters__[name]) {
-                        propertyName = this.__getters__[name];
-                        for (var i in this.__setters__) {
-                            if (this.__setters__[i] === propertyName) {
-                                setter = i;
-                                break;
-                            }
-                        }
-                        cc.defineGetterSetter(prototype, propertyName, prop[name], prop[setter] ? prop[setter] : prototype[setter], name, setter);
-                    }
-                    if (this.__setters__ && this.__setters__[name]) {
-                        propertyName = this.__setters__[name];
-                        for (var i in this.__getters__) {
-                            if (this.__getters__[i] === propertyName) {
-                                getter = i;
-                                break;
-                            }
-                        }
-                        cc.defineGetterSetter(prototype, propertyName, prop[getter] ? prop[getter] : prototype[getter], prop[name], getter, name);
-                    }
                 }
             }
         }
@@ -200,44 +171,6 @@ cc.defineGetterSetter = function (proto, prop, getter, setter, getterName, sette
         Object.defineProperty(proto, prop, desc);
     } else {
         throw new Error("browser does not support getters");
-    }
-
-    if(!getterName && !setterName) {
-        // Lookup getter/setter function
-        var hasGetter = (getter != null), hasSetter = (setter != undefined), props = Object.getOwnPropertyNames(proto);
-        for (var i = 0; i < props.length; i++) {
-            var name = props[i];
-
-            if( (proto.__lookupGetter__ ? proto.__lookupGetter__(name)
-                                        : Object.getOwnPropertyDescriptor(proto, name))
-                || typeof proto[name] !== "function" )
-                continue;
-
-            var func = proto[name];
-            if (hasGetter && func === getter) {
-                getterName = name;
-                if(!hasSetter || setterName) break;
-            }
-            if (hasSetter && func === setter) {
-                setterName = name;
-                if(!hasGetter || getterName) break;
-            }
-        }
-    }
-
-    // Found getter/setter
-    var ctor = proto.constructor;
-    if (getterName) {
-        if (!ctor.__getters__) {
-            ctor.__getters__ = {};
-        }
-        ctor.__getters__[getterName] = prop;
-    }
-    if (setterName) {
-        if (!ctor.__setters__) {
-            ctor.__setters__ = {};
-        }
-        ctor.__setters__[setterName] = prop;
     }
 };
 

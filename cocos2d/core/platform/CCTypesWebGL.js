@@ -27,7 +27,10 @@
 var cc = cc || {};
 cc._tmp = cc._tmp || {};
 
-if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
+cc.game.addEventListener("rendererInited", function () {
+    if (cc._renderType !== cc.game.RENDER_TYPE_WEBGL) {
+        return;
+    }
 
     //redefine some types with ArrayBuffer for WebGL
     //redefine cc.Color
@@ -687,4 +690,4 @@ if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
     /** @expose */
     _p.c;
     cc.defineGetterSetter(_p, "c", _p._getC, _p._setC);
-}
+});

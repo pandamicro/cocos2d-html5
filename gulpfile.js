@@ -19,6 +19,7 @@ global.paths = {
     get scripts() { return this.src + '/**/*.js'; },
 
     originCocos2d: './lib/cocos2d-js-v3.9-min.js',
+    originSourcemap: './lib/cocos2d-js-v3.9-sourcemap',
     modularCocos2d: './bin/modular-cocos2d.js',
 };
 
