@@ -18,6 +18,7 @@ global.paths = {
 
     get scripts() { return this.src + '/**/*.js'; },
 
+    originCocos2dCompileDir: './tools',
     originCocos2d: './lib/cocos2d-js-v3.9-min.js',
     modularCocos2d: './bin/modular-cocos2d.js',
 };

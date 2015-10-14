@@ -1,4 +1,5 @@
 var Path = require('path');
+var Chalk = require('chalk');
 
 var gulp = require('gulp');
 var mirror = require('gulp-mirror');
@@ -145,7 +146,40 @@ function createBundler() {
 //    }
 //}
 
-gulp.task('build-modular-cocos2d', function () {
+gulp.task('compile-cocos2d', function (done) {
+    console.log('Spawn ' + Chalk.cyan('ant') + ' in ' + paths.originCocos2dCompileDir);
+
+    var spawn = require('child_process').spawn;
+    var child;
+    child = spawn('ant', {
+        cwd: paths.originCocos2dCompileDir
+    });
+    child.on('error', function (err) {
+        console.error(Chalk.red('Failed to start "ant": ' + err.code));
+        if (err.code === 'ENOENT') {
+            console.error(Chalk.red('You should install "ant" to build cocos2d-html5'));
+        }
+        process.exit(1);
+    });
+    child.stdout.on('data', function (data) {
+        console.log(data.toString());
+    });
+    child.stderr.on('data', function (data) {
+        //if (data.toString().indexOf('ERROR') !== -1) {
+        //    console.error('######### Error:');
+        //}
+        if (data.toString().indexOf('BUILD FAILED') !== -1) {
+            console.error(Chalk.red(data.toString()));
+            process.exit(1);
+        }
+        else {
+            console.error(Chalk.red(data.toString()));
+        }
+    });
+    child.on('exit', done);
+});
+
+gulp.task('build-modular-cocos2d', ['compile-cocos2d'], function () {
     var header = new Buffer('(function (cc, ccui) {\n');
     var footer = new Buffer(/*'\n(' + modularity + ')();\n' +*/
                             '\n}).call(window, cc, ccui);\n');
