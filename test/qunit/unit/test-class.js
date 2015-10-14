@@ -247,23 +247,6 @@ test('prop reference', function () {
     cc.js.unregisterClass(type);
 });
 
-test('serialization if inherited from CCObject', function () {
-    var type = cc.FireClass({
-        name: 'cc.MyType',
-        extends: CCObject
-    });
-
-    var obj = new type();
-    obj.name = '阿加西';
-
-    var json = JSON.parse(Editor.serialize(obj));
-    var expected = { "__type__": "cc.MyType", "_name": "阿加西", "_objFlags": 0 };
-
-    deepEqual(json, expected, 'can serialize CCObject.name');
-
-    cc.js.unregisterClass(type);
-});
-
 test('isChildClassOf', function () {
     strictEqual(cc.isChildClassOf(null, null) ||
                 cc.isChildClassOf(Object, null) ||

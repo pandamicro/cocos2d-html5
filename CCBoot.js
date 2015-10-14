@@ -196,8 +196,7 @@ cc.formatStr = function(){
     return str;
 };
 
-var FireUrl = CC_EDITOR && !CC_TEST && require('fire-url');
-
+require('../CCDebugger');
 require('../cocos2d/core/utils/Async');
 require('../cocos2d/core/platform/CCLoader');
 require('../cocos2d/core/platform/CCSys');

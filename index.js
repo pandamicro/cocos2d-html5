@@ -112,7 +112,7 @@ if (isCoreLevel) {
     Editor.versions['cocos2d'] = require('./package.json').version;
 }
 else {
-    //cc.Runtime = require('./runtime/index');
+    cc.Runtime = require('./wrapper');
     cc.isRuntimeNode = cc.getWrapperType;   // 由于是借助 wrapper 来判断，所以该方法只有在 wrapper 都注册好后才有效
 
     require('./cocos2d/deprecated');

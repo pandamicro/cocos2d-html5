@@ -108,8 +108,6 @@ JS.getset(sceneProto, 'uuid',
 
 if (CC_EDITOR) {
 
-    var serialize = require('../../editor/serialize');
-
     JS.mixin(sceneProto, {
         /**
          * The implement of serialization for the whole scene.
@@ -125,7 +123,7 @@ if (CC_EDITOR) {
                 uuid: this.uuid || ''
             };
 
-            return serialize(toSerialize, {
+            return Editor.serialize(toSerialize, {
                 exporting: exporting,
                 nicify: exporting,
                 stringify: false

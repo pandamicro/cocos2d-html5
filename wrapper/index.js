@@ -67,15 +67,12 @@ cc.js.mixin(Runtime, {
     registerNodeType: registerNodeType,
     registerToCore: registerToCore,
 
-    EngineWrapper: require('./wrappers/engine'),
-
     Helpers: require('./helpers')
 });
 
 // load utility methods
 require('./extends/node-extends');
 require('./extends/scene-extends');
-require('./extends/engine-extends');
 
 // settings for editor
 Runtime.Settings = {
@@ -110,7 +107,7 @@ cc.unMixin = mixin.unMixin;
 
 cc.find = require('./find');
 
-require('./utils')
+require('./utils');
 
 if (cc.sys.isNative) {
     // TODO - add to jsb ?
@@ -123,12 +120,6 @@ if (cc.sys.isNative) {
     cc.warn  = log;
     cc.info  = log;
 }
-
-// require engine
-var EngineWrapper = require('./wrappers/engine');
-
-// register engine wrapper
-cc.engine = new EngineWrapper(false);
 
 // register node type
 var wrappers = require('./wrappers');
