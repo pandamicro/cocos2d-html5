@@ -112,7 +112,7 @@ cc._LogInfos = {
         addLayer: "cc.Layer.addLayer(): layer should be non-null",
     },
 
-    EGLView: {
+    view: {
         setDesignResolutionSize: "Resolution not valid",
         setDesignResolutionSize_2: "should set resolutionPolicy",
     },
@@ -172,19 +172,6 @@ cc._LogInfos = {
         removeChild: "cc.SpriteBatchNode.addChild(): sprite batch node should contain the child",
         addSpriteWithoutQuad_2: "cc.SpriteBatchNode.addQuadFromSprite(): child should be non-null",
         reorderChild_2: "cc.SpriteBatchNode.addChild(): child should be non-null",
-    },
-
-    spriteFrameCache: {
-        _getFrameConfig: "cocos2d: WARNING: originalWidth/Height not found on the cc.SpriteFrame. AnchorPoint won't work as expected. Regenrate the .plist",
-        addSpriteFrames: "cocos2d: WARNING: an alias with name %s already exists",
-        _checkConflict: "cocos2d: WARNING: Sprite frame: %s has already been added by another source, please fix name conflit",
-        getSpriteFrame: "cocos2d: cc.SpriteFrameCahce: Frame %s not found",
-        _getFrameConfig_2: "Please load the resource first : %s",
-        addSpriteFrames_2: "cc.SpriteFrameCache.addSpriteFrames(): plist should be non-null",
-        addSpriteFrames_3: "Argument must be non-nil",
-    },
-
-    CCSpriteBatchNode: {
         updateQuadFromSprite: "cc.SpriteBatchNode.updateQuadFromSprite(): cc.SpriteBatchNode only supports cc.Sprites as children",
         insertQuadFromSprite: "cc.SpriteBatchNode.insertQuadFromSprite(): cc.SpriteBatchNode only supports cc.Sprites as children",
         addChild: "cc.SpriteBatchNode.addChild(): cc.SpriteBatchNode only supports cc.Sprites as children",
@@ -195,6 +182,16 @@ cc._LogInfos = {
         updateQuadFromSprite_2: "cc.SpriteBatchNode.updateQuadFromSprite(): sprite should be non-null",
         insertQuadFromSprite_2: "cc.SpriteBatchNode.insertQuadFromSprite(): sprite should be non-null",
         addChild_3: "cc.SpriteBatchNode.addChild(): child should be non-null",
+    },
+
+    spriteFrameCache: {
+        _getFrameConfig: "cocos2d: WARNING: originalWidth/Height not found on the cc.SpriteFrame. AnchorPoint won't work as expected. Regenrate the .plist",
+        addSpriteFrames: "cocos2d: WARNING: an alias with name %s already exists",
+        _checkConflict: "cocos2d: WARNING: Sprite frame: %s has already been added by another source, please fix name conflit",
+        getSpriteFrame: "cocos2d: cc.SpriteFrameCahce: Frame %s not found",
+        _getFrameConfig_2: "Please load the resource first : %s",
+        addSpriteFrames_2: "cc.SpriteFrameCache.addSpriteFrames(): plist should be non-null",
+        addSpriteFrames_3: "Argument must be non-nil",
     },
 
     TextureAtlas: {

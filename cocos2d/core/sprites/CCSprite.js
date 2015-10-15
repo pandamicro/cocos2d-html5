@@ -687,7 +687,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      */
     initWithTexture: function (texture, rect, rotated, counterclockwise) {
         var _t = this;
-        cc.assert(arguments.length !== 0, cc._LogInfos.CCSpriteBatchNode.initWithTexture);
+        cc.assert(arguments.length !== 0, cc._LogInfos.SpriteBatchNode.initWithTexture);
 
         rotated = rotated || false;
         texture = this._renderCmd._handleTextureForRotatedTexture(texture, rect, rotated, counterclockwise);
@@ -801,7 +801,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      * @override
      */
     addChild: function (child, localZOrder, tag) {
-        cc.assert(child, cc._LogInfos.CCSpriteBatchNode.addChild_2);
+        cc.assert(child, cc._LogInfos.SpriteBatchNode.addChild_2);
 
         if (localZOrder == null)
             localZOrder = child._localZOrder;

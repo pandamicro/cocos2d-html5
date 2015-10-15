@@ -378,9 +378,9 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
      * @param {Number} index
      */
     updateQuadFromSprite: function (sprite, index) {
-        cc.assert(sprite, cc._LogInfos.CCSpriteBatchNode.updateQuadFromSprite_2);
+        cc.assert(sprite, cc._LogInfos.SpriteBatchNode.updateQuadFromSprite_2);
         if (!(sprite instanceof cc.Sprite)) {
-            cc.log(cc._LogInfos.CCSpriteBatchNode.updateQuadFromSprite);
+            cc.log(cc._LogInfos.SpriteBatchNode.updateQuadFromSprite);
             return;
         }
         this._renderCmd.checkAtlasCapacity();
@@ -406,9 +406,9 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
      * @param {Number} index
      */
     insertQuadFromSprite: function (sprite, index) {
-        cc.assert(sprite, cc._LogInfos.CCSpriteBatchNode.insertQuadFromSprite_2);
+        cc.assert(sprite, cc._LogInfos.SpriteBatchNode.insertQuadFromSprite_2);
         if (!(sprite instanceof cc.Sprite)) {
-            cc.log(cc._LogInfos.CCSpriteBatchNode.insertQuadFromSprite);
+            cc.log(cc._LogInfos.SpriteBatchNode.insertQuadFromSprite);
             return;
         }
         this._renderCmd.insertQuad(sprite, index);
@@ -560,7 +560,7 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
      * @param {Number} [tag]
      */
     addChild: function (child, zOrder, tag) {
-        cc.assert(child != null, cc._LogInfos.CCSpriteBatchNode.addChild_3);
+        cc.assert(child != null, cc._LogInfos.SpriteBatchNode.addChild_3);
 
         if(!this._renderCmd.isValidChild(child))
             return;
