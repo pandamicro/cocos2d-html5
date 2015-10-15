@@ -150,8 +150,10 @@ gulp.task('compile-cocos2d', function (done) {
     console.log('Spawn ' + Chalk.cyan('ant') + ' in ' + paths.originCocos2dCompileDir);
 
     var spawn = require('child_process').spawn;
+    var cmdStr = process.platform === 'win32' ? 'ant.bat' : 'ant';
     var child;
-    child = spawn('ant', {
+    console.log(process.cwd());
+    child = spawn(cmdStr, {
         cwd: paths.originCocos2dCompileDir
     });
     child.on('error', function (err) {

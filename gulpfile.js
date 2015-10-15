@@ -1,5 +1,6 @@
 ﻿var gulp = require('gulp');
 var requireDir = require('require-dir');
+var Path = require('path');
 
 // specify game project paths for tasks.
 global.paths = {
