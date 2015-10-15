@@ -906,7 +906,7 @@ function parseAttributes (attrs, className, propName) {
 
     parseSimpleAttr('rawType', 'string', Attr.RawType);
     parseSimpleAttr('editorOnly', 'boolean', Attr.EditorOnly);
-    if (CC_EDITOR) {
+    if (CC_EDITOR || CC_TEST) {
         parseSimpleAttr('displayName', 'string');
         parseSimpleAttr('multiline', 'boolean', {multiline: true});
         parseSimpleAttr('readonly', 'boolean', {readonly: true});
