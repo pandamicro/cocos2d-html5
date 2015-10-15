@@ -60,7 +60,7 @@
         var node = this._node;
         if (node._batchNode) {
             if (!(child instanceof cc.Sprite)) {
-                cc.log(cc._LogInfos.Sprite_addChild);
+                cc.log(cc._LogInfos.Sprite.addChild);
                 return false;
             }
             if (child.texture._webTextureObj !== node.textureAtlas.texture._webTextureObj)

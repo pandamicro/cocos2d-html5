@@ -44,7 +44,7 @@
         node._opacityModifyRGB = true;
         node._texture = texture;
         if (!node._texture) {
-            cc.log(cc._LogInfos.AtlasNode__initWithTexture);
+            cc.log(cc._LogInfos.AtlasNode._initWithTexture);
             return false;
         }
         this._textureToRender = texture;

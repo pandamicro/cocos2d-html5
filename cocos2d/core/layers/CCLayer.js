@@ -654,7 +654,7 @@ cc.LayerMultiplex = cc.Layer.extend(/** @lends cc.LayerMultiplex# */{
      */
     initWithLayers: function (layers) {
         if ((layers.length > 0) && (layers[layers.length - 1] == null))
-            cc.log(cc._LogInfos.LayerMultiplex_initWithLayers);
+            cc.log(cc._LogInfos.LayerMultiplex.initWithLayers);
 
         this._layers = layers;
         this._enabledLayer = 0;
@@ -669,7 +669,7 @@ cc.LayerMultiplex = cc.Layer.extend(/** @lends cc.LayerMultiplex# */{
      */
     switchTo: function (n) {
         if (n >= this._layers.length) {
-            cc.log(cc._LogInfos.LayerMultiplex_switchTo);
+            cc.log(cc._LogInfos.LayerMultiplex.switchTo);
             return;
         }
 
@@ -685,7 +685,7 @@ cc.LayerMultiplex = cc.Layer.extend(/** @lends cc.LayerMultiplex# */{
      */
     switchToAndReleaseMe: function (n) {
         if (n >= this._layers.length) {
-            cc.log(cc._LogInfos.LayerMultiplex_switchToAndReleaseMe);
+            cc.log(cc._LogInfos.LayerMultiplex.switchToAndReleaseMe);
             return;
         }
 
@@ -703,7 +703,7 @@ cc.LayerMultiplex = cc.Layer.extend(/** @lends cc.LayerMultiplex# */{
      */
     addLayer: function (layer) {
         if (!layer) {
-            cc.log(cc._LogInfos.LayerMultiplex_addLayer);
+            cc.log(cc._LogInfos.LayerMultiplex.addLayer);
             return;
         }
         this._layers.push(layer);

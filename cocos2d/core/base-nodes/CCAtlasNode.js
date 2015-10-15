@@ -98,7 +98,7 @@ cc.AtlasNode = cc.Node.extend(/** @lends cc.AtlasNode# */{
      * @function
      */
     updateAtlasValues: function () {
-        cc.log(cc._LogInfos.AtlasNode_updateAtlasValues);
+        cc.log(cc._LogInfos.AtlasNode.updateAtlasValues);
     },
 
     /**

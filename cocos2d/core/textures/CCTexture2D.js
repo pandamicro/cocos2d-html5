@@ -299,7 +299,7 @@ cc.game.addEventListener("rendererInited", function () {
              * @warning does not support on HTML5
              */
             initWithETCFile: function (file) {
-                cc.log(cc._LogInfos.Texture2D_initWithETCFile);
+                cc.log(cc._LogInfos.Texture2D.initWithETCFile);
                 return false;
             },
 
@@ -308,7 +308,7 @@ cc.game.addEventListener("rendererInited", function () {
              * @warning does not support on HTML5
              */
             initWithPVRFile: function (file) {
-                cc.log(cc._LogInfos.Texture2D_initWithPVRFile);
+                cc.log(cc._LogInfos.Texture2D.initWithPVRFile);
                 return false;
             },
 
@@ -317,7 +317,7 @@ cc.game.addEventListener("rendererInited", function () {
              * @warning does not support on HTML5
              */
             initWithPVRTCData: function (data, level, bpp, hasAlpha, length, pixelFormat) {
-                cc.log(cc._LogInfos.Texture2D_initWithPVRTCData);
+                cc.log(cc._LogInfos.Texture2D.initWithPVRTCData);
                 return false;
             },
 

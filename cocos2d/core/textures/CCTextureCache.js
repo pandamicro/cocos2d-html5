@@ -61,7 +61,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
      * @return {cc.Texture2D}
      */
     addPVRTCImage: function (filename) {
-        cc.log(cc._LogInfos.textureCache_addPVRTCImage);
+        cc.log(cc._LogInfos.textureCache.addPVRTCImage);
     },
 
     /**
@@ -75,7 +75,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
      * @return {cc.Texture2D}
      */
     addETCImage: function (filename) {
-        cc.log(cc._LogInfos.textureCache_addETCImage);
+        cc.log(cc._LogInfos.textureCache.addETCImage);
     },
 
     /**
@@ -96,7 +96,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
      * var key = cc.textureCache.textureForKey("hello.png");
      */
     textureForKey: function (textureKeyName) {
-        cc.log(cc._LogInfos.textureCache_textureForKey);
+        cc.log(cc._LogInfos.textureCache.textureForKey);
         return this.getTextureForKey(textureKeyName);
     },
 
@@ -162,7 +162,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
      * @return {cc.Texture2D}
      */
     addPVRImage: function (path) {
-        cc.log(cc._LogInfos.textureCache_addPVRImage);
+        cc.log(cc._LogInfos.textureCache.addPVRImage);
     },
 
     /**
@@ -247,7 +247,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
      * @return {cc.Texture2D}
      */
     addUIImage: function (image, key) {
-        cc.assert(image, cc._LogInfos.textureCache_addUIImage_2);
+        cc.assert(image, cc._LogInfos.textureCache.addUIImage_2);
 
         if (key) {
             if (this._textures[key])
@@ -260,7 +260,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
         if (key != null)
             this._textures[key] = texture;
         else
-            cc.log(cc._LogInfos.textureCache_addUIImage);
+            cc.log(cc._LogInfos.textureCache.addUIImage);
         return texture;
     },
 
@@ -276,9 +276,9 @@ cc.textureCache = /** @lends cc.textureCache# */{
             var selTexture = locTextures[key];
             count++;
             if (selTexture.getHtmlElementObj() instanceof  HTMLImageElement)
-                cc.log(cc._LogInfos.textureCache_dumpCachedTextureInfo, key, selTexture.getHtmlElementObj().src, selTexture.pixelsWidth, selTexture.pixelsHeight);
+                cc.log(cc._LogInfos.textureCache.dumpCachedTextureInfo, key, selTexture.getHtmlElementObj().src, selTexture.pixelsWidth, selTexture.pixelsHeight);
             else {
-                cc.log(cc._LogInfos.textureCache_dumpCachedTextureInfo_2, key, selTexture.pixelsWidth, selTexture.pixelsHeight);
+                cc.log(cc._LogInfos.textureCache.dumpCachedTextureInfo_2, key, selTexture.pixelsWidth, selTexture.pixelsHeight);
             }
             totalBytes += selTexture.pixelsWidth * selTexture.pixelsHeight * 4;
         }
@@ -289,12 +289,12 @@ cc.textureCache = /** @lends cc.textureCache# */{
             for (var selCanvasKey in selCanvasColorsArr) {
                 var selCanvas = selCanvasColorsArr[selCanvasKey];
                 count++;
-                cc.log(cc._LogInfos.textureCache_dumpCachedTextureInfo_2, key, selCanvas.width, selCanvas.height);
+                cc.log(cc._LogInfos.textureCache.dumpCachedTextureInfo_2, key, selCanvas.width, selCanvas.height);
                 totalBytes += selCanvas.width * selCanvas.height * 4;
             }
 
         }
-        cc.log(cc._LogInfos.textureCache_dumpCachedTextureInfo_3, count, totalBytes / 1024, (totalBytes / (1024.0 * 1024.0)).toFixed(2));
+        cc.log(cc._LogInfos.textureCache.dumpCachedTextureInfo_3, count, totalBytes / 1024, (totalBytes / (1024.0 * 1024.0)).toFixed(2));
     },
 
     _clear: function () {
@@ -337,7 +337,7 @@ cc.game.addEventListener("rendererInited", function () {
          */
         _p.addImage = function (url, cb, target) {
 
-            cc.assert(url, cc._LogInfos.Texture2D_addImage);
+            cc.assert(url, cc._LogInfos.Texture2D.addImage);
 
             var locTexs = this._textures;
             //remove judge
