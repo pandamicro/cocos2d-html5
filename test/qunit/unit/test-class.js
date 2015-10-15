@@ -82,6 +82,10 @@ test('test', function () {
             weight: 100
         }
     });
+    var labradorConstructor = new Callback();
+    Labrador = Animal.extend({
+        ctor: labradorConstructor
+    })
 
     constructor.enable();
     var instance1 = new Animal();
@@ -97,7 +101,12 @@ test('test', function () {
     var instance3 = new Animal();
     strictEqual(instance3.weight, 100, 'class define not changed');
 
-    cc.js.unregisterClass(Animal);
+    labradorConstructor.enable();
+    var instance4 = new Labrador();
+    constructor.once('call constructor of parent class');
+    labradorConstructor.once('call constructor of child class');
+
+    cc.js.unregisterClass(Animal, Labrador);
 });
 
 test('Inherit', function () {
@@ -317,18 +326,26 @@ test('isChildClassOf', function () {
             weight: 100
         }
     });
+    var Labrador = Dog.extend({
+        name: 'cc.Labrador',
+        properties: {
+            clever: true
+        }
+    });
 
     strictEqual(cc.isChildClassOf( Husky, Husky), true, 'Husky is child of itself');
     strictEqual(cc.isChildClassOf( Dog, Animal), true, 'Animal is parent of Dog');
     strictEqual(cc.isChildClassOf( Husky, Animal) &&
                 ! cc.isChildClassOf( Animal, Husky), true, 'Animal is parent of Husky');
     strictEqual(cc.isChildClassOf( Dog, Husky), false, 'Dog is not child of Husky');
+    strictEqual(cc.isChildClassOf( Labrador, Dog), true, 'Labrador is child of Dog');
+    strictEqual(cc.isChildClassOf( Labrador, Animal), true, 'Labrador is child of Animal');
 
     strictEqual(cc.isChildClassOf( Animal, Sub), true, 'Animal is child of Sub');
     strictEqual(cc.isChildClassOf( Animal, Base), true, 'Animal is child of Base');
     strictEqual(cc.isChildClassOf( Dog, Base),  true, 'Dog is child of Base');
 
-    cc.js.unregisterClass(Animal, Dog, Husky);
+    cc.js.unregisterClass(Animal, Dog, Husky, Labrador);
 });
 
 test('statics', function () {
@@ -340,11 +357,21 @@ test('statics', function () {
     var Dog = cc.Class({
         extends: Animal
     });
+    var Labrador = Dog.extend({
+        name: 'cc.Labrador',
+        statics: {
+            nickName: "niuniu"
+        }
+    });
 
     strictEqual(Animal.id, "be-bu", 'can get static prop');
     strictEqual(Dog.id, "be-bu", 'can copy static prop to child class');
+    strictEqual(Labrador.id, "be-bu", 'can copy static prop to child class with Dog.extend syntax');
     Animal.id = "duang-duang";
     strictEqual(Animal.id, "duang-duang", 'can set static prop');
+    strictEqual(Labrador.nickName, "niuniu", 'can add static prop in child class');
+    
+    cc.js.unregisterClass(Animal, Dog, Labrador);
 });
 
 test('try catch', function () {
@@ -364,7 +391,46 @@ test('try catch', function () {
 });
 
 test('this._super', function () {
-    ok(false, 'should add unit tests');
+    var play = Callback();
+    var getLost = Callback();
+    var wagTail = Callback();
+    var Dog = cc.Class({
+        name: 'cc.Dog',
+        play: play,
+        getLost: getLost,
+        wagTail: wagTail
+    });
+    var Husky = cc.Class({
+        name: 'cc.Husky',
+        extends: Dog,
+        play: function () {
+            this._super();
+            this.getLost();
+        }
+    });
+    var Labrador = Dog.extend({
+        name: 'cc.Labrador',
+        play: function () {
+            this._super();
+            this.wagTail();
+        }
+    });
+
+    play.enable();
+    getLost.enable();
+    wagTail.enable();
+    
+    var husky = new Husky();
+    husky.play();
+    play.once("Husky is playing");
+    getLost.once("Husky appears to be lost");
+
+    var labrador = new Labrador();
+    labrador.play();
+    play.once("Labrador is playing");
+    wagTail.once("Labrador is wagging its tail");
+
+    cc.js.unregisterClass(Dog, Husky, Labrador);
 });
 
 test('property notify', function () {
@@ -395,4 +461,24 @@ test('property notify', function () {
 
     strictEqual(string1, "0 : 4", 'dogs has 4 legs');
     strictEqual(string2, "0 : 2", 'dogs has 2 eyes');
+});
+
+test('__cid__', function () {
+    var Dog = cc.Class({
+        name: 'cc.Dog'
+    });
+    var Husky = cc.Class({
+        extends: Dog
+    });
+    var Labrador = Dog.extend({
+    });
+
+    ok(Dog.prototype.__cid__.length > 0, "Dog's cid is not empty");
+    ok(Husky.prototype.__cid__.length > 0, "Husky's cid is not empty");
+    ok(Labrador.prototype.__cid__.length > 0, "Labrador's cid is not empty");
+    notEqual(Dog.prototype.__cid__, Husky.prototype.__cid__, "Dog and Husky don't have the same cid");
+    notEqual(Dog.prototype.__cid__, Labrador.prototype.__cid__, "Dog and Labrador don't have the same cid");
+    notEqual(Labrador.prototype.__cid__, Husky.prototype.__cid__, "Labrador and Husky don't have the same cid");
+
+    cc.js.unregisterClass(Dog, Husky, Labrador);
 });
