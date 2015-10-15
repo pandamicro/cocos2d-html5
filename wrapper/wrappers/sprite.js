@@ -1,7 +1,7 @@
 
 var NodeWrapper = require('./node');
 
-var SpriteWrapper = cc.FireClass({
+var SpriteWrapper = cc.Class({
     name: 'cc.SpriteWrapper',
     extends: NodeWrapper,
 

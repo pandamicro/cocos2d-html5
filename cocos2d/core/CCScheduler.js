@@ -40,7 +40,7 @@ cc.PRIORITY_NON_SYSTEM = cc.PRIORITY_SYSTEM + 1;
  * @param {cc.ListEntry} prev
  * @param {cc.ListEntry} next
  * @param {function} callback
- * @param {cc.Class} target not retained (retained by hashUpdateEntry)
+ * @param {cc._Class} target not retained (retained by hashUpdateEntry)
  * @param {Number} priority
  * @param {Boolean} paused
  * @param {Boolean} markedForDeletion selector will no longer be called and entry will be removed at end of the next tick
@@ -61,7 +61,7 @@ cc.ListEntry = function (prev, next, callback, target, priority, paused, markedF
  * @name cc.HashUpdateEntry
  * @param {Array} list Which list does it belong to ?
  * @param {cc.ListEntry} entry entry in the list
- * @param {cc.Class} target hash key (retained)
+ * @param {cc._Class} target hash key (retained)
  * @param {function} callback
  * @param {Array} hh
  */
@@ -78,7 +78,7 @@ cc.HashUpdateEntry = function (list, entry, target, callback, hh) {
  * Hash Element used for "selectors with interval"
  * @Class
  * @param {Array} timers
- * @param {cc.Class} target  hash key (retained)
+ * @param {cc._Class} target  hash key (retained)
  * @param {Number} timerIndex
  * @param {cc.Timer} currentTimer
  * @param {Boolean} currentTimerSalvaged
@@ -99,9 +99,9 @@ cc.HashTimerEntry = cc.hashSelectorEntry = function (timers, target, timerIndex,
 /**
  * Light weight timer
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.Timer = cc.Class.extend(/** @lends cc.Timer# */{
+cc.Timer = cc._Class.extend(/** @lends cc.Timer# */{
     _scheduler: null,
     _elapsed:0.0,
     _runForever:false,
@@ -280,13 +280,13 @@ cc.TimerTargetCallback = cc.Timer.extend({
  *    The 'custom selectors' should be avoided when possible. It is faster, and consumes less memory to use the 'update callback'. *
  * </p>
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  *
  * @example
  * //register a schedule to scheduler
  * cc.director.getScheduler().schedule(callback, this, interval, !this._isRunning);
  */
-cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
+cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
     _timeScale:1.0,
 
     //_updates : null, //_updates[0] list of priority < 0, _updates[1] list of priority == 0, _updates[2] list of priority > 0,
@@ -531,7 +531,7 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
      *   delay is the amount of time the action will wait before it'll start<br/>
      * </p>
      * @deprecated since v3.4 please use .schedule
-     * @param {cc.Class} target
+     * @param {cc._Class} target
      * @param {function} callback_fn
      * @param {Number} interval
      * @param {Number} repeat
@@ -572,7 +572,7 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
             }
         }
 
-        cc.assert(target, cc._LogInfos.Scheduler_scheduleCallbackForTarget_3);
+        cc.assert(target, cc._LogInfos.Scheduler.scheduleCallbackForTarget_3);
         if(isSelector === false)
             cc.assert(key, "key should not be empty!");
 
@@ -594,7 +594,7 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
             for (i = 0; i < element.timers.length; i++) {
                 timer = element.timers[i];
                 if (callback === timer._callback) {
-                    cc.log(cc._LogInfos.Scheduler_scheduleCallbackForTarget, timer.getInterval().toFixed(4), interval.toFixed(4));
+                    cc.log(cc._LogInfos.Scheduler.scheduleCallbackForTarget, timer.getInterval().toFixed(4), interval.toFixed(4));
                     timer._interval = interval;
                     return;
                 }
@@ -879,11 +879,11 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
      *    All scheduled selectors/update for a given target won't be 'ticked' until the target is resumed.<br/>
      *    If the target is not present, nothing happens.
      * </p>
-     * @param {cc.Class} target
+     * @param {cc._Class} target
      */
     pauseTarget:function (target) {
 
-        cc.assert(target, cc._LogInfos.Scheduler_pauseTarget);
+        cc.assert(target, cc._LogInfos.Scheduler.pauseTarget);
 
         //customer selectors
         var self = this, element = self._hashForTimers[target.__instanceId];
@@ -902,11 +902,11 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
      * Resumes the target.<br/>
      * The 'target' will be unpaused, so all schedule selectors/update will be 'ticked' again.<br/>
      * If the target is not present, nothing happens.
-     * @param {cc.Class} target
+     * @param {cc._Class} target
      */
     resumeTarget:function (target) {
 
-        cc.assert(target, cc._LogInfos.Scheduler_resumeTarget);
+        cc.assert(target, cc._LogInfos.Scheduler.resumeTarget);
 
         // custom selectors
         var self = this, element = self._hashForTimers[target.__instanceId];
@@ -925,12 +925,12 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
 
     /**
      * Returns whether or not the target is paused
-     * @param {cc.Class} target
+     * @param {cc._Class} target
      * @return {Boolean}
      */
     isTargetPaused:function (target) {
 
-        cc.assert(target, cc._LogInfos.Scheduler_isTargetPaused);
+        cc.assert(target, cc._LogInfos.Scheduler.isTargetPaused);
 
         // Custom selectors
         var element = this._hashForTimers[target.__instanceId];
@@ -951,7 +951,7 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
      *    The lower the priority, the earlier it is called.
      * </p>
      * @deprecated since v3.4 please use .scheduleUpdate
-     * @param {cc.Class} target
+     * @param {cc._Class} target
      * @param {Number} priority
      * @param {Boolean} paused
      * @example
@@ -969,7 +969,7 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
      *   If you want to unschedule the "update", use unscheudleUpdateForTarget.
      * </p>
      * @deprecated since v3.4 please use .unschedule
-     * @param {cc.Class} target
+     * @param {cc._Class} target
      * @param {function} callback callback[Function] or key[String]
      * @example
      * //unschedule a callback of target
@@ -982,7 +982,7 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
 
     /**
      * Unschedules the update callback function for a given target
-     * @param {cc.Class} target
+     * @param {cc._Class} target
      * @deprecated since v3.4 please use .unschedule
      * @example
      * //unschedules the "update" method.
@@ -996,7 +996,7 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
     /**
      * Unschedules all function callbacks for a given target. This also includes the "update" callback function.
      * @deprecated since v3.4 please use .unscheduleAll
-     * @param {cc.Class} target
+     * @param {cc._Class} target
      */
     unscheduleAllCallbacksForTarget: function(target){
         //cc.log("unscheduleAllCallbacksForTarget is deprecated. Please use unscheduleAll.");

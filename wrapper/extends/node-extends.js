@@ -254,7 +254,7 @@ JS.mixin(nodeProto, {
     },
 
     _onAfterInstantiate: function () {
-        if (cc.engine.isPlaying) {
+        if (CC_EDITOR && cc.engine.isPlaying) {
             this.name += ' (Clone)';
         }
         // invoke onLoad, note that the new node have not added to any parent yet
@@ -321,7 +321,7 @@ function dumpNodeForInstantiation (node) {
             var props = mixinClass.__props__;
             for (var p = 0; p < props.length; p++) {
                 var propName = props[p];
-                var attrs = cc.FireClass.attr(mixinClass, propName);
+                var attrs = cc.Class.attr(mixinClass, propName);
                 if (attrs.serializable === false) {
                     continue;
                 }

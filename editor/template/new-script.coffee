@@ -1,4 +1,4 @@
-cc.FireClass {
+cc.Class {
     extends: cc.Behavior
 
     properties: {

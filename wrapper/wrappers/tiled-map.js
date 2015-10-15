@@ -1,7 +1,7 @@
 
 var NodeWrapper = require('./node');
 
-var TiledMapWrapper = cc.FireClass({
+var TiledMapWrapper = cc.Class({
     name: 'cc.TiledMapWrapper',
     extends: NodeWrapper,
 

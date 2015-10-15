@@ -222,9 +222,9 @@ test('createBatchedProperty', function () {
     actual = test('p.x', pos, 321);
     deepEqual(actual, v2(321, 456), 'checking value y');
 
-    var MyValue = cc.FireClass({
+    var MyValue = cc.Class({
         extends: cc.ValueType,
-        constructor: function () {
+        ctor: function () {
             this.abc = {
                 def: {
                     gh: arguments[0]

@@ -78,7 +78,7 @@ cc.animationCache = /** @lends cc.animationCache# */{
     _addAnimationsWithDictionary:function (dictionary,plist) {
         var animations = dictionary["animations"];
         if (!animations) {
-            cc.log(cc._LogInfos.animationCache__addAnimationsWithDictionary);
+            cc.log(cc._LogInfos.animationCache._addAnimationsWithDictionary);
             return;
         }
 
@@ -102,7 +102,7 @@ cc.animationCache = /** @lends cc.animationCache# */{
                 this._parseVersion2(animations);
                 break;
             default :
-                cc.log(cc._LogInfos.animationCache__addAnimationsWithDictionary_2);
+                cc.log(cc._LogInfos.animationCache._addAnimationsWithDictionary_2);
                 break;
         }
     },
@@ -116,12 +116,12 @@ cc.animationCache = /** @lends cc.animationCache# */{
      */
     addAnimations:function (plist) {
 
-        cc.assert(plist, cc._LogInfos.animationCache_addAnimations_2);
+        cc.assert(plist, cc._LogInfos.animationCache.addAnimations_2);
 
         var dict = cc.loader.getRes(plist);
 
         if(!dict){
-            cc.log(cc._LogInfos.animationCache_addAnimations);
+            cc.log(cc._LogInfos.animationCache.addAnimations);
             return;
         }
 
@@ -137,7 +137,7 @@ cc.animationCache = /** @lends cc.animationCache# */{
             var delay = parseFloat(animationDict["delay"]) || 0;
             var animation = null;
             if (!frameNames) {
-                cc.log(cc._LogInfos.animationCache__parseVersion1, key);
+                cc.log(cc._LogInfos.animationCache._parseVersion1, key);
                 continue;
             }
 
@@ -145,7 +145,7 @@ cc.animationCache = /** @lends cc.animationCache# */{
             for (var i = 0; i < frameNames.length; i++) {
                 var spriteFrame = frameCache.getSpriteFrame(frameNames[i]);
                 if (!spriteFrame) {
-                    cc.log(cc._LogInfos.animationCache__parseVersion1_2, key, frameNames[i]);
+                    cc.log(cc._LogInfos.animationCache._parseVersion1_2, key, frameNames[i]);
                     continue;
                 }
                 var animFrame = new cc.AnimationFrame();
@@ -154,10 +154,10 @@ cc.animationCache = /** @lends cc.animationCache# */{
             }
 
             if (frames.length === 0) {
-                cc.log(cc._LogInfos.animationCache__parseVersion1_3, key);
+                cc.log(cc._LogInfos.animationCache._parseVersion1_3, key);
                 continue;
             } else if (frames.length !== frameNames.length) {
-                cc.log(cc._LogInfos.animationCache__parseVersion1_4, key);
+                cc.log(cc._LogInfos.animationCache._parseVersion1_4, key);
             }
             animation = new cc.Animation(frames, delay, 1);
             cc.animationCache.addAnimation(animation, key);
@@ -177,7 +177,7 @@ cc.animationCache = /** @lends cc.animationCache# */{
             var frameArray = animationDict["frames"];
 
             if (!frameArray) {
-                cc.log(cc._LogInfos.animationCache__parseVersion2, key);
+                cc.log(cc._LogInfos.animationCache._parseVersion2, key);
                 continue;
             }
 
@@ -188,7 +188,7 @@ cc.animationCache = /** @lends cc.animationCache# */{
                 var spriteFrameName = entry["spriteframe"];
                 var spriteFrame = frameCache.getSpriteFrame(spriteFrameName);
                 if (!spriteFrame) {
-                    cc.log(cc._LogInfos.animationCache__parseVersion2_2, key, spriteFrameName);
+                    cc.log(cc._LogInfos.animationCache._parseVersion2_2, key, spriteFrameName);
                     continue;
                 }
 

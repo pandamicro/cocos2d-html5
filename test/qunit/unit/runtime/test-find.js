@@ -1,23 +1,12 @@
 module('cc.find', SetupEngine);
 
 test('test', function () {
-    var MyScene = cc.FireClass({
-        extends: TestNode
-    });
-    var MySceneWrapper = cc.FireClass({
-        extends: cc.Runtime.SceneWrapper,
-        properties: {
-            childrenN: {
-                get: function () {
-                    return this.targetN.children;
-                }
-            }
-        }
-    });
-    cc.Runtime.registerNodeType(MyScene, MySceneWrapper);
+    var MyScene = cc.Scene;
+    var MySceneWrapper = cc.Runtime.SceneWrapper;
 
     var scene = new MyScene();
-    cc.engine._setCurrentSceneN(scene);
+    cc.director.runScene(scene);
+    cc.director.setNextScene();
 
     var ent = new TestNode('');
     scene.children = [ent];

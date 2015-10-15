@@ -35,7 +35,7 @@ cc._tmp.WebGLTexture2D = function () {
      * Be aware that the content of the generated textures will be upside-down! </p>
      * @name cc.Texture2D
      * @class
-     * @extends cc.Class
+     * @extends cc._Class
      *
      * @property {WebGLTexture}     name            - <@readonly> WebGLTexture Object
      * @property {Number}           pixelFormat     - <@readonly> Pixel format of the texture
@@ -48,7 +48,7 @@ cc._tmp.WebGLTexture2D = function () {
      * @property {Number}           maxT            - Texture max T
      */
         //Original : Texture2DWebGL
-    cc.Texture2D = cc.Class.extend(/** @lends cc.Texture2D# */{
+    cc.Texture2D = cc._Class.extend(/** @lends cc.Texture2D# */{
         // By default PVR images are treated as if they don't have the alpha channel premultiplied
         _pVRHaveAlphaPremultiplied: true,
         _pixelFormat: null,
@@ -290,7 +290,7 @@ cc._tmp.WebGLTexture2D = function () {
                     format = gl.LUMINANCE;
                     break;
                 default:
-                    cc.assert(0, cc._LogInfos.Texture2D_initWithData);
+                    cc.assert(0, cc._LogInfos.Texture2D.initWithData);
             }
             gl.texImage2D(gl.TEXTURE_2D, 0, format, pixelsWide, pixelsHigh, 0, format, type, data);
 
@@ -393,7 +393,7 @@ cc._tmp.WebGLTexture2D = function () {
          */
         initWithImage: function (uiImage) {
             if (uiImage == null) {
-                cc.log(cc._LogInfos.Texture2D_initWithImage);
+                cc.log(cc._LogInfos.Texture2D.initWithImage);
                 return false;
             }
 
@@ -402,7 +402,7 @@ cc._tmp.WebGLTexture2D = function () {
 
             var maxTextureSize = cc.configuration.getMaxTextureSize();
             if (imageWidth > maxTextureSize || imageHeight > maxTextureSize) {
-                cc.log(cc._LogInfos.Texture2D_initWithImage_2, imageWidth, imageHeight, maxTextureSize, maxTextureSize);
+                cc.log(cc._LogInfos.Texture2D.initWithImage_2, imageWidth, imageHeight, maxTextureSize, maxTextureSize);
                 return false;
             }
             this._textureLoaded = true;
@@ -510,7 +510,7 @@ cc._tmp.WebGLTexture2D = function () {
          * @return {Boolean}
          */
         initWithString: function (text, fontName, fontSize, dimensions, hAlignment, vAlignment) {
-            cc.log(cc._LogInfos.Texture2D_initWithString);
+            cc.log(cc._LogInfos.Texture2D.initWithString);
             return null;
         },
 
@@ -521,7 +521,7 @@ cc._tmp.WebGLTexture2D = function () {
          * @return {Boolean}
          */
         initWithETCFile: function (file) {
-            cc.log(cc._LogInfos.Texture2D_initWithETCFile_2);
+            cc.log(cc._LogInfos.Texture2D.initWithETCFile_2);
             return false;
         },
 
@@ -531,7 +531,7 @@ cc._tmp.WebGLTexture2D = function () {
          * @return {Boolean}
          */
         initWithPVRFile: function (file) {
-            cc.log(cc._LogInfos.Texture2D_initWithPVRFile_2);
+            cc.log(cc._LogInfos.Texture2D.initWithPVRFile_2);
             return false;
         },
 
@@ -551,7 +551,7 @@ cc._tmp.WebGLTexture2D = function () {
          * @return {Boolean}
          */
         initWithPVRTCData: function (data, level, bpp, hasAlpha, length, pixelFormat) {
-            cc.log(cc._LogInfos.Texture2D_initWithPVRTCData_2);
+            cc.log(cc._LogInfos.Texture2D.initWithPVRTCData_2);
             return false;
         },
 
@@ -642,7 +642,7 @@ cc._tmp.WebGLTexture2D = function () {
             format = format || this._pixelFormat;
             var value = cc.Texture2D._B[format];
             if (value != null) return value;
-            cc.log(cc._LogInfos.Texture2D_bitsPerPixelForFormat, format);
+            cc.log(cc._LogInfos.Texture2D.bitsPerPixelForFormat, format);
             return -1;
         },
 
@@ -663,7 +663,7 @@ cc._tmp.WebGLTexture2D = function () {
                 if (bpp >= 8) {
                     pixelFormat = tex2d.PIXEL_FORMAT_RGB888;
                 } else {
-                    cc.log(cc._LogInfos.Texture2D__initPremultipliedATextureWithImage);
+                    cc.log(cc._LogInfos.Texture2D._initPremultipliedATextureWithImage);
                     pixelFormat = tex2d.PIXEL_FORMAT_RGB565;
                 }
             }
@@ -879,7 +879,7 @@ cc._tmp.WebGLTextureCache = function () {
      * cc.textureCache.addImage("hello.png");
      */
     _p.addImage = function (url, cb, target) {
-        cc.assert(url, cc._LogInfos.Texture2D_addImage_2);
+        cc.assert(url, cc._LogInfos.Texture2D.addImage_2);
 
         var locTexs = this._textures;
         //remove judge(webgl)

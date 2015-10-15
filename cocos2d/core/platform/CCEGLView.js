@@ -116,9 +116,9 @@ switch(cc.__BrowserGetter.adaptationType){
  *  - cc.view.methodName(); <br/>
  * @class
  * @name cc.view
- * @extend cc.Class
+ * @extend cc._Class
  */
-cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
+cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
     _delegate: null,
     // Size of parent node that contains cc.container and cc.game.canvas
     _frameSize: null,
@@ -601,14 +601,14 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
     setDesignResolutionSize: function (width, height, resolutionPolicy) {
         // Defensive code
         if( !(width > 0 || height > 0) ){
-            cc.log(cc._LogInfos.EGLView_setDesignResolutionSize);
+            cc.log(cc._LogInfos.view.setDesignResolutionSize);
             return;
         }
 
         this.setResolutionPolicy(resolutionPolicy);
         var policy = this._resolutionPolicy;
         if (!policy){
-            cc.log(cc._LogInfos.EGLView_setDesignResolutionSize_2);
+            cc.log(cc._LogInfos.view.setDesignResolutionSize_2);
             return;
         }
         policy.preApply(this);
@@ -853,9 +853,9 @@ cc.EGLView._getInstance = function () {
  * it controls the behavior of how to scale the cc.container and cc.game.canvas object</p>
  *
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.ContainerStrategy = cc.Class.extend(/** @lends cc.ContainerStrategy# */{
+cc.ContainerStrategy = cc._Class.extend(/** @lends cc.ContainerStrategy# */{
     /**
      * Manipulation before appling the strategy
      * @param {cc.view} The target view
@@ -938,9 +938,9 @@ cc.ContainerStrategy = cc.Class.extend(/** @lends cc.ContainerStrategy# */{
  * it controls the behavior of how to scale the scene and setup the viewport for the game</p>
  *
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.ContentStrategy = cc.Class.extend(/** @lends cc.ContentStrategy# */{
+cc.ContentStrategy = cc._Class.extend(/** @lends cc.ContentStrategy# */{
 
     _result: {
         scale: [1, 1],
@@ -1172,11 +1172,11 @@ cc.ContentStrategy = cc.Class.extend(/** @lends cc.ContentStrategy# */{
  * its main task is to maintain the compatibility with Cocos2d-x</p>
  *
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  * @param {cc.ContainerStrategy} containerStg The container strategy
  * @param {cc.ContentStrategy} contentStg The content strategy
  */
-cc.ResolutionPolicy = cc.Class.extend(/** @lends cc.ResolutionPolicy# */{
+cc.ResolutionPolicy = cc._Class.extend(/** @lends cc.ResolutionPolicy# */{
 	_containerStrategy: null,
     _contentStrategy: null,
 

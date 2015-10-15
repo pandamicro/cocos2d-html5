@@ -1,7 +1,7 @@
 
 var ScrollViewWrapper = require('./scroll-view');
 
-var ListViewWrapper = cc.FireClass({
+var ListViewWrapper = cc.Class({
     name: 'cc.ListViewWrapper',
     extends: ScrollViewWrapper,
 

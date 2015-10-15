@@ -1,11 +1,11 @@
 
 var WidgetWrapper = require('./widget');
 
-var Scale9Wrapper = cc.FireClass({
+var Scale9Wrapper = cc.Class({
     name: 'cc.Scale9Wrapper',
     extends: WidgetWrapper,
 
-    constructor: function () {
+    ctor: function () {
         this._scale9Size = null;
         this._updatingCapInsets = false;
     },

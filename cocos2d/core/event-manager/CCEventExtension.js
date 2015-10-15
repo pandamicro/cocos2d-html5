@@ -67,7 +67,7 @@ cc._EventListenerAcceleration = cc.EventListener.extend({
 
     checkAvailable: function () {
 
-        cc.assert(this._onAccelerationEvent, cc._LogInfos._EventListenerAcceleration_checkAvailable);
+        cc.assert(this._onAccelerationEvent, cc._LogInfos._checkEventListenerAvailable.acceleration);
 
         return true;
     },
@@ -112,7 +112,7 @@ cc._EventListenerKeyboard = cc.EventListener.extend({
 
     checkAvailable: function () {
         if (this.onKeyPressed === null && this.onKeyReleased === null) {
-            cc.log(cc._LogInfos._EventListenerKeyboard_checkAvailable);
+            cc.log(cc._LogInfos._checkEventListenerAvailable.keyboard);
             return false;
         }
         return true;

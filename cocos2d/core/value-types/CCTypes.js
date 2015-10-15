@@ -67,16 +67,16 @@ cc.BlendFunc._additive = function(){
 
 /** @expose */
 cc.BlendFunc.DISABLE;
-cc.defineGetterSetter(cc.BlendFunc, "DISABLE", cc.BlendFunc._disable);
+cc.js.get(cc.BlendFunc, "DISABLE", cc.BlendFunc._disable);
 /** @expose */
 cc.BlendFunc.ALPHA_PREMULTIPLIED;
-cc.defineGetterSetter(cc.BlendFunc, "ALPHA_PREMULTIPLIED", cc.BlendFunc._alphaPremultiplied);
+cc.js.get(cc.BlendFunc, "ALPHA_PREMULTIPLIED", cc.BlendFunc._alphaPremultiplied);
 /** @expose */
 cc.BlendFunc.ALPHA_NON_PREMULTIPLIED;
-cc.defineGetterSetter(cc.BlendFunc, "ALPHA_NON_PREMULTIPLIED", cc.BlendFunc._alphaNonPremultiplied);
+cc.js.get(cc.BlendFunc, "ALPHA_NON_PREMULTIPLIED", cc.BlendFunc._alphaNonPremultiplied);
 /** @expose */
 cc.BlendFunc.ADDITIVE;
-cc.defineGetterSetter(cc.BlendFunc, "ADDITIVE", cc.BlendFunc._additive);
+cc.js.get(cc.BlendFunc, "ADDITIVE", cc.BlendFunc._additive);
 
 /**
  * @function
@@ -167,10 +167,7 @@ cc.VerticalTextAlignment = cc.Enum({
     BOTTOM: 2
 });
 
-cc._Dictionary = cc.Class.extend({
-    _keyMapTb: null,
-    _valueMapTb: null,
-    __currId: 0,
+cc._Dictionary = cc.Class({
 
     ctor: function () {
         this._keyMapTb = {};

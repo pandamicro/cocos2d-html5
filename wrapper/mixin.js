@@ -2,7 +2,7 @@
 var JS = cc.js;
 var Wrapper = require('./wrappers/node');
 var Behavior = require('./behavior');
-var instantiateProps = require('../cocos2d/core/platform/CCFireClass').instantiateProps;
+var instantiateProps = require('../cocos2d/core/platform/CCClass').instantiateProps;
 
 var LifecycleMethods = Behavior.LCMethodNames;
 var lcmInvokers = Behavior.lcmInvokers;
@@ -43,8 +43,8 @@ function mixin (node, typeOrTypename) {
 
     if (CC_EDITOR) {
         // validate
-        if (!cc.FireClass._isFireClass(classToMix)) {
-            cc.error('cc.mixin: The class to mixin must be FireClass.');
+        if (!cc.Class._isCCClass(classToMix)) {
+            cc.error('cc.mixin: The class to mixin must be CCClass.');
             return;
         }
         if (!JS._getClassId(classToMix, false) && !CC_TEST) {
@@ -112,7 +112,7 @@ function mixin (node, typeOrTypename) {
         var lcmIndex = LifecycleMethods.indexOf(propName);
         var isLifecycleMethods = lcmIndex !== -1;
         if (isLifecycleMethods) {
-            //if (cc.engine && !cc.engine._isPlaying && CC_EDITOR) {
+            //if (cc.game.isPaused() && CC_EDITOR) {
             //    continue;
             //}
             scriptCtx[propName] = classToMixProto[propName];
@@ -140,7 +140,7 @@ function mixin (node, typeOrTypename) {
         }
     }
 
-    if (cc.engine && (cc.engine._isPlaying || !CC_EDITOR) && !cc.game._isCloning) {
+    if ((!CC_EDITOR || cc.engine._isPlaying) && !cc.game._isCloning) {
         // invoke onLoad
         var onLoad = classToMixProto.onLoad;
         if (onLoad) {

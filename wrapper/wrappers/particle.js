@@ -80,10 +80,10 @@ var defaultValues = {
     tangentialAccelVariance: 0
 };
 
-var ParticleWrapper = cc.FireClass({
+var ParticleWrapper = cc.Class({
     name: 'cc.ParticleWrapper',
     extends: NodeWrapper,
-    constructor: function () {
+    ctor: function () {
     },
 
     properties: {
@@ -106,7 +106,9 @@ var ParticleWrapper = cc.FireClass({
                         this.targetN.resetSystem();
                         this.targetN.stopSystem();
 
-                        cc.engine.repaintInEditMode();
+                        if (CC_EDITOR) {
+                            cc.engine.repaintInEditMode();
+                        }
                     }
                 }
             }
@@ -727,7 +729,9 @@ var ParticleWrapper = cc.FireClass({
         this.targetN.resetSystem();
         this.targetN.stopSystem();
 
-        cc.engine.repaintInEditMode();
+        if (CC_EDITOR) {
+            cc.engine.repaintInEditMode();
+        }
     },
 
     _serializeToObject: function (object, property) {
@@ -752,7 +756,7 @@ var ParticleWrapper = cc.FireClass({
 
         if (!value) return;
 
-        var attr = cc.FireClass.attr(ParticleWrapper, property);
+        var attr = cc.Class.attr(ParticleWrapper, property);
 
         if (attr.ctor === cc.Color) {
             this[property] = value ? new cc.Color(value[0], value[1], value[2], value[3]) : cc.Color.white;;

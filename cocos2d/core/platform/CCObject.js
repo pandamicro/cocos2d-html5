@@ -112,7 +112,7 @@ CCObject.Flags = {
 
 };
 
-require('./CCFireClass').fastDefine('cc.Object', CCObject, ['_name', '_objFlags']);
+require('./CCClass').fastDefine('cc.Object', CCObject, ['_name', '_objFlags']);
 
 // internal static
 

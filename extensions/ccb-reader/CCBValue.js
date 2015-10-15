@@ -35,7 +35,7 @@ cc.BOOL_VALUE = 3;
 cc.UNSIGNEDCHAR_VALUE = 4;
 
 
-cc.Color3BWapper = cc.Class.extend({
+cc.Color3BWapper = cc._Class.extend({
     _color:null,
     ctor:function () {
         this._color = cc.color(0, 0, 0);
@@ -55,7 +55,7 @@ cc.Color3BWapper.create = function (color) {
     return ret;
 };
 
-cc.BuilderValue = cc.Class.extend({
+cc.BuilderValue = cc._Class.extend({
     _value:null,
     _type:0,
 

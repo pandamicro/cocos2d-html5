@@ -277,7 +277,7 @@ var AssetLibrary = {
                     if (!shouldLoadByEngine) {
                         return callback(new Error('Should not load raw file in AssetLibrary, uuid: ' + uuid));
                     }
-                    LoadManager.loadByLoader(cc.loader.loadJson, url, function (error, json) {
+                    LoadManager.loadByLoader(cc.loader.loadJson.bind(cc.loader), url, function (error, json) {
                         onload(error, json, url);
                     });
                 }
@@ -288,7 +288,7 @@ var AssetLibrary = {
             if (info.raw) {
                 return callback(new Error('Should not load raw file in AssetLibrary, uuid: ' + uuid));
             }
-            LoadManager.loadByLoader(cc.loader.loadJson, info.url, function (error, json) {
+            LoadManager.loadByLoader(cc.loader.loadJson.bind(cc.loader), info.url, function (error, json) {
                 onload(error, json, info.url);
             });
         }
@@ -327,7 +327,7 @@ var AssetLibrary = {
         var rawProp = _tdInfo.rawProp;     // _tdInfo不能用在回调里！
         if (rawProp) {
             // load depends raw objects
-            var attrs = cc.FireClass.attr(asset.constructor, _tdInfo.rawProp);
+            var attrs = cc.Class.attr(asset.constructor, _tdInfo.rawProp);
             var rawType = attrs.rawType;
             ++pendingCount;
             LoadManager.load(url, rawType, asset._rawext, function onRawObjLoaded (error, raw) {

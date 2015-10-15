@@ -1,7 +1,7 @@
 
 var WidgetWrapper = require('./widget');
 
-var TextAtlasWrapper = cc.FireClass({
+var TextAtlasWrapper = cc.Class({
     name: 'cc.TextAtlasWrapper',
     extends: WidgetWrapper,
 

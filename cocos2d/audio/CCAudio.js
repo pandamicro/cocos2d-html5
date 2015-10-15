@@ -131,7 +131,7 @@
 /**
  * Encapsulate DOM and webAudio
  */
-cc.Audio = cc.Class.extend({
+cc.Audio = cc._Class.extend({
     //TODO Maybe loader shift in will be better
     volume: 1,
     loop: false,

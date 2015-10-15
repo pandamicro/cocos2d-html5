@@ -17,7 +17,6 @@ var Texture = cc.Texture;
 var Ticker = cc._Ticker;
 var Time = cc.Time;
 //var Entity = cc.Entity;
-var Engine = cc.engine;
 //var Camera = cc.Camera;
 //var Component = cc.Component;
 var LoadManager = cc._LoadManager;
@@ -32,10 +31,10 @@ var color = cc.fireColor;
 
 if (!cc.SpriteAsset) {
     var Sprite = (function () {
-        var Sprite = cc.FireClass({
+        var Sprite = cc.Class({
             name: 'cc.SpriteAsset',
             extends: cc.Asset,
-            constructor: function () {
+            ctor: function () {
                 var img = arguments[0];
                 if (img) {
                     this.texture = new cc.TextureAsset(img);
@@ -152,10 +151,10 @@ if (!cc.TextureAsset) {
             Bilinear: -1,
             Trilinear: -1
         });
-        var Texture = cc.FireClass({
+        var Texture = cc.Class({
             name: 'cc.TextureAsset',
             extends: cc.Asset,
-            constructor: function () {
+            ctor: function () {
                 var img = arguments[0];
                 if (img) {
                     this.image = img;
@@ -241,7 +240,7 @@ if (!cc.TextureAsset) {
     var canvasCtxToGetPixel = null;
 }
 
-cc.RawTexture = cc.FireClass({
+cc.RawTexture = cc.Class({
     name: 'cc.RawTexture',
     extends: cc.RawAsset
 });
@@ -252,7 +251,7 @@ TestNode = function () {
     this.parent = null;
     this.scale = cc.Vec2.one;
 };
-TestWrapper = cc.FireClass({
+TestWrapper = cc.Class({
     name: 'TestWrapper',
     extends: cc.Runtime.NodeWrapper,
     properties: {
@@ -335,21 +334,7 @@ TestWrapper = cc.FireClass({
 });
 cc.Runtime.registerNodeType(TestNode, TestWrapper);
 
-var EngineWrapper = cc.FireClass({
-    extends: cc.Runtime.EngineWrapper,
-    constructor: function () {
-        this._scene = null;
-    },
-    tick: function () {},
-    tickInEditMode: function () {}
-});
-
-/**
- * @property {EngineWrapper} engine - The instance of current registered engine.
- */
-cc.engine = new EngineWrapper(true);
-
-var TestScript = cc.FireClass({
+var TestScript = cc.Class({
     name: 'TestScript',
     extends: cc.Behavior,
     properties: {
@@ -364,35 +349,68 @@ var TestScript = cc.FireClass({
     }
 });
 
-var Engine = cc.engine;
-Engine._reset = function (w, h) {
-    if (!Engine.isInitialized && !Engine._isInitializing) {
+var assetDir = '../test/qunit/assets';
+
+var canvas;
+function _resetGame (w, h) {
+    if (!cc.game._prepared && !cc.game._prepareCalled) {
+        if (!canvas) {
+            canvas = document.createElement('canvas');
+            canvas.id = 'test-canvas';
+            document.body.appendChild(canvas);
+        }
         cc.game.run({
             width: w,
-            height: h
+            height: h,
+            id: 'test-canvas'
         });
     }
-    //else {
-    //    Screen.size = new V2(w, h);
-    //}
+    else {
+        var view = cc.view;
+
+        cc._canvas.width = w * view.getDevicePixelRatio();
+        cc._canvas.height = h * view.getDevicePixelRatio();
+
+        cc._canvas.style.width = w;
+        cc._canvas.style.height = h;
+
+        // reset container style
+        var style = cc.container.style;
+        style.paddingTop = "0px";
+        style.paddingRight = "0px";
+        style.paddingBottom = "0px";
+        style.paddingLeft = "0px";
+        style.borderTop = "0px";
+        style.borderRight = "0px";
+        style.borderBottom = "0px";
+        style.borderLeft = "0px";
+        style.marginTop = "0px";
+        style.marginRight = "0px";
+        style.marginBottom = "0px";
+        style.marginLeft = "0px";
+
+        cc.container.style.width = w;
+        cc.container.style.height = h;
+
+        var size = view.getDesignResolutionSize();
+        view.setDesignResolutionSize(size.width, size.height, view.getResolutionPolicy());
+
+        cc.eventManager.dispatchCustomEvent('canvas-resize');
+    }
     //Engine._launchScene(new cc._Scene());
 
-    Engine.stop();
-};
+    cc.director.pause();
+}
 
 var SetupEngine = {
     setup: function () {
-        Engine.tick = function () {};
-        Engine.tickInEditMode = function () {};
-        Engine._reset(256, 512);
+        _resetGame(256, 512);
         //// check error
         //Engine._renderContext.checkMatchCurrentScene(true);
     },
     teardown: function () {
-        Engine.tick = function () {};
-        Engine.tickInEditMode = function () {};
         //Engine._launchScene(new cc._Scene());
-        Engine.stop();
+        cc.game.pause();
         //// check error
         //Engine._renderContext.checkMatchCurrentScene(true);
     }
@@ -400,9 +418,9 @@ var SetupEngine = {
 
 // force stop to ensure start will only called once
 function asyncEnd () {
-    Engine.stop();
-    Engine.tick = function () {};
-    Engine.tickInEditMode = function () {};
+    cc.game.pause();
+    //Engine.tick = function () {};
+    //Engine.tickInEditMode = function () {};
     start();
 }
 

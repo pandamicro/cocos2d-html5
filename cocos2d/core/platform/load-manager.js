@@ -4,15 +4,15 @@ var CallbacksInvoker = require('./callbacks-invoker');
 function getBuiltinRawTypes () {
     return {
         image: {
-            loader: cc.loader.loadImg,
+            loader: cc.loader.loadImg.bind(cc.loader),
             defaultExtname: '.host'
         },
         json: {
-            loader: cc.loader.loadJson,
+            loader: cc.loader.loadJson.bind(cc.loader),
             defaultExtname: '.json'
         },
         text: {
-            loader: cc.loader.loadTxt,
+            loader: cc.loader.loadTxt.bind(cc.loader),
             defaultExtname: '.txt'
         }
     };

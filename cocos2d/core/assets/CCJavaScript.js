@@ -1,4 +1,4 @@
-var JavaScript = cc.FireClass({
+var JavaScript = cc.Class({
     name: 'cc.JavaScript',
     extends: cc.RawAsset,
 });

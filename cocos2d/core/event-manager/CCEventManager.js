@@ -26,7 +26,7 @@
 /**
  * @ignore
  */
-cc._EventListenerVector = cc.Class.extend({
+cc._EventListenerVector = cc._Class.extend({
     _fixedListeners: null,
     _sceneGraphListeners: null,
     gt0Index: 0,
@@ -88,7 +88,7 @@ cc.__getListenerID = function (event) {
     if(getType === eventType.TOUCH){
         // Touch listener is very special, it contains two kinds of listeners, EventListenerTouchOneByOne and EventListenerTouchAllAtOnce.
         // return UNKNOWN instead.
-        cc.log(cc._LogInfos.__getListenerID);
+        cc.log(cc._LogInfos._getListenerID);
     }
     return "";
 };
@@ -190,7 +190,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
             var node = listener._getSceneGraphPriority();
             if (node === null)
-                cc.log(cc._LogInfos.eventManager__forceAddEventListener);
+                cc.log(cc._LogInfos.EventManager._forceAddEventListener);
 
             this._associateNodeAndEventListener(node, listener);
             if (node.isRunning())
@@ -383,7 +383,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     _updateListeners: function (event) {
         var locInDispatch = this._inDispatch;
-        cc.assert(locInDispatch > 0, cc._LogInfos.EventManager__updateListeners);
+        cc.assert(locInDispatch > 0, cc._LogInfos.EventManager._updateListeners);
 
         if(locInDispatch > 1)
             return;
@@ -394,7 +394,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
         } else
             this._onUpdateListeners(cc.__getListenerID(event));
 
-        cc.assert(locInDispatch === 1, cc._LogInfos.EventManager__updateListeners_2);
+        cc.assert(locInDispatch === 1, cc._LogInfos.EventManager._updateListeners_2);
         var locListenersMap = this._listenersMap, locPriorityDirtyFlagMap = this._priorityDirtyFlagMap;
         for (var selKey in locListenersMap) {
             if (locListenersMap[selKey].empty()) {
@@ -655,13 +655,13 @@ cc.eventManager = /** @lends cc.eventManager# */{
      * @return {cc.EventListener} Return the listener. Needed in order to remove the event from the dispatcher.
      */
     addListener: function (listener, nodeOrPriority) {
-        cc.assert(listener && nodeOrPriority, cc._LogInfos.eventManager_addListener_2);
+        cc.assert(listener && nodeOrPriority, cc._LogInfos.EventManager.addListener_2);
         if(!(listener instanceof cc.EventListener)){
-            cc.assert(!cc.js.isNumber(nodeOrPriority), cc._LogInfos.eventManager_addListener_3);
+            cc.assert(!cc.js.isNumber(nodeOrPriority), cc._LogInfos.EventManager.addListener_3);
             listener = cc.EventListener.create(listener);
         } else {
             if(listener._isRegistered()){
-                cc.log(cc._LogInfos.eventManager_addListener_4);
+                cc.log(cc._LogInfos.EventManager.addListener_4);
                 return;
             }
         }
@@ -671,7 +671,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
         if (cc.js.isNumber(nodeOrPriority)) {
             if (nodeOrPriority === 0) {
-                cc.log(cc._LogInfos.eventManager_addListener);
+                cc.log(cc._LogInfos.EventManager.addListener);
                 return;
             }
 
@@ -842,7 +842,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
             else if (listenerType === cc.EventListener.KEYBOARD)
                 _t._removeListenersForListenerID(cc._EventListenerKeyboard.LISTENER_ID);
             else
-                cc.log(cc._LogInfos.eventManager_removeListeners);
+                cc.log(cc._LogInfos.EventManager.removeListeners);
         }
     },
 
@@ -882,7 +882,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
                 var found = fixedPriorityListeners.indexOf(listener);
                 if (found !== -1) {
                     if(listener._getSceneGraphPriority() != null)
-                        cc.log(cc._LogInfos.eventManager_setPriority);
+                        cc.log(cc._LogInfos.EventManager.setPriority);
                     if (listener._getFixedPriority() !== fixedPriority) {
                         listener._setFixedPriority(fixedPriority);
                         this._setDirty(listener._getListenerID(), this.DIRTY_FIXED_PRIORITY);

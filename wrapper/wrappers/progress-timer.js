@@ -1,10 +1,10 @@
 var NodeWrapper = require('./node');
 
-var ProgressTimerWrapper = cc.FireClass({
+var ProgressTimerWrapper = cc.Class({
     name: 'cc.ProgressTimerWrapper',
     extends: NodeWrapper,
 
-    constructor: function () {
+    ctor: function () {
         this._midPoint = [0.5, 0.5];
         this._barChangeRate = [1, 1];
     },

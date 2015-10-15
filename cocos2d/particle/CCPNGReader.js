@@ -30,7 +30,7 @@
  * A png file reader
  * @name cc.tiffReader
  */
-cc.PNGReader = cc.Class.extend({
+cc.PNGReader = cc._Class.extend({
     ctor:function(data){
         var chunkSize, colors, delayDen, delayNum, frame, i, index, key, section, ccshort, text, _i, _j, _ref;
         this.data = data;

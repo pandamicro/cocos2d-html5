@@ -1,5 +1,5 @@
 
-var ParticleAsset = cc.FireClass({
+var ParticleAsset = cc.Class({
     name: 'cc.ParticleAsset',
     extends: cc.RawAsset,
 

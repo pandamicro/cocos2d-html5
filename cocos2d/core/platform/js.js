@@ -159,8 +159,8 @@ var js = {
 
     /**
      * Derive the class from the supplied base class.
-     * Both classes are just native javascript constructors, not created by cc.FireClass, so
-     * usually you will want to inherit using {% crosslink cc.FireClass cc.FireClass %} instead.
+     * Both classes are just native javascript constructors, not created by cc.Class, so
+     * usually you will want to inherit using {% crosslink cc.Class cc.Class %} instead.
      *
      * @method extend
      * @param {function} cls
@@ -179,9 +179,8 @@ var js = {
             }
         }
         for (var p in base) if (base.hasOwnProperty(p)) cls[p] = base[p];
-        function __() { this.constructor = cls; }
-        __.prototype = base.prototype;
-        cls.prototype = new __();
+        cls.prototype = Object.create(base.prototype);
+        cls.prototype.constructor = cls;
         return cls;
     },
 

@@ -1,5 +1,5 @@
 
-var TTFFont = cc.FireClass({
+var TTFFont = cc.Class({
     name: 'cc.TTFFont',
     extends: cc.Asset,
 

@@ -1,4 +1,4 @@
-var CoffeeScript = cc.FireClass({
+var CoffeeScript = cc.Class({
     name: 'cc.CoffeeScript',
     extends: cc.RawAsset,
 });

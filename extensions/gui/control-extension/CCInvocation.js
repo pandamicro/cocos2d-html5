@@ -27,9 +27,9 @@
 /**
  * An Invocation class
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.Invocation = cc.Class.extend(/** @lends cc.Invocation# */{
+cc.Invocation = cc._Class.extend(/** @lends cc.Invocation# */{
     _action:null,
     _target:null,
     _controlEvent:null,

@@ -102,11 +102,11 @@ cc.TMX_TILE_FLIPPED_MASK = (~(cc.TMX_TILE_FLIPPED_ALL)) >>> 0;
  *  <br />
  * This information is obtained from the TMX file.</p>
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  *
  * @property {Array}    properties  - Properties of the layer info.
  */
-cc.TMXLayerInfo = cc.Class.extend(/** @lends cc.TMXLayerInfo# */{
+cc.TMXLayerInfo = cc._Class.extend(/** @lends cc.TMXLayerInfo# */{
     properties:null,
 
 	name:"",
@@ -160,7 +160,7 @@ cc.TMXLayerInfo = cc.Class.extend(/** @lends cc.TMXLayerInfo# */{
  *
  * This information is obtained from the TMX file. </p>
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  *
  * @property {string} name - Tileset name
  * @property {number} firstGid - First grid
@@ -169,7 +169,7 @@ cc.TMXLayerInfo = cc.Class.extend(/** @lends cc.TMXLayerInfo# */{
  * @property {string} sourceImage - Filename containing the tiles (should be sprite sheet / texture atlas)
  * @property {cc.Size|null} imageSize - Size in pixels of the image
  */
-cc.TMXTilesetInfo = cc.Class.extend(/** @lends cc.TMXTilesetInfo# */{
+cc.TMXTilesetInfo = cc._Class.extend(/** @lends cc.TMXTilesetInfo# */{
 
     //Tileset name
     name:"",

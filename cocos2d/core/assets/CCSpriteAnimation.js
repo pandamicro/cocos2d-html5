@@ -1,4 +1,4 @@
-var SpriteAnimationAsset = cc.FireClass({
+var SpriteAnimationAsset = cc.Class({
     name: 'cc.SpriteAnimationAsset',
     extends: cc.Asset,
 

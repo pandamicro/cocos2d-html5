@@ -2,7 +2,7 @@ var Utils = require('../utils');
 
 var WidgetWrapper = require('./widget');
 
-var TextFieldWrapper = cc.FireClass({
+var TextFieldWrapper = cc.Class({
     name: 'cc.TextFieldWrapper',
     extends: WidgetWrapper,
 

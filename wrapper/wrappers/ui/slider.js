@@ -1,7 +1,7 @@
 
 var Scale9Wrapper = require('./scale9');
 
-var SliderWrapper = cc.FireClass({
+var SliderWrapper = cc.Class({
     name: 'cc.SliderWrapper',
     extends: Scale9Wrapper,
 

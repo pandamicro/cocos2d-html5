@@ -2,9 +2,9 @@
 
 test('test', function () {
 
-    ok(cc.FireClass(), 'can define empty class');
+    ok(cc.Class(), 'can define empty class');
 
-    var Animal = cc.FireClass({
+    var Animal = cc.Class({
         name: 'Animal',
         properties: {
             myName: {
@@ -56,9 +56,9 @@ test('test', function () {
     deepEqual(instance.nonEmptyObj, [1, 2], 'get non-empty default value from function');
     notEqual(instance.nonEmptyObj, (new Animal()).nonEmptyObj, 'compute non-empty default value for every object instance');
 
-    strictEqual(cc.FireClass.attr(Animal, 'myName').tooltip, 'Float', 'get name tooltip');
-    strictEqual(cc.FireClass.attr(Animal, 'myName').displayName, 'displayName', 'get name displayName');
-    strictEqual(cc.FireClass.attr(Animal, 'weight').serializable, false, 'get attribute');
+    strictEqual(cc.Class.attr(Animal, 'myName').tooltip, 'Float', 'get name tooltip');
+    strictEqual(cc.Class.attr(Animal, 'myName').displayName, 'displayName', 'get name displayName');
+    strictEqual(cc.Class.attr(Animal, 'weight').serializable, false, 'get attribute');
 
     // getter / setter
 
@@ -75,9 +75,9 @@ test('test', function () {
     cc.js.unregisterClass(Animal);
 
     var constructor = new Callback();
-    Animal = cc.FireClass({
+    Animal = cc.Class({
         name: 'Animal',
-        constructor: constructor,
+        ctor: constructor,
         properties: {
             weight: 100
         }
@@ -87,7 +87,7 @@ test('test', function () {
     var instance1 = new Animal();
     constructor.once('call constructor');
 
-    strictEqual(cc.FireClass.attr(Animal, 'weight').default, 100, 'can get attribute even has constructor');
+    strictEqual(cc.Class.attr(Animal, 'weight').default, 100, 'can get attribute even has constructor');
     strictEqual(instance1.weight, 100, 'property inited even has constructor');
 
     var instance2 = new Animal();
@@ -101,13 +101,13 @@ test('test', function () {
 });
 
 test('Inherit', function () {
-    var Animal = cc.FireClass({
+    var Animal = cc.Class({
         name: 'cc.Animal',
         properties: {
             myName: 'ann'
         }
     });
-    var Dog = cc.FireClass({
+    var Dog = cc.Class({
         name: 'cc.Dog',
         extends: Animal,
         properties: {
@@ -117,7 +117,7 @@ test('Inherit', function () {
             }
         }
     });
-    var Husky = cc.FireClass({
+    var Husky = cc.Class({
         name: 'cc.Husky',
         extends: Dog,
         properties: {
@@ -138,10 +138,10 @@ test('Inherit', function () {
 
     strictEqual(Dog.$super, Animal, 'can get super');
 
-    strictEqual(cc.FireClass.attr(Animal, 'myName'), cc.FireClass.attr(Dog, 'myName'),
+    strictEqual(cc.Class.attr(Animal, 'myName'), cc.Class.attr(Dog, 'myName'),
                 "inheritance chain shares the same property's attribute");
-    strictEqual(cc.FireClass.attr(Dog, 'myName').tooltip, 'String', 'can modify attribute');
-    strictEqual(cc.FireClass.attr(Dog, 'weight'), undefined, 'base property not added');
+    strictEqual(cc.Class.attr(Dog, 'myName').tooltip, 'String', 'can modify attribute');
+    strictEqual(cc.Class.attr(Dog, 'weight'), undefined, 'base property not added');
 
     var husky = new Husky();
     var dog = new Dog();
@@ -166,24 +166,24 @@ test('Inherit + constructor', function () {
     var animalConstructor = Callback();
     var huskyConstructor = Callback();
     var labradorConstructor = Callback();
-    var Animal = cc.FireClass({
+    var Animal = cc.Class({
         name: 'cc.Animal',
-        constructor: animalConstructor,
+        ctor: animalConstructor,
         properties: {
             myName: 'ann'
         }
     });
-    var Dog = cc.FireClass({
+    var Dog = cc.Class({
         name: 'cc.Dog',
         extends: Animal,
         properties: {
             myName: 'doge'
         }
     });
-    var Husky = cc.FireClass({
+    var Husky = cc.Class({
         name: 'cc.Husky',
         extends: Dog,
-        constructor: huskyConstructor
+        ctor: huskyConstructor
     });
     var Labrador = Dog.extend({
         name: 'cc.Labrador',
@@ -219,14 +219,14 @@ test('Inherit + constructor', function () {
 });
 
 test('prop initial times', function () {
-    var Base = cc.FireClass({
+    var Base = cc.Class({
         properties: {
             foo: 0,
         }
     });
     var fooTester = Callback().enable();
     var instanceMocker = {
-        constructor: Base,  // mock constructor of class instance
+        ctor: Base,  // mock constructor of class instance
     };
     Object.defineProperty(instanceMocker, 'foo', {
         set: fooTester
@@ -234,7 +234,7 @@ test('prop initial times', function () {
     Base.call(instanceMocker);
     fooTester.once('property should init once');
 
-    var Sub = cc.FireClass({
+    var Sub = cc.Class({
         extends: Base,
         properties: {
             bar: 0,
@@ -251,7 +251,7 @@ test('prop initial times', function () {
 });
 
 test('prop reference', function () {
-    var type = cc.FireClass({
+    var type = cc.Class({
         name: 'cc.MyType',
         properties: {
             ary: [],
@@ -296,21 +296,21 @@ test('isChildClassOf', function () {
 
     // fire class
 
-    var Animal = cc.FireClass({
+    var Animal = cc.Class({
         name: 'cc.Animal',
         extends: Sub,
         properties: {
             name: 'ann'
         }
     });
-    var Dog = cc.FireClass({
+    var Dog = cc.Class({
         name: 'cc.Dog',
         extends: Animal,
         properties: {
             name: 'doge'
         }
     });
-    var Husky = cc.FireClass({
+    var Husky = cc.Class({
         name: 'cc.Husky',
         extends: Dog,
         properties: {
@@ -332,12 +332,12 @@ test('isChildClassOf', function () {
 });
 
 test('statics', function () {
-    var Animal = cc.FireClass({
+    var Animal = cc.Class({
         statics: {
             id: "be-bu"
         }
     });
-    var Dog = cc.FireClass({
+    var Dog = cc.Class({
         extends: Animal
     });
 
@@ -351,8 +351,8 @@ test('try catch', function () {
     var originThrow = cc._throw;
 
     cc._throw = Callback().enable();
-    var Animal = cc.FireClass({
-        constructor: function () {
+    var Animal = cc.Class({
+        ctor: function () {
             null.foo();
         }
     });
@@ -363,11 +363,15 @@ test('try catch', function () {
     cc._throw = originThrow;
 });
 
+test('this._super', function () {
+    ok(false, 'should add unit tests');
+});
+
 test('property notify', function () {
     var string1 = "";
     var string2 = "";
 
-    var Animal = cc.FireClass({
+    var Animal = cc.Class({
         properties: {
             legs: {
                 default: 0,

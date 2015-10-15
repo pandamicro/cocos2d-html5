@@ -5,13 +5,13 @@
  * @constructor
  * @param {Image} [img] - Specify the html image element to render so you can create Sprite dynamically.
  */
-var Sprite = cc.FireClass({
+var Sprite = cc.Class({
 
     name: 'cc.SpriteAsset',
 
     extends: cc.Asset,
 
-    constructor: function () {
+    ctor: function () {
         var img = arguments[0];
         if (img) {
             this.texture = img.src;

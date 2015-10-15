@@ -36,11 +36,11 @@
 
     proto.isValidChild = function(child){
         if (!(child instanceof cc.Sprite)) {
-            cc.log(cc._LogInfos.Sprite_addChild_4);
+            cc.log(cc._LogInfos.Sprite.addChild_4);
             return false;
         }
         if (child.texture != this.getTexture()) {
-            cc.log(cc._LogInfos.Sprite_addChild_5);
+            cc.log(cc._LogInfos.Sprite.addChild_5);
             return false;
         }
         return true;
@@ -102,11 +102,11 @@
         var locCapacity = this._textureAtlas.capacity;
         var quantity = Math.floor((locCapacity + 1) * 4 / 3);
 
-        cc.log(cc._LogInfos.SpriteBatchNode_increaseAtlasCapacity, locCapacity, quantity);
+        cc.log(cc._LogInfos.SpriteBatchNode.increaseAtlasCapacity, locCapacity, quantity);
 
         if (!this._textureAtlas.resizeCapacity(quantity)) {
             // serious problems
-            cc.log(cc._LogInfos.SpriteBatchNode_increaseAtlasCapacity_2);
+            cc.log(cc._LogInfos.SpriteBatchNode.increaseAtlasCapacity_2);
         }
     };
 

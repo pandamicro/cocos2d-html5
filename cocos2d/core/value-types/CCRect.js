@@ -21,7 +21,7 @@ function Rect (x, y, w, h) {
     this.height = typeof h === 'number' ? h : 0.0;
 }
 JS.extend(Rect, ValueType);
-require('../platform/CCFireClass').fastDefine('cc.Rect', Rect, ['x', 'y', 'width', 'height']);
+require('../platform/CCClass').fastDefine('cc.Rect', Rect, ['x', 'y', 'width', 'height']);
 
 /**
  * Creates a rectangle from two coordinate values.

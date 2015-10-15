@@ -1,7 +1,7 @@
 var NodeWrapper = require('../node');
 var WidgetWrapper = require('./widget');
 
-var LayoutWrapper = cc.FireClass({
+var LayoutWrapper = cc.Class({
     name: 'cc.LayoutWrapper',
     extends: WidgetWrapper,
 
@@ -15,7 +15,9 @@ var LayoutWrapper = cc.FireClass({
                     this.targetN.clippingEnabled = value;
 
                     cc.renderer.childrenOrderDirty = true;
-                    cc.engine.repaintInEditMode();
+                    if (CC_EDITOR) {
+                        cc.engine.repaintInEditMode();
+                    }
                 }
                 else {
                     cc.error('The new clippingEnabled must be boolean');
@@ -79,7 +81,9 @@ var LayoutWrapper = cc.FireClass({
     doLayout: function () {
         this.targetN.requestDoLayout();
         cc.renderer.childrenOrderDirty = true;
-        cc.engine.repaintInEditMode();
+        if (CC_EDITOR) {
+            cc.engine.repaintInEditMode();
+        }
     },
 
     onBeforeSerialize: function () {

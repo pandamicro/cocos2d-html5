@@ -28,9 +28,9 @@
  * Parallax Object. <br />
  * Parallax required attributes are stored.
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.PointObject = cc.Class.extend(/** @lends cc.PointObject# */{
+cc.PointObject = cc._Class.extend(/** @lends cc.PointObject# */{
     _ratio:null,
     _offset:null,
     _child:null,

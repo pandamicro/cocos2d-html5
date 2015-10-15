@@ -1,7 +1,7 @@
 
 var NodeWrapper = require('./node');
 
-var SpriteBatchNodeWrapper = cc.FireClass({
+var SpriteBatchNodeWrapper = cc.Class({
     name: 'cc.SpriteBatchNodeWrapper',
     extends: NodeWrapper,
 

@@ -27,9 +27,9 @@
 /**
  * Text field delegate
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.TextFieldDelegate = cc.Class.extend(/** @lends cc.TextFieldDelegate# */{
+cc.TextFieldDelegate = cc._Class.extend(/** @lends cc.TextFieldDelegate# */{
     /**
      * If the sender doesn't want to attach with IME, return true;
      * @param {cc.TextFieldTTF} sender

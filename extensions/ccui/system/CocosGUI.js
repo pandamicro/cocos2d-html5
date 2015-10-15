@@ -32,11 +32,11 @@ var ccui = ccui || {};
 
 //These classes defines are use for jsDoc
 /**
- * The same as cc.Class
+ * The same as cc._Class
  * @class
  */
-ccui.Class = ccui.Class || cc.Class;
-ccui.Class.extend = ccui.Class.extend || cc.Class.extend;
+ccui.Class = ccui.Class || cc._Class;
+ccui.Class.extend = ccui.Class.extend || cc._Class.extend;
 
 /**
  * that same as cc.Node

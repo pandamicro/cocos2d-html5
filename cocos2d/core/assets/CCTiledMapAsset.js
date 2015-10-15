@@ -1,5 +1,5 @@
 
-var TiledMapAsset = cc.FireClass({
+var TiledMapAsset = cc.Class({
     name: 'cc.TiledMapAsset',
     extends: cc.RawAsset,
 

@@ -89,10 +89,10 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
      * @return {cc.SpriteBatchNode}
      */
     addSpriteWithoutQuad: function (child, z, aTag) {
-        cc.assert(child, cc._LogInfos.SpriteBatchNode_addSpriteWithoutQuad_2);
+        cc.assert(child, cc._LogInfos.SpriteBatchNode.addSpriteWithoutQuad_2);
 
         if (!(child instanceof cc.Sprite)) {
-            cc.log(cc._LogInfos.SpriteBatchNode_addSpriteWithoutQuad);
+            cc.log(cc._LogInfos.SpriteBatchNode.addSpriteWithoutQuad);
             return null;
         }
 
@@ -335,9 +335,9 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
      * @param {Number} zOrder
      */
     reorderChild: function (child, zOrder) {
-        cc.assert(child, cc._LogInfos.SpriteBatchNode_reorderChild_2);
+        cc.assert(child, cc._LogInfos.SpriteBatchNode.reorderChild_2);
         if (this._children.indexOf(child) === -1) {
-            cc.log(cc._LogInfos.SpriteBatchNode_reorderChild);
+            cc.log(cc._LogInfos.SpriteBatchNode.reorderChild);
             return;
         }
         if (zOrder === child.zIndex)
@@ -358,7 +358,7 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
         if (child == null)
             return;
         if (this._children.indexOf(child) === -1) {
-            cc.log(cc._LogInfos.SpriteBatchNode_removeChild);
+            cc.log(cc._LogInfos.SpriteBatchNode.removeChild);
             return;
         }
 
@@ -378,9 +378,9 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
      * @param {Number} index
      */
     updateQuadFromSprite: function (sprite, index) {
-        cc.assert(sprite, cc._LogInfos.CCSpriteBatchNode_updateQuadFromSprite_2);
+        cc.assert(sprite, cc._LogInfos.SpriteBatchNode.updateQuadFromSprite_2);
         if (!(sprite instanceof cc.Sprite)) {
-            cc.log(cc._LogInfos.CCSpriteBatchNode_updateQuadFromSprite);
+            cc.log(cc._LogInfos.SpriteBatchNode.updateQuadFromSprite);
             return;
         }
         this._renderCmd.checkAtlasCapacity();
@@ -406,9 +406,9 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
      * @param {Number} index
      */
     insertQuadFromSprite: function (sprite, index) {
-        cc.assert(sprite, cc._LogInfos.CCSpriteBatchNode_insertQuadFromSprite_2);
+        cc.assert(sprite, cc._LogInfos.SpriteBatchNode.insertQuadFromSprite_2);
         if (!(sprite instanceof cc.Sprite)) {
-            cc.log(cc._LogInfos.CCSpriteBatchNode_insertQuadFromSprite);
+            cc.log(cc._LogInfos.SpriteBatchNode.insertQuadFromSprite);
             return;
         }
         this._renderCmd.insertQuad(sprite, index);
@@ -560,7 +560,7 @@ cc.SpriteBatchNode = cc.Node.extend(/** @lends cc.SpriteBatchNode# */{
      * @param {Number} [tag]
      */
     addChild: function (child, zOrder, tag) {
-        cc.assert(child != null, cc._LogInfos.CCSpriteBatchNode_addChild_3);
+        cc.assert(child != null, cc._LogInfos.SpriteBatchNode.addChild_3);
 
         if(!this._renderCmd.isValidChild(child))
             return;

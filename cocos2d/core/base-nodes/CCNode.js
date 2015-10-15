@@ -89,7 +89,7 @@ cc.s_globalOrderOfArrival = 1;
  * -# The grid will render the captured screen <br/></P>
  *
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  *
  * @property {Number}               x                   - x axis position of node
  * @property {Number}               y                   - y axis position of node
@@ -128,7 +128,7 @@ cc.s_globalOrderOfArrival = 1;
  * @property {cc.GLProgram}         shaderProgram       - The shader program currently used for this node
  * @property {Number}               glServerState       - The state of OpenGL server side
  */
-cc.Node = cc.Class.extend(/** @lends cc.Node# */{
+cc.Node = cc._Class.extend(/** @lends cc.Node# */{
     _localZOrder: 0,                                     ///< Local order (relative to its siblings) used to sort the node
     _globalZOrder: 0,                                    ///< Global order used to sort the node
     _vertexZ: 0.0,
@@ -287,7 +287,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
                 }
                 break;
             default :
-                cc.assert(0, cc._LogInfos.Node__arrayMakeObjectsPerformSelector);
+                cc.assert(0, cc._LogInfos.Node._arrayMakeObjectsPerformSelector);
                 break;
         }
     },
@@ -409,7 +409,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * @deprecated since 3.0, please use getLocalZOrder instead
      */
     getZOrder: function () {
-        cc.log(cc._LogInfos.Node_getZOrder);
+        cc.log(cc._LogInfos.Node.getZOrder);
         return this.getLocalZOrder();
     },
 
@@ -427,7 +427,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * @deprecated since 3.0, please use setLocalZOrder instead
      */
     setZOrder: function (z) {
-        cc.log(cc._LogInfos.Node_setZOrder);
+        cc.log(cc._LogInfos.Node.setZOrder);
         this.setLocalZOrder(z);
     },
 
@@ -497,7 +497,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      */
     getRotation: function () {
         if (this._rotationX !== this._rotationY)
-            cc.log(cc._LogInfos.Node_getRotation);
+            cc.log(cc._LogInfos.Node.getRotation);
         return this._rotationX;
     },
 
@@ -574,7 +574,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      */
     getScale: function () {
         if (this._scaleX !== this._scaleY)
-            cc.log(cc._LogInfos.Node_getScale);
+            cc.log(cc._LogInfos.Node.getScale);
         return this._scaleX;
     },
 
@@ -1168,7 +1168,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * @return {cc.Rect}
      */
     boundingBox: function(){
-        cc.log(cc._LogInfos.Node_boundingBox);
+        cc.log(cc._LogInfos.Node.boundingBox);
         return this.getBoundingBox();
     },
 
@@ -1262,7 +1262,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
             name = "";
         }
 
-        cc.assert(child, cc._LogInfos.Node_addChild_3);
+        cc.assert(child, cc._LogInfos.Node.addChild_3);
         cc.assert(child._parent === null, "child already added. It can't be added again");
 
         this._addChildHelper(child, localZOrder, tag, name, setTag);
@@ -1317,7 +1317,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * @param {Boolean} [cleanup=true] true if all actions and callbacks on this node should be removed, false otherwise.
      */
     removeFromParentAndCleanup: function (cleanup) {
-        cc.log(cc._LogInfos.Node_removeFromParentAndCleanup);
+        cc.log(cc._LogInfos.Node.removeFromParentAndCleanup);
         this.removeFromParent(cleanup);
     },
 
@@ -1354,11 +1354,11 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      */
     removeChildByTag: function (tag, cleanup) {
         if (tag === cc.NODE_TAG_INVALID)
-            cc.log(cc._LogInfos.Node_removeChildByTag);
+            cc.log(cc._LogInfos.Node.removeChildByTag);
 
         var child = this.getChildByTag(tag);
         if (!child)
-            cc.log(cc._LogInfos.Node_removeChildByTag_2, tag);
+            cc.log(cc._LogInfos.Node.removeChildByTag_2, tag);
         else
             this.removeChild(child, cleanup);
     },
@@ -1441,7 +1441,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * @param {Number} zOrder Z order for drawing priority. Please refer to setZOrder(int)
      */
     reorderChild: function (child, zOrder) {
-        cc.assert(child, cc._LogInfos.Node_reorderChild);
+        cc.assert(child, cc._LogInfos.Node.reorderChild);
         cc.renderer.childrenOrderDirty = this._reorderChildDirty = true;
         child.arrivalOrder = cc.s_globalOrderOfArrival;
         cc.s_globalOrderOfArrival++;
@@ -1570,7 +1570,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * @return {cc.Action} An Action pointer
      */
     runAction: function (action) {
-        cc.assert(action, cc._LogInfos.Node_runAction);
+        cc.assert(action, cc._LogInfos.Node.runAction);
 
         this.actionManager.addAction(action, this, !this._running);
         return action;
@@ -1600,7 +1600,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      */
     stopActionByTag: function (tag) {
         if (tag === cc.ACTION_TAG_INVALID) {
-            cc.log(cc._LogInfos.Node_stopActionByTag);
+            cc.log(cc._LogInfos.Node.stopActionByTag);
             return;
         }
         this.actionManager.removeActionByTag(tag, this);
@@ -1615,7 +1615,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      */
     getActionByTag: function (tag) {
         if (tag === cc.ACTION_TAG_INVALID) {
-            cc.log(cc._LogInfos.Node_getActionByTag);
+            cc.log(cc._LogInfos.Node.getActionByTag);
             return null;
         }
         return this.actionManager.getActionByTag(tag, this);
@@ -1728,8 +1728,8 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
             }
         }
 
-        cc.assert(callback, cc._LogInfos.Node_schedule);
-        cc.assert(interval >= 0, cc._LogInfos.Node_schedule_2);
+        cc.assert(callback, cc._LogInfos.Node.schedule);
+        cc.assert(interval >= 0, cc._LogInfos.Node.schedule_2);
 
         interval = interval || 0;
         repeat = (repeat == null) ? cc.REPEAT_FOREVER : repeat;
@@ -1785,7 +1785,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * @deprecated since v3.0, please use resume() instead
      */
     resumeSchedulerAndActions: function () {
-        cc.log(cc._LogInfos.Node_resumeSchedulerAndActions);
+        cc.log(cc._LogInfos.Node.resumeSchedulerAndActions);
         this.resume();
     },
 
@@ -1806,7 +1806,7 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
      * @function
      */
     pauseSchedulerAndActions: function () {
-        cc.log(cc._LogInfos.Node_pauseSchedulerAndActions);
+        cc.log(cc._LogInfos.Node.pauseSchedulerAndActions);
         this.pause();
     },
 

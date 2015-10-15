@@ -33,13 +33,13 @@
  *       - offset
  * </p>
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  * @param spriteFrame
  * @param delayUnits
  * @param userInfo
  * @returns {AnimationFrame}
  */
-cc.AnimationFrame = cc.Class.extend(/** @lends cc.AnimationFrame# */{
+cc.AnimationFrame = cc._Class.extend(/** @lends cc.AnimationFrame# */{
     _spriteFrame:null,
     _delayPerUnit:0,
     _userInfo:null,
@@ -161,7 +161,7 @@ cc.AnimationFrame.create = function(spriteFrame,delayUnits,userInfo){
  *      You can animate a cc.Animation object by using the cc.Animate action.
  * </p>
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  * @param {Array} frames
  * @param {Number} delay
  * @param {Number} [loops=1]
@@ -192,7 +192,7 @@ cc.AnimationFrame.create = function(spriteFrame,delayUnits,userInfo){
  * //run animate
  * sprite.runAction(action);
  */
-cc.Animation = cc.Class.extend(/** @lends cc.Animation# */{
+cc.Animation = cc._Class.extend(/** @lends cc.Animation# */{
     _frames:null,
     _loops:0,
     _restoreOriginalFrame:false,

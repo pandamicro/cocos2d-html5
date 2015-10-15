@@ -1,5 +1,5 @@
 
-var SpriteAtlas = cc.FireClass({
+var SpriteAtlas = cc.Class({
     name: 'cc.SpriteAtlas',
     extends: cc.RawAsset,
 });

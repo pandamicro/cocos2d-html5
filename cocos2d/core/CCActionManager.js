@@ -26,11 +26,11 @@
 
 /**
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  * @example
  * var element = new cc.HashElement();
  */
-cc.HashElement = cc.Class.extend(/** @lends cc.HashElement# */{
+cc.HashElement = cc._Class.extend(/** @lends cc.HashElement# */{
     actions:null,
     target:null, //ccobject
     actionIndex:0,
@@ -61,11 +61,11 @@ cc.HashElement = cc.Class.extend(/** @lends cc.HashElement# */{
  * - When you want to run an action where the target is different from a CCNode.<br/>
  * - When you want to pause / resume the actions<br/>
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  * @example
  * var mng = new cc.ActionManager();
  */
-cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
+cc.ActionManager = cc._Class.extend(/** @lends cc.ActionManager# */{
     _hashTargets:null,
     _arrayTargets:null,
     _currentTarget:null,
@@ -168,7 +168,7 @@ cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
                 }
             }
         } else {
-            cc.log(cc._LogInfos.ActionManager_removeAction);
+            cc.log(cc._LogInfos.ActionManager.removeAction);
         }
     },
 
@@ -178,9 +178,9 @@ cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
      */
     removeActionByTag:function (tag, target) {
         if(tag === cc.ACTION_TAG_INVALID)
-            cc.log(cc._LogInfos.ActionManager_addAction);
+            cc.log(cc._LogInfos.ActionManager.addAction);
 
-        cc.assert(target, cc._LogInfos.ActionManager_addAction);
+        cc.assert(target, cc._LogInfos.ActionManager.addAction);
 
         var element = this._hashTargets[target.__instanceId];
 
@@ -203,7 +203,7 @@ cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
      */
     getActionByTag:function (tag, target) {
         if(tag === cc.ACTION_TAG_INVALID)
-            cc.log(cc._LogInfos.ActionManager_getActionByTag);
+            cc.log(cc._LogInfos.ActionManager.getActionByTag);
 
         var element = this._hashTargets[target.__instanceId];
         if (element) {
@@ -214,7 +214,7 @@ cc.ActionManager = cc.Class.extend(/** @lends cc.ActionManager# */{
                         return action;
                 }
             }
-            cc.log(cc._LogInfos.ActionManager_getActionByTag_2, tag);
+            cc.log(cc._LogInfos.ActionManager.getActionByTag_2, tag);
         }
         return null;
     },

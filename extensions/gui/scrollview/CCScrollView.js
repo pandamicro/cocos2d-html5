@@ -49,7 +49,7 @@ cc.convertDistanceFromPointToInch = function(pointDis){
     return (pointDis * factor) / 160;               // CCDevice::getDPI() default value
 };
 
-cc.ScrollViewDelegate = cc.Class.extend({
+cc.ScrollViewDelegate = cc._Class.extend({
     scrollViewDidScroll:function (view) {
     },
     scrollViewDidZoom:function (view) {

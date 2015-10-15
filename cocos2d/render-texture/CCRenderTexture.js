@@ -374,13 +374,13 @@ cc.RenderTexture = cc.Node.extend(/** @lends cc.RenderTexture# */{
 
     /**
      * Listen "come to background" message, and save render texture. It only has effect on Android.
-     * @param {cc.Class} obj
+     * @param {cc._Class} obj
      */
     listenToBackground:function (obj) { },
 
     /**
      * Listen "come to foreground" message and restore the frame buffer object. It only has effect on Android.
-     * @param {cc.Class} obj
+     * @param {cc._Class} obj
      */
     listenToForeground:function (obj) { }
 });

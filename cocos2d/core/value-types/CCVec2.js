@@ -1,6 +1,6 @@
 var ValueType = require('./CCValueType');
 var JS = require('../platform/js');
-var FireClass = require('../platform/CCFireClass');
+var FireClass = require('../platform/CCClass');
 
 /**
  * Representation of 2D vectors and points.

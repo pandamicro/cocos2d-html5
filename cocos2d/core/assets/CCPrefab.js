@@ -7,7 +7,7 @@ function visitWrapper (wrapper, visitor) {
     }
 }
 
-var Prefab = cc.FireClass({
+var Prefab = cc.Class({
     name: 'cc.Prefab',
     extends: cc.Asset,
 

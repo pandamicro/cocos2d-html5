@@ -22,7 +22,7 @@
             <fileset dir="${src.dir}">
                 <include name="./../CCBoot.js"/>
                 <include name="./../jsb_apis.js"/>
-                <include name="core/platform/CCClass.js"/>
+                <include name="core/platform/_CCClass.js"/>
                 <include name="core/platform/CCCommon.js"/>
                 <include name="core/platform/CCSAXParser.js"/>
                 <include name="core/platform/CCLoaders.js"/>

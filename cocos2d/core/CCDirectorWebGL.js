@@ -34,9 +34,9 @@ cc.game.addEventListener("rendererInited", function () {
     /**
      * OpenGL projection protocol
      * @class
-     * @extends cc.Class
+     * @extends cc._Class
      */
-    cc.DirectorDelegate = cc.Class.extend(/** @lends cc.DirectorDelegate# */{
+    cc.DirectorDelegate = cc._Class.extend(/** @lends cc.DirectorDelegate# */{
         /**
          * Called by CCDirector when the projection is updated, and "custom" projection is used
          */
@@ -111,7 +111,7 @@ cc.game.addEventListener("rendererInited", function () {
                     _t._projectionDelegate.updateProjection();
                 break;
             default:
-                cc.log(cc._LogInfos.Director_setProjection);
+                cc.log(cc._LogInfos.Director.setProjection);
                 break;
         }
         _t._projection = projection;

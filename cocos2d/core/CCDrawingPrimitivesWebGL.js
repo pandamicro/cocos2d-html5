@@ -27,9 +27,9 @@
 /**
  * Canvas of DrawingPrimitive implement version use for WebGlMode
  * @class
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.DrawingPrimitiveWebGL = cc.Class.extend(/** @lends cc.DrawingPrimitiveWebGL# */{
+cc.DrawingPrimitiveWebGL = cc._Class.extend(/** @lends cc.DrawingPrimitiveWebGL# */{
     _renderContext:null,
     _initialized:false,
     _shader: null,

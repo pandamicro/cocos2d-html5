@@ -299,7 +299,7 @@ cc.game.addEventListener("rendererInited", function () {
              * @warning does not support on HTML5
              */
             initWithETCFile: function (file) {
-                cc.log(cc._LogInfos.Texture2D_initWithETCFile);
+                cc.log(cc._LogInfos.Texture2D.initWithETCFile);
                 return false;
             },
 
@@ -308,7 +308,7 @@ cc.game.addEventListener("rendererInited", function () {
              * @warning does not support on HTML5
              */
             initWithPVRFile: function (file) {
-                cc.log(cc._LogInfos.Texture2D_initWithPVRFile);
+                cc.log(cc._LogInfos.Texture2D.initWithPVRFile);
                 return false;
             },
 
@@ -317,7 +317,7 @@ cc.game.addEventListener("rendererInited", function () {
              * @warning does not support on HTML5
              */
             initWithPVRTCData: function (data, level, bpp, hasAlpha, length, pixelFormat) {
-                cc.log(cc._LogInfos.Texture2D_initWithPVRTCData);
+                cc.log(cc._LogInfos.Texture2D.initWithPVRTCData);
                 return false;
             },
 
@@ -564,7 +564,7 @@ cc.game.addEventListener("rendererInited", function () {
          * Be aware that the content of the generated textures will be upside-down! </p>
          * @name cc.Texture2D
          * @class
-         * @extends cc.Class
+         * @extends cc._Class
          *
          * @property {WebGLTexture}     name            - <@readonly> WebGLTexture Object
          * @property {Number}           pixelFormat     - <@readonly> Pixel format of the texture
@@ -576,7 +576,7 @@ cc.game.addEventListener("rendererInited", function () {
          * @property {Number}           maxS            - Texture max S
          * @property {Number}           maxT            - Texture max T
          */
-        cc.Texture2D = cc.Class.extend(/** @lends cc.Texture2D# */proto);
+        cc.Texture2D = cc._Class.extend(/** @lends cc.Texture2D# */proto);
 
         cc.Texture2D._generateGrayTexture = function(texture, rect, renderCanvas){
             if (texture === null)

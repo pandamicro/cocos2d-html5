@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-cc.NodeLoaderLibrary = cc.Class.extend({
+cc.NodeLoaderLibrary = cc._Class.extend({
     _ccNodeLoaders:null,
 
     ctor:function(){

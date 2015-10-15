@@ -28,9 +28,9 @@
  * A SAX Parser
  * @class
  * @name cc.saxParser
- * @extends cc.Class
+ * @extends cc._Class
  */
-cc.SAXParser = cc.Class.extend(/** @lends cc.saxParser# */{
+cc.SAXParser = cc._Class.extend(/** @lends cc.saxParser# */{
     _parser: null,
     _isSupportDOMParser: null,
 

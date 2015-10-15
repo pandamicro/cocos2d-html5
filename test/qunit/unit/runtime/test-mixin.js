@@ -4,7 +4,7 @@ test('basic', function() {
     function Node () {}
     Node.prototype.getAge = function () {};
 
-    var NodeWrapper = cc.FireClass({
+    var NodeWrapper = cc.Class({
         extends: cc.Runtime.NodeWrapper
     });
     cc.Runtime.registerNodeType(Node, NodeWrapper);
@@ -12,9 +12,9 @@ test('basic', function() {
     var originGetAge = Node.prototype.getAge;
     var node = new Node();
 
-    var Script = cc.FireClass({
+    var Script = cc.Class({
         name: '2154648724566',
-        extends: cc.FireClass({
+        extends: cc.Class({
             extends: cc.Behavior,
             load: function () {
                 this.realAge = 30;
@@ -29,7 +29,7 @@ test('basic', function() {
                 return this.age;
             }
         }),
-        constructor: function () {
+        ctor: function () {
             this._ctorCalled = true;
         },
         load: function () {
@@ -52,7 +52,7 @@ test('basic', function() {
 
     cc.mixin(node, Script);
 
-    strictEqual(cc.hasMixin(node, cc.FireClass()), false, 'cc.hasMixin should be false if not class Script');
+    strictEqual(cc.hasMixin(node, cc.Class()), false, 'cc.hasMixin should be false if not class Script');
     strictEqual(cc.hasMixin(node, Script), true, 'cc.hasMixin should be true if is class Script');
 
     strictEqual(node.constructor, Node, 'constructor should not changed');
@@ -61,11 +61,11 @@ test('basic', function() {
     node.load();
     strictEqual(node._name, 'ha', 'could call load');
     strictEqual(node.name, 'ha', 'should mixin properties');
-    strictEqual(cc.FireClass.attr(node, 'name').displayName, 'Name', 'should mixin attributes');
+    strictEqual(cc.Class.attr(node, 'name').displayName, 'Name', 'should mixin attributes');
     strictEqual(node.getName(), 'ha', 'should mixin methods');
 
     strictEqual(node.age, 40, 'should mixin base properties');
-    strictEqual(cc.FireClass.attr(node, 'age').tooltip, 'Age', 'should mixin base attributes');
+    strictEqual(cc.Class.attr(node, 'age').tooltip, 'Age', 'should mixin base attributes');
     notStrictEqual(node.getAge, originGetAge, 'should override origin methods');
     strictEqual(node.getAge(), 40, 'should mixin base methods');
 
@@ -83,8 +83,8 @@ test('basic', function() {
 //    function Node () {}
 //    var node = new Node();
 //
-//    var Script = cc.FireClass({
-//        constructor: function () {
+//    var Script = cc.Class({
+//        ctor: function () {
 //            this._name = 'ha';
 //        },
 //        properties: {
@@ -104,6 +104,6 @@ test('basic', function() {
 //
 //    strictEqual(node._name, 'ha', 'should mixin constructor');
 //    strictEqual(node.name, 'ha', 'should mixin properties');
-//    strictEqual(cc.FireClass.attr(node, 'name').displayName, 'Name', 'should mixin attributes');
+//    strictEqual(cc.Class.attr(node, 'name').displayName, 'Name', 'should mixin attributes');
 //    strictEqual(node.getName(), 'ha', 'should mixin methods');
 //});

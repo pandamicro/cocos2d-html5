@@ -12,7 +12,7 @@
                 <file name="CCBoot.js"/>
                 <file name="cocos2d/core/event-manager/CCEventHelper.js"/>
                 <file name="cocos2d/core/utils/BinaryLoader.js"/>
-                <file name="cocos2d/core/platform/CCClass.js"/>
+                <file name="cocos2d/core/platform/_CCClass.js"/>
                 <file name="cocos2d/core/platform/CCCommon.js"/>
                 <file name="cocos2d/core/platform/CCSAXParser.js"/>
                 <file name="cocos2d/core/platform/CCLoaders.js"/>
@@ -301,7 +301,7 @@
             <sources dir="./../">
                 <file name="CCBoot.js"/>
                 <file name="cocos2d/core/event-manager/CCEventHelper.js"/>
-                <file name="cocos2d/core/platform/CCClass.js"/>
+                <file name="cocos2d/core/platform/_CCClass.js"/>
                 <file name="cocos2d/core/platform/CCSAXParser.js"/>
                 <file name="cocos2d/core/platform/CCLoaders.js"/>
                 <file name="cocos2d/core/platform/CCConfig.js"/>
