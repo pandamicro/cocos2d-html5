@@ -568,7 +568,7 @@ function _createCtor (ctor, baseClass, className, options) {
     return fireClass;
 }
 
-var SuperCallReg = /\b_super\b/;
+var SuperCallReg = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
 function _boundSuperCall (func, funcName, base) {
     var superFunc = null;
     var pd = JS.getPropertyDescriptor(base.prototype, funcName);

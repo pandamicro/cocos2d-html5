@@ -60,20 +60,18 @@ cc.pool = /** @lends cc.pool# */{
      * @param obj
      */
     putInPool: function (obj) {
-        var pid = obj.constructor.prototype.__pid;
-        if (!pid) {
-            var desc = { writable: true, enumerable: false, configurable: true };
-            desc.value = ClassManager.getNewID();
-            Object.defineProperty(obj.constructor.prototype, '__pid', desc);
+        var cid = cc.js._getClassId(obj.constructor);
+        if (!cid) {
+            return;
         }
-        if (!this._pool[pid]) {
-            this._pool[pid] = [];
+        if (!this._pool[cid]) {
+            this._pool[cid] = [];
         }
         // JSB retain to avoid being auto released
         obj.retain && obj.retain();
         // User implementation for disable the object
         obj.unuse && obj.unuse();
-        this._pool[pid].push(obj);
+        this._pool[cid].push(obj);
     },
 
     /**
@@ -82,8 +80,8 @@ cc.pool = /** @lends cc.pool# */{
      * @returns {boolean} if this kind of obj is already in pool return true,else return false;
      */
     hasObject: function (objClass) {
-        var pid = objClass.prototype.__pid;
-        var list = this._pool[pid];
+        var cid = cc.js._getClassId(objClass);
+        var list = this._pool[cid];
         if (!list || list.length === 0) {
             return false;
         }
@@ -95,9 +93,9 @@ cc.pool = /** @lends cc.pool# */{
      * @param obj
      */
     removeObject: function (obj) {
-        var pid = obj.constructor.prototype.__pid;
-        if (pid) {
-            var list = this._pool[pid];
+        var cid = cc.js._getClassId(obj.constructor);
+        if (cid) {
+            var list = this._pool[cid];
             if (list) {
                 for (var i = 0; i < list.length; i++) {
                     if (obj === list[i]) {
@@ -117,8 +115,8 @@ cc.pool = /** @lends cc.pool# */{
      */
     getFromPool: function (objClass/*,args*/) {
         if (this.hasObject(objClass)) {
-            var pid = objClass.prototype.__pid;
-            var list = this._pool[pid];
+            var cid = cc.js._getClassId(objClass);
+            var list = this._pool[cid];
             var args = Array.prototype.slice.call(arguments);
             args.shift();
             var obj = list.pop();

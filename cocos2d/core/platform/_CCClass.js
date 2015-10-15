@@ -94,7 +94,7 @@ var ClassManager = {
 	    // desc = { writable: true, enumerable: false, configurable: true,
 	    //          value: XXX }; Again, we make this non-enumerable.
 	    desc.value = classId;
-	    Object.defineProperty(prototype, '__pid', desc);
+	    Object.defineProperty(prototype, '__cid__', desc);
 
 	    // Populate our constructed prototype object
 	    Class.prototype = prototype;
