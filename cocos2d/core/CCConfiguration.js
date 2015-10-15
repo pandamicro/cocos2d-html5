@@ -222,7 +222,7 @@ cc.configuration = /** @lends cc.configuration# */{
     dumpInfo: function(){
          if(cc.ENABLE_GL_STATE_CACHE === 0){
              cc.log("");
-             cc.log(cc._LogInfos.configuration_dumpInfo);
+             cc.log(cc._LogInfos.configuration.dumpInfo);
              cc.log("")
          }
     },
@@ -279,11 +279,11 @@ cc.configuration = /** @lends cc.configuration# */{
 		    this._init();
         var dict = cc.loader.getRes(url);
         if(!dict) throw new Error("Please load the resource first : " + url);
-        cc.assert(dict, cc._LogInfos.configuration_loadConfigFile_2, url);
+        cc.assert(dict, cc._LogInfos.configuration.loadConfigFile_2, url);
 
         var getDatas = dict["data"];
         if(!getDatas){
-            cc.log(cc._LogInfos.configuration_loadConfigFile, url);
+            cc.log(cc._LogInfos.configuration.loadConfigFile, url);
             return;
         }
 

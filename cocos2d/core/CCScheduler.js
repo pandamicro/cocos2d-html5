@@ -572,7 +572,7 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
             }
         }
 
-        cc.assert(target, cc._LogInfos.Scheduler_scheduleCallbackForTarget_3);
+        cc.assert(target, cc._LogInfos.Scheduler.scheduleCallbackForTarget_3);
         if(isSelector === false)
             cc.assert(key, "key should not be empty!");
 
@@ -594,7 +594,7 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
             for (i = 0; i < element.timers.length; i++) {
                 timer = element.timers[i];
                 if (callback === timer._callback) {
-                    cc.log(cc._LogInfos.Scheduler_scheduleCallbackForTarget, timer.getInterval().toFixed(4), interval.toFixed(4));
+                    cc.log(cc._LogInfos.Scheduler.scheduleCallbackForTarget, timer.getInterval().toFixed(4), interval.toFixed(4));
                     timer._interval = interval;
                     return;
                 }
@@ -883,7 +883,7 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
      */
     pauseTarget:function (target) {
 
-        cc.assert(target, cc._LogInfos.Scheduler_pauseTarget);
+        cc.assert(target, cc._LogInfos.Scheduler.pauseTarget);
 
         //customer selectors
         var self = this, element = self._hashForTimers[target.__instanceId];
@@ -906,7 +906,7 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
      */
     resumeTarget:function (target) {
 
-        cc.assert(target, cc._LogInfos.Scheduler_resumeTarget);
+        cc.assert(target, cc._LogInfos.Scheduler.resumeTarget);
 
         // custom selectors
         var self = this, element = self._hashForTimers[target.__instanceId];
@@ -930,7 +930,7 @@ cc.Scheduler = cc.Class.extend(/** @lends cc.Scheduler# */{
      */
     isTargetPaused:function (target) {
 
-        cc.assert(target, cc._LogInfos.Scheduler_isTargetPaused);
+        cc.assert(target, cc._LogInfos.Scheduler.isTargetPaused);
 
         // Custom selectors
         var element = this._hashForTimers[target.__instanceId];

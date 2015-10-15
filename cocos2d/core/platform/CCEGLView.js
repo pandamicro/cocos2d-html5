@@ -601,14 +601,14 @@ cc.EGLView = cc.Class.extend(/** @lends cc.view# */{
     setDesignResolutionSize: function (width, height, resolutionPolicy) {
         // Defensive code
         if( !(width > 0 || height > 0) ){
-            cc.log(cc._LogInfos.EGLView_setDesignResolutionSize);
+            cc.log(cc._LogInfos.view.setDesignResolutionSize);
             return;
         }
 
         this.setResolutionPolicy(resolutionPolicy);
         var policy = this._resolutionPolicy;
         if (!policy){
-            cc.log(cc._LogInfos.EGLView_setDesignResolutionSize_2);
+            cc.log(cc._LogInfos.view.setDesignResolutionSize_2);
             return;
         }
         policy.preApply(this);

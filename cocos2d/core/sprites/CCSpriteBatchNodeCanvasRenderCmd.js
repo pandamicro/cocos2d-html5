@@ -38,7 +38,7 @@
 
     proto.isValidChild = function(child){
         if (!(child instanceof cc.Sprite)) {
-            cc.log(cc._LogInfos.Sprite_addChild_4);
+            cc.log(cc._LogInfos.Sprite.addChild_4);
             return false;
         }
         return true;
