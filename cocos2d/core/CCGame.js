@@ -240,7 +240,7 @@ cc.game = /** @lends cc.game# */{
             }
         }
         
-        this.prepare(onStart && onStart.bind(cc.game));
+        this.prepare(cc.game.onStart && cc.game.onStart.bind(cc.game));
     },
 
 //  @Intersection list for editor

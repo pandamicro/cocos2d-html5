@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2013-2015 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -143,75 +143,6 @@ cc.FontDefinition = function (properties) {
 cc.FontDefinition.prototype._getCanvasFontStr = function(){
     var lineHeight = !this.lineHeight.charAt ? this.lineHeight+"px" : this.lineHeight;
     return this.fontStyle + " " + this.fontWeight + " " + this.fontSize + "px/"+lineHeight+" '" + this.fontName + "'";
-};
-
-
-/**
- * @class cc.Vertex2F
- * @memberof cc
- * @param {Number} x1
- * @param {Number} y1
- * @see cc.Vec2
- */
-cc.Vertex2F = cc.Vec2;
-
-/**
- * Helper macro that creates an Vertex2F type composed of 2 floats: x, y
- * @function
- * @name cc.vertex2
- * @memberof cc
- * @param {Number} x
- * @param {Number} y
- * @return {cc.Vec2}
- * @see cc.v2
- */
-cc.vertex2 = cc.v2;
-
-/**
- * @class cc.Vertex3F
- * @constructor
- * @param {Number} x1
- * @param {Number} y1
- * @param {Number} z1
- */
-cc.Vertex3F = function (x1, y1, z1) {
-    this.x = x1 || 0;
-    this.y = y1 || 0;
-    this.z = z1 || 0;
-};
-
-/**
- * Helper macro that creates an Vertex3F type composed of 3 floats: x, y, z
- * @function
- * @param {Number} x
- * @param {Number} y
- * @param {Number} z
- * @return {cc.Vertex3F}
- */
-cc.vertex3 = function (x, y, z) {
-    return new cc.Vertex3F(x, y, z);
-};
-
-/**
- * @class cc.Tex2F
- * @constructor
- * @param {Number} u1
- * @param {Number} v1
- */
-cc.Tex2F = function (u1, v1) {
-    this.u = u1 || 0;
-    this.v = v1 || 0;
-};
-
-/**
- * Helper macro that creates an Tex2F type: A texcoord composed of 2 floats: u, y
- * @function
- * @param {Number} u
- * @param {Number} v
- * @return {cc.Tex2F}
- */
-cc.tex2 = function (u, v) {
-    return new cc.Tex2F(u, v);
 };
 
 /**
