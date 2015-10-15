@@ -179,9 +179,8 @@ var js = {
             }
         }
         for (var p in base) if (base.hasOwnProperty(p)) cls[p] = base[p];
-        function __() { this.constructor = cls; }
-        __.prototype = base.prototype;
-        cls.prototype = new __();
+        cls.prototype = Object.create(base.prototype);
+        cls.prototype.constructor = cls;
         return cls;
     },
 
