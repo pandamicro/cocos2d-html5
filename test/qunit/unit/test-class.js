@@ -124,10 +124,17 @@ test('Inherit', function () {
             weight: 100
         }
     });
+    var Labrador = Dog.extend({
+        name: 'cc.Labrador',
+        properties: {
+            clever: true
+        }
+    });
 
     strictEqual(cc.js.getClassName(Animal), 'cc.Animal', 'can get class name 1');
     strictEqual(cc.js.getClassName(Dog), 'cc.Dog', 'can get class name 2');
     strictEqual(cc.js.getClassName(Husky), 'cc.Husky', 'can get class name 3');
+    strictEqual(cc.js.getClassName(Labrador), 'cc.Labrador', 'can get class name 4');
 
     strictEqual(Dog.$super, Animal, 'can get super');
 
@@ -138,19 +145,27 @@ test('Inherit', function () {
 
     var husky = new Husky();
     var dog = new Dog();
+    var labrador = new Labrador();
 
     strictEqual(dog.myName, 'doge', 'can override property');
     strictEqual(husky.myName, 'doge', 'can inherit property');
+    strictEqual(labrador.myName, 'doge', 'can inherit property with Dog.extend syntax');
 
     deepEqual(Husky.__props__, /*CCObject.__props__.concat*/(['myName', 'weight']), 'can inherit prop list');
+    deepEqual(labrador.__props__, /*CCObject.__props__.concat*/(['myName', 'clever']), 'can inherit prop list with Dog.extend syntax');
     deepEqual(Dog.__props__, /*CCObject.__props__.concat*/(['myName']), 'base prop list not changed');
 
-    cc.js.unregisterClass(Animal, Dog, Husky);
+    strictEqual(husky instanceof Dog, true, 'can pass instanceof check');
+    strictEqual(husky instanceof Animal, true, 'can pass instanceof check for deep inheritance');
+    strictEqual(labrador instanceof Dog, true, 'can pass instanceof check with Dog.extend syntax');
+
+    cc.js.unregisterClass(Animal, Dog, Husky, Labrador);
 });
 
 test('Inherit + constructor', function () {
     var animalConstructor = Callback();
     var huskyConstructor = Callback();
+    var labradorConstructor = Callback();
     var Animal = cc.FireClass({
         name: 'cc.Animal',
         constructor: animalConstructor,
@@ -170,15 +185,21 @@ test('Inherit + constructor', function () {
         extends: Dog,
         constructor: huskyConstructor
     });
+    var Labrador = Dog.extend({
+        name: 'cc.Labrador',
+        ctor: labradorConstructor
+    });
 
     strictEqual(cc.js.getClassName(Dog), 'cc.Dog', 'can get class name 2');
 
     animalConstructor.enable();
     huskyConstructor.enable();
+    labradorConstructor.enable();
     huskyConstructor.callbackFunction(function () {
         animalConstructor.once('base construct should called automatically');
         Husky.$super.call(this);
     });
+
     var husky = new Husky();
     huskyConstructor.once('call husky constructor');
     animalConstructor.once('call anim constructor by husky');
@@ -186,10 +207,15 @@ test('Inherit + constructor', function () {
     var dog = new Dog();
     animalConstructor.once('call anim constructor by dog');
 
+    var labrador = new Labrador();
+    labradorConstructor.once('call labrador constructor');
+    animalConstructor.once('call anim constructor by labrador');
+
     strictEqual(dog.myName, 'doge', 'can override property');
     strictEqual(husky.myName, 'doge', 'can inherit property');
+    strictEqual(labrador.myName, 'doge', 'can inherit property with Dog.extend syntax');
 
-    cc.js.unregisterClass(Animal, Dog, Husky);
+    cc.js.unregisterClass(Animal, Dog, Husky, Labrador);
 });
 
 test('prop initial times', function () {
