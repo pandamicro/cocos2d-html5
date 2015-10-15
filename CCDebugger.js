@@ -105,16 +105,6 @@ cc._LogInfos = {
 
     __getListenerID: "Don't call this method if the event is for touch.",
 
-    eventManager_: {
-        _forceAddEventListener: "Invalid scene graph priority!",
-        addListener: "0 priority is forbidden for fixed priority since it's used for scene graph based priority.",
-        removeListeners: "Invalid listener type!",
-        setPriority: "Can't set fixed priority with scene graph based listener.",
-        addListener_2: "Invalid parameters.",
-        addListener_3: "listener must be a cc.EventListener object when adding a fixed priority listener",
-        addListener_4: "The listener has been registered, please don't register it again.",
-    },
-
     LayerMultiplex: {
         initWithLayers: "parameters should not be ending with null in Javascript",
         switchTo: "Invalid index in MultiplexLayer switchTo message",
@@ -259,6 +249,13 @@ cc._LogInfos = {
     RectHeight: "Rect height exceeds maximum margin: %s",
 
     EventManager: {
+        addListener: "0 priority is forbidden for fixed priority since it's used for scene graph based priority.",
+        removeListeners: "Invalid listener type!",
+        setPriority: "Can't set fixed priority with scene graph based listener.",
+        addListener_2: "Invalid parameters.",
+        addListener_3: "listener must be a cc.EventListener object when adding a fixed priority listener",
+        addListener_4: "The listener has been registered, please don't register it again.",
+        _forceAddEventListener: "Invalid scene graph priority!",
         _updateListeners: "If program goes here, there should be event in dispatch.",
         _updateListeners_2: "_inDispatch should be 1 here."
     }
