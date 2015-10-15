@@ -50,8 +50,6 @@
             "cocos2d/core/platform/CCConfig.js",
             "cocos2d/core/platform/miniFramework.js",
             "cocos2d/core/platform/CCMacro.js",
-            "cocos2d/core/platform/CCTypesWebGL.js",
-            "cocos2d/core/platform/CCTypes.js",
             "cocos2d/core/platform/CCEGLView.js",
             "cocos2d/core/platform/CCScreen.js",
             "cocos2d/core/platform/CCVisibleRect.js",
@@ -59,7 +57,6 @@
             "cocos2d/core/platform/CCInputManager.js",
             "cocos2d/core/platform/CCInputExtension.js",
 
-            "cocos2d/core/value-types/CCAffineTransform.js",
             "cocos2d/core/support/CCPointExtension.js",
             "cocos2d/core/support/CCVertex.js",
             "cocos2d/core/support/TransformUtils.js",

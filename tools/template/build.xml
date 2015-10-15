@@ -30,12 +30,10 @@
                 <include name="core/platform/miniFramework.js"/>
                 <include name="core/platform/CCMacro.js"/>
                 <include name="core/platform/CCFileUtils.js"/>
-                <include name="core/platform/CCTypes.js"/>
                 <include name="core/platform/CCEGLView.js"/>
                 <include name="core/platform/CCScreen.js"/>
                 <include name="core/platform/CCVisibleRect.js"/>
                 <include name="core/platform/CCInputManager.js"/>
-                <include name="core/value-types/CCAffineTransform.js"/>
                 <include name="core/support/CCPointExtension.js"/>
                 <include name="core/support/CCVertex.js"/>
                 <include name="core/support/TransformUtils.js"/>

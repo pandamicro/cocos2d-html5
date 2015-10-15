@@ -235,19 +235,28 @@
     proto._setColorDirty = function () {};
 
     proto._updateColor = function () {
-        var locDisplayedColor = this._displayedColor, locDisplayedOpacity = this._displayedOpacity, node = this._node;
-        var color4 = {r: locDisplayedColor.r, g: locDisplayedColor.g, b: locDisplayedColor.b, a: locDisplayedOpacity};
+        var node = this._node,
+            locDisplayedColor = this._displayedColor, 
+            r = locDisplayedColor.r,
+            g = locDisplayedColor.g,
+            b = locDisplayedColor.b,
+            a = locDisplayedColor.a = this._displayedOpacity;
         // special opacity for premultiplied textures
         if (node._opacityModifyRGB) {
-            color4.r *= locDisplayedOpacity / 255.0;
-            color4.g *= locDisplayedOpacity / 255.0;
-            color4.b *= locDisplayedOpacity / 255.0;
+            locDisplayedColor.r *= a / 255.0;
+            locDisplayedColor.g *= a / 255.0;
+            locDisplayedColor.b *= a / 255.0;
         }
         var locQuad = this._quad;
-        locQuad.bl.colors = color4;
-        locQuad.br.colors = color4;
-        locQuad.tl.colors = color4;
-        locQuad.tr.colors = color4;
+        locQuad.bl.colors = locDisplayedColor;
+        locQuad.br.colors = locDisplayedColor;
+        locQuad.tl.colors = locDisplayedColor;
+        locQuad.tr.colors = locDisplayedColor;
+
+        // Roll back color
+        locDisplayedColor.r = r;
+        locDisplayedColor.g = g;
+        locDisplayedColor.b = b;
 
         // renders using Sprite Manager
         if (node._batchNode) {
