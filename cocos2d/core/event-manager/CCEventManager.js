@@ -190,7 +190,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
             var node = listener._getSceneGraphPriority();
             if (node === null)
-                cc.log(cc._LogInfos.eventManager._forceAddEventListener);
+                cc.log(cc._LogInfos.EventManager._forceAddEventListener);
 
             this._associateNodeAndEventListener(node, listener);
             if (node.isRunning())
@@ -655,13 +655,13 @@ cc.eventManager = /** @lends cc.eventManager# */{
      * @return {cc.EventListener} Return the listener. Needed in order to remove the event from the dispatcher.
      */
     addListener: function (listener, nodeOrPriority) {
-        cc.assert(listener && nodeOrPriority, cc._LogInfos.eventManager.addListener_2);
+        cc.assert(listener && nodeOrPriority, cc._LogInfos.EventManager.addListener_2);
         if(!(listener instanceof cc.EventListener)){
-            cc.assert(!cc.js.isNumber(nodeOrPriority), cc._LogInfos.eventManager.addListener_3);
+            cc.assert(!cc.js.isNumber(nodeOrPriority), cc._LogInfos.EventManager.addListener_3);
             listener = cc.EventListener.create(listener);
         } else {
             if(listener._isRegistered()){
-                cc.log(cc._LogInfos.eventManager.addListener_4);
+                cc.log(cc._LogInfos.EventManager.addListener_4);
                 return;
             }
         }
@@ -671,7 +671,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
         if (cc.js.isNumber(nodeOrPriority)) {
             if (nodeOrPriority === 0) {
-                cc.log(cc._LogInfos.eventManager.addListener);
+                cc.log(cc._LogInfos.EventManager.addListener);
                 return;
             }
 
@@ -842,7 +842,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
             else if (listenerType === cc.EventListener.KEYBOARD)
                 _t._removeListenersForListenerID(cc._EventListenerKeyboard.LISTENER_ID);
             else
-                cc.log(cc._LogInfos.eventManager.removeListeners);
+                cc.log(cc._LogInfos.EventManager.removeListeners);
         }
     },
 
@@ -882,7 +882,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
                 var found = fixedPriorityListeners.indexOf(listener);
                 if (found !== -1) {
                     if(listener._getSceneGraphPriority() != null)
-                        cc.log(cc._LogInfos.eventManager.setPriority);
+                        cc.log(cc._LogInfos.EventManager.setPriority);
                     if (listener._getFixedPriority() !== fixedPriority) {
                         listener._setFixedPriority(fixedPriority);
                         this._setDirty(listener._getListenerID(), this.DIRTY_FIXED_PRIORITY);

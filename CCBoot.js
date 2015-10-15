@@ -30,7 +30,7 @@
  */
 var cc = cc || {};
 cc._tmp = cc._tmp || {};
-cc._LogInfos = {};
+cc._LogInfos = cc._LogInfos || {};
 
 var _p = window;
 /** @expose */

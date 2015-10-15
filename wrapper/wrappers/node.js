@@ -486,13 +486,12 @@ var NodeWrapper = cc.Class({
             get: function () {
                 var color = this.targetN.color;
                 color.a = this.targetN.opacity;
-                return Color.fromCCColor(color);
+                return color;
             },
             set: function (value) {
                 if (value instanceof Color) {
-                    var color = value.toCCColor();
-                    this.targetN.color = color;
-                    this.targetN.opacity = color.a;
+                    this.targetN.color = value;
+                    this.targetN.opacity = value.a;
                 }
                 else {
                     cc.error('The new color must be cc.Color');
@@ -637,7 +636,6 @@ var NodeWrapper = cc.Class({
 
         if (this._color) {
             var color = new Color(this._color[0], this._color[1], this._color[2], this._color[3]);
-            color = color.toCCColor();
 
             // Cocos runtime 3.3 not support node.color and node opacity
             node.setColor(color);

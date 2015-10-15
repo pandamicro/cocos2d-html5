@@ -202,9 +202,7 @@
         }
     });
 
-    var assetDir = '../assets';
-    var projPath = assetDir;
-    var libPath = projPath + '/library/deferred-loading';
+    var libPath = assetDir + '/library/deferred-loading';
 
     var grossini_uuid = '748321';
     var grossiniSprite_uuid = '1232218';

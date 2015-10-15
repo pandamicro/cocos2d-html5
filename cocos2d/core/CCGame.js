@@ -207,11 +207,13 @@ cc.game = /** @lends cc.game# */{
 
             // Load game scripts
             var jsList = config[CONFIG_KEY.jsList];
-            cc.loader.loadJsWithImg(jsList, function (err) {
-                if (err) throw new Error(err);
-                self._prepared = true;
-                if (cb) cb();
-            });
+            if (jsList) {
+                cc.loader.loadJsWithImg(jsList, function (err) {
+                    if (err) throw new Error(err);
+                    self._prepared = true;
+                    if (cb) cb();
+                });
+            }
 
             return;
         }

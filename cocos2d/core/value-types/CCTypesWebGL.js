@@ -86,16 +86,16 @@ _p._setA = function (value) {
 };
 /** @expose */
 _p.r;
-cc.defineGetterSetter(_p, "r", _p._getR, _p._setR);
+cc.js.getset(_p, "r", _p._getR, _p._setR);
 /** @expose */
 _p.g;
-cc.defineGetterSetter(_p, "g", _p._getG, _p._setG);
+cc.js.getset(_p, "g", _p._getG, _p._setG);
 /** @expose */
 _p.b;
-cc.defineGetterSetter(_p, "b", _p._getB, _p._setB);
+cc.js.getset(_p, "b", _p._getB, _p._setB);
 /** @expose */
 _p.a;
-cc.defineGetterSetter(_p, "a", _p._getA, _p._setA);
+cc.js.getset(_p, "a", _p._getA, _p._setA);
 
 //redefine cc.Vertex2F
 /**
@@ -136,10 +136,10 @@ _p._setY = function (yValue) {
 };
 /** @expose */
 _p.x;
-cc.defineGetterSetter(_p, "x", _p._getX, _p._setX);
+cc.js.getset(_p, "x", _p._getX, _p._setX);
 /** @expose */
 _p.y;
-cc.defineGetterSetter(_p, "y", _p._getY, _p._setY);
+cc.js.getset(_p, "y", _p._getY, _p._setY);
 
 // redefine cc.Vertex3F
 /**
@@ -190,13 +190,13 @@ _p._setZ = function (zValue) {
 };
 /** @expose */
 _p.x;
-cc.defineGetterSetter(_p, "x", _p._getX, _p._setX);
+cc.js.getset(_p, "x", _p._getX, _p._setX);
 /** @expose */
 _p.y;
-cc.defineGetterSetter(_p, "y", _p._getY, _p._setY);
+cc.js.getset(_p, "y", _p._getY, _p._setY);
 /** @expose */
 _p.z;
-cc.defineGetterSetter(_p, "z", _p._getZ, _p._setZ);
+cc.js.getset(_p, "z", _p._getZ, _p._setZ);
 
 // redefine cc.Tex2F
 /**
@@ -237,10 +237,10 @@ _p._setV = function (yValue) {
 };
 /** @expose */
 _p.u;
-cc.defineGetterSetter(_p, "u", _p._getU, _p._setU);
+cc.js.getset(_p, "u", _p._getU, _p._setU);
 /** @expose */
 _p.v;
-cc.defineGetterSetter(_p, "v", _p._getV, _p._setV);
+cc.js.getset(_p, "v", _p._getV, _p._setV);
 
 //redefine cc.Quad2
 /**
@@ -301,16 +301,16 @@ _p._setBR = function (brValue) {
 
 /** @expose */
 _p.tl;
-cc.defineGetterSetter(_p, "tl", _p._getTL, _p._setTL);
+cc.js.getset(_p, "tl", _p._getTL, _p._setTL);
 /** @expose */
 _p.tr;
-cc.defineGetterSetter(_p, "tr", _p._getTR, _p._setTR);
+cc.js.getset(_p, "tr", _p._getTR, _p._setTR);
 /** @expose */
 _p.bl;
-cc.defineGetterSetter(_p, "bl", _p._getBL, _p._setBL);
+cc.js.getset(_p, "bl", _p._getBL, _p._setBL);
 /** @expose */
 _p.br;
-cc.defineGetterSetter(_p, "br", _p._getBR, _p._setBR);
+cc.js.getset(_p, "br", _p._getBR, _p._setBR);
 
 /**
  * A 3D Quad. 4 * 3 floats
@@ -385,13 +385,13 @@ _p._setTexCoords = function (texValue) {
 };
 /** @expose */
 _p.vertices;
-cc.defineGetterSetter(_p, "vertices", _p._getVertices, _p._setVertices);
+cc.js.getset(_p, "vertices", _p._getVertices, _p._setVertices);
 /** @expose */
 _p.colors;
-cc.defineGetterSetter(_p, "colors", _p._getColor, _p._setColor);
+cc.js.getset(_p, "colors", _p._getColor, _p._setColor);
 /** @expose */
 _p.texCoords;
-cc.defineGetterSetter(_p, "texCoords", _p._getTexCoords, _p._setTexCoords);
+cc.js.getset(_p, "texCoords", _p._getTexCoords, _p._setTexCoords);
 
 //redefine cc.V3F_C4B_T2F_Quad
 /**
@@ -466,19 +466,19 @@ _p._getArrayBuffer = function () {
 
 /** @expose */
 _p.tl;
-cc.defineGetterSetter(_p, "tl", _p._getTL, _p._setTL);
+cc.js.getset(_p, "tl", _p._getTL, _p._setTL);
 /** @expose */
 _p.tr;
-cc.defineGetterSetter(_p, "tr", _p._getTR, _p._setTR);
+cc.js.getset(_p, "tr", _p._getTR, _p._setTR);
 /** @expose */
 _p.bl;
-cc.defineGetterSetter(_p, "bl", _p._getBL, _p._setBL);
+cc.js.getset(_p, "bl", _p._getBL, _p._setBL);
 /** @expose */
 _p.br;
-cc.defineGetterSetter(_p, "br", _p._getBR, _p._setBR);
+cc.js.getset(_p, "br", _p._getBR, _p._setBR);
 /** @expose */
 _p.arrayBuffer;
-cc.defineGetterSetter(_p, "arrayBuffer", _p._getArrayBuffer, null);
+cc.js.get(_p, "arrayBuffer", _p._getArrayBuffer);
 
 /**
  * @function
@@ -587,13 +587,13 @@ _p._setTexCoords = function (texValue) {
 
 /** @expose */
 _p.vertices;
-cc.defineGetterSetter(_p, "vertices", _p._getVertices, _p._setVertices);
+cc.js.getset(_p, "vertices", _p._getVertices, _p._setVertices);
 /** @expose */
 _p.colors;
-cc.defineGetterSetter(_p, "colors", _p._getColor, _p._setColor);
+cc.js.getset(_p, "colors", _p._getColor, _p._setColor);
 /** @expose */
 _p.texCoords;
-cc.defineGetterSetter(_p, "texCoords", _p._getTexCoords, _p._setTexCoords);
+cc.js.getset(_p, "texCoords", _p._getTexCoords, _p._setTexCoords);
 
 //redefine cc.V2F_C4B_T2F_Triangle
 /**
@@ -653,10 +653,10 @@ _p._setC = function (cValue) {
 
 /** @expose */
 _p.a;
-cc.defineGetterSetter(_p, "a", _p._getA, _p._setA);
+cc.js.getset(_p, "a", _p._getA, _p._setA);
 /** @expose */
 _p.b;
-cc.defineGetterSetter(_p, "b", _p._getB, _p._setB);
+cc.js.getset(_p, "b", _p._getB, _p._setB);
 /** @expose */
 _p.c;
-cc.defineGetterSetter(_p, "c", _p._getC, _p._setC);
+cc.js.getset(_p, "c", _p._getC, _p._setC);

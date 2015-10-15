@@ -277,7 +277,7 @@ var AssetLibrary = {
                     if (!shouldLoadByEngine) {
                         return callback(new Error('Should not load raw file in AssetLibrary, uuid: ' + uuid));
                     }
-                    LoadManager.loadByLoader(cc.loader.loadJson, url, function (error, json) {
+                    LoadManager.loadByLoader(cc.loader.loadJson.bind(cc.loader), url, function (error, json) {
                         onload(error, json, url);
                     });
                 }
@@ -288,7 +288,7 @@ var AssetLibrary = {
             if (info.raw) {
                 return callback(new Error('Should not load raw file in AssetLibrary, uuid: ' + uuid));
             }
-            LoadManager.loadByLoader(cc.loader.loadJson, info.url, function (error, json) {
+            LoadManager.loadByLoader(cc.loader.loadJson.bind(cc.loader), info.url, function (error, json) {
                 onload(error, json, info.url);
             });
         }

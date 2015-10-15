@@ -1,20 +1,8 @@
 module('cc.find', SetupEngine);
 
 test('test', function () {
-    var MyScene = cc.Class({
-        extends: TestNode
-    });
-    var MySceneWrapper = cc.Class({
-        extends: cc.Runtime.SceneWrapper,
-        properties: {
-            childrenN: {
-                get: function () {
-                    return this.targetN.children;
-                }
-            }
-        }
-    });
-    cc.Runtime.registerNodeType(MyScene, MySceneWrapper);
+    var MyScene = cc.Scene;
+    var MySceneWrapper = cc.Runtime.SceneWrapper;
 
     var scene = new MyScene();
     cc.director.runScene(scene);
