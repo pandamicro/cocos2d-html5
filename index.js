@@ -45,20 +45,16 @@ cc._setWrapperGetter = function (getter) {
 
 // if "global_defs" not preprocessed by uglify, just declare them globally
 // (use eval to prevent the uglify from renaming symbols)
+if (typeof CC_TEST === 'undefined') {
+    eval('CC_TEST=typeof describe!=="undefined"||typeof QUnit!=="undefined"');
+}
 if (typeof CC_EDITOR === 'undefined') {
     eval('CC_EDITOR=typeof Editor!=="undefined"');
 }
 if (typeof CC_DEV === 'undefined') {
     eval('CC_DEV=CC_EDITOR');
 }
-if (typeof CC_TEST === 'undefined') {
-    if (CC_EDITOR) {
-        eval('CC_TEST=typeof describe!=="undefined"');
-    }
-    else {
-        eval('CC_TEST=typeof QUnit!=="undefined"');
-    }
-}
+
 if (CC_TEST) {
     /**
      * contains internal apis for unit tests
