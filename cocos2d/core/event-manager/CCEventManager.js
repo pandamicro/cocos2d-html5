@@ -88,7 +88,7 @@ cc.__getListenerID = function (event) {
     if(getType === eventType.TOUCH){
         // Touch listener is very special, it contains two kinds of listeners, EventListenerTouchOneByOne and EventListenerTouchAllAtOnce.
         // return UNKNOWN instead.
-        cc.log(cc._LogInfos.._getListenerID);
+        cc.log(cc._LogInfos._getListenerID);
     }
     return "";
 };

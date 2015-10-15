@@ -395,7 +395,7 @@ cc._EventListenerTouchOneByOne = cc.EventListener.extend({
 
     checkAvailable: function () {
         if(!this.onTouchBegan){
-            cc.log(cc._LogInfos._EventListenerTouchOneByOne.checkAvailable);
+            cc.log(cc._LogInfos._checkEventListenerAvailable.touchOneByOne);
             return false;
         }
         return true;
@@ -430,7 +430,7 @@ cc._EventListenerTouchAllAtOnce = cc.EventListener.extend({
     checkAvailable: function(){
         if (this.onTouchesBegan === null && this.onTouchesMoved === null
             && this.onTouchesEnded === null && this.onTouchesCancelled === null) {
-            cc.log(cc._LogInfos._EventListenerTouchAllAtOnce.checkAvailable);
+            cc.log(cc._LogInfos._checkEventListenerAvailable.touchAllAtOnce);
             return false;
         }
         return true;

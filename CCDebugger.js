@@ -92,20 +92,11 @@ cc._LogInfos = {
         _initWithTexture: "cocos2d: Could not initialize cc.AtlasNode. Invalid Texture.",
     },
 
-    _EventListenerKeyboard: {
-        checkAvailable: "cc._EventListenerKeyboard.checkAvailable(): Invalid EventListenerKeyboard!",
-    },
-
-    _EventListenerTouchOneByOne: {
-        checkAvailable: "cc._EventListenerTouchOneByOne.checkAvailable(): Invalid EventListenerTouchOneByOne!",
-    },
-
-    __EventListenerTouchAllAtOnce: {
-        checkAvailable: "cc._EventListenerTouchAllAtOnce.checkAvailable(): Invalid EventListenerTouchAllAtOnce!",
-    },
-
-    _EventListenerAcceleration: {
-        checkAvailable: "cc._EventListenerAcceleration.checkAvailable(): _onAccelerationEvent must be non-nil",
+    _checkEventListenerAvailable: {
+        keyboard: "cc._EventListenerKeyboard.checkAvailable(): Invalid EventListenerKeyboard!",
+        touchOneByOne: "cc._EventListenerTouchOneByOne.checkAvailable(): Invalid EventListenerTouchOneByOne!",
+        touchAllAtOnce: "cc._EventListenerTouchAllAtOnce.checkAvailable(): Invalid EventListenerTouchAllAtOnce!",
+        acceleration: "cc._EventListenerAcceleration.checkAvailable(): _onAccelerationEvent must be non-nil",
     },
 
     EventListener: {
