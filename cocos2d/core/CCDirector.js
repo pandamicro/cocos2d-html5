@@ -367,7 +367,7 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
      */
     popScene: function () {
 
-        cc.assert(this._runningScene, cc._LogInfos.Director_popScene);
+        cc.assert(this._runningScene, cc._LogInfos.Director.popScene);
 
         this._scenesStack.pop();
         var c = this._scenesStack.length;
@@ -433,7 +433,7 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
      */
     pushScene: function (scene) {
 
-        cc.assert(scene, cc._LogInfos.Director_pushScene);
+        cc.assert(scene, cc._LogInfos.Director.pushScene);
 
         this._sendCleanupToScene = false;
 
@@ -447,7 +447,7 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
      */
     runScene: function (scene) {
 
-        cc.assert(scene, cc._LogInfos.Director_pushScene);
+        cc.assert(scene, cc._LogInfos.Director.pushScene);
 
         if (!this._runningScene) {
             //start scene
@@ -483,7 +483,7 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
         this.setAnimationInterval(this._oldAnimationInterval);
         this._lastUpdate = Date.now();
         if (!this._lastUpdate) {
-            cc.log(cc._LogInfos.Director_resume);
+            cc.log(cc._LogInfos.Director.resume);
         }
 
         this._paused = false;
@@ -739,7 +739,7 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
      * @param {Number} level
      */
     popToSceneStackLevel: function (level) {
-        cc.assert(this._runningScene, cc._LogInfos.Director_popToSceneStackLevel_2);
+        cc.assert(this._runningScene, cc._LogInfos.Director.popToSceneStackLevel_2);
 
         var locScenesStack = this._scenesStack;
         var c = locScenesStack.length;

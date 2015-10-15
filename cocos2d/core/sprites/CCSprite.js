@@ -245,7 +245,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      * @return {Boolean}  true if the sprite is initialized properly, false otherwise.
      */
     initWithSpriteFrame:function (spriteFrame) {
-        cc.assert(spriteFrame, cc._LogInfos.Sprite_initWithSpriteFrame);
+        cc.assert(spriteFrame, cc._LogInfos.Sprite.initWithSpriteFrame);
 
         if(!spriteFrame.textureLoaded()){
             //add event listener
@@ -273,9 +273,9 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      * sprite.initWithSpriteFrameName("grossini_dance_01.png");
      */
     initWithSpriteFrameName:function (spriteFrameName) {
-        cc.assert(spriteFrameName, cc._LogInfos.Sprite_initWithSpriteFrameName);
+        cc.assert(spriteFrameName, cc._LogInfos.Sprite.initWithSpriteFrameName);
         var frame = cc.spriteFrameCache.getSpriteFrame(spriteFrameName);
-        cc.assert(frame, spriteFrameName + cc._LogInfos.Sprite_initWithSpriteFrameName1);
+        cc.assert(frame, spriteFrameName + cc._LogInfos.Sprite.initWithSpriteFrameName1);
         return this.initWithSpriteFrame(frame);
     },
 
@@ -351,9 +351,9 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      * @override
      */
     reorderChild:function (child, zOrder) {
-        cc.assert(child, cc._LogInfos.Sprite_reorderChild_2);
+        cc.assert(child, cc._LogInfos.Sprite.reorderChild_2);
         if(this._children.indexOf(child) === -1){
-            cc.log(cc._LogInfos.Sprite_reorderChild);
+            cc.log(cc._LogInfos.Sprite.reorderChild);
             return;
         }
 
@@ -416,7 +416,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      */
     ignoreAnchorPointForPosition:function (relative) {
         if(this._batchNode){
-            cc.log(cc._LogInfos.Sprite_ignoreAnchorPointForPosition);
+            cc.log(cc._LogInfos.Sprite.ignoreAnchorPointForPosition);
             return;
         }
         cc.Node.prototype.ignoreAnchorPointForPosition.call(this, relative);
@@ -506,16 +506,16 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      * @param {Number} frameIndex
      */
     setDisplayFrameWithAnimationName:function (animationName, frameIndex) {
-        cc.assert(animationName, cc._LogInfos.Sprite_setDisplayFrameWithAnimationName_3);
+        cc.assert(animationName, cc._LogInfos.Sprite.setDisplayFrameWithAnimationName_3);
 
         var cache = cc.animationCache.getAnimation(animationName);
         if(!cache){
-            cc.log(cc._LogInfos.Sprite_setDisplayFrameWithAnimationName);
+            cc.log(cc._LogInfos.Sprite.setDisplayFrameWithAnimationName);
             return;
         }
         var animFrame = cache.getFrames()[frameIndex];
         if(!animFrame){
-            cc.log(cc._LogInfos.Sprite_setDisplayFrameWithAnimationName_2);
+            cc.log(cc._LogInfos.Sprite.setDisplayFrameWithAnimationName_2);
             return;
         }
         this.setSpriteFrame(animFrame.getSpriteFrame());
@@ -659,7 +659,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      * @return {Boolean} true if the sprite is initialized properly, false otherwise.
      */
     initWithFile:function (filename, rect) {
-        cc.assert(filename, cc._LogInfos.Sprite_initWithFile);
+        cc.assert(filename, cc._LogInfos.Sprite.initWithFile);
 
         var tex = cc.textureCache.getTextureForKey(filename);
         if (!tex) {
@@ -687,7 +687,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      */
     initWithTexture: function (texture, rect, rotated, counterclockwise) {
         var _t = this;
-        cc.assert(arguments.length !== 0, cc._LogInfos.CCSpriteBatchNode_initWithTexture);
+        cc.assert(arguments.length !== 0, cc._LogInfos.SpriteBatchNode.initWithTexture);
 
         rotated = rotated || false;
         texture = this._renderCmd._handleTextureForRotatedTexture(texture, rect, rotated, counterclockwise);
@@ -801,7 +801,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      * @override
      */
     addChild: function (child, localZOrder, tag) {
-        cc.assert(child, cc._LogInfos.CCSpriteBatchNode_addChild_2);
+        cc.assert(child, cc._LogInfos.SpriteBatchNode.addChild_2);
 
         if (localZOrder == null)
             localZOrder = child._localZOrder;
@@ -825,7 +825,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
         var _t = this;
         if(cc.js.isString(newFrame)){
             newFrame = cc.spriteFrameCache.getSpriteFrame(newFrame);
-            cc.assert(newFrame, cc._LogInfos.Sprite_setSpriteFrame)
+            cc.assert(newFrame, cc._LogInfos.Sprite.setSpriteFrame)
         }
 
         this.setNodeDirty(true);
@@ -863,7 +863,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      * @deprecated
      */
     setDisplayFrame: function(newFrame){
-        cc.log(cc._LogInfos.Sprite_setDisplayFrame);
+        cc.log(cc._LogInfos.Sprite.setDisplayFrame);
         this.setSpriteFrame(newFrame);
     },
 
