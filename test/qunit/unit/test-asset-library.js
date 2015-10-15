@@ -1,8 +1,6 @@
 ﻿(function () {
 
-    var assetDir = '../assets';
-    var projPath = assetDir;
-    var libPath = projPath + '/library';
+    var libPath = assetDir + '/library';
 
     var grossini_uuid = '748321';
     var grossiniSprite_uuid = '1232218';

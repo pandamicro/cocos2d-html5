@@ -349,11 +349,20 @@ var TestScript = cc.Class({
     }
 });
 
+var assetDir = '../test/qunit/assets';
+
+var canvas;
 function _resetGame (w, h) {
     if (!cc.game._prepared && !cc.game._prepareCalled) {
+        if (!canvas) {
+            canvas = document.createElement('canvas');
+            canvas.id = 'test-canvas';
+            document.body.appendChild(canvas);
+        }
         cc.game.run({
             width: w,
-            height: h
+            height: h,
+            id: 'test-canvas'
         });
     }
     else {

@@ -1,4 +1,5 @@
 var Path = require('path');
+var Spawn = require('child_process').spawn;
 var Chalk = require('chalk');
 
 var gulp = require('gulp');
@@ -58,6 +59,8 @@ function getUglifyOptions (minify, global_defs) {
 }
 
 function rebundle(bundler) {
+    console.log('This will take some minutes...');
+
     var bundle = bundler.bundle()
         .on('error', handleErrors.handler)
         .pipe(handleErrors())
@@ -147,36 +150,33 @@ function createBundler() {
 //}
 
 gulp.task('compile-cocos2d', function (done) {
-    console.log('Spawn ' + Chalk.cyan('ant') + ' in ' + paths.originCocos2dCompileDir);
+    console.log('Spawn ant in ' + paths.originCocos2dCompileDir);
 
-    var spawn = require('child_process').spawn;
-    var child;
-    child = spawn('ant', {
-        cwd: paths.originCocos2dCompileDir
+    var child = Spawn('ant', {
+        cwd: paths.originCocos2dCompileDir,
+        stdio: [0, 1, 'pipe']
     });
     child.on('error', function (err) {
-        console.error(Chalk.red('Failed to start "ant": ' + err.code));
+        var ANT = Chalk.inverse('ant');
         if (err.code === 'ENOENT') {
-            console.error(Chalk.red('You should install "ant" to build cocos2d-html5'));
+            console.error(Chalk.red('You should install %s to build cocos2d-html5'), ANT);
+        }
+        else {
+            console.error(Chalk.red('Failed to start %s') + ': %s', ANT, err.code);
         }
         process.exit(1);
     });
-    child.stdout.on('data', function (data) {
-        console.log(data.toString());
-    });
     child.stderr.on('data', function (data) {
-        //if (data.toString().indexOf('ERROR') !== -1) {
-        //    console.error('######### Error:');
-        //}
-        if (data.toString().indexOf('BUILD FAILED') !== -1) {
-            console.error(Chalk.red(data.toString()));
-            process.exit(1);
+        process.stderr.write(Chalk.red(data.toString()));
+    });
+    child.on('exit', function (code) {
+        if (code === 0) {
+            done();
         }
         else {
-            console.error(Chalk.red(data.toString()));
+            process.exit(1);
         }
     });
-    child.on('exit', done);
 });
 
 gulp.task('build-modular-cocos2d', ['compile-cocos2d'], function () {
