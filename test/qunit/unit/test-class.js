@@ -74,22 +74,22 @@ test('test', function () {
 
     cc.js.unregisterClass(Animal);
 
-    var constructor = new Callback();
+    var animalCtor = new Callback();
     Animal = cc.Class({
         name: 'Animal',
-        ctor: constructor,
+        ctor: animalCtor,
         properties: {
             weight: 100
         }
     });
     var labradorConstructor = new Callback();
-    Labrador = Animal.extend({
+    var Labrador = Animal.extend({
         ctor: labradorConstructor
-    })
+    });
 
-    constructor.enable();
+    animalCtor.enable();
     var instance1 = new Animal();
-    constructor.once('call constructor');
+    animalCtor.once('call constructor');
 
     strictEqual(cc.Class.attr(Animal, 'weight').default, 100, 'can get attribute even has constructor');
     strictEqual(instance1.weight, 100, 'property inited even has constructor');
@@ -102,8 +102,9 @@ test('test', function () {
     strictEqual(instance3.weight, 100, 'class define not changed');
 
     labradorConstructor.enable();
+    animalCtor.calledCount = 0;
     var instance4 = new Labrador();
-    constructor.once('call constructor of parent class');
+    animalCtor.once('call constructor of parent class');
     labradorConstructor.once('call constructor of child class');
 
     cc.js.unregisterClass(Animal, Labrador);
@@ -161,7 +162,7 @@ test('Inherit', function () {
     strictEqual(labrador.myName, 'doge', 'can inherit property with Dog.extend syntax');
 
     deepEqual(Husky.__props__, /*CCObject.__props__.concat*/(['myName', 'weight']), 'can inherit prop list');
-    deepEqual(labrador.__props__, /*CCObject.__props__.concat*/(['myName', 'clever']), 'can inherit prop list with Dog.extend syntax');
+    deepEqual(Labrador.__props__, /*CCObject.__props__.concat*/(['myName', 'clever']), 'can inherit prop list with Dog.extend syntax');
     deepEqual(Dog.__props__, /*CCObject.__props__.concat*/(['myName']), 'base prop list not changed');
 
     strictEqual(husky instanceof Dog, true, 'can pass instanceof check');
@@ -473,12 +474,12 @@ test('__cid__', function () {
     var Labrador = Dog.extend({
     });
 
-    ok(Dog.prototype.__cid__.length > 0, "Dog's cid is not empty");
-    ok(Husky.prototype.__cid__.length > 0, "Husky's cid is not empty");
-    ok(Labrador.prototype.__cid__.length > 0, "Labrador's cid is not empty");
-    notEqual(Dog.prototype.__cid__, Husky.prototype.__cid__, "Dog and Husky don't have the same cid");
-    notEqual(Dog.prototype.__cid__, Labrador.prototype.__cid__, "Dog and Labrador don't have the same cid");
-    notEqual(Labrador.prototype.__cid__, Husky.prototype.__cid__, "Labrador and Husky don't have the same cid");
+    ok(cc.js._getClassId(Dog).length > 0, "Dog's cid is not empty");
+    ok(cc.js._getClassId(Husky).length > 0, "Husky's cid is not empty");
+    ok(cc.js._getClassId(Labrador).length > 0, "Labrador's cid is not empty");
+    notEqual(cc.js._getClassId(Dog), cc.js._getClassId(Husky), "Dog and Husky don't have the same cid");
+    notEqual(cc.js._getClassId(Dog), cc.js._getClassId(Labrador), "Dog and Labrador don't have the same cid");
+    notEqual(cc.js._getClassId(Labrador), cc.js._getClassId(Husky), "Labrador and Husky don't have the same cid");
 
     cc.js.unregisterClass(Dog, Husky, Labrador);
 });

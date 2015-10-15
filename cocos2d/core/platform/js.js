@@ -247,16 +247,14 @@ js.getClassName = function (obj) {
     return '';
 };
 
-var TCID = 'cc.TmpCId.';
-
-function getTempClassIdInEditor () {
-    if (CC_EDITOR) {
-        return TCID + Editor.uuid();
-    }
+var TCID_PREFIX = 'cc.TmpCId.';
+var id = 0;
+function getTempCID () {
+    return TCID_PREFIX + (id++);
 }
 
 js._isTempClassId = function (id) {
-    return CC_EDITOR && id.startsWith(TCID);
+    return CC_EDITOR && id.startsWith(TCID_PREFIX);
 };
 
 // id 注册
@@ -314,7 +312,7 @@ cc.js.unregisterClass to remove the id of unused class';
         doSetClassName(className, constructor);
         // auto set class id
         if (!constructor.prototype.hasOwnProperty('__cid__')) {
-            var id = className || (CC_EDITOR && getTempClassIdInEditor());
+            var id = className || getTempCID();
             if (id) {
                 js._setClassId(id, constructor);
             }
@@ -375,7 +373,7 @@ cc.js.unregisterClass to remove the id of unused class';
      * @private
      */
     js._getClassId = function (obj, allowTempId) {
-        allowTempId = (typeof allowTempId !== 'undefined' ? allowTempId: true) && CC_EDITOR;
+        allowTempId = (typeof allowTempId !== 'undefined' ? allowTempId: true);
 
         var res;
         if (typeof obj === 'function' && obj.prototype.hasOwnProperty('__cid__')) {
