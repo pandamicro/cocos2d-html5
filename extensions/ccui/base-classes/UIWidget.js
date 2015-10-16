@@ -1670,7 +1670,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
      */
     removeNode: function (node, cleanup) {
         cc.Node.prototype.removeChild.call(this, node, cleanup);
-        cc.arrayRemoveObject(this._nodes, node);
+        cc.js.array.remove(this._nodes, node);
     },
 
     /**

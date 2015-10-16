@@ -317,7 +317,7 @@ ccui.RichText = ccui.Widget.extend(/** @lends ccui.RichText# */{
         if (cc.js.isNumber(element))
             this._richElements.splice(element, 1);
          else
-            cc.arrayRemoveObject(this._richElements, element);
+            cc.js.array.remove(this._richElements, element);
         this._formatTextDirty = true;
     },
 

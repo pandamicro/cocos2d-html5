@@ -317,7 +317,7 @@ cc.ActionManager = cc._Class.extend(/** @lends cc.ActionManager# */{
         if (element) {
             if(this._hashTargets[element.target.__instanceId]){
                 delete this._hashTargets[element.target.__instanceId];
-                cc.arrayRemoveObject(this._arrayTargets, element);
+                cc.js.array.remove(this._arrayTargets, element);
                 ret = true;
             }
             element.actions = null;

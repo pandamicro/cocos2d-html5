@@ -295,7 +295,7 @@ ccs.Bone = ccs.Node.extend(/** @lends ccs.Bone# */{
 
             bone.setParentBone(null);
             bone.getDisplayManager().setCurrentDecorativeDisplay(null);
-            cc.arrayRemoveObject(this._children, bone);
+            cc.js.array.remove(this._children, bone);
         }
     },
 

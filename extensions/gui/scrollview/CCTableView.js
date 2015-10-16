@@ -344,7 +344,7 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
 
         this._cellsFreed.addObject(cell);
         this._cellsUsed.removeSortedObject(cell);
-        cc.arrayRemoveObject(this._indices, cell.getIdx());
+        cc.js.array.remove(this._indices, cell.getIdx());
 
         cell.reset();
         if (cell.getParent() === this.getContainer()) {
@@ -486,7 +486,7 @@ cc.TableView = cc.ScrollView.extend(/** @lends cc.TableView# */{
 
         //remove first
         this._moveCellOutOfSight(cell);
-        cc.arrayRemoveObject(this._indices, idx);
+        cc.js.array.remove(this._indices, idx);
         this._updateCellPositions();
 
         for (var i = locCellsUsed.count() - 1; i > newIdx; i--) {

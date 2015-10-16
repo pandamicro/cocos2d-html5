@@ -226,7 +226,7 @@ ccs.ColliderDetector = ccs.Class.extend(/** @lends ccs.ColliderDetector# */{
         }
 
         for (i=0; i<eraseList.length; i++)
-            cc.arrayRemoveObject(locBodyList, eraseList[i]);
+            cc.js.array.remove(locBodyList, eraseList[i]);
     },
 
     /**

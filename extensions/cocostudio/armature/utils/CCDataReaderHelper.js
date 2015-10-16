@@ -241,7 +241,7 @@ ccs.dataReaderHelper = /** @lends ccs.dataReaderHelper# */{
      * @param {String} configFile
      */
     removeConfigFile: function (configFile) {
-//        cc.arrayRemoveObject(this._configFileList, configFile);
+//        cc.js.array.remove(this._configFileList, configFile);
         var locFileList = this._configFileList;
         var len = locFileList.length;
         var it = locFileList[len];
@@ -251,7 +251,7 @@ ccs.dataReaderHelper = /** @lends ccs.dataReaderHelper# */{
         }
 
         if (it !== locFileList[len])
-            cc.arrayRemoveObject(locFileList, configFile);
+            cc.js.array.remove(locFileList, configFile);
     },
 
     /**

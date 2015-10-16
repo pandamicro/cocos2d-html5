@@ -234,7 +234,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
             }
 
             if (this._inDispatch === 0)
-                cc.arrayRemoveObject(listenerVector, selListener);
+                cc.js.array.remove(listenerVector, selListener);
             else
                 ++i;
         }
@@ -263,7 +263,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
         for (i = 0; i < locToAddedListeners.length;) {
             listener = locToAddedListeners[i];
             if (listener && listener._getListenerID() === listenerID)
-                cc.arrayRemoveObject(locToAddedListeners, listener);
+                cc.js.array.remove(locToAddedListeners, listener);
             else
                 ++i;
         }
@@ -358,7 +358,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
             for (i = 0; i < sceneGraphPriorityListeners.length;) {
                 selListener = sceneGraphPriorityListeners[i];
                 if (!selListener._isRegistered()) {
-                    cc.arrayRemoveObject(sceneGraphPriorityListeners, selListener);
+                    cc.js.array.remove(sceneGraphPriorityListeners, selListener);
                 } else
                     ++i;
             }
@@ -368,7 +368,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
             for (i = 0; i < fixedPriorityListeners.length;) {
                 selListener = fixedPriorityListeners[i];
                 if (!selListener._isRegistered())
-                    cc.arrayRemoveObject(fixedPriorityListeners, selListener);
+                    cc.js.array.remove(fixedPriorityListeners, selListener);
                 else
                     ++i;
             }
@@ -470,7 +470,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
         if (null === oneByOneListeners && null === allAtOnceListeners)
             return;
 
-        var originalTouches = event.getTouches(), mutableTouches = cc.copyArray(originalTouches);
+        var originalTouches = event.getTouches(), mutableTouches = cc.js.array.copy(originalTouches);
         var oneByOneArgsObj = {event: event, needsMutableSet: (oneByOneListeners && allAtOnceListeners), touches: mutableTouches, selTouch: null};
 
         //
@@ -532,7 +532,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
     _dissociateNodeAndEventListener: function (node, listener) {
         var listeners = this._nodeListenersMap[node.__instanceId];
         if (listeners) {
-            cc.arrayRemoveObject(listeners, listener);
+            cc.js.array.remove(listeners, listener);
             if (listeners.length === 0)
                 delete this._nodeListenersMap[node.__instanceId];
         }
@@ -739,7 +739,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
             for (var i = 0, len = locToAddedListeners.length; i < len; i++) {
                 var selListener = locToAddedListeners[i];
                 if (selListener === listener) {
-                    cc.arrayRemoveObject(locToAddedListeners, selListener);
+                    cc.js.array.remove(locToAddedListeners, selListener);
                     selListener._setRegistered(false);
                     break;
                 }
@@ -761,7 +761,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
                 }
 
                 if (this._inDispatch === 0)
-                    cc.arrayRemoveObject(listeners, selListener);
+                    cc.js.array.remove(listeners, selListener);
                 return true;
             }
         }
@@ -782,7 +782,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
                 }
 
                 if (this._inDispatch === 0)
-                    cc.arrayRemoveObject(listeners, selListener);
+                    cc.js.array.remove(listeners, selListener);
                 return true;
             }
         }
@@ -800,10 +800,10 @@ cc.eventManager = /** @lends cc.eventManager# */{
             // Ensure the node is removed from these immediately also.
             // Don't want any dangling pointers or the possibility of dealing with deleted objects..
             delete _t._nodePriorityMap[listenerType.__instanceId];
-            cc.arrayRemoveObject(_t._dirtyNodes, listenerType);
+            cc.js.array.remove(_t._dirtyNodes, listenerType);
             var listeners = _t._nodeListenersMap[listenerType.__instanceId], i;
             if (listeners) {
-                var listenersCopy = cc.copyArray(listeners);
+                var listenersCopy = cc.js.array.copy(listeners);
                 for (i = 0; i < listenersCopy.length; i++)
                     _t.removeListener(listenersCopy[i]);
                 listenersCopy.length = 0;

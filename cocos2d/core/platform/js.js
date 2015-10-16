@@ -520,10 +520,10 @@ js.obsoletes = function (obj, objName, props, writable) {
 };
 
 /**
- * @class Array
+ * @class array
  * @static
  */
-js.Array = {
+js.array = {
     /**
      * Removes the first occurrence of a specific object from the array.
      * @method remove
@@ -561,6 +561,62 @@ js.Array = {
      */
     contains: function (array, value) {
         return array.indexOf(value) !== -1;
+    },
+
+    /**
+     * Verify array's Type
+     * @param {array} array
+     * @param {function} type
+     * @return {Boolean}
+     * @function
+     */
+    verifyType: function (array, type) {
+        if (array && array.length > 0) {
+            for (var i = 0; i < array.length; i++) {
+                if (!(array[i] instanceof  type)) {
+                    cc.log(cc._LogInfos.Array.verifyType);
+                    return false;
+                }
+            }
+        }
+        return true;
+    },
+
+    /**
+     * Removes from array all values in minusArr. For each Value in minusArr, the first matching instance in array will be removed.
+     * @function
+     * @param {Array} array Source Array
+     * @param {Array} minusArr minus Array
+     */
+    removeArray: function (array, minusArr) {
+        for (var i = 0, l = minusArr.length; i < l; i++) {
+            remove(array, minusArr[i]);
+        }
+    },
+
+    /**
+     * Inserts some objects at index
+     * @function
+     * @param {Array} array
+     * @param {Array} addObjs
+     * @param {Number} index
+     * @return {Array}
+     */
+    appendObjectsToIndex: function(array, addObjs, index){
+        array.splice.apply(array, [index, 0].concat(addObjs));
+        return array;
+    },
+
+    /**
+     * Copy an array's item to a new array (its performance is better than Array.slice)
+     * @param {Array} array
+     * @return {Array}
+     */
+    copy: function(array){
+        var i, len = array.length, arr_clone = new Array(len);
+        for (i = 0; i < len; i += 1)
+            arr_clone[i] = array[i];
+        return arr_clone;
     }
 };
 

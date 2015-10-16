@@ -280,7 +280,7 @@ cc.Animation = cc._Class.extend(/** @lends cc.Animation# */{
      * @param {Number} [loops=1]
      */
     initWithAnimationFrames:function (arrayOfAnimationFrames, delayPerUnit, loops) {
-        cc.arrayVerifyType(arrayOfAnimationFrames, cc.AnimationFrame);
+        cc.js.array.verifyType(arrayOfAnimationFrames, cc.AnimationFrame);
 
         this._delayPerUnit = delayPerUnit;
         this._loops = loops === undefined ? 1 : loops;
@@ -406,7 +406,7 @@ cc.Animation = cc._Class.extend(/** @lends cc.Animation# */{
      * @param {Number} [loops=1]
      */
     initWithSpriteFrames:function (frames, delay, loops) {
-        cc.arrayVerifyType(frames, cc.SpriteFrame);
+        cc.js.array.verifyType(frames, cc.SpriteFrame);
         this._loops = loops === undefined ? 1 : loops;
         this._delayPerUnit = delay || 0;
         this._totalDelayUnits = 0;

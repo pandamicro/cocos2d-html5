@@ -244,7 +244,7 @@ ccs.ActionNode = ccs.Class.extend(/** @lends ccs.ActionNode# */{
             return;
         var frameType = frame.frameType;
         var array = this._frameArray[frameType];
-        cc.arrayRemoveObject(array, frame);
+        cc.js.array.remove(array, frame);
     },
 
     /**

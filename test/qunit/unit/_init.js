@@ -269,7 +269,7 @@ TestWrapper = cc.Class({
             },
             set: function (value) {
                 if (this.targetN.parent) {
-                    cc.js.Array.remove(this.targetN.parent.children, this.targetN);
+                    cc.js.array.remove(this.targetN.parent.children, this.targetN);
                 }
                 this.targetN.parent = value;
                 if (value) {

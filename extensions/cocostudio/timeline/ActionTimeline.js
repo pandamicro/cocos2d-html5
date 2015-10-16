@@ -342,8 +342,8 @@ ccs.ActionTimeline = cc.Action.extend({
                 if(item === timeline)
                     return true;
             })) {
-                cc.arrayRemoveObject(this._timelineMap[tag], timeline);
-                cc.arrayRemoveObject(this._timelineList, timeline);
+                cc.js.array.remove(this._timelineMap[tag], timeline);
+                cc.js.array.remove(this._timelineList, timeline);
                 timeline.setActionTimeline(null);
             }
         }
