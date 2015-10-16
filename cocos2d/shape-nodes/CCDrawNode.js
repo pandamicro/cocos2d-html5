@@ -512,7 +512,7 @@ cc.game.addEventListener("rendererInited", function () {
             }
         });
     }
-    else if (cc._renderType === cc.game.RENDER_TYPE_CANVAS) {
+    else if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
         
         cc.js.mixin(cc.DrawNode.prototype, {
             _bufferCapacity:0,
@@ -528,7 +528,7 @@ cc.game.addEventListener("rendererInited", function () {
                 cc.Node.prototype.ctor.call(this);
                 this._buffer = [];
                 this._blendFunc = new cc.BlendFunc(cc.SRC_ALPHA, cc.ONE_MINUS_SRC_ALPHA);
-                this._drawColor = cc.color(255,255,255,255);
+                this._drawColor = new cc.WebGLColor(255,255,255,255);
 
                 this.init();
             },
