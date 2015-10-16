@@ -77,7 +77,7 @@ cc.rendererWebGL = {
         }
         locCmds.length = 0;
         delete this._cacheToBufferCmds[renderTextureId];
-        cc.arrayRemoveObject(locIDs, renderTextureId);
+        cc.js.array.remove(locIDs, renderTextureId);
 
         if (locIDs.length === 0)
             this._isCacheToBufferOn = false;

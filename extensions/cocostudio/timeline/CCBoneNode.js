@@ -374,7 +374,7 @@ ccs.BoneNode = (function () {
                 this._rootSkeleton._subBonesDirty = true;
                 this._rootSkeleton._subBonesOrderDirty = true;
             }
-            cc.arrayRemoveObject(this._childBones, bone);
+            cc.js.array.remove(this._childBones, bone);
         },
 
         _setRootSkeleton: function(rootSkeleton){
@@ -452,7 +452,7 @@ ccs.BoneNode = (function () {
         },
 
         _removeFromSkinList: function (skin) {
-            cc.arrayRemoveObject(this._boneSkins, skin);
+            cc.js.array.remove(this._boneSkins, skin);
         },
 
         sortAllChildren: function () {

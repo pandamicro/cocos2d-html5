@@ -358,7 +358,7 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
 
     _removeHashElement:function (element) {
         delete this._hashForTimers[element.target.__instanceId];
-        cc.arrayRemoveObject(this._arrayForTimers, element);
+        cc.js.array.remove(this._arrayForTimers, element);
         element.Timer = null;
         element.target = null;
         element = null;
@@ -368,10 +368,10 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
         var self = this, element = self._hashForUpdates[entry.target.__instanceId];
         if (element) {
             //list entry
-            cc.arrayRemoveObject(element.list, element.entry);
+            cc.js.array.remove(element.list, element.entry);
 
             delete self._hashForUpdates[element.target.__instanceId];
-            //cc.arrayRemoveObject(self._hashForUpdates, element);
+            //cc.js.array.remove(self._hashForUpdates, element);
             element.entry = null;
 
             //hash entry

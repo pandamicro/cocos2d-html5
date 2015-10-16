@@ -1421,7 +1421,7 @@ cc.Node = cc._Class.extend(/** @lends cc.Node# */{
         // set parent nil at the end
         child.parent = null;
         child._renderCmd.detachFromParent();
-        cc.arrayRemoveObject(this._children, child);
+        cc.js.array.remove(this._children, child);
     },
 
     _insertChild: function (child, z) {

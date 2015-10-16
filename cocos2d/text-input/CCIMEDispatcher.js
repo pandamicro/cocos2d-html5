@@ -463,7 +463,7 @@ cc.IMEDispatcher = cc._Class.extend(/**  @lends cc.imeDispatcher# */{
                 this.impl._delegateWithIme = null;
             }
         }
-        cc.arrayRemoveObject(this.impl._delegateList, delegate);
+        cc.js.array.remove(this.impl._delegateList, delegate);
     },
 
     /**

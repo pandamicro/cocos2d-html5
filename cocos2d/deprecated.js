@@ -134,7 +134,72 @@ if (CC_DEV) {
         "Point": 'Vec2'
     });
 
+    /**
+     * Verify Array's Type
+     * @memberof cc
+     * @deprecated
+     * @param {Array} arr
+     * @param {function} type
+     * @return {Boolean}
+     * @function
+     */
+    js.get(cc, 'arrayVerifyType', function () {
+        cc.warn(INFO, 'cc.arrayVerifyType', 'cc.js.array.verifyType');
+        return cc.js.array.verifyType;
+    });
 
+    /**
+     * Searches for the first occurance of object and removes it. If object is not found the function has no effect.
+     * @function
+     * @memberof cc
+     * @deprecated
+     * @param {Array} arr Source Array
+     * @param {*} delObj  remove object
+     */
+    js.get(cc, 'arrayRemoveObject', function () {
+        cc.warn(INFO, 'cc.arrayRemoveObject', 'cc.js.array.remove');
+        return cc.js.array.remove;
+    });
+
+    /**
+     * Removes from arr all values in minusArr. For each Value in minusArr, the first matching instance in arr will be removed.
+     * @function
+     * @memberof cc
+     * @deprecated
+     * @param {Array} arr Source Array
+     * @param {Array} minusArr minus Array
+     */
+    js.get(cc, 'arrayRemoveArray', function () {
+        cc.warn(INFO, 'cc.arrayRemoveArray', 'cc.js.array.removeArray');
+        return cc.js.array.removeArray;
+    });
+
+    /**
+     * Inserts some objects at index
+     * @function
+     * @memberof cc
+     * @deprecated
+     * @param {Array} arr
+     * @param {Array} addObjs
+     * @param {Number} index
+     * @return {Array}
+     */
+    js.get(cc, 'arrayAppendObjectsToIndex', function() {
+        cc.warn(INFO, 'cc.arrayAppendObjectsToIndex', 'cc.js.array.appendObjectsAt');
+        return cc.js.array.appendObjectsAt;
+    });
+
+    /**
+     * Copy an array's item to a new array (its performance is better than Array.slice)
+     * @memberof cc
+     * @deprecated
+     * @param {Array} arr
+     * @return {Array}
+     */
+    js.get(cc, 'copyArray', function() {
+        cc.warn(INFO, 'cc.copyArray', 'cc.js.array.copy');
+        return cc.js.array.copy;
+    });
 
     function deprecateEnum (obj, oldPath, newPath, hasTypePrefixBefore) {
         hasTypePrefixBefore = hasTypePrefixBefore !== false;

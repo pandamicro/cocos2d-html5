@@ -49,7 +49,10 @@ cc._LogInfos = {
         pushScene: "the scene should not null",
     },
 
-    arrayVerifyType: "element type is wrong!",
+    Array: {
+        verifyType: "element type is wrong!",
+    },
+
     deprecated: '"%s" is deprecated, please use "%s" instead.',
 
     Scheduler: {

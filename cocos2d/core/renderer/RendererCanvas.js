@@ -75,7 +75,7 @@ cc.rendererCanvas = {
         locCmds.length = 0;
         var locIDs = this._cacheInstanceIds;
         delete this._cacheToCanvasCmds[instanceID];
-        cc.arrayRemoveObject(locIDs, instanceID);
+        cc.js.array.remove(locIDs, instanceID);
 
         if (locIDs.length === 0)
             this._isCacheToCanvasOn = false;

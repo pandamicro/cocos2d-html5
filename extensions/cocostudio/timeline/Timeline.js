@@ -109,7 +109,7 @@ ccs.Timeline = ccs.Class.extend({
      * @param {ccs.Frame} frame
      */
     removeFrame: function(frame){
-        cc.arrayRemoveObject(this._frames, frame);
+        cc.js.array.remove(this._frames, frame);
         frame.setTimeline(null);
     },
 

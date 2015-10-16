@@ -340,7 +340,7 @@ cc.Control = cc.Layer.extend(/** @lends cc.Control# */{
                     shouldBeRemoved = (shouldBeRemoved && (action === invocation.getAction()));
                 // Remove the corresponding invocation object
                 if (shouldBeRemoved)
-                    cc.arrayRemoveObject(eventInvocationList, invocation);
+                    cc.js.array.remove(eventInvocationList, invocation);
                 else
                     i++;
             }

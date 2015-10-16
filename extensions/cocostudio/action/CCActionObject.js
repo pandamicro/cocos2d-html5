@@ -184,7 +184,7 @@ ccs.ActionObject = ccs.Class.extend(/** @lends ccs.ActionObject# */{
     removeActionNode: function (node) {
         if (node == null)
             return;
-        cc.arrayRemoveObject(this._actionNodeList, node);
+        cc.js.array.remove(this._actionNodeList, node);
     },
 
     /**

@@ -221,7 +221,7 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
 
         bone.setArmature(null);
         bone.removeFromParent(recursion);
-        cc.arrayRemoveObject(this._topBoneList, bone);
+        cc.js.array.remove(this._topBoneList, bone);
 
         delete  this._boneDic[bone.getName()];
         this.removeChild(bone, true);
@@ -246,7 +246,7 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
 
         var parentBone = bone.getParentBone();
         if (parentBone) {
-            cc.arrayRemoveObject(parentBone.getChildren(), bone);
+            cc.js.array.remove(parentBone.getChildren(), bone);
             bone.setParentBone(null);
         }
 
@@ -254,7 +254,7 @@ ccs.Armature = ccs.Node.extend(/** @lends ccs.Armature# */{
             var boneParent = this._boneDic[parentName];
             if (boneParent) {
                 boneParent.addChildBone(bone);
-                cc.arrayRemoveObject(this._topBoneList, bone);
+                cc.js.array.remove(this._topBoneList, bone);
             } else
                 this._topBoneList.push(bone);
         }
