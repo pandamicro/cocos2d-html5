@@ -13,7 +13,7 @@ if (CC_DEV) {
      * @returns {object}
      */
     js.get(cc, "inject", function () {
-        cc.warn(INFO, 'cc.inject', 'cc.js.addon');
+        cc.warn(INFO + " The first argument should be the destination object", 'cc.inject', 'cc.js.addon');
         return js.addon;
     });
 

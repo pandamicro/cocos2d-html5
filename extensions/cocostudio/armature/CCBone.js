@@ -695,7 +695,7 @@ ccs.Bone.RenderCmd = {
     };
 
     var proto = ccs.Bone.CanvasRenderCmd.prototype = Object.create(cc.Node.CanvasRenderCmd.prototype);
-    cc.js.mixin(ccs.Bone.RenderCmd, proto);
+    cc.js.mixin(proto, ccs.Bone.RenderCmd);
     proto.constructor = ccs.Bone.CanvasRenderCmd;
 })();
 
@@ -708,6 +708,6 @@ ccs.Bone.RenderCmd = {
     };
 
     var proto = ccs.Bone.WebGLRenderCmd.prototype = Object.create(cc.Node.WebGLRenderCmd.prototype);
-    cc.js.mixin(ccs.Bone.RenderCmd, proto);
+    cc.js.mixin(proto, ccs.Bone.RenderCmd);
     proto.constructor = ccs.Bone.WebGLRenderCmd;
 })();

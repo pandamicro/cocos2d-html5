@@ -389,7 +389,7 @@ cc.LabelTTF._firsrEnglish = /^[a-zA-Z0-9ÄÖÜäöüßéèçàùêâîôû]/;
     };
 
     cc.LabelTTF.CacheRenderCmd.prototype = Object.create( cc.LabelTTF.RenderCmd.prototype);
-    cc.js.mixin(cc.LabelTTF.RenderCmd.prototype, cc.LabelTTF.CacheRenderCmd.prototype);
+    cc.js.mixin(cc.LabelTTF.CacheRenderCmd.prototype, cc.LabelTTF.RenderCmd.prototype);
 
     var proto = cc.LabelTTF.CacheRenderCmd.prototype;
     proto.constructor = cc.LabelTTF.CacheRenderCmd;
@@ -448,7 +448,7 @@ cc.LabelTTF._firsrEnglish = /^[a-zA-Z0-9ÄÖÜäöüßéèçàùêâîôû]/;
     };
 
     var proto = cc.LabelTTF.CacheCanvasRenderCmd.prototype = Object.create(cc.Sprite.CanvasRenderCmd.prototype);
-    cc.js.mixin(cc.LabelTTF.CacheRenderCmd.prototype, proto);
+    cc.js.mixin(proto, cc.LabelTTF.CacheRenderCmd.prototype);
     proto.constructor = cc.LabelTTF.CacheCanvasRenderCmd;
 })();
 
@@ -459,7 +459,7 @@ cc.LabelTTF._firsrEnglish = /^[a-zA-Z0-9ÄÖÜäöüßéèçàùêâîôû]/;
     };
 
     cc.LabelTTF.CanvasRenderCmd.prototype = Object.create(cc.Sprite.CanvasRenderCmd.prototype);
-    cc.js.mixin(cc.LabelTTF.RenderCmd.prototype, cc.LabelTTF.CanvasRenderCmd.prototype);
+    cc.js.mixin(cc.LabelTTF.CanvasRenderCmd.prototype, cc.LabelTTF.RenderCmd.prototype);
 
     var proto = cc.LabelTTF.CanvasRenderCmd.prototype;
     proto.constructor = cc.LabelTTF.CanvasRenderCmd;
