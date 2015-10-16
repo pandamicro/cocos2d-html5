@@ -333,10 +333,10 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
      *
      * @example Using ColorStops argument:
      * //startColor & endColor are for default and backward compatibility
-     * var layerGradient = new cc.LayerGradient(cc.color.RED, new cc.Color(255,0,0,0), cc.p(0, -1),
-     *                                          [{p:0, color: cc.color.RED},
+     * var layerGradient = new cc.LayerGradient(cc.Color.RED, new cc.Color(255,0,0,0), cc.p(0, -1),
+     *                                          [{p:0, color: cc.Color.RED},
      *                                           {p:.5, color: new cc.Color(0,0,0,0)},
-     *                                           {p:1, color: cc.color.RED}]);
+     *                                           {p:1, color: cc.Color.RED}]);
      * //where p = A value between 0.0 and 1.0 that represents the position between start and end in a gradient
      *
      */
@@ -349,10 +349,10 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
 
         if(stops && stops instanceof Array){
             this._colorStops = stops;
-            stops.splice(0, 0, {p:0, color: start || cc.color.BLACK});
-            stops.push({p:1, color: end || cc.color.BLACK});
+            stops.splice(0, 0, {p:0, color: start || cc.Color.BLACK});
+            stops.push({p:1, color: end || cc.Color.BLACK});
         } else
-            this._colorStops = [{p:0, color: start || cc.color.BLACK}, {p:1, color: end || cc.color.BLACK}];
+            this._colorStops = [{p:0, color: start || cc.Color.BLACK}, {p:1, color: end || cc.Color.BLACK}];
 
         cc.LayerGradient.prototype.init.call(this, start, end, v, stops);
     },
@@ -547,7 +547,7 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
      * Return an array of Object representing a colorStop for the gradient, if no stops was specified
      * start & endColor will be provided as default values
      * @example
-     * [{p: 0, color: cc.color.RED},{p: 1, color: cc.color.RED},...]
+     * [{p: 0, color: cc.Color.RED},{p: 1, color: cc.Color.RED},...]
      * @returns {Array}
      */
     getColorStops: function(){
@@ -560,10 +560,10 @@ cc.LayerGradient = cc.LayerColor.extend(/** @lends cc.LayerGradient# */{
      *
      * @example
      * //startColor & endColor are for default and backward compatibility
-     * var layerGradient = new cc.LayerGradient(cc.color.RED, new cc.Color(255,0,0,0), cc.p(0, -1));
-     * layerGradient.setColorStops([{p:0, color: cc.color.RED},
+     * var layerGradient = new cc.LayerGradient(cc.Color.RED, new cc.Color(255,0,0,0), cc.p(0, -1));
+     * layerGradient.setColorStops([{p:0, color: cc.Color.RED},
      *                              {p:.5, color: new cc.Color(0,0,0,0)},
-     *                              {p:1, color: cc.color.RED}]);
+     *                              {p:1, color: cc.Color.RED}]);
      * //where p = A value between 0.0 and 1.0 that represents the position between start and end in a gradient
      *
      */

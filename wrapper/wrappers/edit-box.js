@@ -74,7 +74,7 @@ var EditBoxWrapper = cc.Class({
             default: ''
         },
         fontColor: {
-            default: cc.Color.white,
+            default: cc.Color.WHITE,
             type: cc.Color,
 
             notify: function() {
@@ -117,7 +117,7 @@ var EditBoxWrapper = cc.Class({
             }
         },
         placeholderColor: {
-            default: cc.Color.white,
+            default: cc.Color.WHITE,
             type: cc.Color,
 
             notify: function() {

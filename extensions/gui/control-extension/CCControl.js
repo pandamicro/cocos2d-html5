@@ -144,7 +144,7 @@ cc.Control = cc.Layer.extend(/** @lends cc.Control# */{
     ctor: function () {
         cc.Layer.prototype.ctor.call(this);
         this._dispatchTable = {};
-        this._color = cc.color.WHITE;
+        this._color = cc.Color.WHITE;
     },
 
     init: function () {

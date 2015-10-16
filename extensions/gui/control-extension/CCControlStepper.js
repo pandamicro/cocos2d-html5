@@ -248,19 +248,19 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
         if (location.x < this._minusSprite.getContentSize().width
             && this._value > this._minimumValue) {
             this._touchedPart = cc.CONTROL_STEPPER_PARTMINUS;
-            this._minusSprite.setColor(cc.color.GRAY);
-            this._plusSprite.setColor(cc.color.WHITE);
+            this._minusSprite.setColor(cc.Color.GRAY);
+            this._plusSprite.setColor(cc.Color.WHITE);
 
         } else if (location.x >= this._minusSprite.getContentSize().width
             && this._value < this._maximumValue) {
             this._touchedPart = cc.CONTROL_STEPPER_PARTPLUS;
-            this._minusSprite.setColor(cc.color.WHITE);
-            this._plusSprite.setColor(cc.color.GRAY);
+            this._minusSprite.setColor(cc.Color.WHITE);
+            this._plusSprite.setColor(cc.Color.GRAY);
 
         } else {
             this._touchedPart = cc.CONTROL_STEPPER_PARTNONE;
-            this._minusSprite.setColor(cc.color.WHITE);
-            this._plusSprite.setColor(cc.color.WHITE);
+            this._minusSprite.setColor(cc.Color.WHITE);
+            this._plusSprite.setColor(cc.Color.WHITE);
         }
     },
 
@@ -296,8 +296,8 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
         } else {
             this._touchInsideFlag = false;
             this._touchedPart = cc.CONTROL_STEPPER_PARTNONE;
-            this._minusSprite.setColor(cc.color.WHITE);
-            this._plusSprite.setColor(cc.color.WHITE);
+            this._minusSprite.setColor(cc.Color.WHITE);
+            this._plusSprite.setColor(cc.Color.WHITE);
             if (this._autorepeat) {
                 this.stopAutorepeat();
             }
@@ -305,8 +305,8 @@ cc.ControlStepper = cc.Control.extend(/** @lends cc.ControlStepper# */{
     },
 
     onTouchEnded:function (touch, event) {
-        this._minusSprite.setColor(cc.color.WHITE);
-        this._plusSprite.setColor(cc.color.WHITE);
+        this._minusSprite.setColor(cc.Color.WHITE);
+        this._plusSprite.setColor(cc.Color.WHITE);
 
         if (this._autorepeat) {
             this.stopAutorepeat();

@@ -101,7 +101,7 @@ var ButtonWrapper = cc.Class({
         fontColor: {
             get: function () {
                 var color = this.targetN.titleColor;
-                return color || cc.Color.white;
+                return color || cc.Color.WHITE;
             },
             set: function (value) {
                 if (value instanceof cc.Color) {

@@ -46,7 +46,7 @@
                     if (locParent && locParent._cascadeColorEnabled)
                         parentColor = locParent.getDisplayedColor();
                     else
-                        parentColor = cc.color.WHITE;
+                        parentColor = cc.Color.WHITE;
                 }
                 locDispColor.r = 0 | (locRealColor.r * parentColor.r / 255.0);
                 locDispColor.g = 0 | (locRealColor.g * parentColor.g / 255.0);

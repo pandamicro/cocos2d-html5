@@ -76,7 +76,7 @@ ccui.RichElementText = ccui.RichElement.extend(/** @lends ccui.RichElementText# 
      * Usage Example using FontDefinition:
      *
      * var rtEl  = new ccui.RichElementText("tag", new cc.FontDefinition({
-     *                              fillStyle: cc.color.BLACK,
+     *                              fillStyle: cc.Color.BLACK,
      *                              fontName: "Arial",
      *                              fontSize: 12,
      *                              fontWeight: "bold",

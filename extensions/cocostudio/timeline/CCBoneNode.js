@@ -71,7 +71,7 @@ ccs.BoneNode = (function () {
                     {x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}, {x: 0, y: 0}
                 ];
 
-            this._rackColor = cc.color.WHITE;
+            this._rackColor = cc.Color.WHITE;
             this._blendFunc = BlendFunc.ALPHA_NON_PREMULTIPLIED;
 
             this._childBones = [];
@@ -523,7 +523,7 @@ ccs.BoneNode = (function () {
         var BoneNodeCanvasCmd = function (node) {
             Node.CanvasRenderCmd.call(this, node);
             this._debug = false;
-            this._color = cc.color.WHITE;
+            this._color = cc.Color.WHITE;
             this._drawNode = new cc.DrawNode();
         };
 
@@ -556,7 +556,7 @@ ccs.BoneNode = (function () {
         var BoneNodeWebGLCmd = function (node) {
             Node.WebGLRenderCmd.call(this, node);
             this._debug = false;
-            this._color = cc.color.WHITE;
+            this._color = cc.Color.WHITE;
             this._drawNode = new cc.DrawNode();
         };
 

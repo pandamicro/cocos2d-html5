@@ -100,7 +100,7 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
         this._normalTextureSize = cc.size(0, 0);
         this._pressedTextureSize = cc.size(0, 0);
         this._disabledTextureSize = cc.size(0, 0);
-        this._titleColor = cc.color.WHITE;
+        this._titleColor = cc.Color.WHITE;
         ccui.Widget.prototype.ctor.call(this);
         this.setTouchEnabled(true);
         this.init(normalImage, selectedImage, disableImage, texType);
@@ -532,7 +532,7 @@ ccui.Button = ccui.Widget.extend(/** @lends ccui.Button# */{
 
             this._titleRenderer.stopAllActions();
             if (this._scale9Enabled)
-                this._buttonNormalRenderer.setColor(cc.color.WHITE);
+                this._buttonNormalRenderer.setColor(cc.Color.WHITE);
 
             this._titleRenderer.setScaleX(1);
             this._titleRenderer.setScaleY(1);
