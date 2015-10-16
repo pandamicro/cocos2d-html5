@@ -1,36 +1,37 @@
 module('cc.find', SetupEngine);
 
 test('test', function () {
-    var MyScene = cc.Scene;
-    var MySceneWrapper = cc.Runtime.SceneWrapper;
-
-    var scene = new MyScene();
+    var scene = new cc.Scene();
     cc.director.runScene(scene);
-    cc.director.setNextScene();
 
-    var ent = new TestNode('');
-    scene.children = [ent];
+    var ent = new cc.Node();
+    cc(ent).name = '';
+    scene.addChild(ent);
 
     ok(cc.find('/') === ent, 'should found, empty name, path starts with sep');
     ok(cc.find('') === ent, 'should found, empty name');
 
-    var ent2 = new TestNode('.去');
-    scene.children = [ent, ent2];
+    var ent2 = new cc.Node('.去');
+    cc(ent2).name = '.去';
+    scene.addChild(ent2);
     ok(cc.find('/.去') === ent2, 'should found, Chinese name, path starts with sep');
     ok(cc.find('.去') === ent2, 'should found, Chinese name');
 
-    var entent = new TestNode('');
-    ent.children = [entent];
+    var entent = new cc.Node('');
+    cc(entent).name = '';
+    ent.addChild(entent);
     ok(cc.find('//') === entent, 'should found, empty name * 2');
     ok(cc.find('/', ent) === entent, 'should found by reference node, empty name * 2');
 
-    var ent2ent2 = new TestNode('Jare Guo');
-    ent2.children = [ent2ent2];
+    var ent2ent2 = new cc.Node('Jare Guo');
+    cc(ent2ent2).name = 'Jare Guo';
+    ent2.addChild(ent2ent2);
     ok(cc.find('/.去/Jare Guo') === ent2ent2, 'should found, name contains space, path starts with sep');
     ok(cc.find('.去/Jare Guo') === ent2ent2, 'should found, name contains space');
     ok(cc.find('Jare Guo', ent2) === ent2ent2, 'should found by reference node, name contains space');
 
-    var ent2ent2ent2 = new TestNode('Knox');
-    ent2ent2.children = [ent2ent2ent2];
+    var ent2ent2ent2 = new cc.Node('Knox');
+    cc(ent2ent2ent2).name = 'Knox';
+    ent2ent2.addChild(ent2ent2ent2);
     ok(cc.find('Jare Guo/Knox', ent2) === ent2ent2ent2, 'should found by reference node');
 });

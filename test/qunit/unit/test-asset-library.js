@@ -13,25 +13,29 @@
         }
     });
 
-    asyncTest('load asset with raw', function () {
-        //var texture = new cc.TextureAsset();
-        //texture.height = 123;
-        //texture.width = 321;
-        //cc.log(Editor.serialize(texture));
+    var TestHostFile = false;
 
-        AssetLibrary.loadAsset(grossini_uuid, function (err, asset) {
-            clearTimeout(timerId);
-            ok(asset, 'can load asset by uuid');
-            strictEqual(asset.width, 321, 'can get width');
-            strictEqual(asset.height, 123, 'can get height');
-            ok(asset.image, 'can get image');
-            start();
+    if (TestHostFile) {
+        asyncTest('load asset with raw', function () {
+            //var texture = new cc.TextureAsset();
+            //texture.height = 123;
+            //texture.width = 321;
+            //cc.log(Editor.serialize(texture));
+
+            AssetLibrary.loadAsset(grossini_uuid, function (err, asset) {
+                clearTimeout(timerId);
+                ok(asset, 'can load asset by uuid');
+                strictEqual(asset.width, 321, 'can get width');
+                strictEqual(asset.height, 123, 'can get height');
+                ok(asset.image, 'can get image');
+                start();
+            });
+            var timerId = setTimeout(function () {
+                ok(false, 'time out!');
+                start();
+            }, 100);
         });
-        var timerId = setTimeout(function () {
-            ok(false, 'time out!');
-            start();
-        }, 100);
-    });
+    }
 
     asyncTest('load asset with depends asset', function () {
         //var sprite = new cc.SpriteAsset();
@@ -40,10 +44,16 @@
         //cc.log(Editor.serialize(sprite));
 
         AssetLibrary.loadAsset(grossiniSprite_uuid, function (err, asset) {
+            if (err) {
+                ok(false, err.errorMessage);
+                return start();
+            }
             clearTimeout(timerId);
             ok(asset.texture, 'can load depends asset');
             strictEqual(asset.texture.height, 123, 'can get height');
-            ok(asset.texture.image, 'can load depends asset\'s host');
+            if (TestHostFile) {
+                ok(asset.texture.image, 'can load depends asset\'s host');
+            }
             start();
         });
         var timerId = setTimeout(function () {
@@ -54,6 +64,10 @@
 
     asyncTest('load asset with depends asset recursively if no cache', function () {
         AssetLibrary.loadAsset(selfReferenced_uuid, function (err, asset) {
+            if (err) {
+                ok(false, err.errorMessage);
+                return start();
+            }
             clearTimeout(timerId);
             ok(asset.texture === asset, 'asset could reference to itself');
             start();

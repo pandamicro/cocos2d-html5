@@ -190,13 +190,14 @@ cc.loader = (function () {
                     xhr.setRequestHeader("Accept-Charset", "utf-8");
                     xhr.onreadystatechange = function () {
                         if(xhr.readyState === 4)
-                            xhr.status === 200 ? cb(null, xhr.responseText) : cb({status:xhr.status, errorMessage:errInfo}, null);
+                            (xhr.status === 200 || (CC_TEST && xhr.status === 0)) ? cb(null, xhr.responseText) : cb({status:xhr.status, errorMessage:errInfo}, null);
                     };
                 } else {
                     if (xhr.overrideMimeType) xhr.overrideMimeType("text\/plain; charset=utf-8");
                     xhr.onload = function () {
-                        if(xhr.readyState === 4)
-                            xhr.status === 200 ? cb(null, xhr.responseText) : cb({status:xhr.status, errorMessage:errInfo}, null);
+                        if(xhr.readyState === 4) {
+                            (xhr.status === 200 || (CC_TEST && xhr.status === 0)) ? cb(null, xhr.responseText) : cb({status:xhr.status, errorMessage:errInfo}, null);
+                        }
                     };
                     xhr.onerror = function(){
                         cb({status:xhr.status, errorMessage:errInfo}, null);
@@ -221,7 +222,7 @@ cc.loader = (function () {
                     if (xhr.overrideMimeType) xhr.overrideMimeType("text\/plain; charset=utf-8");
                 }
                 xhr.send(null);
-                if (!xhr.readyState === 4 || xhr.status !== 200) {
+                if (!xhr.readyState === 4 || !(xhr.status === 200 || (CC_TEST && xhr.status === 0))) {
                     return null;
                 }
                 return xhr.responseText;

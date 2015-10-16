@@ -135,11 +135,11 @@
 
     test('asset reference', function () {
         var sprite = {};
-        sprite.texture = new cc.TextureAsset();
+        sprite.sprite = new cc.SpriteAsset();
 
         var clone = cc.instantiate(sprite);
 
-        strictEqual(sprite.texture, clone.texture, 'should not clone asset');
+        ok(sprite.sprite === clone.sprite, 'should not clone asset');
     });
 
     test('mixin', function () {

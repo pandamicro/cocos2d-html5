@@ -35,13 +35,11 @@ describe( 'cc.game.getIntersectionList', function () {
 
     after(function () {
         cc.director.runScene(oldScene);
-        cc.director.setNextScene();
     });
 
     beforeEach(function () {
         scene = new cc.Scene();
         cc.director.runScene(scene);
-        cc.director.setNextScene();
 
         nodes = [];
         wrappers = [];

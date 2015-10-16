@@ -189,7 +189,7 @@ var exports = {
     },
 
     unMixin: function (node, typeOrTypename) {
-        if ((cc.engine && cc.engine.isPlaying) || !CC_EDITOR) {
+        if ((cc.engine && cc.engine.isPlaying) || !(CC_EDITOR || CC_TEST)) {
             return cc.warn("cc.unMixin: Sorry, can not un-mixin when the engine is playing.");
         }
 

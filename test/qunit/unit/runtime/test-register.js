@@ -3,7 +3,8 @@ module('register');
 test('basic', function() {
     var MyNode = cc.Class();
     var MyNodeWrapper = cc.Class({
-        extends: cc.Runtime.NodeWrapper
+        extends: cc.Runtime.NodeWrapper,
+        attached: function () {}
     });
     cc.Runtime.registerNodeType(MyNode, MyNodeWrapper);
 

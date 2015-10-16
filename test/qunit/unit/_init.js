@@ -1,4 +1,4 @@
-﻿// platform definition
+﻿﻿// platform definition
 
 cc.isUnitTest = true;
 
@@ -28,217 +28,6 @@ var FO = cc.Object;
 var V2 = cc.Vec2;
 var v2 = cc.v2;
 var color = cc.fireColor;
-
-if (!cc.SpriteAsset) {
-    var Sprite = (function () {
-        var Sprite = cc.Class({
-            name: 'cc.SpriteAsset',
-            extends: cc.Asset,
-            ctor: function () {
-                var img = arguments[0];
-                if (img) {
-                    this.texture = new cc.TextureAsset(img);
-                    this.width = img.width;
-                    this.height = img.height;
-                }
-            },
-            properties: {
-                pivot: {
-                    default: new cc.Vec2(0.5, 0.5),
-                    tooltip: 'The pivot is normalized, like a percentage.\n' +
-                             '(0,0) means the bottom-left corner and (1,1) means the top-right corner.\n' +
-                             'But you can use values higher than (1,1) and lower than (0,0) too.'
-                },
-                trimX: {
-                    default: 0,
-                    type: 'Integer'
-                },
-                trimY: {
-                    default: 0,
-                    type: 'Integer'
-                },
-                width: {
-                    default: 0,
-                    type: 'Integer'
-                },
-                height: {
-                    default: 0,
-                    type: 'Integer'
-                },
-                texture: {
-                    default: null,
-                    type: cc.TextureAsset,
-                    visible: false
-                },
-                rotated: {
-                    default: false,
-                    visible: false
-                },
-                x: {
-                    default: 0,
-                    type: 'Integer',
-                    visible: false
-                },
-                y: {
-                    default: 0,
-                    type: 'Integer',
-                    visible: false
-                },
-                rawWidth: {
-                    default: 0,
-                    type: 'Integer',
-                    visible: false
-                },
-                rawHeight: {
-                    default: 0,
-                    type: 'Integer',
-                    visible: false
-                },
-                pixelLevelHitTest: {
-                    default: false,
-                    tooltip: 'Use pixel-level hit testing.'
-                },
-                alphaThreshold: {
-                    default: 0.1,
-                    tooltip: 'The highest alpha channel value that is considered opaque for hit test.',
-                    watch: {
-                        'pixelLevelHitTest': function (obj, propEL) {
-                            propEL.disabled = !obj.pixelLevelHitTest;
-                        }
-                    }
-                },
-                borderTop: {
-                    default: 0,
-                    type: 'Integer'
-                },
-                borderBottom: {
-                    default: 0,
-                    type: 'Integer'
-                },
-                borderLeft: {
-                    default: 0,
-                    type: 'Integer'
-                },
-                borderRight: {
-                    default: 0,
-                    type: 'Integer'
-                }
-            }
-        });
-
-        return Sprite;
-    })();
-
-    cc.SpriteAsset = Sprite;
-
-    cc.js.get(Sprite.prototype, 'rotatedWidth', function () {
-        return this.rotated ? this.height : this.width;
-    });
-
-    cc.js.get(Sprite.prototype, 'rotatedHeight', function () {
-        return this.rotated ? this.width : this.height;
-    });
-}
-
-if (!cc.TextureAsset) {
-    var Texture = (function () {
-        var WrapMode = cc.Enum({
-            Repeat: -1,
-            Clamp: -1
-        });
-        var FilterMode = cc.Enum({
-            Point: -1,
-            Bilinear: -1,
-            Trilinear: -1
-        });
-        var Texture = cc.Class({
-            name: 'cc.TextureAsset',
-            extends: cc.Asset,
-            ctor: function () {
-                var img = arguments[0];
-                if (img) {
-                    this.image = img;
-                    this.width = img.width;
-                    this.height = img.height;
-                }
-            },
-            properties: {
-                image: {
-                    default: null,
-                    rawType: 'image',
-                    visible: false
-                },
-                width: {
-                    default: 0,
-                    type: 'Integer',
-                    readonly: true
-                },
-                height: {
-                    default: 0,
-                    type: 'Integer',
-                    readonly: true
-                },
-                wrapMode: {
-                    default: WrapMode.Clamp,
-                    type: WrapMode,
-                    readonly: true
-                },
-                filterMode: {
-                    default: FilterMode.Bilinear,
-                    type: FilterMode,
-                    readonly: true
-                }
-            },
-            getPixel: function (x, y) {
-                if (!canvasCtxToGetPixel) {
-                    var canvas = document.createElement('canvas');
-                    canvas.width = 1;
-                    canvas.height = 1;
-                    canvasCtxToGetPixel = canvas.getContext('2d');
-                }
-                if (this.wrapMode === Texture.WrapMode.Clamp) {
-                    x = Math.clamp(x, 0, this.image.width);
-                    y = Math.clamp(y, 0, this.image.height);
-                }
-                else if (this.wrapMode === Texture.WrapMode.Repeat) {
-                    x = x % this.image.width;
-                    if (x < 0) {
-                        x += this.image.width;
-                    }
-                    y = y % this.image.width;
-                    if (y < 0) {
-                        y += this.image.width;
-                    }
-                }
-                canvasCtxToGetPixel.clearRect(0, 0, 1, 1);
-                canvasCtxToGetPixel.drawImage(this.image, x, y, 1, 1, 0, 0, 1, 1);
-
-                var imgBytes = null;
-                try {
-                    imgBytes = canvasCtxToGetPixel.getImageData(0, 0, 1, 1).data;
-                }
-                catch (e) {
-                    cc.error("An error has occurred. This is most likely due to security restrictions on reading canvas pixel data with local or cross-domain images.");
-                    return cc.Color.TRANSPARENT;
-                }
-                var result = new cc.Color();
-                result.r = imgBytes[0] / 255;
-                result.g = imgBytes[1] / 255;
-                result.b = imgBytes[2] / 255;
-                result.a = imgBytes[3] / 255;
-                return result;
-            }
-        });
-
-        Texture.WrapMode = WrapMode;
-        Texture.FilterMode = FilterMode;
-
-        return Texture;
-    })();
-    cc.TextureAsset = Texture;
-
-    var canvasCtxToGetPixel = null;
-}
 
 cc.RawTexture = cc.Class({
     name: 'cc.RawTexture',
@@ -362,7 +151,8 @@ function _resetGame (w, h) {
         cc.game.run({
             width: w,
             height: h,
-            id: 'test-canvas'
+            id: 'test-canvas',
+            debugMode: cc.DebugMode.INFO
         });
     }
     else {
@@ -401,6 +191,8 @@ function _resetGame (w, h) {
 
     cc.director.pause();
 }
+
+_resetGame(64, 64);
 
 var SetupEngine = {
     setup: function () {
