@@ -69,7 +69,7 @@ cc.Menu = cc.Layer.extend(/** @lends cc.Menu# */{
      */
     ctor: function (menuItems) {
         cc.Layer.prototype.ctor.call(this);
-        this._color = cc.color.WHITE;
+        this._color = cc.Color.WHITE;
         this.enabled = false;
         this._opacity = 255;
         this._selectedItem = null;

@@ -237,7 +237,7 @@ cc.MenuItemLabel = cc.MenuItem.extend(/** @lends cc.MenuItemLabel# */{
 
         if (label) {
             this._originalScale = 1.0;
-            this._colorBackup = cc.color.WHITE;
+            this._colorBackup = cc.Color.WHITE;
             this._disabledColor = cc.color(126, 126, 126);
             this.setLabel(label);
 
@@ -317,7 +317,7 @@ cc.MenuItemLabel = cc.MenuItem.extend(/** @lends cc.MenuItemLabel# */{
     initWithLabel: function (label, selector, target) {
         this.initWithCallback(selector, target);
         this._originalScale = 1.0;
-        this._colorBackup = cc.color.WHITE;
+        this._colorBackup = cc.Color.WHITE;
         this._disabledColor = cc.color(126, 126, 126);
         this.setLabel(label);
 
@@ -1106,7 +1106,7 @@ cc.MenuItemToggle = cc.MenuItem.extend(/** @lends cc.MenuItemToggle# */{
         this._selectedIndex = 0;
         this.subItems = [];
         this._opacity = 0;
-        this._color = cc.color.WHITE;
+        this._color = cc.Color.WHITE;
 
         if(arguments.length > 0)
             this.initWithItems(Array.prototype.slice.apply(arguments));

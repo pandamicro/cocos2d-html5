@@ -212,8 +212,8 @@ cc.EditBox = cc.ControlButton.extend({
     ctor: function (size, normal9SpriteBg, press9SpriteBg, disabled9SpriteBg) {
         cc.ControlButton.prototype.ctor.call(this);
 
-        this._textColor = cc.color.WHITE;
-        this._placeholderColor = cc.color.GRAY;
+        this._textColor = cc.Color.WHITE;
+        this._placeholderColor = cc.Color.GRAY;
         this.setContentSize(size);
         var tmpDOMSprite = this._domInputSprite = new cc.Sprite();
         tmpDOMSprite.draw = function () {};  //redefine draw function

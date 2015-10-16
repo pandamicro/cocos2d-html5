@@ -25,6 +25,7 @@
  ****************************************************************************/
 
 var JS = require('./js');
+var Enum = require('../value-types/CCEnum');
 var Utils = require('./utils');
 var _isPlainEmptyObj_DEV = Utils.isPlainEmptyObj_DEV;
 var _cloneable_DEV = Utils.cloneable_DEV;
@@ -855,11 +856,11 @@ function parseAttributes (attrs, className, propName) {
                 }
                 else {
                     if (typeof type === 'object') {
-                        if (cc.Enum.isEnum(type)) {
+                        if (Enum.isEnum(type)) {
                             result.push({
                                 type: 'Enum',
                                 expectedTypeOf: 'number',
-                                enumList: cc.Enum.getList(type)
+                                enumList: Enum.getList(type)
                             });
                         }
                         else if (CC_EDITOR) {

@@ -30,7 +30,7 @@
     };
 
     var proto = cc.ProtectedNode.WebGLRenderCmd.prototype = Object.create(cc.Node.WebGLRenderCmd.prototype);
-    cc.js.mixin(cc.ProtectedNode.RenderCmd, proto);
+    cc.js.mixin(proto, cc.ProtectedNode.RenderCmd);
     proto.constructor = cc.ProtectedNode.WebGLRenderCmd;
 
     proto.visit = function(parentCmd){

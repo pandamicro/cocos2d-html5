@@ -52,7 +52,7 @@
     };
 
     var proto = ccs.Armature.CanvasRenderCmd.prototype = Object.create(cc.Node.CanvasRenderCmd.prototype);
-    cc.js.mixin(ccs.Armature.RenderCmd, proto);
+    cc.js.mixin(proto, ccs.Armature.RenderCmd);
     proto.constructor = ccs.Armature.CanvasRenderCmd;
 
     proto._startCmdCallback = function(ctx, scaleX, scaleY){

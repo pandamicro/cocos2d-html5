@@ -30,65 +30,71 @@ var Color = (function () {
     var DefaultColors = {
         // color: [r, g, b, a]
         /**
-         * @property white
+         * @property WHITE
          * @type Color
          * @static
          */
-        white:      [255, 255, 255, 255],
+        WHITE:      [255, 255, 255, 255],
         /**
-         * @property black
+         * @property BLACK
          * @type Color
          * @static
          */
-        black:      [0, 0, 0, 255],
+        BLACK:      [0, 0, 0, 255],
         /**
-         * @property transparent
+         * @property TRANSPARENT
          * @type Color
          * @static
          */
-        transparent:[0, 0, 0, 0],
+        TRANSPARENT:[0, 0, 0, 0],
         /**
-         * @property gray
+         * @property GRAY
          * @type Color
          * @static
          */
-        gray:       [127.5, 127.5, 127.5],
+        GRAY:       [127.5, 127.5, 127.5],
         /**
-         * @property red
+         * @property RED
          * @type Color
          * @static
          */
-        red:        [255, 0, 0],
+        RED:        [255, 0, 0],
         /**
-         * @property green
+         * @property GREEN
          * @type Color
          * @static
          */
-        green:      [0, 255, 0],
+        GREEN:      [0, 255, 0],
         /**
-         * @property blue
+         * @property BLUE
          * @type Color
          * @static
          */
-        blue:       [0, 0, 255],
+        BLUE:       [0, 0, 255],
         /**
-         * @property yellow
+         * @property YELLOW
          * @type Color
          * @static
          */
-        yellow:     [255, 235, 4],
+        YELLOW:     [255, 235, 4],
         /**
-         * @property cyan
+         * @property ORANGE
          * @type Color
          * @static
          */
-        cyan:       [0, 255, 255],
+        ORANGE:     [255, 127, 0],
         /**
-         * @property magenta
+         * @property CYAN
          * @type Color
          * @static
          */
-        magenta:    [255, 0, 255]
+        CYAN:       [0, 255, 255],
+        /**
+         * @property MAGENTA
+         * @type Color
+         * @static
+         */
+        MAGENTA:    [255, 0, 255]
     };
     for (var colorName in DefaultColors) {
         var colorGetter = (function (r, g, b, a) {
@@ -487,3 +493,5 @@ cc.colorToHex = function (color) {
     var hR = color.r.toString(16), hG = color.g.toString(16), hB = color.b.toString(16);
     return "#" + (color.r < 16 ? ("0" + hR) : hR) + (color.g < 16 ? ("0" + hG) : hG) + (color.b < 16 ? ("0" + hB) : hB);
 };
+
+module.exports = cc.Color;

@@ -164,7 +164,7 @@
         this._clippingRectDirty = false;
     };
     var proto = cc.LayerGradient.WebGLRenderCmd.prototype = Object.create(cc.LayerColor.WebGLRenderCmd.prototype);
-    cc.js.mixin(cc.LayerGradient.RenderCmd, proto);
+    cc.js.mixin(proto, cc.LayerGradient.RenderCmd);
     proto.constructor = cc.LayerGradient.WebGLRenderCmd;
 
     proto._syncStatus = function (parentCmd) {

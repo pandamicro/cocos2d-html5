@@ -6,7 +6,7 @@
     <target name="compile">
         <jscomp compilationLevel="simple" warning="quiet"
                 debug="false" output="./../lib/cocos2d-js-v3.9-min.js"
-            sourceMapOutputFile="./../lib/cocos2d-js-v3.9-sourcemap" sourceMapFormat="V3" >
+                sourceMapOutputFile="./../lib/cocos2d-js-v3.9-sourcemap" sourceMapFormat="V3" >
             <sources dir="./../">
                 <file name="Base64Images.js"/>
                 <file name="CCBoot.js"/>
@@ -22,8 +22,6 @@
                 <file name="cocos2d/core/platform/CCEGLView.js"/>
                 <file name="cocos2d/core/platform/CCScreen.js"/>
                 <file name="cocos2d/core/platform/CCVisibleRect.js"/>
-                <file name="cocos2d/core/platform/CCInputManager.js"/>
-                <file name="cocos2d/core/platform/CCInputExtension.js"/>
                 <file name="cocos2d/core/support/CCPointExtension.js"/>
                 <file name="cocos2d/core/support/CCVertex.js"/>
                 <file name="cocos2d/core/support/TransformUtils.js"/>
@@ -309,7 +307,6 @@
                 <file name="cocos2d/core/platform/CCMacro.js"/>
                 <file name="cocos2d/core/platform/CCEGLView.js"/>
                 <file name="cocos2d/core/platform/CCVisibleRect.js"/>
-                <file name="cocos2d/core/platform/CCInputManager.js"/>
                 <file name="cocos2d/core/support/CCPointExtension.js"/>
                 <file name="cocos2d/core/event-manager/CCTouch.js"/>
                 <file name="cocos2d/core/event-manager/CCEvent.js"/>

@@ -219,7 +219,7 @@ if (!cc.TextureAsset) {
                 }
                 catch (e) {
                     cc.error("An error has occurred. This is most likely due to security restrictions on reading canvas pixel data with local or cross-domain images.");
-                    return cc.Color.transparent;
+                    return cc.Color.TRANSPARENT;
                 }
                 var result = new cc.Color();
                 result.r = imgBytes[0] / 255;

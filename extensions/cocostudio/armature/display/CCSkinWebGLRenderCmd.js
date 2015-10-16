@@ -29,7 +29,7 @@
     };
 
     var proto = ccs.Skin.WebGLRenderCmd.prototype = Object.create(cc.Sprite.WebGLRenderCmd.prototype);
-    cc.js.mixin(ccs.Skin.RenderCmd, proto);
+    cc.js.mixin(proto, ccs.Skin.RenderCmd);
     proto.constructor = ccs.Skin.WebGLRenderCmd;
 
     proto.updateTransform = function(){

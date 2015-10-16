@@ -46,7 +46,7 @@
                     if (locParent && locParent._cascadeColorEnabled)
                         parentColor = locParent.getDisplayedColor();
                     else
-                        parentColor = cc.color.WHITE;
+                        parentColor = cc.Color.WHITE;
                 }
                 locDispColor.r = 0 | (locRealColor.r * parentColor.r / 255.0);
                 locDispColor.g = 0 | (locRealColor.g * parentColor.g / 255.0);
@@ -145,7 +145,7 @@
     };
 
     var proto = cc.ProtectedNode.CanvasRenderCmd.prototype = Object.create(cc.Node.CanvasRenderCmd.prototype);
-    cc.js.mixin(cc.ProtectedNode.RenderCmd, proto);
+    cc.js.mixin(proto, cc.ProtectedNode.RenderCmd);
     proto.constructor = cc.ProtectedNode.CanvasRenderCmd;
 
     proto.visit = function(parentCmd){

@@ -209,7 +209,7 @@ cc.ControlSlider = cc.Control.extend(/** @lends cc.ControlSlider# */{
 
     sliderBegan:function (location) {
         this.setSelected(true);
-        this._thumbSprite.setColor(cc.color.GRAY);
+        this._thumbSprite.setColor(cc.Color.GRAY);
         this.setValue(this.valueForLocation(location));
     },
     sliderMoved:function (location) {
@@ -219,7 +219,7 @@ cc.ControlSlider = cc.Control.extend(/** @lends cc.ControlSlider# */{
         if (this.isSelected()) {
             this.setValue(this.valueForLocation(this._thumbSprite.getPosition()));
         }
-        this._thumbSprite.setColor(cc.color.WHITE);
+        this._thumbSprite.setColor(cc.Color.WHITE);
         this.setSelected(false);
     },
 

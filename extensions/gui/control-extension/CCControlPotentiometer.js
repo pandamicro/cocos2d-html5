@@ -221,7 +221,7 @@ cc.ControlPotentiometer = cc.Control.extend(/** @lends cc.ControlPotentiometer# 
 
     potentiometerBegan:function (location) {
         this.setSelected(true);
-        this.getThumbSprite().setColor(cc.color.GRAY);
+        this.getThumbSprite().setColor(cc.Color.GRAY);
     },
 
     potentiometerMoved:function (location) {
@@ -241,7 +241,7 @@ cc.ControlPotentiometer = cc.Control.extend(/** @lends cc.ControlPotentiometer# 
     },
 
     potentiometerEnded:function (location) {
-        this.getThumbSprite().setColor(cc.color.WHITE);
+        this.getThumbSprite().setColor(cc.Color.WHITE);
         this.setSelected(false);
     },
     setThumbSprite:function (sprite) {

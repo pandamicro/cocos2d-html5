@@ -30,7 +30,7 @@
         cc.Node.WebGLRenderCmd.call(this, renderableObject);
         this._needDraw = true;
         this._textureAtlas = null;
-        this._colorUnmodified = cc.color.WHITE;
+        this._colorUnmodified = cc.Color.WHITE;
         this._colorF32Array = null;
         this._uniformColor = null;
 
@@ -71,7 +71,7 @@
         var node = this._node;
         node._itemWidth = tileWidth;
         node._itemHeight = tileHeight;
-        this._colorUnmodified = cc.color.WHITE;
+        this._colorUnmodified = cc.Color.WHITE;
         node._opacityModifyRGB = true;
 
         node._blendFunc.src = cc.BLEND_SRC;

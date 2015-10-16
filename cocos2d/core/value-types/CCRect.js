@@ -425,3 +425,5 @@ cc.rectIntersection = function (rectA, rectB) {
     intersection.height = Math.min(cc.rectGetMaxY(rectA), cc.rectGetMaxY(rectB)) - cc.rectGetMinY(intersection);
     return intersection;
 };
+
+module.exports = cc.Rect;

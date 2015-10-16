@@ -32,7 +32,7 @@
     };
 
     var proto = ccs.Armature.WebGLRenderCmd.prototype = Object.create(cc.Node.WebGLRenderCmd.prototype);
-    cc.js.mixin(ccs.Armature.RenderCmd, proto);
+    cc.js.mixin(proto, ccs.Armature.RenderCmd);
     proto.constructor = ccs.Armature.WebGLRenderCmd;
 
     proto.rendering = function (ctx, dontChangeMatrix) {

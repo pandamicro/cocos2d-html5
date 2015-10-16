@@ -67,9 +67,10 @@ var isCoreLevel = CC_EDITOR && Editor.isCoreLevel;
 
 // PRELOAD SOME MODULES FOR COCOS
 
-require('./cocos2d/core/platform/CCEnum');
 require('./cocos2d/core/platform/js');
 require('./cocos2d/core/value-types');
+require('./cocos2d/core/platform/CCInputManager');
+require('./cocos2d/core/platform/CCInputExtension');
 require('./CCDebugger');
 
 if (!isCoreLevel) {

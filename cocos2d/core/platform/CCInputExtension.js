@@ -23,14 +23,14 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-var _p = cc.inputManager;
+var inputManager = require("./CCInputManager");
 
 /**
  * whether enable accelerometer event
  * @function
  * @param {Boolean} isEnable
  */
-_p.setAccelerometerEnabled = function(isEnable){
+inputManager.setAccelerometerEnabled = function(isEnable){
     var _t = this;
     if(_t._accelEnabled === isEnable)
         return;
@@ -51,26 +51,26 @@ _p.setAccelerometerEnabled = function(isEnable){
  * @function
  * @param {Number} interval
  */
-_p.setAccelerometerInterval = function(interval){
+inputManager.setAccelerometerInterval = function(interval){
     if (this._accelInterval !== interval) {
         this._accelInterval = interval;
     }
 };
 
-_p._registerKeyboardEvent = function(){
-    cc._canvas.addEventListener("keydown", function (e) {
+inputManager._registerKeyboardEvent = function(){
+    cc.game.canvas.addEventListener("keydown", function (e) {
         cc.eventManager.dispatchEvent(new cc.EventKeyboard(e.keyCode, true));
         e.stopPropagation();
         e.preventDefault();
     }, false);
-    cc._canvas.addEventListener("keyup", function (e) {
+    cc.game.canvas.addEventListener("keyup", function (e) {
         cc.eventManager.dispatchEvent(new cc.EventKeyboard(e.keyCode, false));
         e.stopPropagation();
         e.preventDefault();
     }, false);
 };
 
-_p._registerAccelerometerEvent = function(){
+inputManager._registerAccelerometerEvent = function(){
     var w = window, _t = this;
     _t._acceleration = new cc.Acceleration();
     _t._accelDeviceEvent = w.DeviceMotionEvent || w.DeviceOrientationEvent;
@@ -88,7 +88,7 @@ _p._registerAccelerometerEvent = function(){
     w.addEventListener(_deviceEventType, _t.didAccelerate.bind(_t), false);
 };
 
-_p.didAccelerate = function (eventData) {
+inputManager.didAccelerate = function (eventData) {
     var _t = this, w = window;
     if (!_t._accelEnabled)
         return;
@@ -120,16 +120,14 @@ _p.didAccelerate = function (eventData) {
     mAcceleration.timestamp = eventData.timeStamp || Date.now();
 
     var tmpX = mAcceleration.x;
-    if(w.orientation === cc.UIInterfaceOrientationLandscapeRight){
+    if(w.orientation === cc.UIOrientation.LANDSCAPE_RIGHT){
         mAcceleration.x = -mAcceleration.y;
         mAcceleration.y = tmpX;
-    }else if(w.orientation === cc.UIInterfaceOrientationLandscapeLeft){
+    }else if(w.orientation === cc.UIOrientation.LANDSCAPE_LEFT){
         mAcceleration.x = mAcceleration.y;
         mAcceleration.y = -tmpX;
-    }else if(w.orientation === cc.UIInterfaceOrientationPortraitUpsideDown){
+    }else if(w.orientation === cc.UIOrientation.PORTRAIT_UPSIDE_DOWN){
         mAcceleration.x = -mAcceleration.x;
         mAcceleration.y = -mAcceleration.y;
     }
 };
-
-delete _p;

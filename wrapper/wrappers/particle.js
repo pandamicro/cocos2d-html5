@@ -759,7 +759,7 @@ var ParticleWrapper = cc.Class({
         var attr = cc.Class.attr(ParticleWrapper, property);
 
         if (attr.ctor === cc.Color) {
-            this[property] = value ? new cc.Color(value[0], value[1], value[2], value[3]) : cc.Color.white;;
+            this[property] = value ? new cc.Color(value[0], value[1], value[2], value[3]) : cc.Color.WHITE;;
         }
         else if(attr.ctor === cc.Vec2) {
             this[property] = value ? new cc.Vec2(value[0], value[1]) : cc.Vec2.zero;
