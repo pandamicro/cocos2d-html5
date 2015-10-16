@@ -182,9 +182,9 @@ gulp.task('compile-cocos2d', function (done) {
 });
 
 gulp.task('build-modular-cocos2d', ['compile-cocos2d'], function () {
-    var header = new Buffer('(function (cc, ccui) {');
+    var header = new Buffer('(function (cc, ccui, ccs, sp, cp) {');
     var footer = new Buffer(/*'\n(' + modularity + ')();\n' +*/
-                            '\n}).call(window, cc, ccui);\n');
+                            '\n}).call(window, cc, ccui, ccs, sp, cp);\n');
 
     function wrap (header, footer) {
         return es.through(function (file) {

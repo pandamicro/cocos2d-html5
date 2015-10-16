@@ -76,6 +76,9 @@ require('./CCDebugger');
 if (!isCoreLevel) {
     // LOAD ORIGIN COCOS2D COMPILED BY CLOSURE
     root.ccui = {};
+    root.ccs = {};
+    root.sp = {};
+    root.cp = {};
     require('./bin/modular-cocos2d');
 }
 else {
