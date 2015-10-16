@@ -136,74 +136,70 @@ if (CC_DEV) {
 
     /**
      * Verify Array's Type
+     * @memberof cc
+     * @deprecated
      * @param {Array} arr
      * @param {function} type
      * @return {Boolean}
      * @function
      */
-    cc.arrayVerifyType = function (arr, type) {
-        if (arr && arr.length > 0) {
-            for (var i = 0; i < arr.length; i++) {
-                if (!(arr[i] instanceof  type)) {
-                    cc.log("element type is wrong!");
-                    return false;
-                }
-            }
-        }
-        return true;
-    };
+    js.get(cc, 'arrayVerifyType', function () {
+        cc.warn(INFO, 'cc.arrayVerifyType', 'cc.js.array.verifyType');
+        return cc.js.array.verifyType;
+    });
 
     /**
      * Searches for the first occurance of object and removes it. If object is not found the function has no effect.
      * @function
+     * @memberof cc
+     * @deprecated
      * @param {Array} arr Source Array
      * @param {*} delObj  remove object
      */
-    cc.arrayRemoveObject = function (arr, delObj) {
-        for (var i = 0, l = arr.length; i < l; i++) {
-            if (arr[i] === delObj) {
-                arr.splice(i, 1);
-                break;
-            }
-        }
-    };
+    js.get(cc, 'arrayRemoveObject', function () {
+        cc.warn(INFO, 'cc.arrayRemoveObject', 'cc.js.array.remove');
+        return cc.js.array.remove;
+    });
 
     /**
      * Removes from arr all values in minusArr. For each Value in minusArr, the first matching instance in arr will be removed.
      * @function
+     * @memberof cc
+     * @deprecated
      * @param {Array} arr Source Array
      * @param {Array} minusArr minus Array
      */
-    cc.arrayRemoveArray = function (arr, minusArr) {
-        for (var i = 0, l = minusArr.length; i < l; i++) {
-            cc.arrayRemoveObject(arr, minusArr[i]);
-        }
-    };
+    js.get(cc, 'arrayRemoveArray', function () {
+        cc.warn(INFO, 'cc.arrayRemoveArray', 'cc.js.array.removeArray');
+        return cc.js.array.removeArray;
+    });
 
     /**
      * Inserts some objects at index
      * @function
+     * @memberof cc
+     * @deprecated
      * @param {Array} arr
      * @param {Array} addObjs
      * @param {Number} index
      * @return {Array}
      */
-    cc.arrayAppendObjectsToIndex = function(arr, addObjs,index){
-        arr.splice.apply(arr, [index, 0].concat(addObjs));
-        return arr;
-    };
+    js.get(cc, 'arrayAppendObjectsToIndex', function() {
+        cc.warn(INFO, 'cc.arrayAppendObjectsToIndex', 'cc.js.array.appendObjectsAt');
+        return cc.js.array.appendObjectsAt;
+    });
 
     /**
      * Copy an array's item to a new array (its performance is better than Array.slice)
+     * @memberof cc
+     * @deprecated
      * @param {Array} arr
      * @return {Array}
      */
-    cc.copyArray = function(arr){
-        var i, len = arr.length, arr_clone = new Array(len);
-        for (i = 0; i < len; i += 1)
-            arr_clone[i] = arr[i];
-        return arr_clone;
-    };
+    js.get(cc, 'copyArray', function() {
+        cc.warn(INFO, 'cc.copyArray', 'cc.js.array.copy');
+        return cc.js.array.copy;
+    });
 
     function deprecateEnum (obj, oldPath, newPath, hasTypePrefixBefore) {
         hasTypePrefixBefore = hasTypePrefixBefore !== false;

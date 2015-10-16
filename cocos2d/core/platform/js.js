@@ -602,7 +602,7 @@ js.array = {
      * @param {Number} index
      * @return {Array}
      */
-    appendObjectsToIndex: function(array, addObjs, index){
+    appendObjectsAt: function(array, addObjs, index) {
         array.splice.apply(array, [index, 0].concat(addObjs));
         return array;
     },
@@ -612,7 +612,7 @@ js.array = {
      * @param {Array} array
      * @return {Array}
      */
-    copy: function(array){
+    copy: function(array) {
         var i, len = array.length, arr_clone = new Array(len);
         for (i = 0; i < len; i += 1)
             arr_clone[i] = array[i];
