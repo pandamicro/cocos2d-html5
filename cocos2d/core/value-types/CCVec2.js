@@ -483,3 +483,5 @@ cc.p = cc.v2;
 cc.pointEqualToPoint = function (point1, point2) {
     return point1 && point2 && (point1.x === point2.x) && (point1.y === point2.y);
 };
+
+module.exports = cc.Vec2;

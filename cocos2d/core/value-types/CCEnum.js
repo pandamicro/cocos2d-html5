@@ -127,3 +127,5 @@ if (CC_DEV) {
                  'please report this error here: https://github.com/fireball-x/fireball/issues/new');
     }
 }
+
+module.exports = cc.Enum;

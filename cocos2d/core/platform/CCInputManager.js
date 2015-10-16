@@ -23,30 +23,19 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-/**
- * ignore
- */
+Enum = require("../value-types/CCEnum");
 
 /**
- * @constant
- * @type {number}
+ * Enum for UIOrientation.
+ * @readonly
+ * @enum {Number}
  */
-cc.UIInterfaceOrientationLandscapeLeft = -90;
-/**
- * @constant
- * @type {number}
- */
-cc.UIInterfaceOrientationLandscapeRight = 90;
-/**
- * @constant
- * @type {number}
- */
-cc.UIInterfaceOrientationPortraitUpsideDown = 180;
-/**
- * @constant
- * @type {number}
- */
-cc.UIInterfaceOrientationPortrait = 0;
+cc.UIOrientation = cc.Enum({
+    PORTRAIT: 0,
+    LANDSCAPE_LEFT: -90,
+    LANDSCAPE_RIGHT: 90,
+    PORTRAIT_UPSIDE_DOWN: 180,
+});
 
 /**
  * <p>
@@ -55,7 +44,7 @@ cc.UIInterfaceOrientationPortrait = 0;
  * @class
  * @name cc.inputManager
  */
-cc.inputManager = /** @lends cc.inputManager# */{
+var inputManager = /** @lends cc.inputManager# */{
     _mousePressed: false,
 
     _isRegisterEvent: false,
@@ -413,12 +402,11 @@ cc.inputManager = /** @lends cc.inputManager# */{
 
         //register touch event
         if (supportMouse) {
-            window.addEventListener('mousedown', function () {
+            !prohibition && window.addEventListener('mousedown', function () {
                 selfPointer._mousePressed = true;
             }, false);
 
-            window.addEventListener('mouseup', function (event) {
-                if(prohibition) return;
+            !prohibition && window.addEventListener('mouseup', function (event) {
                 var savePressed = selfPointer._mousePressed;
                 selfPointer._mousePressed = false;
 
@@ -437,8 +425,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
             }, false);
 
             //register canvas mouse event
-            element.addEventListener("mousedown", function (event) {
-                if(prohibition) return;
+            !prohibition && element.addEventListener("mousedown", function (event) {
                 selfPointer._mousePressed = true;
 
                 var pos = selfPointer.getHTMLElementPosition(element);
@@ -455,8 +442,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
                 element.focus();
             }, false);
 
-            element.addEventListener("mouseup", function (event) {
-                if(prohibition) return;
+            !prohibition && element.addEventListener("mouseup", function (event) {
                 selfPointer._mousePressed = false;
 
                 var pos = selfPointer.getHTMLElementPosition(element);
@@ -472,9 +458,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
                 event.preventDefault();
             }, false);
 
-            element.addEventListener("mousemove", function (event) {
-                if(prohibition) return;
-
+            !prohibition && element.addEventListener("mousemove", function (event) {
                 var pos = selfPointer.getHTMLElementPosition(element);
                 var location = selfPointer.getPointByEvent(event, pos);
 
@@ -614,3 +598,7 @@ cc.inputManager = /** @lends cc.inputManager# */{
         this._accelCurTime += dt;
     }
 };
+
+cc.inputManager = inputManager;
+
+module.exports = inputManager;

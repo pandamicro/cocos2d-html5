@@ -25,7 +25,6 @@
  ****************************************************************************/
 
 require('./js');
-require('./CCEnum');
 require('./CCClass');
 require('./CCObject');
 require('./callbacks-invoker');

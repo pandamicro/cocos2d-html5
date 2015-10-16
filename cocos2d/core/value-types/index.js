@@ -1,4 +1,5 @@
 require('./CCValueType');
+require('./CCEnum');
 require('./CCVec2');
 require('./CCSize');
 require('./CCRect');

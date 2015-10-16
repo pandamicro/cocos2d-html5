@@ -43,3 +43,5 @@ cc.size = function (w, h) {
 cc.sizeEqualToSize = function (size1, size2) {
     return (size1 && size2 && (size1.width === size2.width) && (size1.height === size2.height));
 };
+
+module.exports = cc.Size;
