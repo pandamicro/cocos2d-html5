@@ -25,7 +25,7 @@ var ERR_NaN = 'The %s must not be NaN';
  * @param {RuntimeNode} node
  */
 var NodeWrapper = cc.Class({
-    name: 'cc.Runtime.NodeWrapper',
+    name: 'cc.NodeWrapper',
     extends: cc.Object,
 
     ctor: function () {

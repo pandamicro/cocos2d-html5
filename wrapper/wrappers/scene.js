@@ -12,7 +12,7 @@ var NodeWrapper = require('./node');
  * @param {RuntimeNode} node - The root node of current stage.
  */
 var SceneWrapper = cc.Class({
-    name: 'cc.Runtime.SceneWrapper',
+    name: 'cc.SceneWrapper',
     extends: NodeWrapper,
     ctor: function () {
         this._dataToDeserialize = null;
