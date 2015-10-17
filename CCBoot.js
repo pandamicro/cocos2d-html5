@@ -196,10 +196,9 @@ cc.formatStr = function(){
     return str;
 };
 
-require('../cocos2d/core/utils/Async');
+require('../cocos2d/core/utils');
 require('../cocos2d/core/platform/CCLoader');
 require('../cocos2d/core/platform/CCSys');
-require('../cocos2d/core/utils/CCPath');
 
 require('../cocos2d/core/CCGame');
 

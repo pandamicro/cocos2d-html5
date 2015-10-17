@@ -41,7 +41,6 @@
         ],
         "core" : [
             "cocos2d/core/event-manager/CCEventHelper.js",
-            "cocos2d/core/utils/BinaryLoader.js",
             "Base64Images.js",
             "cocos2d/core/platform/CCClass.js",
             "cocos2d/core/platform/CCCommon.js",
@@ -116,9 +115,7 @@
             "cocos2d/core/labelttf/CCLabelTTFCanvasRenderCmd.js",
             "cocos2d/core/labelttf/CCLabelTTFWebGLRenderCmd.js",
 
-            "cocos2d/core/CCActionManager.js",
-            
-            "cocos2d/core/utils/CCProfiler.js"
+            "cocos2d/core/CCActionManager.js"
         ],
         "effects" : [
             "core",

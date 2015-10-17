@@ -69,8 +69,11 @@ var isCoreLevel = CC_EDITOR && Editor.isCoreLevel;
 
 require('./cocos2d/core/platform/js');
 require('./cocos2d/core/value-types');
+require('./cocos2d/core/utils');
 require('./cocos2d/core/platform/CCInputManager');
 require('./cocos2d/core/platform/CCInputExtension');
+require('./cocos2d/core/platform/CCSys');
+require('./cocos2d/core/platform/CCLoader');
 require('./CCDebugger');
 
 if (!isCoreLevel) {
@@ -84,7 +87,6 @@ if (!isCoreLevel) {
 else {
     // load modules for editor's core-level which included in modular-cocos2d.js
     cc._initDebugSetting(1);    // DEBUG_MODE_INFO
-    require('./cocos2d/core/platform/CCSys');
 }
 
 // LOAD EXTENDS FOR FIREBALL
