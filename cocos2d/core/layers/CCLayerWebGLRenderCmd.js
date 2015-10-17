@@ -60,15 +60,15 @@
         _t._squareColorsAB = new ArrayBuffer(16);
 
         var locSquareVerticesAB = _t._squareVerticesAB, locSquareColorsAB = _t._squareColorsAB;
-        var locVertex2FLen = cc.Vertex2F.BYTES_PER_ELEMENT, locColorLen = cc.Color.BYTES_PER_ELEMENT;
+        var locVertex2FLen = cc.Vertex2F.BYTES_PER_ELEMENT, locColorLen = cc.WebGLColor.BYTES_PER_ELEMENT;
         _t._squareVertices = [new cc.Vertex2F(0, 0, locSquareVerticesAB, 0),
             new cc.Vertex2F(0, 0, locSquareVerticesAB, locVertex2FLen),
             new cc.Vertex2F(0, 0, locSquareVerticesAB, locVertex2FLen * 2),
             new cc.Vertex2F(0, 0, locSquareVerticesAB, locVertex2FLen * 3)];
-        _t._squareColors = [cc.color(0, 0, 0, 255, locSquareColorsAB, 0),
-            cc.color(0, 0, 0, 255, locSquareColorsAB, locColorLen),
-            cc.color(0, 0, 0, 255, locSquareColorsAB, locColorLen * 2),
-            cc.color(0, 0, 0, 255, locSquareColorsAB, locColorLen * 3)];
+        _t._squareColors = [new cc.WebGLColor(0, 0, 0, 255, locSquareColorsAB, 0),
+            new cc.WebGLColor(0, 0, 0, 255, locSquareColorsAB, locColorLen),
+            new cc.WebGLColor(0, 0, 0, 255, locSquareColorsAB, locColorLen * 2),
+            new cc.WebGLColor(0, 0, 0, 255, locSquareColorsAB, locColorLen * 3)];
         _t._verticesFloat32Buffer = cc._renderContext.createBuffer();
         _t._colorsUint8Buffer = cc._renderContext.createBuffer();
     };
@@ -216,10 +216,10 @@
         locColors.length = 0;
 
         var locSquareVerticesAB = this._squareVerticesAB, locSquareColorsAB = this._squareColorsAB;
-        var locVertex2FLen = cc.Vertex2F.BYTES_PER_ELEMENT, locColorLen = cc.Color.BYTES_PER_ELEMENT;
+        var locVertex2FLen = cc.Vertex2F.BYTES_PER_ELEMENT, locColorLen = cc.WebGLColor.BYTES_PER_ELEMENT;
         for(i = 0; i < verticesLen; i++){
             locVertices.push(new cc.Vertex2F(0, 0, locSquareVerticesAB, locVertex2FLen * i));
-            locColors.push(cc.color(0, 0, 0, 255, locSquareColorsAB, locColorLen * i))
+            locColors.push(new cc.WebGLColor(0, 0, 0, 255, locSquareColorsAB, locColorLen * i))
         }
 
         //init vertex

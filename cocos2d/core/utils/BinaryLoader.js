@@ -24,6 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+require('../platform/CCLoader');
 
 /**
  * Load binary data by url.

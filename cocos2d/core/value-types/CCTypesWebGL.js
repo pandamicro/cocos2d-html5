@@ -36,8 +36,8 @@
  * @param {Number} offset
  * @constructor
  */
-WebGLColor = function (r, g, b, a, arrayBuffer, offset) {
-    this._arrayBuffer = arrayBuffer || new ArrayBuffer(WebGLColor.BYTES_PER_ELEMENT);
+cc.WebGLColor = function (r, g, b, a, arrayBuffer, offset) {
+    this._arrayBuffer = arrayBuffer || new ArrayBuffer(cc.WebGLColor.BYTES_PER_ELEMENT);
     this._offset = offset || 0;
 
     var locArrayBuffer = this._arrayBuffer, locOffset = this._offset, locElementLen = Uint8Array.BYTES_PER_ELEMENT;
@@ -58,8 +58,8 @@ WebGLColor = function (r, g, b, a, arrayBuffer, offset) {
  * @constant
  * @type {number}
  */
-WebGLColor.BYTES_PER_ELEMENT = 4;
-var _p = WebGLColor.prototype;
+cc.WebGLColor.BYTES_PER_ELEMENT = 4;
+var _p = cc.WebGLColor.prototype;
 _p._getR = function () {
     return this._rU8[0];
 };
@@ -345,10 +345,10 @@ cc.V3F_C4B_T2F = function (vertices, colors, texCoords, arrayBuffer, offset) {
     var locArrayBuffer = this._arrayBuffer, locOffset = this._offset, locElementLen = cc.Vertex3F.BYTES_PER_ELEMENT;
     this._vertices = vertices ? new cc.Vertex3F(vertices.x, vertices.y, vertices.z, locArrayBuffer, locOffset) :
         new cc.Vertex3F(0, 0, 0, locArrayBuffer, locOffset);
-    this._colors = colors ? new WebGLColor(colors.r, colors.g, colors.b, colors.a, locArrayBuffer, locOffset + locElementLen) :
-        new WebGLColor(0, 0, 0, 0, locArrayBuffer, locOffset + locElementLen);
-    this._texCoords = texCoords ? new cc.Tex2F(texCoords.u, texCoords.v, locArrayBuffer, locOffset + locElementLen + WebGLColor.BYTES_PER_ELEMENT) :
-        new cc.Tex2F(0, 0, locArrayBuffer, locOffset + locElementLen + WebGLColor.BYTES_PER_ELEMENT);
+    this._colors = colors ? new cc.WebGLColor(colors.r, colors.g, colors.b, colors.a, locArrayBuffer, locOffset + locElementLen) :
+        new cc.WebGLColor(0, 0, 0, 0, locArrayBuffer, locOffset + locElementLen);
+    this._texCoords = texCoords ? new cc.Tex2F(texCoords.u, texCoords.v, locArrayBuffer, locOffset + locElementLen + cc.WebGLColor.BYTES_PER_ELEMENT) :
+        new cc.Tex2F(0, 0, locArrayBuffer, locOffset + locElementLen + cc.WebGLColor.BYTES_PER_ELEMENT);
 };
 /**
  * @constant
@@ -548,10 +548,10 @@ cc.V2F_C4B_T2F = function (vertices, colors, texCoords, arrayBuffer, offset) {
     var locArrayBuffer = this._arrayBuffer, locOffset = this._offset, locElementLen = cc.Vertex2F.BYTES_PER_ELEMENT;
     this._vertices = vertices ? new cc.Vertex2F(vertices.x, vertices.y, locArrayBuffer, locOffset) :
         new cc.Vertex2F(0, 0, locArrayBuffer, locOffset);
-    this._colors = colors ? WebGLColor(colors.r, colors.g, colors.b, colors.a, locArrayBuffer, locOffset + locElementLen) :
-        WebGLColor(0, 0, 0, 0, locArrayBuffer, locOffset + locElementLen);
-    this._texCoords = texCoords ? new cc.Tex2F(texCoords.u, texCoords.v, locArrayBuffer, locOffset + locElementLen + WebGLColor.BYTES_PER_ELEMENT) :
-        new cc.Tex2F(0, 0, locArrayBuffer, locOffset + locElementLen + WebGLColor.BYTES_PER_ELEMENT);
+    this._colors = colors ? new cc.WebGLColor(colors.r, colors.g, colors.b, colors.a, locArrayBuffer, locOffset + locElementLen) :
+        new cc.WebGLColor(0, 0, 0, 0, locArrayBuffer, locOffset + locElementLen);
+    this._texCoords = texCoords ? new cc.Tex2F(texCoords.u, texCoords.v, locArrayBuffer, locOffset + locElementLen + cc.WebGLColor.BYTES_PER_ELEMENT) :
+        new cc.Tex2F(0, 0, locArrayBuffer, locOffset + locElementLen + cc.WebGLColor.BYTES_PER_ELEMENT);
 };
 
 /**

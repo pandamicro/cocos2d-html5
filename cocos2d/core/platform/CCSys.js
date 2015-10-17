@@ -737,3 +737,5 @@ sys.dump = function () {
 sys.openURL = function(url){
     window.open(url);
 };
+
+module.exports = sys;

@@ -152,3 +152,5 @@ cc.profiler = (function () {
 
     return profiler;
 })();
+
+module.exports = cc.profiler;

@@ -214,6 +214,9 @@ cc.game = /** @lends cc.game# */{
                     if (cb) cb();
                 });
             }
+            else {
+                if (cb) cb();
+            }
 
             return;
         }
