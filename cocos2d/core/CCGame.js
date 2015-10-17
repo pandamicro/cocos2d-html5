@@ -248,30 +248,6 @@ cc.game = /** @lends cc.game# */{
         this.prepare(cc.game.onStart && cc.game.onStart.bind(cc.game));
     },
 
-//  @Intersection list for editor
-    getIntersectionList: function (rect) {
-        var scene = cc(cc.director.getRunningScene());
-        var list = [];
-
-        scene._deepQueryChildren(function (child) {
-
-            var bounds = child.getWorldBounds();
-
-            // if intersect aabb success, then try intersect obb
-            if (rect.intersects(bounds)) {
-                bounds = child.getWorldOrientedBounds();
-                var polygon = new cc.Polygon(bounds);
-
-                if (Editor.Intersection.rectPolygon(rect, polygon)) {
-                    list.push(child.targetN);
-                }
-            }
-
-            return true;
-        });
-
-        return list;
-    },
 
 //  @Scene Loading
     /**
@@ -619,6 +595,9 @@ cc.game = /** @lends cc.game# */{
         }
     },
 
+    // for editor
+    _onPreLaunchScene: null,
+
     /**
      * Launch loaded scene.
      * @method _launchScene
@@ -627,8 +606,6 @@ cc.game = /** @lends cc.game# */{
      * @private
      */
     _launchScene: function (scene, onBeforeLoadScene) {
-        var self = this;
-
         if (!scene) {
             cc.error('Argument must be non-nil');
             return;
@@ -665,7 +642,9 @@ cc.game = /** @lends cc.game# */{
             onBeforeLoadScene();
         }
 
-        self.emit('pre-launch-scene');
+        if (this._onPreLaunchScene) {
+            this._onPreLaunchScene();
+        }
 
         //// init scene
         //Engine._renderContext.onSceneLoaded(scene);
@@ -708,7 +687,7 @@ cc.game = /** @lends cc.game# */{
             else {
                 var uuid = scene._uuid;
                 scene = scene.scene;    // Currently our scene not inherited from Asset, so need to extract scene from dummy asset
-                if (scene instanceof SceneWrapper) {
+                if (scene instanceof cc.Runtime.SceneWrapper) {
                     scene.uuid = uuid;
                 }
                 else {
@@ -739,6 +718,6 @@ cc.game = /** @lends cc.game# */{
     //    var SceneWrapperImpl = cc(cc.director.getRunningScene()).constructor;
     //    var sceneWrapper = new SceneWrapperImpl();
     //    sceneWrapper.createAndAttachNode();
-    //    cc.engine._launchScene(sceneWrapper);
+    //    cc.game._launchScene(sceneWrapper);
     //}
 };

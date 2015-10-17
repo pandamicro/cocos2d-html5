@@ -1,5 +1,5 @@
 
-var FireUrl = CC_EDITOR && !CC_TEST && require('fire-url');
+var FireUrl = CC_EDITOR && require('fire-url');
 
 /**
  * Loader for resource loading process. It's a singleton object.
@@ -182,7 +182,7 @@ cc.loader = (function () {
          */
         loadTxt: function (url, cb) {
             if (!cc._isNodeJs) {
-                var xhr = this.getXMLHttpRequest(),
+                var xhr = this. getXMLHttpRequest(),
                     errInfo = "load " + url + " failed!";
                 xhr.open("GET", url, true);
                 if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
@@ -190,13 +190,13 @@ cc.loader = (function () {
                     xhr.setRequestHeader("Accept-Charset", "utf-8");
                     xhr.onreadystatechange = function () {
                         if(xhr.readyState === 4)
-                            (xhr.status === 200 || (CC_TEST && xhr.status === 0)) ? cb(null, xhr.responseText) : cb({status:xhr.status, errorMessage:errInfo}, null);
+                            (xhr.status === 200 || xhr.status === 0) ? cb(null, xhr.responseText) : cb({status:xhr.status, errorMessage:errInfo}, null);
                     };
                 } else {
                     if (xhr.overrideMimeType) xhr.overrideMimeType("text\/plain; charset=utf-8");
                     xhr.onload = function () {
                         if(xhr.readyState === 4) {
-                            (xhr.status === 200 || (CC_TEST && xhr.status === 0)) ? cb(null, xhr.responseText) : cb({status:xhr.status, errorMessage:errInfo}, null);
+                            (xhr.status === 200 || xhr.status === 0) ? cb(null, xhr.responseText) : cb({status:xhr.status, errorMessage:errInfo}, null);
                         }
                     };
                     xhr.onerror = function(){
@@ -222,7 +222,7 @@ cc.loader = (function () {
                     if (xhr.overrideMimeType) xhr.overrideMimeType("text\/plain; charset=utf-8");
                 }
                 xhr.send(null);
-                if (!xhr.readyState === 4 || !(xhr.status === 200 || (CC_TEST && xhr.status === 0))) {
+                if (!xhr.readyState === 4 || !(xhr.status === 200 || xhr.status === 0)) {
                     return null;
                 }
                 return xhr.responseText;

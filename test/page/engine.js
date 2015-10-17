@@ -22,7 +22,7 @@ describe( 'test engine', function () {
 });
 
 
-describe( 'cc.game.getIntersectionList', function () {
+describe( 'cc.engine.getIntersectionList', function () {
     var scene;
     var nodes;
     var wrappers;
@@ -63,14 +63,14 @@ describe( 'cc.game.getIntersectionList', function () {
 
     it( 'should get an empty array if not intersects any node', function () {
         var rect = new cc.Rect(0,0, 49,49);
-        var list = cc.game.getIntersectionList(rect);
+        var list = cc.engine.getIntersectionList(rect);
 
         expect( list.length ).to.equal( 0 );
     });
 
     it( 'should get an array with a node if intersects a node', function () {
         var rect = new cc.Rect(0,0, 50,50);
-        var list = cc.game.getIntersectionList(rect);
+        var list = cc.engine.getIntersectionList(rect);
 
         expect( list.length ).to.equal( 1 );
     });
@@ -79,7 +79,7 @@ describe( 'cc.game.getIntersectionList', function () {
         wrappers[0].rotation = 45;
 
         var rect = new cc.Rect(0,0, 64,64);
-        var list = cc.game.getIntersectionList(rect);
+        var list = cc.engine.getIntersectionList(rect);
 
         expect( list.length ).to.equal( 0 );
     });
@@ -88,7 +88,7 @@ describe( 'cc.game.getIntersectionList', function () {
         wrappers[0].rotation = 45;
 
         var rect = new cc.Rect(0,0, 65,65);
-        var list = cc.game.getIntersectionList(rect);
+        var list = cc.engine.getIntersectionList(rect);
 
         expect( list.length ).to.equal( 1 );
     });
@@ -96,7 +96,7 @@ describe( 'cc.game.getIntersectionList', function () {
     it( 'should get an array with two nodes if intersects two nodes', function () {
 
         var rect = new cc.Rect(0,0, 200,200);
-        var list = cc.game.getIntersectionList(rect);
+        var list = cc.engine.getIntersectionList(rect);
 
         expect( list.length ).to.equal( 2 );
     });

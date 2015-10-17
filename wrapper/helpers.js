@@ -7,7 +7,7 @@ module.exports = {
             cc.engine.on('post-update', this._debounceNodeEvent);
 
             // 场景重建时，有可能引用改变ID不变，这里先 flush 一下以免事件顺序错乱
-            cc.engine.on('pre-launch-scene', this._debounceNodeEvent);
+            cc.game._onPreLaunchScene = this._debounceNodeEvent;
         }
     },
 
