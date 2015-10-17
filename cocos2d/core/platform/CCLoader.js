@@ -539,6 +539,15 @@ cc.loader = (function () {
         },
 
         /**
+         * Get aliase by url.
+         * @param url
+         * @returns {*}
+         */
+        getAliase: function (url) {
+            return _aliases[url];
+        },
+
+        /**
          * Release the cache of resource by url.
          * @param url
          */
