@@ -1,6 +1,6 @@
-﻿﻿// platform definition
+﻿// platform definition
 
-cc.isUnitTest = true;
+var TestEditorExtends = typeof Editor === 'object' && Editor.serialize;
 
 // shortcuts
 

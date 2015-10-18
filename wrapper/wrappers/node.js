@@ -729,10 +729,21 @@ var NodeWrapper = cc.Class({
     setSiblingIndex: function (index) {
         if (!this.parentN) return;
 
-        cc.Runtime.NodeWrapper.prototype.setSiblingIndex.call(this, index);
-
         var siblings = this.parentN.children;
-        for (var i=0; i<siblings.length; i++) {
+        var item = this.targetN;
+        index = index !== -1 ? index : siblings.length - 1;
+        var oldIndex = siblings.indexOf(item);
+        if (index !== oldIndex) {
+            siblings.splice(oldIndex, 1);
+            if (index < siblings.length) {
+                siblings.splice(index, 0, item);
+            }
+            else {
+                siblings.push(item);
+            }
+        }
+
+        for (var i = 0; i < siblings.length; i++) {
             siblings[i].setOrderOfArrival(i);
         }
 

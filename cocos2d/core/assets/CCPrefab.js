@@ -41,7 +41,7 @@ var Prefab = cc.Class({
 
         newWrapper._onAfterInstantiate();
 
-        if (CC_EDITOR) {
+        if (CC_EDITOR || CC_TEST) {
             Editor.PrefabUtils.onPrefabInstantiated(this, newWrapper);
         }
 

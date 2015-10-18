@@ -28,7 +28,8 @@
 var JS = require('./js');
 var CCObject = require('./CCObject');
 
-var ENABLE_TARGET = CC_EDITOR;
+var EDITOR = CC_EDITOR || CC_TEST;
+var ENABLE_TARGET = EDITOR;
 
 // HELPERS
 
@@ -117,7 +118,7 @@ var Details = function () {
 
     this.wrapperToNode = new W2NMapper();
 
-    if (CC_EDITOR) {
+    if (EDITOR) {
         /**
          * 用户可以指定一个在反序列化结束时会被触发的回调，该回调会传回反序列化时统计到的所有解析过的字段。
          * NOTE:
@@ -147,13 +148,13 @@ Details.prototype.reset = function () {
     //this.rawPropList.length = 0;
     this.wrapperToNode.reset();
 
-    if (CC_EDITOR) {
+    if (EDITOR) {
         this.visitorInEditor = null;
         this.visitObjList.length = 0;
         this.visitPropList.length = 0;
     }
 };
-if (CC_EDITOR) {
+if (EDITOR) {
     Details.prototype.visitLater = function (obj, propName) {
         this.visitObjList.push(obj);
         this.visitPropList.push(propName);
@@ -202,8 +203,7 @@ var _Deserializer = (function () {
     ///**
     // * @param {Boolean} isEditor - if false, "editorOnly" properties will be discarded
     // */
-    function _Deserializer(jsonObj, result, target, isEditor, classFinder) {
-        this._editor = isEditor;
+    function _Deserializer(jsonObj, result, target, classFinder) {
         this._classFinder = classFinder;
         if (ENABLE_TARGET) {
             this._target = target;
@@ -251,7 +251,7 @@ var _Deserializer = (function () {
         _dereference(this);
 
         // call visitor after all properties initialized
-        if (CC_EDITOR) {
+        if (EDITOR) {
             this._callVisitorInEditor();
         }
     }
@@ -266,7 +266,7 @@ var _Deserializer = (function () {
         }
     };
 
-    if (CC_EDITOR) {
+    if (EDITOR) {
         _Deserializer.prototype._callVisitorInEditor = function () {
             var result = this.result;
             if (result.visitorInEditor) {
@@ -301,7 +301,7 @@ var _Deserializer = (function () {
                 else {
                     obj[propName] = _deserializeObject(this, jsonObj);
                 }
-                if (this.result.visitorInEditor && CC_EDITOR) {
+                if (this.result.visitorInEditor && EDITOR) {
                     this.result.visitLater(obj, propName);
                 }
             }
@@ -316,7 +316,7 @@ var _Deserializer = (function () {
                 this._idObjList.push(obj);
                 this._idPropList.push(propName);
             }
-            if (this.result.visitorInEditor && CC_EDITOR) {
+            if (this.result.visitorInEditor && EDITOR) {
                 this.result.visitLater(obj, propName);
             }
         }
@@ -329,7 +329,7 @@ var _Deserializer = (function () {
                 if (typeof prop !== 'object') {
                     if (propName !== '__type__'/* && k != '__id__'*/) {
                         instance[propName] = prop;
-                        if (self.result.visitorInEditor && CC_EDITOR) {
+                        if (self.result.visitorInEditor && EDITOR) {
                             self.result.visitLater(instance, propName);
                         }
                     }
@@ -389,7 +389,7 @@ var _Deserializer = (function () {
             // assume all prop in __props__ must have attr
             var rawType = attrs.rawType;
             if (!rawType) {
-                if (!self._editor && attrs.editorOnly) {
+                if (!EDITOR && attrs.editorOnly) {
                     continue;   // skip editor only if not editor
                 }
                 if (attrs.serializable === false) {
@@ -511,7 +511,7 @@ var _Deserializer = (function () {
                 else {
                     obj[i] = prop;
 
-                    if (self.result.visitorInEditor && CC_EDITOR) {
+                    if (self.result.visitorInEditor && EDITOR) {
                         self.result.visitLater(obj, '' + i);
                     }
                 }
@@ -539,13 +539,12 @@ var _Deserializer = (function () {
  * @return {object} the main data(asset)
  */
 cc.deserialize = function (data, result, options) {
-    var isEditor = (options && 'isEditor' in options) ? options.isEditor : CC_EDITOR;
     var classFinder = (options && options.classFinder) || JS._getClassById;
     // 启用 createAssetRefs 后，如果有 url 属性则会被统一强制设置为 { uuid: 'xxx' }，必须后面再特殊处理
     var createAssetRefs = (options && options.createAssetRefs) || cc.sys.platform === cc.sys.EDITOR_CORE;
     var target = ENABLE_TARGET && (options && options.target);
 
-    if ((CC_EDITOR || CC_TEST) && cc._isNodeJs && Buffer.isBuffer(data)) {
+    if (EDITOR && cc._isNodeJs && Buffer.isBuffer(data)) {
         data = data.toString();
     }
 
@@ -557,7 +556,7 @@ cc.deserialize = function (data, result, options) {
         result = new Details();
     }
     cc.game._isCloning = true;
-    var deserializer = new _Deserializer(data, result, target, isEditor, classFinder);
+    var deserializer = new _Deserializer(data, result, target, classFinder);
     cc.game._isCloning = false;
 
     if (createAssetRefs) {
@@ -580,7 +579,7 @@ cc.deserialize.applyMixinProps = function (deserializedData, classToMix, target,
         if (attrs.serializable === false) {
             continue;   // skip nonSerialized
         }
-        if (!CC_EDITOR && attrs.editorOnly) {
+        if (!EDITOR && attrs.editorOnly) {
             continue;   // skip editor only if not editor
         }
         var prop = deserializedData[propName];

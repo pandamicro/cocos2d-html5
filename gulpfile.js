@@ -7,17 +7,15 @@ global.paths = {
     src: './src',
     jsEntry: './index',
     outDir: './bin',
-    outFile: 'cocos2d.js',
+    outFile: 'cocos2d-js.js',
 
     test: {
         src: 'test/qunit/unit/**/*.js',
         runner: 'test/qunit/lib/qunit-runner.html',
-        lib: [
-            'bin/cocos2d.test.js',
-        ]
+        jsEntryEditorExtends: '../../editor/share/engine-extends/index.js',     // only available in editor
+        dest: 'bin/cocos2d-js-for-test.js',
+        destEditorExtends: 'bin/cocos2d-js-extends-for-test.js'
     },
-
-    get scripts() { return this.src + '/**/*.js'; },
 
     originCocos2dCompileDir: './tools',
     originCocos2d: './lib/cocos2d-js-v3.9-min.js',

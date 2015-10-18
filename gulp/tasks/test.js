@@ -1,3 +1,4 @@
+var Fs = require('fire-fs');
 var gulp = require('gulp');
 var fb = require('gulp-fb');
 
@@ -6,9 +7,15 @@ var TimeOutInSeconds = 5;
 gulp.task('unit-runner', function() {
     var js = paths.test.src;
     var dest = paths.outDir;
+    var libs = [paths.test.dest];
+    var title = 'Cocos2d-JS Test Suite';
+    if (Fs.existsSync(paths.test.destEditorExtends)) {
+        libs.push(paths.test.destEditorExtends);
+        title += ' (Editor Extends Included)'
+    }
     return gulp.src(js, { read: false, base: './' })
         .pipe(fb.toFileList())
-        .pipe(fb.generateRunner(paths.test.runner, dest, 'Cocos Test Suite', paths.test.lib))
+        .pipe(fb.generateRunner(paths.test.runner, dest, title, libs))
         .pipe(gulp.dest(dest));
 });
 

@@ -263,7 +263,7 @@ JS.mixin(nodeProto, {
 });
 
 function dumpNodeForSerialization (node) {
-    if (CC_EDITOR) {
+    if (CC_EDITOR || CC_TEST) {
         var wrapper = cc(node);
         wrapper.onBeforeSerialize();
 
@@ -294,6 +294,10 @@ function dumpNodeForSerialization (node) {
             c: children,    // children
         };
     }
+}
+
+if (CC_EDITOR || CC_TEST) {
+    NodeWrapper._dumpNodeForSerialization = dumpNodeForSerialization;
 }
 
 function dumpNodeForInstantiation (node) {

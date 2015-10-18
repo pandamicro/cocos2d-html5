@@ -1,6 +1,8 @@
 var Path = require('path');
 var Spawn = require('child_process').spawn;
+var Fs = require('fire-fs');
 var Chalk = require('chalk');
+var Del = require('del');
 
 var gulp = require('gulp');
 var mirror = require('gulp-mirror');
@@ -76,7 +78,7 @@ function rebundle(bundler) {
         .pipe(sourcemaps.write('./', {sourceRoot: './', addComment: true}))
         .pipe(gulp.dest(paths.outDir));
 
-    var min = rename({ suffix: '.min' });
+    var min = rename({ suffix: '-min' });
     min.pipe(sourcemaps.init({loadMaps: true}))
         .pipe(uglify(getUglifyOptions(true, {
             CC_EDITOR: false,
@@ -89,7 +91,7 @@ function rebundle(bundler) {
     return bundle.pipe(mirror(dev, min));
 }
 
-function rebundle_test(bundler) {
+function rebundle_test(bundler, suffix) {
 
     var PreProcess = false;
     var TestEditorExtends = true;   // if PreProcess
@@ -100,7 +102,7 @@ function rebundle_test(bundler) {
         .pipe(handleErrors())
         .pipe(source(paths.outFile))
         .pipe(buffer())
-        .pipe(rename({ suffix: '.test' }));
+        .pipe(rename({ suffix: suffix }));
 
     if (PreProcess) {
         if (SourceMap) {
@@ -120,7 +122,8 @@ function rebundle_test(bundler) {
     return bundle;
 }
 
-function createBundler() {
+function createBundler(entryFiles) {
+    // https://github.com/substack/node-browserify#methods
     var options = {
         debug: true,
         detectGlobals: false,    // dont insert `process`, `global`, `__filename`, and `__dirname`
@@ -128,26 +131,8 @@ function createBundler() {
         //standalone: 'engine-framework',
         //basedir: tempScriptDir
     };
-    // https://github.com/substack/node-browserify#methods
-    var bundler = new browserify(paths.jsEntry, options);
-    return bundler;
+    return new browserify(entryFiles, options);
 }
-
-//function modularity () {
-//    if (typeof exports !== 'undefined') {
-//        if (typeof module !== 'undefined' && module.exports) {
-//            exports = module.exports = cc;
-//        }
-//        exports.cc = cc;
-//    }
-//    else if (typeof define !== 'undefined' && define.amd) {
-//        define(cc);
-//    }
-//    else {
-//        var root = typeof global !== 'undefined' ? global : window;
-//        root.cc = cc;
-//    }
-//}
 
 gulp.task('compile-cocos2d', function (done) {
     console.log('Spawn ant in ' + paths.originCocos2dCompileDir);
@@ -201,9 +186,21 @@ gulp.task('build-modular-cocos2d', ['compile-cocos2d'], function () {
 });
 
 gulp.task('build', ['build-modular-cocos2d'], function () {
-    return rebundle(createBundler());
+    return rebundle(createBundler(paths.jsEntry));
 });
 
-gulp.task('build-test', ['build-modular-cocos2d'], function () {
-    return rebundle_test(createBundler());
+gulp.task('clean-test', function (done) {
+    Del([paths.test.destEditorExtends, paths.test.dest], done);
+});
+
+gulp.task('build-test', ['build-modular-cocos2d', 'clean-test'], function () {
+    var engine = rebundle_test(createBundler(paths.jsEntry), '-for-test');
+    if (Fs.existsSync(paths.test.jsEntryEditorExtends)) {
+        var editorExtends = rebundle_test(createBundler(paths.test.jsEntryEditorExtends), '-extends-for-test');
+        return es.merge(engine, editorExtends);
+    }
+    else {
+        // not in editor, skip editor extend
+        return engine;
+    }
 });

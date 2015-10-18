@@ -49,7 +49,7 @@ if (typeof CC_TEST === 'undefined') {
     eval('CC_TEST=typeof describe!=="undefined"||typeof QUnit!=="undefined"');
 }
 if (typeof CC_EDITOR === 'undefined') {
-    eval('CC_EDITOR=typeof Editor!=="undefined"');
+    eval('CC_EDITOR=typeof Editor!=="undefined"&&typeof process!=="undefined"&&"electron" in process.versions');
 }
 if (typeof CC_DEV === 'undefined') {
     eval('CC_DEV=CC_EDITOR');
