@@ -484,6 +484,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
         container.style.width = width + 'px';
         container.style.height = height + 'px';
+
+        this.setDesignResolutionSize(width, height, this.getResolutionPolicy());
     },
 
     /**
