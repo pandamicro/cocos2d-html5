@@ -58,10 +58,9 @@
             "cocos2d/core/support/TransformUtils.js",
             "cocos2d/core/event-manager/CCTouch.js",
 
-            "cocos2d/core/event-manager/CCEvent.js",
+            "cocos2d/core/event-manager/CCSystemEvent.js",
             "cocos2d/core/event-manager/CCEventListener.js",
             "cocos2d/core/event-manager/CCEventManager.js",
-            "cocos2d/core/event-manager/CCEventExtension.js",
 
             "cocos2d/core/renderer/RendererCanvas.js",
             "cocos2d/core/renderer/RendererWebGL.js",

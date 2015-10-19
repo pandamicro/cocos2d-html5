@@ -120,8 +120,8 @@ var inputManager = /** @lends cc.inputManager# */{
         }
         if(handleTouches.length > 0){
             this._glView._convertTouchesWithScale(handleTouches);
-            var touchEvent = new cc.EventTouch(handleTouches);
-            touchEvent._eventCode = cc.EventTouch.EventCode.BEGAN;
+            var touchEvent = new cc.Event.EventTouch(handleTouches);
+            touchEvent._eventCode = cc.Event.EventTouch.BEGAN;
             cc.eventManager.dispatchEvent(touchEvent);
         }
     },
@@ -149,8 +149,8 @@ var inputManager = /** @lends cc.inputManager# */{
         }
         if(handleTouches.length > 0){
             this._glView._convertTouchesWithScale(handleTouches);
-            var touchEvent = new cc.EventTouch(handleTouches);
-            touchEvent._eventCode = cc.EventTouch.EventCode.MOVED;
+            var touchEvent = new cc.Event.EventTouch(handleTouches);
+            touchEvent._eventCode = cc.EventTouch.MOVED;
             cc.eventManager.dispatchEvent(touchEvent);
         }
     },
@@ -163,8 +163,8 @@ var inputManager = /** @lends cc.inputManager# */{
         var handleTouches = this.getSetOfTouchesEndOrCancel(touches);
         if(handleTouches.length > 0) {
             this._glView._convertTouchesWithScale(handleTouches);
-            var touchEvent = new cc.EventTouch(handleTouches);
-            touchEvent._eventCode = cc.EventTouch.EventCode.ENDED;
+            var touchEvent = new cc.Event.EventTouch(handleTouches);
+            touchEvent._eventCode = cc.EventTouch.ENDED;
             cc.eventManager.dispatchEvent(touchEvent);
         }
     },
@@ -177,8 +177,8 @@ var inputManager = /** @lends cc.inputManager# */{
         var handleTouches = this.getSetOfTouchesEndOrCancel(touches);
         if(handleTouches.length > 0) {
             this._glView._convertTouchesWithScale(handleTouches);
-            var touchEvent = new cc.EventTouch(handleTouches);
-            touchEvent._eventCode = cc.EventTouch.EventCode.CANCELLED;
+            var touchEvent = new cc.Event.EventTouch(handleTouches);
+            touchEvent._eventCode = cc.EventTouch.CANCELLED;
             cc.eventManager.dispatchEvent(touchEvent);
         }
     },

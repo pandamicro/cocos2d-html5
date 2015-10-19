@@ -847,7 +847,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
                 widgetGetFocus.onFocusChanged(widgetLostFocus, widgetGetFocus);
             if (widgetLostFocus && widgetGetFocus.onFocusChanged)
                 widgetLostFocus.onFocusChanged(widgetLostFocus, widgetGetFocus);
-            cc.eventManager.dispatchEvent(new cc.EventFocus(widgetLostFocus, widgetGetFocus));
+            cc.eventManager.dispatchEvent(new cc.Event.EventFocus(widgetLostFocus, widgetGetFocus));
         }
     },
 

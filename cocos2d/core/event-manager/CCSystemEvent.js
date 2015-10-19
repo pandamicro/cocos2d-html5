@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2011-2012 cocos2d-x.org
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2013-2015 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -23,161 +23,63 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-/**
- * Base class of all kinds of events.
- * @class
- * @extends cc._Class
- */
-cc.Event = cc._Class.extend(/** @lends cc.Event# */{
-    _type: 0,                                   //  Event type
-    _isStopped: false,                         //< whether the event has been stopped.
-    _currentTarget: null,                       //< Current target
+var JS = require("../platform/js");
+require("../event/event");
 
-    _setCurrentTarget: function (target) {
-        this._currentTarget = target;
-    },
-
-    ctor: function (type) {
-        this._type = type;
-    },
-
-    /**
-     * Gets the event type
-     * @function
-     * @returns {Number}
-     */
-    getType: function () {
-        return this._type;
-    },
-
-    /**
-     * Stops propagation for current event
-     * @function
-     */
-    stopPropagation: function () {
-        this._isStopped = true;
-    },
-
-    /**
-     * Checks whether the event has been stopped
-     * @function
-     * @returns {boolean}
-     */
-    isStopped: function () {
-        return this._isStopped;
-    },
-
-    /**
-     * <p>
-     *     Gets current target of the event                                                            <br/>
-     *     note: It only be available when the event listener is associated with node.                <br/>
-     *          It returns 0 when the listener is associated with fixed priority.
-     * </p>
-     * @function
-     * @returns {cc.Node}  The target with which the event associates.
-     */
-    getCurrentTarget: function () {
-        return this._currentTarget;
-    }
-});
-
-//event type
 /**
  * The type code of Touch event.
  * @constant
- * @type {number}
+ * @type {string}
  */
-cc.Event.TOUCH = 0;
-/**
- * The type code of Keyboard event.
- * @constant
- * @type {number}
- */
-cc.Event.KEYBOARD = 1;
-/**
- * The type code of Acceleration event.
- * @constant
- * @type {number}
- */
-cc.Event.ACCELERATION = 2;
+cc.Event.TOUCH = 'touch';
 /**
  * The type code of Mouse event.
  * @constant
- * @type {number}
+ * @type {string}
  */
-cc.Event.MOUSE = 3;
+cc.Event.MOUSE = 'mouse';
 /**
  * The type code of UI focus event.
  * @constant
- * @type {number}
+ * @type {string}
  */
-cc.Event.FOCUS = 4;
+cc.Event.FOCUS = 'focus';
 /**
- * The type code of Custom event.
+ * The type code of Keyboard event.
  * @constant
- * @type {number}
+ * @memberof cc.Event
+ * @type {string}
  */
-cc.Event.CUSTOM = 6;
-
+cc.Event.KEYBOARD = 'keyboard';
 /**
- * The Custom event
- * @class
- * @extends cc.Event
+ * The type code of Acceleration event.
+ * @constant
+ * @memberof cc.Event
+ * @type {string}
  */
-cc.EventCustom = cc.Event.extend(/** @lends cc.EventCustom# */{
-    _eventName: null,
-    _userData: null,                                 // User data
-
-    ctor: function (eventName) {
-        cc.Event.prototype.ctor.call(this, cc.Event.CUSTOM);
-        this._eventName = eventName;
-    },
-
-    /**
-     * Sets user data
-     * @param {*} data
-     */
-    setUserData: function (data) {
-        this._userData = data;
-    },
-
-    /**
-     * Gets user data
-     * @returns {*}
-     */
-    getUserData: function () {
-        return this._userData;
-    },
-
-    /**
-     * Gets event name
-     * @returns {String}
-     */
-    getEventName: function () {
-        return this._eventName;
-    }
-});
+cc.Event.ACCELERATION = 'acceleration';
 
 /**
  * The mouse event
- * @class
+ * @class cc.Event.EventMouse
+ * @constructor
  * @extends cc.Event
+ * @param {boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
  */
-cc.EventMouse = cc.Event.extend(/** @lends cc.EventMouse# */{
-    _eventType: 0,
-    _button: 0,
-    _x: 0,
-    _y: 0,
-    _prevX: 0,
-    _prevY: 0,
-    _scrollX: 0,
-    _scrollY: 0,
+var EventMouse = function (bubbles) {
+    cc.Event.call(this, cc.Event.MOUSE, bubbles);
+    this._eventType = 0;
+    this._button = 0;
+    this._x = 0;
+    this._y = 0;
+    this._prevX = 0;
+    this._prevY = 0;
+    this._scrollX = 0;
+    this._scrollY = 0;
+};
 
-    ctor: function (eventType) {
-        cc.Event.prototype.ctor.call(this, cc.Event.MOUSE);
-        this._eventType = eventType;
-    },
-
+JS.extend(EventMouse, cc.Event);
+JS.mixin(EventMouse.prototype, {
     /**
      * Sets scroll data
      * @param {number} scrollX
@@ -292,108 +194,110 @@ cc.EventMouse = cc.Event.extend(/** @lends cc.EventMouse# */{
     }
 });
 
-//Different types of MouseEvent
+//Inner event types of MouseEvent
 /**
- * The none event code of  mouse event.
+ * The none event code of mouse event.
  * @constant
  * @type {number}
  */
-cc.EventMouse.NONE = 0;
+EventMouse.NONE = 0;
 /**
  * The event type code of mouse down event.
  * @constant
  * @type {number}
  */
-cc.EventMouse.DOWN = 1;
+EventMouse.DOWN = 1;
 /**
  * The event type code of mouse up event.
  * @constant
  * @type {number}
  */
-cc.EventMouse.UP = 2;
+EventMouse.UP = 2;
 /**
  * The event type code of mouse move event.
  * @constant
  * @type {number}
  */
-cc.EventMouse.MOVE = 3;
+EventMouse.MOVE = 3;
 /**
  * The event type code of mouse scroll event.
  * @constant
  * @type {number}
  */
-cc.EventMouse.SCROLL = 4;
+EventMouse.SCROLL = 4;
 
 /**
  * The tag of Mouse left button
  * @constant
  * @type {Number}
  */
-cc.EventMouse.BUTTON_LEFT = 0;
+EventMouse.BUTTON_LEFT = 0;
 
 /**
  * The tag of Mouse right button  (The right button number is 2 on browser)
  * @constant
  * @type {Number}
  */
-cc.EventMouse.BUTTON_RIGHT = 2;
+EventMouse.BUTTON_RIGHT = 2;
 
 /**
  * The tag of Mouse middle button  (The right button number is 1 on browser)
  * @constant
  * @type {Number}
  */
-cc.EventMouse.BUTTON_MIDDLE = 1;
+EventMouse.BUTTON_MIDDLE = 1;
 
 /**
  * The tag of Mouse button 4
  * @constant
  * @type {Number}
  */
-cc.EventMouse.BUTTON_4 = 3;
+EventMouse.BUTTON_4 = 3;
 
 /**
  * The tag of Mouse button 5
  * @constant
  * @type {Number}
  */
-cc.EventMouse.BUTTON_5 = 4;
+EventMouse.BUTTON_5 = 4;
 
 /**
  * The tag of Mouse button 6
  * @constant
  * @type {Number}
  */
-cc.EventMouse.BUTTON_6 = 5;
+EventMouse.BUTTON_6 = 5;
 
 /**
  * The tag of Mouse button 7
  * @constant
  * @type {Number}
  */
-cc.EventMouse.BUTTON_7 = 6;
+EventMouse.BUTTON_7 = 6;
 
 /**
  * The tag of Mouse button 8
  * @constant
  * @type {Number}
  */
-cc.EventMouse.BUTTON_8 = 7;
+EventMouse.BUTTON_8 = 7;
 
 /**
  * The touch event
- * @class
+ * @class cc.Event.EventTouch
+ * @constructor
  * @extends cc.Event
+ * @param {Array} [touchArr=[]] - The array of the touches
+ * @param {boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
  */
-cc.EventTouch = cc.Event.extend(/** @lends cc.EventTouch# */{
-    _eventCode: 0,
-    _touches: null,
+EventTouch = function (touchArr, bubbles) {
+    cc.Event.call(this, cc.Event.TOUCH, bubbles);
+    this._eventCode = 0;
+    this._touches = touchArr || [];
+};
 
-    ctor: function (arr) {
-        cc.Event.prototype.ctor.call(this, cc.Event.TOUCH);
-        this._touches = arr || [];
-    },
-
+JS.extend(EventTouch, cc.Event);
+JS.mixin(EventTouch.prototype, {
     /**
      * Returns event code
      * @returns {number}
@@ -424,26 +328,84 @@ cc.EventTouch = cc.Event.extend(/** @lends cc.EventTouch# */{
  * @constant
  * @type {Number}
  */
-cc.EventTouch.MAX_TOUCHES = 5;
+EventTouch.MAX_TOUCHES = 5;
 
-cc.EventTouch.EventCode = {BEGAN: 0, MOVED: 1, ENDED: 2, CANCELLED: 3};
+/**
+ * The event type code of touch began event.
+ * @constant
+ * @type {number}
+ */
+EventTouch.BEGAN = 0;
+/**
+ * The event type code of touch moved event.
+ * @constant
+ * @type {number}
+ */
+EventTouch.MOVED = 1;
+/**
+ * The event type code of touch ended event.
+ * @constant
+ * @type {number}
+ */
+EventTouch.ENDED = 2;
+/**
+ * The event type code of touch cancelled event.
+ * @constant
+ * @type {number}
+ */
+EventTouch.CANCELED = 3;
 
 /**
  * Focus change event for UI widget
- * @class
+ * @class cc.Event.EventFocus
+ * @constructor
  * @extends cc.Event
+ * @param {ccui.Widget} widgetLoseFocus
+ * @param {ccui.Widget} widgetGetFocus
+ * @param {boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
  */
-cc.EventFocus = cc.Event.extend(/** @lends cc.EventTouch# */{
-    _widgetGetFocus: null,
-    _widgetLoseFocus: null,
-    /**
-     * Constructor function.
-     * @param {ccui.Widget} widgetLoseFocus
-     * @param {ccui.Widget} widgetGetFocus
-     */
-    ctor: function(widgetLoseFocus, widgetGetFocus){
-        cc.Event.prototype.ctor.call(this, cc.Event.FOCUS);
-        this._widgetGetFocus = widgetGetFocus;
-        this._widgetLoseFocus = widgetLoseFocus;
-    }
-});
+EventFocus = function (widgetGetFocus, widgetLoseFocus, bubbles) {
+    cc.Event.call(this, cc.Event.FOCUS, bubbles);
+    this._widgetGetFocus = widgetGetFocus;
+    this._widgetLoseFocus = widgetLoseFocus;
+};
+JS.extend(EventFocus, cc.Event);
+
+/**
+ * The acceleration event
+ * @class cc.Event.EventAcceleration
+ * @extends cc.Event
+ * @constructor
+ * @param {Object} acc - The acceleration
+ * @param {boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
+ */
+EventAcceleration = function (acc, bubbles) {
+    cc.Event.call(this, Event.ACCELERATION, bubbles);
+    this._acc = acc;
+};
+JS.extend(EventAcceleration, cc.Event);
+
+/**
+ * The keyboard event
+ * @class cc.Event.EventKeyboard
+ * @extends cc.Event
+ * @constructor
+ * @param {Number} keyCode - The key code of which triggered this event
+ * @param {boolean} isPressed - A boolean indicating whether the key have been pressed
+ * @param {boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
+ */
+EventKeyboard = function (keyCode, isPressed, bubbles) {
+    cc.Event.call(this, Event.KEYBOARD, bubbles);
+    this._keyCode = keyCode;
+    this._isPressed = isPressed;
+};
+JS.extend(EventKeyboard, cc.Event);
+
+cc.Event.EventCustom = EventCustom;
+cc.Event.EventMouse = EventMouse;
+cc.Event.EventTouch = EventTouch;
+cc.Event.EventFocus = EventFocus;
+cc.Event.EventAcceleration = EventAcceleration;
+cc.Event.EventKeyboard = EventKeyboard;
+
+module.exports = cc.Event;
