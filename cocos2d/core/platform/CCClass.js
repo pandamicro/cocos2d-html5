@@ -1,7 +1,7 @@
 ﻿/****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2013-2015 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -387,35 +387,37 @@ function doDefine (className, baseClass, constructor, options) {
 }
 
 function define (className, baseClass, constructor, options) {
-    if (cc.isChildClassOf(baseClass, cc.Behavior)) {
+    if (cc.isChildClassOf(baseClass, cc.Component)) {
         var frame = cc._RFpeek();
         if (frame) {
             if (CC_DEV && constructor) {
-                cc.warn('cc.Class: Should not define constructor for cc.Behavior.');
+                cc.warn('cc.Class: Should not define constructor for cc.Component.');
             }
             if (frame.beh) {
-                cc.error('Each script can have at most one Behavior.');
+                cc.error('Each script can have at most one Component.');
                 return;
             }
-            var isInProject = frame.uuid;
-            if (isInProject) {
-                if (className) {
-                    cc.warn('Should not specify class name for Behavior which defines in project.');
+            var uuid = frame.uuid;
+            if (uuid) {
+                if (className && CC_EDITOR) {
+                    cc.warn('Should not specify class name for Component which defines in project.');
                 }
             }
             //else {
-            //    builtin plugin behavior
+            //    builtin
             //}
             className = className || frame.script;
             var cls = doDefine(className, baseClass, constructor, options);
-            if (frame.uuid) {
-                JS._setClassId(frame.uuid, cls);
+            if (uuid) {
+                JS._setClassId(uuid, cls);
+                //Editor.addComponentMenu(cls, 'Scripts/' + cc.js.getClassName(comp), -1);
+                cls.prototype.__scriptUuid = Editor.decompressUuid(uuid);
             }
             frame.beh = cls;
             return cls;
         }
     }
-    // not project behavior
+    // not project component
     return doDefine(className, baseClass, constructor, options);
 }
 
