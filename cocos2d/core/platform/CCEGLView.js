@@ -467,6 +467,26 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
     },
 
     /**
+     * Not support on native.<br/>
+     * On web, it sets the size of the canvas.
+     * @param {Number} width
+     * @param {Number} height
+     */
+    setCanvasSize: function (width, height) {
+        var canvas = cc.game.canvas;
+        var container = cc.game.container;
+
+        canvas.width = width * this._devicePixelRatio;
+        canvas.height = height * this._devicePixelRatio;
+
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+
+        container.style.width = width + 'px';
+        container.style.height = height + 'px';
+    },
+
+    /**
      * Returns the canvas size of the view.<br/>
      * On native platforms, it returns the screen size since the view is a fullscreen view.<br/>
      * On web, it returns the size of the canvas element.
