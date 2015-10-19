@@ -458,18 +458,17 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
 
     /**
      * Intercept touch event, handle its child's touch event.
+     * @param {cc.Event} event
      * @param {Number} eventType
-     * @param {ccui.Widget} sender
      * @param {cc.Touch} touch
      */
-    interceptTouchEvent: function (eventType, sender, touch) {
-        ccui.ScrollView.prototype.interceptTouchEvent.call(this, eventType, sender, touch);
-        if(!this._touchEnabled)
-        {
+    interceptTouchEvent: function (event, eventType, touch) {
+        ccui.ScrollView.prototype.interceptTouchEvent.call(this, event, eventType, touch);
+        if (!this._touchEnabled)
             return;
-        }
+        
         if (eventType !== ccui.Widget.TOUCH_MOVED) {
-            var parent = sender;
+            var parent = event.target;
             while (parent) {
                 if (parent && parent.getParent() === this._innerContainer) {
                     this._curSelectedIndex = this.getIndex(parent);
@@ -477,7 +476,7 @@ ccui.ListView = ccui.ScrollView.extend(/** @lends ccui.ListView# */{
                 }
                 parent = parent.getParent();
             }
-            if (sender.isHighlighted())
+            if (event.target.isHighlighted())
                 this._selectedItemEvent(eventType);
         }
     },
