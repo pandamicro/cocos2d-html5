@@ -36,7 +36,7 @@
                 <include name="core/support/CCPointExtension.js"/>
                 <include name="core/support/CCVertex.js"/>
                 <include name="core/support/TransformUtils.js"/>
-                <include name="core/event-manager/CCEvent.js"/>
+                <include name="core/event-manager/CCSystemEvent.js"/>
                 <include name="core/event-manager/CCTouch.js"/>
                 <include name="core/event-manager/CCEventListener.js"/>
                 <include name="core/event-manager/CCEventManager.js"/>

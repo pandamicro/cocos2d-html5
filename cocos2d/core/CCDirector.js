@@ -151,13 +151,13 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
             this._actionManager = null;
         }
 
-        this._eventAfterUpdate = new cc.EventCustom(cc.Director.EVENT_AFTER_UPDATE);
+        this._eventAfterUpdate = new cc.Event.EventCustom(cc.Director.EVENT_AFTER_UPDATE);
         this._eventAfterUpdate.setUserData(this);
-        this._eventAfterVisit = new cc.EventCustom(cc.Director.EVENT_AFTER_VISIT);
+        this._eventAfterVisit = new cc.Event.EventCustom(cc.Director.EVENT_AFTER_VISIT);
         this._eventAfterVisit.setUserData(this);
-        this._eventAfterDraw = new cc.EventCustom(cc.Director.EVENT_AFTER_DRAW);
+        this._eventAfterDraw = new cc.Event.EventCustom(cc.Director.EVENT_AFTER_DRAW);
         this._eventAfterDraw.setUserData(this);
-        this._eventProjectionChanged = new cc.EventCustom(cc.Director.EVENT_PROJECTION_CHANGED);
+        this._eventProjectionChanged = new cc.Event.EventCustom(cc.Director.EVENT_PROJECTION_CHANGED);
         this._eventProjectionChanged.setUserData(this);
 
         return true;

@@ -517,3 +517,76 @@ cc._EventListenerFocus = cc.EventListener.extend({
 });
 
 cc._EventListenerFocus.LISTENER_ID = "__cc_focus_event";
+
+//Acceleration
+cc._EventListenerAcceleration = cc.EventListener.extend({
+    _onAccelerationEvent: null,
+
+    ctor: function (callback) {
+        this._onAccelerationEvent = callback;
+        var selfPointer = this;
+        var listener = function (event) {
+            selfPointer._onAccelerationEvent(event._acc, event);
+        };
+        cc.EventListener.prototype.ctor.call(this, cc.EventListener.ACCELERATION, cc._EventListenerAcceleration.LISTENER_ID, listener);
+    },
+
+    checkAvailable: function () {
+
+        cc.assert(this._onAccelerationEvent, cc._LogInfos._checkEventListenerAvailable.acceleration);
+
+        return true;
+    },
+
+    clone: function () {
+        return new cc._EventListenerAcceleration(this._onAccelerationEvent);
+    }
+});
+
+cc._EventListenerAcceleration.LISTENER_ID = "__cc_acceleration";
+
+cc._EventListenerAcceleration.create = function (callback) {
+    return new cc._EventListenerAcceleration(callback);
+};
+
+
+//Keyboard
+cc._EventListenerKeyboard = cc.EventListener.extend({
+    onKeyPressed: null,
+    onKeyReleased: null,
+
+    ctor: function () {
+        var selfPointer = this;
+        var listener = function (event) {
+            if (event._isPressed) {
+                if (selfPointer.onKeyPressed)
+                    selfPointer.onKeyPressed(event._keyCode, event);
+            } else {
+                if (selfPointer.onKeyReleased)
+                    selfPointer.onKeyReleased(event._keyCode, event);
+            }
+        };
+        cc.EventListener.prototype.ctor.call(this, cc.EventListener.KEYBOARD, cc._EventListenerKeyboard.LISTENER_ID, listener);
+    },
+
+    clone: function () {
+        var eventListener = new cc._EventListenerKeyboard();
+        eventListener.onKeyPressed = this.onKeyPressed;
+        eventListener.onKeyReleased = this.onKeyReleased;
+        return eventListener;
+    },
+
+    checkAvailable: function () {
+        if (this.onKeyPressed === null && this.onKeyReleased === null) {
+            cc.log(cc._LogInfos._checkEventListenerAvailable.keyboard);
+            return false;
+        }
+        return true;
+    }
+});
+
+cc._EventListenerKeyboard.LISTENER_ID = "__cc_keyboard";
+
+cc._EventListenerKeyboard.create = function () {
+    return new cc._EventListenerKeyboard();
+};

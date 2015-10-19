@@ -25,10 +25,9 @@
                 <file name="cocos2d/core/support/CCVertex.js"/>
                 <file name="cocos2d/core/support/TransformUtils.js"/>
                 <file name="cocos2d/core/event-manager/CCTouch.js"/>
-                <file name="cocos2d/core/event-manager/CCEvent.js"/>
+                <file name="cocos2d/core/event-manager/CCSystemEvent.js"/>
                 <file name="cocos2d/core/event-manager/CCEventListener.js"/>
                 <file name="cocos2d/core/event-manager/CCEventManager.js"/>
-                <file name="cocos2d/core/event-manager/CCEventExtension.js"/>
                 <file name="cocos2d/core/base-nodes/BaseNodesPropertyDefine.js"/>
 
                 <file name="cocos2d/core/renderer/RendererCanvas.js"/>
@@ -307,7 +306,7 @@
                 <file name="cocos2d/core/platform/CCVisibleRect.js"/>
                 <file name="cocos2d/core/support/CCPointExtension.js"/>
                 <file name="cocos2d/core/event-manager/CCTouch.js"/>
-                <file name="cocos2d/core/event-manager/CCEvent.js"/>
+                <file name="cocos2d/core/event-manager/CCSystemEvent.js"/>
                 <file name="cocos2d/core/event-manager/CCEventListener.js"/>
                 <file name="cocos2d/core/event-manager/CCEventManager.js"/>
                 <file name="cocos2d/core/base-nodes/BaseNodesPropertyDefine.js"/>

@@ -59,12 +59,12 @@ inputManager.setAccelerometerInterval = function(interval){
 
 inputManager._registerKeyboardEvent = function(){
     cc.game.canvas.addEventListener("keydown", function (e) {
-        cc.eventManager.dispatchEvent(new cc.EventKeyboard(e.keyCode, true));
+        cc.eventManager.dispatchEvent(new cc.Event.EventKeyboard(e.keyCode, true));
         e.stopPropagation();
         e.preventDefault();
     }, false);
     cc.game.canvas.addEventListener("keyup", function (e) {
-        cc.eventManager.dispatchEvent(new cc.EventKeyboard(e.keyCode, false));
+        cc.eventManager.dispatchEvent(new cc.Event.EventKeyboard(e.keyCode, false));
         e.stopPropagation();
         e.preventDefault();
     }, false);

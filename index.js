@@ -72,6 +72,7 @@ require('./cocos2d/core/value-types');
 require('./cocos2d/core/utils');
 require('./cocos2d/core/platform/CCInputManager');
 require('./cocos2d/core/platform/CCInputExtension');
+require('./cocos2d/core/event');
 require('./cocos2d/core/platform/CCSys');
 require('./cocos2d/core/platform/CCLoader');
 require('./CCDebugger');
