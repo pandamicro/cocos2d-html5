@@ -85,7 +85,7 @@ cc.Event = function(type, bubbles) {
     this._defaultPrevented = false;
 
     /**
-     * Indicates whether or not event.stop() has been called on the event
+     * Indicates whether or not event.stopPropagation() has been called on the event
      * @property _propagationStopped
      * @type {boolean}
      * @private
@@ -93,7 +93,7 @@ cc.Event = function(type, bubbles) {
     this._propagationStopped = false;
 
     /**
-     * Indicates whether or not event.stop(true) has been called on the event
+     * Indicates whether or not event.stopPropagationImmediate() has been called on the event
      * @property _propagationImmediateStopped
      * @type {boolean}
      * @private

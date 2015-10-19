@@ -32,8 +32,8 @@ EventListeners.prototype.invoke = function (event) {
                     --endIndex;
                 }
                 else {
-                    // 只允许在一个回调里面移除一个回调。如果要移除很多，只能用 event.stop(true)
-                    cc.error('Call event.stop(true) when you remove more than one callbacks in a event callback.');
+                    // 只允许在一个回调里面移除一个回调。如果要移除很多，只能用 event.stopPropagationImmediate()
+                    cc.error('Call event.stopPropagationImmediate() when you remove more than one callbacks in a event callback.');
                     return;
                 }
             }
