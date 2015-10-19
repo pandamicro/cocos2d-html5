@@ -11,14 +11,14 @@ EventListeners.prototype.invoke = function (event) {
     var list = this._callbackTable[event.type];
     if (list && list.length > 0) {
         if (list.length === 1) {
-            list[0].call(event.currentTarget, event);
+            list[0].apply(event.currentTarget, arguments);
             return;
         }
         var endIndex = list.length - 1;
         var lastFunc = list[endIndex];
         for (var i = 0; i <= endIndex; ++i) {
             var callingFunc = list[i];
-            callingFunc.call(event.currentTarget, event);
+            callingFunc.apply(event.currentTarget, arguments);
             if (event._propagationImmediateStopped || i === endIndex) {
                 break;
             }
