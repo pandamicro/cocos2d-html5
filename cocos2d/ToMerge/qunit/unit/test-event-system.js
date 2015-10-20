@@ -2,7 +2,7 @@
 module('EventTarget');
 
 test('basic test', function () {
-    var target = new Fire.EventTarget();
+    var target = new cc.EventTarget();
     var fireEvent = new Fire.Event('fire');
     var jumpEvent = new Fire.Event('jump');
 

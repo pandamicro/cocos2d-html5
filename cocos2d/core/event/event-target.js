@@ -1,7 +1,6 @@
 ﻿var EventListeners = require('./event-listeners');
 var Event = require('./event');
-var CustomEvent = Event.CustomEvent;
-var CCObject = require('../platform/CCObject');
+var EventCustom = Event.EventCustom;
 var JS = cc.js;
 
 var cachedArray = new Array(16);
@@ -96,7 +95,10 @@ var _doSendEvent = function (event) {
  *
  * @class EventTarget
  */
-var EventTarget = {
+var EventTarget = function () {
+}
+
+JS.mixin(EventTarget.prototype, {
     /**
      * @property _capturingListeners
      * @type {EventListeners}
@@ -112,29 +114,6 @@ var EventTarget = {
      * @private
      */
     _bubblingListeners: null,
-
-    /**
-     * Polyfill the functionalities of EventTarget into a existing object
-     * @param {Object} object - An object to be extended with EventTarget capability
-     */
-    polyfill: function (object) {
-        // Can't use cc.js.mixin because we don't want to inject polyfill or overwrite _getXXXTargets
-        object._capturingListeners = null;
-        object._bubblingListeners = null;
-
-        object.hasEventListener = this.hasEventListener;
-        object.on = this.on;
-        object.off = this.off;
-        object.once = this.once;
-        object.dispatchEvent = this.dispatchEvent;
-        object.emit = this.emit;
-        if (!object._isTargetActive)
-            object._isTargetActive = this._isTargetActive;
-        if (!object._getCapturingTargets)
-            object._getCapturingTargets = this._getCapturingTargets;
-        if (!object._getBubblingTargets)
-            object._getBubblingTargets = this._getBubblingTargets;
-    },
 
     /**
      * Checks whether the EventTarget object has any callback registered for a specific type of event.
@@ -223,8 +202,6 @@ var EventTarget = {
         this.on(type, cb, useCapture);
     },
 
-    ,
-
     /**
      * Dispatches an event into the event flow. The event target is the EventTarget object upon which the dispatchEvent() method is called.
      *
@@ -241,8 +218,6 @@ var EventTarget = {
         return notPrevented;
     },
 
-    ,
-
     /**
      * Send an event to this object directly, this method will not propagate the event to any other objects.
      * The event will be created from the supplied message, you can get the "detail" argument from event.detail.
@@ -253,7 +228,7 @@ var EventTarget = {
      */
     emit: function (message, detail) {
         if ( typeof message === 'string' ) {
-            var event = new CustomEvent(message);
+            var event = new EventCustom(message);
             event.detail = detail;
             _doSendEvent.call(this, event);
         }
@@ -311,6 +286,32 @@ var EventTarget = {
     _getBubblingTargets: function (type, array) {
         // Object can override this method to make event propagable.
     }
-};
+});
+
+/**
+ * Polyfill the functionalities of EventTarget into a existing object
+ * @static
+ * @memberof EventTarget
+ * @param {Object} object - An object to be extended with EventTarget capability
+ */
+EventTarget.polyfill = function (object) {
+    var proto = EventTarget.prototype;
+    // Can't use cc.js.mixin because we don't want to inject polyfill or overwrite _getXXXTargets
+    object._capturingListeners = null;
+    object._bubblingListeners = null;
+
+    object.hasEventListener = proto.hasEventListener;
+    object.on = proto.on;
+    object.off = proto.off;
+    object.once = proto.once;
+    object.dispatchEvent = proto.dispatchEvent;
+    object.emit = proto.emit;
+    if (!object._isTargetActive)
+        object._isTargetActive = proto._isTargetActive;
+    if (!object._getCapturingTargets)
+        object._getCapturingTargets = proto._getCapturingTargets;
+    if (!object._getBubblingTargets)
+        object._getBubblingTargets = proto._getBubblingTargets;
+}
 
 cc.EventTarget = module.exports = EventTarget;

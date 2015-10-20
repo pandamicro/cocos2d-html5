@@ -1638,7 +1638,7 @@ var BMFontMultiLineAlignmentTest = AtlasDemo.extend({
         }
     },
     onMouseMove:function (event) {
-        if(!event.getButton || event.getButton() != cc.EventMouse.BUTTON_LEFT)
+        if(!event.getButton || event.getButton() != cc.Event.EventMouse.BUTTON_LEFT)
             return;
 
         var location = event.getLocation();
