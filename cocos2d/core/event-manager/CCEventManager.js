@@ -415,7 +415,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
             return false;
 
         var event = argsObj.event, selTouch = argsObj.selTouch;
-        event._setCurrentTarget(listener._node);
+        event.currentTarget = listener._node;
 
         var isClaimed = false, removedIdx;
         var getCode = event.getEventCode(), EventTouch = cc.Event.EventTouch;
@@ -500,7 +500,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
             return false;
 
         var EventTouch = cc.Event.EventTouch, event = callbackParams.event, touches = callbackParams.touches, getCode = event.getEventCode();
-        event._setCurrentTarget(listener._node);
+        event.currentTarget = listener._node;
         if(getCode === EventTouch.BEGAN && listener.onTouchesBegan)
             listener.onTouchesBegan(touches, event);
         else if(getCode === EventTouch.MOVED && listener.onTouchesMoved)
@@ -936,7 +936,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
     },
 
     _onListenerCallback: function(listener, event){
-        event._setCurrentTarget(listener._getSceneGraphPriority());
+        event.currentTarget = listener._getSceneGraphPriority();
         listener._onEvent(event);
         return event.isStopped();
     },

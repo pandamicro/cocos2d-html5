@@ -274,4 +274,6 @@ JS.mixin(EventCustom.prototype, {
     getEventName: cc.Event.prototype.getType
 });
 
+cc.Event.EventCustom = EventCustom;
+
 module.exports = cc.Event;
