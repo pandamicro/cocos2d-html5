@@ -317,7 +317,7 @@ cc._EventListenerMouse = cc.EventListener.extend({
     ctor: function () {
         var selfPointer = this;
         var listener = function (event) {
-            var eventType = cc.EventMouse;
+            var eventType = cc.Event.EventMouse;
             switch (event._eventType) {
                 case eventType.DOWN:
                     if (selfPointer.onMouseDown)

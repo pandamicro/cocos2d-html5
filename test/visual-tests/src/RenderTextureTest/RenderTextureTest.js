@@ -96,7 +96,7 @@ var RenderTextureSave = RenderTextureBaseLayer.extend({
                     event.getCurrentTarget()._lastLocation = event.getLocation();
                 },
                 onMouseMove: function(event){
-                    if(event.getButton() == cc.EventMouse.BUTTON_LEFT)
+                    if(event.getButton() == cc.Event.EventMouse.BUTTON_LEFT)
                         event.getCurrentTarget().drawInLocation(event.getLocation());
                 }
             }, this);
