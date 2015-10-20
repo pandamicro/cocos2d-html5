@@ -1,7 +1,5 @@
 /****************************************************************************
- Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011-2012 cocos2d-x.org
- Copyright (c) 2013-2015 Chukong Technologies Inc.
+ Copyright (c) 2015 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -24,23 +22,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-require('./polyfill');
-
-// DEFINE CC
-
-var root = typeof global !== 'undefined' ? global : window;
-
-// `cc(node)` takes a runtime node and return its corresponding cc.Runtime.NodeWrapper instance.
-var getWrapper;
-var cc = function (node) {
-    return getWrapper(node);
-};
-root.cc = cc;
-
-cc._setWrapperGetter = function (getter) {
-    getWrapper = getter;
-};
-
 // MACROS
 
 // if "global_defs" not preprocessed by uglify, just declare them globally
@@ -49,33 +30,19 @@ if (typeof CC_TEST === 'undefined') {
     eval('CC_TEST=typeof describe!=="undefined"||typeof QUnit!=="undefined"');
 }
 if (typeof CC_EDITOR === 'undefined') {
-    eval('CC_EDITOR=typeof Editor!=="undefined"&&typeof process!== "undefined"&&"electron" in process.versions');
+    eval('CC_EDITOR=typeof Editor!=="undefined"&&typeof process!=="undefined"&&"electron" in process.versions');
 }
 if (typeof CC_DEV === 'undefined') {
     eval('CC_DEV=CC_EDITOR');
 }
 
-if (CC_TEST) {
-    /**
-     * contains internal apis for unit tests
-     * @expose
-     */
-    cc._Test = {};
-}
+// PREDEFINE
+
+require('./predefine');
+
+// LOAD BUNDLED COCOS2D
 
 var isCoreLevel = CC_EDITOR && Editor.isCoreLevel;
-
-// PRELOAD SOME MODULES FOR COCOS
-
-require('./cocos2d/core/platform/js');
-require('./cocos2d/core/value-types');
-require('./cocos2d/core/utils');
-require('./cocos2d/core/platform/CCInputManager');
-require('./cocos2d/core/platform/CCInputExtension');
-require('./cocos2d/core/platform/CCSys');
-require('./cocos2d/core/platform/CCLoader');
-require('./CCDebugger');
-
 if (!isCoreLevel) {
     // LOAD ORIGIN COCOS2D COMPILED BY CLOSURE
     ccui = {};
@@ -91,8 +58,7 @@ else {
 
 // LOAD EXTENDS FOR FIREBALL
 
-require('./cocos2d/core/platform');
-require('./cocos2d/core/assets');
+require('./extends');
 
 if (CC_EDITOR) {
     /**
@@ -108,16 +74,12 @@ if (isCoreLevel) {
     cc.isRuntimeNode = function () {
         return false;
     };
-    getWrapper = function () {
+    cc._setWrapperGetter(function () {
         return null;
-    };
+    });
     Editor.versions['cocos2d'] = require('./package.json').version;
 }
 else {
-    require('./cocos2d/core/CCComponent');
-    cc.Runtime = require('./wrapper');
-    cc.isRuntimeNode = cc.getWrapperType;   // 由于是借助 wrapper 来判断，所以该方法只有在 wrapper 都注册好后才有效
-
     require('./cocos2d/deprecated');
 }
 

@@ -2,6 +2,7 @@
 /bin
 /web.config
 .idea
+.DS_Store
 build
 aspnet_client
 node_modules

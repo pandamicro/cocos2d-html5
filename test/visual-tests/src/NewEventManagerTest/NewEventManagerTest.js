@@ -395,7 +395,7 @@ var CustomEventTest =  EventDispatcherTestDemo.extend({
 
         var sendItem = new cc.MenuItemFont("Send Custom Event 1", function(sender){
             ++selfPointer._item1Count;
-            var event = new cc.EventCustom("game_custom_event1");
+            var event = new cc.Event.EventCustom("game_custom_event1");
             event.setUserData(selfPointer._item1Count.toString());
             cc.eventManager.dispatchEvent(event);
         });
@@ -416,7 +416,7 @@ var CustomEventTest =  EventDispatcherTestDemo.extend({
         cc.eventManager.addListener(this._listener2, 1);
         var sendItem2 = new cc.MenuItemFont("Send Custom Event 2", function(sender){
             ++selfPointer._item2Count;
-            var event = new cc.EventCustom("game_custom_event2");
+            var event = new cc.Event.EventCustom("game_custom_event2");
             event.setUserData(selfPointer._item2Count.toString());
             cc.eventManager.dispatchEvent(event);
         });
@@ -1225,13 +1225,13 @@ var Issue9898 = EventDispatcherTestDemo.extend({
             eventName: "Issue9898",
             callback: function(event){
                 cc.eventManager.removeListener(_listener);
-                event = new cc.EventCustom("Issue9898");
+                event = new cc.Event.EventCustom("Issue9898");
                 cc.eventManager.dispatchEvent(event);
             }
         });
         cc.eventManager.addListener(_listener, 1);
         var menuItem  = new cc.MenuItemFont("Dispatch Custom Event1", function(sender){
-            var event = new cc.EventCustom("Issue9898");
+            var event = new cc.Event.EventCustom("Issue9898");
             cc.eventManager.dispatchEvent(event);
         });
         menuItem.setPosition(origin.x + size.width/2, origin.y + size.height/2);

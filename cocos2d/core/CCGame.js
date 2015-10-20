@@ -518,9 +518,9 @@ cc.game = /** @lends cc.game# */{
     _initEvents: function () {
         var win = window, self = this, hidden, visibilityChange, _undef = "undefined";
 
-        this._eventHide = this._eventHide || new cc.EventCustom(this.EVENT_HIDE);
+        this._eventHide = this._eventHide || new cc.Event.EventCustom(this.EVENT_HIDE);
         this._eventHide.setUserData(this);
-        this._eventShow = this._eventShow || new cc.EventCustom(this.EVENT_SHOW);
+        this._eventShow = this._eventShow || new cc.Event.EventCustom(this.EVENT_SHOW);
         this._eventShow.setUserData(this);
 
         // register system events

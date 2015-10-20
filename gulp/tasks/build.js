@@ -61,8 +61,6 @@ function getUglifyOptions (minify, global_defs) {
 }
 
 function rebundle(bundler) {
-    console.log('This will take some minutes...');
-
     var bundle = bundler.bundle()
         .on('error', handleErrors.handler)
         .pipe(handleErrors())
@@ -185,9 +183,11 @@ gulp.task('build-modular-cocos2d', ['compile-cocos2d'], function () {
         .pipe(gulp.dest(Path.dirname(paths.modularCocos2d)))
 });
 
-gulp.task('build', ['build-modular-cocos2d'], function () {
+gulp.task('build-html5', ['build-modular-cocos2d'], function () {
+    console.log('This will take some minutes...');
     return rebundle(createBundler(paths.jsEntry));
 });
+
 
 gulp.task('clean-test', function (done) {
     Del([paths.test.destEditorExtends, paths.test.dest], done);
@@ -204,3 +204,41 @@ gulp.task('build-test', ['build-modular-cocos2d', 'clean-test'], function () {
         return engine;
     }
 });
+
+
+function rebundle_jsb(bundler, minify, suffix) {
+    var SourceMap = false;
+    var bundle = bundler.bundle()
+        .on('error', handleErrors.handler)
+        .pipe(handleErrors())
+        .pipe(source(paths.JSBOutFile))
+        .pipe(buffer())
+        .pipe(rename({ suffix: suffix }));
+    if (SourceMap) {
+        bundle = bundle.pipe(sourcemaps.init({loadMaps: true}));
+    }
+    bundle = bundle.pipe(uglify(getUglifyOptions(minify, {
+        CC_EDITOR: false,
+        CC_DEV: false,
+        CC_TEST: false
+    })));
+    if (SourceMap) {
+        bundle = bundle.pipe(sourcemaps.write('./', {sourceRoot: './', addComment: true}));
+    }
+    return bundle.pipe(gulp.dest(paths.outDir));
+}
+
+gulp.task('build-jsb-extends-min', function () {
+    var jsbExtends = rebundle_jsb(createBundler(paths.JSBEntryExtends), true, '-extends');
+    var jsbPredefine = rebundle_jsb(createBundler(paths.JSBEntryPredefine), true, '-predefine');
+    return es.merge(jsbExtends, jsbPredefine);
+});
+
+gulp.task('build-jsb-extends-dev', function () {
+    var jsbExtends = rebundle_jsb(createBundler(paths.JSBEntryExtends), false, '-extends');
+    var jsbPredefine = rebundle_jsb(createBundler(paths.JSBEntryPredefine), false, '-predefine');
+    return es.merge(jsbExtends, jsbPredefine);
+});
+
+
+gulp.task('build', ['build-html5', 'build-jsb-extends-min']);

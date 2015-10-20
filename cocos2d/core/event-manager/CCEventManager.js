@@ -74,23 +74,21 @@ cc._EventListenerVector = cc._Class.extend({
 });
 
 cc.__getListenerID = function (event) {
-    var eventType = cc.Event, getType = event.getType();
-    if(getType === eventType.ACCELERATION)
+    var eventType = cc.Event, type = event.getType();
+    if (type === eventType.ACCELERATION)
         return cc._EventListenerAcceleration.LISTENER_ID;
-    if(getType === eventType.CUSTOM)
-        return event.getEventName();
-    if(getType === eventType.KEYBOARD)
+    if (type === eventType.KEYBOARD)
         return cc._EventListenerKeyboard.LISTENER_ID;
-    if(getType === eventType.MOUSE)
+    if (type === eventType.MOUSE)
         return cc._EventListenerMouse.LISTENER_ID;
-    if(getType === eventType.FOCUS)
+    if (type === eventType.FOCUS)
         return cc._EventListenerFocus.LISTENER_ID;
-    if(getType === eventType.TOUCH){
+    if (type === eventType.TOUCH){
         // Touch listener is very special, it contains two kinds of listeners, EventListenerTouchOneByOne and EventListenerTouchAllAtOnce.
         // return UNKNOWN instead.
         cc.log(cc._LogInfos._getListenerID);
     }
-    return "";
+    return type;
 };
 
 /**
@@ -417,11 +415,11 @@ cc.eventManager = /** @lends cc.eventManager# */{
             return false;
 
         var event = argsObj.event, selTouch = argsObj.selTouch;
-        event._setCurrentTarget(listener._node);
+        event.currentTarget = listener._node;
 
         var isClaimed = false, removedIdx;
-        var getCode = event.getEventCode(), eventCode = cc.EventTouch.EventCode;
-        if (getCode === eventCode.BEGAN) {
+        var getCode = event.getEventCode(), EventTouch = cc.Event.EventTouch;
+        if (getCode === EventTouch.BEGAN) {
             if (listener.onTouchBegan) {
                 isClaimed = listener.onTouchBegan(selTouch, event);
                 if (isClaimed && listener._registered)
@@ -430,14 +428,14 @@ cc.eventManager = /** @lends cc.eventManager# */{
         } else if (listener._claimedTouches.length > 0
             && ((removedIdx = listener._claimedTouches.indexOf(selTouch)) !== -1)) {
             isClaimed = true;
-            if(getCode === eventCode.MOVED && listener.onTouchMoved){
+            if(getCode === EventTouch.MOVED && listener.onTouchMoved){
                 listener.onTouchMoved(selTouch, event);
-            } else if(getCode === eventCode.ENDED){
+            } else if(getCode === EventTouch.ENDED){
                 if (listener.onTouchEnded)
                     listener.onTouchEnded(selTouch, event);
                 if (listener._registered)
                     listener._claimedTouches.splice(removedIdx, 1);
-            } else if(getCode === eventCode.CANCELLED){
+            } else if(getCode === EventTouch.CANCELLED){
                 if (listener.onTouchCancelled)
                     listener.onTouchCancelled(selTouch, event);
                 if (listener._registered)
@@ -501,15 +499,15 @@ cc.eventManager = /** @lends cc.eventManager# */{
         if (!listener._registered)
             return false;
 
-        var eventCode = cc.EventTouch.EventCode, event = callbackParams.event, touches = callbackParams.touches, getCode = event.getEventCode();
-        event._setCurrentTarget(listener._node);
-        if(getCode === eventCode.BEGAN && listener.onTouchesBegan)
+        var EventTouch = cc.Event.EventTouch, event = callbackParams.event, touches = callbackParams.touches, getCode = event.getEventCode();
+        event.currentTarget = listener._node;
+        if(getCode === EventTouch.BEGAN && listener.onTouchesBegan)
             listener.onTouchesBegan(touches, event);
-        else if(getCode === eventCode.MOVED && listener.onTouchesMoved)
+        else if(getCode === EventTouch.MOVED && listener.onTouchesMoved)
             listener.onTouchesMoved(touches, event);
-        else if(getCode === eventCode.ENDED && listener.onTouchesEnded)
+        else if(getCode === EventTouch.ENDED && listener.onTouchesEnded)
             listener.onTouchesEnded(touches, event);
-        else if(getCode === eventCode.CANCELLED && listener.onTouchesCancelled)
+        else if(getCode === EventTouch.CANCELLED && listener.onTouchesCancelled)
             listener.onTouchesCancelled(touches, event);
 
         // If the event was stopped, return directly.
@@ -938,7 +936,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
     },
 
     _onListenerCallback: function(listener, event){
-        event._setCurrentTarget(listener._getSceneGraphPriority());
+        event.currentTarget = listener._getSceneGraphPriority();
         listener._onEvent(event);
         return event.isStopped();
     },
@@ -949,7 +947,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
      * @param {*} optionalUserData
      */
     dispatchCustomEvent: function (eventName, optionalUserData) {
-        var ev = new cc.EventCustom(eventName);
+        var ev = new cc.Event.EventCustom(eventName);
         ev.setUserData(optionalUserData);
         this.dispatchEvent(ev);
     }
