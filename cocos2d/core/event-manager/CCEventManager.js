@@ -414,7 +414,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
         if (!listener._isRegistered)
             return false;
 
-        var event = argsObj.event, selTouch = argsObj.selTouch;
+        var event = argsObj.event, selTouch = event.currentTouch;
         event.currentTarget = listener._node;
 
         var isClaimed = false, removedIdx;
@@ -476,7 +476,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
         //
         if (oneByOneListeners) {
             for (var i = 0; i < originalTouches.length; i++) {
-                oneByOneArgsObj.selTouch = originalTouches[i];
+                event.currentTouch = originalTouches[i];
                 this._dispatchEventToListeners(oneByOneListeners, this._onTouchEventCallback, oneByOneArgsObj);
                 if (event.isStopped())
                     return;
