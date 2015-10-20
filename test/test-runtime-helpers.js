@@ -52,11 +52,11 @@
 //        var c1 = new TestNode();
 //
 //        Helpers.onNodeAttachedToParent(c1);
-//        expect(cc.engine.attachedWrappersForEditor[cc(c1).uuid]).to.be.equals(cc(c1));
+//        expect(cc.engine.attachedWrappersForEditor[cc.getWrapper(c1).uuid]).to.be.equals(cc.getWrapper(c1));
 //
 //        Helpers.onNodeDetachedFromParent(c1);
 //        cc.engine.emit("post-update");
-//        expect(cc.engine.attachedWrappersForEditor[cc(c1).uuid]).to.be.undefined;
+//        expect(cc.engine.attachedWrappersForEditor[cc.getWrapper(c1).uuid]).to.be.undefined;
 //    });
 //
 //    it('should debounce event in one frame', function () {
@@ -68,7 +68,7 @@
 //            target.push(event.detail.targetN);
 //        });
 //
-//        cc.engine.attachedWrappersForEditor[cc(c1).uuid] = 'unchanged';
+//        cc.engine.attachedWrappersForEditor[cc.getWrapper(c1).uuid] = 'unchanged';
 //
 //        Helpers.onNodeDetachedFromParent(c1);
 //        Helpers.onNodeDetachedFromParent(c2);
@@ -77,7 +77,7 @@
 //        cc.engine.emit("post-update");
 //
 //        expect(target).to.be.deep.equals([c2]);
-//        expect(cc.engine.attachedWrappersForEditor[cc(c1).uuid]).to.be.equals('unchanged');
-//        expect(cc.engine.attachedWrappersForEditor[cc(c2).uuid]).to.be.undefined;
+//        expect(cc.engine.attachedWrappersForEditor[cc.getWrapper(c1).uuid]).to.be.equals('unchanged');
+//        expect(cc.engine.attachedWrappersForEditor[cc.getWrapper(c2).uuid]).to.be.undefined;
 //    });
 //});

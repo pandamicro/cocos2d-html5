@@ -8,7 +8,7 @@ describe( 'test BitmapFont wrapper', function () {
 
     beforeEach(function () {
         node = new cc.LabelBMFont();
-        wrapper = cc(node);
+        wrapper = cc.getWrapper(node);
     });
 
     it( 'BitmapFont wrapper exists', function () {

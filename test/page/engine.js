@@ -46,7 +46,7 @@ describe( 'cc.engine.getIntersectionList', function () {
 
         for(var i = 0; i<2; i++) {
             var node = new cc.Node();
-            var wrapper = cc(node);
+            var wrapper = cc.getWrapper(node);
             node.setAnchorPoint(0.5, 0.5);
 
             scene.addChild(node);

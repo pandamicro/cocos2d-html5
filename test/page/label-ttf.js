@@ -18,7 +18,7 @@ describe( 'cc.LabelTTFWrapper', function () {
 
     beforeEach(function () {
         node = new cc.LabelTTF();
-        wrapper = cc(node);
+        wrapper = cc.getWrapper(node);
     });
 
 

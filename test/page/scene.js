@@ -10,7 +10,7 @@ describe( 'test scene wrapper', function () {
 
     beforeEach(function () {
         scene = new cc.Scene();
-        wrapper = cc(scene);
+        wrapper = cc.getWrapper(scene);
     });
 
     it( 'scene wrapper exists', function () {

@@ -60,7 +60,7 @@ function instantiate (original) {
     }
 
     if (cc.isRuntimeNode(original)) {
-        var wrapper = cc.instantiate(cc(original));
+        var wrapper = cc.instantiate(cc.getWrapper(original));
         return wrapper.targetN;
     }
 
@@ -221,7 +221,7 @@ function instantiateObj (obj, parent, wrapperToNode, ownerObj, ownerKey) {
     //}
     else {
         if (cc.isRuntimeNode(obj)) {
-            var wrapper = cc(obj);
+            var wrapper = cc.getWrapper(obj);
             clone = wrapper._iN$t;
             if (clone) {
                 if (wrapperToNode) {

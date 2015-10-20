@@ -8,7 +8,7 @@ describe( 'test node wrapper', function () {
     beforeEach(function () {
 
         node    = new cc.Node();
-        wrapper = cc(node);
+        wrapper = cc.getWrapper(node);
 
         scene = cc.director.getRunningScene();
 
@@ -44,7 +44,7 @@ describe( 'test node wrapper', function () {
 
     it( 'childrenN', function () {
         var child = new cc.Node();
-        var childWrapper = cc(child);
+        var childWrapper = cc.getWrapper(child);
 
         childWrapper.parentN = node;
 
@@ -280,7 +280,7 @@ describe( 'NodeWrapper siblingIndex', function () {
     });
 
     it( 'should be last if set siblingIndex to -1', function () {
-        var wrapper = cc(nodes[0]);
+        var wrapper = cc.getWrapper(nodes[0]);
 
         wrapper.setSiblingIndex(-1);
 
@@ -288,7 +288,7 @@ describe( 'NodeWrapper siblingIndex', function () {
     });
 
     it( 'should be 3 if 1st node\'s set siblingIndex to 3', function () {
-        var wrapper = cc(nodes[0]);
+        var wrapper = cc.getWrapper(nodes[0]);
 
         wrapper.setSiblingIndex(3);
 
@@ -296,7 +296,7 @@ describe( 'NodeWrapper siblingIndex', function () {
     });
 
     it( 'should be 3 if set 2nd node\'s siblingIndex to 3', function () {
-        var wrapper = cc(nodes[2]);
+        var wrapper = cc.getWrapper(nodes[2]);
 
         wrapper.setSiblingIndex(3);
 
@@ -304,7 +304,7 @@ describe( 'NodeWrapper siblingIndex', function () {
     });
 
     it( 'should be 0 if set 3rd node\'s siblingIndex to 0', function () {
-        var wrapper = cc(nodes[3]);
+        var wrapper = cc.getWrapper(nodes[3]);
 
         wrapper.setSiblingIndex(0);
 
@@ -312,7 +312,7 @@ describe( 'NodeWrapper siblingIndex', function () {
     });
 
     it( 'should be 2 if set 3rd node\'s siblingIndex to 2', function () {
-        var wrapper = cc(nodes[3]);
+        var wrapper = cc.getWrapper(nodes[3]);
 
         wrapper.setSiblingIndex(2);
 

@@ -6,7 +6,7 @@ describe( 'test sprite wrapper', function () {
 
     beforeEach(function () {
         sprite = new cc.Sprite();
-        wrapper = cc(sprite);
+        wrapper = cc.getWrapper(sprite);
     });
 
     it( 'sprite wrapper exists', function () {
