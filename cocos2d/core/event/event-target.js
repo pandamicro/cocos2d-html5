@@ -6,20 +6,20 @@ var JS = cc.js;
 var cachedArray = new Array(16);
 cachedArray.length = 0;
 
-var _doDispatchEvent = function (event) {
-    event.target = this;
+var _doDispatchEvent = function (owner, event, args) {
+    var target, i;
+    event.target = owner;
 
     // Event.CAPTURING_PHASE
-    this._getCapturingTargets(event.type, cachedArray);
+    owner._getCapturingTargets(event.type, cachedArray);
     // propagate
     event.eventPhase = 1;
-    var target, i;
     for (i = cachedArray.length - 1; i >= 0; --i) {
         target = cachedArray[i];
         if (target._isTargetActive() && target._capturingListeners) {
             event.currentTarget = target;
             // fire event
-            target._capturingListeners.invoke.apply(target._capturingListeners, arguments);
+            target._capturingListeners.invoke(event);
             // check if propagation stopped
             if (event._propagationStopped) {
                 return;
@@ -30,8 +30,8 @@ var _doDispatchEvent = function (event) {
 
     // Event.AT_TARGET
     // checks if destroyed in capturing callbacks
-    if (this._isTargetActive()) {
-        _doSendEvent.call(this, event);
+    if (owner._isTargetActive()) {
+        _doSendEvent(owner, event);
         if (event._propagationStopped) {
             return;
         }
@@ -39,7 +39,7 @@ var _doDispatchEvent = function (event) {
 
     if (event.bubbles) {
         // Event.BUBBLING_PHASE
-        this._getBubblingTargets(event.type, cachedArray);
+        owner._getBubblingTargets(event.type, cachedArray);
         // propagate
         event.eventPhase = 3;
         for (i = 0; i < cachedArray.length; ++i) {
@@ -59,18 +59,18 @@ var _doDispatchEvent = function (event) {
 };
 
 
-var _doSendEvent = function (event) {
+var _doSendEvent = function (owner, event) {
     // Event.AT_TARGET
     event.eventPhase = 2;
-    event.currentTarget = this;
-    if (this._capturingListeners) {
-        this._capturingListeners.invoke(event);
+    event.currentTarget = owner;
+    if (owner._capturingListeners) {
+        owner._capturingListeners.invoke(event);
         if (event._propagationStopped) {
             return;
         }
     }
-    if (this._bubblingListeners) {
-        this._bubblingListeners.invoke(event);
+    if (owner._bubblingListeners) {
+        owner._bubblingListeners.invoke(event);
     }
 };
 
@@ -93,7 +93,7 @@ var _doSendEvent = function (event) {
  *  - _getCapturingTargets
  *  - _getBubblingTargets
  *
- * @class EventTarget
+ * @class cc.EventTarget
  */
 var EventTarget = function () {
 }
@@ -211,7 +211,7 @@ JS.mixin(EventTarget.prototype, {
      *                      or its cancelable attribute value is false, and false otherwise.
      */
     dispatchEvent: function (event) {
-        _doDispatchEvent.apply(this, arguments);
+        _doDispatchEvent(this, event);
         cachedArray.length = 0;
         var notPrevented = ! event._defaultPrevented;
         event.unuse();
@@ -230,7 +230,7 @@ JS.mixin(EventTarget.prototype, {
         if ( typeof message === 'string' ) {
             var event = new EventCustom(message);
             event.detail = detail;
-            _doSendEvent.call(this, event);
+            _doSendEvent(this, event);
         }
         else {
             cc.error('The message must be provided');
@@ -291,7 +291,7 @@ JS.mixin(EventTarget.prototype, {
 /**
  * Polyfill the functionalities of EventTarget into a existing object
  * @static
- * @memberof EventTarget
+ * @memberof cc.EventTarget
  * @param {Object} object - An object to be extended with EventTarget capability
  */
 EventTarget.polyfill = function (object) {
