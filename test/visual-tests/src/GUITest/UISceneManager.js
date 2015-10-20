@@ -639,7 +639,7 @@
                 cc.eventManager.addListener({
                     event: cc.EventListener.MOUSE,
                     onMouseMove: function (event) {
-                        if (event.getButton() == cc.EventMouse.BUTTON_LEFT)
+                        if (event.getButton() == cc.Event.EventMouse.BUTTON_LEFT)
                             event.getCurrentTarget().moveMenu(event.getDelta());
                     },
                     onMouseScroll: function (event) {
