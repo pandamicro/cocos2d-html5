@@ -50,6 +50,10 @@ cc.game = /** @lends cc.game# */{
     _lastTime: null,
     _frameTime: null,
 
+    /**
+     * The current running Scene in Fireball. Fireball can only run one Scene at the time.
+     */
+    _scene: null,
     _loadingScene: '',
     // Scenes list
     _sceneInfos: [],

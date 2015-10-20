@@ -1,7 +1,5 @@
 /****************************************************************************
- Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011-2012 cocos2d-x.org
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2015 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -24,19 +22,15 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-require('./js');
-require('./CCClass');
-require('./CCObject');
-require('./callbacks-invoker');
-require('./url');
-require('./deserialize');
-require('./instantiate');
-require('./prefab-info');
-require('./requiring-frame');
-require('./CCSys');
-require('./CCLoader');
+/**
+ * Class of all nodes in Fireball scenes.
+ * @class
+ * @name cc.ENode
+ * @param {string} name - the name of the node
+ */
+var Node = cc.Class({
+    name: 'cc.Node',
+});
 
-if (cc.sys.isBrowser) {
-    require('./load-manager');
-    require('./CCAssetLibrary');
-}
+// TODO - 这个难听的类之后要改名成 cc.Node，再对外屏蔽原 cc.Node
+cc.ENode = module.exports = Node;

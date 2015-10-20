@@ -21,8 +21,13 @@ qunit references:
     <script>
         var isPhantomJS = window.navigator.userAgent.indexOf('PhantomJS') !== -1;
         if (isPhantomJS) {
-            window.onerror = function (_, _, _, _, error) {
-                console.error(error.stack);
+            window.onerror = function (msg, url, line, column, error) {
+                if (error) {
+                    console.error(error.stack);
+                }
+                else {
+                    console.error(msg + '.\n' + url + ':' + line);
+                }
             };
             // polyfill
             var video = document.createElement("video");

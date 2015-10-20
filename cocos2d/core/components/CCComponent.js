@@ -109,7 +109,7 @@ var Component = cc.Class({
     name: 'cc.Component',
     //extends: HashObject,
 
-    //constructor: CC_EDITOR && function () {
+    //ctor: CC_EDITOR && function () {
     //    // 我们并不在构造函数中给 entity 赋值，因为那样到了反序列化时，子类的构造函数就还是会拿不到 entity。
     //    Editor._AssetsWatcher.initComponent(this);
     //},

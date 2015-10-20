@@ -1,7 +1,5 @@
 /****************************************************************************
- Copyright (c) 2008-2010 Ricardo Quesada
- Copyright (c) 2011-2012 cocos2d-x.org
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2015 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -24,19 +22,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-require('./js');
-require('./CCClass');
-require('./CCObject');
-require('./callbacks-invoker');
-require('./url');
-require('./deserialize');
-require('./instantiate');
-require('./prefab-info');
-require('./requiring-frame');
-require('./CCSys');
-require('./CCLoader');
+// internal scene wrapper for cc.Scene
+var _Scene = cc.Class({
+    name: 'cc.Scene',
+    extends: require('./CCNode'),
 
-if (cc.sys.isBrowser) {
-    require('./load-manager');
-    require('./CCAssetLibrary');
-}
+
+});
+
+module.exports = _Scene;
