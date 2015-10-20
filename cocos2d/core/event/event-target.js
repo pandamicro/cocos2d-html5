@@ -1,7 +1,7 @@
 ﻿var EventListeners = require('./event-listeners');
 var Event = require('./event');
 var CustomEvent = Event.CustomEvent;
-var CCObject = cc.Object;
+var CCObject = require('../platform/CCObject');
 var JS = cc.js;
 
 /**

@@ -5,9 +5,14 @@ var Path = require('path');
 // specify game project paths for tasks.
 global.paths = {
     src: './src',
-    jsEntry: './index',
+    jsEntry: './index.js',
+    //JSBEntryPredefine: './gulp/jsb-build-entry-predefine',
+    //JSBEntryExtends: './gulp/jsb-build-entry-extends',
+    JSBEntryPredefine: './predefine.js',
+    JSBEntryExtends: './extends.js',
     outDir: './bin',
     outFile: 'cocos2d-js.js',
+    JSBOutFile: 'cocos2d-jsb.js',
 
     test: {
         src: 'test/qunit/unit/**/*.js',

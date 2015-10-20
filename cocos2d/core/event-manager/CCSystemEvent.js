@@ -23,8 +23,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-var JS = require("../platform/js");
-require("../event/event");
+var JS = cc.js;
 
 /**
  * The type code of Touch event.
@@ -401,7 +400,6 @@ EventKeyboard = function (keyCode, isPressed, bubbles) {
 };
 JS.extend(EventKeyboard, cc.Event);
 
-cc.Event.EventCustom = EventCustom;
 cc.Event.EventMouse = EventMouse;
 cc.Event.EventTouch = EventTouch;
 cc.Event.EventFocus = EventFocus;
