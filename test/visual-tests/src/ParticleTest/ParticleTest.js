@@ -219,7 +219,7 @@ var ParticleDemo = BaseTestLayer.extend({
         var selfPoint = this;
         this._freeMovementButton = new cc.MenuItemSprite(freeBtnNormal, freeBtnSelected, freeBtnDisabled,
             function () {
-                selfPoint._emitter.setPositionType(cc.ParticleSystem.TYPE_RELATIVE);
+                selfPoint._emitter.setPositionType(cc.ParticleSystem.Type.RELATIVE);
                 selfPoint._relativeMovementButton.setVisible(true);
                 selfPoint._freeMovementButton.setVisible(false);
                 selfPoint._groupMovementButton.setVisible(false);
@@ -230,7 +230,7 @@ var ParticleDemo = BaseTestLayer.extend({
 
         this._relativeMovementButton = new cc.MenuItemSprite(relativeBtnNormal, relativeBtnSelected, relativeBtnDisabled,
             function () {
-                selfPoint._emitter.setPositionType(cc.ParticleSystem.TYPE_GROUPED);
+                selfPoint._emitter.setPositionType(cc.ParticleSystem.Type.GROUPED);
                 selfPoint._relativeMovementButton.setVisible(false);
                 selfPoint._freeMovementButton.setVisible(false);
                 selfPoint._groupMovementButton.setVisible(true);
@@ -242,7 +242,7 @@ var ParticleDemo = BaseTestLayer.extend({
 
         this._groupMovementButton = new cc.MenuItemSprite(groupBtnNormal, groupBtnSelected, groupBtnDisabled,
             function () {
-                selfPoint._emitter.setPositionType(cc.ParticleSystem.TYPE_FREE);
+                selfPoint._emitter.setPositionType(cc.ParticleSystem.Type.FREE);
                 selfPoint._relativeMovementButton.setVisible(false);
                 selfPoint._freeMovementButton.setVisible(true);
                 selfPoint._groupMovementButton.setVisible(false);
@@ -342,12 +342,12 @@ var ParticleDemo = BaseTestLayer.extend({
         director.runScene(s);
     },
     toggleCallback:function (sender) {
-        if (this._emitter.getPositionType() == cc.ParticleSystem.TYPE_GROUPED)
-            this._emitter.setPositionType(cc.ParticleSystem.TYPE_FREE);
-        else if (this._emitter.getPositionType() == cc.ParticleSystem.TYPE_FREE)
-            this._emitter.setPositionType(cc.ParticleSystem.TYPE_RELATIVE);
-        else if (this._emitter.getPositionType() == cc.ParticleSystem.TYPE_RELATIVE)
-            this._emitter.setPositionType(cc.ParticleSystem.TYPE_GROUPED);
+        if (this._emitter.getPositionType() == cc.ParticleSystem.Type.GROUPED)
+            this._emitter.setPositionType(cc.ParticleSystem.Type.FREE);
+        else if (this._emitter.getPositionType() == cc.ParticleSystem.Type.FREE)
+            this._emitter.setPositionType(cc.ParticleSystem.Type.RELATIVE);
+        else if (this._emitter.getPositionType() == cc.ParticleSystem.Type.RELATIVE)
+            this._emitter.setPositionType(cc.ParticleSystem.Type.GROUPED);
     },
 
     _moveToTouchPoint: function (location) {
@@ -923,7 +923,7 @@ var RadiusMode1 = ParticleDemo.extend({
         this._emitter.duration = cc.ParticleSystem.DURATION_INFINITY;
 
         // radius mode
-        this._emitter.emitterMode = cc.ParticleSystem.MODE_RADIUS;
+        this._emitter.emitterMode = cc.ParticleSystem.Mode.RADIUS;
 
         // radius mode: start and end radius in pixels
         this._emitter.startRadius = 0;
@@ -994,7 +994,7 @@ var RadiusMode2 = ParticleDemo.extend({
         this._emitter.duration = cc.ParticleSystem.DURATION_INFINITY;
 
         // radius mode
-        this._emitter.emitterMode = cc.ParticleSystem.MODE_RADIUS;
+        this._emitter.emitterMode = cc.ParticleSystem.Mode.RADIUS;
 
         // radius mode: start and end radius in pixels
         this._emitter.startRadius = 100;
@@ -1065,7 +1065,7 @@ var Issue704 = ParticleDemo.extend({
         this._emitter.duration = cc.ParticleSystem.DURATION_INFINITY;
 
         // radius mode
-        this._emitter.emitterMode = cc.ParticleSystem.MODE_RADIUS;
+        this._emitter.emitterMode = cc.ParticleSystem.Mode.RADIUS;
 
         // radius mode: start and end radius in pixels
         this._emitter.startRadius = 50;

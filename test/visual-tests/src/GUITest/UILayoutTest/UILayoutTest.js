@@ -153,7 +153,7 @@ var UILayoutTest_BackGroundImage_Scale9 = UILayoutTestBase.extend({
 var UILayoutTest_Layout_Linear_Vertical = UILayoutTestBase.extend({
     createLayout: function () {
         var layout = new ccui.Layout();
-        layout.setLayoutType(ccui.Layout.LINEAR_VERTICAL);
+        layout.setLayoutType(ccui.Layout.Type.LINEAR_VERTICAL);
         layout.setContentSize(cc.size(280, 150));
         return layout;
     },
@@ -180,7 +180,7 @@ var UILayoutTest_Layout_Linear_Vertical = UILayoutTestBase.extend({
 var UILayoutTest_Layout_Linear_Horizontal = UILayoutTestBase.extend({
     createLayout: function () {
         var layout = new ccui.Layout();
-        layout.setLayoutType(ccui.Layout.LINEAR_HORIZONTAL);
+        layout.setLayoutType(ccui.Layout.Type.LINEAR_HORIZONTAL);
         layout.setClippingEnabled(true);
         layout.setContentSize(cc.size(280, 150));
         return layout;
@@ -210,7 +210,7 @@ var UILayoutTest_Layout_Relative = UILayoutTestBase.extend({
     createLayout: function () {
         var layout = new ccui.Layout();
         layout.ignoreContentAdaptWithSize(false);
-        layout.setLayoutType(ccui.Layout.RELATIVE);
+        layout.setLayoutType(ccui.Layout.Type.RELATIVE);
         layout.sizeType = ccui.Widget.SIZE_PERCENT;
         layout.setSizePercent(cc.p(0.5, 0.5));
         //layout.setContentSize(cc.size(280, 150));
@@ -227,15 +227,15 @@ var UILayoutTest_Layout_Relative = UILayoutTestBase.extend({
     setLayoutParameter: function () {
         var lp1 = new ccui.RelativeLayoutParameter();
         this.button.setLayoutParameter(lp1);
-        lp1.setAlign(ccui.RelativeLayoutParameter.PARENT_TOP_LEFT);
+        lp1.setAlign(ccui.RelativeLayoutParameter.Type.PARENT_TOP_LEFT);
 
         var lp2 = new ccui.RelativeLayoutParameter();
         this.textButton.setLayoutParameter(lp2);
-        lp2.setAlign(ccui.RelativeLayoutParameter.CENTER_IN_PARENT);
+        lp2.setAlign(ccui.RelativeLayoutParameter.Type.CENTER_IN_PARENT);
 
         var lp3 = new ccui.RelativeLayoutParameter();
         this.button_scale9.setLayoutParameter(lp3);
-        lp3.setAlign(ccui.RelativeLayoutParameter.PARENT_RIGHT_BOTTOM);
+        lp3.setAlign(ccui.RelativeLayoutParameter.Type.PARENT_RIGHT_BOTTOM);
     }
 });
 
@@ -255,7 +255,7 @@ var UILayoutTest_Layout_Relative_Align_Parent = UIMainLayer.extend({
 
              // Create the layout
              var layout = new ccui.Layout();
-             layout.setLayoutType(ccui.Layout.RELATIVE);
+             layout.setLayoutType(ccui.Layout.Type.RELATIVE);
              layout.setContentSize(280, 150);
              layout.setBackGroundColorType(ccui.Layout.BG_COLOR_SOLID);
              layout.setBackGroundColor(cc.Color.GREEN);
@@ -269,7 +269,7 @@ var UILayoutTest_Layout_Relative_Align_Parent = UIMainLayer.extend({
              layout.addChild(button_TopLeft);
 
              var rp_TopLeft = new ccui.RelativeLayoutParameter();
-             rp_TopLeft.setAlign(ccui.RelativeLayoutParameter.PARENT_TOP_LEFT);
+             rp_TopLeft.setAlign(ccui.RelativeLayoutParameter.Type.PARENT_TOP_LEFT);
              button_TopLeft.setLayoutParameter(rp_TopLeft);
 
              // top center horizontal
@@ -277,21 +277,21 @@ var UILayoutTest_Layout_Relative_Align_Parent = UIMainLayer.extend({
              layout.addChild(button_TopCenter);
 
              var rp_TopCenter = new ccui.RelativeLayoutParameter();
-             rp_TopCenter.setAlign(ccui.RelativeLayoutParameter.PARENT_TOP_CENTER_HORIZONTAL);
+             rp_TopCenter.setAlign(ccui.RelativeLayoutParameter.Type.PARENT_TOP_CENTER_HORIZONTAL);
              button_TopCenter.setLayoutParameter(rp_TopCenter);
 
              // top right
              var button_TopRight = new ccui.Button("ccs-res/cocosui/animationbuttonnormal.png", "ccs-res/cocosui/animationbuttonpressed.png");
              layout.addChild(button_TopRight);
              var rp_TopRight = new ccui.RelativeLayoutParameter();
-             rp_TopRight.setAlign(ccui.RelativeLayoutParameter.PARENT_TOP_RIGHT);
+             rp_TopRight.setAlign(ccui.RelativeLayoutParameter.Type.PARENT_TOP_RIGHT);
              button_TopRight.setLayoutParameter(rp_TopRight);
 
              // left center
              var button_LeftCenter = new ccui.Button("ccs-res/cocosui/animationbuttonnormal.png", "ccs-res/cocosui/animationbuttonpressed.png");
              layout.addChild(button_LeftCenter);
              var rp_LeftCenter = new ccui.RelativeLayoutParameter();
-             rp_LeftCenter.setAlign(ccui.RelativeLayoutParameter.PARENT_LEFT_CENTER_VERTICAL);
+             rp_LeftCenter.setAlign(ccui.RelativeLayoutParameter.Type.PARENT_LEFT_CENTER_VERTICAL);
              button_LeftCenter.setLayoutParameter(rp_LeftCenter);
 
              // center
@@ -299,14 +299,14 @@ var UILayoutTest_Layout_Relative_Align_Parent = UIMainLayer.extend({
              layout.addChild(buttonCenter);
 
              var rpCenter = new ccui.RelativeLayoutParameter();
-             rpCenter.setAlign(ccui.RelativeLayoutParameter.CENTER_IN_PARENT);
+             rpCenter.setAlign(ccui.RelativeLayoutParameter.Type.CENTER_IN_PARENT);
              buttonCenter.setLayoutParameter(rpCenter);
 
              // right center
              var button_RightCenter = new ccui.Button("ccs-res/cocosui/animationbuttonnormal.png", "ccs-res/cocosui/animationbuttonpressed.png");
              layout.addChild(button_RightCenter);
              var rp_RightCenter = new ccui.RelativeLayoutParameter();
-             rp_RightCenter.setAlign(ccui.RelativeLayoutParameter.PARENT_RIGHT_CENTER_VERTICAL);
+             rp_RightCenter.setAlign(ccui.RelativeLayoutParameter.Type.PARENT_RIGHT_CENTER_VERTICAL);
              button_RightCenter.setLayoutParameter(rp_RightCenter);
 
 
@@ -314,21 +314,21 @@ var UILayoutTest_Layout_Relative_Align_Parent = UIMainLayer.extend({
              var button_LeftBottom = new ccui.Button("ccs-res/cocosui/animationbuttonnormal.png", "ccs-res/cocosui/animationbuttonpressed.png");
              layout.addChild(button_LeftBottom);
              var rp_LeftBottom = new ccui.RelativeLayoutParameter();
-             rp_LeftBottom.setAlign(ccui.RelativeLayoutParameter.PARENT_LEFT_BOTTOM);
+             rp_LeftBottom.setAlign(ccui.RelativeLayoutParameter.Type.PARENT_LEFT_BOTTOM);
              button_LeftBottom.setLayoutParameter(rp_LeftBottom);
 
              // bottom center
              var button_BottomCenter = new ccui.Button("ccs-res/cocosui/animationbuttonnormal.png", "ccs-res/cocosui/animationbuttonpressed.png");
              layout.addChild(button_BottomCenter);
              var rp_BottomCenter = new ccui.RelativeLayoutParameter();
-             rp_BottomCenter.setAlign(ccui.RelativeLayoutParameter.PARENT_BOTTOM_CENTER_HORIZONTAL);
+             rp_BottomCenter.setAlign(ccui.RelativeLayoutParameter.Type.PARENT_BOTTOM_CENTER_HORIZONTAL);
              button_BottomCenter.setLayoutParameter(rp_BottomCenter);
 
              // right bottom
              var button_RightBottom = new ccui.Button("ccs-res/cocosui/animationbuttonnormal.png", "ccs-res/cocosui/animationbuttonpressed.png");
              layout.addChild(button_RightBottom);
              var rp_RightBottom = new ccui.RelativeLayoutParameter();
-             rp_RightBottom.setAlign(ccui.RelativeLayoutParameter.PARENT_RIGHT_BOTTOM);
+             rp_RightBottom.setAlign(ccui.RelativeLayoutParameter.Type.PARENT_RIGHT_BOTTOM);
              button_RightBottom.setLayoutParameter(rp_RightBottom);
 
              return true;
@@ -353,7 +353,7 @@ var UILayoutTest_Layout_Relative_Location = UIMainLayer.extend({
 
              // Create the layout
              var layout = new ccui.Layout();
-             layout.setLayoutType(ccui.Layout.RELATIVE);
+             layout.setLayoutType(ccui.Layout.Type.RELATIVE);
              layout.setContentSize(280, 150);
              var backgroundSize = background.getContentSize();
              layout.setPosition((widgetSize.width - backgroundSize.width) / 2.0 + (backgroundSize.width - layout.width) / 2.0,
@@ -365,7 +365,7 @@ var UILayoutTest_Layout_Relative_Location = UIMainLayer.extend({
              layout.addChild(imageView_Center);
              var rp_Center = new ccui.RelativeLayoutParameter();
              rp_Center.setRelativeName("rp_Center");
-             rp_Center.setAlign(ccui.RelativeLayoutParameter.CENTER_IN_PARENT);
+             rp_Center.setAlign(ccui.RelativeLayoutParameter.Type.CENTER_IN_PARENT);
              imageView_Center.setLayoutParameter(rp_Center);
 
              // above center
@@ -373,7 +373,7 @@ var UILayoutTest_Layout_Relative_Location = UIMainLayer.extend({
              layout.addChild(imageView_AboveCenter);
              var rp_AboveCenter = new ccui.RelativeLayoutParameter();
              rp_AboveCenter.setRelativeToWidgetName("rp_Center");
-             rp_AboveCenter.setAlign(ccui.RelativeLayoutParameter.LOCATION_ABOVE_CENTER);
+             rp_AboveCenter.setAlign(ccui.RelativeLayoutParameter.Type.LOCATION_ABOVE_CENTER);
              imageView_AboveCenter.setLayoutParameter(rp_AboveCenter);
 
              // below center
@@ -381,7 +381,7 @@ var UILayoutTest_Layout_Relative_Location = UIMainLayer.extend({
              layout.addChild(imageView_BelowCenter);
              var rp_BelowCenter = new ccui.RelativeLayoutParameter();
              rp_BelowCenter.setRelativeToWidgetName("rp_Center");
-             rp_BelowCenter.setAlign(ccui.RelativeLayoutParameter.LOCATION_BELOW_CENTER);
+             rp_BelowCenter.setAlign(ccui.RelativeLayoutParameter.Type.LOCATION_BELOW_CENTER);
              imageView_BelowCenter.setLayoutParameter(rp_BelowCenter);
 
              // left center
@@ -389,7 +389,7 @@ var UILayoutTest_Layout_Relative_Location = UIMainLayer.extend({
              layout.addChild(imageView_LeftCenter);
              var rp_LeftCenter = new ccui.RelativeLayoutParameter();
              rp_LeftCenter.setRelativeToWidgetName("rp_Center");
-             rp_LeftCenter.setAlign(ccui.RelativeLayoutParameter.LOCATION_LEFT_OF_CENTER);
+             rp_LeftCenter.setAlign(ccui.RelativeLayoutParameter.Type.LOCATION_LEFT_OF_CENTER);
              imageView_LeftCenter.setLayoutParameter(rp_LeftCenter);
 
              // right center
@@ -397,7 +397,7 @@ var UILayoutTest_Layout_Relative_Location = UIMainLayer.extend({
              layout.addChild(imageView_RightCenter);
              var rp_RightCenter = new ccui.RelativeLayoutParameter();
              rp_RightCenter.setRelativeToWidgetName("rp_Center");
-             rp_RightCenter.setAlign(ccui.RelativeLayoutParameter.LOCATION_RIGHT_OF_CENTER);
+             rp_RightCenter.setAlign(ccui.RelativeLayoutParameter.Type.LOCATION_RIGHT_OF_CENTER);
              imageView_RightCenter.setLayoutParameter(rp_RightCenter);
 
              return true;

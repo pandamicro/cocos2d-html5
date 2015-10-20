@@ -39,7 +39,7 @@ var UIScrollViewTest_Vertical = UIMainLayer.extend({
 
             // Create the scrollview
             var scrollView = new ccui.ScrollView();
-            scrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
+            scrollView.setDirection(ccui.ScrollView.Dir.VERTICAL);
             scrollView.setTouchEnabled(true);
             scrollView.setContentSize(cc.size(280, 150));
 
@@ -106,7 +106,7 @@ var UIScrollViewTest_Horizontal = UIMainLayer.extend({
 
             // Create the scrollview
             var scrollView = new ccui.ScrollView();
-            scrollView.setDirection(ccui.ScrollView.DIR_HORIZONTAL);
+            scrollView.setDirection(ccui.ScrollView.Dir.HORIZONTAL);
             scrollView.setTouchEnabled(true);
             scrollView.setContentSize(cc.size(280, 150));
             var scrollViewRect = scrollView.getContentSize();
@@ -175,7 +175,7 @@ var UIScrollViewTest_Both = UIMainLayer.extend({
 
             // Create the scrollview
             var scrollView = new ccui.ScrollView();
-            scrollView.setDirection(ccui.ScrollView.DIR_BOTH);
+            scrollView.setDirection(ccui.ScrollView.Dir.BOTH);
             scrollView.setTouchEnabled(true);
             scrollView.setBounceEnabled(true);
             scrollView.setBackGroundImageScale9Enabled(true);
@@ -218,7 +218,7 @@ var UIScrollViewTest_ScrollToPercentBothDirection = UIMainLayer.extend({
             scrollView.setTouchEnabled(true);
             scrollView.setBackGroundColor(cc.Color.GREEN);
             scrollView.setBackGroundColorType(ccui.Layout.BG_COLOR_SOLID);
-            scrollView.setDirection(ccui.ScrollView.DIR_BOTH);
+            scrollView.setDirection(ccui.ScrollView.Dir.BOTH);
             scrollView.setInnerContainerSize(cc.size(480, 320));
             scrollView.setContentSize(cc.size(100, 100));
             var scrollViewSize = scrollView.getContentSize();
@@ -259,7 +259,7 @@ var UIScrollViewTest_ScrollToPercentBothDirection_Bounce = UIMainLayer.extend({
             scrollView.setBounceEnabled(true);
             scrollView.setBackGroundColor(cc.Color.GREEN);
             scrollView.setBackGroundColorType(ccui.Layout.BG_COLOR_SOLID);
-            scrollView.setDirection(ccui.ScrollView.DIR_BOTH);
+            scrollView.setDirection(ccui.ScrollView.Dir.BOTH);
             scrollView.setInnerContainerSize(cc.size(480, 320));
             scrollView.setContentSize(cc.size(100, 100));
             var scrollViewSize = scrollView.getContentSize();
@@ -302,7 +302,7 @@ var UIScrollViewNestTest = UIMainLayer.extend({
             // Create the scrollview by vertical
             var scrollView = new ccui.ScrollView();
             scrollView.setContentSize(cc.size(280.0, 150.0));
-            scrollView.setDirection(ccui.ScrollView.DIR_BOTH);
+            scrollView.setDirection(ccui.ScrollView.Dir.BOTH);
             var backgroundSize = background.getContentSize();
             scrollView.setPosition(cc.p((widgetSize.width - backgroundSize.width) / 2.0 +
                 (backgroundSize.width - scrollView.getContentSize().width) / 2.0,
@@ -340,7 +340,7 @@ var UIScrollViewNestTest = UIMainLayer.extend({
             sc.setBackGroundColor(cc.Color.GREEN);
             sc.setBackGroundColorType(ccui.Layout.BG_COLOR_SOLID);
             sc.setBounceEnabled(true);
-            sc.setDirection(ccui.ScrollView.DIR_BOTH);
+            sc.setDirection(ccui.ScrollView.Dir.BOTH);
             sc.setInnerContainerSize(cc.size(480, 320));
             sc.setContentSize(cc.size(100,100));
             sc.setPropagateTouchEvents(false);
@@ -376,7 +376,7 @@ var UIScrollViewRotated = UIMainLayer.extend({
             // Create the scrollview by vertical
             var scrollView = new ccui.ScrollView();
             scrollView.setContentSize(cc.size(280.0, 150.0));
-            scrollView.setDirection(ccui.ScrollView.DIR_BOTH);
+            scrollView.setDirection(ccui.ScrollView.Dir.BOTH);
             var backgroundSize = background.getContentSize();
             scrollView.setPosition(cc.p((widgetSize.width - backgroundSize.width) / 2.0 +
                 (backgroundSize.width - scrollView.getContentSize().width) / 2.0,
@@ -499,7 +499,7 @@ var UIScrollViewTest_Vertical_Multiple = UIMainLayer.extend({
 
             // Create the scrollview
             var scrollView = this._scrollView = new ccui.ScrollView();
-            scrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
+            scrollView.setDirection(ccui.ScrollView.Dir.VERTICAL);
             scrollView.setTouchEnabled(true);
             scrollView.setContentSize(cc.size(280, 150));
 

@@ -494,7 +494,7 @@ var UIFocusTestListView = UIFocusTestBase.extend({
             var winSize = cc.director.getVisibleSize();
 
             this._listView = new ccui.ListView();
-            this._listView.setDirection(ccui.ScrollView.DIR_VERTICAL);
+            this._listView.setDirection(ccui.ScrollView.Dir.VERTICAL);
             this._listView.setBounceEnabled(true);
             this._listView.setBackGroundImage("ccs-res/cocosui/green_edit.png");
             this._listView.setBackGroundImageScale9Enabled(true);

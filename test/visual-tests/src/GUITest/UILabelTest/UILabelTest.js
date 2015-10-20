@@ -60,7 +60,7 @@ var UILabelTest_LineWrap = UIMainLayer.extend({
             text.boundingWidth = 280;
 	        text.boundingHeight = 150;
             text.attr({
-	            textAlign: cc.TEXT_ALIGNMENT_CENTER,
+	            textAlign: cc.TextAlignment.CENTER,
 	            string: "Label can line wrap",
 	            font: "32px AmericanTypewriter",
 	            x: this._widget.width / 2
@@ -87,7 +87,7 @@ var UILabelTest_TTF = UIMainLayer.extend({
             text.boundingWidth = 280;
 	        text.boundingHeight = 150;
             text.attr({
-	            textAlign: cc.TEXT_ALIGNMENT_CENTER,
+	            textAlign: cc.TextAlignment.CENTER,
 	            string: "Label TTF",
 	            font: "32px mericanTypewriter",
 	            x: this._widget.width / 2,

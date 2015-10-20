@@ -683,7 +683,7 @@ ccui.RichText = ccui.Widget.extend(/** @lends ccui.RichText# */{
      *
      * @example
      * var richText = new ccui.RichText();
-     * richText.setTextHorizontalAlignment(cc.Text_ALIGNMENT_RIGHT);
+     * richText.setTextHorizontalAlignment(cc.TextAlignment.RIGHT);
      *
      * @param {cc.TextAlignment} value - example cc.TextAlignment.RIGHT
      */
