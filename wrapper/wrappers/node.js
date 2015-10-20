@@ -6,7 +6,6 @@ var JS = cc.js;
 var Vec2 = cc.Vec2;
 var Rect = cc.Rect;
 var Color = cc.Color;
-var Utils = require('./utils');
 var Helpers = require('../helpers');
 
 var ERR_NaN = 'The %s must not be NaN';

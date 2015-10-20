@@ -154,28 +154,39 @@ gulp.task('build-test', ['build-modular-cocos2d', 'clean-test'], function () {
     }
 });
 
-function rebundle_jsb(bundler, suffix) {
-    return bundler.bundle()
+function rebundle_jsb(bundler, minify, suffix) {
+    var SourceMap = false;
+    var bundle = bundler.bundle()
         .on('error', handleErrors.handler)
         .pipe(handleErrors())
         .pipe(source(paths.JSBOutFile))
         .pipe(buffer())
-        .pipe(rename({ suffix: suffix }))
-        .pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(uglify(getUglifyOptions(true, {
-            CC_EDITOR: false,
-            CC_DEV: false,
-            CC_TEST: false
-        })))
-        .pipe(sourcemaps.write('./', {sourceRoot: './', addComment: true}))
-        .pipe(gulp.dest(paths.outDir));
+        .pipe(rename({ suffix: suffix }));
+    if (SourceMap) {
+        bundle = bundle.pipe(sourcemaps.init({loadMaps: true}));
+    }
+    bundle = bundle.pipe(uglify(getUglifyOptions(minify, {
+        CC_EDITOR: false,
+        CC_DEV: false,
+        CC_TEST: false
+    })));
+    if (SourceMap) {
+        bundle = bundle.pipe(sourcemaps.write('./', {sourceRoot: './', addComment: true}));
+    }
+    return bundle.pipe(gulp.dest(paths.outDir));
 }
 
-gulp.task('build-jsb-extends', function () {
-    var jsbExtends = rebundle_jsb(createBundler(paths.JSBEntryExtends), '-extends');
-    var jsbPredefine = rebundle_jsb(createBundler(paths.JSBEntryPredefine), '-predefine');
+gulp.task('build-jsb-extends-min', function () {
+    var jsbExtends = rebundle_jsb(createBundler(paths.JSBEntryExtends), true, '-extends');
+    var jsbPredefine = rebundle_jsb(createBundler(paths.JSBEntryPredefine), true, '-predefine');
+    return es.merge(jsbExtends, jsbPredefine);
+});
+
+gulp.task('build-jsb-extends-dev', function () {
+    var jsbExtends = rebundle_jsb(createBundler(paths.JSBEntryExtends), false, '-extends');
+    var jsbPredefine = rebundle_jsb(createBundler(paths.JSBEntryPredefine), false, '-predefine');
     return es.merge(jsbExtends, jsbPredefine);
 });
 
 
-gulp.task('build', ['build-html5', 'build-jsb-extends']);
+gulp.task('build', ['build-html5', 'build-jsb-extends-min']);
