@@ -1,7 +1,5 @@
 var Path = require('path');
-var Spawn = require('child_process').spawn;
 var Fs = require('fire-fs');
-var Chalk = require('chalk');
 var Del = require('del');
 
 var gulp = require('gulp');
@@ -15,6 +13,8 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var handleErrors = require('../util/handleErrors');
+
+require('./build-cocos2d');
 
 function getUglifyOptions (minify, global_defs) {
     if (minify) {
@@ -132,57 +132,6 @@ function createBundler(entryFiles) {
     return new browserify(entryFiles, options);
 }
 
-gulp.task('compile-cocos2d', function (done) {
-    console.log('Spawn ant in ' + paths.originCocos2dCompileDir);
-
-    var spawn = require('child_process').spawn;
-    var cmdStr = process.platform === 'win32' ? 'ant.bat' : 'ant';
-    var child = Spawn(cmdStr, {
-        cwd: paths.originCocos2dCompileDir,
-        stdio: [0, 1, 'pipe']
-    });
-    child.on('error', function (err) {
-        var ANT = Chalk.inverse('ant');
-        if (err.code === 'ENOENT') {
-            console.error(Chalk.red('You should install %s to build cocos2d-html5'), ANT);
-        }
-        else {
-            console.error(Chalk.red('Failed to start %s') + ': %s', ANT, err.code);
-        }
-        process.exit(1);
-    });
-    child.stderr.on('data', function (data) {
-        process.stderr.write(Chalk.red(data.toString()));
-    });
-    child.on('exit', function (code) {
-        if (code === 0) {
-            done();
-        }
-        else {
-            process.exit(1);
-        }
-    });
-});
-
-gulp.task('build-modular-cocos2d', ['compile-cocos2d'], function () {
-    var header = new Buffer('(function (cc, ccui, ccs, sp, cp) {');
-    var footer = new Buffer(/*'\n(' + modularity + ')();\n' +*/
-                            '\n}).call(window, cc, ccui, ccs, sp, cp);\n');
-
-    function wrap (header, footer) {
-        return es.through(function (file) {
-            file.contents = Buffer.concat([header, file.contents, footer]);
-            this.emit('data', file);
-        });
-    }
-    gulp.src(paths.originCocos2d)
-        .pipe(wrap(header, footer))
-        .pipe(rename(Path.basename(paths.modularCocos2d)))
-        .pipe(gulp.dest(Path.dirname(paths.modularCocos2d)));
-    gulp.src(paths.originSourcemap)
-        .pipe(gulp.dest(Path.dirname(paths.modularCocos2d)))
-});
-
 gulp.task('build-html5', ['build-modular-cocos2d'], function () {
     console.log('This will take some minutes...');
     return rebundle(createBundler(paths.jsEntry));
@@ -204,7 +153,6 @@ gulp.task('build-test', ['build-modular-cocos2d', 'clean-test'], function () {
         return engine;
     }
 });
-
 
 function rebundle_jsb(bundler, suffix) {
     return bundler.bundle()

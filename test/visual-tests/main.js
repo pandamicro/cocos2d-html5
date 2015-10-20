@@ -92,17 +92,6 @@ cc.game.run({
     "frameRate"     : 60,
     "id"            : "gameCanvas",
     "renderMode"    : 0,
-    "engineDir"     : "../../web/",
-
-    "modules"       : ["cocos2d", "extensions", "external"],
-
-    "plugin": {
-        "facebook": {
-            "appId" : "1426774790893461",
-            "xfbml" : true,
-            "version" : "v2.0"
-        }
-    },
 
     "jsList"        : [
         "src/BaseTestLayer/BaseTestLayer.js",
