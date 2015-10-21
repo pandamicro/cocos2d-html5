@@ -78,6 +78,9 @@ ccui.PageView = ccui.Layout.extend(/** @lends ccui.PageView# */{
         this._pageViewEventListener = null;
         this._pageViewEventSelector = null;
         this.setTouchEnabled(true);
+
+        // For propagation
+        this.on(cc.Event.TOUCH, this.interceptTouchEvent);
     },
 
     /**
@@ -490,17 +493,16 @@ ccui.PageView = ccui.Layout.extend(/** @lends ccui.PageView# */{
 
     /**
      * Intercept touch event, handle its child's touch event.
-     * @param {Number} eventType event type
-     * @param {ccui.Widget} sender
-     * @param {cc.Touch} touch
+     * @param {cc.Event} event
      */
-    interceptTouchEvent: function (eventType, sender, touch) {
-        if(!this._touchEnabled)
-        {
-            ccui.Layout.prototype.interceptTouchEvent.call(this, eventType, sender, touch);
+    interceptTouchEvent: function (event) {
+        var eventType = event._widgetEventType,
+            touch = event.currentTouch,
+            touchPoint, offset = 0;
+        if (!this._touchEnabled)
             return;
-        }
-        var touchPoint = touch.getLocation();
+        
+        touchPoint = touch.getLocation();
         switch (eventType) {
             case ccui.Widget.TOUCH_BEGAN:
                 this._touchBeganPosition.x = touchPoint.x;
@@ -510,10 +512,9 @@ ccui.PageView = ccui.Layout.extend(/** @lends ccui.PageView# */{
             case ccui.Widget.TOUCH_MOVED:
                 this._touchMovePosition.x = touchPoint.x;
                 this._touchMovePosition.y = touchPoint.y;
-                var offset = 0;
-                offset = Math.abs(sender.getTouchBeganPosition().x - touchPoint.x);
+                offset = Math.abs(event.target.getTouchBeganPosition().x - touchPoint.x);
                 if (offset > this._childFocusCancelOffset) {
-                    sender.setHighlighted(false);
+                    event.target.setHighlighted(false);
                     this._handleMoveLogic(touch);
                 }
                 break;
@@ -522,7 +523,7 @@ ccui.PageView = ccui.Layout.extend(/** @lends ccui.PageView# */{
                 this._touchEndPosition.x = touchPoint.x;
                 this._touchEndPosition.y = touchPoint.y;
                 this._handleReleaseLogic(touch);
-                if (sender.isSwallowTouches())
+                if (event.target.isSwallowTouches())
                     this._isInterceptTouch = false;
                 break;
         }

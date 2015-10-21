@@ -63,11 +63,12 @@ cc.Event.ACCELERATION = 'acceleration';
  * @class cc.Event.EventMouse
  * @constructor
  * @extends cc.Event
+ * @param {number} eventType - The mouse event type, UP, DOWN, MOVE, CANCELED
  * @param {boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
  */
-var EventMouse = function (bubbles) {
+var EventMouse = function (eventType, bubbles) {
     cc.Event.call(this, cc.Event.MOUSE, bubbles);
-    this._eventType = 0;
+    this._eventType = eventType;
     this._button = 0;
     this._x = 0;
     this._y = 0;
@@ -293,6 +294,7 @@ EventTouch = function (touchArr, bubbles) {
     cc.Event.call(this, cc.Event.TOUCH, bubbles);
     this._eventCode = 0;
     this._touches = touchArr || [];
+    this.currentTouch = null;
 };
 
 JS.extend(EventTouch, cc.Event);

@@ -69,7 +69,7 @@ var LayerExtended = cc.Layer.extend({
 
         // Create the scrollview
         var scrollView = new ScrollViewExtended();
-        scrollView.setDirection(ccui.ScrollView.DIR_VERTICAL);
+        scrollView.setDirection(ccui.ScrollView.Dir.VERTICAL);
         scrollView.setTouchEnabled(true);
         scrollView.setContentSize(cc.size(280, 150));
 

@@ -150,7 +150,7 @@ var inputManager = /** @lends cc.inputManager# */{
         if(handleTouches.length > 0){
             this._glView._convertTouchesWithScale(handleTouches);
             var touchEvent = new cc.Event.EventTouch(handleTouches);
-            touchEvent._eventCode = cc.EventTouch.MOVED;
+            touchEvent._eventCode = cc.Event.EventTouch.MOVED;
             cc.eventManager.dispatchEvent(touchEvent);
         }
     },
@@ -164,7 +164,7 @@ var inputManager = /** @lends cc.inputManager# */{
         if(handleTouches.length > 0) {
             this._glView._convertTouchesWithScale(handleTouches);
             var touchEvent = new cc.Event.EventTouch(handleTouches);
-            touchEvent._eventCode = cc.EventTouch.ENDED;
+            touchEvent._eventCode = cc.Event.EventTouch.ENDED;
             cc.eventManager.dispatchEvent(touchEvent);
         }
     },
@@ -178,7 +178,7 @@ var inputManager = /** @lends cc.inputManager# */{
         if(handleTouches.length > 0) {
             this._glView._convertTouchesWithScale(handleTouches);
             var touchEvent = new cc.Event.EventTouch(handleTouches);
-            touchEvent._eventCode = cc.EventTouch.CANCELLED;
+            touchEvent._eventCode = cc.Event.EventTouch.CANCELLED;
             cc.eventManager.dispatchEvent(touchEvent);
         }
     },
@@ -312,12 +312,12 @@ var inputManager = /** @lends cc.inputManager# */{
      * @param {cc.Vec2} location
      * @param {cc.Vec2} pos
      * @param {Number} eventType
-     * @returns {cc.EventMouse}
+     * @returns {cc.Event.EventMouse}
      */
     getMouseEvent: function(location, pos, eventType){
         var locPreMouse = this._prevMousePoint;
         this._glView._convertMouseToLocationInView(location, pos);
-        var mouseEvent = new cc.EventMouse(eventType);
+        var mouseEvent = new cc.Event.EventMouse(eventType);
         mouseEvent.setLocation(location.x, location.y);
         mouseEvent._setPrevCursor(locPreMouse.x, locPreMouse.y);
         locPreMouse.x = location.x;
@@ -418,7 +418,7 @@ var inputManager = /** @lends cc.inputManager# */{
                 if (!cc.rectContainsPoint(new cc.Rect(pos.left, pos.top, pos.width, pos.height), location)){
                     selfPointer.handleTouchesEnd([selfPointer.getTouchByXY(location.x, location.y, pos)]);
 
-                    var mouseEvent = selfPointer.getMouseEvent(location,pos,cc.EventMouse.UP);
+                    var mouseEvent = selfPointer.getMouseEvent(location,pos,cc.Event.EventMouse.UP);
                     mouseEvent.setButton(event.button);
                     cc.eventManager.dispatchEvent(mouseEvent);
                 }
@@ -433,7 +433,7 @@ var inputManager = /** @lends cc.inputManager# */{
 
                 selfPointer.handleTouchesBegin([selfPointer.getTouchByXY(location.x, location.y, pos)]);
 
-                var mouseEvent = selfPointer.getMouseEvent(location,pos,cc.EventMouse.DOWN);
+                var mouseEvent = selfPointer.getMouseEvent(location,pos,cc.Event.EventMouse.DOWN);
                 mouseEvent.setButton(event.button);
                 cc.eventManager.dispatchEvent(mouseEvent);
 
@@ -450,7 +450,7 @@ var inputManager = /** @lends cc.inputManager# */{
 
                 selfPointer.handleTouchesEnd([selfPointer.getTouchByXY(location.x, location.y, pos)]);
 
-                var mouseEvent = selfPointer.getMouseEvent(location,pos,cc.EventMouse.UP);
+                var mouseEvent = selfPointer.getMouseEvent(location,pos,cc.Event.EventMouse.UP);
                 mouseEvent.setButton(event.button);
                 cc.eventManager.dispatchEvent(mouseEvent);
 
@@ -464,7 +464,7 @@ var inputManager = /** @lends cc.inputManager# */{
 
                 selfPointer.handleTouchesMove([selfPointer.getTouchByXY(location.x, location.y, pos)]);
 
-                var mouseEvent = selfPointer.getMouseEvent(location,pos,cc.EventMouse.MOVE);
+                var mouseEvent = selfPointer.getMouseEvent(location,pos,cc.Event.EventMouse.MOVE);
                 if(selfPointer._mousePressed)
                     mouseEvent.setButton(event.button);
                 else
@@ -479,7 +479,7 @@ var inputManager = /** @lends cc.inputManager# */{
                 var pos = selfPointer.getHTMLElementPosition(element);
                 var location = selfPointer.getPointByEvent(event, pos);
 
-                var mouseEvent = selfPointer.getMouseEvent(location,pos,cc.EventMouse.SCROLL);
+                var mouseEvent = selfPointer.getMouseEvent(location,pos,cc.Event.EventMouse.SCROLL);
                 mouseEvent.setButton(event.button);
                 mouseEvent.setScrollData(0, event.wheelDelta);
                 cc.eventManager.dispatchEvent(mouseEvent);
@@ -493,7 +493,7 @@ var inputManager = /** @lends cc.inputManager# */{
                 var pos = selfPointer.getHTMLElementPosition(element);
                 var location = selfPointer.getPointByEvent(event, pos);
 
-                var mouseEvent = selfPointer.getMouseEvent(location,pos,cc.EventMouse.SCROLL);
+                var mouseEvent = selfPointer.getMouseEvent(location,pos,cc.Event.EventMouse.SCROLL);
                 mouseEvent.setButton(event.button);
                 mouseEvent.setScrollData(0, event.detail * -120);
                 cc.eventManager.dispatchEvent(mouseEvent);
@@ -593,7 +593,7 @@ var inputManager = /** @lends cc.inputManager# */{
     update:function(dt){
         if(this._accelCurTime > this._accelInterval){
             this._accelCurTime -= this._accelInterval;
-            cc.eventManager.dispatchEvent(new cc.EventAcceleration(this._acceleration));
+            cc.eventManager.dispatchEvent(new cc.Event.EventAcceleration(this._acceleration));
         }
         this._accelCurTime += dt;
     }

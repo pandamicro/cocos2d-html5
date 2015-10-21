@@ -99,6 +99,9 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
         this._bounceOriginalSpeed = 0;
         this.inertiaScrollEnabled = true;
         this.setTouchEnabled(true);
+
+        // For propagation
+        this.on(cc.Event.TOUCH, this.interceptTouchEvent);
     },
 
     /**
@@ -1490,18 +1493,17 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
     /**
      * Intercept touch event, handle its child's touch event.
      * @override
-     * @param {number} event event type
-     * @param {ccui.Widget} sender
-     * @param {cc.Touch} touch
+     * @param {cc.Event} event
      */
-    interceptTouchEvent: function (event, sender, touch) {
-        if(!this._touchEnabled)
-        {
-            ccui.Layout.prototype.interceptTouchEvent.call(this, event, sender, touch);
+    interceptTouchEvent: function (event) {
+        var eventType = event._widgetEventType,
+            touch = event.currentTouch,
+            touchPoint, offset;
+        if (!this._touchEnabled)
             return;
-        }
-        var touchPoint = touch.getLocation();
-        switch (event) {
+
+        touchPoint = touch.getLocation();
+        switch (eventType) {
             case ccui.Widget.TOUCH_BEGAN:
                 this._isInterceptTouch = true;
                 this._touchBeganPosition.x = touchPoint.x;
@@ -1509,11 +1511,11 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
                 this._handlePressLogic(touch);
                 break;
             case ccui.Widget.TOUCH_MOVED:
-                var offset = cc.pLength(cc.pSub(sender.getTouchBeganPosition(), touchPoint));
+                offset = cc.pLength(cc.pSub(event.target.getTouchBeganPosition(), touchPoint));
                 this._touchMovePosition.x = touchPoint.x;
                 this._touchMovePosition.y = touchPoint.y;
                 if (offset > this._childFocusCancelOffset) {
-                    sender.setHighlighted(false);
+                    event.target.setHighlighted(false);
                     this._handleMoveLogic(touch);
                 }
                 break;
@@ -1522,7 +1524,7 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
                 this._touchEndPosition.x = touchPoint.x;
                 this._touchEndPosition.y = touchPoint.y;
                 this._handleReleaseLogic(touch);
-                if (sender.isSwallowTouches())
+                if (event.target.isSwallowTouches())
                     this._isInterceptTouch = false;
                 break;
         }

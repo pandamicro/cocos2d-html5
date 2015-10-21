@@ -23,6 +23,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+EventTarget = require("../cocos2d/core/event/event-target");
+
 ccui._FocusNavigationController = cc._Class.extend({
     _keyboardListener: null,
     _firstFocusedWidget: null,
@@ -808,18 +810,6 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
     onNextFocusedWidget: null,
 
     /**
-     * Sends the touch event to widget's parent, its subclass will override it, e.g. ccui.ScrollView, ccui.PageView
-     * @param {Number}  eventType
-     * @param {ccui.Widget} sender
-     * @param {cc.Touch} touch
-     */
-    interceptTouchEvent: function(eventType, sender, touch){
-        var widgetParent = this.getWidgetParent();
-        if (widgetParent)
-            widgetParent.interceptTouchEvent(eventType,sender,touch);
-    },
-
-    /**
      * This method is called when a focus change event happens
      * @param {ccui.Widget} widgetLostFocus
      * @param {ccui.Widget} widgetGetFocus
@@ -902,12 +892,32 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
      */
     didNotSelectSelf: function () {},
 
+    _isTargetActive: function (type) {
+        if (type === cc.Event.TOUCH)
+            return this._enabled && this._touchEnabled;
+        else if (type === cc.Event.FOCUS)
+            return this._enabled && this._focusEnabled;
+        else 
+            return this._enabled;
+    },
+
+    // Store all bubbling parents that are listening to the same event in the array
+    _getBubblingTargets: function (type, array) {
+        var parent = this.getWidgetParent();
+        while (parent) {
+            if (parent.hasEventListener(type)) {
+                array.push(parent);
+            }
+            parent = parent.getWidgetParent();
+        }
+    },
+
     /**
      * <p>
      *    The callback of touch began event.                                                               <br/>
      *    If the bounding box of ccui.Widget contains the touch point, it will do the following things:    <br/>
      *      1. sets highlight state,                                                                       <br/>
-     *      2. sends event to parent widget by interceptTouchEvent                                         <br/>
+     *      2. sends event to parent widget by dispatchEvent                                               <br/>
      *      3. calls the callback of touch began event.                                                    <br/>
      *      4. returns true,                                                                               <br/>
      *    otherwise returns false directly.                                                                <br/>
@@ -930,29 +940,22 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
             return false;
         }
         this.setHighlighted(true);
-
         /*
          * Propagate touch events to its parents
          */
         if (this._propagateTouchEvents) {
-            this.propagateTouchEvent(ccui.Widget.TOUCH_BEGAN, this, touch);
+            event._widgetEventType = ccui.Widget.TOUCH_BEGAN;
+            this.dispatchEvent(event);
         }
 
         this._pushDownEvent();
         return true;
     },
 
-    propagateTouchEvent: function(event, sender, touch){
-        var widgetParent = this.getWidgetParent();
-        if (widgetParent){
-            widgetParent.interceptTouchEvent(event, sender, touch);
-        }
-    },
-
     /**
      * <p>
      *    The callback of touch moved event.                                                                                                <br/>
-     *    It sets the highlight state by touch, sends event to parent widget by interceptTouchEvent and calls the callback of touch moved event.
+     *    It sets the highlight state by touch, sends event to parent widget by dispatchEvent and calls the callback of touch moved event.
      * </p>
      * @param {cc.Touch} touch
      * @param {cc.Event} event
@@ -965,15 +968,17 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
         /*
          * Propagate touch events to its parents
          */
-        if (this._propagateTouchEvents)
-            this.propagateTouchEvent(ccui.Widget.TOUCH_MOVED, this, touch);
+        if (this._propagateTouchEvents) {
+            event._widgetEventType = ccui.Widget.TOUCH_MOVED;
+            this.dispatchEvent(event);
+        }
         this._moveEvent();
     },
 
     /**
      * <p>
      *      The callback of touch end event
-     *      It sends event to parent widget by interceptTouchEvent,
+     *      It sends event to parent widget by dispatchEvent,
      *      calls the callback of touch end event (highlight= true) or touch canceled event (highlight= false).
      *      sets the highlight state to false ,
      * </p>
@@ -987,8 +992,10 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
         /*
          * Propagate touch events to its parents
          */
-        if (this._propagateTouchEvents)
-            this.propagateTouchEvent(ccui.Widget.TOUCH_ENDED, this, touch);
+        if (this._propagateTouchEvents) {
+            event._widgetEventType = ccui.Widget.TOUCH_ENDED;
+            this.dispatchEvent(event);
+        }
 
         var highlight = this._highlight;
         this.setHighlighted(false);
@@ -1896,6 +1903,8 @@ ccui.Widget.create = function () {
     return new ccui.Widget();
 };
 
+EventTarget.polyfill(ccui.Widget.prototype);
+
 ccui.Widget._focusedWidget = null;                        //both layout & widget will be stored in this variable
 ccui.Widget._focusNavigationController = null;
 
@@ -2009,27 +2018,27 @@ ccui.Widget.PLIST_TEXTURE = 1;
 /**
  * The touch began type of ccui.Widget's touch event
  * @constant
- * @type {number}
+ * @type {string}
  */
-ccui.Widget.TOUCH_BEGAN = 0;
+ccui.Widget.TOUCH_BEGAN = 'widget_touch_began';
 /**
  * The touch moved type of ccui.Widget's touch event
  * @constant
- * @type {number}
+ * @type {string}
  */
-ccui.Widget.TOUCH_MOVED = 1;
+ccui.Widget.TOUCH_MOVED = 'widget_touch_moved';
 /**
  * The touch end type of ccui.Widget's touch event
  * @constant
- * @type {number}
+ * @type {string}
  */
-ccui.Widget.TOUCH_ENDED = 2;
+ccui.Widget.TOUCH_ENDED = 'widget_touch_ended';
 /**
  * The touch canceled type of ccui.Widget's touch event
  * @constant
- * @type {number}
+ * @type {string}
  */
-ccui.Widget.TOUCH_CANCELED = 3;
+ccui.Widget.TOUCH_CANCELED = 'widget_touch_canceled';
 
 //size type
 /**

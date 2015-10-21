@@ -45,10 +45,6 @@ require('./predefine');
 var isCoreLevel = CC_EDITOR && Editor.isCoreLevel;
 if (!isCoreLevel) {
     // LOAD ORIGIN COCOS2D COMPILED BY CLOSURE
-    ccui = {};
-    ccs = {};
-    sp = {};
-    cp = {};
     require('./bin/modular-cocos2d');
 }
 else {

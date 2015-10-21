@@ -25,6 +25,7 @@ global.paths = {
     originCocos2dCompileDir: './tools',
     originCocos2d: './lib/cocos2d-js-v3.9-min.js',
     originSourcemap: './lib/cocos2d-js-v3.9-sourcemap',
+    originCocos2dDev: './lib/cocos2d-dev.js',
     modularCocos2d: './bin/modular-cocos2d.js',
 };
 

@@ -2,9 +2,9 @@
 module('EventTarget');
 
 test('basic test', function () {
-    var target = new Fire.EventTarget();
-    var fireEvent = new Fire.Event('fire');
-    var jumpEvent = new Fire.Event('jump');
+    var target = new cc.EventTarget();
+    var fireEvent = new cc.Event('fire');
+    var jumpEvent = new cc.Event('jump');
 
     var cb1 = new Callback();
     var cb2 = new Callback();
@@ -36,7 +36,7 @@ test('basic test', function () {
 });
 
 test('emit', function () {
-    var target = new cc.FireEventTarget();
+    var target = new cc.EventTarget();
     var cb1 = new Callback().enable();
     target.on('fire', cb1);
     cb1.callbackFunction(function (event) {
@@ -49,8 +49,8 @@ test('emit', function () {
 });
 
 test('once', function () {
-    var target = new cc.FireEventTarget();
-    var fireEvent = new cc.FireEvent('fire');
+    var target = new cc.EventTarget();
+    var fireEvent = new cc.Event('fire');
     var cb1 = new Callback();
 
     // once
@@ -86,8 +86,8 @@ test('once', function () {
 });
 
 test('test useCapture in on/off', function () {
-    var target = new cc.FireEventTarget();
-    var event = new cc.FireEvent('fire');
+    var target = new cc.EventTarget();
+    var event = new cc.Event('fire');
     var cb1 = new Callback().enable();
     var cb2 = new Callback().enable();
 
@@ -106,8 +106,8 @@ test('test useCapture in on/off', function () {
 
 test('test propagation', function () {
     // define hierarchy
-    var node1 = new cc.FireEventTarget();
-    var node2 = new cc.FireEventTarget();
+    var node1 = new cc.EventTarget();
+    var node2 = new cc.EventTarget();
     node2.parent = node1;
     node2._getCapturingTargets = function (type, array) {
         for (var target = this.parent; target; target = target.parent) {
@@ -124,7 +124,7 @@ test('test propagation', function () {
         }
     };
 
-    var event = new cc.FireEvent('fire', true);
+    var event = new cc.Event('fire', true);
     var capture1 = new Callback();
     var capture2 = new Callback();
     var bubble1 = new Callback();
@@ -182,8 +182,8 @@ test('test propagation', function () {
 
 test('test stop propagation', function () {
     // define hierarchy
-    var node1 = new cc.FireEventTarget();
-    var node2 = new cc.FireEventTarget();
+    var node1 = new cc.EventTarget();
+    var node2 = new cc.EventTarget();
     node2.parent = node1;
     node2._getCapturingTargets = function (type, array) {
         for (var target = this.parent; target; target = target.parent) {
@@ -200,7 +200,7 @@ test('test stop propagation', function () {
         }
     };
 
-    var event = new cc.FireEvent('fire', true);
+    var event = new cc.Event('fire', true);
     var capture1 = new Callback().enable();
     var capture2 = new Callback().enable();
     var bubble1 = new Callback().enable();
@@ -241,8 +241,8 @@ test('test stop propagation', function () {
 
 test('test stop propagation immediate', function () {
     // define hierarchy
-    var node1 = new cc.FireEventTarget();
-    var node2 = new cc.FireEventTarget();
+    var node1 = new cc.EventTarget();
+    var node2 = new cc.EventTarget();
     node2.parent = node1;
     node2._getCapturingTargets = function (type, array) {
         for (var target = this.parent; target; target = target.parent) {
@@ -259,7 +259,7 @@ test('test stop propagation immediate', function () {
         }
     };
 
-    var event = new cc.FireEvent('fire', true);
+    var event = new cc.Event('fire', true);
     var capture1 = new Callback().enable();
     var capture1_2nd = new Callback().enable();
     var capture2 = new Callback().enable();
@@ -297,8 +297,8 @@ test('test stop propagation immediate', function () {
 
 test('test Event.bubbles', function () {
     // define hierarchy
-    var node1 = new cc.FireEventTarget();
-    var node2 = new cc.FireEventTarget();
+    var node1 = new cc.EventTarget();
+    var node2 = new cc.EventTarget();
     node2.parent = node1;
     node2._getBubblingTargets = function (type, array) {
         for (var target = this.parent; target; target = target.parent) {
@@ -311,7 +311,7 @@ test('test Event.bubbles', function () {
     var bubble1 = new Callback();
     node1.on('fire', bubble1, false);
 
-    var event = new cc.FireEvent('fire');
+    var event = new cc.Event('fire');
     event.bubbles = false;
     bubble1.disable('bubble1 should not be invoked if set event.bubbles to false');
     node2.dispatchEvent(event);
@@ -324,9 +324,9 @@ test('test Event.bubbles', function () {
 
 //test('', function () {
 //    // define hierarchy
-//    var node1 = new cc.FireEventTarget();
-//    var node2 = new cc.FireEventTarget();
-//    var node3 = new cc.FireEventTarget();
+//    var node1 = new cc.EventTarget();
+//    var node2 = new cc.EventTarget();
+//    var node3 = new cc.EventTarget();
 //    node2.parent = node1;
 //    node3.parent = node2;
 //    node3._getCapturingTargets = node2._getCapturingTargets = function (type, array) {
@@ -344,7 +344,7 @@ test('test Event.bubbles', function () {
 //        }
 //    };
 
-//    var event = new cc.FireEvent('fire');
+//    var event = new cc.Event('fire');
 //    var capture1 = new Callback();
 //    var capture2 = new Callback();
 //    var capture3 = new Callback();

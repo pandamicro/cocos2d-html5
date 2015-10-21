@@ -53,7 +53,7 @@ var UITextTest_LineWrap = UIMainLayer.extend({
             var text = new ccui.Text("TextArea Widget can line wrap","AmericanTypewriter",32);
             text.ignoreContentAdaptWithSize(false);
             text.setContentSize(cc.size(280, 150));
-            text.setTextHorizontalAlignment(cc.TEXT_ALIGNMENT_CENTER);
+            text.setTextHorizontalAlignment(cc.TextAlignment.CENTER);
             text.setTouchScaleChangeEnabled(true);
             text.setTouchEnabled(true);
             text.addTouchEventListener(function(sender, type){
@@ -168,8 +168,8 @@ var UITextTest_IgnoreConentSize = UIMainLayer.extend({
             var halighButton = new ccui.Button();
             halighButton.setTitleText("Alignment Right");
             halighButton.addClickEventListener(function(){
-                leftText.setTextHorizontalAlignment(cc.TEXT_ALIGNMENT_RIGHT);
-                rightText.setTextHorizontalAlignment(cc.TEXT_ALIGNMENT_RIGHT);
+                leftText.setTextHorizontalAlignment(cc.TextAlignment.RIGHT);
+                rightText.setTextHorizontalAlignment(cc.TextAlignment.RIGHT);
             });
             halighButton.setPosition(cc.p(widgetSize.width/2 - 50,
                     widgetSize.height/2 - 50));
