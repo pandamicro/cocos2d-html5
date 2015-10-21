@@ -360,7 +360,8 @@ function doDefine (className, baseClass, constructor, options) {
     // occupy some non-inherited static members
     for (var staticMember in _metaClass) {
         Object.defineProperty(fireClass, staticMember, {
-            value: _metaClass[staticMember]
+            value: _metaClass[staticMember],
+            writable: true
         });
     }
 
