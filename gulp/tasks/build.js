@@ -229,14 +229,14 @@ function rebundle_jsb(bundler, minify, suffix) {
 }
 
 gulp.task('build-jsb-extends-min', function () {
-    var jsbExtends = rebundle_jsb(createBundler(paths.JSBEntryExtends), true, '-extends');
-    var jsbPredefine = rebundle_jsb(createBundler(paths.JSBEntryPredefine), true, '-predefine');
+    var jsbExtends = rebundle_jsb(createBundler(paths.JSBEntryExtends), true, '_extends');
+    var jsbPredefine = rebundle_jsb(createBundler(paths.JSBEntryPredefine), true, '_predefine');
     return es.merge(jsbExtends, jsbPredefine);
 });
 
 gulp.task('build-jsb-extends-dev', function () {
-    var jsbExtends = rebundle_jsb(createBundler(paths.JSBEntryExtends), false, '-extends');
-    var jsbPredefine = rebundle_jsb(createBundler(paths.JSBEntryPredefine), false, '-predefine');
+    var jsbExtends = rebundle_jsb(createBundler(paths.JSBEntryExtends), false, '_extends');
+    var jsbPredefine = rebundle_jsb(createBundler(paths.JSBEntryPredefine), false, '_predefine');
     return es.merge(jsbExtends, jsbPredefine);
 });
 

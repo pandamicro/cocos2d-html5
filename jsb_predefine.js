@@ -25,10 +25,7 @@
 
 // define cc
 
-// `cc(node)` takes a runtime node and return its corresponding cc.Runtime.NodeWrapper instance.
-cc = function (node) {
-    return cc.getWrapper(node);
-};
+// `cc.getWrapper(node)` takes a runtime node and return its corresponding cc.Runtime.NodeWrapper instance.
 
 cc._setWrapperGetter = function (getter) {
     cc.getWrapper = getter;
@@ -47,10 +44,4 @@ if (CC_TEST) {
 require('./polyfill');
 require('./cocos2d/core/platform/js');
 require('./cocos2d/core/value-types');
-require('./cocos2d/core/utils');
-require('./cocos2d/core/platform/CCInputManager');
-require('./cocos2d/core/platform/CCInputExtension');
 require('./cocos2d/core/event');
-require('./cocos2d/core/platform/CCSys');
-require('./cocos2d/core/platform/CCLoader');
-require('./CCDebugger');

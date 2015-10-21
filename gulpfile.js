@@ -8,11 +8,11 @@ global.paths = {
     jsEntry: './index.js',
     //JSBEntryPredefine: './gulp/jsb-build-entry-predefine',
     //JSBEntryExtends: './gulp/jsb-build-entry-extends',
-    JSBEntryPredefine: './predefine.js',
+    JSBEntryPredefine: './jsb_predefine.js',
     JSBEntryExtends: './extends.js',
     outDir: './bin',
     outFile: 'cocos2d-js.js',
-    JSBOutFile: 'cocos2d-jsb.js',
+    JSBOutFile: 'jsb.js',
 
     test: {
         src: 'test/qunit/unit/**/*.js',

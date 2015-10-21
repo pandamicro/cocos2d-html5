@@ -1,4 +1,6 @@
 
+if (cc.loader) return;
+
 var FireUrl = CC_EDITOR && require('fire-url');
 
 /**
