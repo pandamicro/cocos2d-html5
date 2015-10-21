@@ -132,58 +132,54 @@ cc.Node = cc.Class({
     name: 'cc.Node',
 
     properties: {
-        _localZOrder: { "default": 0 },
-        _globalZOrder: { "default": 0 }, ///< Global order used to sort the node
-        _vertexZ: { "default": 0.0 },
+        _localZOrder: { 'default': 0 },
+        _globalZOrder: { 'default': 0 }, ///< Global order used to sort the node
+        _vertexZ: { 'default': 0.0 },
 
-        _rotationX: { "default": 0 },
-        _rotationY: { "default": 0.0 },
-        _scaleX: { "default": 1.0 },
-        _scaleY: { "default": 1.0 },
-        _position: { "default": cc.p(0, 0) },
+        _rotationX: { 'default': 0 },
+        _rotationY: { 'default': 0.0 },
+        _scaleX: { 'default': 1.0 },
+        _scaleY: { 'default': 1.0 },
+        _position: { 'default': cc.p(0, 0) },
 
-        _normalizedPosition: { "default": cc.p(0, 0) },
-        _usingNormalizedPosition: { "default": false },
+        _normalizedPosition: { 'default': cc.p(0, 0) },
+        _usingNormalizedPosition: { 'default': false },
 
-        _skewX: { "default": 0.0 },
-        _skewY: { "default": 0.0 },
+        _skewX: { 'default': 0.0 },
+        _skewY: { 'default': 0.0 },
         // children (lazy allocs),
-        _children: { "default": [] },
+        _children: { 'default': [] },
         // lazy alloc,
-        _visible: { "default": true },
-        _anchorPoint: { "default": cc.p(0, 0) },
-        _contentSize: { "default": cc.size(0, 0) },
-        _parent: { "default": null },
+        _visible: { 'default': true },
+        _anchorPoint: { 'default': cc.p(0, 0) },
+        _contentSize: { 'default': cc.size(0, 0) },
+        _parent: { 'default': null },
 
         // "whole screen" objects. like Scenes and Layers, should set _ignoreAnchorPointForPosition to true
-        _ignoreAnchorPointForPosition: { "default": false },
-        tag: { "default": cc.NODE_TAG_INVALID },
+        _ignoreAnchorPointForPosition: { 'default': false },
+        tag: { 'default': cc.NODE_TAG_INVALID },
         // userData is always initialized as nil
-        userData: { "default": null },
-        userObject: { "default": null },
+        userData: { 'default': null },
+        userObject: { 'default': null },
 
-        _showNode: { "default": false },
-        _name: "",                     ///<a string label, an user defined string to identify this node
+        _showNode: { 'default': false },
+        _name: { 'default': 'New Node' },                     ///<a string label, an user defined string to identify this node
 
-        _realOpacity: { "default": 255 },
-        _realColor: { "default": cc.color(255, 255, 255, 255) },
-        _cascadeColorEnabled: { "default": false },
-        _cascadeOpacityEnabled: { "default": false }
+        _realOpacity: { 'default': 255 },
+        _realColor: { 'default': cc.color(255, 255, 255, 255) },
+        _cascadeColorEnabled: { 'default': false },
+        _cascadeOpacityEnabled: { 'default': false }
     },
 
     ctor: function() {
         var name = arguments[0];
-        this._name = typeof name !== 'undefined' ? name : 'New Entity';
+        this._name = typeof name !== 'undefined' ? name : 'New Node';
 
         this._normalizedPositionDirty = false;
         this._running = false;
         this._reorderChildDirty = false;
         this._shaderProgram = null;
         this.arrivalOrder = 0;
-
-        this._actionManager = null;
-        this._scheduler = null;
-        this._eventDispatcher = null;
 
         this._additionalTransformDirty = false;
         this._isTransitionFinished = false;
