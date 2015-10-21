@@ -1494,14 +1494,15 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
      * Intercept touch event, handle its child's touch event.
      * @override
      * @param {cc.Event} event
-     * @param {number} eventType event type
-     * @param {cc.Touch} touch
      */
-    interceptTouchEvent: function (event, eventType, touch) {
+    interceptTouchEvent: function (event) {
+        var eventType = event._widgetEventType,
+            touch = event.currentTouch,
+            touchPoint, offset;
         if (!this._touchEnabled)
             return;
 
-        var touchPoint = touch.getLocation();
+        touchPoint = touch.getLocation();
         switch (eventType) {
             case ccui.Widget.TOUCH_BEGAN:
                 this._isInterceptTouch = true;
@@ -1510,7 +1511,7 @@ ccui.ScrollView = ccui.Layout.extend(/** @lends ccui.ScrollView# */{
                 this._handlePressLogic(touch);
                 break;
             case ccui.Widget.TOUCH_MOVED:
-                var offset = cc.pLength(cc.pSub(event.target.getTouchBeganPosition(), touchPoint));
+                offset = cc.pLength(cc.pSub(event.target.getTouchBeganPosition(), touchPoint));
                 this._touchMovePosition.x = touchPoint.x;
                 this._touchMovePosition.y = touchPoint.y;
                 if (offset > this._childFocusCancelOffset) {

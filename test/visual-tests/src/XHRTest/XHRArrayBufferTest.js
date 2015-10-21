@@ -28,7 +28,7 @@
 function ensureLeftAligned (label) {
     label.anchorX = 0;
     label.anchorY = 1;
-    label.textAlign = cc.TEXT_ALIGNMENT_LEFT;
+    label.textAlign = cc.TextAlignment.LEFT;
 }
 
 function streamXHREventsToLabel ( xhr, label, textbox, method ) {

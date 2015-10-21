@@ -294,6 +294,7 @@ EventTouch = function (touchArr, bubbles) {
     cc.Event.call(this, cc.Event.TOUCH, bubbles);
     this._eventCode = 0;
     this._touches = touchArr || [];
+    this.currentTouch = null;
 };
 
 JS.extend(EventTouch, cc.Event);

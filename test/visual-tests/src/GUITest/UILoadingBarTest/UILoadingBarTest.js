@@ -92,7 +92,7 @@ var UILoadingBarTest_Right = UILoadingBarTest.extend({
         var loadingBar = new ccui.LoadingBar();
         loadingBar.setName("LoadingBar");
         loadingBar.loadTexture("ccs-res/cocosui/sliderProgress.png");
-        loadingBar.setDirection(ccui.LoadingBar.TYPE_RIGHT);
+        loadingBar.setDirection(ccui.LoadingBar.Type.RIGHT);
         loadingBar.setPercent(0);
         loadingBar.x = widgetSize.width / 2;
         loadingBar.y = widgetSize.height / 2 + loadingBar.height / 4;
@@ -107,7 +107,7 @@ var UILoadingBarTest_Fix = UILoadingBarTest.extend({
         var loadingBar = new ccui.LoadingBar();
         loadingBar.setName("LoadingBar");
         loadingBar.loadTexture("ccs-res/cocosui/sliderProgress.png");
-        loadingBar.setDirection(ccui.LoadingBar.TYPE_RIGHT);
+        loadingBar.setDirection(ccui.LoadingBar.Type.RIGHT);
         loadingBar.setPercent(40);
         loadingBar.x = widgetSize.width / 2;
         loadingBar.y = widgetSize.height / 2 + loadingBar.height / 4;
@@ -142,7 +142,7 @@ var UILoadingBarTest_Right_Scale9 = UILoadingBarTest.extend({
         loadingBar.loadTexture("ccs-res/cocosui/slider_bar_active_9patch.png");
         loadingBar.setCapInsets(cc.rect(0, 0, 0, 0));
         loadingBar.setContentSize(cc.size(300, 30));
-        loadingBar.setDirection(ccui.LoadingBar.TYPE_RIGHT);
+        loadingBar.setDirection(ccui.LoadingBar.Type.RIGHT);
         loadingBar.setPercent(0);
         loadingBar.x = widgetSize.width / 2;
         loadingBar.y = widgetSize.height / 2 + loadingBar.height / 4;
@@ -161,7 +161,7 @@ var UILoadingBarTest_Fix_Scale9 = UILoadingBarTest.extend({
         loadingBar.setPercent(40);
         loadingBar.setCapInsets(cc.rect(0, 0, 0, 0));
         loadingBar.setContentSize(cc.size(300, 30));
-        loadingBar.setDirection(ccui.LoadingBar.TYPE_RIGHT);
+        loadingBar.setDirection(ccui.LoadingBar.Type.RIGHT);
         loadingBar.x = widgetSize.width / 2;
         loadingBar.y = widgetSize.height / 2 + loadingBar.height / 4;
         this._mainNode.addChild(loadingBar);

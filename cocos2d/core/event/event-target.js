@@ -16,7 +16,7 @@ var _doDispatchEvent = function (owner, event, args) {
     event.eventPhase = 1;
     for (i = cachedArray.length - 1; i >= 0; --i) {
         target = cachedArray[i];
-        if (target._isTargetActive() && target._capturingListeners) {
+        if (target._isTargetActive(event.type) && target._capturingListeners) {
             event.currentTarget = target;
             // fire event
             target._capturingListeners.invoke(event);
@@ -30,7 +30,7 @@ var _doDispatchEvent = function (owner, event, args) {
 
     // Event.AT_TARGET
     // checks if destroyed in capturing callbacks
-    if (owner._isTargetActive()) {
+    if (owner._isTargetActive(event.type)) {
         _doSendEvent(owner, event);
         if (event._propagationStopped) {
             return;
@@ -44,7 +44,7 @@ var _doDispatchEvent = function (owner, event, args) {
         event.eventPhase = 3;
         for (i = 0; i < cachedArray.length; ++i) {
             target = cachedArray[i];
-            if (target._isTargetActive() && target._bubblingListeners) {
+            if (target._isTargetActive(event.type) && target._bubblingListeners) {
                 event.currentTarget = target;
                 // fire event
                 target._bubblingListeners.invoke(event);

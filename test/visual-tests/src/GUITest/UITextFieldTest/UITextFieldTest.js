@@ -200,8 +200,8 @@ var UITextFieldTest_LineWrap = UIMainLayer.extend({
             //textField.getVirtualRenderer().setLineBreakWithoutSpace(true);
             textField.setContentSize(240, 120);
             textField.setString("input words here");
-            textField.setTextHorizontalAlignment(cc.TEXT_ALIGNMENT_CENTER);
-            textField.setTextVerticalAlignment(cc.TEXT_ALIGNMENT_CENTER);
+            textField.setTextHorizontalAlignment(cc.TextAlignment.CENTER);
+            textField.setTextVerticalAlignment(cc.TextAlignment.CENTER);
             textField.setPosition(widgetSize.width / 2, widgetSize.height / 2);
             textField.addEventListener(this.textFieldEvent, this);
             this._mainNode.addChild(textField);
@@ -214,14 +214,14 @@ var UITextFieldTest_LineWrap = UIMainLayer.extend({
         switch (type){
             case ccui.TextField.EVENT_ATTACH_WITH_IME:
                 textField.runAction(cc.moveTo(0.225, cc.p(widgetSize.width / 2, widgetSize.height / 2 + 30)));
-                textField.setTextHorizontalAlignment(cc.TEXT_ALIGNMENT_LEFT);
-                textField.setTextVerticalAlignment(cc.VERTICAL_TEXT_ALIGNMENT_TOP);
+                textField.setTextHorizontalAlignment(cc.TextAlignment.LEFT);
+                textField.setTextVerticalAlignment(cc.cc.VerticalTextAlignment.TOP);
                 this._topDisplayLabel.setString("attach with IME");
                 break;
             case ccui.TextField.EVENT_DETACH_WITH_IME:
                 textField.runAction(cc.moveTo(0.175, cc.p(widgetSize.width / 2, widgetSize.height / 2)));
-                textField.setTextHorizontalAlignment(cc.TEXT_ALIGNMENT_CENTER);
-                textField.setTextVerticalAlignment(cc.TEXT_ALIGNMENT_CENTER);
+                textField.setTextHorizontalAlignment(cc.TextAlignment.CENTER);
+                textField.setTextVerticalAlignment(cc.TextAlignment.CENTER);
                 this._topDisplayLabel.setString("detach with IME");
                 break;
             case ccui.TextField.EVENT_INSERT_TEXT:

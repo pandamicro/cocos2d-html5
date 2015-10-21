@@ -892,10 +892,10 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
      */
     didNotSelectSelf: function () {},
 
-    _isTargetActive: function (event) {
-        if (event.type === cc.Event.TOUCH)
+    _isTargetActive: function (type) {
+        if (type === cc.Event.TOUCH)
             return this._enabled && this._touchEnabled;
-        else if (event.type === cc.Event.FOCUS)
+        else if (type === cc.Event.FOCUS)
             return this._enabled && this._focusEnabled;
         else 
             return this._enabled;
@@ -944,7 +944,8 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
          * Propagate touch events to its parents
          */
         if (this._propagateTouchEvents) {
-            this.dispatchEvent(event, ccui.Widget.TOUCH_BEGAN, touch);
+            event._widgetEventType = ccui.Widget.TOUCH_BEGAN;
+            this.dispatchEvent(event);
         }
 
         this._pushDownEvent();
@@ -968,7 +969,8 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
          * Propagate touch events to its parents
          */
         if (this._propagateTouchEvents) {
-            this.dispatchEvent(event, ccui.Widget.TOUCH_MOVED, touch);
+            event._widgetEventType = ccui.Widget.TOUCH_MOVED;
+            this.dispatchEvent(event);
         }
         this._moveEvent();
     },
@@ -991,7 +993,8 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
          * Propagate touch events to its parents
          */
         if (this._propagateTouchEvents) {
-            this.dispatchEvent(event, ccui.Widget.TOUCH_ENDED, touch);
+            event._widgetEventType = ccui.Widget.TOUCH_ENDED;
+            this.dispatchEvent(event);
         }
 
         var highlight = this._highlight;
