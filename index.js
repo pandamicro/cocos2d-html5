@@ -49,7 +49,7 @@ if (typeof CC_TEST === 'undefined') {
     eval('CC_TEST=typeof describe!=="undefined"||typeof QUnit!=="undefined"');
 }
 if (typeof CC_EDITOR === 'undefined') {
-    eval('CC_EDITOR=typeof Editor!=="undefined"&&typeof process!=="undefined"&&"electron" in process.versions');
+    eval('CC_EDITOR=typeof Editor!=="undefined"&&typeof process!== "undefined"&&"electron" in process.versions');
 }
 if (typeof CC_DEV === 'undefined') {
     eval('CC_DEV=CC_EDITOR');
@@ -78,10 +78,10 @@ require('./CCDebugger');
 
 if (!isCoreLevel) {
     // LOAD ORIGIN COCOS2D COMPILED BY CLOSURE
-    root.ccui = {};
-    root.ccs = {};
-    root.sp = {};
-    root.cp = {};
+    ccui = {};
+    ccs = {};
+    sp = {};
+    cp = {};
     require('./bin/modular-cocos2d');
 }
 else {
@@ -114,6 +114,7 @@ if (isCoreLevel) {
     Editor.versions['cocos2d'] = require('./package.json').version;
 }
 else {
+    require('./cocos2d/core/CCComponent');
     cc.Runtime = require('./wrapper');
     cc.isRuntimeNode = cc.getWrapperType;   // 由于是借助 wrapper 来判断，所以该方法只有在 wrapper 都注册好后才有效
 

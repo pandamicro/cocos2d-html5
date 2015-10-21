@@ -37,12 +37,15 @@ var DontDestroy = 1 << 5;
 var Destroying = 1 << 9;
 var HideInGame = 1 << 10;
 var HideInEditor = 1 << 11;
-//var Prefab = 1 << 12,
+
+var IsOnEnableCalled = 1 << 12;
 var IsOnLoadCalled = 1 << 13;
+var IsOnStartCalled = 1 << 14;
+
 var Hide = HideInGame | HideInEditor;
 // should not clone or serialize these flags
 var PersistentMask = ~(ToDestroy | Dirty | Destroying | DontDestroy |
-                       IsOnLoadCalled);
+                        IsOnEnableCalled | IsOnLoadCalled | IsOnStartCalled);
 
 /**
  * Bit mask that controls object states.
@@ -109,7 +112,8 @@ CCObject.Flags = {
     // FLAGS FOR COMPONENT
 
     IsOnLoadCalled: IsOnLoadCalled,
-
+    IsOnEnableCalled: IsOnEnableCalled,
+    IsOnStartCalled: IsOnStartCalled
 };
 
 require('./CCClass').fastDefine('cc.Object', CCObject, ['_name', '_objFlags']);

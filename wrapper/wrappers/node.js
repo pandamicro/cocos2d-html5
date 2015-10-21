@@ -585,11 +585,11 @@ var NodeWrapper = cc.Class({
         /**
          * If true, the engine will keep updating this node in 60 fps when it is selected,
          * otherwise, it will update only if necessary
-         * @property {Boolean} animatableInEditor
+         * @property {Boolean} _60fpsInEditMode
          * @default false
          * @static
          */
-        animatableInEditor: false,
+        _60fpsInEditMode: false,
 
         /**
          * If false, Hierarchy will disallow to drag child into this node, and all children will be hidden.
