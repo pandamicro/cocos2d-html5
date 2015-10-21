@@ -54,3 +54,8 @@ require('./cocos2d/core/event');
 require('./cocos2d/core/platform/CCSys');
 require('./cocos2d/core/platform/CCLoader');
 require('./CCDebugger');
+
+ccui = {};
+ccs = {};
+sp = {};
+cp = {};

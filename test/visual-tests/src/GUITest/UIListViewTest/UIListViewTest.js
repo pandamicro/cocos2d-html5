@@ -42,7 +42,7 @@ var UIListViewTest_Vertical = UIMainLayer.extend({
             // Create the list view
             var listView = new ccui.ListView();
             // set list view ex direction
-            listView.setDirection(ccui.ScrollView.DIR_NONE);
+            listView.setDirection(ccui.ScrollView.Dir.NONE);
             listView.setTouchEnabled(false);
             listView.setBounceEnabled(false);
             listView.setBackGroundImage("ccs-res/cocosui/green_edit.png");
@@ -174,7 +174,7 @@ var UIListViewTest_Horizontal = UIMainLayer.extend({
             // Create the list view
             var listView = new ccui.ListView();
             // set list view ex direction
-            listView.setDirection(ccui.ScrollView.DIR_HORIZONTAL);
+            listView.setDirection(ccui.ScrollView.Dir.HORIZONTAL);
             listView.setTouchEnabled(true);
             listView.setBounceEnabled(true);
             listView.setBackGroundImage("ccs-res/cocosui/green_edit.png");
@@ -301,7 +301,7 @@ var UIListViewTest_TouchIntercept = UIMainLayer.extend({
             // Create the list view
             var listView = new ccui.ListView();
             // set list view ex direction
-            listView.setDirection(ccui.ScrollView.DIR_NONE);
+            listView.setDirection(ccui.ScrollView.Dir.NONE);
             listView.setBounceEnabled(true);
             listView.setTouchEnabled(false);
             listView.setBackGroundImage("ccs-res/cocosui/green_edit.png");
