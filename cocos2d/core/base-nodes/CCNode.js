@@ -2044,7 +2044,7 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
      * Returns a component identified by the name given.
      * @function
      * @param {String} name The name to search for
-     * @return {cc.Component} The component found
+     * @return {cc._Component} The component found
      */
     getComponent: function (name) {
         if(this._componentContainer)
@@ -2055,7 +2055,7 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
     /**
      * Adds a component to the node's component container.
      * @function
-     * @param {cc.Component} component
+     * @param {cc._Component} component
      */
     addComponent: function (component) {
         if(this._componentContainer)
@@ -2065,7 +2065,7 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
     /**
      * Removes a component identified by the given name or removes the component object given
      * @function
-     * @param {String|cc.Component} component
+     * @param {String|cc._Component} component
      */
     removeComponent: function (component) {
         if(this._componentContainer)

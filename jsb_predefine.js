@@ -1,6 +1,5 @@
 /****************************************************************************
- Copyright (c) 2011-2012 cocos2d-x.org
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2015 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -22,47 +21,27 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-/**
- * The main namespace of Cocostudio, all classes, functions, properties and constants of Spine are defined in this namespace
- * @namespace
- * @name ccs
- */
-var ccs = ccs || {};
 
-/**
- * The same as cc._Class
- * @class
- */
-ccs.Class = ccs.Class || cc._Class;
-ccs.Class.extend = ccs.Class.extend || cc._Class.extend;
 
-/**
- * The same as cc.Node
- * @class
- * @extends ccs.Class
- */
-ccs.Node = ccs.Node || cc.Node;
-ccs.Node.extend = ccs.Node.extend || cc.Node.extend;
+// define cc
 
-/**
- * The same as cc.Sprite
- * @class
- * @extends ccs.Class
- */
-ccs.Sprite = ccs.Sprite || cc.Sprite;
-ccs.Sprite.extend = ccs.Sprite.extend || cc.Sprite.extend;
+// `cc.getWrapper(node)` takes a runtime node and return its corresponding cc.Runtime.NodeWrapper instance.
 
-/**
- * The same as cc._Component
- * @class
- * @extends ccs.Class
- */
-ccs.Component = ccs.Component || cc._Component;
-ccs.Component.extend = ccs.Component.extend || cc._Component.extend;
+cc._setWrapperGetter = function (getter) {
+    cc.getWrapper = getter;
+};
 
-/**
- * CocoStudio version
- * @constant
- * @type {string}
- */
-ccs.cocostudioVersion = "v1.3.0.0";
+if (CC_TEST) {
+    /**
+     * contains internal apis for unit tests
+     * @expose
+     */
+    cc._Test = {};
+}
+
+// predefine some modules for cocos
+
+require('./polyfill');
+require('./cocos2d/core/platform/js');
+require('./cocos2d/core/value-types');
+require('./cocos2d/core/event');

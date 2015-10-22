@@ -60,7 +60,7 @@ var LayoutWrapper = cc.Class({
     },
 
     addChildN: function (child) {
-        var wrapper = cc(child);
+        var wrapper = cc.getWrapper(child);
         wrapper.widgetLayoutType = this.layoutType;
         NodeWrapper.prototype.addChildN.call(this, child);
     },

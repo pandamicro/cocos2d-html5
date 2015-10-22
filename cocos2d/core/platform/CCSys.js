@@ -1,4 +1,6 @@
 
+if (cc.sys) return;
+
 /**
  * System variables
  * @namespace

@@ -22,17 +22,16 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-var getWrapper;
 
 // define cc
 
 // `cc(node)` takes a runtime node and return its corresponding cc.Runtime.NodeWrapper instance.
 cc = function (node) {
-    return getWrapper(node);
+    return cc.getWrapper(node);
 };
 
 cc._setWrapperGetter = function (getter) {
-    getWrapper = getter;
+    cc.getWrapper = getter;
 };
 
 if (CC_TEST) {

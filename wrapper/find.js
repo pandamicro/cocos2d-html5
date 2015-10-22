@@ -17,7 +17,7 @@ module.exports = function (path, referenceNode) {
         return null;
     }
     if (!referenceNode) {
-        var scene = cc(cc.director.getRunningScene());
+        var scene = cc.getWrapper(cc.director.getRunningScene());
         if (!scene) {
             cc.warn('Can not get current scene.');
             return null;
@@ -25,7 +25,7 @@ module.exports = function (path, referenceNode) {
         referenceNode = scene;
     }
     else if (!(referenceNode instanceof NodeWrapper)) {
-        referenceNode = cc(referenceNode)
+        referenceNode = cc.getWrapper(referenceNode)
     }
 
     var matchWrapper = referenceNode;
@@ -49,7 +49,7 @@ module.exports = function (path, referenceNode) {
         var children = matchWrapper.childrenN;
         matchWrapper = null;
         for (var t = 0, len = children.length; t < len; ++t) {
-            var subWrapper = cc(children[t]);
+            var subWrapper = cc.getWrapper(children[t]);
             if (findByBeh) {
                 if (cc.hasMixin(subWrapper, beh)) {
                     matchWrapper = subWrapper;

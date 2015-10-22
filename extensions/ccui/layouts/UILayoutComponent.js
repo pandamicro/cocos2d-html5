@@ -42,7 +42,7 @@ ccui.LayoutComponent_SizeType = {
 };
 
 //refactor since v3.3
-ccui.LayoutComponent = cc.Component.extend({
+ccui.LayoutComponent = cc._Component.extend({
     _horizontalEdge: 0,
     _verticalEdge: 0,
 
@@ -75,7 +75,7 @@ ccui.LayoutComponent = cc.Component.extend({
     init: function () {
         var ret = true;
 
-        if (!cc.Component.prototype.init.call(this)) {
+        if (!cc._Component.prototype.init.call(this)) {
             return false;
         }
 

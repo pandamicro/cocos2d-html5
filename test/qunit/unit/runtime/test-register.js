@@ -11,9 +11,9 @@ test('basic', function() {
     strictEqual(cc.getWrapperType(MyNode), MyNodeWrapper, 'getWrapperType should return registered wrapper type');
 
     var node = new MyNode();
-    var wrapper = cc(node);
-    ok(wrapper instanceof MyNodeWrapper, 'cc() should create registered wrapper');
-    strictEqual(cc(node), wrapper, 'cc() should return created registered wrapper');
+    var wrapper = cc.getWrapper(node);
+    ok(wrapper instanceof MyNodeWrapper, 'cc.getWrapper() should create registered wrapper');
+    strictEqual(cc.getWrapper(node), wrapper, 'cc.getWrapper() should return created registered wrapper');
 
     strictEqual(wrapper.targetN, node, 'wrapper target should be node');
 

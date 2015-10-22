@@ -28,13 +28,13 @@
  * @class
  * @extends cc._Class
  */
-cc.Component = cc._Class.extend(/** @lends cc.Component# */{
+cc._Component = cc._Class.extend(/** @lends cc._Component# */{
     _owner: null,
     _name: "",
     _enabled: true,
 
     /**
-     * Construction of cc.Component
+     * Construction of cc._Component
      */
     ctor:function(){
         this._owner = null;
@@ -43,7 +43,7 @@ cc.Component = cc._Class.extend(/** @lends cc.Component# */{
     },
 
     /**
-     * Initializes a cc.Component.
+     * Initializes a cc._Component.
      * @returns {boolean}
      */
     init:function(){
@@ -93,7 +93,7 @@ cc.Component = cc._Class.extend(/** @lends cc.Component# */{
     },
 
     /**
-     * Returns the name of cc.Component.
+     * Returns the name of cc._Component.
      * @returns {string}
      */
     getName:function(){
@@ -101,7 +101,7 @@ cc.Component = cc._Class.extend(/** @lends cc.Component# */{
     } ,
 
     /**
-     * Sets the name to cc.Component.
+     * Sets the name to cc._Component.
      * @param {String} name
      */
     setName:function(name){
@@ -109,7 +109,7 @@ cc.Component = cc._Class.extend(/** @lends cc.Component# */{
     } ,
 
     /**
-     * Sets the owner to cc.Component.
+     * Sets the owner to cc._Component.
      * @param owner
      */
     setOwner:function(owner){
@@ -117,7 +117,7 @@ cc.Component = cc._Class.extend(/** @lends cc.Component# */{
     },
 
     /**
-     * Returns the owner of cc.Component.
+     * Returns the owner of cc._Component.
      * @returns {*}
      */
     getOwner:function(){
@@ -128,9 +128,9 @@ cc.Component = cc._Class.extend(/** @lends cc.Component# */{
 /**
  * Allocates and initializes a component.
  * @deprecated since v3.0, please use new construction instead.
- * @return {cc.Component}
+ * @return {cc._Component}
  */
-cc.Component.create = function(){
-    return new cc.Component();
+cc._Component.create = function(){
+    return new cc._Component();
 };
 

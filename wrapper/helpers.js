@@ -14,7 +14,7 @@ module.exports = {
     // assert(node)
     onNodeAttachedToParent: function (node) {
         if (CC_EDITOR) {
-            var uuid = cc(node).uuid;
+            var uuid = cc.getWrapper(node).uuid;
             if (!uuid) {
                 return;
             }
@@ -42,7 +42,7 @@ module.exports = {
     // assert(node)
     onNodeDetachedFromParent: function (node) {
         if (CC_EDITOR) {
-            var uuid = cc(node).uuid;
+            var uuid = cc.getWrapper(node).uuid;
             if (!uuid) {
                 return;
             }

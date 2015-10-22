@@ -10,7 +10,7 @@ describe( 'test Particle wrapper', function () {
 
     beforeEach(function () {
         node = new cc.ParticleSystem();
-        wrapper = cc(node);
+        wrapper = cc.getWrapper(node);
     });
 
     function setShareProperties () {
