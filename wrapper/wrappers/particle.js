@@ -714,7 +714,7 @@ var ParticleWrapper = cc.Class({
     },
 
     statics: {
-        animatableInEditor: true
+        _60fpsInEditMode: true
     },
 
     onFocusInEditor: function () {
