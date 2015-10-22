@@ -139,7 +139,11 @@ gulp.task('build-html5', ['build-modular-cocos2d'], function () {
 
 
 gulp.task('clean-test', function (done) {
-    Del([paths.test.destEditorExtends, paths.test.dest], done);
+    Del([paths.test.destEditorExtends, paths.test.dest],
+        // sometimes it may need to delay 100ms to ensure build-test will be execute...
+        setTimeout(function () {
+            done();
+        }, 100));
 });
 
 gulp.task('build-test', ['build-modular-cocos2d', 'clean-test'], function () {

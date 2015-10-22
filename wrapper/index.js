@@ -131,11 +131,11 @@ wrappers.forEach(function (type) {
     var menuPath = type[3];
     var nodeType = namespace[name];
 
-    var originCtor = nodeType.prototype.ctor;
-    nodeType.prototype.ctor = function () {
-        originCtor.apply(this, arguments);
-        this._FB_wrapper = null;
-    };
+    //var originCtor = nodeType.ctor;
+    //nodeType = function () {
+    //    originCtor.apply(this, arguments);
+    //    this._FB_wrapper = null;
+    //};
 
     registerNodeType(nodeType, wrapper, menuPath);
 

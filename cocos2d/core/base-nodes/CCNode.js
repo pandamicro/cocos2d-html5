@@ -128,96 +128,73 @@ cc.s_globalOrderOfArrival = 1;
  * @property {cc.GLProgram}         shaderProgram       - The shader program currently used for this node
  * @property {Number}               glServerState       - The state of OpenGL server side
  */
-cc.Node = cc._Class.extend(/** @lends cc.Node# */{
-    _localZOrder: 0,                                     ///< Local order (relative to its siblings) used to sort the node
-    _globalZOrder: 0,                                    ///< Global order used to sort the node
-    _vertexZ: 0.0,
+cc.Node = cc.Class(/** @lends cc.Node# */{
+    name: 'cc.Node',
 
-    _rotationX: 0,
-    _rotationY: 0.0,
-    _scaleX: 1.0,
-    _scaleY: 1.0,
-    _position: null,
+    properties: {
+        _localZOrder: 0,    ///< Local order (relative to its siblings) used to sort the node
+        _globalZOrder: 0,   ///< Global order used to sort the node
+        _vertexZ: 0.0,
 
-    _normalizedPosition:null,
-    _usingNormalizedPosition: false,
-    _normalizedPositionDirty: false,
+        _rotationX: 0,
+        _rotationY: 0.0,
+        _scaleX: 1.0,
+        _scaleY: 1.0,
+        _position: cc.p(0, 0),
 
-    _skewX: 0.0,
-    _skewY: 0.0,
-    // children (lazy allocs),
-    _children: null,
-    // lazy alloc,
-    _visible: true,
-    _anchorPoint: null,
-    _contentSize: null,
-    _running: false,
-    _parent: null,
+        _normalizedPosition: cc.p(0, 0),
+        _usingNormalizedPosition: false,
 
-    // "whole screen" objects. like Scenes and Layers, should set _ignoreAnchorPointForPosition to true
-    _ignoreAnchorPointForPosition: false,
-    tag: cc.NODE_TAG_INVALID,
-    // userData is always initialized as nil
-    userData: null,
-    userObject: null,
+        _skewX: 0.0,
+        _skewY: 0.0,
+        _children: [],
+        // lazy alloc,
+        _visible: true,
+        _anchorPoint: cc.p(0, 0),
+        _contentSize: cc.size(0, 0),
+        _parent: null,
 
-    //since 2.0 api
-    _reorderChildDirty: false,
-    _shaderProgram: null,
-    arrivalOrder: 0,
+        // "whole screen" objects. like Scenes and Layers, should set _ignoreAnchorPointForPosition to true
+        _ignoreAnchorPointForPosition: false,
+        tag: cc.NODE_TAG_INVALID,
+        // userData is always initialized as nil
+        userData: null,
+        userObject: null,
 
-    _actionManager: null,
-    _scheduler: null,
-    _eventDispatcher: null,
+        _showNode: false,
+        _name: '',                     ///<a string label, an user defined string to identify this node
 
-    _additionalTransformDirty: false,
-    _additionalTransform: null,
-    _componentContainer: null,
-    _isTransitionFinished: false,
-
-    _className: "Node",
-    _showNode: false,
-    _name: "",                     ///<a string label, an user defined string to identify this node
-
-    _realOpacity: 255,
-    _realColor: null,
-    _cascadeColorEnabled: false,
-    _cascadeOpacityEnabled: false,
-
-    _renderCmd:null,
-
-    _camera: null,
-
-    /**
-     * Constructor function, override it to extend the construction behavior, remember to call "this._super()" in the extended "ctor" function.
-     * @function
-     */
-    ctor: function(){
-        this._initNode();
-        this._initRendererCmd();
+        _realOpacity: 255,
+        _realColor: cc.color(255, 255, 255, 255),
+        _cascadeColorEnabled: false,
+        _cascadeOpacityEnabled: false
     },
 
-    _initNode: function () {
-        var _t = this;
-        _t._anchorPoint = cc.p(0, 0);
-        _t._contentSize = cc.size(0, 0);
-        _t._position = cc.p(0, 0);
-        _t._normalizedPosition = cc.p(0,0);
-        _t._children = [];
+    ctor: function() {
+        var name = arguments[0];
+        this._name = typeof name !== 'undefined' ? name : 'New Node';
+
+        this._normalizedPositionDirty = false;
+        this._running = false;
+        this._reorderChildDirty = false;
+        this._shaderProgram = null;
+        this.arrivalOrder = 0;
+
+        this._additionalTransformDirty = false;
+        this._isTransitionFinished = false;
 
         var director = cc.director;
-        _t._actionManager = director.getActionManager();
-        _t._scheduler = director.getScheduler();
+        this._actionManager = director.getActionManager();
+        this._scheduler = director.getScheduler();
+        this._additionalTransform = cc.affineTransformMakeIdentity();
 
-        _t._additionalTransform = cc.affineTransformMakeIdentity();
         if (cc.ComponentContainer) {
-            _t._componentContainer = new cc.ComponentContainer(_t);
+            this._componentContainer = new cc.ComponentContainer(this);
         }
 
-        this._realOpacity = 255;
-        this._realColor = cc.color(255, 255, 255, 255);
-        this._cascadeColorEnabled = false;
-        this._cascadeOpacityEnabled = false;
+        this.grid = null;
+        this._camera = null;
+        this._initRendererCmd();
     },
 
     /**
@@ -2556,6 +2533,13 @@ cc.Node = cc._Class.extend(/** @lends cc.Node# */{
         return ret;
     }
 });
+
+cc.Node.extend = function (options) {
+    return cc._Class.extend.call(cc.Node, options);
+};
+
+// to support calling this._super in sub class
+cc.Node.prototype.ctor = cc.Node;
 
 /**
  * Allocates and initializes a node.
