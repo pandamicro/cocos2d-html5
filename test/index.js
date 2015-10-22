@@ -5,6 +5,7 @@ var tests = [
     'test-runtime-helpers',
     'test-set-property-by-path',
     'test-behavior',
+    'test-node',
     'page',
     'core'
 ];
