@@ -53,12 +53,12 @@ ccs.Sprite = ccs.Sprite || cc.Sprite;
 ccs.Sprite.extend = ccs.Sprite.extend || cc.Sprite.extend;
 
 /**
- * The same as cc.Component
+ * The same as cc._Component
  * @class
  * @extends ccs.Class
  */
-ccs.Component = ccs.Component || cc.Component;
-ccs.Component.extend = ccs.Component.extend || cc.Component.extend;
+ccs.Component = ccs.Component || cc._Component;
+ccs.Component.extend = ccs.Component.extend || cc._Component.extend;
 
 /**
  * CocoStudio version

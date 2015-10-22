@@ -36,7 +36,7 @@ ccs.ComAudio = ccs.Component.extend(/** @lends ccs.ComAudio# */{
      * Construction of ccs.ComAudio
      */
     ctor: function () {
-        cc.Component.prototype.ctor.call(this);
+        cc._Component.prototype.ctor.call(this);
         this._name = "Audio";
         ccs.ComAudio.prototype.init.call(this);
     },
