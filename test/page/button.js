@@ -19,7 +19,7 @@ describe( 'test button wrapper', function () {
 
     beforeEach(function () {
         node = new ccui.Button();
-        wrapper = cc(node);
+        wrapper = cc.getWrapper(node);
     });
 
     it( 'normalTexture', function () {

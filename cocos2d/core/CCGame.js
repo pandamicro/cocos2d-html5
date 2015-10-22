@@ -35,7 +35,7 @@ cc.game = /** @lends cc.game# */{
         jsList: "jsList",
         scenes: "scenes"
     },
-    
+
     // states
     _paused: true,//whether the game is paused
     _isCloning: false,    // deserializing or instantiating
@@ -44,9 +44,9 @@ cc.game = /** @lends cc.game# */{
     _rendererInitialized: false,
 
     _renderContext: null,
-    
+
     _intervalId: null,//interval target of main
-    
+
     _lastTime: null,
     _frameTime: null,
 
@@ -156,7 +156,7 @@ cc.game = /** @lends cc.game# */{
      */
     prepare: function (cb) {
         var self = this,
-            config = self.config, 
+            config = self.config,
             CONFIG_KEY = self.CONFIG_KEY;
 
         this._loadConfig();
@@ -244,7 +244,7 @@ cc.game = /** @lends cc.game# */{
                 cc.game.onStart = onStart;
             }
         }
-        
+
         this.prepare(cc.game.onStart && cc.game.onStart.bind(cc.game));
     },
 
@@ -375,7 +375,7 @@ cc.game = /** @lends cc.game# */{
         if (document["ccConfig"]) {
             this._initConfig(document["ccConfig"]);
         }
-        // Load from project.json 
+        // Load from project.json
         else {
             try {
                 var cocos_script = document.getElementsByTagName('script');
@@ -715,7 +715,7 @@ cc.game = /** @lends cc.game# */{
     }
 
     //launchNewScene: function () {
-    //    var SceneWrapperImpl = cc(cc.director.getRunningScene()).constructor;
+    //    var SceneWrapperImpl = cc.getWrapper(cc.director.getRunningScene()).constructor;
     //    var sceneWrapper = new SceneWrapperImpl();
     //    sceneWrapper.createAndAttachNode();
     //    cc.game._launchScene(sceneWrapper);

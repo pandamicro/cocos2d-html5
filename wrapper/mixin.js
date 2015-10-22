@@ -118,7 +118,7 @@ function mixin (node, typeOrTypename) {
             scriptCtx[propName] = classToMixProto[propName];
             if (! lcmInitStates[lcmIndex]) {
                 lcmInitStates[lcmIndex] = true;
-                // cc.warn("cc.mixin: %s's %s is overridden", cc(node).name, propName);
+                // cc.warn("cc.mixin: %s's %s is overridden", cc.getWrapper(node).name, propName);
                 (function () {
                     var invoker = lcmInvokers[propName];
                     var originMethod = node[propName];
@@ -225,7 +225,7 @@ var exports = {
             }
         }
         return cc.error('cc.unMixin: Can not find mixed class "%s" in node "%s".',
-            typeOrTypename, cc(node).name);
+            typeOrTypename, cc.getWrapper(node).name);
     }
 };
 

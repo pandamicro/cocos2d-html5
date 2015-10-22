@@ -230,16 +230,16 @@
         child.nodeArrayInBeh = [parent, other];
         child.otherNodeInBeh = other;
 
-        cc(parent).nodeInWrapper = child;
-        cc(parent).nodeArrayInWrapper = [child, other];
-        cc(child).nodeInWrapper = parent;
-        cc(child).nodeArrayInWrapper = [parent, other];
-        cc(parent).wrapper = cc(child);
-        cc(child).wrapper = cc(parent);
-        cc(parent).otherWrapper = cc(other);
-        cc(child).otherWrapper = cc(other);
-        cc(parent).otherNodeInWrapper = other;
-        cc(child).otherNodeInWrapper = other;
+        cc.getWrapper(parent).nodeInWrapper = child;
+        cc.getWrapper(parent).nodeArrayInWrapper = [child, other];
+        cc.getWrapper(child).nodeInWrapper = parent;
+        cc.getWrapper(child).nodeArrayInWrapper = [parent, other];
+        cc.getWrapper(parent).wrapper = cc.getWrapper(child);
+        cc.getWrapper(child).wrapper = cc.getWrapper(parent);
+        cc.getWrapper(parent).otherWrapper = cc.getWrapper(other);
+        cc.getWrapper(child).otherWrapper = cc.getWrapper(other);
+        cc.getWrapper(parent).otherNodeInWrapper = other;
+        cc.getWrapper(child).otherNodeInWrapper = other;
 
         var cloneParent = cc.instantiate(parent);
         var cloneChild = cloneParent.children[0];
@@ -254,16 +254,16 @@
         ok(cloneParent.otherNodeInBeh === other, 'should not clone other node in parent behavior');
         ok(cloneChild.otherNodeInBeh === other, 'should not clone other node in child behavior');
 
-        ok(cc(cloneParent).nodeInWrapper === cloneChild, 'should redirect child reference in wrapper');
-        fastArrayEqual(cc(cloneParent).nodeArrayInWrapper, [cloneChild, other], 'should redirect array of child reference in wrapper');
-        ok(cc(cloneChild).nodeInWrapper === cloneParent, 'should redirect parent reference in wrapper');
-        fastArrayEqual(cc(cloneChild).nodeArrayInWrapper, [cloneParent, other], 'should redirect array of parent reference in wrapper');
-        ok(cc(cloneChild).otherNodeInWrapper === other, 'should not clone other node in child wrapper');
-        ok(cc(cloneParent).otherNodeInWrapper === other, 'should not clone other node in parent wrapper');
-        ok(cc(cloneChild).wrapper === cc(cloneParent), 'should redirect wrapper to new parent');
-        ok(cc(cloneParent).wrapper === cc(cloneChild), 'should redirect wrapper to new child');
-        ok(cc(cloneChild).otherWrapper === cc(other), 'should not clone other otherWrapper in child wrapper');
-        ok(cc(cloneParent).otherWrapper === cc(other), 'should not clone other otherWrapper in parent wrapper');
+        ok(cc.getWrapper(cloneParent).nodeInWrapper === cloneChild, 'should redirect child reference in wrapper');
+        fastArrayEqual(cc.getWrapper(cloneParent).nodeArrayInWrapper, [cloneChild, other], 'should redirect array of child reference in wrapper');
+        ok(cc.getWrapper(cloneChild).nodeInWrapper === cloneParent, 'should redirect parent reference in wrapper');
+        fastArrayEqual(cc.getWrapper(cloneChild).nodeArrayInWrapper, [cloneParent, other], 'should redirect array of parent reference in wrapper');
+        ok(cc.getWrapper(cloneChild).otherNodeInWrapper === other, 'should not clone other node in child wrapper');
+        ok(cc.getWrapper(cloneParent).otherNodeInWrapper === other, 'should not clone other node in parent wrapper');
+        ok(cc.getWrapper(cloneChild).wrapper === cc.getWrapper(cloneParent), 'should redirect wrapper to new parent');
+        ok(cc.getWrapper(cloneParent).wrapper === cc.getWrapper(cloneChild), 'should redirect wrapper to new child');
+        ok(cc.getWrapper(cloneChild).otherWrapper === cc.getWrapper(other), 'should not clone other otherWrapper in child wrapper');
+        ok(cc.getWrapper(cloneParent).otherWrapper === cc.getWrapper(other), 'should not clone other otherWrapper in parent wrapper');
 
         cc.js.unregisterClass(Script);
     });

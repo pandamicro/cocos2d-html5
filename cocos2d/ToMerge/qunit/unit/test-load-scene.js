@@ -213,7 +213,7 @@
             var sprite = asset;
             var texture = sprite.texture;
 
-            var wrapper = cc(cc.director.getRunningScene());
+            var wrapper = cc.getWrapper(cc.director.getRunningScene());
             var actual = Editor.serialize(wrapper, {stringify: false});
             var expect = {
                 "__type__": "MySceneWrapper",
@@ -236,10 +236,10 @@
             cc.mixin(node1, ScriptToMix);
             node1.onLoad();
             node1.age = 30;
-            node1.target = cc(node2);
+            node1.target = cc.getWrapper(node2);
 
-            cc(node1)._id = 'id1';
-            cc(node2)._id = 'id2';
+            cc.getWrapper(node1)._id = 'id1';
+            cc.getWrapper(node2)._id = 'id2';
             actual = Editor.serialize(wrapper, {stringify: false});
             expect = {
                 "__type__": "MySceneWrapper",
@@ -325,14 +325,14 @@
                 strictEqual(rootNode.constructor, MyNode, 'root node should be MyNode');
                 deepEqual(rootNode.color, node1.color, 'color of root node should equals to node1');
                 strictEqual(rootNode.asset._uuid, sprite._uuid, 'asset of root node should equals to sprite');
-                strictEqual(cc(rootNode).childrenN.length, 1, 'root node should have 1 child');
-                strictEqual(cc(rootNode).parent, loaded, 'parent of root node should be scene');
+                strictEqual(cc.getWrapper(rootNode).childrenN.length, 1, 'root node should have 1 child');
+                strictEqual(cc.getWrapper(rootNode).parent, loaded, 'parent of root node should be scene');
 
-                var childNode = cc(rootNode).childrenN[0];
+                var childNode = cc.getWrapper(rootNode).childrenN[0];
                 deepEqual(childNode.color, node2.color, 'color of child node should equals to node2');
                 strictEqual(childNode.asset._uuid, texture._uuid, 'asset of child node should equals to texture');
-                strictEqual(cc(childNode).childrenN.length, 0, 'child node should have no child');
-                strictEqual(cc(childNode).parentN, rootNode, 'parent of child node should be root node');
+                strictEqual(cc.getWrapper(childNode).childrenN.length, 0, 'child node should have no child');
+                strictEqual(cc.getWrapper(childNode).parentN, rootNode, 'parent of child node should be root node');
 
                 strictEqual(rootNode.asset.texture, childNode.asset, 'references of the same asset should be equal');
 
@@ -341,7 +341,7 @@
                 strictEqual(rootNode.getName, ScriptToMix.prototype.getName, 'should mixin methods');
                 strictEqual(rootNode.age, 30, 'should deserialize mixin');
                 //ok(rootNode.target === childNode, 'should restore node references in mixin');
-                ok(rootNode.target === cc(childNode), 'should restore wrapper references in mixin');
+                ok(rootNode.target === cc.getWrapper(childNode), 'should restore wrapper references in mixin');
 
                 start();
             });

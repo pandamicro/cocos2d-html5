@@ -3,7 +3,7 @@ function visitWrapper (wrapper, visitor) {
 
     var childrenN = wrapper.childrenN;
     for (var i = 0; i < childrenN.length; i++) {
-        visitor(cc(childrenN[i]));
+        visitor(cc.getWrapper(childrenN[i]));
     }
 }
 

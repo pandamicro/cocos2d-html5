@@ -8,7 +8,7 @@ largeModule('Prefab', {
 
 test('basic test', function() {
     var node = new TestNode();
-    strictEqual(cc(node)._prefab, null, "new object should not have prefab info");
+    strictEqual(cc.getWrapper(node)._prefab, null, "new object should not have prefab info");
 });
 
 (function () {
@@ -20,10 +20,10 @@ test('basic test', function() {
     var child = new cc.Node();
     var otherNode = new cc.Node();
 
-    var wrapper = cc(node);
-    cc(child).parent = wrapper;
+    var wrapper = cc.getWrapper(node);
+    cc.getWrapper(child).parent = wrapper;
     wrapper.scale = cc.v2(123, 432);
-    cc(child).scale = cc.v2(22, 11);
+    cc.getWrapper(child).scale = cc.v2(22, 11);
     var ensureIdInitialized = wrapper.uuid;
     cc.mixin(node, TestScript);
     node.target = child;
@@ -69,8 +69,8 @@ test('basic test', function() {
     test('instantiate prefab', function () {
         var newNode = cc.instantiate(prefab);
         var newNode2 = cc.instantiate(prefab);
-        var newWrapper = cc(newNode);
-        var newWrapper2 = cc(newNode2);
+        var newWrapper = cc.getWrapper(newNode);
+        var newWrapper2 = cc.getWrapper(newNode2);
         var prefabInfo = newWrapper._prefab;
 
         ok(newNode !== null, "new node should be created");
@@ -105,7 +105,7 @@ test('basic test', function() {
 
         var testNode = cc.instantiate(prefab);
         var testChildN = testNode.children[0];
-        var testWrapper = cc(testNode);
+        var testWrapper = cc.getWrapper(testNode);
 
         testNode.scale = cc.Vec2.zero;
         cc.unMixin(testNode, TestScript);
@@ -113,7 +113,7 @@ test('basic test', function() {
         cc.mixin(testChildN, TestScript);
 
         var newNode = new cc.Node();
-        cc(newNode).parentN = testChildN;
+        cc.getWrapper(newNode).parentN = testChildN;
 
         Editor.PrefabUtils.revertPrefab(testWrapper, function () {
             cc.loader.loadJson = restore;

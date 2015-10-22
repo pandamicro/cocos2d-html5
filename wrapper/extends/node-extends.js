@@ -24,7 +24,7 @@ var nodeProto = NodeWrapper.prototype;
 JS.getset(nodeProto, 'parent',
     function () {
         var parent = this.parentN;
-        return parent && cc(parent);
+        return parent && cc.getWrapper(parent);
     },
     function (value) {
         if (CC_EDITOR && value) {
@@ -72,7 +72,7 @@ JS.get(nodeProto, 'children',
  */
 JS.getset(nodeProto, 'scenePosition',
     function () {
-        var scene = cc(cc.director.getRunningScene());
+        var scene = cc.getWrapper(cc.director.getRunningScene());
         if (!scene) {
             cc.error('Can not access scenePosition if no running scene');
             return cc.Vec2.zero;
@@ -81,7 +81,7 @@ JS.getset(nodeProto, 'scenePosition',
         return scene.transformPointToLocal( this.worldPosition );
     },
     function (value) {
-        var scene = cc(cc.director.getRunningScene());
+        var scene = cc.getWrapper(cc.director.getRunningScene());
         if (!scene) {
             cc.error('Can not access scenePosition if no running scene');
             return;
@@ -99,7 +99,7 @@ JS.getset(nodeProto, 'scenePosition',
  */
 JS.getset(nodeProto, 'sceneRotation',
     function () {
-        var scene = cc(cc.director.getRunningScene());
+        var scene = cc.getWrapper(cc.director.getRunningScene());
         if (!scene) {
             cc.error('Can not access sceneRotation if no running scene');
             return 0;
@@ -108,7 +108,7 @@ JS.getset(nodeProto, 'sceneRotation',
         return this.worldRotation - scene.rotation;
     },
     function (value) {
-        var scene = cc(cc.director.getRunningScene());
+        var scene = cc.getWrapper(cc.director.getRunningScene());
         if (!scene) {
             cc.error('Can not access sceneRotation if no running scene');
             return;
@@ -127,7 +127,7 @@ JS.getset(nodeProto, 'sceneRotation',
  */
 JS.getset(nodeProto, 'sceneScale',
     function () {
-        var scene = cc(cc.director.getRunningScene());
+        var scene = cc.getWrapper(cc.director.getRunningScene());
         if (!scene) {
             cc.error('Can not access sceneScale if no running scene');
             return cc.Vec2.one;
@@ -199,7 +199,7 @@ JS.mixin(nodeProto, {
         var children = this.childrenN;
         for (var i = 0, len = children.length; i < len; ++i) {
             var node = children[i];
-            cc(node)._onActivatedInGameMode();
+            cc.getWrapper(node)._onActivatedInGameMode();
         }
     },
 
@@ -220,7 +220,7 @@ JS.mixin(nodeProto, {
             var children = this.childrenN;
             for (var i = 0, len = children.length; i < len; ++i) {
                 var node = children[i];
-                cc(node)._onActivatedInEditMode();
+                cc.getWrapper(node)._onActivatedInEditMode();
             }
         }
     },
@@ -236,7 +236,7 @@ JS.mixin(nodeProto, {
             var children = this.childrenN;
             for (var i = 0, len = children.length; i < len; ++i) {
                 var node = children[i];
-                cc(node)._callUpdateInEM(deltaTime);
+                cc.getWrapper(node)._callUpdateInEM(deltaTime);
             }
         }
     },
@@ -264,7 +264,7 @@ JS.mixin(nodeProto, {
 
 function dumpNodeForSerialization (node) {
     if (CC_EDITOR || CC_TEST) {
-        var wrapper = cc(node);
+        var wrapper = cc.getWrapper(node);
         wrapper.onBeforeSerialize();
 
         var children, targetN, mixin;
@@ -301,7 +301,7 @@ if (CC_EDITOR || CC_TEST) {
 }
 
 function dumpNodeForInstantiation (node) {
-    var wrapper = cc(node);
+    var wrapper = cc.getWrapper(node);
     wrapper.onBeforeSerialize();
 
     var children, targetN, mixin;

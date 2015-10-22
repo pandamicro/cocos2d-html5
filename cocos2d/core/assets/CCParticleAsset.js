@@ -15,7 +15,7 @@ var ParticleAsset = cc.Class({
                     return callback(e);
                 }
 
-                var wrapper = cc(node);
+                var wrapper = cc.getWrapper(node);
                 wrapper.file = url;
                 wrapper.name = Url.basenameNoExt(url);
                 wrapper.preview = false;

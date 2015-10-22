@@ -6,7 +6,7 @@ describe( 'cc.Scale9SpriteWrapper', function () {
 
     beforeEach(function () {
         sprite = new ccui.ImageView();
-        wrapper = cc(sprite);
+        wrapper = cc.getWrapper(sprite);
     });
 
     it( 'should exists', function () {

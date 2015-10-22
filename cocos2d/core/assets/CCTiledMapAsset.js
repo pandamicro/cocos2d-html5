@@ -24,7 +24,7 @@ var TiledMapAsset = cc.Class({
                         return callback(e);
                     }
 
-                    var wrapper = cc(node);
+                    var wrapper = cc.getWrapper(node);
                     wrapper.name = Url.basenameNoExt(url);
                     wrapper._textures = textures;
 

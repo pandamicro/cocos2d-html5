@@ -15,7 +15,7 @@ var ERR_NaN = 'The %s must not be NaN';
  * Note: 接口中以 "N" 结尾的使用的都是 Runtime 的原生 Node 类型。
  * !#en: This is a wrapper class for operating node with editor script
  * The instance of this class is a wrapper, not a node.
- * You can use `cc(node)` to get the wrapper if you really want to
+ * You can use `cc.getWrapper(node)` to get the wrapper if you really want to
  * use these API on runtime nodes.
  * Note: API that has a suffix "N" return Runtime's native Node type
  *
@@ -133,7 +133,7 @@ var NodeWrapper = cc.Class({
                 var targetN = this.targetN;
 
                 if (value) {
-                    parent = cc(value);
+                    parent = cc.getWrapper(value);
                     if ( !parent.canAddChildN(targetN) ) return;
                 }
 
@@ -343,7 +343,7 @@ var NodeWrapper = cc.Class({
                         return this.rotation + parent.rotation;
                     }
                     else {
-                        return this.rotation + cc(parent).worldRotation;
+                        return this.rotation + cc.getWrapper(parent).worldRotation;
                     }
                 }
                 else {
@@ -358,7 +358,7 @@ var NodeWrapper = cc.Class({
                             this.rotation = value - parent.rotation;
                         }
                         else {
-                            this.rotation = value - cc(parent).worldRotation;
+                            this.rotation = value - cc.getWrapper(parent).worldRotation;
                         }
                     }
                     else {
@@ -715,7 +715,7 @@ var NodeWrapper = cc.Class({
      * @return {number}
      */
     getSiblingIndex: function () {
-        return cc(this.parentN).childrenN.indexOf(this.targetN);
+        return cc.getWrapper(this.parentN).childrenN.indexOf(this.targetN);
     },
 
     /**
@@ -917,7 +917,7 @@ NodeWrapper.prototype.schedulePriority = 0;
 
 cc._setWrapperGetter(function (node) {
     if (node instanceof NodeWrapper) {
-        cc.warn('cc() accept argument of type runtime node, not wrapper.');
+        cc.warn('cc.getWrapper() accept argument of type runtime node, not wrapper.');
         return node;
     }
     if (!node) {
