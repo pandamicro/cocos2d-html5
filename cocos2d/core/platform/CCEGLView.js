@@ -485,7 +485,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
         container.style.width = width + 'px';
         container.style.height = height + 'px';
 
-        this.setDesignResolutionSize(width, height, this.getResolutionPolicy());
+        // make canvas size works
+        this.setDesignResolutionSize(this._designResolutionSize.width, this._designResolutionSize.height, this.getResolutionPolicy());
     },
 
     /**
@@ -560,7 +561,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
      * @return {cc.Vec2}
      */
     getVisibleOriginInPixel: function () {
-        return cc.p(this._visibleRect.x * this._scaleX, 
+        return cc.p(this._visibleRect.x * this._scaleX,
                     this._visibleRect.y * this._scaleY);
     },
 
