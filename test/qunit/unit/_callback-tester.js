@@ -1,5 +1,11 @@
 ﻿var CallbackTester = cc.Class({
-    extends: cc.Behavior,
+    extends: cc.Component,
+    ctor: function () {
+        this._expects = [];
+        this._messages = [];
+        this._unexpect = {};
+        this._stopped = false;
+    }
 });
 
 CallbackTester.OnLoad = 'onLoad';
@@ -7,13 +13,6 @@ CallbackTester.start = 'start';
 CallbackTester.OnEnable = 'onEnable';
 CallbackTester.OnDisable = 'onDisable';
 CallbackTester.OnDestroy = 'onDestroy';
-
-CallbackTester.prototype.init = function () {
-    this._expects = [];
-    this._messages = [];
-    this._unexpect = {};
-    this._stopped = false;
-};
 
 /**
  * @param {string} expect
@@ -31,7 +30,7 @@ CallbackTester.prototype.expect = function (expect, message, append) {
 
     var error = !append && this._expects.length > 0;
     if (error) {
-        throw new Error('expecting a new callback but the last ' + this._expects[0].expect + ' have not being called');
+        strictEqual(this._expects[0].expect, null, 'expecting a new callback but the last ' + this._expects[0].expect + ' have not being called');
         this._expects.length = 0;
     }
     else {
@@ -50,7 +49,7 @@ CallbackTester.prototype.expect = function (expect, message, append) {
  */
 CallbackTester.prototype.notExpect = function (notExpect, message) {
     if (this._expects.length > 0 && this._expects[0].expect === notExpect) {
-        throw new Error('The callback not expected is still expected, the last callback not called yet ?');
+        ok(false, 'The callback not expected is still expected, the last callback not called yet ?');
         return;
     }
     this._unexpect[notExpect] = message;
@@ -65,7 +64,7 @@ CallbackTester.prototype.stopTest = function () {
         var last = this._expects.splice(0, 1)[0];
         var expect = last.expect;
         var message = last.message;
-        throw new Error('The last expected ' + expect + ' not called yet: ' + message);
+        ok(false, 'The last expected ' + expect + ' not called yet: ' + message);
     }
     this._stopped = true;
     this._expects = null;
@@ -93,9 +92,7 @@ CallbackTester.prototype._assert = function (actual) {
             }
         }
     }
-    it (error || message || '' + expect + ' called', function () {
-        expect(actual).to.be.equal(expect);
-    });
+    strictEqual(actual, expect, error || message || '' + expect + ' called');
     this._unexpect = {};
     //cc.log('CallbackTester: ' + actual);
 };
@@ -119,5 +116,3 @@ CallbackTester.prototype.onDisable = function () {
 CallbackTester.prototype.onDestroy = function () {
     this._assert(CallbackTester.OnDestroy);
 };
-
-module.exports = CallbackTester;

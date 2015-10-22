@@ -879,38 +879,6 @@ var NodeWrapper = cc.Class({
 
         return [out_bl, out_tl, out_tr, out_br];
     },
-
-    // MISC
-
-    /**
-     * Retains the ownership for JSB runtime.
-     * This increases the target node's reference count.
-     * @method retain
-     */
-    retain: function () {
-        this.targetN.retain();
-    },
-
-    /**
-     * Releases the ownership immediately for JSB runtime.
-     * This decrements the target node's reference count.
-     * @method release
-     */
-    release: function () {
-        this.targetN.release();
-    },
-
-    // EDITOR
-
-    /**
-     * @method onFocusInEditor
-     */
-    onFocusInEditor: null,
-
-    /**
-     * @method onLostFocusInEditor
-     */
-    onLostFocusInEditor: null,
 });
 
 NodeWrapper.prototype.schedulePriority = 0;

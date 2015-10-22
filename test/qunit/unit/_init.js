@@ -16,7 +16,6 @@ var Texture = cc.Texture;
 
 var Ticker = cc._Ticker;
 var Time = cc.Time;
-//var Entity = cc.Entity;
 //var Camera = cc.Camera;
 //var Component = cc.Component;
 var LoadManager = cc._LoadManager;

@@ -16,7 +16,7 @@ if (CC_EDITOR) {
     var callOnDisableInTryCatch = eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onDisable'));
     var callOnLoadInTryCatch = eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onLoad'));
     var callStartInTryCatch = eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'start'));
-    //var callOnDestroyInTryCatch = eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onDestroy'));
+    var callOnDestroyInTryCatch = eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onDestroy'));
     var callOnFocusInTryCatch = eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onFocusInEditMode'));
     var callOnLostFocusInTryCatch = eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onLostFocusInEditMode'));
 }
@@ -39,8 +39,9 @@ function callOnEnable (self, enable) {
     //        return;
     //    }
     //}
+    var enableCalled = self._objFlags & IsOnEnableCalled;
     if (enable) {
-        if (!(self._objFlags & IsOnEnableCalled)) {
+        if (!enableCalled) {
             if (self.onEnable) {
                 if (CC_EDITOR) {
                     callOnEnableInTryCatch(self);
@@ -53,7 +54,7 @@ function callOnEnable (self, enable) {
         }
     }
     else {
-        if (self._objFlags & IsOnEnableCalled) {
+        if (enableCalled) {
             if (self.onDisable) {
                 if (CC_EDITOR) {
                     callOnDisableInTryCatch(self);
@@ -107,7 +108,7 @@ function callOnEnable (self, enable) {
  */
 var Component = cc.Class({
     name: 'cc.Component',
-    //extends: HashObject,
+    extends: cc.Object,
 
     //ctor: CC_EDITOR && function () {
     //    // 我们并不在构造函数中给 entity 赋值，因为那样到了反序列化时，子类的构造函数就还是会拿不到 entity。
@@ -373,7 +374,8 @@ var Component = cc.Class({
 
     __onNodeActivated: function (active) {
         if (CC_EDITOR) {
-            if (!(this._objFlags & IsOnLoadCalled) && (cc.engine.isPlaying || this.constructor._executeInEditMode)) {
+            if (!(this._objFlags & IsOnLoadCalled) &&
+                (cc.engine.isPlaying || this.constructor._executeInEditMode)) {
                 if (this.onLoad) {
                     callOnLoadInTryCatch(this);
                     this._objFlags |= IsOnLoadCalled;
@@ -446,26 +448,24 @@ var Component = cc.Class({
 
     __scriptUuid: '',
 
-    //_onPreDestroy: function () {
-    //    // ensure onDisable called
-    //    callOnEnable(this, false);
-    //    // onDestroy
-    //    // @ifdef EDITOR
-    //    Editor._AssetsWatcher.stop(this);
-    //    if (Engine.isPlaying || this.constructor._executeInEditMode) {
-    //        if (this.onDestroy) {
-    //            callOnDestroyInTryCatch(this);
-    //        }
-    //    }
-    //    // @endif
-    //    // @ifndef EDITOR
-    //    if (this.onDestroy) {
-    //        this.onDestroy();
-    //    }
-    //    // @endif
-    //    // remove component
-    //    this.node._removeComponent(this);
-    //}
+    _onPreDestroy: function () {
+        // ensure onDisable called
+        callOnEnable(this, false);
+        // onDestroy
+        if (CC_EDITOR) {
+            //Editor._AssetsWatcher.stop(this);
+            if (cc.engine.isPlaying || this.constructor._executeInEditMode) {
+                if (this.onDestroy) {
+                    callOnDestroyInTryCatch(this);
+                }
+            }
+        }
+        else if (this.onDestroy) {
+            this.onDestroy();
+        }
+        // do remove component
+        this.node._removeComponent(this);
+    }
 });
 
 cc.Component = module.exports = Component;

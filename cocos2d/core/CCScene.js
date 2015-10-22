@@ -23,11 +23,7 @@
  ****************************************************************************/
 
 // internal scene wrapper for cc.Scene
-var _Scene = cc.Class({
+module.exports = cc.Class({
     name: 'cc.Scene',
-    extends: require('./CCNode'),
-
-
+    extends: require('./utils/node-wrapper'),
 });
-
-module.exports = _Scene;

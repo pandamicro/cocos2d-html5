@@ -46,6 +46,9 @@ var ComponentInSG = cc.Class({
         node.setLocalZOrder(-1);
         var sgParent = this.node._sgNode;
         sgParent.addChild(node);
+
+        // retain immediately
+        node.retain();
         this._sgNode = node;
     },
 

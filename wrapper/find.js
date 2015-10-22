@@ -3,11 +3,12 @@ var NodeWrapper = require('./wrappers/node');
 /**
  * Finds a node by hierarchy path, the path is case-sensitive.
  * It will traverse the hierarchy by splitting the path using '/' character.
+ * This function will still returns the entity even if it is inactive.
  * It is recommended to not use this function every frame instead cache the result at startup.
  *
  * @method find
  * @param {string} path
- * @param {RuntimeNode} referenceNode
+ * @param {RuntimeNode} [referenceNode]
  * @return {RuntimeNode} the node or null if not found
  */
 module.exports = function (path, referenceNode) {

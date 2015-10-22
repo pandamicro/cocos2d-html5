@@ -33,6 +33,9 @@ var SceneGraphMaintainer = {
             if (node._parent) {
                 node._parent.removeChild(node);
             }
+
+            // release
+            this._sgNode.release();
             this._sgNode = null;
         }
     },
@@ -54,7 +57,11 @@ var SceneGraphMaintainer = {
     },
     onEntityCreated: function (entity) {
         var node = new SGNode();
+
+        // retain immediately
+        node.retain();
         entity._sgNode = node;
+
         node.setAnchorPoint(0, 1);
         if (entity._parent) {
             entity._parent._sgNode.addChild(node);
@@ -66,7 +73,11 @@ var SceneGraphMaintainer = {
     },
     onSceneLoaded: function (scene) {
         var sgNode = new SGScene();
+
+        // retain immediately
+        sgNode.retain();
         scene._sgNode = sgNode;
+
         sgNode.setAnchorPoint(0, 1);
         var children = scene._children;
         for (var i = 0, len = children.length; i < len; i++) {
