@@ -58,7 +58,7 @@ cc.ComponentContainer = cc._Class.extend(/** @lends cc.ComponentContainer# */{
 
     /**
      * Adds a component to container
-     * @param {cc.Component} component
+     * @param {cc._Component} component
      * @returns {boolean}
      */
     add:function(component){
@@ -86,7 +86,7 @@ cc.ComponentContainer = cc._Class.extend(/** @lends cc.ComponentContainer# */{
 
     /**
      * Removes component from container by name or component object.
-     * @param {String|cc.Component} name component name or component object.
+     * @param {String|cc._Component} name component name or component object.
      * @returns {boolean}
      */
     remove:function(name){
@@ -94,7 +94,7 @@ cc.ComponentContainer = cc._Class.extend(/** @lends cc.ComponentContainer# */{
             throw new Error("cc.ComponentContainer.remove(): name should be non-null");
         if(!this._components)
             return false;
-        if(name instanceof cc.Component)
+        if(name instanceof cc._Component)
             return this._removeByComponent(name);
         else {
             name = name.trim();
