@@ -2,8 +2,10 @@
 var requireDir = require('require-dir');
 var Path = require('path');
 
+MinifyOriginCocos2d = false;     // true - compile by closure, false - just concat
+
 // specify game project paths for tasks.
-global.paths = {
+paths = {
     src: './src',
     jsEntry: './index.js',
     //JSBEntryPredefine: './gulp/jsb-build-entry-predefine',
@@ -24,8 +26,7 @@ global.paths = {
 
     originCocos2dCompileDir: './tools',
     originCocos2d: './lib/cocos2d-js-v3.9-min.js',
-    originSourcemap: './lib/cocos2d-js-v3.9-sourcemap',
-    originCocos2dDev: './lib/cocos2d-dev.js',
+    //originSourcemap: './lib/cocos2d-js-v3.9-sourcemap',
     modularCocos2d: './bin/modular-cocos2d.js',
 };
 
