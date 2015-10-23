@@ -277,12 +277,6 @@ var srcs = [
     "./extensions/ccpool/CCPool.js"
 ];
 
-gulp.task('build-dev-cocos2d', function () {
-    gulp.src(srcs)
-        .pipe(concat(Path.basename(paths.originCocos2dDev)))
-        .pipe(gulp.dest(Path.dirname(paths.originCocos2dDev)));
-});
-
 gulp.task('compile-cocos2d', function (done) {
     console.log('Spawn ant in ' + paths.originCocos2dCompileDir);
 
@@ -315,26 +309,36 @@ gulp.task('compile-cocos2d', function (done) {
     });
 });
 
-gulp.task('build-modular-cocos2d', ['build-dev-cocos2d'], function () {
-    var header = new Buffer('(function (cc, ccui, ccs, sp, cp) {');
-    var footer = new Buffer(/*'\n(' + modularity + ')();\n' +*/
-                            '\n}).call(window, cc, ccui, ccs, sp, cp);\n');
+var header = new Buffer('(function (cc, ccui, ccs, sp, cp) {');
+var footer = new Buffer(/*'\n(' + modularity + ')();\n' +*/
+    '\n}).call(window, cc, ccui, ccs, sp, cp);\n');
 
-    function wrap (header, footer) {
-        return es.through(function (file) {
-            file.contents = Buffer.concat([header, file.contents, footer]);
-            this.emit('data', file);
-        });
-    }
-    gulp.src(paths.originCocos2dDev)
-        .pipe(wrap(header, footer))
-        .pipe(rename(Path.basename(paths.modularCocos2d)))
-        .pipe(gulp.dest(Path.dirname(paths.modularCocos2d)));
+function wrap (header, footer) {
+    return es.through(function (file) {
+        file.contents = Buffer.concat([header, file.contents, footer]);
+        this.emit('data', file);
+    });
+}
 
-    // gulp.src(paths.originCocos2d)
-    //     .pipe(wrap(header, footer))
-    //     .pipe(rename(Path.basename(paths.modularCocos2d)))
-    //     .pipe(gulp.dest(Path.dirname(paths.modularCocos2d)));
-    // gulp.src(paths.originSourcemap)
-    //     .pipe(gulp.dest(Path.dirname(paths.modularCocos2d)));
-});
+if (MinifyOriginCocos2d) {
+    gulp.task('build-modular-cocos2d', ['compile-cocos2d'], function () {
+        return gulp.src(paths.originCocos2dDev)
+            .pipe(wrap(header, footer))
+            .pipe(rename(Path.basename(paths.modularCocos2d)))
+            .pipe(gulp.dest(Path.dirname(paths.modularCocos2d)));
+        // gulp.src(paths.originCocos2d)
+        //     .pipe(wrap(header, footer))
+        //     .pipe(rename(Path.basename(paths.modularCocos2d)))
+        //     .pipe(gulp.dest(Path.dirname(paths.modularCocos2d)));
+        // gulp.src(paths.originSourcemap)
+        //     .pipe(gulp.dest(Path.dirname(paths.modularCocos2d)));
+    });
+}
+else {
+    gulp.task('build-modular-cocos2d', function () {
+        return gulp.src(srcs)
+            .pipe(concat(Path.basename(paths.modularCocos2d)))
+            .pipe(wrap(header, footer))
+            .pipe(gulp.dest(Path.dirname(paths.modularCocos2d)));
+    });
+}
