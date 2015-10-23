@@ -30,6 +30,43 @@ var SceneGraphMaintainer = require('./utils/scene-graph-maintainer');
  * @class
  * @name cc.ENode
  * @param {string} [name] - the name of the node
+ *
+ * @property {Number}               x                   - x axis position of node
+ * @property {Number}               y                   - y axis position of node
+ * @property {Number}               width               - Width of node
+ * @property {Number}               height              - Height of node
+ * @property {Number}               anchorX             - Anchor point's position on x axis
+ * @property {Number}               anchorY             - Anchor point's position on y axis
+ * @property {Boolean}              ignoreAnchor        - Indicate whether ignore the anchor point property for positioning
+ * @property {Number}               skewX               - Skew x
+ * @property {Number}               skewY               - Skew y
+ * @property {Number}               zIndex              - Z order in depth which stands for the drawing order
+ * @property {Number}               vertexZ             - WebGL Z vertex of this node, z order works OK if all the nodes uses the same openGL Z vertex
+ * @property {Number}               rotation            - Rotation of node
+ * @property {Number}               rotationX           - Rotation on x axis
+ * @property {Number}               rotationY           - Rotation on y axis
+ * @property {Number}               scale               - Scale of node
+ * @property {Number}               scaleX              - Scale on x axis
+ * @property {Number}               scaleY              - Scale on y axis
+ * @property {Boolean}              visible             - Indicate whether node is visible or not
+ * @property {cc.Color}             color               - Color of node, default value is white: (255, 255, 255)
+ * @property {Boolean}              cascadeColor        - Indicate whether node's color value affect its child nodes, default value is false
+ * @property {Number}               opacity             - Opacity of node, default value is 255
+ * @property {Boolean}              opacityModifyRGB    - Indicate whether opacity affect the color value, default value is false
+ * @property {Boolean}              cascadeOpacity      - Indicate whether node's opacity value affect its child nodes, default value is false
+ * @property {Array}                children            - <@readonly> All children nodes
+ * @property {Number}               childrenCount       - <@readonly> Number of children
+ * @property {cc.Node}              parent              - Parent node
+ * @property {Boolean}              running             - <@readonly> Indicate whether node is running or not
+ * @property {Number}               tag                 - Tag of node
+ * @property {Object}               userData            - Custom user data
+ * @property {Object}               userObject          - User assigned CCObject, similar to userData, but instead of holding a void* it holds an id
+ * @property {Number}               arrivalOrder        - The arrival order, indicates which children is added previously
+ * @property {cc.ActionManager}     actionManager       - The CCActionManager object that is used by all actions.
+ * @property {cc.Scheduler}         scheduler           - cc.Scheduler used to schedule all "updates" and timers.
+ * @property {cc.GridBase}          grid                - grid object that is used when applying effects
+ * @property {cc.GLProgram}         shaderProgram       - The shader program currently used for this node
+ * @property {Number}               glServerState       - The state of OpenGL server side
  */
 var Node = cc.Class({
     name: 'cc.Node',
@@ -68,31 +105,9 @@ var Node = cc.Class({
             }
         },
 
-        /**
-         * Get the amount of children
-         * @property childrenCount
-         * @type {number}
-         */
-        childrenCount: {
-            get: function () {
-                return this._children.length;
-            },
-            visible: false
-        },
-
         // internal properties
 
         _active: true,
-        _parent: null,
-
-        /**
-         * @property _children
-         * @type {Entity[]}
-         * @default []
-         * @readOnly
-         * @private
-         */
-        _children: [],
 
         /**
          * @property _components
@@ -107,10 +122,39 @@ var Node = cc.Class({
         var name = arguments[0];
         this._name = typeof name !== 'undefined' ? name : 'New Node';
 
-        this._activeInHierarchy = !cc.game._isCloning;
+        if (cc.game._isCloning) {
+            this._activeInHierarchy = false;
+        }
+        else {
+            // create dynamically
+            this._activeInHierarchy = true;
+            SceneGraphMaintainer.onEntityCreated(this);
+        }
     },
 
     // OVERRIDES
+
+    update: CC_EDITOR ? function (dt) {
+        for (var i = 0; i < this._components.length; i++) {
+            var comp = this._components[i];
+            if (comp._enabled && comp.update &&
+                (cc.engine._isPlaying || comp.constructor._executeInEditMode)) {
+                try {
+                    comp.update(dt);
+                }
+                catch (e) {
+                    cc._throw(e);
+                }
+            }
+        }
+    } : function (dt) {
+        for (var i = 0; i < this._components.length; i++) {
+            var comp = this._components[i];
+            if (comp._enabled && comp.update) {
+                comp.update(dt);
+            }
+        }
+    },
 
     destroy: function () {
         if (cc.Object.prototype.destroy.call(this)) {
@@ -227,6 +271,39 @@ var Node = cc.Class({
         return component;
     },
 
+    /**
+     * Removes a component identified by the given name or removes the component object given.
+     * @function
+     * @param {String|function|cc.Component} component
+     * @deprecated please destroy the component to remove it.
+     */
+    removeComponent: function (component) {
+        if (CC_DEV) {
+            cc.warn('cc.ENode.removeComponent(component) is deprecated, please use component.destroy() instead.');
+            if ( !component ) {
+                cc.error('removeComponent: Component must be non-nil');
+                return null;
+            }
+        }
+        if (typeof component !== 'object') {
+            component = this.getComponent(component);
+        }
+        if (component) {
+            component.destroy();
+        }
+    },
+
+    /**
+     * Removes all components of cc.ENode.
+     * @function
+     */
+    removeAllComponents: function () {
+        for (var i = 0; i < this._components.length; i++) {
+            var comp = this._components[i];
+            comp.destroy();
+        }
+    },
+
     // do remove component, only used internally
     _removeComponent: function (component) {
         if (!component) {
@@ -243,53 +320,6 @@ var Node = cc.Class({
                 cc.error("Component not owned by this entity");
             }
         }
-    },
-
-    // HIERARCHY METHODS
-
-    /**
-     * Set the sibling index of this node.
-     *
-     * @function
-     * @param {number} index
-     */
-    setSiblingIndex: function (index) {
-        if (!this._parent) {
-            return 0;
-        }
-        var array = this._parent._children;
-        index = index !== -1 ? index : array.length - 1;
-        var oldIndex = array.indexOf(this);
-        if (index !== oldIndex) {
-            array.splice(oldIndex, 1);
-            if (index < array.length) {
-                array.splice(index, 0, this);
-            }
-            else {
-                array.push(this);
-            }
-            // update rendering scene graph
-            SceneGraphMaintainer.onEntityIndexChanged(this);
-        }
-    },
-
-    /**
-     * Is this node a child of the given node?
-     *
-     * @function
-     * @param {cc.ENode} parent
-     * @return {Boolean} - Returns true if this node is a child, deep child or identical to the given node.
-     */
-    isChildOf: function (parent) {
-        var child = this;
-        do {
-            if (child === parent) {
-                return true;
-            }
-            child = child._parent;
-        }
-        while (child);
-        return false;
     },
 
     // INTERNAL

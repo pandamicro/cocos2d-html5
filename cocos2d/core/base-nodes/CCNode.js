@@ -148,7 +148,6 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
         _skewX: 0.0,
         _skewY: 0.0,
         _children: [],
-        // lazy alloc,
         _visible: true,
         _anchorPoint: cc.p(0, 0),
         _contentSize: cc.size(0, 0),
@@ -165,7 +164,7 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
         _name: '',                     ///<a string label, an user defined string to identify this node
 
         _realOpacity: 255,
-        _realColor: cc.color(255, 255, 255, 255),
+        _realColor: cc.Color.WHITE,
         _cascadeColorEnabled: false,
         _cascadeOpacityEnabled: false
     },
@@ -1862,7 +1861,7 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
      * @return {cc.AffineTransform}
      */
     getParentToNodeTransform: function () {
-       this._renderCmd.getParentToNodeTransform();
+       return this._renderCmd.getParentToNodeTransform();
     },
 
     /**

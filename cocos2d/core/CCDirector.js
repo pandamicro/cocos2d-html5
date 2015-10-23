@@ -95,7 +95,12 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
     _openGLView: null,
     _scenesStack: null,
     _projectionDelegate: null,
+
+    // The root of rendering scene graph
     _runningScene: null,
+
+    // The entity-component scene
+    _scene: null,
 
     _totalFrames: 0,
     _secondsPerFrame: 0,
@@ -662,6 +667,14 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
      */
     getRunningScene: function () {
         return this._runningScene;
+    },
+
+    /**
+     * Returns current running Scene. Director can only run one Scene at the time
+     * @return {cc.EScene}
+     */
+    getScene: function () {
+        return this._scene;
     },
 
     /**

@@ -1,6 +1,6 @@
 if (TestEditorExtends) {
 
-    largeModule('cc.Node');
+    largeModule('cc.ENode');
 
     function getRandomInt() {
         return Math.floor(Math.random() * 1000);
@@ -80,7 +80,7 @@ if (TestEditorExtends) {
     }
 
     function createNode(nodeName) {
-        var ret = new cc.Node();
+        var ret = new cc.ENode();
 
         ret._localZOrder = getRandomInt();
         ret._globalZOrder = getRandomInt();

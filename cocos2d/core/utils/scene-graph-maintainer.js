@@ -3,10 +3,6 @@
 var SGNode = cc.Node;
 var SGScene = cc.Scene;
 
-// typedef: entity node types
-var Entity = require('../CCNode');
-var Scene = require('../CCScene');
-
 // called after changing parent
 function setMaxZOrder (node) {
     var siblings = node._parent.getChildren();
@@ -42,10 +38,12 @@ var SceneGraphMaintainer = {
     onEntityParentChanged: function (entity) {
         var node = entity._sgNode;
         if (node) {
-            node.removeFromParent();
-            var parent = entity._parent._sgNode;
-            parent.addChild(node);
-            setMaxZOrder(node);
+            node.removeFromParent(false);
+            if (entity._parent) {
+                var parent = entity._parent._sgNode;
+                parent.addChild(node);
+                setMaxZOrder(node);
+            }
         }
     },
     onEntityIndexChanged: function (entity) {
@@ -55,18 +53,31 @@ var SceneGraphMaintainer = {
             sibling._sgNode.setOrderOfArrival(i);
         }
     },
-    onEntityCreated: function (entity) {
-        var node = new SGNode();
+    onEntityCreated: function (node) {
+        var sgNode = new SGNode();
 
         // retain immediately
-        node.retain();
-        entity._sgNode = node;
+        sgNode.retain();
+        node._sgNode = sgNode;
 
-        node.setAnchorPoint(0, 1);
-        if (entity._parent) {
-            entity._parent._sgNode.addChild(node);
+        sgNode.setAnchorPoint(0, 1);
+        if (node._parent) {
+            node._parent._sgNode.addChild(sgNode);
         }
-        var children = entity._children;
+        var children = node._children;
+        for (var i = 0, len = children.length; i < len; i++) {
+            this.onEntityCreated(children[i]);
+        }
+    },
+    onSceneCreated: function (node) {
+        var sgNode = new SGScene();
+
+        // retain immediately
+        sgNode.retain();
+        node._sgNode = sgNode;
+
+        sgNode.setAnchorPoint(0, 1);
+        var children = node._children;
         for (var i = 0, len = children.length; i < len; i++) {
             this.onEntityCreated(children[i]);
         }
@@ -111,7 +122,7 @@ if (CC_DEV) {
         }
     };
     SceneGraphMaintainer.checkMatchCurrentScene = function () {
-        var scene = cc.game._scene;
+        var scene = cc.director.getScene();
         var sgScene = cc.director.getRunningScene();
         function checkMatch (ent, sgNode) {
             if (ent._sgNode !== sgNode) {

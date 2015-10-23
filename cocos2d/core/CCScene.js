@@ -22,8 +22,27 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-// internal scene wrapper for cc.Scene
-module.exports = cc.Class({
+var SceneGraphMaintainer = require('./utils/scene-graph-maintainer');
+
+/**
+ * <p>cc.Scene is a subclass of cc.Node that is used only as an abstract concept.</p>
+ * <p>cc.Scene and cc.Node are almost identical with the difference that users can not modify cc.Scene manually. </p>
+ *
+ * @class
+ */
+cc.EScene = cc.Class({
     name: 'cc.Scene',
     extends: require('./utils/node-wrapper'),
+    ctor: function () {
+        if (cc.game._isCloning) {
+            this._activeInHierarchy = false;
+        }
+        else {
+            // create dynamically
+            this._activeInHierarchy = true;
+            SceneGraphMaintainer.onSceneCreated(this);
+        }
+    },
 });
+
+module.exports = cc.EScene;

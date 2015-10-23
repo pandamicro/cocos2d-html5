@@ -27,7 +27,7 @@
 
 /**
  * <p>cc.Scene is a subclass of cc.Node that is used only as an abstract concept.</p>
- *  <p>cc.Scene an cc.Node are almost identical with the difference that cc.Scene has it's
+ *  <p>cc.Scene and cc.Node are almost identical with the difference that cc.Scene has it's
  * anchor point (by default) at the center of the screen.</p>
  *
  * <p>For the moment cc.Scene has no other logic than that, but in future releases it might have
