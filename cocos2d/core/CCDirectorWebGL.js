@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-cc.game.addEventListener("rendererInited", function () {
+cc.game.addEventListener(cc.game.EVENT_RENDERER_INITED, function () {
 
     // Do nothing under other render mode
     if (cc._renderType !== cc.game.RENDER_TYPE_WEBGL) {

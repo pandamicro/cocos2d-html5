@@ -305,7 +305,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
     }
 };
 
-cc.game.addEventListener("rendererInited", function () {
+cc.game.addEventListener(cc.game.EVENT_RENDERER_INITED, function () {
     if (cc._renderType === cc.game.RENDER_TYPE_CANVAS) {
 
         var _p = cc.textureCache;

@@ -169,7 +169,7 @@ cc.DrawNode.TYPE_DOT = 0;
 cc.DrawNode.TYPE_SEGMENT = 1;
 cc.DrawNode.TYPE_POLY = 2;
 
-cc.game.addEventListener("rendererInited", function () {
+cc.game.addEventListener(cc.game.EVENT_RENDERER_INITED, function () {
     if (cc._renderType === cc.game.RENDER_TYPE_CANVAS) {
 
         cc._DrawNodeElement = function (type, verts, fillColor, lineWidth, lineColor, lineCap, isClosePolygon, isFill, isStroke) {
