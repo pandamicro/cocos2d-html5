@@ -23,8 +23,21 @@
  ****************************************************************************/
 
 var JS = cc.js;
-var SceneGraphMaintainer = require('./scene-graph-maintainer');
+var SceneGraphHelper = require('./scene-graph-helper');
 var SGProto = cc.Node.prototype;
+var Destroying = cc.Object.Flags.Destroying;
+
+// called after changing parent
+function setMaxZOrder (node) {
+    var siblings = node._parent.getChildren();
+    var z = 0;
+    if (siblings.length >= 2) {
+        var prevNode = siblings[siblings.length - 2];
+        z = prevNode.getOrderOfArrival() + 1;
+    }
+    node.setOrderOfArrival(z);
+    return z;
+}
 
 // A base internal wrapper for CCNode and CCScene, it will:
 // - the same api with origin cocos2d rendering node (SGNode)
@@ -41,7 +54,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         // SERIALIZABLE
 
         _name: '',
-        _color: cc.Color.WHITE,
+        _realOpacity: 255,
+        _realColor: cc.Color.WHITE,
         _parent: null,
         _anchorPoint: cc.p(0, 0),
         _contentSize: cc.size(0, 0),
@@ -69,6 +83,59 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             set: function (value) {
                 this._name = value;
             },
+        },
+
+        parent: {
+            get: function () {
+                return this._parent;
+            },
+            set: function (value) {
+                var node = this._sgNode;
+                if (node._parent) {
+                    node._parent.removeChild(node, false);
+                }
+                if (value) {
+                    var parent = value._sgNode;
+                    parent.addChild(node);
+                    setMaxZOrder(node);
+                    value._children.push(this);
+                }
+                //
+                var oldParent = this._parent;
+                this._parent = value || null;
+                if (oldParent) {
+                    if (!(oldParent._objFlags & Destroying)) {
+                        oldParent._children.splice(oldParent._children.indexOf(this), 1);
+                        this._onHierarchyChanged(oldParent);
+                    }
+                }
+                else if (value) {
+                    this._onHierarchyChanged(null);
+                }
+            },
+        },
+
+        /**
+         * uuid
+         * @property _id
+         * @type {String}
+         * @private
+         */
+        _id: {
+            default: '',
+            editorOnly: true
+        },
+
+        /**
+         * The uuid for editor, will be stripped before building project
+         * @type {String}
+         * @readOnly
+         */
+        uuid: {
+            get: function () {
+                return this._id || (this._id = Editor.uuid());
+            },
+            visible: false
         },
 
         skewX: {
@@ -213,16 +280,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
         running: {
             get: SGProto.isRunning
-        },
-
-        parent: {
-            get: function () {
-                return this._parent;
-            },
-            set: function (value) {
-                this._parent = value;
-                SceneGraphMaintainer.onEntityParentChanged(this);
-            },
         },
 
         ignoreAnchor: {
@@ -1000,7 +1057,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
      */
     setSiblingIndex: function (index) {
         if (!this._parent) {
-            return 0;
+            return;
         }
         var array = this._parent._children;
         index = index !== -1 ? index : array.length - 1;
@@ -1013,8 +1070,13 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             else {
                 array.push(this);
             }
-            // update rendering scene graph
-            SceneGraphMaintainer.onEntityIndexChanged(this);
+
+            // update rendering scene graph, sort them by arrivalOrder
+            var siblings = this._parent._children;
+            for (var i = 0, len = siblings.length; i < len; i++) {
+                var sibling = siblings[i];
+                sibling._sgNode.setOrderOfArrival(i);
+            }
         }
     },
 
@@ -1036,6 +1098,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         while (child);
         return false;
     },
+
+    _removeSgNode: SceneGraphHelper.removeSgNode,
+    _onHierarchyChanged: null
 });
 
 

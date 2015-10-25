@@ -102,6 +102,9 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
     // The entity-component scene
     _scene: null,
 
+    // the temp array which contains cross-scene global nodes
+    _dontDestroyNodes: [],
+
     _totalFrames: 0,
     _secondsPerFrame: 0,
 

@@ -1,4 +1,4 @@
-var SceneGraphMaintainer = require('../utils/scene-graph-maintainer');
+var SceneGraphHelper = require('../utils/scene-graph-helper');
 
 /**
  * Component in scene graph.
@@ -29,7 +29,7 @@ var ComponentInSG = cc.Class({
             this._sgNode.visible = false;
         }
     },
-    onDestroy: SceneGraphMaintainer.removeSgNode,
+    onDestroy: SceneGraphHelper.removeSgNode,
 
     _appendSgNode: function (node) {
         // TODO - 初始化不会继承自父物体的属性，同时这些属性要监听来自父物体的变更
@@ -43,7 +43,9 @@ var ComponentInSG = cc.Class({
         //
         this._updateColor();
 
+        // set z order to -1 to make sure component will rendered before all of its entity's children.
         node.setLocalZOrder(-1);
+
         var sgParent = this.node._sgNode;
         sgParent.addChild(node);
 

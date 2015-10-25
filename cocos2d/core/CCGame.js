@@ -586,22 +586,13 @@ cc.game = /** @lends cc.game# */{
     },
 
 //  @Scene loading section
-    _initScene: function (sceneWrapper, callback) {
-        if (sceneWrapper._needCreate) {
-            sceneWrapper.create(callback);
-        }
-        else {
-            callback();
-        }
-    },
-
     // for editor
     _onPreLaunchScene: null,
 
     /**
      * Launch loaded scene.
      * @method _launchScene
-     * @param {SceneWrapper} scene
+     * @param {cc.EScene} scene
      * @param {function} [onBeforeLoadScene]
      * @private
      */
@@ -611,59 +602,48 @@ cc.game = /** @lends cc.game# */{
             return;
         }
 
-        if (scene._needCreate && CC_EDITOR) {
-            cc.error('The scene wrapper %s is not yet fully created', scene.name);
-            return;
+        var director = cc.director;
+
+        // unload scene
+        var oldScene = director._scene;
+        if (cc.isValid(oldScene)) {
+            //// destroyed and unload
+            //AssetLibrary.unloadAsset(oldScene, true);
+            oldScene.destroy();
         }
 
-        //Engine._dontDestroyEntities.length = 0;
+        // purge destroyed nodes belongs to old scene
+        cc.Object._deferredDestroy();
 
-        //// unload scene
-        //var oldScene = Engine._scene;
-        //
-        ////editorCallback.onStartUnloadScene(oldScene);
-        //
-        //if (cc.isValid(oldScene)) {
-        //    // destroyed and unload
-        //    AssetLibrary.unloadAsset(oldScene, true);
-        //}
-        //
-        //// purge destroyed entities belongs to old scene
-        //CCObject._deferredDestroy();
-        //
-        //Engine._scene = null;
+        director._scene = null;
 
-        // destroy last scene
-        if (CC_EDITOR && cc.engine && cc.engine._emptySceneN) {
-            cc.director.runScene(cc.engine._emptySceneN);
+        // force onExit last scene
+        if (CC_EDITOR && cc.engine && cc.engine._emptySgScene) {
+            director.runScene(cc.engine._emptySgScene);
         }
 
         if (onBeforeLoadScene) {
             onBeforeLoadScene();
         }
-
         if (this._onPreLaunchScene) {
             this._onPreLaunchScene();
         }
 
-        //// init scene
-        //Engine._renderContext.onSceneLoaded(scene);
+        // init scene
+        scene._onBatchCreated();
 
-        ////if (editorCallback.onSceneLoaded) {
-        ////    editorCallback.onSceneLoaded(scene);
-        ////}
+        var dontDestroyNodes = director._dontDestroyNodes;
+        for (var i = 0; i < dontDestroyNodes.length; i++) {
+            var node = dontDestroyNodes[i];
+            node.parent = scene;
+        }
+        director._dontDestroyNodes = [];
 
-        //// launch scene
-        //scene.entities = scene.entities.concat(Engine._dontDestroyEntities);
-        //Engine._dontDestroyEntities.length = 0;
-        cc.director.runScene(scene.targetN);
-        //Engine._renderContext.onSceneLaunched(scene);
-
-        //editorCallback.onBeforeActivateScene(scene);
+        // launch scene
+        director.runScene(scene._sgNode);
+        director._scene = scene;
 
         scene._onActivated();
-
-        //editorCallback.onSceneLaunched(scene);
     },
 
     /**
@@ -675,49 +655,33 @@ cc.game = /** @lends cc.game# */{
      * @private
      */
     _loadSceneByUuid: function (uuid, onLaunched, onUnloaded) {
-        var self = this;
         //cc.AssetLibrary.unloadAsset(uuid);     // force reload
-        cc.AssetLibrary.loadAsset(uuid, function (error, scene) {
+        cc.AssetLibrary.loadAsset(uuid, function (error, sceneAsset) {
+            var scene;
             if (error) {
                 error = 'Failed to load scene: ' + error;
+                cc.error(error);
                 if (CC_EDITOR) {
                     console.assert(false, error);
                 }
             }
             else {
-                var uuid = scene._uuid;
-                scene = scene.scene;    // Currently our scene not inherited from Asset, so need to extract scene from dummy asset
-                if (scene instanceof cc.Runtime.SceneWrapper) {
-                    scene.uuid = uuid;
+                var uuid = sceneAsset._uuid;
+                scene = sceneAsset.scene;
+                if (scene instanceof cc.EScene) {
+                    scene._id = uuid;
+                    cc.game._launchScene(scene, onUnloaded);
                 }
                 else {
                     error = 'The asset ' + uuid + ' is not a scene';
+                    cc.error(error);
                     scene = null;
                 }
             }
-            if (scene) {
-                self._initScene(scene, function () {
-                    self._launchScene(scene, onUnloaded);
-                    self._loadingScene = '';
-                    if (onLaunched) {
-                        onLaunched(error, scene);
-                    }
-                });
-            }
-            else {
-                cc.error(error);
-                self._loadingScene = '';
-                if (onLaunched) {
-                    onLaunched(error, scene);
-                }
+            cc.game._loadingScene = '';
+            if (onLaunched) {
+                onLaunched(error, scene);
             }
         });
     }
-
-    //launchNewScene: function () {
-    //    var SceneWrapperImpl = cc.getWrapper(cc.director.getRunningScene()).constructor;
-    //    var sceneWrapper = new SceneWrapperImpl();
-    //    sceneWrapper.createAndAttachNode();
-    //    cc.game._launchScene(sceneWrapper);
-    //}
 };

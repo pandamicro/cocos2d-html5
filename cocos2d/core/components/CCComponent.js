@@ -248,12 +248,12 @@ var Component = cc.Class({
      */
     onDisable: null,
 
-    ///**
-    // * Called when this component will be destroyed.
-    // * @method onDestroy
-    // */
-    //onDestroy: null,
-    //
+    /**
+     * Called when this component will be destroyed.
+     * @method onDestroy
+     */
+    onDestroy: null,
+
     ///**
     // * Called when the engine starts rendering the scene.
     // * @method onPreRender
@@ -364,13 +364,13 @@ var Component = cc.Class({
 
     // OVERRIDES
 
-    //destroy: function () {
-    //    if (FObject.prototype.destroy.call(this)) {
-    //        if (this._enabled && this.node._activeInHierarchy) {
-    //            callOnEnable(this, false);
-    //        }
-    //    }
-    //},
+    destroy: function () {
+        if (this._super()) {
+            if (this._enabled && this.node._activeInHierarchy) {
+                callOnEnable(this, false);
+            }
+        }
+    },
 
     __onNodeActivated: function (active) {
         if (CC_EDITOR) {

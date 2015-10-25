@@ -23,7 +23,8 @@
  ****************************************************************************/
 
 var JS = cc.js;
-var SceneGraphMaintainer = require('./utils/scene-graph-maintainer');
+var Destroying = cc.Object.Flags.Destroying;
+var DontDestroy = cc.Object.Flags.DontDestroy;
 
 /**
  * Class of all entities in Fireball scenes.
@@ -84,9 +85,10 @@ var Node = cc.Class({
                 return this._active;
             },
             set: function (value) {
+                value = !!value;
                 if (this._active !== value) {
                     this._active = value;
-                    var canActiveInHierarchy = (!this._parent || this._parent._activeInHierarchy);
+                    var canActiveInHierarchy = (this._parent && this._parent._activeInHierarchy);
                     if (canActiveInHierarchy) {
                         this._onActivatedInHierarchy(value);
                     }
@@ -105,6 +107,26 @@ var Node = cc.Class({
             }
         },
 
+        /**
+         * If true, the node will be destroyed automatically when loading a new scene. Default is true.
+         * @property destroyOnSceneExit
+         * @type {Boolean}
+         * @default true
+         */
+        destroyOnSceneExit: {
+            get: function () {
+                return !(this._objFlags | DontDestroy);
+            },
+            set: function (value) {
+                if (value) {
+                    this._objFlags &= ~DontDestroy;
+                }
+                else {
+                    this._objFlags |= DontDestroy;
+                }
+            }
+        },
+
         // internal properties
 
         _active: true,
@@ -116,19 +138,16 @@ var Node = cc.Class({
          * @readOnly
          * @private
          */
-        _components: null,
+        _components: [],
     },
     ctor: function () {
         var name = arguments[0];
         this._name = typeof name !== 'undefined' ? name : 'New Node';
+        this._activeInHierarchy = false;
 
-        if (cc.game._isCloning) {
-            this._activeInHierarchy = false;
-        }
-        else {
+        if (!cc.game._isCloning) {
             // create dynamically
-            this._activeInHierarchy = true;
-            SceneGraphMaintainer.onEntityCreated(this);
+            this._onBatchCreated();
         }
     },
 
@@ -170,7 +189,7 @@ var Node = cc.Class({
         this._objFlags |= Destroying;
         var destroyByParent = parent && (parent._objFlags & Destroying);
         if (!destroyByParent) {
-            SceneGraphMaintainer.removeSgNode(this);
+            this._removeSgNode();
         }
         // destroy components
         for (var c = 0; c < this._components.length; ++c) {
@@ -353,8 +372,8 @@ var Node = cc.Class({
     },
 
     _onHierarchyChanged: function (oldParent) {
-        var activeInHierarchyBefore = this._active && (!oldParent || oldParent._activeInHierarchy);
-        var shouldActiveNow = this._active && (!this._parent || this._parent._activeInHierarchy);
+        var activeInHierarchyBefore = this._active && !!(oldParent && oldParent._activeInHierarchy);
+        var shouldActiveNow = this._active && !!(this._parent && this._parent._activeInHierarchy);
         if (activeInHierarchyBefore !== shouldActiveNow) {
             this._onActivatedInHierarchy(shouldActiveNow);
         }
@@ -383,7 +402,7 @@ var Node = cc.Class({
             this._name += ' (Clone)';
         }
 
-        SceneGraphMaintainer.onEntityCreated(clone);
+        clone._onBatchCreated();
 
         // activate components
         if (clone._active) {
@@ -391,6 +410,23 @@ var Node = cc.Class({
         }
 
         return clone;
+    },
+
+    _onBatchCreated: function () {
+        var sgNode = new cc.Node();
+
+        // retain immediately
+        sgNode.retain();
+        this._sgNode = sgNode;
+
+        sgNode.setAnchorPoint(0, 1);
+        if (this._parent) {
+            this._parent._sgNode.addChild(sgNode);
+        }
+        var children = this._children;
+        for (var i = 0, len = children.length; i < len; i++) {
+            children[i]._onBatchCreated();
+        }
     }
 });
 

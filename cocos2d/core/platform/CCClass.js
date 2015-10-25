@@ -583,9 +583,9 @@ function _boundSuperCall (func, funcName, base) {
             }
         }
         else if (pd.get) {
-            superFunc = pd.get();
-            if (typeof superFunc !== 'function') {
-                superFunc = null;
+            var got = pd.get();
+            if (typeof got === 'function') {
+                superFunc = got;
             }
         }
     }

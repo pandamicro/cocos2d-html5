@@ -315,7 +315,7 @@ if (CC_DEV) {
             arrivalOrder: ['getSiblingIndex', 'setSiblingIndex'],
             _visible: ['active', 'active'],
             _running: ['active', 'active'],
-            _realOpacity: ['color', 'color'],
+            _realOpacity: ['opacity', 'opacity'],
             _realColor: ['color', 'color'],
             getZOrder: ['getLocalZOrder'],
             setZOrder: ['setLocalZOrder'],
