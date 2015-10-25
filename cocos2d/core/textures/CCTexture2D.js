@@ -96,7 +96,7 @@ cc.PVRHaveAlphaPremultiplied_ = false;
 
 //cc.Texture2DWebGL move to TextureWebGL.js
 
-cc.game.addEventListener("rendererInited", function () {
+cc.game.addEventListener(cc.game.EVENT_RENDERER_INITED, function () {
 
     if(cc._renderType === cc.game.RENDER_TYPE_CANVAS) {
 

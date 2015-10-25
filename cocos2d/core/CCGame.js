@@ -8,6 +8,7 @@ cc.game = /** @lends cc.game# */{
     EVENT_HIDE: "game_on_hide",
     EVENT_SHOW: "game_on_show",
     EVENT_RESIZE: "game_on_resize",
+    EVENT_RENDERER_INITED: "renderer_inited",
 
     RENDER_TYPE_CANVAS: 0,
     RENDER_TYPE_WEBGL: 1,
@@ -510,7 +511,7 @@ cc.game = /** @lends cc.game# */{
             if (!cc._isContextMenuEnable) return false;
         };
 
-        this.dispatchEvent("rendererInited", true);
+        this.dispatchEvent(this.EVENT_RENDERER_INITED, true);
 
         this._rendererInitialized = true;
     },
