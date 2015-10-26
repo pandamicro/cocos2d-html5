@@ -54,6 +54,9 @@ cc.ListEntry = function (prev, next, callback, target, priority, paused, markedF
     this.paused = paused;
     this.markedForDeletion = markedForDeletion;
 };
+cc.ListEntry.prototype.trigger = function (dt) {
+    this.callback.call(this.target, dt);
+};
 
 /**
  * A update entry list
@@ -318,7 +321,6 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
 
         this._arrayForTimers = [];
         //this._arrayForUpdates = [];
-
     },
 
     //-----------------------private method----------------------
@@ -449,19 +451,19 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
         for(i=0,list=this._updatesNegList, len = list.length; i<len; i++){
             entry = list[i];
             if(!entry.paused && !entry.markedForDeletion)
-                entry.callback(dt);
+                entry.trigger(dt);
         }
 
         for(i=0, list=this._updates0List, len=list.length; i<len; i++){
             entry = list[i];
             if (!entry.paused && !entry.markedForDeletion)
-                entry.callback(dt);
+                entry.trigger(dt);
         }
 
         for(i=0, list=this._updatesPosList, len=list.length; i<len; i++){
             entry = list[i];
             if (!entry.paused && !entry.markedForDeletion)
-                entry.callback(dt);
+                entry.trigger(dt);
         }
 
         // Iterate over all the custom selectors
@@ -622,10 +624,9 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
         }
     },
 
-    scheduleUpdate: function(target, priority, paused){
-        this._schedulePerFrame(function(dt){
-            target.update(dt);
-        }, target, priority, paused);
+    scheduleUpdate: function(target, priority, paused, updateFunc){
+        updateFunc = updateFunc || target.update;
+        this._schedulePerFrame(updateFunc, target, priority, paused);
     },
 
     _getUnscheduleMark: function(key, timer){

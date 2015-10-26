@@ -106,6 +106,10 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
     _dirtyRegion: null,
 
     _scheduler: null,
+    _startScheduler: null,
+    _updateScheduler: null,
+    _lateUpdateScheduler: null,
+
     _actionManager: null,
 
     ctor: function () {
@@ -140,9 +144,17 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
         this._openGLView = null;
         this._contentScaleFactor = 1.0;
 
-        //scheduler
+        // Schedulers
+        // Scheduler for user registration update
         this._scheduler = new cc.Scheduler();
-        //action manager
+        // Scheduler for components start function registration
+        this._startScheduler = new cc.Scheduler();
+        // Scheduler for components update function registration
+        this._updateScheduler = new cc.Scheduler();
+        // Scheduler for components lateUpdate function registration
+        this._lateUpdateScheduler = new cc.Scheduler();
+
+        // Action manager
         if(cc.ActionManager){
             this._actionManager = new cc.ActionManager();
             this._scheduler.scheduleUpdate(this._actionManager, cc.Scheduler.PRIORITY_SYSTEM, false);
@@ -197,13 +209,11 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
     convertToUI: null,
 
     gameUpdate: function (deltaTime) {
-        // Call start for new added entities and their components recursively
-        // High cost: Recusive function execution
-        Component._callStartsOn(this._scene);
+        // Call start for new added components
+        this._startScheduler.update(deltaTime);
 
-        // Recursive update
-        // High cost: Recusive function execution
-        Component._callUpdatesOn(this._scene, deltaTime);
+        // Update for components
+        this._updateScheduler.update(deltaTime);
 
         // Destroy entities that have been removed recently
         // Low cost: Array manipulation
@@ -225,9 +235,8 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
     },
 
     gameLateUpdate: function (deltaTime) {
-        // Recursive late update
-        // High cost: Recusive function execution
-        Component._callLateUpdatesOn(this._scene, deltaTime);
+        // Late update for components
+        this._lateUpdateScheduler.update(deltaTime);
     },
 
     visit: function (deltaTime) {

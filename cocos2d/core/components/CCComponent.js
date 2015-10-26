@@ -49,6 +49,8 @@ function callOnEnable (self, enable) {
                 else {
                     self.onEnable();
                 }
+                self.update && cc.director._updateScheduler.resumeTarget(self);
+                self.lateUpdate && cc.director._lateUpdateScheduler.resumeTarget(self);
             }
             self._objFlags |= IsOnEnableCalled;
         }
@@ -62,94 +64,56 @@ function callOnEnable (self, enable) {
                 else {
                     self.onDisable();
                 }
+                self.update && cc.director._updateScheduler.pauseTarget(self);
+                self.lateUpdate && cc.director._lateUpdateScheduler.pauseTarget(self);
             }
             self._objFlags &= ~IsOnEnableCalled;
         }
     }
 }
 
-// TODO: This loop all entities, should be optimized
-var callStartsOn = function (node) {
-    var countBefore = node._components.length;
-    var isPlaying = cc.engine.isPlaying || !CC_EDITOR;
-    for (var c = 0; c < countBefore; ++c) {
-        var comp = node._components[c];
-        if (!(comp._objFlags & IsOnStartCalled) && (isPlaying || comp.constructor._executeInEditMode)) {
-            if (comp.start) {
-                if (CC_EDITOR) {
-                    callStartInTryCatch(comp);
-                }
-                else {
-                    comp.start();
-                }
-            }
-            comp._objFlags |= IsOnStartCalled;
+var _callStart = CC_EDITOR ? function () {
+    var isPlaying = cc.engine.isPlaying;
+    if (!(this._objFlags & IsOnStartCalled) && (isPlaying || this.constructor._executeInEditMode)) {
+        if (this.start) {
+            callStartInTryCatch(this);
+        }
+        this._objFlags |= IsOnStartCalled;
+    }
+} : function () {
+    if (!(this._objFlags & IsOnStartCalled)) {
+        if (this.start) {
+            this.start();
+        }
+        this._objFlags |= IsOnStartCalled;
+    }
+};
+var _callUpdate = CC_EDITOR ? function (dt) {
+    var isPlaying = cc.engine.isPlaying;
+    if ((isPlaying || this.constructor._executeInEditMode) && this.update) {
+        try {
+            this.update(dt);
+        }
+        catch (e) {
+            cc._throw(e);
         }
     }
-    // activate its children recursively
-    for (var i = 0, children = node._children, len = children.length; i < len; ++i) {
-        var child = children[i];
-        if (child._active) {
-            callStartsOn(child);
+} : function (dt) {
+    this.update && this.update(dt);
+};
+var _callLateUpdate = CC_EDITOR ? function (dt) {
+    var isPlaying = cc.engine.isPlaying;
+    if ((isPlaying || this.constructor._executeInEditMode) && this.lateUpdate) {
+        try {
+            this.lateUpdate(dt);
+        }
+        catch (e) {
+            cc._throw(e);
         }
     }
-}
-// TODO: This loop all entities, should be optimized
-function callUpdatesOn (node, dt) {
-    var countBefore = node._components.length;
-    var isPlaying = cc.engine.isPlaying || !CC_EDITOR;
-    for (var c = 0; c < countBefore; ++c) {
-        var comp = node._components[c];
-        if ((isPlaying || comp.constructor._executeInEditMode) && comp.update) {
-            if (CC_EDITOR) {
-                try {
-                    comp.update(dt);
-                }
-                catch (e) {
-                    cc._throw(e);
-                }
-            }
-            else {
-                comp.update(dt);
-            }
-        }
-    }
-    // activate its children recursively
-    for (var i = 0, children = node._children, len = children.length; i < len; ++i) {
-        var child = children[i];
-        if (child._active) {
-            callUpdatesOn(child);
-        }
-    }
-}
-// TODO: This loop all entities, should be optimized
-function callLateUpdatesOn (node) {
-    var countBefore = node._components.length;
-    var isPlaying = cc.engine.isPlaying || !CC_EDITOR;
-    for (var c = 0; c < countBefore; ++c) {
-        var comp = node._components[c];
-        if ((isPlaying || comp.constructor._executeInEditMode) && comp.lateUpdate) {
-            if (CC_EDITOR) {
-                try {
-                    comp.lateUpdate(dt);
-                }
-                catch (e) {
-                    cc._throw(e);
-                }
-            }
-            else {
-                comp.lateUpdate();
-            }
-        }
-    }
-    // activate its children recursively
-    for (var i = 0, children = node._children, len = children.length; i < len; ++i) {
-        var child = children[i];
-        if (child._active) {
-            callLateUpdatesOn(child);
-        }
-    }
-}
+} : function (dt) {
+    this.lateUpdate && this.lateUpdate(dt);
+};
 
 //var createInvoker = function (timerFunc, timerWithKeyFunc, errorInfo) {
 //    return function (functionOrMethodName, time) {
@@ -455,38 +419,55 @@ var Component = cc.Class({
         }
     },
 
-    __onNodeActivated: function (active) {
-        if (CC_EDITOR) {
-            if (!(this._objFlags & IsOnLoadCalled) &&
-                (cc.engine.isPlaying || this.constructor._executeInEditMode)) {
-                if (this.onLoad) {
-                    callOnLoadInTryCatch(this);
-                    this._objFlags |= IsOnLoadCalled;
+    __onNodeActivated: CC_EDITOR ? function (active) {
+        if (!(this._objFlags & IsOnLoadCalled) &&
+            (cc.engine.isPlaying || this.constructor._executeInEditMode)) {
+            if (this.onLoad) {
+                callOnLoadInTryCatch(this);
+                this._objFlags |= IsOnLoadCalled;
 
-                    if (!cc.engine.isPlaying) {
-                        var focused = Editor.Selection.curActivate('node') === this.node.uuid;
-                        if (focused && this.onFocusInEditMode) {
-                            callOnFocusInTryCatch(this);
-                        }
-                        else if (this.onLostFocusInEditMode) {
-                            callOnLostFocusInTryCatch(this);
-                        }
+                if (!cc.engine.isPlaying) {
+                    var focused = Editor.Selection.curActivate('node') === this.node.uuid;
+                    if (focused && this.onFocusInEditMode) {
+                        callOnFocusInTryCatch(this);
+                    }
+                    else if (this.onLostFocusInEditMode) {
+                        callOnLostFocusInTryCatch(this);
                     }
                 }
-                else {
-                    this._objFlags |= IsOnLoadCalled;
-                }
-                //Editor._AssetsWatcher.start(this);
             }
-        }
-        else {
-            if (!(this._objFlags & IsOnLoadCalled)) {
-                if (this.onLoad) {
-                    this.onLoad();
-                }
+            else {
                 this._objFlags |= IsOnLoadCalled;
             }
+            //Editor._AssetsWatcher.start(this);
         }
+
+        var frameTime = 1000 / cc.game.config[cc.game.CONFIG_KEY.frameRate];
+        if (this.start)
+            cc.director._startScheduler.schedule(_callStart, this, 0, 0, 0, false, this.__instanceId);
+        if (this.update)
+            cc.director._updateScheduler.schedule(_callUpdate, this, frameTime, false, this.__instanceId);
+        if (this.lateUpdate)
+            cc.director._lateUpdateScheduler.schedule(_callLateUpdate, this, frameTime, false, this.__instanceId);
+
+        if (this._enabled) {
+            callOnEnable(this, active);
+        }
+    } : function (active) {
+        if (!(this._objFlags & IsOnLoadCalled)) {
+            if (this.onLoad) {
+                this.onLoad();
+            }
+            this._objFlags |= IsOnLoadCalled;
+        }
+
+        var frameTime = 1000 / cc.game.config[cc.game.CONFIG_KEY.frameRate];
+        if (this.start)
+            cc.director._startScheduler.schedule(_callStart, this, 0, 0, 0, false, this.__instanceId);
+        if (this.update)
+            cc.director._updateScheduler.scheduleUpdate(this, 0, false);
+        if (this.lateUpdate)
+            cc.director._lateUpdateScheduler.schedule(_callLateUpdate, this, frameTime, false, this.__instanceId);
 
         if (this._enabled) {
             callOnEnable(this, active);
@@ -494,22 +475,6 @@ var Component = cc.Class({
     },
 
     statics: {
-
-        // FLOW CONTROL APIs, used internally
-
-        // invoke starts on entities
-        _callStartsOn: function (node) {
-            callStartsOn(node);
-        },
-
-        _callUpdatesOn: function (node, dt) {
-            callUpdatesOn(node, dt);
-        },
-
-        _callLateUpdatesOn: function (node, dt) {
-            callLateUpdatesOn(node, dt);
-        },
-
         _executeInEditMode: false,
 
         // This property is only available if _executeInEditMode is true.

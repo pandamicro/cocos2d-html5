@@ -30,7 +30,7 @@ var cc = cc || {};
  * @namespace
  * @name ClassManager
  */
-var ClassManager = {
+var ClassManager = cc.ClassManager = {
     id : (0|(Math.random()*998)),
 
     instanceId : (0|(Math.random()*998)),
