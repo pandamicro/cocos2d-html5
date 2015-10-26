@@ -153,28 +153,6 @@ var Node = cc.Class({
 
     // OVERRIDES
 
-    update: CC_EDITOR ? function (dt) {
-        for (var i = 0; i < this._components.length; i++) {
-            var comp = this._components[i];
-            if (comp._enabled && comp.update &&
-                (cc.engine._isPlaying || comp.constructor._executeInEditMode)) {
-                try {
-                    comp.update(dt);
-                }
-                catch (e) {
-                    cc._throw(e);
-                }
-            }
-        }
-    } : function (dt) {
-        for (var i = 0; i < this._components.length; i++) {
-            var comp = this._components[i];
-            if (comp._enabled && comp.update) {
-                comp.update(dt);
-            }
-        }
-    },
-
     destroy: function () {
         if (cc.Object.prototype.destroy.call(this)) {
             // disable hierarchy

@@ -68,6 +68,89 @@ function callOnEnable (self, enable) {
     }
 }
 
+// TODO: This loop all entities, should be optimized
+var callStartsOn = function (node) {
+    var countBefore = node._components.length;
+    var isPlaying = cc.engine.isPlaying || !CC_EDITOR;
+    for (var c = 0; c < countBefore; ++c) {
+        var comp = node._components[c];
+        if (!(comp._objFlags & IsOnStartCalled) && (isPlaying || comp.constructor._executeInEditMode)) {
+            if (comp.start) {
+                if (CC_EDITOR) {
+                    callStartInTryCatch(comp);
+                }
+                else {
+                    comp.start();
+                }
+            }
+            comp._objFlags |= IsOnStartCalled;
+        }
+    }
+    // activate its children recursively
+    for (var i = 0, children = node._children, len = children.length; i < len; ++i) {
+        var child = children[i];
+        if (child._active) {
+            callStartsOn(child);
+        }
+    }
+}
+// TODO: This loop all entities, should be optimized
+function callUpdatesOn (node, dt) {
+    var countBefore = node._components.length;
+    var isPlaying = cc.engine.isPlaying || !CC_EDITOR;
+    for (var c = 0; c < countBefore; ++c) {
+        var comp = node._components[c];
+        if ((isPlaying || comp.constructor._executeInEditMode) && comp.update) {
+            if (CC_EDITOR) {
+                try {
+                    comp.update(dt);
+                }
+                catch (e) {
+                    cc._throw(e);
+                }
+            }
+            else {
+                comp.update(dt);
+            }
+        }
+    }
+    // activate its children recursively
+    for (var i = 0, children = node._children, len = children.length; i < len; ++i) {
+        var child = children[i];
+        if (child._active) {
+            callUpdatesOn(child);
+        }
+    }
+}
+// TODO: This loop all entities, should be optimized
+function callLateUpdatesOn (node) {
+    var countBefore = node._components.length;
+    var isPlaying = cc.engine.isPlaying || !CC_EDITOR;
+    for (var c = 0; c < countBefore; ++c) {
+        var comp = node._components[c];
+        if ((isPlaying || comp.constructor._executeInEditMode) && comp.lateUpdate) {
+            if (CC_EDITOR) {
+                try {
+                    comp.lateUpdate(dt);
+                }
+                catch (e) {
+                    cc._throw(e);
+                }
+            }
+            else {
+                comp.lateUpdate();
+            }
+        }
+    }
+    // activate its children recursively
+    for (var i = 0, children = node._children, len = children.length; i < len; ++i) {
+        var child = children[i];
+        if (child._active) {
+            callLateUpdatesOn(child);
+        }
+    }
+}
+
 //var createInvoker = function (timerFunc, timerWithKeyFunc, errorInfo) {
 //    return function (functionOrMethodName, time) {
 //        var ms = (time || 0) * 1000;
@@ -411,31 +494,20 @@ var Component = cc.Class({
     },
 
     statics: {
+
+        // FLOW CONTROL APIs, used internally
+
         // invoke starts on entities
         _callStartsOn: function (node) {
-            var countBefore = node._components.length;
-            var isPlaying = cc.engine.isPlaying || !CC_EDITOR;
-            for (var c = 0; c < countBefore; ++c) {
-                var comp = node._components[c];
-                if (!(comp._objFlags & IsOnStartCalled) && (isPlaying || comp.constructor._executeInEditMode)) {
-                    if (comp.start) {
-                        if (CC_EDITOR) {
-                            callStartInTryCatch(comp);
-                        }
-                        else {
-                            comp.start();
-                        }
-                    }
-                    comp._objFlags |= IsOnStartCalled;
-                }
-            }
-            // activate its children recursively
-            for (var i = 0, children = node._children, len = children.length; i < len; ++i) {
-                var child = children[i];
-                if (child._active) {
-                    Component._callStartsOn(child);
-                }
-            }
+            callStartsOn(node);
+        },
+
+        _callUpdatesOn: function (node, dt) {
+            callUpdatesOn(node, dt);
+        },
+
+        _callLateUpdatesOn: function (node, dt) {
+            callLateUpdatesOn(node, dt);
         },
 
         _executeInEditMode: false,

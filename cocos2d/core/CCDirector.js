@@ -197,7 +197,17 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
     convertToUI: null,
 
     gameUpdate: function (deltaTime) {
+        // Call start for new added entities and their components recursively
+        // High cost: Recusive function execution
+        Component._callStartsOn(this._scene);
 
+        // Recursive update
+        // High cost: Recusive function execution
+        Component._callUpdatesOn(this._scene, deltaTime);
+
+        // Destroy entities that have been removed recently
+        // Low cost: Array manipulation
+        CCObject._deferredDestroy();
     },
 
     engineUpdate: function (deltaTime) {
@@ -212,6 +222,12 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
         if (this._nextScene) {
             this.setNextScene();
         }
+    },
+
+    gameLateUpdate: function (deltaTime) {
+        // Recursive late update
+        // High cost: Recusive function execution
+        Component._callLateUpdatesOn(this._scene, deltaTime);
     },
 
     visit: function (deltaTime) {
@@ -259,6 +275,7 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
 
         this.gameUpdate(this._deltaTime);
         this.engineUpdate(this._deltaTime);
+        this.gameLateUpdate(this._deltaTime);
         this.visit(this._deltaTime);
         this.render(this._deltaTime);
 
