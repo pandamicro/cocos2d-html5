@@ -1,3 +1,5 @@
+var ValueType = require('./CCValueType');
+var JS = require('../platform/js');
 
 /**
  * cc.Size is the class for size object, please do not use its constructor to create sizes, use cc.size() alias function instead.
@@ -10,6 +12,53 @@
 cc.Size = function (width, height) {
     this.width = width || 0;
     this.height = height || 0;
+};
+JS.extend(cc.Size, ValueType);
+require('../platform/CCClass').fastDefine('cc.Size', cc.Size, ['width', 'height']);
+
+var proto = cc.Size.prototype;
+
+/**
+ * @method clone
+ * @return {cc.Size}
+ */
+proto.clone = function () {
+    return new cc.Size(this.width, this.height);
+};
+
+/**
+ * @method equals
+ * @param {cc.Size} other
+ * @return {Boolean}
+ */
+proto.equals = function (other) {
+    return other &&
+           this.width === other.width &&
+           this.height === other.height;
+};
+
+/**
+ * @method lerp
+ * @param {cc.Rect} to
+ * @param {number} ratio - the interpolation coefficient
+ * @param {cc.Size} [out] - optional, the receiving vector
+ * @return {cc.Size}
+ */
+proto.lerp = function (to, ratio, out) {
+    out = out || new cc.Size();
+    var width = this.width;
+    var height = this.height;
+    out.width = width + (to.width - width) * ratio;
+    out.height = height + (to.height - height) * ratio;
+    return out;
+};
+
+/**
+ * @method toString
+ * @return {string}
+ */
+proto.toString = function () {
+    return '(' + this.width.toFixed(2) + ', ' + this.height.toFixed(2) + ')';
 };
 
 /**

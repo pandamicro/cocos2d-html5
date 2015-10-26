@@ -1,166 +1,281 @@
-if (TestEditorExtends) {
+﻿// jshint ignore: start
 
-    largeModule('cc.Node');
+largeModule('Node');
 
-    function getRandomInt() {
-        return Math.floor(Math.random() * 1000);
-    }
+test('basic test', function () {
+    var node = new cc.ENode();
+    ok(node.name, 'node has default name');
+    strictEqual(new cc.ENode('myNode').name, 'myNode', 'can specify node name');
 
-    function getSpecRandomInt(low, high) {
-        return Math.floor(Math.random() * (high - low) + low);
-    }
+    strictEqual(node.active, true, 'node is active');
 
-    function getRandomDouble() {
-        return Math.random(0, 1000);
-    }
+    node.active = false;
 
-    function getRandomBool() {
-        var temp = getRandomInt(0, 1000);
-        return (temp >= 500);
-    }
+    strictEqual(node.active, false, 'node is deactive');
 
-    var compareKeys = [
-        '_localZOrder',
-        '_globalZOrder',
-        '_vertexZ',
-        '_rotationX',
-        '_rotationY',
-        '_scaleX',
-        '_scaleY',
-        '_position',
-        '_normalizedPosition',
-        '_usingNormalizedPosition',
-        '_skewX',
-        '_skewY',
-        '_visible',
-        '_anchorPoint',
-        '_contentSize',
-        '_ignoreAnchorPointForPosition',
-        'tag',
-        'userData',
-        'userObject',
-        '_name',
-        '_showNode',
-        '_realOpacity',
-        '_realColor',
-        '_cascadeColorEnabled',
-        '_cascadeOpacityEnabled',
-        '__type__'
-    ];
+    node._destroyImmediate();
+    strictEqual(node.isValid, false, 'node can be destoryed');
+});
 
-    function createNodeData(nodeName) {
-        return {
-            '_localZOrder' : getRandomInt(),
-            '_globalZOrder' : getRandomInt(),
-            '_vertexZ' : getRandomDouble(),
-            '_rotationX' : getRandomDouble(),
-            '_rotationY' : getRandomDouble(),
-            '_scaleX' : 1.5,
-            '_scaleY' : 1.5,
-            '_position' : cc.p(getRandomDouble(), getRandomDouble()),
-            '_normalizedPosition' : cc.p(getRandomDouble(), getRandomDouble()),
-            '_usingNormalizedPosition' : getRandomBool(),
-            '_skewX' : getRandomDouble(),
-            '_skewY' : getRandomDouble(),
-            '_visible' : getRandomBool(),
-            '_anchorPoint' : cc.p(getRandomDouble(), getRandomDouble()),
-            '_contentSize' : cc.size(getRandomDouble(), getRandomDouble()),
-            '_ignoreAnchorPointForPosition' : getRandomBool(),
-            'tag' : getRandomInt(),
-            'userData' : {mydata: nodeName},
-            'userObject' : {myobj: nodeName},
-            '_name' : nodeName,
-            '_showNode' : getRandomBool(),
-            '_realOpacity' : getSpecRandomInt(0, 256),
-            '_realColor' : cc.color(getSpecRandomInt(0, 256), getSpecRandomInt(0, 256), getSpecRandomInt(0, 256), getSpecRandomInt(0, 256)),
-            '_cascadeColorEnabled' : getRandomBool(),
-            '_cascadeOpacityEnabled' : getRandomBool(),
-            '__type__' : 'cc.Node'
-        };
-    }
+test('test hierarchy', function () {
+    var parent = new cc.ENode();
+    var child1 = new cc.ENode();
+    var child2 = new cc.ENode();
 
-    function createNode(nodeName) {
-        var ret = new cc.Node();
+    strictEqual(parent.parent, null, 'node\'s default parent is null');
+    strictEqual(parent.childrenCount, 0, 'node\'s default child count is 0');
 
-        ret._localZOrder = getRandomInt();
-        ret._globalZOrder = getRandomInt();
-        ret._vertexZ = getRandomDouble();
-        ret._rotationX = getRandomDouble();
-        ret._rotationY = getRandomDouble();
-        ret._scaleX = 1.5;
-        ret._scaleY = 1.5;
-        ret._position = cc.p(getRandomDouble(), getRandomDouble());
-        ret._normalizedPosition = cc.p(getRandomDouble(), getRandomDouble());
-        ret._usingNormalizedPosition = getRandomBool();
-        ret._skewX = getRandomDouble();
-        ret._skewY = getRandomDouble();
-        ret._visible = getRandomBool();
-        ret._anchorPoint = cc.p(getRandomDouble(), getRandomDouble());
-        ret._contentSize = cc.size(getRandomDouble(), getRandomDouble());
-        ret._ignoreAnchorPointForPosition = getRandomBool();
-        ret.tag = getRandomInt();
-        ret.userData = {mydata: nodeName};
-        ret.userObject = {myobj: nodeName};
-        ret._name = nodeName;
-        ret._showNode = getRandomBool();
-        ret._realOpacity = getSpecRandomInt(0, 256);
-        ret._realColor = cc.color(getSpecRandomInt(0, 256), getSpecRandomInt(0, 256), getSpecRandomInt(0, 256), getSpecRandomInt(0, 256));
-        ret._cascadeColorEnabled = getRandomBool();
-        ret._cascadeOpacityEnabled = getRandomBool();
-        ret.__type__ = 'cc.Node';
+    child1.parent = parent;
+    ok(child1.parent === parent, 'can get/set parent');
+    strictEqual(parent.childrenCount, 1, 'child count increased to 1');
+    ok(parent.children[0] === child1, 'can get child1');
 
-        return ret;
-    }
+    child2.parent = parent;
+    strictEqual(parent.childrenCount, 2, 'child count increased to 2');
+    ok(parent.children[1] === child2, 'can get child2');
 
-    function checkNodeData(originData, node) {
-        for (var prop in originData) {
-            if (originData.hasOwnProperty(prop))
-                equal(node.prop, originData.prop, '"' + prop + '" should be equal between serialize data & node data.');
+    child1.destroy();
+
+    FO._deferredDestroy();
+
+    strictEqual(parent.childrenCount, 1, 'child count should return to 1');
+    ok(parent.children[0] === child2, 'only child2 left');
+
+    // TODO: what if parent.parent = child2 ?
+});
+
+test('activeInHierarchy', function () {
+    var parent = new cc.ENode();
+    var child = new cc.ENode();
+    child.parent = parent;
+
+    strictEqual(parent.activeInHierarchy, false, 'parent should not activeInHierarchy before add to scene');
+    strictEqual(child.activeInHierarchy, false, 'child should not activeInHierarchy before add to scene');
+
+    cc.director.getScene().addChild(parent);
+
+    strictEqual(parent.activeInHierarchy, true, 'parent should become activeInHierarchy after add to scene');
+    strictEqual(child.activeInHierarchy, true, 'child should become activeInHierarchy after add to scene');
+
+    child.active = false;
+
+    strictEqual(parent.activeInHierarchy, true, 'parent unchanged');
+    strictEqual(child.activeInHierarchy, false, 'child deactiveInHierarchy');
+
+    parent.active = false;
+
+    strictEqual(parent.activeInHierarchy, false, 'parent deactiveInHierarchy');
+    strictEqual(child.activeInHierarchy, false, 'child still deactiveInHierarchy');
+
+    child.active = true;
+
+    strictEqual(parent.activeInHierarchy, false, 'parent unchanged');
+    strictEqual(child.activeInHierarchy, false, 'child deactiveInHierarchy because parent deactived');
+
+    parent.active = true;
+
+    strictEqual(parent.activeInHierarchy, true, 'parent become activeInHierarchy');
+    strictEqual(child.activeInHierarchy, true, 'child become activeInHierarchy because parent actived');
+
+    parent.removeFromParent();
+
+    strictEqual(parent.activeInHierarchy, false, 'parent should not activeInHierarchy after remove from scene');
+    strictEqual(child.activeInHierarchy, false, 'child should not activeInHierarchy after remove from scene');
+});
+
+test('activation logic for component', function () {
+    // 这里主要测试node，不是测试component
+
+    // my component
+    var MyComponentBase = cc.Class({
+        name: 'MyComponentBase',
+        extends: CallbackTester
+    });
+    cc.executeInEditMode(MyComponentBase);
+
+    var MyComponent = cc.Class({
+        name: 'MyComponent',
+        extends: MyComponentBase,
+        ctor: function () {
+            this.expect(CallbackTester.OnLoad, 'call onLoad while attaching to node');
+            this.expect(CallbackTester.OnEnable, 'then call onEnable if node active', true);
         }
-    }
-
-    function compare2Nodes(node1, node2) {
-        for (var i in compareKeys) {
-            var key = compareKeys[i];
-            equal(node1.key, node2.key, '"' + key + '" should be equal between two nodes.');
-        }
-
-        equal(node1.getChildrenCount(), node2.getChildrenCount(), 'The children count should be equal between two nodes.');
-        if (node1.getChildrenCount() > 0) {
-            for (var i in node1.getChildren()) {
-                compare2Nodes(node1.getChildren()[i], node2.getChildren()[i], 'The children content should be equal between two nodes.');
-            }
-        }
-    }
-
-    test('basic test deserialize', function () {
-        var nodeData = createNodeData('rootNode');
-        var rootNode = cc.deserialize(nodeData);
-        checkNodeData(nodeData, rootNode);
     });
 
-    test('basic test serialize', function() {
-        var node = createNode('rootNode');
-        var json = JSON.parse(Editor.serialize(node));
-        checkNodeData(json, node);
+    var obj = new cc.ENode();
+    cc.director.getScene().addChild(obj);
+
+    var comp = obj.addComponent(MyComponent); // onEnable
+
+    comp.expect(CallbackTester.start, 'call start after onEnable');
+    cc.game.step();
+    comp.notExpect(CallbackTester.start, 'start should called only once');
+    cc.game.step();
+
+    strictEqual(comp.node, obj, 'can get node from component');
+
+    comp.expect(CallbackTester.OnDisable);
+    obj.active = false; // onDisable
+
+    comp.expect(CallbackTester.OnEnable);
+    obj.active = true;  // onEnable
+
+    //strictEqual(obj.getComponent(cc.Transform), obj.transform, 'getComponent: can get transform');
+    strictEqual(obj.getComponent(MyComponent), comp, 'getComponent: can get my component');
+    strictEqual(obj.getComponent(cc.js.getClassName(MyComponent)), comp, 'getComponent: can get my component by name');
+    strictEqual(obj.getComponent(MyComponentBase), comp, 'getComponent: can get component by base type');
+    strictEqual(obj.getComponent(cc.js.getClassName(MyComponentBase)), comp, 'getComponent: can get component by base name');
+
+    comp.expect(CallbackTester.OnDisable, 'should called onDisable when destory');
+    comp.destroy();     // onDisable
+
+    strictEqual(obj.getComponent(MyComponent), comp, 'can still get component in this frame');
+
+    comp.expect(CallbackTester.OnDestroy);
+    FO._deferredDestroy();    // onDestroy
+
+    strictEqual(obj.getComponent(MyComponent), null, 'can not get component after this frame');
+
+    comp.stopTest();
+
+    cc.js.unregisterClass(MyComponent, MyComponentBase);
+});
+
+test('activation logic for component in hierarchy', function () {
+    var parent = new cc.ENode();
+    var child = new cc.ENode();
+    child.parent = parent;
+    parent.active = false;
+    parent.parent = cc.director.getScene();
+
+    var MyComponent = cc.Class({
+        extends: CallbackTester,
+        ctor: function () {
+            this.notExpect(CallbackTester.OnLoad, 'should not call onLoad while node inactive');
+        }
     });
+    cc.executeInEditMode(MyComponent);
 
-    test('test the node tree serialize & deserialize', function() {
-        var rootNode = createNode('rootNode');
-        var child1 = createNode('child1');
-        var child2 = createNode('child2');
-        var child11 = createNode('child11');
-        var child12 = createNode('child12');
-        var child13 = createNode('child13');
+    var comp = child.addComponent(MyComponent);
 
-        rootNode.addChild(child1);
-        rootNode.addChild(child2);
-        child1.addChild(child11);
-        child1.addChild(child12);
-        child1.addChild(child13);
+    comp.expect(CallbackTester.OnLoad, 'should call onLoad while node activated');
+    comp.expect(CallbackTester.OnEnable, 'should enable when parent become active', true);
+    parent.active = true;
 
-        var json = Editor.serialize(rootNode);
-        var newNode = cc.deserialize(json);
-        compare2Nodes(rootNode, newNode);
+    comp.expect(CallbackTester.OnDisable, 'should disable when parent become inactive');
+    parent.active = false;
+
+    comp.expect(CallbackTester.OnEnable, 'should enable when parent become active');
+    parent.active = true;
+
+    comp.expect(CallbackTester.OnDisable, 'should disable when node detached from its parent');
+    child.parent = null;
+
+    var activeParent = new cc.ENode();
+    activeParent.parent = cc.director.getScene();
+    comp.expect(CallbackTester.OnEnable, 'should enable when add to active parent');
+    child.parent = activeParent;
+
+    var inactiveParent = new cc.ENode();
+    inactiveParent.active = false;
+    inactiveParent.parent = cc.director.getScene();
+    comp.expect(CallbackTester.OnDisable, 'should disable when add to inactive parent');
+    child.parent = inactiveParent;
+
+    comp.stopTest();
+});
+
+test('destroy', function () {
+    var parent = new cc.ENode();
+    var child = new cc.ENode();
+    parent.addChild(child);
+    cc.director.getScene().addChild(parent);
+
+    // add child component
+    var ChildComp = cc.Class({
+        extends: CallbackTester,
+        ctor: function () {
+            this.expect([CallbackTester.OnLoad, CallbackTester.OnEnable]);
+        }
     });
-}
+    cc.executeInEditMode(ChildComp);
+    var childComp = child.addComponent(ChildComp);
+
+    // expect ondisable
+    childComp.expect(CallbackTester.OnDisable, 'should disable while destroy parent');
+    childComp.notExpect(CallbackTester.OnDestroy, 'can not destroyed before the end of this frame');
+
+    // call destroy
+    parent.destroy();
+
+    childComp.notExpect(CallbackTester.OnDisable, 'child comp should only disabled once');
+    childComp.notExpect(CallbackTester.OnEnable, 'child component should not re-enable when parent destroying');
+    childComp.expect(CallbackTester.OnDestroy, 'should destroyed at the end of frame');
+
+    // try add component after destroy
+
+    var ChildComp_new = cc.Class({
+        extends: CallbackTester,
+        ctor: function () {
+            this.expect(CallbackTester.OnLoad, 'new child component should onLoad even if added after destroy');
+            this.expect(CallbackTester.OnEnable, 'new child component should enable even if added after destroy', true);
+            this.expect(CallbackTester.OnDisable, 'new component\'s onDisable should be called before its onDestroy', true);
+            this.expect(CallbackTester.OnDestroy, 'new component should also destroyed at the end of frame', true);
+        }
+    });
+    var childComp_new = child.addComponent(ChildComp_new);
+
+    var NewParentComp = cc.Class({
+        extends: CallbackTester,
+        ctor: function () {
+            this.expect([CallbackTester.OnLoad,
+                         CallbackTester.OnEnable,
+                         CallbackTester.OnDisable,
+                         CallbackTester.OnDestroy]);
+        }
+    });
+    var newParentComp = parent.addComponent(NewParentComp);
+
+    // try add child after destroy
+
+    var NewChildNodeComp = cc.Class({
+        extends: CallbackTester,
+        ctor: function () {
+            this.expect([CallbackTester.OnLoad,
+                         CallbackTester.OnEnable,
+                         CallbackTester.OnDisable,
+                         CallbackTester.OnDestroy]);
+        }
+    });
+    var newChildNode = new cc.ENode();
+    parent.addChild(newChildNode);
+    var newChildNodeComp = newChildNode.addComponent(NewChildNodeComp);
+
+    // do destory
+
+    FO._deferredDestroy();
+
+    strictEqual(childComp_new.isValid, false, 'node will finally destroyed with its component which added after calling destroy');
+    strictEqual(childComp.isValid, false, 'node will destroyed with its child components');
+    strictEqual(child.isValid, false, 'node will destroyed with its children');
+    strictEqual(newChildNode.isValid, false, 'node will destroyed with its new children');
+
+    childComp.stopTest();
+    childComp_new.stopTest();
+    newParentComp.stopTest();
+    newChildNodeComp.stopTest();
+});
+
+test('isChildOf', function () {
+    var ent1 = new cc.ENode();
+    var ent2 = new cc.ENode();
+    var ent3 = new cc.ENode();
+
+    ent1.addChild(ent2);
+    ent2.addChild(ent3);
+
+    strictEqual(ent1.isChildOf(ent2), false, 'not a child of its children');
+    strictEqual(ent1.isChildOf(ent1), true, 'is child of itself');
+    strictEqual(ent2.isChildOf(ent1), true, 'is child of its parent');
+    strictEqual(ent3.isChildOf(ent1), true, 'is child of its ancestor');
+});

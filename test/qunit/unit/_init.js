@@ -186,7 +186,7 @@ function _resetGame (w, h) {
 
         cc.eventManager.dispatchCustomEvent('canvas-resize');
     }
-    //Engine._launchScene(new cc._Scene());
+    cc.game._launchScene(new cc.EScene());
 
     cc.director.pause();
 }

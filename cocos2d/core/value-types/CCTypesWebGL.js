@@ -24,12 +24,12 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-//redefine some types with ArrayBuffer for WebGL
-//redefine cc.Color
+// define some types with ArrayBuffer for WebGL
+
 /**
- * @class cc.Color
+ * @class cc.WebGLColor
  * @param {Number} r
- * @param {Number}g
+ * @param {Number} g
  * @param {Number} b
  * @param {Number} a
  * @param {Array} arrayBuffer

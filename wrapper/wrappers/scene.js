@@ -57,7 +57,7 @@ var SceneWrapper = cc.Class({
      * @param {string} callback.error
      */
     preloadAssets: function (assetObjects, rawAssetUrls, callback) {
-        var urls = assetObjects.map( function (asset) {
+        var urls = assetObjects.map(function (asset) {
             return asset.url;
         });
 
@@ -124,10 +124,10 @@ var SceneWrapper = cc.Class({
         function traversal (node, cb) {
             var children = node.children;
 
-            for (var i = 0; i<children.length; i++) {
+            for (var i = 0; i < children.length; i++) {
                 var child = children[i];
 
-                if (!cb( child )) break;
+                if (!cb(child)) break;
 
                 traversal(child, cb);
             }
@@ -135,6 +135,14 @@ var SceneWrapper = cc.Class({
 
         traversal(this, cb);
     },
+
+    // 临时加回来，之后要干掉这些wrapper
+    retain: function () {
+        this.targetN.retain();
+    },
+    release: function () {
+        this.targetN.release();
+    }
 });
 
 module.exports = SceneWrapper;

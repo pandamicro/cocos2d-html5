@@ -22,8 +22,125 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-// internal scene wrapper for cc.Scene
-module.exports = cc.Class({
+/**
+ * <p>cc.Scene is a subclass of cc.Node that is used only as an abstract concept.</p>
+ * <p>cc.Scene and cc.Node are almost identical with the difference that users can not modify cc.Scene manually. </p>
+ *
+ * @class
+ */
+cc.EScene = cc.Class({
     name: 'cc.Scene',
     extends: require('./utils/node-wrapper'),
+
+    ctor: function () {
+        this._activeInHierarchy = false;
+        if (!cc.game._isCloning) {
+            // create dynamically
+            this._onBatchCreated();
+        }
+    },
+
+    destroy: function () {
+        var children = this._children;
+        var DontDestroy = cc.Object.Flags.DontDestroy;
+        var list = cc.director._dontDestroyNodes = [];
+
+        for (var i = 0, len = children.length; i < len; ++i) {
+            var child = children[i];
+            if (child.isValid) {
+                if (child._objFlags & DontDestroy) {
+                    list.push(child);
+                }
+                else {
+                    child.destroy();
+                }
+            }
+        }
+
+        this._super();
+        this._activeInHierarchy = false;
+    },
+
+    _onHierarchyChanged: function () {},
+
+    _onBatchCreated: function () {
+        var sgNode = new cc.Scene();
+
+        // retain immediately
+        sgNode.retain();
+        this._sgNode = sgNode;
+
+        sgNode.setAnchorPoint(0, 1);
+        var children = this._children;
+        for (var i = 0; i < children.length; i++) {
+            children[i]._onBatchCreated();
+        }
+    },
+
+    _onActivated: function () {
+        this._activeInHierarchy = true;
+
+        // invoke onLoad and onEnable
+        var children = this._children;
+        for (var i = 0; i < children.length; ++i) {
+            var entity = children[i];
+            if (entity._active) {
+                entity._onActivatedInHierarchy(true);
+            }
+        }
+        if (!CC_EDITOR || cc.engine.isPlaying) {
+            // invoke onStart
+            for (var j = 0; j < children.length; ++j) {
+                cc.Component._callStartsOn(children[i]);
+            }
+        }
+    }
 });
+
+module.exports = cc.EScene;
+
+if (CC_EDITOR) {
+    var ERR = '"%s" is not defined in the Scene, it is only defined in child nodes.';
+    Object.defineProperties(cc.EScene.prototype, {
+        active: {
+            get: function () {
+                cc.error(ERR, 'active');
+                return true;
+            },
+            set: function () {
+                cc.error(ERR, 'active');
+            }
+        },
+        activeInHierarchy: {
+            get: function () {
+                cc.error(ERR, 'activeInHierarchy');
+                return true;
+            },
+        },
+        destroyOnSceneExit: {
+            get: function () {
+                cc.error(ERR, 'destroyOnSceneExit');
+                return true;
+            },
+            set: function () {
+                cc.error(ERR, 'destroyOnSceneExit');
+            }
+        },
+        getComponent: {
+            get: function () {
+                cc.error(ERR, 'getComponent');
+                return function () {
+                    return null;
+                };
+            }
+        },
+        addComponent: {
+            get: function () {
+                cc.error(ERR, 'addComponent');
+                return function () {
+                    return null;
+                };
+            }
+        },
+    });
+}

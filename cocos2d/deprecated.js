@@ -236,4 +236,115 @@ if (CC_DEV) {
     deprecateEnum(cc, 'cc.KEYBOARD_RETURNTYPE', 'cc.KeyboardReturnType');
     deprecateEnum(cc, 'cc.EDITBOX_INPUT_MODE', 'cc.EditBox.InputMode');
     deprecateEnum(cc, 'cc.EDITBOX_INPUT_FLAG', 'cc.EditBox.InputFlag');
+
+    // cc.ENode
+
+    [
+        '_componentContainer',
+        '_camera',
+        '_additionalTransform',
+        '_scheduler',
+        '_actionManager',
+        'actionManager',
+        '_isTransitionFinished',
+        '_additionalTransformDirty',
+        '_shaderProgram',
+        'shaderProgram',
+        '_reorderChildDirty',
+        '_normalizedPositionDirty',
+        '_renderCmd',
+        '_vertexZ',
+        '_showNode',
+        '_cascadeColorEnabled',
+        '_cascadeOpacityEnabled',
+        '_arrayMakeObjectsPerformSelector',
+        'getActionManager',
+        'setActionManager',
+        'getScheduler',
+        'setScheduler',
+        'sortAllChildren',
+        'reorderChild',
+        'draw',
+        'transformAncestors',
+        'onEnter',
+        'onEnterTransitionDidFinish',
+        'onExitTransitionDidStart',
+        'onExit',
+        'runAction',
+        'stopAllActions',
+        'stopAction',
+        'stopActionByTag',
+        'getActionByTag',
+        'getNumberOfRunningActions',
+        'scheduleUpdate',
+        'scheduleUpdateWithPriority',
+        'unscheduleUpdate',
+        'schedule',
+        'scheduleOnce',
+        'unschedule',
+        'unscheduleAllCallbacks',
+        'resumeSchedulerAndActions',
+        'resume',
+        'pauseSchedulerAndActions',
+        'pause',
+        'setAdditionalTransform',
+        'updateTransform',
+        'retain',
+        'release',
+        'visit',
+        'transform',
+        'getCamera',
+        'grid',
+        'getGrid',
+        'setGrid',
+        'getShaderProgram',
+        'setShaderProgram',
+        'getGLServerState',
+        'setGLServerState',
+        '_initRendererCmd',
+        '_createRenderCmd',
+    ].forEach(function (prop) {
+        function error () {
+            cc.error('Sorry, cc.ENode.' + prop + ' is removed.');
+        }
+        js.getset(cc.ENode.prototype, prop, error, error);
+    });
+
+    (function () {
+        var GetSet = {
+            arrivalOrder: ['getSiblingIndex', 'setSiblingIndex'],
+            _visible: ['active', 'active'],
+            _running: ['active', 'active'],
+            _realOpacity: ['opacity', 'opacity'],
+            _realColor: ['color', 'color'],
+            getZOrder: ['getLocalZOrder'],
+            setZOrder: ['setLocalZOrder'],
+            getOrderOfArrival: ['getSiblingIndex'],
+            setOrderOfArrival: ['setSiblingIndex'],
+            boundingBox: ['getBoundingBox'],
+            removeFromParentAndCleanup: ['removeFromParent'],
+            removeAllChildrenWithCleanup: ['removeAllChildren'],
+            parentToNodeTransform: ['getParentToNodeTransform'],
+            nodeToWorldTransform: ['getNodeToWorlshaderProgramdTransform'],
+            worldToNodeTransform: ['getWorldToNodeTransform'],
+            nodeToParentTransform: ['getNodeToParentTransform'],
+            getNodeToParentAffineTransform: ['getNodeToParentTransform'],
+            updateDisplayedOpacity: ['_updateDisplayedOpacity'],
+            updateDisplayedColor: ['_updateDisplayedColor'],
+        };
+        var Info = 'Sorry, cc.ENode.%s is removed, please use %s instead.';
+        for (var prop in GetSet) {
+            (function (prop) {
+                var getset = GetSet[prop];
+                js.getset(cc.ENode.prototype, prop,
+                    function () {
+                        cc.error(Info, prop, getset[0]);
+                    },
+                    getset[1] && function () {
+                        cc.error(Info, prop, getset[1]);
+                    }
+                );
+            })(prop);
+        }
+    })();
 }
