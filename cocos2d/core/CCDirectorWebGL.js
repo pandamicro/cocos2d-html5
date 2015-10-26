@@ -24,6 +24,20 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+require('./CCDirector');
+require('./CCGame');
+
+var GLToClipTransform = function (transformOut) {
+    //var projection = new cc.math.Matrix4();
+    //cc.kmGLGetMatrix(cc.KM_GL_PROJECTION, projection);
+    cc.kmGLGetMatrix(cc.KM_GL_PROJECTION, transformOut);
+
+    var modelview = new cc.math.Matrix4();
+    cc.kmGLGetMatrix(cc.KM_GL_MODELVIEW, modelview);
+
+    transformOut.multiply(modelview);
+};
+
 cc.game.addEventListener("rendererInited", function () {
 
     // Do nothing under other render mode
@@ -56,7 +70,7 @@ cc.game.addEventListener("rendererInited", function () {
         }
     };
 
-    cc.eventManager.addCustomListener(cc.Director.EVENT_PROJECTION_CHANGED, function(){
+    cc.Director._getInstance().on(cc.Director.EVENT_PROJECTION_CHANGED, function(){
         var director = cc.director;
         var stack = cc.director._scenesStack;
         for(var  i=0; i<stack.length; i++)
@@ -115,7 +129,7 @@ cc.game.addEventListener("rendererInited", function () {
                 break;
         }
         _t._projection = projection;
-        cc.eventManager.dispatchEvent(_t._eventProjectionChanged);
+        _t.emit(cc.Director.EVENT_PROJECTION_CHANGED, _t);
         cc.setProjectionMatrixDirty();
         cc.renderer.childrenOrderDirty = true;
     };
@@ -174,7 +188,7 @@ cc.game.addEventListener("rendererInited", function () {
 
     _p.convertToGL = function (uiPoint) {
         var transform = new cc.math.Matrix4();
-        cc.GLToClipTransform(transform);
+        GLToClipTransform(transform);
 
         var transformInv = transform.inverse();
 
@@ -188,7 +202,7 @@ cc.game.addEventListener("rendererInited", function () {
 
     _p.convertToUI = function (glPoint) {
         var transform = new cc.math.Matrix4();
-        cc.GLToClipTransform(transform);
+        GLToClipTransform(transform);
 
         var clipCoord = new cc.math.Vec3(glPoint.x, glPoint.y, 0.0);
         // Need to calculate the zero depth from the transform.

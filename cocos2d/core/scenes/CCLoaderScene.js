@@ -34,6 +34,7 @@ cc.LoaderScene = cc.Scene.extend({
     _interval : null,
     _label : null,
     _className:"LoaderScene",
+    _onProjectionChange: null,
     cb: null,
     target: null,
     /**
@@ -89,11 +90,16 @@ cc.LoaderScene = cc.Scene.extend({
         var self = this;
         cc.Node.prototype.onEnter.call(self);
         self.schedule(self._startLoading, 0.3);
+        this._onProjectionChange = function(){
+            self._updateTransform();
+        };
+        cc.director.on(cc.Director.EVENT_PROJECTION_CHANGED, this._onProjectionChange);
     },
     /**
      * custom onExit
      */
     onExit: function () {
+        cc.director.off(cc.Director.EVENT_PROJECTION_CHANGED, this._onProjectionChange);
         cc.Node.prototype.onExit.call(this);
         var tmpStr = "Loading... 0%";
         this._label.setString(tmpStr);
@@ -153,9 +159,6 @@ cc.LoaderScene.preload = function(resources, cb, target){
     if(!_cc.loaderScene) {
         _cc.loaderScene = new cc.LoaderScene();
         _cc.loaderScene.init();
-        cc.eventManager.addCustomListener(cc.Director.EVENT_PROJECTION_CHANGED, function(){
-            _cc.loaderScene._updateTransform();
-        });
     }
     _cc.loaderScene.initWithResources(resources, cb, target);
 

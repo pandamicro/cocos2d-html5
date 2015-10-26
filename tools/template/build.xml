@@ -54,7 +54,6 @@
                 <include name="core/sprites/CCSpriteFrameCache.js"/>
                 <include name="core/sprites/CCSpriteBatchNode.js"/>
                 <include name="core/CCConfiguration.js"/>
-                <include name="core/CCDirector.js"/>
                 <include name="core/CCCamera.js"/>
                 <include name="core/CCScheduler.js"/>
                 <include name="core/CCLoader.js"/>

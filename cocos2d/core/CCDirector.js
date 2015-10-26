@@ -23,19 +23,14 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
+var EventTarget = require('./event/event-target');
+require('./platform/_CCClass');
+var Component = require('./components/CCComponent');
+var CCObject = require('./platform/CCObject');
+
 cc.g_NumberOfDraws = 0;
 
-cc.GLToClipTransform = function (transformOut) {
-    //var projection = new cc.math.Matrix4();
-    //cc.kmGLGetMatrix(cc.KM_GL_PROJECTION, projection);
-    cc.kmGLGetMatrix(cc.KM_GL_PROJECTION, transformOut);
-
-    var modelview = new cc.math.Matrix4();
-    cc.kmGLGetMatrix(cc.KM_GL_MODELVIEW, modelview);
-
-    transformOut.multiply(modelview);
-};
 //----------------------------------------------------------------------------------------------------------------------
 
 /**
@@ -112,10 +107,6 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
 
     _scheduler: null,
     _actionManager: null,
-    _eventProjectionChanged: null,
-    _eventAfterUpdate: null,
-    _eventAfterVisit: null,
-    _eventAfterDraw: null,
 
     ctor: function () {
         var self = this;
@@ -159,14 +150,8 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
             this._actionManager = null;
         }
 
-        this._eventAfterUpdate = new cc.Event.EventCustom(cc.Director.EVENT_AFTER_UPDATE);
-        this._eventAfterUpdate.setUserData(this);
-        this._eventAfterVisit = new cc.Event.EventCustom(cc.Director.EVENT_AFTER_VISIT);
-        this._eventAfterVisit.setUserData(this);
-        this._eventAfterDraw = new cc.Event.EventCustom(cc.Director.EVENT_AFTER_DRAW);
-        this._eventAfterDraw.setUserData(this);
-        this._eventProjectionChanged = new cc.Event.EventCustom(cc.Director.EVENT_PROJECTION_CHANGED);
-        this._eventProjectionChanged.setUserData(this);
+        // Event target
+        EventTarget.polyfill(this);
 
         return true;
     },
@@ -219,7 +204,7 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
         //tick before glClear: issue #533
         if (!this._paused) {
             this._scheduler.update(deltaTime);
-            cc.eventManager.dispatchEvent(this._eventAfterUpdate);
+            this.emit(cc.Director.EVENT_AFTER_UPDATE, this);
         }
 
         /* to avoid flickr, nextScene MUST be here: after tick and before draw.
@@ -249,7 +234,7 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
         if (this._notificationNode)
             this._notificationNode.visit();
 
-        cc.eventManager.dispatchEvent(this._eventAfterVisit);
+        this.emit(cc.Director.EVENT_AFTER_VISIT, this);
 
         if (this._afterVisitScene)
             this._afterVisitScene();
@@ -262,7 +247,7 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
         cc.renderer.rendering(cc._renderContext);
         this._totalFrames++;
 
-        cc.eventManager.dispatchEvent(this._eventAfterDraw);
+        this.emit(cc.Director.EVENT_AFTER_DRAW, this);
     },
 
     /**

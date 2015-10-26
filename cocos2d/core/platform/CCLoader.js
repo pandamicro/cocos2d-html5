@@ -184,7 +184,7 @@ cc.loader = (function () {
          */
         loadTxt: function (url, cb) {
             if (!cc._isNodeJs) {
-                var xhr = this. getXMLHttpRequest(),
+                var xhr = this.getXMLHttpRequest(),
                     errInfo = "load " + url + " failed!";
                 xhr.open("GET", url, true);
                 if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
