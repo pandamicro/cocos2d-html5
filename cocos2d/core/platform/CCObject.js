@@ -141,7 +141,7 @@ Object.defineProperty(CCObject, '_deferredDestroy', {
         }
 
         if (CC_EDITOR) {
-            deferredDestroyTimer = -1;
+            deferredDestroyTimer = null;
         }
     },
     enumerable: false
@@ -150,9 +150,9 @@ Object.defineProperty(CCObject, '_deferredDestroy', {
 if (CC_EDITOR) {
     Object.defineProperty(CCObject, '_clearDeferredDestroyTimer', {
         value: function () {
-            if (deferredDestroyTimer !== -1) {
-                clearTimeout(deferredDestroyTimer);
-                deferredDestroyTimer = -1;
+            if (deferredDestroyTimer !== null) {
+                clearImmediate(deferredDestroyTimer);
+                deferredDestroyTimer = null;
             }
         },
         enumerable: false
@@ -189,7 +189,7 @@ JS.get(prototype, 'isValid', function () {
     return !(this._objFlags & Destroyed);
 });
 
-var deferredDestroyTimer = -1;
+var deferredDestroyTimer = null;
 
 /**
  * Destroy this CCObject, and release all its own references to other resources.
@@ -212,9 +212,9 @@ prototype.destroy = function () {
     this._objFlags |= ToDestroy;
     objectsToDestroy.push(this);
 
-    if (deferredDestroyTimer === -1 && cc.engine && ! cc.engine._isUpdating && CC_EDITOR) {
+    if (deferredDestroyTimer === null && cc.engine && ! cc.engine._isUpdating && CC_EDITOR) {
         // auto destroy immediate in edit mode
-        deferredDestroyTimer = setTimeout(CCObject._deferredDestroy, 1);
+        deferredDestroyTimer = setImmediate(CCObject._deferredDestroy);
     }
     return true;
 };
@@ -228,7 +228,6 @@ prototype.destroy = function () {
  * @private
  */
 prototype._destruct = function () {
-    // 允许重载destroy
     // 所有可枚举到的属性，都会被清空
     for (var key in this) {
         if (this.hasOwnProperty(key)) {

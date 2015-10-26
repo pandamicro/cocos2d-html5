@@ -46,8 +46,6 @@ function LoadingHandle (readMainCache, writeMainCache, recordAssets, reassociate
     // 需要让场景 preload 的 url
     this.urlsNeedPreload = {};
 
-    this.wrapperToNode = reassociateNode ? new cc.deserialize.W2NMapper() : null;
-
     // 可以提供一个反序列化句柄，用来在执行反序列化任务时，做一些特殊处理
     this.deserializeInfo = deserializeInfo;
 }
@@ -436,10 +434,6 @@ var AssetLibrary = {
             classFinder: classFinder,
             target: existingAsset
         });
-
-        if (handle.wrapperToNode && tdInfo.wrapperToNode) {
-            handle.wrapperToNode.concat(tdInfo.wrapperToNode);
-        }
 
         var hasRawType = !!tdInfo.rawProp;
 

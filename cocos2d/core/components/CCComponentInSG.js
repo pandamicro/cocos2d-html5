@@ -63,4 +63,4 @@ var ComponentInSG = cc.Class({
 });
 
 cc.executeInEditMode(ComponentInSG);
-cc.ComponentInSG = module.exports = ComponentInSG;
+cc._ComponentInSG = module.exports = ComponentInSG;

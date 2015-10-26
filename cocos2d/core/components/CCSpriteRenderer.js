@@ -70,5 +70,4 @@ var SpriteRenderer = cc.Class({
     },
 });
 
-cc.addComponentMenu(SpriteRenderer, 'Sprite Renderer');
 cc.SpriteRenderer = module.exports = SpriteRenderer;

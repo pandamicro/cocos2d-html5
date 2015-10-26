@@ -24,22 +24,9 @@ cc._RFpop = function () {
             // exported
             return;
         }
-        // auto export behavior
+        // auto export component
         module.exports = exports = frameInfo.beh;
     }
-    //if (cc.isChildClassOf(exports, cc.Behavior)) {
-    //    if (frameInfo.script) {
-    //        if (! cc.js.getClassName(exports)) {
-    //            cc.js.setClassName(frameInfo.script, exports);
-    //        }
-    //        else {
-    //            cc.warn('Sorry, specifying class name for exported Behavior is not allowed.');
-    //        }
-    //    }
-    //    if (frameInfo.uuid) {
-    //        cc.js._setClassId(frameInfo.uuid, exports);
-    //    }
-    //}
 };
 
 cc._RFpeek = function () {

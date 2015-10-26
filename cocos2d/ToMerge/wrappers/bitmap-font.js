@@ -138,10 +138,6 @@ var BitmapFontWrapper = cc.Class({
         }
     },
 
-    statics: {
-        canHaveChildrenInEditor: false
-    },
-
     onBeforeSerialize: function () {
         NodeWrapper.prototype.onBeforeSerialize.call(this);
 

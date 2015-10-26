@@ -38,7 +38,7 @@ var NodeWrapper = cc.Class({
             if (CC_EDITOR) {
                 var uuid = this.uuid;
                 if (uuid) {
-                    cc.engine.attachedWrappersForEditor[uuid] = this;
+                    cc.engine.attachedObjsForEditor[uuid] = this;
                 }
             }
             this.attached();
@@ -103,16 +103,6 @@ var NodeWrapper = cc.Class({
             visible: false
         },
 
-        /**
-         * The PrefabInfo object
-         * @property _prefab
-         * @type {PrefabInfo}
-         * @private
-         */
-        _prefab: {
-            default: null,
-            editorOnly: true
-        },
 
         // HIERARCHY
 
@@ -160,20 +150,6 @@ var NodeWrapper = cc.Class({
             visible: false
         },
 
-        /**
-         * Returns the array of children. If no child, this method should return an empty array.
-         * The returns array can be modified ONLY in setSiblingIndex.
-         * @property childrenN
-         * @type {RuntimeNode[]}
-         * @readOnly
-         */
-        childrenN: {
-            get: function () {
-                return this.targetN.children;
-            },
-            visible: false
-        },
-
         // TRANSFORM
 
         /**
@@ -193,50 +169,6 @@ var NodeWrapper = cc.Class({
                     cc.error('The new position must be cc.Vec2');
                 }
             }
-        },
-
-        /**
-         * The local x position in its parent's coordinate system
-         * @property x
-         * @type {number}
-         */
-        x: {
-            get: function () {
-                return this.position.x;
-            },
-            set: function (value) {
-                if ( !isNaN(value) ) {
-                    var p = this.position;
-                    p.x = value;
-                    this.position = p;
-                }
-                else {
-                    cc.error(ERR_NaN, 'new x');
-                }
-            },
-            visible: false
-        },
-
-        /**
-         * The local y position in its parent's coordinate system
-         * @property y
-         * @type {number}
-         */
-        y: {
-            get: function () {
-                return this.position.y;
-            },
-            set: function (value) {
-                if ( !isNaN(value) ) {
-                    var p = this.position;
-                    p.y = value;
-                    this.position = p;
-                }
-                else {
-                    cc.error(ERR_NaN, 'new y');
-                }
-            },
-            visible: false
         },
 
         /**
@@ -308,26 +240,6 @@ var NodeWrapper = cc.Class({
                 }
             },
             visible: false
-        },
-
-        /**
-         * The clockwise degrees of rotation relative to the parent
-         * @property rotation
-         * @type {number}
-         */
-        rotation: {
-            get: function () {
-                return this.targetN.rotation;
-            },
-            set: function (value) {
-                if ( !isNaN(value) ) {
-                    this.targetN.rotation = value;
-                }
-                else {
-                    cc.error('The new rotation must not be NaN');
-                }
-            },
-            tooltip: "The clockwise degrees of rotation relative to the parent"
         },
 
         /**
@@ -567,38 +479,6 @@ var NodeWrapper = cc.Class({
         }
     },
 
-    statics: {
-        ///**
-        // * Creates a new node without any resources.
-        // * @method createEmpty
-        // * @return {RuntimeNode}
-        // * @static
-        // */
-        //createEmpty: function () {
-        //    if (CC_EDITOR) {
-        //        cc.error('Not yet implemented');
-        //    }
-        //    return null;
-        //}
-
-        /**
-         * If true, the engine will keep updating this node in 60 fps when it is selected,
-         * otherwise, it will update only if necessary
-         * @property {Boolean} _60fpsInEditMode
-         * @default false
-         * @static
-         */
-        _60fpsInEditMode: false,
-
-        /**
-         * If false, Hierarchy will disallow to drag child into this node, and all children will be hidden.
-         * @property {Boolean} canHaveChildrenInEditor
-         * @default true
-         * @static
-         */
-        canHaveChildrenInEditor: true
-    },
-
     // SERIALIZATION
 
     /**
@@ -645,24 +525,6 @@ var NodeWrapper = cc.Class({
     },
 
     /**
-     * 这个方法会在场景保存前调用，你可以将 node 的属性保存到 wrapper 的可序列化的 properties 中，
-     * 以便在 createNode() 方法中重新设置好 node。
-     * @method onBeforeSerialize
-     */
-    onBeforeSerialize: function () {
-        this._name  = this.name;
-        this._size  = [this.size.x, this.size.y];
-        this._scale = [this.scaleX, this.scaleY];
-        this._rotation = this.rotation;
-        this._position = [this.position.x, this.position.y];
-        this._anchorPoint = [this.anchorPoint.x, this.anchorPoint.y];
-        this._visible = this.visible;
-
-        var color = this.color;
-        this._color = [color.r, color.g, color.b, color.a];
-    },
-
-    /**
      * Creates a new node and bind with this wrapper.
      * @method createAndAttachNode
      */
@@ -673,7 +535,7 @@ var NodeWrapper = cc.Class({
         if (CC_EDITOR) {
             var uuid = this.uuid;
             if (uuid) {
-                cc.engine.attachedWrappersForEditor[uuid] = this;
+                cc.engine.attachedObjsForEditor[uuid] = this;
             }
         }
         this.attached();
@@ -701,78 +563,6 @@ var NodeWrapper = cc.Class({
         }
 
         this.targetN.scheduleUpdateWithPriority(this.schedulePriority);
-    },
-
-    // HIERARCHY
-
-    /**
-     * Get the sibling index.
-     *
-     * NOTE: If this node does not have parent and not belongs to the current scene,
-     *       The return value will be -1
-     *
-     * @method getSiblingIndex
-     * @return {number}
-     */
-    getSiblingIndex: function () {
-        return cc.getWrapper(this.parentN).childrenN.indexOf(this.targetN);
-    },
-
-    /**
-     * Set the sibling index of this node.
-     * (值越小越先渲染，-1 代表最后一个)
-     *
-     * @method setSiblingIndex
-     * @param {number} index - new zero-based index of the node, -1 will move to the end of children.
-     */
-    setSiblingIndex: function (index) {
-        if (!this.parentN) return;
-
-        var siblings = this.parentN.children;
-        var item = this.targetN;
-        index = index !== -1 ? index : siblings.length - 1;
-        var oldIndex = siblings.indexOf(item);
-        if (index !== oldIndex) {
-            siblings.splice(oldIndex, 1);
-            if (index < siblings.length) {
-                siblings.splice(index, 0, item);
-            }
-            else {
-                siblings.push(item);
-            }
-        }
-
-        for (var i = 0; i < siblings.length; i++) {
-            siblings[i].setOrderOfArrival(i);
-        }
-
-        cc.renderer.childrenOrderDirty = true;
-
-        var parent = this.parent;
-        if (parent.onChildSiblingIndexChanged)
-            parent.onChildSiblingIndexChanged();
-    },
-
-    canAddChildN: function () {
-        return true;
-    },
-
-    addChildN: function (child) {
-        this.targetN.addChild( child );
-    },
-
-    removeChildN: function (child, cleanup) {
-        this.targetN.removeChild( child, cleanup);
-    },
-
-    setMaxOrder: function () {
-        var parent = this.parentN;
-        var length = parent.children.length;
-        if ( length >= 2 ) {
-            var prevNode = parent.children[length-2];
-            var z = prevNode.getOrderOfArrival() + 1;
-            this.targetN.setOrderOfArrival( z );
-        }
     },
 
     // TRANSFORM
@@ -882,27 +672,5 @@ var NodeWrapper = cc.Class({
 });
 
 NodeWrapper.prototype.schedulePriority = 0;
-
-cc._setWrapperGetter(function (node) {
-    if (node instanceof NodeWrapper) {
-        cc.warn('cc.getWrapper() accept argument of type runtime node, not wrapper.');
-        return node;
-    }
-    if (!node) {
-        return null;
-    }
-    var wrapper = node._FB_wrapper;
-    if (!wrapper) {
-        var Wrapper = cc.getWrapperType(node);
-        if (!Wrapper) {
-            var getClassName = cc.js.getClassName;
-            cc.error('%s not registered for %s', getClassName(NodeWrapper), getClassName(node));
-            return null;
-        }
-        wrapper = new Wrapper(node);
-        node._FB_wrapper = wrapper;
-    }
-    return wrapper;
-});
 
 module.exports = NodeWrapper;

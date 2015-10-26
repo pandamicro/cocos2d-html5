@@ -139,7 +139,19 @@ var Node = cc.Class({
          * @private
          */
         _components: [],
+
+        /**
+         * The PrefabInfo object
+         * @property _prefab
+         * @type {PrefabInfo}
+         * @private
+         */
+        _prefab: {
+            default: null,
+            editorOnly: true
+        }
     },
+
     ctor: function () {
         var name = arguments[0];
         this._name = typeof name !== 'undefined' ? name : 'New Node';
@@ -208,6 +220,11 @@ var Node = cc.Class({
         for (var i = 0, len = children.length; i < len; ++i) {
             // destroy immediate so its _onPreDestroy can be called before
             children[i]._destroyImmediate();
+        }
+
+        if (CC_EDITOR) {
+            // detach
+            delete cc.engine.attachedObjsForEditor[this._id];
         }
     },
 
@@ -377,6 +394,19 @@ var Node = cc.Class({
         if (activeInHierarchyBefore !== shouldActiveNow) {
             this._onActivatedInHierarchy(shouldActiveNow);
         }
+        if (CC_EDITOR) {
+            var scene = cc.director.getScene();
+            var inCurrentSceneBefore = oldParent && oldParent.isChildOf(scene);
+            var inCurrentSceneNow = this._parent && this._parent.isChildOf(scene);
+            if (!inCurrentSceneBefore && inCurrentSceneNow) {
+                // attach
+                cc.engine.attachedObjsForEditor[this.uuid] = this;
+            }
+            else if (inCurrentSceneBefore && !inCurrentSceneNow) {
+                // detach
+                delete cc.engine.attachedObjsForEditor[this._id];
+            }
+        }
     },
 
     _deactivateChildComponents: function () {
@@ -423,6 +453,7 @@ var Node = cc.Class({
         if (this._parent) {
             this._parent._sgNode.addChild(sgNode);
         }
+
         var children = this._children;
         for (var i = 0, len = children.length; i < len; i++) {
             children[i]._onBatchCreated();
