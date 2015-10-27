@@ -1,13 +1,16 @@
+require('../platform/CCObject');
+require('../CCNode');
+
 var Flags = cc.Object.Flags;
 var IsOnEnableCalled = Flags.IsOnEnableCalled;
 var IsOnLoadCalled = Flags.IsOnLoadCalled;
 var IsOnStartCalled = Flags.IsOnStartCalled;
 
 // TEMP
-cc.Node.prototype._activeInHierarchy = true;
-cc.Node.prototype.activeInHierarchy = true;
-cc.Node.prototype.uuid = '(TODO)';
-cc.Node.prototype._components = [];
+cc.ENode.prototype._activeInHierarchy = true;
+cc.ENode.prototype.activeInHierarchy = true;
+cc.ENode.prototype.uuid = '(TODO)';
+cc.ENode.prototype._components = [];
 
 
 if (CC_EDITOR) {

@@ -526,7 +526,6 @@ function _createCtor (ctor, baseClass, className, options) {
     if (superCallBounded) {
         body += 'this._super=null;\n';
     }
-    body += 'this.__instanceId = cc.ClassManager.getNewInstanceId()\n';
     body += 'instantiateProps(this,fireClass);\n';
 
     // call user constructors

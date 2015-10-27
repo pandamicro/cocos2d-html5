@@ -271,6 +271,10 @@ cc.TimerTargetCallback = cc.Timer.extend({
 
 });
 
+var getTargetId = function (target) {
+    return target.uuid || target.__instanceId;
+}
+
 /**
  * <p>
  *    Scheduler is responsible of triggering the scheduled callbacks.<br/>
@@ -326,7 +330,7 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
     //-----------------------private method----------------------
 
     _schedulePerFrame: function(callback, target, priority, paused){
-        var hashElement = this._hashForUpdates[target.__instanceId];
+        var hashElement = this._hashForUpdates[getTargetId(target)];
         if (hashElement && hashElement.entry){
             // check if priority has changed
             if (hashElement.entry.priority !== priority){
@@ -359,7 +363,7 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
     },
 
     _removeHashElement:function (element) {
-        delete this._hashForTimers[element.target.__instanceId];
+        delete this._hashForTimers[getTargetId(element.target)];
         cc.js.array.remove(this._arrayForTimers, element);
         element.Timer = null;
         element.target = null;
@@ -367,12 +371,12 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
     },
 
     _removeUpdateFromHash:function (entry) {
-        var self = this, element = self._hashForUpdates[entry.target.__instanceId];
+        var self = this, element = self._hashForUpdates[getTargetId(entry.target)];
         if (element) {
             //list entry
             cc.js.array.remove(element.list, element.entry);
 
-            delete self._hashForUpdates[element.target.__instanceId];
+            delete self._hashForUpdates[getTargetId(element.target)];
             //cc.js.array.remove(self._hashForUpdates, element);
             element.entry = null;
 
@@ -401,7 +405,7 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
         }
 
         //update hash entry for quick access
-        self._hashForUpdates[target.__instanceId] = new cc.HashUpdateEntry(ppList, listElement, target, null);
+        self._hashForUpdates[getTargetId(target)] = new cc.HashUpdateEntry(ppList, listElement, target, null);
 
         return ppList;
     },
@@ -411,7 +415,7 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
         ppList.push(listElement);
 
         //update hash entry for quicker access
-        self._hashForUpdates[target.__instanceId] = new cc.HashUpdateEntry(ppList, listElement, target, null, null);
+        self._hashForUpdates[getTargetId(target)] = new cc.HashUpdateEntry(ppList, listElement, target, null, null);
     },
 
     //-----------------------public method-------------------------
@@ -545,7 +549,7 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
      */
     scheduleCallbackForTarget: function(target, callback_fn, interval, repeat, delay, paused){
         //cc.log("scheduleCallbackForTarget is deprecated. Please use schedule.");
-        this.schedule(callback_fn, target, interval, repeat, delay, paused, target.__instanceId + "");
+        this.schedule(callback_fn, target, interval, repeat, delay, paused, getTargetId(target) + "");
     },
 
     schedule: function(callback, target, interval, repeat, delay, paused, key){
@@ -578,13 +582,14 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
         if(isSelector === false)
             cc.assert(key, "key should not be empty!");
 
-        var element = this._hashForTimers[target.__instanceId];
+        var instanceId = getTargetId(target);
+        var element = this._hashForTimers[instanceId];
 
         if(!element){
             // Is this the 1st element ? Then set the pause level to all the callback_fns of this target
             element = new cc.HashTimerEntry(null, target, 0, null, null, paused, null);
             this._arrayForTimers.push(element);
-            this._hashForTimers[target.__instanceId] = element;
+            this._hashForTimers[instanceId] = element;
         }else{
             cc.assert(element.paused === paused, "");
         }
@@ -650,7 +655,7 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
         if (!target || !key)
             return;
 
-        var self = this, element = self._hashForTimers[target.__instanceId];
+        var self = this, element = self._hashForTimers[getTargetId(target)];
         if (element) {
             var timers = element.timers;
             for(var i = 0, li = timers.length; i < li; i++){
@@ -682,7 +687,7 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
         if (target == null)
             return;
 
-        var element = this._hashForUpdates[target.__instanceId];
+        var element = this._hashForUpdates[getTargetId(target)];
 
         if (element){
             if (this._updateHashLocked){
@@ -700,7 +705,7 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
         }
 
         // Custom Selectors
-        var element = this._hashForTimers[target.__instanceId];
+        var element = this._hashForTimers[getTargetId(target)];
 
         if (element){
             if (element.timers.indexOf(element.currentTimer) > -1
@@ -774,7 +779,7 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
         cc.assert(key, "Argument key must not be empty");
         cc.assert(target, "Argument target must be non-nullptr");
 
-        var element = this._hashForUpdates[target.__instanceId];
+        var element = this._hashForUpdates[getTargetId(target)];
 
         if (!element){
             return false;
@@ -887,13 +892,15 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
         cc.assert(target, cc._LogInfos.Scheduler.pauseTarget);
 
         //customer selectors
-        var self = this, element = self._hashForTimers[target.__instanceId];
+        var self = this, 
+            instanceId = getTargetId(target),
+            element = self._hashForTimers[instanceId];
         if (element) {
             element.paused = true;
         }
 
         //update callback
-        var elementUpdate = self._hashForUpdates[target.__instanceId];
+        var elementUpdate = self._hashForUpdates[instanceId];
         if (elementUpdate) {
             elementUpdate.entry.paused = true;
         }
@@ -910,14 +917,16 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
         cc.assert(target, cc._LogInfos.Scheduler.resumeTarget);
 
         // custom selectors
-        var self = this, element = self._hashForTimers[target.__instanceId];
+        var self = this,
+            instanceId = getTargetId(target),
+            element = self._hashForTimers[instanceId];
 
         if (element) {
             element.paused = false;
         }
 
         //update callback
-        var elementUpdate = self._hashForUpdates[target.__instanceId];
+        var elementUpdate = self._hashForUpdates[instanceId];
 
         if (elementUpdate) {
             elementUpdate.entry.paused = false;
@@ -934,11 +943,12 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
         cc.assert(target, cc._LogInfos.Scheduler.isTargetPaused);
 
         // Custom selectors
-        var element = this._hashForTimers[target.__instanceId];
+        var instanceId = getTargetId(target),
+            element = this._hashForTimers[instanceId];
         if (element) {
             return element.paused;
         }
-        var elementUpdate = this._hashForUpdates[target.__instanceId];
+        var elementUpdate = this._hashForUpdates[instanceId];
         if (elementUpdate) {
             return elementUpdate.entry.paused;
         }
@@ -1001,7 +1011,7 @@ cc.Scheduler = cc._Class.extend(/** @lends cc.Scheduler# */{
      */
     unscheduleAllCallbacksForTarget: function(target){
         //cc.log("unscheduleAllCallbacksForTarget is deprecated. Please use unscheduleAll.");
-        this.unschedule(target.__instanceId + "", target);
+        this.unschedule(getTargetId(target) + "", target);
     },
 
     /**
