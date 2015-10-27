@@ -129,7 +129,8 @@ function createBundler(entryFiles) {
         //standalone: 'engine-framework',
         //basedir: tempScriptDir
     };
-    return new browserify(entryFiles, options);
+    return new browserify(entryFiles, options)
+        .exclude('package.json');
 }
 
 gulp.task('build-html5', ['build-modular-cocos2d'], function () {

@@ -730,8 +730,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         else
             child.setName(name);
 
-        child.parent = this;
-
         //if( this._running ){
         //    child.onEnter();
         //    // prevent onEnterTransitionDidFinish to be called twice when a node is added in onEnter
@@ -745,7 +743,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     },
 
     _insertChild: function (child, z) {
-        this._children.push(child);
+        child.parent = this;
         child._setLocalZOrder(z);
     },
 

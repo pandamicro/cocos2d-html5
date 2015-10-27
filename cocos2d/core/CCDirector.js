@@ -531,7 +531,9 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         }
 
         // Activate 
-        scene._onActivated();
+        if (scene instanceof cc.EScene) {
+            scene._onActivated();
+        }
     },
 
     /**

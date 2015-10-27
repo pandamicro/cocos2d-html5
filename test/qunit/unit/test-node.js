@@ -41,7 +41,11 @@ test('test hierarchy', function () {
     strictEqual(parent.childrenCount, 1, 'child count should return to 1');
     ok(parent.children[0] === child2, 'only child2 left');
 
-    // TODO: what if parent.parent = child2 ?
+    child2.parent = null;
+    strictEqual(parent.childrenCount, 0, 'child2 detached');
+
+    parent.addChild(child2);
+    strictEqual(parent.childrenCount, 1, 'child2 attached by using addChild');
 });
 
 test('activeInHierarchy', function () {
