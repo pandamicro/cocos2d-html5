@@ -303,6 +303,8 @@ if (CC_DEV) {
         'setGLServerState',
         '_initRendererCmd',
         '_createRenderCmd',
+        'updateDisplayedOpacity',
+        'updateDisplayedColor'
     ].forEach(function (prop) {
         function error () {
             cc.error('Sorry, cc.ENode.' + prop + ' is removed.');
@@ -329,8 +331,6 @@ if (CC_DEV) {
             worldToNodeTransform: ['getWorldToNodeTransform'],
             nodeToParentTransform: ['getNodeToParentTransform'],
             getNodeToParentAffineTransform: ['getNodeToParentTransform'],
-            updateDisplayedOpacity: ['_updateDisplayedOpacity'],
-            updateDisplayedColor: ['_updateDisplayedColor'],
         };
         var Info = 'Sorry, cc.ENode.%s is removed, please use %s instead.';
         for (var prop in GetSet) {

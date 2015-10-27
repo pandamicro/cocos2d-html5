@@ -54,8 +54,10 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         // SERIALIZABLE
 
         _name: '',
-        _realOpacity: 255,
-        _realColor: cc.Color.WHITE,
+        _opacity: 255,
+        _color: cc.Color.WHITE,
+        _cascadeOpacityEnabled: true,
+        _cascadeColorEnabled: false,
         _parent: null,
         _anchorPoint: cc.p(0, 0),
         _contentSize: cc.size(0, 0),
@@ -252,6 +254,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             set: function (value) {
                 this._anchorPoint.x = value;
                 this._sgNode.anchorX = value;
+                this._onAnchorChanged();
             },
         },
 
@@ -260,6 +263,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             set: function (value) {
                 this._anchorPoint.y = value;
                 this._sgNode.anchorY = value;
+                this._onAnchorChanged();
             },
         },
 
@@ -268,6 +272,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             set: function (value) {
                 this._contentSize.width = value;
                 this._sgNode.width = value;
+                this._onSizeChanged();
             },
         },
 
@@ -276,6 +281,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             set: function (value) {
                 this._contentSize.height = value;
                 this._sgNode.height = value;
+                this._onSizeChanged();
             },
         },
 
@@ -288,6 +294,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             set: function (value) {
                 this._ignoreAnchorPointForPosition = value;
                 this._sgNode.ignoreAnchor = value;
+                this._onAnchorChanged();
             },
         },
 
@@ -302,10 +309,13 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         },
 
         opacity: {
-            get: SGProto.getOpacity,
+            get: function () {
+                return this._opacity;
+            },
             set: function (value) {
-                this._realOpacity = value;
+                this._opacity = value;
                 this._sgNode.opacity = value;
+                this._onColorChanged();
             },
         },
 
@@ -318,13 +328,18 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         },
 
         color: {
-            get: SGProto.getColor,
+            get: function () {
+                var color = this._color;
+                return new cc.Color(color.r, color.g, color.b, color.a);
+            },
             set: function (value) {
-                var locRealColor = this._realColor;
-                locRealColor.r = value.r;
-                locRealColor.g = value.g;
-                locRealColor.b = value.b;
+                var color = this._color;
+                color.r = value.r;
+                color.g = value.g;
+                color.b = value.b;
+                // Discard Alpha !!!
                 this._sgNode.color = value;
+                this._onColorChanged();
             },
         },
 
@@ -349,6 +364,19 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             enumerable: false
         });
     },
+
+    // ABSTRACT INTERFACES
+
+    // called when the node's parent changed
+    _onHierarchyChanged: null,
+    // called when the node's color or opacity changed
+    _onColorChanged: null,
+    // called when the node's width or height changed
+    _onSizeChanged: null,
+    // called when the node's anchor changed
+    _onAnchorChanged: null,
+
+    //
 
     /**
      * Initializes the instance of cc.ENode
@@ -530,6 +558,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             locAnchorPoint.y = y;
         }
         this._sgNode.setAnchorPoint(point, y);
+        this._onAnchorChanged();
     },
 
     /**
@@ -577,6 +606,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             locContentSize.height = height;
         }
         this._sgNode.setContentSize(size, height);
+        this._onSizeChanged();
     },
 
     /**
@@ -1107,7 +1137,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     },
 
     _removeSgNode: SceneGraphHelper.removeSgNode,
-    _onHierarchyChanged: null
 });
 
 
