@@ -481,16 +481,15 @@ var Component = cc.Class({
             else {
                 this._objFlags |= IsOnLoadCalled;
             }
+            var frameTime = 1000 / cc.game.config[cc.game.CONFIG_KEY.frameRate];
+            if (this.start)
+                cc.director._startScheduler.schedule(_callStart, this, 0, 0, 0, false, this.uuid||" ");
+            if (this.update)
+                cc.director._updateScheduler.schedule(_callUpdate, this, frameTime, false, this.uuid||" ");
+            if (this.lateUpdate)
+                cc.director._lateUpdateScheduler.schedule(_callLateUpdate, this, frameTime, false, this.uuid||" ");
             //Editor._AssetsWatcher.start(this);
         }
-
-        var frameTime = 1000 / cc.game.config[cc.game.CONFIG_KEY.frameRate];
-        if (this.start)
-            cc.director._startScheduler.schedule(_callStart, this, 0, 0, 0, false, this.__instanceId);
-        if (this.update)
-            cc.director._updateScheduler.schedule(_callUpdate, this, frameTime, false, this.__instanceId);
-        if (this.lateUpdate)
-            cc.director._lateUpdateScheduler.schedule(_callLateUpdate, this, frameTime, false, this.__instanceId);
 
         if (this._enabled) {
             callOnEnable(this, active);
@@ -501,15 +500,15 @@ var Component = cc.Class({
                 this.onLoad();
             }
             this._objFlags |= IsOnLoadCalled;
+            
+            var frameTime = 1000 / cc.game.config[cc.game.CONFIG_KEY.frameRate];
+            if (this.start)
+                cc.director._startScheduler.schedule(_callStart, this, 0, 0, 0, false, this.uuid||" ");
+            if (this.update)
+                cc.director._updateScheduler.scheduleUpdate(this, 0, false);
+            if (this.lateUpdate)
+                cc.director._lateUpdateScheduler.schedule(_callLateUpdate, this, frameTime, false, this.uuid||" ");
         }
-
-        var frameTime = 1000 / cc.game.config[cc.game.CONFIG_KEY.frameRate];
-        if (this.start)
-            cc.director._startScheduler.schedule(_callStart, this, 0, 0, 0, false, this.__instanceId);
-        if (this.update)
-            cc.director._updateScheduler.scheduleUpdate(this, 0, false);
-        if (this.lateUpdate)
-            cc.director._lateUpdateScheduler.schedule(_callLateUpdate, this, frameTime, false, this.__instanceId);
 
         if (this._enabled) {
             callOnEnable(this, active);

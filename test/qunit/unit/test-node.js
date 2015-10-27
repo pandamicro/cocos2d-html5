@@ -96,20 +96,25 @@ test('activation logic for component', function () {
     var MyComponent = cc.Class({
         name: 'MyComponent',
         extends: MyComponentBase,
+        count: 0,
         ctor: function () {
             this.expect(CallbackTester.OnLoad, 'call onLoad while attaching to node');
             this.expect(CallbackTester.OnEnable, 'then call onEnable if node active', true);
+        },
+        start: function () {
+            this._assert(MyComponent.start);
         }
     });
+    MyComponent.start = "MyCompStart";
 
     var obj = new cc.ENode();
     cc.director.getScene().addChild(obj);
 
     var comp = obj.addComponent(MyComponent); // onEnable
 
-    comp.expect(CallbackTester.start, 'call start after onEnable');
+    comp.expect(MyComponent.start, 'call start after onEnable');
     cc.game.step();
-    comp.notExpect(CallbackTester.start, 'start should called only once');
+    comp.notExpect(MyComponent.start, 'start should called only once');
     cc.game.step();
 
     strictEqual(comp.node, obj, 'can get node from component');
