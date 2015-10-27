@@ -10,6 +10,8 @@
 
 CallbackTester.OnLoad = 'onLoad';
 CallbackTester.start = 'start';
+CallbackTester.update = 'update';
+CallbackTester.lateUpdate = 'lateUpdate';
 CallbackTester.OnEnable = 'onEnable';
 CallbackTester.OnDisable = 'onDisable';
 CallbackTester.OnDestroy = 'onDestroy';
@@ -103,6 +105,14 @@ CallbackTester.prototype.onLoad = function () {
 
 CallbackTester.prototype.start = function () {
     this._assert(CallbackTester.start);
+};
+
+CallbackTester.prototype.update = function () {
+    this._assert(CallbackTester.update);
+};
+
+CallbackTester.prototype.lateUpdate = function () {
+    this._assert(CallbackTester.lateUpdate);
 };
 
 CallbackTester.prototype.onEnable = function () {

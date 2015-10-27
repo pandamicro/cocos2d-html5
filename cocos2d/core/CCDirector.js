@@ -221,21 +221,14 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
 
     engineUpdate: function (deltaTime) {
         //tick before glClear: issue #533
-        if (!this._paused) {
-            this._scheduler.update(deltaTime);
-            this.emit(cc.Director.EVENT_AFTER_UPDATE, this);
-        }
-
-        /* to avoid flickr, nextScene MUST be here: after tick and before draw.
-         XXX: Which bug is this one. It seems that it can't be reproduced with v0.9 */
-        if (this._nextScene) {
-            this.setNextScene();
-        }
+        this._scheduler.update(deltaTime);
+        this.emit(cc.Director.EVENT_AFTER_ENGINE_UPDATE, this);
     },
 
     gameLateUpdate: function (deltaTime) {
         // Late update for components
         this._lateUpdateScheduler.update(deltaTime);
+        this.emit(cc.Director.EVENT_AFTER_UPDATE, this);
     },
 
     visit: function (deltaTime) {
@@ -281,9 +274,18 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         // calculate "global" dt
         this.calculateDeltaTime();
 
-        this.gameUpdate(this._deltaTime);
-        this.engineUpdate(this._deltaTime);
-        this.gameLateUpdate(this._deltaTime);
+        if (!this._paused) {
+            this.gameUpdate(this._deltaTime);
+            this.engineUpdate(this._deltaTime);
+            this.gameLateUpdate(this._deltaTime);
+        }
+
+        /* to avoid flickr, nextScene MUST be here: after tick and before draw.
+         XXX: Which bug is this one. It seems that it can't be reproduced with v0.9 */
+        if (this._nextScene) {
+            this.setNextScene();
+        }
+
         this.visit(this._deltaTime);
         this.render(this._deltaTime);
 
@@ -850,7 +852,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
  * @constant
  * @type {string}
  * @example
- *   cc.eventManager.addCustomListener(cc.Director.EVENT_PROJECTION_CHANGED, function(event) {
+ *   cc.director.on(cc.Director.EVENT_PROJECTION_CHANGED, function(event) {
  *           cc.log("Projection changed.");
  *       });
  */
@@ -861,7 +863,18 @@ cc.Director.EVENT_PROJECTION_CHANGED = "director_projection_changed";
  * @constant
  * @type {string}
  * @example
- *   cc.eventManager.addCustomListener(cc.Director.EVENT_AFTER_UPDATE, function(event) {
+ *   cc.director.on(cc.Director.EVENT_AFTER_ENGINE_UPDATE, function(event) {
+ *           cc.log("after update event.");
+ *       });
+ */
+cc.Director.EVENT_AFTER_ENGINE_UPDATE = "director_after_engine_update";
+
+/**
+ * The event after update of cc.Director
+ * @constant
+ * @type {string}
+ * @example
+ *   cc.director.on(cc.Director.EVENT_AFTER_UPDATE, function(event) {
  *           cc.log("after update event.");
  *       });
  */
@@ -872,7 +885,7 @@ cc.Director.EVENT_AFTER_UPDATE = "director_after_update";
  * @constant
  * @type {string}
  * @example
- *   cc.eventManager.addCustomListener(cc.Director.EVENT_AFTER_VISIT, function(event) {
+ *   cc.director.on(cc.Director.EVENT_AFTER_VISIT, function(event) {
  *           cc.log("after visit event.");
  *       });
  */
@@ -883,7 +896,7 @@ cc.Director.EVENT_AFTER_VISIT = "director_after_visit";
  * @constant
  * @type {string}
  * @example
- *   cc.eventManager.addCustomListener(cc.Director.EVENT_AFTER_DRAW, function(event) {
+ *   cc.director.on(cc.Director.EVENT_AFTER_DRAW, function(event) {
  *           cc.log("after draw event.");
  *       });
  */
