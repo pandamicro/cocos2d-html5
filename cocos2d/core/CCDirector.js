@@ -464,15 +464,50 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     /**
      * Run a scene. Replaces the running scene with a new one or enter the first scene.
      * @param {cc.Scene} scene
+     * @param {function} [onBeforeLoadScene]
      */
-    runScene: function (scene) {
+    runScene: function (scene, onBeforeLoadScene) {
         cc.assert(scene, cc._LogInfos.Director.pushScene);
 
+        // unload scene
+        var oldScene = this._scene;
+        if (cc.isValid(oldScene)) {
+            // destroyed
+            oldScene.destroy();
+        }
+        this._scene = null;
+
+        // purge destroyed nodes belongs to old scene
+        cc.Object._deferredDestroy();
+
+        // force onExit last scene      
+        if (CC_EDITOR && cc.engine && cc.engine._emptySgScene) {       
+            this.runScene(cc.engine._emptySgScene);        
+        }
+
+        if (onBeforeLoadScene) {
+            onBeforeLoadScene();
+        }
+        this.emit(cc.Director.EVENT_BEFORE_SCENE_LAUNCH, scene);
+
+        // Currently do nothing for _dontDestroyNodes
+        // var dontDestroyNodes = this._dontDestroyNodes;
+        // for (var i = 0; i < dontDestroyNodes.length; i++) {
+        //     var node = dontDestroyNodes[i];
+        //     node.parent = scene;
+        // }
+        // director._dontDestroyNodes = [];
+
+        // Run an Entity Scene
         if (scene instanceof cc.EScene) {
+            // init scene
+            scene._onBatchCreated();
+
             this._scene = scene;
             scene = scene._sgNode;
         }
 
+        // Run or replace rendering scene
         if (!this._runningScene) {
             //start scene
             this.pushScene(scene);
@@ -494,6 +529,9 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         if (this._nextScene) {
             this.setNextScene();
         }
+
+        // Activate 
+        scene._onActivated();
     },
 
     /**
@@ -863,8 +901,19 @@ cc.Director.EVENT_PROJECTION_CHANGED = "director_projection_changed";
  * @constant
  * @type {string}
  * @example
+ *   cc.director.on(cc.Director.EVENT_BEFORE_SCENE_LAUNCH, function(event) {
+ *           cc.log("before scene launch event.");
+ *       });
+ */
+cc.Director.EVENT_BEFORE_SCENE_LAUNCH = "director_before_scene_launch";
+
+/**
+ * The event after update of cc.Director
+ * @constant
+ * @type {string}
+ * @example
  *   cc.director.on(cc.Director.EVENT_AFTER_ENGINE_UPDATE, function(event) {
- *           cc.log("after update event.");
+ *           cc.log("after engine update event.");
  *       });
  */
 cc.Director.EVENT_AFTER_ENGINE_UPDATE = "director_after_engine_update";

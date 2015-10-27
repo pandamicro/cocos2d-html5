@@ -589,64 +589,6 @@ cc.game = /** @lends cc.game# */{
     },
 
 //  @Scene loading section
-    // for editor
-    _onPreLaunchScene: null,
-
-    /**
-     * Launch loaded scene.
-     * @method _launchScene
-     * @param {cc.EScene} scene
-     * @param {function} [onBeforeLoadScene]
-     * @private
-     */
-    _launchScene: function (scene, onBeforeLoadScene) {
-        if (!scene) {
-            cc.error('Argument must be non-nil');
-            return;
-        }
-
-        var director = cc.director;
-
-        // unload scene
-        var oldScene = director._scene;
-        if (cc.isValid(oldScene)) {
-            //// destroyed and unload
-            //AssetLibrary.unloadAsset(oldScene, true);
-            oldScene.destroy();
-        }
-
-        // purge destroyed nodes belongs to old scene
-        cc.Object._deferredDestroy();
-
-        director._scene = null;
-
-        // force onExit last scene
-        if (CC_EDITOR && cc.engine && cc.engine._emptySgScene) {
-            director.runScene(cc.engine._emptySgScene);
-        }
-
-        if (onBeforeLoadScene) {
-            onBeforeLoadScene();
-        }
-        if (this._onPreLaunchScene) {
-            this._onPreLaunchScene();
-        }
-
-        // init scene
-        scene._onBatchCreated();
-
-        var dontDestroyNodes = director._dontDestroyNodes;
-        for (var i = 0; i < dontDestroyNodes.length; i++) {
-            var node = dontDestroyNodes[i];
-            node.parent = scene;
-        }
-        director._dontDestroyNodes = [];
-
-        // launch scene
-        director.runScene(scene);
-
-        scene._onActivated();
-    },
 
     /**
      * Loads the scene by its uuid.
@@ -672,7 +614,7 @@ cc.game = /** @lends cc.game# */{
                 scene = sceneAsset.scene;
                 if (scene instanceof cc.EScene) {
                     scene._id = uuid;
-                    cc.game._launchScene(scene, onUnloaded);
+                    cc.director.runScene(scene, onUnloaded);
                 }
                 else {
                     error = 'The asset ' + uuid + ' is not a scene';
