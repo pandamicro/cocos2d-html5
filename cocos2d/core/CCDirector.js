@@ -25,8 +25,7 @@
  ****************************************************************************/
 
 var EventTarget = require('./event/event-target');
-require('./platform/_CCClass');
-var Component = require('./components/CCComponent');
+var Class = require('./platform/_CCClass');
 var CCObject = require('./platform/CCObject');
 
 cc.g_NumberOfDraws = 0;
@@ -68,7 +67,7 @@ cc.g_NumberOfDraws = 0;
  * @class
  * @name cc.Director
  */
-cc.Director = cc._Class.extend(/** @lends cc.Director# */{
+cc.Director = Class.extend(/** @lends cc.Director# */{
     //Variables
     _landscape: false,
     _nextDeltaTimeZero: false,
