@@ -194,3 +194,7 @@ gulp.task('build-jsb-extends-dev', function () {
 
 
 gulp.task('build', ['build-html5', 'build-jsb-extends-min']);
+
+gulp.task('fast-build', ['build-test', 'build-jsb-extends-min'], function (done) {
+    Del(['./bin/cocos2d-js.js', './bin/cocos2d-js-min.js',], done);
+});
