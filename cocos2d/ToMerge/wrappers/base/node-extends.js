@@ -9,7 +9,7 @@ var Behavior = cc.Behavior;
 /**
  * @class NodeWrapper
  */
-var NodeWrapper = require('../wrappers/node');
+var NodeWrapper = require('../node');
 
 var nodeProto = NodeWrapper.prototype;
 
@@ -32,34 +32,10 @@ JS.getset(nodeProto, 'parent',
                 cc.error('The new parent must be type NodeWrapper');
                 return;
             }
-            if (value.constructor.canHaveChildrenInEditor) {
-                this.parentN = value && value.targetN;
-            }
-            else {
-                cc.warn('Can not add "%s" to "%s" which type is "%s".', this.name, value.name, JS.getClassName(value));
-                if (!this.parentN) {
-                    this.parentN = cc.director.getRunningScene();
-                }
-            }
+            this.parentN = value && value.targetN;
         }
         else {
             this.parentN = value && value.targetN;
-        }
-    }
-);
-
-/**
- * Returns a new array which contains wrappers of child nodes.
- * @property children
- * @type {NodeWrapper[]}
- */
-JS.get(nodeProto, 'children',
-    function () {
-        if (!CC_EDITOR || this.constructor.canHaveChildrenInEditor) {
-            return this.childrenN.map(cc);
-        }
-        else {
-            return [];
         }
     }
 );
@@ -144,43 +120,6 @@ JS.mixin(nodeProto, {
      * @property isScene
      */
     isScene: false,
-
-    /**
-     * Is this wrapper a child of the parentWrapper?
-     *
-     * @method isChildOf
-     * @param {NodeWrapper} parentWrapper
-     * @return {boolean} - Returns true if this wrapper is a child, deep child or identical to the given wrapper.
-     */
-    isChildOf: function (parentWrapper) {
-        var child = this;
-        do {
-            if (child === parentWrapper) {
-                return true;
-            }
-            child = child.parent;
-        }
-        while (child);
-        return false;
-    },
-
-    /**
-     * Move the node to the top.
-     *
-     * @method setAsFirstSibling
-     */
-    setAsFirstSibling: function () {
-        this.setSiblingIndex(0);
-    },
-
-    /**
-     * Move the node to the bottom.
-     *
-     * @method setAsLastSibling
-     */
-    setAsLastSibling: function () {
-        this.setSiblingIndex(-1);
-    },
 
     _onActivated: function () {
         if (!CC_EDITOR || cc.engine._isPlaying) {
@@ -352,64 +291,6 @@ function notFoundBeh (node, classIdToMixin) {
         errorUuid = Editor.decompressUuid(errorUuid);
     }
     cc.error('Failed to find script %s to mixin', errorUuid);
-}
-
-function initMixin (child, wrapperToNode, specifyTarget) {
-    var wrapper = child.w;
-    var classIdToMixin = child.m;
-    var node = specifyTarget || wrapper.targetN;
-    if (CC_EDITOR && child.t === wrapper) {  // wrapperToNode && wrapperToNode.isRegistered(child, 't')
-        // 如果发生这个报错，可能是因为直接对 dumpNodeForSerialization 的结果进行了 instantiate，应该换成 dumpNodeForInstantiation
-        cc.error('The target of dumped data should not be type Wrapper');
-    }
-    if (classIdToMixin) {
-        var classToMixin;
-        var behMissed = false;
-        if (Array.isArray(classIdToMixin)) {
-            for (var j = 0; j < classIdToMixin.length; j++) {
-                classToMixin = JS._getClassById(classIdToMixin[j]);
-                if (classToMixin) {
-                    mixin(node, classToMixin);
-                    cc.deserialize.applyMixinProps(child.t, classToMixin, node, wrapperToNode);
-                }
-                else {
-                    notFoundBeh(node, classIdToMixin[j]);
-                    behMissed = true;
-                }
-            }
-        }
-        else {
-            classToMixin = JS._getClassById(classIdToMixin);
-            if (classToMixin) {
-                mixin(node, classToMixin);
-                cc.deserialize.applyMixinProps(child.t, classToMixin, node, wrapperToNode);
-            }
-            else {
-                notFoundBeh(node, classIdToMixin);
-                behMissed = true;
-            }
-        }
-        if (behMissed && CC_EDITOR) {
-            node._mixin.originNodeData = child.t;
-        }
-    }
-}
-
-function initNodeAndChildren (datas, parentNode, wrapperToNode) {
-    for (var i = 0, len = datas.length; i < len; i++) {
-        var child = datas[i];
-        var wrapper = child.w;
-        wrapper.createAndAttachNode();
-        if (parentNode) {
-            wrapper.parentN = parentNode;
-        }
-        initMixin(child, wrapperToNode);
-
-        var children = child.c;
-        if (children) {
-            initNodeAndChildren(children, child.w.targetN, wrapperToNode);
-        }
-    }
 }
 
 NodeWrapper._initNodeAndChildren = initNodeAndChildren;

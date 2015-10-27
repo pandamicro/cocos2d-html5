@@ -146,6 +146,14 @@ var _callLateUpdate = CC_EDITOR ? function (dt) {
 //    };
 //};
 
+// Yes, the id might have a conflict problem once every 365 days
+// if the game runs at 60 FPS and each frame 4760273 counts of new HashObject's id are requested.
+var CompId = 0;
+var IdPrefix = CC_EDITOR && ('Comp' + Editor.NonUuidMark);
+var getNewId = CC_EDITOR && function () {
+    return IdPrefix + (++CompId);
+};
+
 /**
  * Base class for everything attached to Node(Entity).
  *
@@ -153,17 +161,23 @@ var _callLateUpdate = CC_EDITOR ? function (dt) {
  *       because Component is created by the engine.
  *
  * @class Component
- * @extends HashObject
+ * @extends cc.Object
  * @constructor
  */
 var Component = cc.Class({
     name: 'cc.Component',
     extends: cc.Object,
 
-    //ctor: CC_EDITOR && function () {
-    //    // 我们并不在构造函数中给 entity 赋值，因为那样到了反序列化时，子类的构造函数就还是会拿不到 entity。
-    //    Editor._AssetsWatcher.initComponent(this);
-    //},
+    ctor: CC_EDITOR && function () {
+        //// 我们并不在构造函数中给 entity 赋值，因为那样到了反序列化时，子类的构造函数就还是会拿不到 entity。
+        //Editor._AssetsWatcher.initComponent(this);
+
+        // dont reset _id when destroyed
+        Object.defineProperty(this, '_id', {
+            value: '',
+            enumerable: false
+        });
+    },
 
     properties: {
         /**
@@ -173,6 +187,31 @@ var Component = cc.Class({
          */
         node: {
             default: null,
+            visible: false
+        },
+
+        _id: {
+            default: '',
+            serializable: false
+        },
+
+        /**
+         * The uuid for editor
+         * @type {String}
+         * @readOnly
+         */
+        uuid: {
+            get: function () {
+                var existsId = this._id;
+                if (existsId) {
+                    return existsId;
+                }
+                if (CC_EDITOR) {
+                    this._id = getNewId();
+                    cc.engine.attachedObjsForEditor[this._id] = this;
+                    return this._id;
+                }
+            },
             visible: false
         },
 
@@ -505,6 +544,10 @@ var Component = cc.Class({
         }
         // do remove component
         this.node._removeComponent(this);
+
+        if (CC_EDITOR) {
+            delete cc.engine.attachedObjsForEditor[this._id];
+        }
     }
 });
 
@@ -526,7 +569,7 @@ if (CC_EDITOR) {
 cc.addComponentMenu = function (constructor, menuPath, priority) {
     if (CC_EDITOR) {
         if ( !cc.isChildClassOf(constructor, Component) ) {
-            cc.error('[cc.addComponentMenu] constructor must inherit from Component');
+            cc.error('cc.addComponentMenu: constructor must inherit from Component');
             return;
         }
         cc._componentMenuItems.push({

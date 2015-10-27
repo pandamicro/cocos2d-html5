@@ -67,12 +67,6 @@ if (CC_EDITOR) {
 }
 
 if (isCoreLevel) {
-    cc.isRuntimeNode = function () {
-        return false;
-    };
-    cc._setWrapperGetter(function () {
-        return null;
-    });
     Editor.versions['cocos2d'] = require('./package.json').version;
 }
 else {

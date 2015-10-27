@@ -2,7 +2,7 @@ var JS = cc.js;
 var nodeExtends = require('./node-extends');
 var dumpNodeForSerialization = nodeExtends.dumpNodeForSerialization;
 var initNodeAndChildren = nodeExtends.initNodeAndChildren;
-var NodeWrapper = require('../wrappers/node');
+var NodeWrapper = require('../node');
 
 /**
  * @module cc.Runtime
@@ -11,7 +11,7 @@ var NodeWrapper = require('../wrappers/node');
 /**
  * @class SceneWrapper
  */
-var SceneWrapper = require('../wrappers/scene');
+var SceneWrapper = require('../scene');
 
 var sceneProto = SceneWrapper.prototype;
 
@@ -95,16 +95,6 @@ JS.mixin(sceneProto, {
 JS.get(sceneProto, '_needCreate', function () {
     return !!this._dataToDeserialize;
 });
-
-// scene uuid will copy from assets
-JS.getset(sceneProto, 'uuid',
-    function () {
-        return this._id;
-    },
-    function (value) {
-        this._id = value;
-    }
-);
 
 if (CC_EDITOR) {
 

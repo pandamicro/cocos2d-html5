@@ -78,28 +78,6 @@ function parseNotify (val, propName, notify, properties) {
     }
 }
 
-// auto set wrapper's type
-function parseWrapper (val, propName, wrapperOf, classname) {
-    if (CC_EDITOR) {
-        cc.info('The "wrapper" attribute of %s.%s is obsoleted, use "type" instead please.', classname, propName);
-        if (val.type) {
-            cc.warn('The "wrapper" attribute of %s.%s can not be used with "type"', classname, propName);
-        }
-        if (cc.Class.isChildClassOf(wrapperOf, cc.Runtime.NodeWrapper)) {
-            val.type = wrapperOf;
-            return;
-        }
-        var wrapper = cc.getWrapperType(wrapperOf);
-        if (wrapper) {
-            val.type = wrapper;
-        }
-        else {
-            cc.warn('Can not declare "wrapper" attribute for %s.%s, the registered wrapper of "%s" is not found.',
-                name, propName, cc.js.getClassName(wrapperOf));
-        }
-    }
-}
-
 function checkUrl (val, className, propName, url) {
     if (Array.isArray(url)) {
         if (url.length > 0) {
@@ -179,13 +157,6 @@ module.exports = function (properties, className) {
             var type = val.type;
             if (type) {
                 parseType(val, type, className, propName);
-            }
-
-            if (CC_EDITOR) {
-                var wrapperOf = val.wrapper;
-                if (wrapperOf) {
-                    parseWrapper(val, propName, wrapperOf, className);
-                }
             }
 
             var url = val.url;

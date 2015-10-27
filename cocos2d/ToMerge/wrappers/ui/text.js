@@ -1,10 +1,14 @@
-var Utils = require('../../utils');
+var Utils = require('../utils');
 
 var WidgetWrapper = require('./widget');
 
-var TextFieldWrapper = cc.Class({
-    name: 'cc.TextFieldWrapper',
+var TextWrapper = cc.Class({
+    name: 'cc.TextWrapper',
     extends: WidgetWrapper,
+
+    ctor: function () {
+        this._boundingBox = [100, 100]
+    },
 
     properties: {
         text: {
@@ -14,27 +18,9 @@ var TextFieldWrapper = cc.Class({
             set: function (value) {
                 if (typeof value === 'string') {
                     this.targetN.string = value;
-
-                    this.setDirtyFlag();
                 }
                 else {
                     cc.error('The new text must be String');
-                }
-            }
-        },
-
-        placeHolder: {
-            get: function () {
-                return this.targetN.placeHolder;
-            },
-            set: function (value) {
-                if (typeof value === 'string') {
-                    this.targetN.placeHolder = value;
-
-                    this.setDirtyFlag();
-                }
-                else {
-                    cc.error('The new placeHolder must be String');
                 }
             }
         },
@@ -46,8 +32,6 @@ var TextFieldWrapper = cc.Class({
             set: function (value) {
                 if ( !isNaN(value) ) {
                     this.targetN.fontSize = value;
-
-                    this.setDirtyFlag();
                 }
                 else {
                     cc.error('The new fontSize must not be NaN');
@@ -65,8 +49,6 @@ var TextFieldWrapper = cc.Class({
                 var value = this.font;
                 if (!value || value instanceof cc.TTFFont) {
                     Utils.setFontToNode(value, this.targetN);
-
-                    this.setDirtyFlag();
                 }
                 else {
                     cc.error('The new font must be cc.TTFFont');
@@ -81,8 +63,6 @@ var TextFieldWrapper = cc.Class({
             set: function (value) {
                 if (typeof value === 'string') {
                     this.targetN.fontName = value;
-
-                    this.setDirtyFlag();
                 }
                 else {
                     cc.error('The new fontFamily must be String');
@@ -90,61 +70,54 @@ var TextFieldWrapper = cc.Class({
             }
         },
 
-        maxLengthEnabled: {
+        align: {
             get: function () {
-                return this.targetN.maxLengthEnabled;
+                return this.targetN.getTextHorizontalAlignment();
             },
-            set: function (value) {
-                if (typeof value === 'boolean') {
-                    this.targetN.maxLengthEnabled = value;
-
-                    this.setDirtyFlag();
-                }
-                else {
-                    cc.error('The new maxLengthEnabled must be boolean');
-                }
-            }
-        },
-
-        maxLength: {
-            get: function () {
-                return this.targetN.maxLength;
-            },
-            set: function (value) {
+            set: function ( value ) {
                 if (typeof value === 'number') {
-                    this.targetN.maxLength = value;
-
-                    this.setDirtyFlag();
+                    this.targetN.textAlign = value;
                 }
                 else {
-                    cc.error('The new maxLength must be String');
+                    cc.error('The new textAlign must be number');
                 }
-            }
+            },
+            type: cc.TextAlignment
         },
 
-        passwordEnabled: {
+        verticalAlign: {
             get: function () {
-                return this.targetN.passwordEnabled;
+                return this.targetN.getTextVerticalAlignment();
             },
-            set: function (value) {
-                if (typeof value === 'boolean') {
-                    var targetN = this.targetN;
-                    targetN.passwordEnabled = value;
-
-                    this.text = this.text;
+            set: function ( value ) {
+                if (typeof value === 'number') {
+                    this.targetN.verticalAlign = value;
                 }
                 else {
-                    cc.error('The new passwordEnabled must be boolean');
+                    cc.error('The new verticalAlign must be number');
                 }
-            }
+            },
+            type: cc.VerticalTextAlignment
+        },
+
+        boundingBox: {
+            get: function () {
+                var size = this.targetN.getTextAreaSize();
+                return new cc.Vec2(size.width, size.height);
+            },
+            set: function (value) {
+                if (value instanceof cc.Vec2) {
+                    this.targetN.setTextAreaSize( cc.size( value.x, value.y ) );
+                }
+                else {
+                    cc.error('The new boundingBox must be Vec2');
+                }
+            },
+            type: cc.Vec2
         },
 
         _text: {
-            default: ''
-        },
-
-        _placeHolder: {
-            default: 'Input Something'
+            default: 'Label'
         },
 
         _fontSize: {
@@ -155,55 +128,46 @@ var TextFieldWrapper = cc.Class({
             default: null
         },
 
-        _maxLengthEnabled: {
-            default: false
+        _align: {
+            default: cc.TextAlignment.CENTER
         },
 
-        _maxLength: {
-            default: 0
+        _verticalAlign: {
+            default: cc.VerticalTextAlignment.CENTER
         },
 
-        _passwordEnabled: {
-            default: false
+        _boundingBox: {
+            default: null
         }
-    },
-
-    onSizeChanged: function () {
-        WidgetWrapper.prototype.onSizeChanged.call(this);
-        this.setDirtyFlag();
-    },
-
-    setDirtyFlag: function () {
-        cc.renderer.childrenOrderDirty = true;
     },
 
     onBeforeSerialize: function () {
         WidgetWrapper.prototype.onBeforeSerialize.call(this);
 
         this._text = this.text;
-        this._placeHolder = this.placeHolder;
         this._fontSize = this.fontSize;
         this._fontFamily = this.fontFamily;
-        this._maxLengthEnabled = this.maxLengthEnabled;
-        this._passwordEnabled = this.passwordEnabled;
-
-        if (this.maxLengthEnabled) this._maxLength = this.maxLength;
+        this._align = this.align;
+        this._verticalAlign = this.verticalAlign;
+        this._boundingBox = [this.boundingBox.x, this.boundingBox.y];
     },
 
     createNode: function (node) {
-        node = node || new ccui.TextField();
+        node = node || new ccui.Text();
         node.ignoreContentAdaptWithSize(false);
 
         WidgetWrapper.prototype.createNode.call(this, node);
 
-        node.passwordEnabled = this._passwordEnabled;
         node.string = this._text;
-        node.placeHolder = this._placeHolder;
         node.fontSize = this._fontSize;
-        node.fontFamily = this._fontFamily;
-        node.maxLengthEnabled = this._maxLengthEnabled;
+        node.fontName = this._fontFamily === null ? node.fontName : this._fontFamily;
+        node.textAlign = this._align;
+        node.verticalAlign = this._verticalAlign;
 
-        if (this._maxLengthEnabled) node.maxLength = this._maxLength;
+        var boundingBox = this._boundingBox;
+        if (boundingBox) {
+            node.setTextAreaSize( cc.size( boundingBox[0], boundingBox[1] ) );
+        }
 
         Utils.setFontToNode(this.font, node);
 
@@ -211,4 +175,4 @@ var TextFieldWrapper = cc.Class({
     }
 });
 
-cc.TextFieldWrapper = module.exports = TextFieldWrapper;
+cc.TextWrapper = module.exports = TextWrapper;

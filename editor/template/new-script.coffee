@@ -1,5 +1,5 @@
 cc.Class {
-    extends: cc.Behavior
+    extends: cc.Component
 
     properties: {
         # foo:

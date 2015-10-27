@@ -640,8 +640,7 @@ cc.game = /** @lends cc.game# */{
         director._dontDestroyNodes = [];
 
         // launch scene
-        director.runScene(scene._sgNode);
-        director._scene = scene;
+        director.runScene(scene);
 
         scene._onActivated();
     },

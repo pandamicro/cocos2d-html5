@@ -14,21 +14,8 @@ var NodeWrapper = require('./node');
 var SceneWrapper = cc.Class({
     name: 'cc.SceneWrapper',
     extends: NodeWrapper,
-    ctor: function () {
-        this._dataToDeserialize = null;
-    },
 
     properties: {
-        parentN: {
-            get: function () {
-                return null;
-            },
-            set: function () {
-                if (CC_DEV) {
-                    cc.error("Disallow to set scene's parent.");
-                }
-            }
-        },
         scenePosition: {
             get: function () {
                 return new cc.Vec2(0, 0);
@@ -37,14 +24,6 @@ var SceneWrapper = cc.Class({
                 cc.error("Disallow to set scene's scenePosition.");
             },
             visible: false
-        },
-
-        _position: {
-            default: null
-        },
-
-        _scale: {
-            default: null
         }
     },
 
@@ -89,35 +68,6 @@ var SceneWrapper = cc.Class({
         preload();
     },
 
-    onBeforeSerialize: function () {
-        this._scale = [this.scaleX, this.scaleY];
-        this._position = [this.position.x, this.position.y];
-    },
-
-    createNode: function (node) {
-        node = node || new cc.Scene();
-
-        node.setAnchorPoint(0.0, 0.0);
-
-        node.x = this._position ? this._position[0] : 0;
-        node.y = this._position ? this._position[1] : 0;
-        node.scaleX = this._scale ? this._scale[0] : 1;
-        node.scaleY = this._scale ? this._scale[1] : 1;
-
-        return node;
-    },
-
-    getSiblingIndex: function () {
-        return 0;
-    },
-
-    setSiblingIndex: function (index) {
-        if (CC_DEV) {
-            if (index !== 0) {
-                cc.error("Disallow to change scene's sibling index.");
-            }
-        }
-    },
 
     _deepQueryChildren: function (cb) {
 

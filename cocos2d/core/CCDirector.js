@@ -465,8 +465,12 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
      * @param {cc.Scene} scene
      */
     runScene: function (scene) {
-
         cc.assert(scene, cc._LogInfos.Director.pushScene);
+
+        if (scene instanceof cc.EScene) {
+            this._scene = scene;
+            scene = scene._sgNode;
+        }
 
         if (!this._runningScene) {
             //start scene

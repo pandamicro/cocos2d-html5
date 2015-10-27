@@ -1,16 +1,12 @@
-var Utils = require('../../utils');
+var Utils = require('./utils');
+var NodeWrapper = require('./node');
 
-var WidgetWrapper = require('./widget');
-
-var TextWrapper = cc.Class({
-    name: 'cc.TextWrapper',
-    extends: WidgetWrapper,
-
-    ctor: function () {
-        this._boundingBox = [100, 100]
-    },
+var LabelTTFWrapper = cc.Class({
+    name: 'cc.LabelTTFWrapper',
+    extends: NodeWrapper,
 
     properties: {
+
         text: {
             get: function () {
                 return this.targetN.string;
@@ -72,7 +68,7 @@ var TextWrapper = cc.Class({
 
         align: {
             get: function () {
-                return this.targetN.getTextHorizontalAlignment();
+                return this.targetN.textAlign;
             },
             set: function ( value ) {
                 if (typeof value === 'number') {
@@ -87,7 +83,7 @@ var TextWrapper = cc.Class({
 
         verticalAlign: {
             get: function () {
-                return this.targetN.getTextVerticalAlignment();
+                return this.targetN.verticalAlign;
             },
             set: function ( value ) {
                 if (typeof value === 'number') {
@@ -102,12 +98,13 @@ var TextWrapper = cc.Class({
 
         boundingBox: {
             get: function () {
-                var size = this.targetN.getTextAreaSize();
-                return new cc.Vec2(size.width, size.height);
+                var target = this.targetN;
+                return new cc.Vec2(target.boundingWidth, target.boundingHeight);
             },
             set: function (value) {
                 if (value instanceof cc.Vec2) {
-                    this.targetN.setTextAreaSize( cc.size( value.x, value.y ) );
+                    this.targetN.boundingWidth = value.x;
+                    this.targetN.boundingHeight = value.y;
                 }
                 else {
                     cc.error('The new boundingBox must be Vec2');
@@ -115,6 +112,22 @@ var TextWrapper = cc.Class({
             },
             type: cc.Vec2
         },
+
+        lineHeight: {
+            get: function() {
+                return this.targetN.getLineHeight();
+            },
+            set: function (value) {
+                if (typeof value === 'number') {
+                    this.targetN.setLineHeight( value );
+                    this.targetN._setUpdateTextureDirty();
+                }
+                else {
+                    cc.error('The new lineHeight must be number');
+                }
+            }
+        },
+
 
         _text: {
             default: 'Label'
@@ -129,20 +142,24 @@ var TextWrapper = cc.Class({
         },
 
         _align: {
-            default: cc.TextAlignment.CENTER
+            default: cc.TextAlignment.LEFT
         },
 
         _verticalAlign: {
-            default: cc.VerticalTextAlignment.CENTER
+            default: cc.VerticalTextAlignment.TOP
         },
 
         _boundingBox: {
+            default: null
+        },
+
+        _lineHeight: {
             default: null
         }
     },
 
     onBeforeSerialize: function () {
-        WidgetWrapper.prototype.onBeforeSerialize.call(this);
+        NodeWrapper.prototype.onBeforeSerialize.call(this);
 
         this._text = this.text;
         this._fontSize = this.fontSize;
@@ -150,13 +167,14 @@ var TextWrapper = cc.Class({
         this._align = this.align;
         this._verticalAlign = this.verticalAlign;
         this._boundingBox = [this.boundingBox.x, this.boundingBox.y];
+        this._lineHeight = this.lineHeight;
     },
 
     createNode: function (node) {
-        node = node || new ccui.Text();
-        node.ignoreContentAdaptWithSize(false);
 
-        WidgetWrapper.prototype.createNode.call(this, node);
+        node = node || new cc.LabelTTF();
+
+        NodeWrapper.prototype.createNode.call(this, node);
 
         node.string = this._text;
         node.fontSize = this._fontSize;
@@ -164,9 +182,15 @@ var TextWrapper = cc.Class({
         node.textAlign = this._align;
         node.verticalAlign = this._verticalAlign;
 
+        if (typeof this._lineHeight === 'number' &&
+            node.setLineHeight) {
+            node.setLineHeight( this._lineHeight );
+        }
+
         var boundingBox = this._boundingBox;
         if (boundingBox) {
-            node.setTextAreaSize( cc.size( boundingBox[0], boundingBox[1] ) );
+            node.boundingWidth = boundingBox[0];
+            node.boundingHeight = boundingBox[1];
         }
 
         Utils.setFontToNode(this.font, node);
@@ -175,4 +199,4 @@ var TextWrapper = cc.Class({
     }
 });
 
-cc.TextWrapper = module.exports = TextWrapper;
+cc.LabelTTFWrapper = module.exports = LabelTTFWrapper;
