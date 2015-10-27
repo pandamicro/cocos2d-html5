@@ -5,7 +5,6 @@ var concat = require('gulp-concat');
 var Spawn = require('child_process').spawn;
 var Chalk = require('chalk');
 var es = require('event-stream');
-var buffer = require('vinyl-buffer');
 
 var srcs = [
     "./Base64Images.js",
@@ -306,9 +305,8 @@ gulp.task('compile-cocos2d', function (done) {
     });
 });
 
-var header = new Buffer('(function (cc, ccui, ccs, sp, cp) {');
-var footer = new Buffer(/*'\n(' + modularity + ')();\n' +*/
-    '\n}).call(window, cc, ccui, ccs, sp, cp);\n');
+var header = new Buffer('(function (cc, ccui, ccs, sp, cp) {\n');
+var footer = new Buffer('\n}).call(window, cc, ccui, ccs, sp, cp);\n');
 
 function wrap (header, footer) {
     return es.through(function (file) {
@@ -316,6 +314,37 @@ function wrap (header, footer) {
         this.emit('data', file);
     });
 }
+
+//var File = require('vinyl');
+//function wrapFile (header, footer) {
+//    var headerFile = new File({
+//        cwd: process.cwd(),
+//        base: process.cwd(),
+//        path: Path.resolve('header.js'),
+//        contents: header
+//    });
+//    var footerFile = new File({
+//        cwd: process.cwd(),
+//        base: process.cwd(),
+//        path: Path.resolve('footer.js'),
+//        contents: footer
+//    });
+//    var isHeaderInserted = false;
+//    return es.through(
+//        function (file) {
+//            if (!isHeaderInserted) {
+//                this.emit('data', headerFile);
+//                isHeaderInserted = true;
+//            }
+//            //file.contents = Buffer.concat([header, file.contents, footer]);
+//            this.emit('data', file);
+//        },
+//        function () {
+//            this.emit('data', footerFile);
+//            this.emit('end');
+//        }
+//    );
+//}
 
 if (MinifyOriginCocos2d) {
     gulp.task('build-modular-cocos2d', ['compile-cocos2d'], function () {
@@ -334,6 +363,7 @@ if (MinifyOriginCocos2d) {
 else {
     gulp.task('build-modular-cocos2d', function () {
         return gulp.src(srcs)
+            //.pipe(wrapFile(header, footer))
             .pipe(concat(Path.basename(paths.modularCocos2d)))
             .pipe(wrap(header, footer))
             .pipe(gulp.dest(Path.dirname(paths.modularCocos2d)));

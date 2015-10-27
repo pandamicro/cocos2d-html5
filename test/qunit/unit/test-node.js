@@ -1,6 +1,6 @@
 ﻿// jshint ignore: start
 
-largeModule('Node');
+largeModule('Node', SetupEngine);
 
 test('basic test', function () {
     var node = new cc.ENode();

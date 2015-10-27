@@ -149,8 +149,8 @@ var _callLateUpdate = CC_EDITOR ? function (dt) {
 // Yes, the id might have a conflict problem once every 365 days
 // if the game runs at 60 FPS and each frame 4760273 counts of new HashObject's id are requested.
 var CompId = 0;
-var IdPrefix = CC_EDITOR && ('Comp' + Editor.NonUuidMark);
-var getNewId = CC_EDITOR && function () {
+var IdPrefix = (CC_EDITOR || CC_TEST) && ('Comp' + Editor.NonUuidMark);
+var getNewId = (CC_EDITOR || CC_TEST) && function () {
     return IdPrefix + (++CompId);
 };
 
@@ -168,7 +168,7 @@ var Component = cc.Class({
     name: 'cc.Component',
     extends: cc.Object,
 
-    ctor: CC_EDITOR && function () {
+    ctor: (CC_EDITOR || CC_TEST) && function () {
         //// 我们并不在构造函数中给 entity 赋值，因为那样到了反序列化时，子类的构造函数就还是会拿不到 entity。
         //Editor._AssetsWatcher.initComponent(this);
 
@@ -206,7 +206,7 @@ var Component = cc.Class({
                 if (existsId) {
                     return existsId;
                 }
-                if (CC_EDITOR) {
+                if (CC_EDITOR || CC_TEST) {
                     this._id = getNewId();
                     cc.engine.attachedObjsForEditor[this._id] = this;
                     return this._id;
@@ -544,7 +544,7 @@ var Component = cc.Class({
         // do remove component
         this.node._removeComponent(this);
 
-        if (CC_EDITOR) {
+        if (CC_EDITOR || CC_TEST) {
             delete cc.engine.attachedObjsForEditor[this._id];
         }
     }
@@ -591,7 +591,7 @@ cc.addComponentMenu = function (constructor, menuPath, priority) {
  *                         otherwise, it will update only if necessary.
  */
 cc.executeInEditMode = function (constructor, prefer60FPS) {
-    if (CC_EDITOR) {
+    if (CC_EDITOR || CC_TEST) {
         if ( !cc.isChildClassOf(constructor, Component) ) {
             cc.error('[cc.executeInEditMode] constructor must inherit from Component');
             return;
