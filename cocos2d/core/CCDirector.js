@@ -23,19 +23,13 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
+var EventTarget = require('./event/event-target');
+var Class = require('./platform/_CCClass');
+var CCObject = require('./platform/CCObject');
+
 cc.g_NumberOfDraws = 0;
 
-cc.GLToClipTransform = function (transformOut) {
-    //var projection = new cc.math.Matrix4();
-    //cc.kmGLGetMatrix(cc.KM_GL_PROJECTION, projection);
-    cc.kmGLGetMatrix(cc.KM_GL_PROJECTION, transformOut);
-
-    var modelview = new cc.math.Matrix4();
-    cc.kmGLGetMatrix(cc.KM_GL_MODELVIEW, modelview);
-
-    transformOut.multiply(modelview);
-};
 //----------------------------------------------------------------------------------------------------------------------
 
 /**
@@ -73,7 +67,7 @@ cc.GLToClipTransform = function (transformOut) {
  * @class
  * @name cc.Director
  */
-cc.Director = cc._Class.extend(/** @lends cc.Director# */{
+cc.Director = Class.extend(/** @lends cc.Director# */{
     //Variables
     _landscape: false,
     _nextDeltaTimeZero: false,
@@ -111,11 +105,11 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
     _dirtyRegion: null,
 
     _scheduler: null,
+    _startScheduler: null,
+    _updateScheduler: null,
+    _lateUpdateScheduler: null,
+
     _actionManager: null,
-    _eventProjectionChanged: null,
-    _eventAfterUpdate: null,
-    _eventAfterVisit: null,
-    _eventAfterDraw: null,
 
     ctor: function () {
         var self = this;
@@ -149,9 +143,17 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
         this._openGLView = null;
         this._contentScaleFactor = 1.0;
 
-        //scheduler
+        // Schedulers
+        // Scheduler for user registration update
         this._scheduler = new cc.Scheduler();
-        //action manager
+        // Scheduler for components start function registration
+        this._startScheduler = new cc.Scheduler();
+        // Scheduler for components update function registration
+        this._updateScheduler = new cc.Scheduler();
+        // Scheduler for components lateUpdate function registration
+        this._lateUpdateScheduler = new cc.Scheduler();
+
+        // Action manager
         if(cc.ActionManager){
             this._actionManager = new cc.ActionManager();
             this._scheduler.scheduleUpdate(this._actionManager, cc.Scheduler.PRIORITY_SYSTEM, false);
@@ -159,14 +161,8 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
             this._actionManager = null;
         }
 
-        this._eventAfterUpdate = new cc.Event.EventCustom(cc.Director.EVENT_AFTER_UPDATE);
-        this._eventAfterUpdate.setUserData(this);
-        this._eventAfterVisit = new cc.Event.EventCustom(cc.Director.EVENT_AFTER_VISIT);
-        this._eventAfterVisit.setUserData(this);
-        this._eventAfterDraw = new cc.Event.EventCustom(cc.Director.EVENT_AFTER_DRAW);
-        this._eventAfterDraw.setUserData(this);
-        this._eventProjectionChanged = new cc.Event.EventCustom(cc.Director.EVENT_PROJECTION_CHANGED);
-        this._eventProjectionChanged.setUserData(this);
+        // Event target
+        EventTarget.polyfill(this);
 
         return true;
     },
@@ -212,21 +208,27 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
     convertToUI: null,
 
     gameUpdate: function (deltaTime) {
+        // Call start for new added components
+        this._startScheduler.update(deltaTime);
 
+        // Update for components
+        this._updateScheduler.update(deltaTime);
+
+        // Destroy entities that have been removed recently
+        // Low cost: Array manipulation
+        CCObject._deferredDestroy();
     },
 
     engineUpdate: function (deltaTime) {
         //tick before glClear: issue #533
-        if (!this._paused) {
-            this._scheduler.update(deltaTime);
-            cc.eventManager.dispatchEvent(this._eventAfterUpdate);
-        }
+        this._scheduler.update(deltaTime);
+        this.emit(cc.Director.EVENT_AFTER_ENGINE_UPDATE, this);
+    },
 
-        /* to avoid flickr, nextScene MUST be here: after tick and before draw.
-         XXX: Which bug is this one. It seems that it can't be reproduced with v0.9 */
-        if (this._nextScene) {
-            this.setNextScene();
-        }
+    gameLateUpdate: function (deltaTime) {
+        // Late update for components
+        this._lateUpdateScheduler.update(deltaTime);
+        this.emit(cc.Director.EVENT_AFTER_UPDATE, this);
     },
 
     visit: function (deltaTime) {
@@ -249,7 +251,7 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
         if (this._notificationNode)
             this._notificationNode.visit();
 
-        cc.eventManager.dispatchEvent(this._eventAfterVisit);
+        this.emit(cc.Director.EVENT_AFTER_VISIT, this);
 
         if (this._afterVisitScene)
             this._afterVisitScene();
@@ -262,7 +264,7 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
         cc.renderer.rendering(cc._renderContext);
         this._totalFrames++;
 
-        cc.eventManager.dispatchEvent(this._eventAfterDraw);
+        this.emit(cc.Director.EVENT_AFTER_DRAW, this);
     },
 
     /**
@@ -272,8 +274,18 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
         // calculate "global" dt
         this.calculateDeltaTime();
 
-        this.gameUpdate(this._deltaTime);
-        this.engineUpdate(this._deltaTime);
+        if (!this._paused) {
+            this.gameUpdate(this._deltaTime);
+            this.engineUpdate(this._deltaTime);
+            this.gameLateUpdate(this._deltaTime);
+        }
+
+        /* to avoid flickr, nextScene MUST be here: after tick and before draw.
+         XXX: Which bug is this one. It seems that it can't be reproduced with v0.9 */
+        if (this._nextScene) {
+            this.setNextScene();
+        }
+
         this.visit(this._deltaTime);
         this.render(this._deltaTime);
 
@@ -452,15 +464,50 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
     /**
      * Run a scene. Replaces the running scene with a new one or enter the first scene.
      * @param {cc.Scene} scene
+     * @param {function} [onBeforeLoadScene]
      */
-    runScene: function (scene) {
+    runScene: function (scene, onBeforeLoadScene) {
         cc.assert(scene, cc._LogInfos.Director.pushScene);
 
+        // unload scene
+        var oldScene = this._scene;
+        if (cc.isValid(oldScene)) {
+            // destroyed
+            oldScene.destroy();
+        }
+        this._scene = null;
+
+        // purge destroyed nodes belongs to old scene
+        cc.Object._deferredDestroy();
+
+        // force onExit last scene      
+        if (CC_EDITOR && cc.engine && cc.engine._emptySgScene) {       
+            this.runScene(cc.engine._emptySgScene);        
+        }
+
+        if (onBeforeLoadScene) {
+            onBeforeLoadScene();
+        }
+        this.emit(cc.Director.EVENT_BEFORE_SCENE_LAUNCH, scene);
+
+        // Currently do nothing for _dontDestroyNodes
+        // var dontDestroyNodes = this._dontDestroyNodes;
+        // for (var i = 0; i < dontDestroyNodes.length; i++) {
+        //     var node = dontDestroyNodes[i];
+        //     node.parent = scene;
+        // }
+        // director._dontDestroyNodes = [];
+
+        // Run an Entity Scene
         if (scene instanceof cc.EScene) {
+            // init scene
+            scene._onBatchCreated();
+
             this._scene = scene;
             scene = scene._sgNode;
         }
 
+        // Run or replace rendering scene
         if (!this._runningScene) {
             //start scene
             this.pushScene(scene);
@@ -482,6 +529,9 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
         if (this._nextScene) {
             this.setNextScene();
         }
+
+        // Activate 
+        scene._onActivated();
     },
 
     /**
@@ -840,7 +890,7 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
  * @constant
  * @type {string}
  * @example
- *   cc.eventManager.addCustomListener(cc.Director.EVENT_PROJECTION_CHANGED, function(event) {
+ *   cc.director.on(cc.Director.EVENT_PROJECTION_CHANGED, function(event) {
  *           cc.log("Projection changed.");
  *       });
  */
@@ -851,7 +901,29 @@ cc.Director.EVENT_PROJECTION_CHANGED = "director_projection_changed";
  * @constant
  * @type {string}
  * @example
- *   cc.eventManager.addCustomListener(cc.Director.EVENT_AFTER_UPDATE, function(event) {
+ *   cc.director.on(cc.Director.EVENT_BEFORE_SCENE_LAUNCH, function(event) {
+ *           cc.log("before scene launch event.");
+ *       });
+ */
+cc.Director.EVENT_BEFORE_SCENE_LAUNCH = "director_before_scene_launch";
+
+/**
+ * The event after update of cc.Director
+ * @constant
+ * @type {string}
+ * @example
+ *   cc.director.on(cc.Director.EVENT_AFTER_ENGINE_UPDATE, function(event) {
+ *           cc.log("after engine update event.");
+ *       });
+ */
+cc.Director.EVENT_AFTER_ENGINE_UPDATE = "director_after_engine_update";
+
+/**
+ * The event after update of cc.Director
+ * @constant
+ * @type {string}
+ * @example
+ *   cc.director.on(cc.Director.EVENT_AFTER_UPDATE, function(event) {
  *           cc.log("after update event.");
  *       });
  */
@@ -862,7 +934,7 @@ cc.Director.EVENT_AFTER_UPDATE = "director_after_update";
  * @constant
  * @type {string}
  * @example
- *   cc.eventManager.addCustomListener(cc.Director.EVENT_AFTER_VISIT, function(event) {
+ *   cc.director.on(cc.Director.EVENT_AFTER_VISIT, function(event) {
  *           cc.log("after visit event.");
  *       });
  */
@@ -873,7 +945,7 @@ cc.Director.EVENT_AFTER_VISIT = "director_after_visit";
  * @constant
  * @type {string}
  * @example
- *   cc.eventManager.addCustomListener(cc.Director.EVENT_AFTER_DRAW, function(event) {
+ *   cc.director.on(cc.Director.EVENT_AFTER_DRAW, function(event) {
  *           cc.log("after draw event.");
  *       });
  */

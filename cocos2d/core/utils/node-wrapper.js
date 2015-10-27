@@ -25,7 +25,7 @@
 var JS = cc.js;
 var SceneGraphHelper = require('./scene-graph-helper');
 var SGProto = cc.Node.prototype;
-var Destroying = cc.Object.Flags.Destroying;
+var Destroying = require('../platform/CCObject').Flags.Destroying;
 
 // called after changing parent
 function setMaxZOrder (node) {

@@ -774,21 +774,19 @@ var DirectorEventTest =  EventDispatcherTestDemo.extend({
         this._label4.setPosition(80,s.height/2 - 60);
         this.addChild(this._label4);
 
-        var dispatcher = cc.eventManager;
-
-        this._event1 = dispatcher.addCustomListener(cc.Director.EVENT_AFTER_UPDATE, this.onEvent1.bind(this));
-        this._event2 = dispatcher.addCustomListener(cc.Director.EVENT_AFTER_VISIT, this.onEvent2.bind(this));
-        this._event3 = dispatcher.addCustomListener(cc.Director.EVENT_AFTER_DRAW, function(event) {
+        this._event1 = this.onEvent1.bind(this);
+        this._event2 = this.onEvent2.bind(this);
+        this._event3 = function(event) {
             selfPointer._label3.setString("Draw: " + selfPointer._count3++);
-        });
-        this._event4 = dispatcher.addCustomListener(cc.Director.EVENT_PROJECTION_CHANGED, function(event) {
+        };
+        this._event4 = function(event) {
             selfPointer._label4.setString("Projection: " + selfPointer._count4++);
-        });
+        }
 
-        this._event1.retain();
-        this._event2.retain();
-        this._event3.retain();
-        this._event4.retain();
+        cc.director.on(cc.Director.EVENT_AFTER_UPDATE, this._event1);
+        cc.director.on(cc.Director.EVENT_AFTER_VISIT, this._event2);
+        cc.director.on(cc.Director.EVENT_AFTER_DRAW, this._event3);
+        cc.director.on(cc.Director.EVENT_PROJECTION_CHANGED, this._event4);
 
         this.scheduleUpdate();
     },
@@ -798,15 +796,10 @@ var DirectorEventTest =  EventDispatcherTestDemo.extend({
         this._super();
 
         var eventManager = cc.eventManager;
-        eventManager.removeListener(this._event1);
-        eventManager.removeListener(this._event2);
-        eventManager.removeListener(this._event3);
-        eventManager.removeListener(this._event4);
-
-        this._event1.release();
-        this._event2.release();
-        this._event3.release();
-        this._event4.release();
+        cc.director.off(cc.Director.EVENT_AFTER_UPDATE, this._event1);
+        cc.director.off(cc.Director.EVENT_AFTER_VISIT, this._event2);
+        cc.director.off(cc.Director.EVENT_AFTER_DRAW, this._event3);
+        cc.director.off(cc.Director.EVENT_PROJECTION_CHANGED, this._event4);
         //----end8----
     },
 
