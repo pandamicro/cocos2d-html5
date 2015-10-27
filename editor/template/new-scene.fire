@@ -9,7 +9,6 @@
     }
   },
   {
-    "__type__": "cc.SceneWrapper",
-    "content": []
+    "__type__": "cc.Scene",
   }
 ]

@@ -26,7 +26,6 @@
 
 var CCObject = require('./CCObject');
 var PersistentMask = CCObject.Flags.PersistentMask;
-//var NodeSavedAsWrapper = CCObject.Flags.NodeSavedAsWrapper;
 var _isDomNode = require('./utils').isDomNode;
 
 /**
@@ -57,11 +56,6 @@ function instantiate (original) {
     if (original instanceof CCObject && !original.isValid) {
         cc.error('The thing you want to instantiate is destroyed');
         return null;
-    }
-
-    if (cc.isRuntimeNode(original)) {
-        var wrapper = cc.instantiate(cc.getWrapper(original));
-        return wrapper.targetN;
     }
 
     var clone;
@@ -100,12 +94,11 @@ var objsToClearTmpVar = [];   // 用于重设临时变量
 // * 值得注意的是，这个方法不可重入，不支持 mixin。
 // *
 // * @param {object} obj - 该方法仅供内部使用，用户需负责保证参数合法。什么参数是合法的请参考 cc.instantiate 的实现。
-// * @param {NodeWrapper} [parent] - 只有在该对象下的场景物体会被克隆。
-// * @param {_RedirectWrapperToNode} [wrapperToNode]
+// * @param {cc.ENode} [parent] - 只有在该对象下的场景物体会被克隆。
 // * @return {object}
 // * @private
 // */
-function doInstantiate (obj, parent, wrapperToNode) {
+function doInstantiate (obj, parent) {
     if (Array.isArray(obj)) {
         cc.error('Can not instantiate array');
         return null;
@@ -115,7 +108,7 @@ function doInstantiate (obj, parent, wrapperToNode) {
         return null;
     }
 
-    var clone = enumerateObject(obj, parent, wrapperToNode);
+    var clone = enumerateObject(obj, parent);
 
     for (var i = 0, len = objsToClearTmpVar.length; i < len; ++i) {
         objsToClearTmpVar[i]._iN$t = null;
@@ -129,7 +122,7 @@ function doInstantiate (obj, parent, wrapperToNode) {
 // * @param {object} obj - The object to instantiate, typeof must be 'object' and should not be an array.
 // * @return {object} - the instantiated instance
 // */
-var enumerateObject = function (obj, parent, wrapperToNode) {
+var enumerateObject = function (obj, parent) {
     var value, type, key;
     var klass = obj.constructor;
     var clone = new klass();
@@ -144,14 +137,14 @@ var enumerateObject = function (obj, parent, wrapperToNode) {
                 value = obj[key];
                 type = typeof value;
                 if (type === 'object') {
-                    clone[key] = value ? instantiateObj(value, parent, wrapperToNode, clone, key) : value;
+                    clone[key] = value ? instantiateObj(value, parent, clone, key) : value;
                 }
                 else {
                     clone[key] = (type !== 'function') ? value : null;
                 }
             }
         }
-        if (clone instanceof cc.Runtime.NodeWrapper && CC_EDITOR) {
+        if (clone instanceof cc.ENode && CC_EDITOR) {
             clone._id = '';
         }
     }
@@ -169,7 +162,7 @@ var enumerateObject = function (obj, parent, wrapperToNode) {
             // instantiate field
             type = typeof value;
             if (type === 'object') {
-                clone[key] = value ? instantiateObj(value, parent, wrapperToNode, clone, key) : value;
+                clone[key] = value ? instantiateObj(value, parent, clone, key) : value;
             }
             else {
                 clone[key] = (type !== 'function') ? value : null;
@@ -185,7 +178,7 @@ var enumerateObject = function (obj, parent, wrapperToNode) {
 ///**
 // * @return {object} - the original non-nil object, typeof must be 'object'
 // */
-function instantiateObj (obj, parent, wrapperToNode, ownerObj, ownerKey) {
+function instantiateObj (obj, parent, ownerObj, ownerKey) {
     // 目前使用“_iN$t”这个特殊字段来存实例化后的对象，这样做主要是为了防止循环引用
     // 注意，为了避免循环引用，所有新创建的实例，必须在赋值前被设为源对象的_iN$t
     var clone = obj._iN$t;
@@ -207,7 +200,7 @@ function instantiateObj (obj, parent, wrapperToNode, ownerObj, ownerKey) {
             // instantiate field
             var type = typeof value;
             if (type === 'object') {
-                clone[i] = value ? instantiateObj(value, parent, wrapperToNode, clone, '' + i) : value;
+                clone[i] = value ? instantiateObj(value, parent, clone, '' + i) : value;
             }
             else {
                 clone[i] = (type !== 'function') ? value : null;
@@ -220,41 +213,28 @@ function instantiateObj (obj, parent, wrapperToNode, ownerObj, ownerKey) {
     //    return obj;
     //}
     else {
-        if (cc.isRuntimeNode(obj)) {
-            var wrapper = cc.getWrapper(obj);
-            clone = wrapper._iN$t;
-            if (clone) {
-                if (wrapperToNode) {
-                    wrapperToNode.register(ownerObj, ownerKey);
-                }
-                return clone;
-            }
-            if (parent && !wrapper.isChildOf(parent)) {
-                return obj;
-            }
-            if (wrapperToNode) {
-                wrapperToNode.register(ownerObj, ownerKey);
-            }
-            return enumerateObject(wrapper, parent, wrapperToNode);
-            //clone._objFlags |= NodeSavedAsWrapper;
-            //return clone;
-        }
-        else {
-            var ctor = obj.constructor;
-            if (cc.Class._isCCClass(ctor)) {
-                if (parent && obj instanceof cc.Runtime.NodeWrapper) {
+        var ctor = obj.constructor;
+        if (cc.Class._isCCClass(ctor)) {
+            if (parent) {
+                if (obj instanceof cc.ENode) {
                     if (!obj.isChildOf(parent)) {
-                        // 不拷贝其它场景对象，保持原有引用
+                        // should not clone other nodes if not descendant
+                        return obj;
+                    }
+                }
+                else if (obj instanceof cc.Component) {
+                    if (!obj.node.isChildOf(parent)) {
+                        // should not clone other component if not descendant
                         return obj;
                     }
                 }
             }
-            else if (ctor !== Object) {
-                // unknown type
-                return obj;
-            }
         }
-        return enumerateObject(obj, parent, wrapperToNode);
+        else if (ctor !== Object) {
+            // unknown type
+            return obj;
+        }
+        return enumerateObject(obj, parent);
     }
 }
 

@@ -129,7 +129,7 @@ cc.s_globalOrderOfArrival = 1;
  * @property {Number}               glServerState       - The state of OpenGL server side
  */
 cc.Node = cc.Class(/** @lends cc.Node# */{
-    name: 'cc.Node',
+    name: 'cc._Node',
 
     properties: {
         _localZOrder: 0,    ///< Local order (relative to its siblings) used to sort the node

@@ -1,9 +1,9 @@
 function visitWrapper (wrapper, visitor) {
     visitor(wrapper);
 
-    var childrenN = wrapper.childrenN;
-    for (var i = 0; i < childrenN.length; i++) {
-        visitor(cc.getWrapper(childrenN[i]));
+    var children = wrapper._children;
+    for (var i = 0; i < children.length; i++) {
+        visitor(children[i]);
     }
 }
 
@@ -45,7 +45,7 @@ var Prefab = cc.Class({
             Editor.PrefabUtils.onPrefabInstantiated(this, newWrapper);
         }
 
-        return newWrapper.targetN;
+        return newWrapper;
     }
 });
 

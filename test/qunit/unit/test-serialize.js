@@ -422,37 +422,17 @@
             properties: {
                 nodes: {
                     default: [],
-                    type: [TestNode]
+                    type: [cc.ENode]
                 }
             }
         });
 
         var data = new Data();
-        var node1 = new TestNode();
-        var node2 = new TestNode();
+        var node1 = new cc.ENode();
+        var node2 = new cc.ENode();
         data.nodes = [node1, node2];
 
         var actual = JSON.parse(Editor.serialize(data));
-
-        //var expected = [
-        //    {
-        //        __type__: 'data',
-        //        nodes: [
-        //            {
-        //                "__id__": 1
-        //            },
-        //            {
-        //                "__id__": 2
-        //            }
-        //        ],
-        //    },
-        //    {
-        //        "__type__": "TestWrapper",
-        //    },
-        //    {
-        //        "__type__": "TestWrapper",
-        //    }
-        //];
 
         ok(Array.isArray(actual), 'checking');
         deepEqual(actual[0], {
@@ -468,10 +448,10 @@
         }, 'checking');
 
         ok(actual[1].constructor === Object, 'checking');
-        strictEqual(actual[1].__type__, "TestWrapper", 'checking');
+        strictEqual(actual[1].__type__, "cc.Node", 'checking');
 
         ok(actual[2].constructor === Object, 'checking');
-        strictEqual(actual[2].__type__, "TestWrapper", 'checking');
+        strictEqual(actual[2].__type__, "cc.Node", 'checking');
 
         cc.js.unregisterClass(Data);
     });

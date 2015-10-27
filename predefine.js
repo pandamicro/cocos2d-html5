@@ -25,14 +25,7 @@
 
 // define cc
 
-// `cc(node)` takes a runtime node and return its corresponding cc.Runtime.NodeWrapper instance.
-cc = function (node) {
-    return cc.getWrapper(node);
-};
-
-cc._setWrapperGetter = function (getter) {
-    cc.getWrapper = getter;
-};
+cc = {};
 
 if (CC_TEST) {
     /**

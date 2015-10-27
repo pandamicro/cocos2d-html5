@@ -1,5 +1,5 @@
 cc.Class({
-    extends: cc.Behavior,
+    extends: cc.Component,
 
     properties: {
         // foo: {
@@ -9,7 +9,6 @@ cc.Class({
         //    visible: true,      // optional, default is true
         //    displayName: 'Foo', // optional
         //    readonly: false,    // optional, default is false
-        //    wrapper: cc.Node    // optional
         // },
         // ...
     },

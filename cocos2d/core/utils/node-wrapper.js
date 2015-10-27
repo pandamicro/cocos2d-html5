@@ -176,6 +176,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
                 this._rotationX = this._rotationY = value;
                 this._sgNode.rotation = value;
             },
+            tooltip: "The clockwise degrees of rotation relative to the parent"
         },
 
         rotationX: {
@@ -341,6 +342,12 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         this.userData = null;
         this.userObject = null;
         this.arrivalOrder = 0;
+
+        // dont reset _id when destroyed
+        Object.defineProperty(this, '_id', {
+            value: '',
+            enumerable: false
+        });
     },
 
     /**
