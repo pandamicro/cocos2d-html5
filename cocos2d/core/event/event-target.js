@@ -146,7 +146,7 @@ JS.mixin(EventTarget.prototype, {
             useCapture = target;
             target = undefined;
         }
-        else useCapture = useCapture || false;
+        else useCapture = !!useCapture;
         if (!callback) {
             cc.error('Callback of event must be non-nil');
             return;
@@ -182,7 +182,7 @@ JS.mixin(EventTarget.prototype, {
             useCapture = target;
             target = undefined;
         }
-        else useCapture = useCapture || false;
+        else useCapture = !!useCapture;
         if (!callback) {
             return;
         }
