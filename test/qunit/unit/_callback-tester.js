@@ -51,7 +51,7 @@ CallbackTester.prototype.expect = function (expect, message, append) {
  */
 CallbackTester.prototype.notExpect = function (notExpect, message) {
     if (this._expects.length > 0 && this._expects[0].expect === notExpect) {
-        ok(false, 'notExpect: The not expected callback is still expected, the last callback not called yet ?');
+        ok(false, 'notExpect: The not expected callback is still expecting, maybe the last callback is not yet called');
         return;
     }
     this._unexpect[notExpect] = message;

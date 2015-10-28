@@ -22,6 +22,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+var nil = function () {};
+
 /**
  * <p>cc.Scene is a subclass of cc.Node that is used only as an abstract concept.</p>
  * <p>cc.Scene and cc.Node are almost identical with the difference that users can not modify cc.Scene manually. </p>
@@ -61,7 +63,10 @@ cc.EScene = cc.Class({
         this._activeInHierarchy = false;
     },
 
-    _onHierarchyChanged: function () {},
+    _onHierarchyChanged: nil,
+    _onColorChanged: nil,
+    _onSizeChanged: nil,
+    _onAnchorChanged: nil,
 
     _onBatchCreated: function () {
         var sgNode = new cc.Scene();

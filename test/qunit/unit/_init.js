@@ -48,6 +48,13 @@ var TestScript = cc.Class({
     }
 });
 
+cc.engine = {
+    attachedObjsForEditor: {},
+    getInstanceById: function (uuid) {
+        return this.attachedObjsForEditor[uuid] || null;
+    },
+};
+
 var assetDir = '../test/qunit/assets';
 
 var canvas;
@@ -97,9 +104,8 @@ function _resetGame (w, h) {
 
         cc.eventManager.dispatchCustomEvent('canvas-resize');
     }
-    cc.game._launchScene(new cc.EScene());
-
-    cc.director.pause();
+    cc.director.runScene(new cc.EScene());
+    //cc.director.pause();
 }
 
 _resetGame(64, 64);

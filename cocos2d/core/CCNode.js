@@ -436,6 +436,38 @@ var Node = cc.Class({
         for (var i = 0, len = children.length; i < len; i++) {
             children[i]._onBatchCreated();
         }
+    },
+
+    _onColorChanged: function () {
+        // update components if also in scene graph
+        for (var c = 0; c < this._components.length; ++c) {
+            var comp = this._components[c];
+            if (comp instanceof cc._ComponentInSG && comp.isValid) {
+                comp._sgNode.setColor(this._color);
+                comp._sgNode.setOpacity(this._opacity / 255);
+            }
+        }
+    },
+
+    _onSizeChanged: function () {
+        // update components if also in scene graph
+        for (var c = 0; c < this._components.length; ++c) {
+            var comp = this._components[c];
+            if (comp instanceof cc._ComponentInSG && comp.isValid) {
+                comp._sgNode.setContentSize(this._contentSize);
+            }
+        }
+    },
+
+    _onAnchorChanged: function () {
+        // update components if also in scene graph
+        for (var c = 0; c < this._components.length; ++c) {
+            var comp = this._components[c];
+            if (comp instanceof cc._ComponentInSG && comp.isValid) {
+                comp._sgNode.setAnchorPoint(this._anchorPoint);
+                comp._sgNode.ignoreAnchorPointForPosition(this._ignoreAnchorPointForPosition);
+            }
+        }
     }
 });
 

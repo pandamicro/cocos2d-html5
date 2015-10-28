@@ -52,13 +52,6 @@ var ComponentInSG = cc.Class({
         // retain immediately
         node.retain();
         this._sgNode = node;
-    },
-
-    _updateColor: function () {
-        // Cocos runtime 3.3 not support node.color and node opacity
-        var color = this.node._color;
-        this._sgNode.setColor(color);
-        this._sgNode.setOpacity(color.a);
     }
 });
 
