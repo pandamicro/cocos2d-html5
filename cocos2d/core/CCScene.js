@@ -75,7 +75,8 @@ cc.EScene = cc.Class({
         sgNode.retain();
         this._sgNode = sgNode;
 
-        sgNode.setAnchorPoint(0, 1);
+        sgNode.setAnchorPoint(0, 0);
+
         var children = this._children;
         for (var i = 0; i < children.length; i++) {
             children[i]._onBatchCreated();
