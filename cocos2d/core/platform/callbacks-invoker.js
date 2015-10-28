@@ -60,7 +60,9 @@ CallbacksHandler.prototype.has = function (key, callback) {
     var list = this._callbackTable[key];
     if (list && list.length > 0) {
         if (callback) {
-            return list.indexOf(callback) !== -1;
+            if (typeof callback !== 'function' || list.indexOf(callback) === -1) 
+                return false;
+            else return true;
         }
         return true;
     }
@@ -86,17 +88,14 @@ CallbacksHandler.prototype.remove = function (key, callback, target) {
     var list = this._callbackTable[key], index, callbackTarget;
     if (list) {
         index = list.indexOf(callback);
-        if (!target && index != -1) {
-            list.splice(index, 1);
-            return true;
-        }
-        while (index != -1) {
+        while (index !== -1) {
             callbackTarget = list[index+1];
-            if (typeof callbackTarget === 'object') {
-                if (callbackTarget === target) {
-                    list.splice(index, 2);
-                    break;
-                }
+            if (typeof callbackTarget !== 'object') {
+                callbackTarget = undefined;
+            }
+            if (callbackTarget === target) {
+                list.splice(index, callbackTarget ? 2 : 1);
+                break;
             }
 
             index = list.indexOf(callback, index + 1);
