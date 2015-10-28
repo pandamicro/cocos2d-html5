@@ -275,6 +275,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         this.calculateDeltaTime();
 
         if (!this._paused) {
+            this.emit(cc.Director.EVENT_BEFORE_UPDATE, this);
             this.gameUpdate(this._deltaTime);
             this.engineUpdate(this._deltaTime);
             this.gameLateUpdate(this._deltaTime);
@@ -906,6 +907,17 @@ cc.Director.EVENT_PROJECTION_CHANGED = "director_projection_changed";
  *       });
  */
 cc.Director.EVENT_BEFORE_SCENE_LAUNCH = "director_before_scene_launch";
+
+/**
+ * The event after update of cc.Director
+ * @constant
+ * @type {string}
+ * @example
+ *   cc.director.on(cc.Director.EVENT_BEFORE_UPDATE, function(event) {
+ *           cc.log("before update event.");
+ *       });
+ */
+cc.Director.EVENT_BEFORE_UPDATE = "director_before_update";
 
 /**
  * The event after update of cc.Director
