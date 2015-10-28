@@ -448,6 +448,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
      * @param {Number} [scaleY=]
      */
     setScale: function (scale, scaleY) {
+        if (scale instanceof cc.Vec2) {
+            scaleY = scale.y;
+            scale = scale.x
+        }
+
         this._scaleX = scale;
         this._scaleY = (scaleY || scaleY === 0) ? scaleY : scale;
         this._sgNode.setScale(scale, scaleY);
