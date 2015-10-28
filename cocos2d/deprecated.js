@@ -237,6 +237,25 @@ if (CC_DEV) {
     deprecateEnum(cc, 'cc.EDITBOX_INPUT_MODE', 'cc.EditBox.InputMode');
     deprecateEnum(cc, 'cc.EDITBOX_INPUT_FLAG', 'cc.EditBox.InputFlag');
 
+
+    function provideClearError (owner, obj) {
+        var className = cc.js.getClassName(owner);
+        var Info = 'Sorry,' + className + '.%s is removed, please use %s instead.';
+        for (var prop in obj) {
+            (function (prop) {
+                var getset = obj[prop];
+                js.getset(owner, prop,
+                    function () {
+                        cc.error(Info, prop, getset[0]);
+                    },
+                    getset[1] && function () {
+                        cc.error(Info, prop, getset[1]);
+                    }
+                );
+            })(prop);
+        }
+    }
+
     // cc.ENode
 
     [
@@ -315,10 +334,11 @@ if (CC_DEV) {
     (function () {
         var GetSet = {
             arrivalOrder: ['getSiblingIndex', 'setSiblingIndex'],
-            _visible: ['active', 'active'],
-            _running: ['active', 'active'],
-            _realOpacity: ['opacity', 'opacity'],
-            _realColor: ['color', 'color'],
+            _visible: ['_activeInHierarchy', 'active'],
+            _running: ['_activeInHierarchy', 'active'],
+            running: ['activeInHierarchy', 'active'],
+            _realOpacity: ['_opacity', '_opacity'],
+            _realColor: ['_color', '_color'],
             getZOrder: ['getLocalZOrder'],
             setZOrder: ['setLocalZOrder'],
             getOrderOfArrival: ['getSiblingIndex'],
@@ -332,19 +352,44 @@ if (CC_DEV) {
             nodeToParentTransform: ['getNodeToParentTransform'],
             getNodeToParentAffineTransform: ['getNodeToParentTransform'],
         };
-        var Info = 'Sorry, cc.ENode.%s is removed, please use %s instead.';
-        for (var prop in GetSet) {
-            (function (prop) {
-                var getset = GetSet[prop];
-                js.getset(cc.ENode.prototype, prop,
-                    function () {
-                        cc.error(Info, prop, getset[0]);
-                    },
-                    getset[1] && function () {
-                        cc.error(Info, prop, getset[1]);
-                    }
-                );
-            })(prop);
-        }
+        provideClearError(cc.Node.prototype, GetSet);
     })();
+
+    // cc.SpriteRenderer
+
+    [
+        'textureLoaded',
+        'addLoadedEventListener',
+        'isDirty',
+        'setDirty',
+        'sortAllChildren',
+        'reorderChild',
+        'removeChild',
+        'init',
+        'removeAllChildren',
+        'setOpacityModifyRGB',
+        'isOpacityModifyRGB',
+        'addChild',
+        'getQuad',
+        'setBlendFunc',
+        'getBlendFunc',
+        'setBlendFunc',
+
+    ].forEach(function (prop) {
+        function error () {
+            cc.error('Sorry, cc.SpriteRenderer.' + prop + ' is removed.');
+        }
+        js.getset(cc.SpriteRenderer.prototype, prop, error, error);
+    });
+
+    (function () {
+        var StaticFunc = {
+            create: ['addComponent'],
+            createWithTexture: ['addComponent'],
+            createWithSpriteFrameName: ['addComponent'],
+            createWithSpriteFrame: ['addComponent'],
+        };
+        provideClearError(cc.SpriteRenderer, StaticFunc);
+    })();
+
 }

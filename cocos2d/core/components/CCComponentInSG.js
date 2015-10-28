@@ -16,8 +16,8 @@ var ComponentInSG = cc.Class({
     },
 
     onLoad: function () {
-        var node = this._createSgNode();
-        this._appendSgNode(node);
+        var sgNode = this._createSgNode();
+        this._appendSgNode(sgNode);
     },
     onEnable: function () {
         if (this._sgNode) {
@@ -31,7 +31,7 @@ var ComponentInSG = cc.Class({
     },
     onDestroy: SceneGraphHelper.removeSgNode,
 
-    _appendSgNode: function (node) {
+    _appendSgNode: function (sgNode) {
         // TODO - 初始化不会继承自父物体的属性，同时这些属性要监听来自父物体的变更
         //var entity = this.node;
         //node.setContentSize(entity._size);
@@ -41,17 +41,26 @@ var ComponentInSG = cc.Class({
         //    node.scaleY = this._scale[1];
         //}
         //
-        this._updateColor();
+
+        // update color
+        sgNode.setColor(this.node._color);
+        sgNode.setOpacity(this.node._opacity / 255);
+        // update Size
+        sgNode.setContentSize(this.node._contentSize);
+        // update color
+        sgNode.setAnchorPoint(this.node._anchorPoint);
+        sgNode.ignoreAnchorPointForPosition(this.node._ignoreAnchorPointForPosition);
 
         // set z order to -1 to make sure component will rendered before all of its entity's children.
-        node.setLocalZOrder(-1);
+
+        sgNode.setLocalZOrder(-1);
 
         var sgParent = this.node._sgNode;
-        sgParent.addChild(node);
+        sgParent.addChild(sgNode);
 
         // retain immediately
-        node.retain();
-        this._sgNode = node;
+        sgNode.retain();
+        this._sgNode = sgNode;
     }
 });
 
