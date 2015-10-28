@@ -472,7 +472,6 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         // unload scene
         var oldScene = this._scene;
         if (cc.isValid(oldScene)) {
-            // destroyed
             oldScene.destroy();
         }
         this._scene = null;
@@ -498,32 +497,28 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         // }
         // director._dontDestroyNodes = [];
 
+        var sgScene = scene;
+
         // Run an Entity Scene
         if (scene instanceof cc.EScene) {
             // init scene
             scene._onBatchCreated();
 
             this._scene = scene;
-            scene = scene._sgNode;
+            sgScene = scene._sgNode;
         }
 
         // Run or replace rendering scene
         if (!this._runningScene) {
             //start scene
-            this.pushScene(scene);
+            this.pushScene(sgScene);
             this.startAnimation();
         } else {
             //replace scene
             var i = this._scenesStack.length;
-            if (i === 0) {
-                this._sendCleanupToScene = true;
-                this._scenesStack[i] = scene;
-                this._nextScene = scene;
-            } else {
-                this._sendCleanupToScene = true;
-                this._scenesStack[i - 1] = scene;
-                this._nextScene = scene;
-            }
+            this._scenesStack[Math.max(i - 1, 0)] = sgScene;
+            this._sendCleanupToScene = true;
+            this._nextScene = sgScene;
         }
 
         if (this._nextScene) {
