@@ -79,19 +79,29 @@ CallbacksHandler.prototype.removeAll = function (key) {
  * @method remove
  * @param {string} key
  * @param {function} callback
+ * @param {object} target
  * @return {Boolean} removed
  */
-CallbacksHandler.prototype.remove = function (key, callback) {
-    var list = this._callbackTable[key];
+CallbacksHandler.prototype.remove = function (key, callback, target) {
+    var list = this._callbackTable[key], index, callbackTarget;
     if (list) {
-        var index = list.indexOf(callback);
-        if (index !== -1) {
-            if (index+1 < list.length && typeof list[index+1] === 'object')
-                list.splice(index, 2);
-            else
-                list.splice(index, 1);
+        index = list.indexOf(callback);
+        if (!target && index != -1) {
+            list.splice(index, 1);
             return true;
         }
+        while (index != -1) {
+            callbackTarget = list[index+1];
+            if (typeof callbackTarget === 'object') {
+                if (callbackTarget === target) {
+                    list.splice(index, 2);
+                    break;
+                }
+            }
+
+            index = list.indexOf(callback, index + 1);
+        }
+        return true;
     }
     return false;
 };
