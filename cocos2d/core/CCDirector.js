@@ -207,28 +207,9 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
      */
     convertToUI: null,
 
-    gameUpdate: function (deltaTime) {
-        // Call start for new added components
-        this._startScheduler.update(deltaTime);
-
-        // Update for components
-        this._updateScheduler.update(deltaTime);
-
-        // Destroy entities that have been removed recently
-        // Low cost: Array manipulation
-        CCObject._deferredDestroy();
-    },
-
     engineUpdate: function (deltaTime) {
         //tick before glClear: issue #533
         this._scheduler.update(deltaTime);
-        this.emit(cc.Director.EVENT_AFTER_ENGINE_UPDATE, this);
-    },
-
-    gameLateUpdate: function (deltaTime) {
-        // Late update for components
-        this._lateUpdateScheduler.update(deltaTime);
-        this.emit(cc.Director.EVENT_AFTER_UPDATE, this);
     },
 
     visit: function (deltaTime) {
@@ -275,9 +256,18 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         this.calculateDeltaTime();
 
         if (!this._paused) {
-            this.gameUpdate(this._deltaTime);
+            // Call start for new added components
+            this.emit(cc.Director.EVENT_BEFORE_UPDATE, this);
+            // Update for components
+            this.emit(cc.Director.EVENT_COMPONENT_UPDATE, this);
+            // Destroy entities that have been removed recently
+            CCObject._deferredDestroy();
+            // Engine update with scheduler
             this.engineUpdate(this._deltaTime);
-            this.gameLateUpdate(this._deltaTime);
+            // Late update for components
+            this.emit(cc.Director.EVENT_COMPONENT_LATE_UPDATE, this);
+            // User can use this event to do things after update
+            this.emit(cc.Director.EVENT_AFTER_UPDATE, this);
         }
 
         /* to avoid flickr, nextScene MUST be here: after tick and before draw.
@@ -897,10 +887,6 @@ cc.Director.EVENT_PROJECTION_CHANGED = "director_projection_changed";
  * The event after update of cc.Director
  * @constant
  * @type {string}
- * @example
- *   cc.director.on(cc.Director.EVENT_BEFORE_SCENE_LAUNCH, function(event) {
- *           cc.log("before scene launch event.");
- *       });
  */
 cc.Director.EVENT_BEFORE_SCENE_LAUNCH = "director_before_scene_launch";
 
@@ -908,21 +894,27 @@ cc.Director.EVENT_BEFORE_SCENE_LAUNCH = "director_before_scene_launch";
  * The event after update of cc.Director
  * @constant
  * @type {string}
- * @example
- *   cc.director.on(cc.Director.EVENT_AFTER_ENGINE_UPDATE, function(event) {
- *           cc.log("after engine update event.");
- *       });
  */
-cc.Director.EVENT_AFTER_ENGINE_UPDATE = "director_after_engine_update";
+cc.Director.EVENT_BEFORE_UPDATE = "director_before_update";
 
 /**
  * The event after update of cc.Director
  * @constant
  * @type {string}
- * @example
- *   cc.director.on(cc.Director.EVENT_AFTER_UPDATE, function(event) {
- *           cc.log("after update event.");
- *       });
+ */
+cc.Director.EVENT_COMPONENT_UPDATE = "director_component_update";
+
+/**
+ * The event after update of cc.Director
+ * @constant
+ * @type {string}
+ */
+cc.Director.EVENT_COMPONENT_LATE_UPDATE = "director_component_late_update";
+
+/**
+ * The event after update of cc.Director
+ * @constant
+ * @type {string}
  */
 cc.Director.EVENT_AFTER_UPDATE = "director_after_update";
 
@@ -930,10 +922,6 @@ cc.Director.EVENT_AFTER_UPDATE = "director_after_update";
  * The event after visit of cc.Director
  * @constant
  * @type {string}
- * @example
- *   cc.director.on(cc.Director.EVENT_AFTER_VISIT, function(event) {
- *           cc.log("after visit event.");
- *       });
  */
 cc.Director.EVENT_AFTER_VISIT = "director_after_visit";
 
@@ -941,10 +929,6 @@ cc.Director.EVENT_AFTER_VISIT = "director_after_visit";
  * The event after draw of cc.Director
  * @constant
  * @type {string}
- * @example
- *   cc.director.on(cc.Director.EVENT_AFTER_DRAW, function(event) {
- *           cc.log("after draw event.");
- *       });
  */
 cc.Director.EVENT_AFTER_DRAW = "director_after_draw";
 

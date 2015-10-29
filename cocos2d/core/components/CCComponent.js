@@ -52,8 +52,8 @@ function callOnEnable (self, enable) {
                 else {
                     self.onEnable();
                 }
-                self.update && cc.director._updateScheduler.resumeTarget(self);
-                self.lateUpdate && cc.director._lateUpdateScheduler.resumeTarget(self);
+                self.update && cc.director.on(cc.Director.EVENT_COMPONENT_UPDATE, _callUpdate, self);
+                self.lateUpdate && cc.director.on(cc.Director.EVENT_COMPONENT_LATE_UPDATE, _callLateUpdate, self);
             }
             self._objFlags |= IsOnEnableCalled;
         }
@@ -67,8 +67,8 @@ function callOnEnable (self, enable) {
                 else {
                     self.onDisable();
                 }
-                self.update && cc.director._updateScheduler.pauseTarget(self);
-                self.lateUpdate && cc.director._lateUpdateScheduler.pauseTarget(self);
+                self.update && cc.director.off(cc.Director.EVENT_COMPONENT_UPDATE, _callUpdate, self);
+                self.lateUpdate && cc.director.off(cc.Director.EVENT_COMPONENT_LATE_UPDATE, _callLateUpdate, self);
             }
             self._objFlags &= ~IsOnEnableCalled;
         }
@@ -481,13 +481,13 @@ var Component = cc.Class({
             else {
                 this._objFlags |= IsOnLoadCalled;
             }
-            var frameTime = 1000 / cc.game.config[cc.game.CONFIG_KEY.frameRate];
+
             if (this.start)
-                cc.director._startScheduler.schedule(_callStart, this, 0, 0, 0, false, this.uuid||" ");
+                cc.director.once(cc.Director.EVENT_BEFORE_UPDATE, _callStart, this);
             if (this.update)
-                cc.director._updateScheduler.schedule(_callUpdate, this, frameTime, false, this.uuid||" ");
+                cc.director.on(cc.Director.EVENT_COMPONENT_UPDATE, _callUpdate, this);
             if (this.lateUpdate)
-                cc.director._lateUpdateScheduler.schedule(_callLateUpdate, this, frameTime, false, this.uuid||" ");
+                cc.director.on(cc.Director.EVENT_COMPONENT_LATE_UPDATE, _callLateUpdate, this);
             //Editor._AssetsWatcher.start(this);
         }
 
@@ -500,14 +500,13 @@ var Component = cc.Class({
                 this.onLoad();
             }
             this._objFlags |= IsOnLoadCalled;
-            
-            var frameTime = 1000 / cc.game.config[cc.game.CONFIG_KEY.frameRate];
+
             if (this.start)
-                cc.director._startScheduler.schedule(_callStart, this, 0, 0, 0, false, this.uuid||" ");
+                cc.director.once(cc.Director.EVENT_BEFORE_UPDATE, _callStart, this);
             if (this.update)
-                cc.director._updateScheduler.scheduleUpdate(this, 0, false);
+                cc.director.on(cc.Director.EVENT_COMPONENT_UPDATE, _callUpdate, this);
             if (this.lateUpdate)
-                cc.director._lateUpdateScheduler.schedule(_callLateUpdate, this, frameTime, false, this.uuid||" ");
+                cc.director.on(cc.Director.EVENT_COMPONENT_LATE_UPDATE, _callLateUpdate, this);
         }
 
         if (this._enabled) {
