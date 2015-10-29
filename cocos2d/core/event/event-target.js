@@ -192,6 +192,11 @@ JS.mixin(EventTarget.prototype, {
         var listeners = useCapture ? this._capturingListeners : this._bubblingListeners;
         if (listeners) {
             listeners.remove(type, callback, target);
+
+            if (target && target.__eventTargets) {
+                var index = target.__eventTargets.indexOf(this);
+                target.__eventTargets.splice(index, 1);
+            }
         }
     },
 
