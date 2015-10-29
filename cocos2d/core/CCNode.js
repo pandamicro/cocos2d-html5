@@ -149,6 +149,18 @@ var Node = cc.Class({
         _prefab: {
             default: null,
             editorOnly: true
+        },
+
+        /**
+         * Register all related EventTargets, 
+         * all event callbacks will be removed in _onPreDestroy
+         * @property __eventTargets
+         * @type array
+         * @private
+         */
+        __eventTargets: {
+            default: [],
+            serializable: false
         }
     },
 
@@ -175,15 +187,21 @@ var Node = cc.Class({
     },
 
     _onPreDestroy: function () {
-        var parent = this._parent;
+        var parent = this._parent, i, len;
         this._objFlags |= Destroying;
         var destroyByParent = parent && (parent._objFlags & Destroying);
         if (!destroyByParent) {
             this._removeSgNode();
         }
+        // Remove all listeners
+        for (i = 0, len = this.__eventTargets.length; i < len; ++i) {
+            var target = this.__eventTargets[i];
+            target && target.targetOff && target.targetOff(this);
+        }
+        this.__eventTargets.length = 0;
         // destroy components
-        for (var c = 0; c < this._components.length; ++c) {
-            var component = this._components[c];
+        for (i = 0, len = this._components.length; i < len; ++i) {
+            var component = this._components[i];
             // destroy immediate so its _onPreDestroy can be called before
             component._destroyImmediate();
         }
@@ -195,7 +213,7 @@ var Node = cc.Class({
         }
         // destroy children
         var children = this._children;
-        for (var i = 0, len = children.length; i < len; ++i) {
+        for (i = 0, len = children.length; i < len; ++i) {
             // destroy immediate so its _onPreDestroy can be called before
             children[i]._destroyImmediate();
         }

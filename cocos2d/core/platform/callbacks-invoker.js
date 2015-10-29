@@ -70,11 +70,29 @@ CallbacksHandler.prototype.has = function (key, callback) {
 };
 
 /**
+ * Removes all callbacks registered in a certain event type or all callbacks registered with a certain target
  * @method removeAll
- * @param {string} key
+ * @param {string|object} key - The event key to be removed or the target to be removed
  */
 CallbacksHandler.prototype.removeAll = function (key) {
-    delete this._callbackTable[key];
+    if (typeof key === 'object') {
+        var target = key, list, index, callback;
+        // loop for all event types
+        for (key in this._callbackTable) {
+            list = this._callbackTable[key];
+            index = list.lastIndexOf(target);
+            while (index !== -1) {
+                callback = list[index-1];
+                if (typeof callback === 'function')
+                    list.splice(index-1, 2);
+                else
+                    list.splice(index, 1);
+                index = list.lastIndexOf(target);
+            }
+        }
+    }
+    else 
+        delete this._callbackTable[key];
 };
 
 /**

@@ -293,6 +293,18 @@ var Component = cc.Class({
                 return this._objFlags & IsOnLoadCalled;
             },
             visible: false
+        },
+
+        /**
+         * Register all related EventTargets, 
+         * all event callbacks will be removed in _onPreDestroy
+         * @property __eventTargets
+         * @type array
+         * @private
+         */
+        __eventTargets: {
+            default: [],
+            serializable: false
         }
     },
 
@@ -526,8 +538,15 @@ var Component = cc.Class({
     __scriptUuid: '',
 
     _onPreDestroy: function () {
+        var i, l, target;
         // ensure onDisable called
         callOnEnable(this, false);
+        // Remove all listeners
+        for (i = 0, l = this.__eventTargets.length; i < l; ++i) {
+            target = this.__eventTargets[i];
+            target && target.targetOff && target.targetOff(this);
+        }
+        this.__eventTargets.length = 0;
         // onDestroy
         if (CC_EDITOR) {
             //Editor._AssetsWatcher.stop(this);

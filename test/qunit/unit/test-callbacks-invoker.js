@@ -108,3 +108,60 @@ test('CallbacksInvoker support target', function () {
     cb2.expect(1, 'callback2 should be called once');
     cb3.expect(2, 'callback3 should be called twice');
 });
+
+test('CallbacksInvoker remove target', function () {
+    var ci = new cc._Test.CallbacksInvoker();
+    var cb1 = new Callback();
+    var cb2 = new Callback();
+    var cb3 = new Callback();
+
+    var target1 = {
+        name: 'CallbackTarget1',
+        count: 0
+    };
+    var target2 = {
+        name: 'CallbackTarget2',
+        count: 0
+    };
+
+    ci.add('a', cb1);
+    ci.add('a', cb1, target1);
+    ci.add('a', cb1);
+    ci.add('a', cb1, target2);
+    ci.add('a', cb1, target2);
+    ci.add('a', cb2, target2);
+    ci.add('a', cb2, target1);
+    ci.add('a', cb3);
+    ci.add('a', cb3, target1);
+
+    cb1.enable();
+    cb2.enable();
+    cb3.enable();
+
+    ci.invoke('a');
+    cb1.expect(5, 'callback1 should be called five times');
+    cb2.expect(2, 'callback2 should be called twice');
+    cb3.expect(2, 'callback3 should be called twice');
+
+    ci.removeAll(target1);
+
+    cb1.calledCount = 0;
+    cb2.calledCount = 0;
+    cb3.calledCount = 0;
+
+    ci.invoke('a');
+    cb1.expect(4, 'removed one, callback1 should be called four times');
+    cb2.expect(1, 'removed one, callback2 should be called once');
+    cb3.expect(1, 'removed one, callback3 should be called once');
+
+    ci.removeAll(target2);
+
+    cb1.calledCount = 0;
+    cb2.calledCount = 0;
+    cb3.calledCount = 0;
+
+    ci.invoke('a');
+    cb1.expect(2, 'removed two, callback1 should be called twice');
+    cb2.expect(0, 'removed one, callback2 should not be called');
+    cb3.expect(1, 'callback3 should be called once');
+});
