@@ -164,13 +164,13 @@ JS.mixin(EventTarget.prototype, {
     },
 
     /**
-     * Removes the callback previously registered with the same type, callback, and capture.
+     * Removes the callback previously registered with the same type, callback, target and or useCapture.
      * This method is merely an alias to removeEventListener.
      *
      * @method off
      * @param {string} type - A string representing the event type being removed.
      * @param {function} callback - The callback to remove.
-     * @param {Object} [target] - The target to invoke the callback, can be null
+     * @param {Object} [target] - The target to invoke the callback, if it's not given, only callback without target will be removed
      * @param {Boolean} [useCapture=false] - Specifies whether the callback being removed was registered as a capturing callback or not.
      *                              If not specified, useCapture defaults to false. If a callback was registered twice,
      *                              one with capture and one without, each must be removed separately. Removal of a capturing callback
@@ -190,6 +190,17 @@ JS.mixin(EventTarget.prototype, {
         if (listeners) {
             listeners.remove(type, callback, target);
         }
+    },
+
+    /**
+     * Removes all callbacks previously registered with the same target.
+     *
+     * @method targetOff
+     * @param {object} target - The target to be searched for all related callbacks
+     */
+    targetOff: function (target) {
+        this._capturingListeners.removeAll(target);
+        this._bubblingListeners.removeAll(target);
     },
 
     /**
