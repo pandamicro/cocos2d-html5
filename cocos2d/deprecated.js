@@ -352,7 +352,7 @@ if (CC_DEV) {
             nodeToParentTransform: ['getNodeToParentTransform'],
             getNodeToParentAffineTransform: ['getNodeToParentTransform'],
         };
-        provideClearError(cc.Node.prototype, GetSet);
+        provideClearError(cc.ENode.prototype, GetSet);
     })();
 
     // cc.SpriteRenderer
