@@ -106,7 +106,9 @@ test('activation logic for component', function () {
         },
         start: function () {
             this._assert(MyComponent.start);
-        }
+        },
+        update: null,
+        lateUpdate: null
     });
     MyComponent.start = "MyCompStart";
 
@@ -114,10 +116,9 @@ test('activation logic for component', function () {
     cc.director.getScene().addChild(obj);
 
     var comp = obj.addComponent(MyComponent); // onEnable
-
     comp.expect(MyComponent.start, 'call start after onEnable');
     cc.game.step();
-    comp.notExpect(MyComponent.start, 'start should called only once');
+    comp.notExpect(MyComponent.start, 'start should be called only once');
     cc.game.step();
 
     strictEqual(comp.node, obj, 'can get node from component');
@@ -167,37 +168,28 @@ test('life cycle logic for component', function () {
     var comp = obj.addComponent(MyComponent); // onEnable
 
     comp.expect(CallbackTester.start, 'call start after onEnable');
-    comp.expect(CallbackTester.update, 'first update call');
-    // cc.director.once(cc.Director.EVENT_AFTER_ENGINE_UPDATE, function(event) {
-        comp.expect(CallbackTester.lateUpdate, 'first lateUpdate call');
-    // });
-    cc.game.step();
-    comp.expect(CallbackTester.update, 'second update call');
-    // cc.director.once(cc.Director.EVENT_AFTER_ENGINE_UPDATE, function(event) {
-        comp.expect(CallbackTester.lateUpdate, 'second lateUpdate call');
-    // });
-    cc.game.step();
-    comp.expect(CallbackTester.update, 'third update call');
-    // cc.director.once(cc.Director.EVENT_AFTER_ENGINE_UPDATE, function(event) {
-        comp.expect(CallbackTester.lateUpdate, 'third lateUpdate call');
-    // });
+    comp.expect(CallbackTester.update, 'first update call', true);
+    comp.expect(CallbackTester.lateUpdate, 'first lateUpdate call', true);
     cc.game.step();
 
+    comp.expect(CallbackTester.update, 'second update call');
+    comp.expect(CallbackTester.lateUpdate, 'second lateUpdate call', true);
+    cc.game.step();
+
+    comp.expect(CallbackTester.update, 'third update call');
+    comp.expect(CallbackTester.lateUpdate, 'third lateUpdate call', true);
+    cc.game.step();
+
+    comp.expect(CallbackTester.OnDisable, 'disabled entity');
     obj.active = false; // onDisable
     comp.notExpect(CallbackTester.update, 'inactive component shouldn\'t have update call back');
-    comp.notExpect(CallbackTester.lateUpdate, 'inactive component shouldn\'t have lateUpdate call back');
+    comp.notExpect(CallbackTester.lateUpdate, 'inactive component shouldn\'t have lateUpdate call back', true);
     cc.game.step();
 
+    comp.expect(CallbackTester.OnEnable, 're-enabled entity');
     obj.active = true;  // onEnable
     comp.expect(CallbackTester.update, 'fourth update call');
-    // cc.director.once(cc.Director.EVENT_AFTER_ENGINE_UPDATE, function(event) {
-        comp.expect(CallbackTester.lateUpdate, 'fourth lateUpdate call');
-    // });
-    cc.game.step();
-
-    comp.destroy();
-    comp.notExpect(CallbackTester.update, 'destroyed component shouldn\'t have update call back');
-    comp.notExpect(CallbackTester.lateUpdate, 'destroyed component shouldn\'t have lateUpdate call back');
+    comp.expect(CallbackTester.lateUpdate, 'fourth lateUpdate call', true);
     cc.game.step();
 
     comp.stopTest();

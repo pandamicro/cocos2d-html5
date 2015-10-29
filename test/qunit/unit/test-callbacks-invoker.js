@@ -59,7 +59,7 @@ test('CallbacksInvoker support target', function () {
     var target2 = {
         name: 'CallbackTarget2',
         count: 0
-    }
+    };
 
     ci.add('a', cb1);
     strictEqual(ci.add('a', cb1, target1), false, 'can add callback with target');

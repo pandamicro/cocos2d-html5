@@ -142,7 +142,11 @@ JS.mixin(EventTarget.prototype, {
      */
     on: function (type, callback, target, useCapture) {
         // Accept also patameters like: (type, callback, useCapture)
-        useCapture = typeof target === "boolean" ? target : (useCapture || false);
+        if (typeof target === 'boolean') {
+            useCapture = target;
+            target = undefined;
+        }
+        else useCapture = !!useCapture;
         if (!callback) {
             cc.error('Callback of event must be non-nil');
             return;
@@ -174,7 +178,11 @@ JS.mixin(EventTarget.prototype, {
      */
     off: function (type, callback, target, useCapture) {
         // Accept also patameters like: (type, callback, useCapture)
-        useCapture = typeof target === "boolean" ? target : (useCapture || false);
+        if (typeof target === 'boolean') {
+            useCapture = target;
+            target = undefined;
+        }
+        else useCapture = !!useCapture;
         if (!callback) {
             return;
         }
@@ -202,7 +210,7 @@ JS.mixin(EventTarget.prototype, {
         var self = this;
         var cb = function (event) {
             self.off(type, cb, target, useCapture);
-            callback(event);
+            callback.call(this, event);
         };
         this.on(type, cb, target, useCapture);
     },
