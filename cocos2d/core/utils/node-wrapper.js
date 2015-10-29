@@ -75,6 +75,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         _globalZOrder: 0,
         _ignoreAnchorPointForPosition: false,
         _tag: cc.NODE_TAG_INVALID,
+        _opacityModifyRGB: false,
 
         // API
 
@@ -1031,6 +1032,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
      * @param {Boolean} opacityValue
      */
     setOpacityModifyRGB: function (opacityValue) {
+        if (this._opacityModifyRGB !== opacityValue) {
+            this._opacityModifyRGB = opacityValue;
+            this._sgNode.setOpacityModifyRGB(opacityValue);
+            this._onOpacityModifyRGBChanged();
+        }
     },
 
     /**
@@ -1039,7 +1045,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
      * @return {Boolean}
      */
     isOpacityModifyRGB: function () {
-        return false;
+        return this._opacityModifyRGB;
     },
 
     /** Search the children of the receiving node to perform processing for nodes which share a name.

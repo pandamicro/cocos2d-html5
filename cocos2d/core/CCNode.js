@@ -468,7 +468,17 @@ var Node = cc.Class({
                 comp._sgNode.ignoreAnchorPointForPosition(this._ignoreAnchorPointForPosition);
             }
         }
+    },
+
+    _onOpacityModifyRGBChanged: function () {
+        for (var c = 0; c < this._components.length; ++c) {
+            var comp = this._components[c];
+            if (comp instanceof cc._ComponentInSG && comp.isValid) {
+                comp._sgNode.setOpacityModifyRGB(this._opacityModifyRGB);
+            }
+        }
     }
+
 });
 
 // TODO - 这个类名是临时的，之后要改名成 cc.Node，再对外屏蔽原 cc.Node
