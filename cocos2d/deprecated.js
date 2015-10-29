@@ -371,7 +371,6 @@ if (CC_DEV) {
         'isOpacityModifyRGB',
         'addChild',
         'getQuad',
-        'setBlendFunc',
         'getBlendFunc',
         'setBlendFunc',
         'useBatchNode',
