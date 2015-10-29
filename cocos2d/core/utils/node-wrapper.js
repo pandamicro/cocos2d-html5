@@ -286,9 +286,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
-        running: {
-            get: SGProto.isRunning
-        },
+        //running: {
+        //    get: SGProto.isRunning
+        //},
 
         ignoreAnchor: {
             get: SGProto.isIgnoreAnchorPointForPosition,
@@ -1161,7 +1161,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         y: ['getPositionY', 'setPositionY'],
         zIndex: ['getLocalZOrder', 'setLocalZOrder'],
         visible: ['isVisible', 'setVisible'],
-        running: ['isRunning'],
+        //running: ['isRunning'],
         ignoreAnchor: ['isIgnoreAnchorPointForPosition', 'ignoreAnchorPointForPosition'],
         opacityModifyRGB: ['isOpacityModifyRGB'],
         cascadeOpacity: ['isCascadeOpacityEnabled', 'setCascadeOpacityEnabled'],

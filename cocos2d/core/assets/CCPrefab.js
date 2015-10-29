@@ -23,29 +23,14 @@ var Prefab = cc.Class({
     },
 
     _instantiate: function () {
-        var initNodeAndChildren = cc.Runtime.NodeWrapper._initNodeAndChildren;
-        var wrapperToNode = new cc.deserialize.W2NMapper();
-
-        // instantiate wrappers
-        var data = cc.instantiate._clone(this.data, null, wrapperToNode);
-
-        var newWrapper = data.w;
-
-        // create nodes
-        cc.game._isCloning = true;
-        initNodeAndChildren([data], null, wrapperToNode);
-        cc.game._isCloning = false;
-
-        // reassociate nodes
-        wrapperToNode.apply();
-
-        newWrapper._onAfterInstantiate();
+        // instantiate
+        var node = cc.instantiate(this.data);
 
         if (CC_EDITOR || CC_TEST) {
-            Editor.PrefabUtils.onPrefabInstantiated(this, newWrapper);
+            Editor.PrefabUtils.onPrefabInstantiated(this, node);
         }
 
-        return newWrapper;
+        return node;
     }
 });
 

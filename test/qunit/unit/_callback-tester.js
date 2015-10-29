@@ -16,12 +16,7 @@ CallbackTester.OnEnable = 'onEnable';
 CallbackTester.OnDisable = 'onDisable';
 CallbackTester.OnDestroy = 'onDestroy';
 
-/**
- * @param {string} expect
- * @param {string} [message]
- * @param {boolean} [append=false]
- */
-CallbackTester.prototype.expect = function (expect, message, append) {
+CallbackTester.prototype._expect = function (expect, message, append) {
     if (Array.isArray(expect) && expect.length > 0) {
         this.expect(expect[0]);
         for (var i = 1; i < expect.length; ++i) {
@@ -32,7 +27,7 @@ CallbackTester.prototype.expect = function (expect, message, append) {
 
     var error = !append && this._expects.length > 0;
     if (error) {
-        strictEqual(this._expects[0].expect, null, 'expecting a new callback but the last ' + this._expects[0].expect + ' have not being called');
+        ok(false, 'expecting a new callback but the last "' + this._expects[0].expect + '" have not being called');
         this._expects.length = 0;
     }
     else {
@@ -42,6 +37,30 @@ CallbackTester.prototype.expect = function (expect, message, append) {
         expect: expect,
         message: message
     });
+    return this;
+};
+
+CallbackTester.prototype.expect = function (expect, message, append) {
+    //console.trace('CallbackTester.expect is obsoleted, use pushExpect or resetExpect instead please!');
+    this._expect(expect, message, append);
+    return this;
+};
+
+/**
+ * @param {string} expect
+ * @param {string} [message]
+ */
+CallbackTester.prototype.pushExpect = function (expect, message) {
+    this._expect(expect, message, true);
+    return this;
+};
+
+/**
+ * @param {string} expect
+ * @param {string} [message]
+ */
+CallbackTester.prototype.resetExpect = function (expect, message) {
+    this._expect(expect, message, false);
     return this;
 };
 
@@ -66,7 +85,7 @@ CallbackTester.prototype.stopTest = function () {
         var last = this._expects.splice(0, 1)[0];
         var expect = last.expect;
         var message = last.message;
-        ok(false, 'The last expected ' + expect + ' not called yet: ' + message);
+        ok(false, 'The last expected "' + expect + '" not called yet: ' + message);
     }
     this._stopped = true;
     this._expects = null;
@@ -87,10 +106,10 @@ CallbackTester.prototype._assert = function (actual) {
         var error = this._unexpect[actual];
         if (!error) {
             if (expect) {
-                error = '' + expect + ' not called, actual: ' + actual;
+                error = 'Should invoke "' + expect + '" but the actual is "' + actual + '"';
             }
             else {
-                error = 'not expect any callback but ' + actual + ' called';
+                error = 'not expect any callback but "' + actual + '" called';
             }
         }
     }
