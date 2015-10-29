@@ -88,7 +88,7 @@ var SpriteRenderer = cc.Class({
      * @return {Boolean}
      */
     isTextureRectRotated: function () {
-        return return this._sgNode.isTextureRectRotated();
+        return this._sgNode.isTextureRectRotated();
     },
 
     /**
