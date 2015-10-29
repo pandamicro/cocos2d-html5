@@ -374,6 +374,11 @@ if (CC_DEV) {
         'setBlendFunc',
         'getBlendFunc',
         'setBlendFunc',
+        'useBatchNode',
+        'getBatchNode',
+        'setBatchNode',
+        'updateTransform',
+        'ignoreAnchorPointForPosition',
 
     ].forEach(function (prop) {
         function error () {
@@ -388,6 +393,7 @@ if (CC_DEV) {
             createWithTexture: ['addComponent'],
             createWithSpriteFrameName: ['addComponent'],
             createWithSpriteFrame: ['addComponent'],
+            ignoreAnchorPointForPosition: ['node.ignoreAnchor'],
         };
         provideClearError(cc.SpriteRenderer, StaticFunc);
     })();

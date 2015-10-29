@@ -33,14 +33,19 @@ var SpriteRenderer = cc.Class({
     extends: require('./CCComponentInSG'),
 
     properties: {
-        _textureAtlas: {
-            default: '',
-            url: cc.SpriteAtlas
-        },
+
+        _texture: '',
+        _atlasIndex: 0,
+        _textureAtlas: '',
+        _isFlippedX: false,
+        _isFlippedY: false,
+        _rectRotated: false,
+        _textureRect: cc.rect(),
+
         /**
          * Texture used to render the sprite.
          * @property textureAtlas
-         * @type {Number}
+         * @type {cc.SpriteAtlas}
          */
         textureAtlas: {
             get: function () {
@@ -54,10 +59,12 @@ var SpriteRenderer = cc.Class({
             },
             url: cc.SpriteAtlas
         },
-        _texture: {
-            default: '',
-            url: cc.TextureAsset
-        },
+
+        /**
+         * The texture of the sprite node
+         * @property texture
+         * @type {cc.TextureAsset}
+         */
         texture: {
             get: function () {
                 return this._texture;
@@ -69,7 +76,7 @@ var SpriteRenderer = cc.Class({
                     this._sgNode.texture = value;
                     // color cleared after reset texture, should reapply color
                     this._sgNode.setColor(this.node._color);
-                    this._sgNode.setOpacity(this.node._opacity / 255);
+                    this._sgNode.setOpacity(this.node._opacity);
                 }
             },
             url: cc.TextureAsset
@@ -81,10 +88,7 @@ var SpriteRenderer = cc.Class({
      * @return {Boolean}
      */
     isTextureRectRotated: function () {
-        if (this._sgNode) {
-            return this._sgNode.isTextureRectRotated()
-        }
-        return false;
+        return return this._sgNode.isTextureRectRotated();
     },
 
     /**
@@ -92,10 +96,7 @@ var SpriteRenderer = cc.Class({
      * @return {Number}
      */
     getAtlasIndex: function () {
-        if (this._sgNode) {
-            return this._sgNode.getAtlasIndex();
-        }
-        return 0;
+        return this._atlasIndex;
     },
 
     /**
@@ -104,9 +105,8 @@ var SpriteRenderer = cc.Class({
      * @param {Number} atlasIndex
      */
     setAtlasIndex: function (atlasIndex) {
-        if (this._sgNode) {
-            this._sgNode.setAtlasIndex(atlasIndex);
-        }
+        this._atlasIndex = atlasIndex;
+        this._sgNode.setAtlasIndex(atlasIndex);
     },
 
     /**
@@ -114,10 +114,7 @@ var SpriteRenderer = cc.Class({
      * @return {cc.Rect}
      */
     getTextureRect: function () {
-        if (this._sgNode) {
-            return this._sgNode.getTextureRect();
-        }
-        return cc.rect();
+        return this._textureRect;
     },
 
     /**
@@ -125,26 +122,23 @@ var SpriteRenderer = cc.Class({
      * @return {cc.Vec2}
      */
     getOffsetPosition: function () {
-        if (this._sgNode) {
-            return this._sgNode.getOffsetPosition();
-        }
-        return cc.p();
+        return this._sgNode.getOffsetPosition();
     },
 
     /**
      * Returns the offset position x of the sprite.
      * @return {float}
      */
-    getOffsetX: function () {
-       return this.getOffsetPosition().x;
+    _getOffsetX: function () {
+        return this._sgNode._getOffsetX();
     },
 
     /**
      * Returns the offset position y of the sprite.
      * @return {float}
      */
-    getOffsetY: function () {
-        return this.getOffsetPosition().y;
+    _getOffsetY: function () {
+        return this._sgNode._getOffsetY();
     },
 
     /**
@@ -154,10 +148,7 @@ var SpriteRenderer = cc.Class({
      * @return {Boolean}  true if the sprite is initialized properly, false otherwise.
      */
     initWithSpriteFrame: function (spriteFrame) {
-        if (this._sgNode) {
-            return this._sgNode.initWithSpriteFrame(spriteFrame);
-        }
-        return false;
+        return this._sgNode.initWithSpriteFrame(spriteFrame);
     },
 
     /**
@@ -172,20 +163,7 @@ var SpriteRenderer = cc.Class({
      * sprite.initWithSpriteFrameName("grossini_dance_01.png");
      */
     initWithSpriteFrameName: function (spriteFrameName) {
-        if (this._sgNode) {
-            return this._sgNode.initWithSpriteFrameName(spriteFrameName);
-        }
-        return false;
-    },
-
-    /**
-     * Tell the sprite to use batch node render.
-     * @param {cc.SpriteBatchNode} batchNode
-     */
-    useBatchNode: function (batchNode) {
-        if (this._sgNode) {
-            this._sgNode.useBatchNode(batchNode);
-        }
+        return this._sgNode.initWithSpriteFrameName(spriteFrameName);
     },
 
     /**
@@ -199,9 +177,13 @@ var SpriteRenderer = cc.Class({
      * @param {cc.Rect} rect
      */
     setVertexRect: function (rect) {
-        if (this._sgNode) {
-            this._sgNode.setVertexRect(rect);
-        }
+        var locRect = this._textureRect;
+        locRect.x = rect.x;
+        locRect.y = rect.y;
+        locRect.width = rect.width;
+        locRect.height = rect.height;
+
+        this._sgNode.setVertexRect(rect);
     },
 
     /**
@@ -214,24 +196,12 @@ var SpriteRenderer = cc.Class({
     },
 
     /**
-     * Sets whether ignore anchor point for positioning
-     * @param {Boolean} relative
-     * @override
-     */
-    ignoreAnchorPointForPosition: function (relative) {
-        if (this._sgNode) {
-            this._sgNode.ignoreAnchorPointForPosition(rect);
-        }
-    },
-
-    /**
      * Sets whether the sprite should be flipped horizontally or not.
      * @param {Boolean} flippedX true if the sprite should be flipped horizontally, false otherwise.
      */
     setFlippedX: function (flippedX) {
-        if (this._sgNode) {
-            this._sgNode.setFlippedX(flippedX);
-        }
+        this._isFlippedX = flippedX;
+        this._sgNode.setFlippedX(flippedX);
     },
 
     /**
@@ -239,9 +209,8 @@ var SpriteRenderer = cc.Class({
      * @param {Boolean} flippedY true if the sprite should be flipped vertically, false otherwise.
      */
     setFlippedY: function (flippedY) {
-        if (this._sgNode) {
-            this._sgNode.setFlippedY(flippedY);
-        }
+        this._isFlippedY = flippedY;
+        this._sgNode.setFlippedY(flippedY);
     },
 
     /**
@@ -255,10 +224,7 @@ var SpriteRenderer = cc.Class({
      * @return {Boolean} true if the sprite is flipped horizontally, false otherwise.
      */
     isFlippedX: function () {
-        if (this._sgNode) {
-            this._sgNode.isFlippedX();
-        }
-        return false;
+        return this._isFlippedX;
     },
 
     /**
@@ -272,10 +238,7 @@ var SpriteRenderer = cc.Class({
      * @return {Boolean} true if the sprite is flipped vertically, false otherwise.
      */
     isFlippedY: function () {
-        if (this._sgNode) {
-            this._sgNode.isFlippedY();
-        }
-        return false;
+        return this._isFlippedY;
     },
 
     // Animation
@@ -287,37 +250,7 @@ var SpriteRenderer = cc.Class({
      * @param {Number} frameIndex
      */
     setDisplayFrameWithAnimationName: function (animationName, frameIndex) {
-        if (this._sgNode) {
-            this._sgNode.setDisplayFrameWithAnimationName(animationName, frameIndex);
-        }
-    },
-
-    /**
-     * Returns the batch node object if this sprite is rendered by cc.SpriteBatchNode
-     * @returns {cc.SpriteBatchNode|null} The cc.SpriteBatchNode object if this sprite is rendered by
-     * cc.SpriteBatchNode, null if the sprite isn't used batch node.
-     */
-    getBatchNode: function () {
-        if (this._sgNode) {
-            return this._sgNode.getBatchNode();
-        }
-        return null;
-    },
-
-    /**
-     * Sets the batch node to sprite
-     * @function
-     * @param {cc.SpriteBatchNode|null} spriteBatchNode
-     * @example
-     *  var batch = new cc.SpriteBatchNode("Images/grossini_dance_atlas.png", 15);
-     *  var sprite = new cc.Sprite(batch.texture, cc.rect(0, 0, 57, 57));
-     *  batch.addChild(sprite);
-     *  layer.addChild(batch);
-     */
-    setBatchNode: function (spriteBatchNode) {
-        if (this._sgNode) {
-            this._sgNode.setBatchNode(spriteBatchNode);
-        }
+        this._sgNode.setDisplayFrameWithAnimationName(animationName, frameIndex);
     },
 
     /**
@@ -334,9 +267,7 @@ var SpriteRenderer = cc.Class({
      * @return {Boolean} true if the sprite is initialized properly, false otherwise.
      */
     initWithFile: function (filename, rect) {
-        if (this._sgNode) {
-            this._sgNode.initWithFile(filename, rect);
-        }
+        this._sgNode.initWithFile(filename, rect);
     },
 
     /**
@@ -353,10 +284,7 @@ var SpriteRenderer = cc.Class({
      * @return {Boolean} true if the sprite is initialized properly, false otherwise.
      */
     initWithTexture: function (texture, rect, rotated, counterclockwise) {
-        if (this._sgNode) {
-           return this._sgNode.initWithTexture(texture, rect, rotated, counterclockwise);
-        }
-        return false;
+        return this._sgNode.initWithTexture(texture, rect, rotated, counterclockwise);
     },
 
     // BatchNode methods
@@ -369,19 +297,24 @@ var SpriteRenderer = cc.Class({
      * @param {Boolean} [needConvert] contentScaleFactor switch
      */
     setTextureRect: function (rect, rotated, untrimmedSize, needConvert) {
-        if (this._sgNode) {
-            this._sgNode.setTextureRect(rect, rotated, untrimmedSize, needConvert);
-        }
-    },
+        var _t = this;
+        _t._rectRotated = rotated || false;
+        _t.node.setContentSize(untrimmedSize || rect);
+        _t.setVertexRect(rect);
 
-    /**
-     * Updates the quad according the the rotation, position, scale values.
-     * @function
-     */
-    updateTransform: function(){
-        if (this._sgNode) {
-            this._sgNode.updateTransform();
-        }
+        var relativeOffsetX = _t._sgNode._unflippedOffsetPositionFromCenter.x,
+            relativeOffsetY = _t._sgNode._unflippedOffsetPositionFromCenter.y;
+
+        if (_t._flippedX)
+            relativeOffsetX = -relativeOffsetX;
+        if (_t._flippedY)
+            relativeOffsetY = -relativeOffsetY;
+
+        var locRect = _t._textureRect;
+        _t._offsetPosition.x = relativeOffsetX + (_t.node._contentSize.width - locRect.width) / 2;
+        _t._offsetPosition.y = relativeOffsetY + (_t.node._contentSize.height - locRect.height) / 2;
+
+        this._sgNode.setTextureRect(rect, rotated, untrimmedSize, needConvert);
     },
 
     // Frames
@@ -391,9 +324,7 @@ var SpriteRenderer = cc.Class({
      * @param {cc.SpriteFrame|String} newFrame
      */
     setSpriteFrame: function (newFrame) {
-        if (this._sgNode) {
-            this._sgNode.setSpriteFrame(newFrame);
-        }
+        this._sgNode.setSpriteFrame(newFrame);
     },
 
     /**
@@ -401,10 +332,7 @@ var SpriteRenderer = cc.Class({
      * @return {cc.SpriteFrame}
      */
     getSpriteFrame: function () {
-        if (this._sgNode) {
-            return this._sgNode.getSpriteFrame();
-        }
-        return null
+        return this._sgNode.getSpriteFrame();
     },
 
     /**
@@ -413,9 +341,7 @@ var SpriteRenderer = cc.Class({
      * @deprecated
      */
     setDisplayFrame: function(newFrame){
-        if (this._sgNode) {
-            this._sgNode.setDisplayFrame(newFrame);
-        }
+        this._sgNode.setDisplayFrame(newFrame);
     },
 
     /**
@@ -434,10 +360,7 @@ var SpriteRenderer = cc.Class({
      * @return {Boolean}
      */
     isFrameDisplayed: function(frame){
-        if (this._sgNode) {
-            return this._sgNode.isFrameDisplayed(frame);
-        }
-        return false;
+        return this._sgNode.isFrameDisplayed(frame);
     },
 
     _createSgNode: function () {
@@ -456,20 +379,15 @@ var SpriteRenderer = cc.Class({
     },
 });
 
-(function () {
-
-    var misc = require('../utils/misc');
-    var SameNameGetSets = ['textureAtlas', 'texture'];
-    var DiffNameGetSets = {
-        atlasIndex: ['getAtlasIndex', 'setAtlasIndex'],
-        offsetX: ['getOffsetX'],
-        offsetY: ['getOffsetY'],
-        flippedX: ['isFlippedX', 'setFlippedX'],
-        flippedY: ['isFlippedY', 'setFlippedY'],
-        textureRectRotated: ['isTextureRectRotated'],
-    };
-    misc.propertyDefine(SpriteRenderer, SameNameGetSets, DiffNameGetSets);
-
-})();
+var misc = require('../utils/misc');
+var SameNameGetSets = ['textureAtlas', 'texture', 'atlasIndex'];
+var DiffNameGetSets = {
+    offsetX: ['_getOffsetX'],
+    offsetY: ['_getOffsetY'],
+    flippedX: ['isFlippedX', 'setFlippedX'],
+    flippedY: ['isFlippedY', 'setFlippedY'],
+    textureRectRotated: ['isTextureRectRotated'],
+};
+misc.propertyDefine(SpriteRenderer, SameNameGetSets, DiffNameGetSets);
 
 cc.SpriteRenderer = module.exports = SpriteRenderer;
