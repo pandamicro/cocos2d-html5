@@ -160,6 +160,9 @@ JS.mixin(EventTarget.prototype, {
         }
         if ( ! listeners.has(type, callback) ) {
             listeners.add(type, callback, target);
+
+            if (target && target.__eventTargets)
+                target.__eventTargets.push(this);
         }
     },
 
