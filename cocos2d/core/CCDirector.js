@@ -469,11 +469,6 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         // purge destroyed nodes belongs to old scene
         cc.Object._deferredDestroy();
 
-        // force onExit last scene      
-        if (CC_EDITOR && cc.engine && cc.engine._emptySgScene) {       
-            this.runScene(cc.engine._emptySgScene);        
-        }
-
         if (onBeforeLoadScene) {
             onBeforeLoadScene();
         }
@@ -515,7 +510,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
             this.setNextScene();
         }
 
-        // Activate 
+        // Activate
         if (scene instanceof cc.EScene) {
             scene._onActivated();
         }
