@@ -158,7 +158,7 @@ JS.mixin(EventTarget.prototype, {
         else {
             listeners = this._bubblingListeners = this._bubblingListeners || new EventListeners();
         }
-        if ( ! listeners.has(type, callback) ) {
+        if ( ! listeners.has(type, callback, target) ) {
             listeners.add(type, callback, target);
 
             if (target && target.__eventTargets)

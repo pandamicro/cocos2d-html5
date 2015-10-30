@@ -54,17 +54,32 @@ CallbacksHandler.prototype.add = function (key, callback, target) {
  * @method has
  * @param {string} key
  * @param {function} [callback]
+ * @param {object} [target]
  * @return {Boolean}
  */
-CallbacksHandler.prototype.has = function (key, callback) {
-    var list = this._callbackTable[key];
+CallbacksHandler.prototype.has = function (key, callback, target) {
+    var list = this._callbackTable[key], callbackTarget, index;
     if (list && list.length > 0) {
-        if (callback) {
-            if (typeof callback !== 'function' || list.indexOf(callback) === -1) 
-                return false;
-            else return true;
+        // callback not given, but key found
+        if (!callback) 
+            return true;
+        // wrong callback type, can't found anything
+        else if (typeof callback !== 'function')
+            return false;
+        // Search callback, target pair in the list
+        index = list.indexOf(callback);
+        while (index !== -1) {
+            callbackTarget = list[index+1];
+            if (typeof callbackTarget !== 'object') {
+                callbackTarget = undefined;
+            }
+            if (callbackTarget === target) {
+                return true;
+            }
+            index = list.indexOf(callback, index + 1);
         }
-        return true;
+        // callback given but not found
+        return false;
     }
     return false;
 };

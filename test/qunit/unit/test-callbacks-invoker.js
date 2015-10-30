@@ -72,6 +72,9 @@ test('CallbacksInvoker support target', function () {
     ci.add('a', cb3, target1);
 
     strictEqual(ci.add('b', cb1, target1), true, 'can add callback with target for new event key');
+    strictEqual(ci.has('a', cb2), false, '`has` should return false if the callback without target not exists');
+    strictEqual(ci.has('a', cb2, target1), true, '`has` should return true if the callback with correct target exists');
+    strictEqual(ci.has('a', cb3), true, '`has` should return true if the callback without target exists');
 
     cb2.enable();
     cb3.enable();
@@ -87,9 +90,9 @@ test('CallbacksInvoker support target', function () {
 
     ci.remove('b', cb1);
     ci.remove('b', cb1, target2);
-    strictEqual(ci.has('b', cb1), true, 'remove callback without the correct target should fail');
+    strictEqual(ci.has('b', cb1, target1), true, 'remove callback without the correct target should fail');
     ci.remove('b', cb1, target1);
-    strictEqual(ci.has('b', cb1), false, 'remove callback with the correct callback and target should succeed');
+    strictEqual(ci.has('b', cb1, target1), false, 'remove callback with the correct callback and target should succeed');
 
     cb1.count = 0;
     target1.count = 0;
