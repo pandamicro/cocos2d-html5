@@ -25,7 +25,7 @@ var _uuidToCallbacks = new CallbacksInvoker();
 var _tdInfo = new cc.deserialize.Details();
 
 // create a loading context which reserves all relevant parameters
-function LoadingHandle (readMainCache, writeMainCache, recordAssets, reassociateNode, deserializeInfo) {
+function LoadingHandle (readMainCache, writeMainCache, recordAssets, deserializeInfo) {
     //this.readMainCache = readMainCache;
     //this.writeMainCache = writeMainCache;
 
@@ -104,7 +104,7 @@ var AssetLibrary = {
             deserializeInfo = options.deserializeInfo;
         }
 
-        var handle = new LoadingHandle(readMainCache, writeMainCache, null, null, deserializeInfo);
+        var handle = new LoadingHandle(readMainCache, writeMainCache, null, deserializeInfo);
         this._loadAssetByUuid(uuid, callback, handle, existingAsset);
     },
 
@@ -298,12 +298,11 @@ var AssetLibrary = {
      * @param {loadCallback} callback
      * @param {boolean} [dontCache=false] - If false, the result will cache to AssetLibrary, and MUST be unload by user manually.
      * @param {boolean} [recordAssets=false] - 是否统计新加载的需要让场景 preload 的 asset（所有包含 raw file 后缀名的 asset 并且不含 rawType 属性的 asset）
-     * * @param {boolean} [reassociateNode=false] - 是否统计需要重新关联的节点数据
      * @return {LoadingHandle}
      * @private
      */
-    loadJson: function (json, callback, dontCache, recordAssets, reassociateNode) {
-        var handle = new LoadingHandle(!dontCache, !dontCache, recordAssets, reassociateNode);
+    loadJson: function (json, callback, dontCache, recordAssets) {
+        var handle = new LoadingHandle(!dontCache, !dontCache, recordAssets);
         var thisTick = true;
         this._deserializeWithDepends(json, '', '', function (p1, p2) {
             if (thisTick) {

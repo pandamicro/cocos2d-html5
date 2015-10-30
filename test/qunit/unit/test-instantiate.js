@@ -165,15 +165,15 @@
             properties: {
                 nodeInComp: {
                     default: null,
-                    type: Node
+                    type: cc.ENode
                 },
                 nodeArrayInComp: {
                     default: [],
-                    type: Node
+                    type: cc.ENode
                 },
                 otherNodeInComp: {
                     default: null,
-                    type: Node
+                    type: cc.ENode
                 },
                 childComp: null,
                 otherComp: null,

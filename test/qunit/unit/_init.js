@@ -119,8 +119,8 @@ var SetupEngine = {
     teardown: function () {
         //Engine._launchScene(new cc._Scene());
         cc.game.pause();
-        //// check error
-        //Engine._renderContext.checkMatchCurrentScene(true);
+        // check error
+        cc._Test.SceneGraphUtils.checkMatchCurrentScene();
     }
 };
 

@@ -16,7 +16,7 @@ var SceneGraphUtils = {
     },
 };
 
-if (CC_DEV) {
+if (CC_DEV || CC_TEST) {
     SceneGraphUtils._getChildrenOffset = function (entityParent) {
         if (entityParent) {
             var sgParent = entityParent._sgNode;
@@ -60,6 +60,7 @@ if (CC_DEV) {
 
         checkMatch(scene, sgScene);
     };
+    cc._Test.SceneGraphUtils = SceneGraphUtils;
 }
 
 module.exports = SceneGraphUtils;

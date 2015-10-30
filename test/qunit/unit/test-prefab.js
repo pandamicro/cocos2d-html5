@@ -1,20 +1,15 @@
 (function () {
 
-    var testingCompCallback = false;
+    //var testingCompCallback = false;
+
     var MyComponent = cc.Class({
         name: '45664564',
         extends: CallbackTester,
-        ctor: function () {
-            if (testingCompCallback) {
-                this.expect(CallbackTester.OnLoad, 'call onLoad while attaching to node');
-                this.expect(CallbackTester.OnEnable, 'then call onEnable if node active', true);
-            }
-        },
-        _assert: function (actual) {
-            if (testingCompCallback) {
-                this._super(actual);
-            }
-        }
+        //_assert: function (actual) {
+        //    if (testingCompCallback) {
+        //        this._super(actual);
+        //    }
+        //}
     });
     cc.executeInEditMode(MyComponent);
 
@@ -23,9 +18,11 @@
             _resetGame();
             AssetLibrary.init('../assets/library');
         },
-        teardownOnce: function () {
-            cc.js.unregisterClass(MyComponent);
-        }
+        //teardownOnce: function () {
+        //    console.log('teardownOnce');
+        //    //testNode.destroy();
+        //    cc.js.unregisterClass(MyComponent);
+        //}
     });
 
     test('basic test', function() {
@@ -40,7 +37,7 @@
     var parent = new cc.ENode('parent');
     var child = new cc.ENode('child');
     var child2 = new cc.ENode('child2');
-    child2.addComponent(MyComponent).stopTest();
+    child2.addComponent(MyComponent);
     var otherNode = new cc.ENode('other');
 
     child.parent = parent;
@@ -153,7 +150,7 @@
         var newNode = new cc.Node();
         newNode.parent = testChild;
 
-        testingCompCallback = true;
+        //testingCompCallback = true;
 
         Editor.PrefabUtils.revertPrefab(testNode, function () {
             cc.loader.loadJson = restore;
@@ -170,8 +167,13 @@
             strictEqual(testNode.childrenCount, 2, 'Should create removed node');
             var created = testNode.children[1];
             ok(created._sgNode, 'Checking created node');
+
             var comp = created.getComponent(MyComponent);
-            //comp
+            comp.resetExpect(CallbackTester.OnLoad, 'call onLoad while attaching to node');
+            comp.pushExpect(CallbackTester.OnEnable, 'then call onEnable if node active');
+
+            cc.director.getScene().addChild(testNode);
+
             comp.stopTest();
             start();
         });

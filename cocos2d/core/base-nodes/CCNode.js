@@ -171,7 +171,6 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
 
     ctor: function() {
         var name = arguments[0];
-        this._name = typeof name !== 'undefined' ? name : 'New Node';
 
         this._normalizedPositionDirty = false;
         this._running = false;
