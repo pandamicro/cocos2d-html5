@@ -274,8 +274,6 @@ if (CC_DEV) {
         '_renderCmd',
         '_vertexZ',
         '_showNode',
-        '_cascadeColorEnabled',
-        '_cascadeOpacityEnabled',
         '_arrayMakeObjectsPerformSelector',
         'getActionManager',
         'setActionManager',

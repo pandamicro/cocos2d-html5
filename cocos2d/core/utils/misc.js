@@ -27,6 +27,6 @@ misc.propertyDefine = function (ctor, sameNameGetSets, diffNameGetSets) {
             JS.getset(np, propName, np[getset[0]], np[getset[1]]);
         }
     }
-}
+};
 
 module.exports = misc;

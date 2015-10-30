@@ -96,7 +96,7 @@ var _doSendEvent = function (owner, event) {
  * @class cc.EventTarget
  */
 var EventTarget = function () {
-}
+};
 
 JS.mixin(EventTarget.prototype, {
     /**
@@ -344,6 +344,6 @@ EventTarget.polyfill = function (object) {
         object._getCapturingTargets = proto._getCapturingTargets;
     if (!object._getBubblingTargets)
         object._getBubblingTargets = proto._getBubblingTargets;
-}
+};
 
 cc.EventTarget = module.exports = EventTarget;

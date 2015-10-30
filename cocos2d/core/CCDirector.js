@@ -105,10 +105,6 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     _dirtyRegion: null,
 
     _scheduler: null,
-    _startScheduler: null,
-    _updateScheduler: null,
-    _lateUpdateScheduler: null,
-
     _actionManager: null,
 
     ctor: function () {
@@ -146,12 +142,6 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         // Schedulers
         // Scheduler for user registration update
         this._scheduler = new cc.Scheduler();
-        // Scheduler for components start function registration
-        this._startScheduler = new cc.Scheduler();
-        // Scheduler for components update function registration
-        this._updateScheduler = new cc.Scheduler();
-        // Scheduler for components lateUpdate function registration
-        this._lateUpdateScheduler = new cc.Scheduler();
 
         // Action manager
         if(cc.ActionManager){
