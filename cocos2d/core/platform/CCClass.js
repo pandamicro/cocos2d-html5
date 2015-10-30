@@ -216,7 +216,7 @@ var _metaClass = {
             }
         }
 
-        if (CC_EDITOR) {
+        if (CC_EDITOR || CC_TEST) {
             Object.defineProperty(this.prototype, name, {
                 //set: function setter_editorWrapper (value) {
                 //    if (this._observing) {

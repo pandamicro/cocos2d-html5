@@ -130,10 +130,10 @@ test('activation logic for component', function () {
     obj.active = true;  // onEnable
 
     //strictEqual(obj.getComponent(cc.Transform), obj.transform, 'getComponent: can get transform');
-    strictEqual(obj.getComponent(MyComponent), comp, 'getComponent: can get my component');
-    strictEqual(obj.getComponent(cc.js.getClassName(MyComponent)), comp, 'getComponent: can get my component by name');
-    strictEqual(obj.getComponent(MyComponentBase), comp, 'getComponent: can get component by base type');
-    strictEqual(obj.getComponent(cc.js.getClassName(MyComponentBase)), comp, 'getComponent: can get component by base name');
+    ok(obj.getComponent(MyComponent) === comp, 'getComponent: can get my component');
+    ok(obj.getComponent(cc.js.getClassName(MyComponent)) === comp, 'getComponent: can get my component by name');
+    ok(obj.getComponent(MyComponentBase) === comp, 'getComponent: can get component by base type');
+    ok(obj.getComponent(cc.js.getClassName(MyComponentBase)) === comp, 'getComponent: can get component by base name');
 
     comp.expect(CallbackTester.OnDisable, 'should called onDisable when destory');
     comp.destroy();     // onDisable
