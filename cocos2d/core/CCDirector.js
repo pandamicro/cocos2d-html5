@@ -139,7 +139,6 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         this._openGLView = null;
         this._contentScaleFactor = 1.0;
 
-        // Schedulers
         // Scheduler for user registration update
         this._scheduler = new cc.Scheduler();
 
