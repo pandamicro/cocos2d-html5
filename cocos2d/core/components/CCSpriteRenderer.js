@@ -34,7 +34,10 @@ var SpriteRenderer = cc.Class({
 
     properties: {
 
-        _texture: '',
+        _texture: {
+            default: '',
+            url: cc.TextureAsset
+        },
         _atlasIndex: 0,
         _textureAtlas: '',
         _isFlippedX: false,

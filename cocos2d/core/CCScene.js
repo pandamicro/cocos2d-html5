@@ -95,12 +95,6 @@ cc.EScene = cc.Class({
                 entity._onActivatedInHierarchy(true);
             }
         }
-        if (!CC_EDITOR || cc.engine.isPlaying) {
-            // invoke onStart
-            for (var j = 0; j < children.length; ++j) {
-                cc.Component._callStartsOn(children[i]);
-            }
-        }
     }
 });
 
