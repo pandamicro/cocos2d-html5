@@ -6,23 +6,17 @@ var IsOnEnableCalled = Flags.IsOnEnableCalled;
 var IsOnLoadCalled = Flags.IsOnLoadCalled;
 var IsOnStartCalled = Flags.IsOnStartCalled;
 
-// TEMP
-cc.ENode.prototype._activeInHierarchy = true;
-cc.ENode.prototype.activeInHierarchy = true;
-cc.ENode.prototype.uuid = '(TODO)';
-cc.ENode.prototype._components = [];
-
-
-if (CC_EDITOR) {
-    var ExecInTryCatchTmpl = '(function call_FUNC_InTryCatch(c){try{c._FUNC_()}catch(e){cc._throw(e)}})';
-    var callOnEnableInTryCatch = eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onEnable'));
-    var callOnDisableInTryCatch = eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onDisable'));
-    var callOnLoadInTryCatch = eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onLoad'));
-    var callStartInTryCatch = eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'start'));
-    var callOnDestroyInTryCatch = eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onDestroy'));
-    var callOnFocusInTryCatch = eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onFocusInEditMode'));
-    var callOnLostFocusInTryCatch = eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onLostFocusInEditMode'));
+var ExecInTryCatchTmpl = CC_EDITOR && '(function call_FUNC_InTryCatch(c){try{c._FUNC_()}catch(e){cc._throw(e)}})';
+if (CC_TEST) {
+    ExecInTryCatchTmpl = '(function call_FUNC_InTryCatch (c) { c._FUNC_() })';
 }
+var callOnEnableInTryCatch = CC_EDITOR && eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onEnable'));
+var callOnDisableInTryCatch = CC_EDITOR && eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onDisable'));
+var callOnLoadInTryCatch = CC_EDITOR && eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onLoad'));
+var callStartInTryCatch = CC_EDITOR && eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'start'));
+var callOnDestroyInTryCatch = CC_EDITOR && eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onDestroy'));
+var callOnFocusInTryCatch = CC_EDITOR && eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onFocusInEditMode'));
+var callOnLostFocusInTryCatch = CC_EDITOR && eval(ExecInTryCatchTmpl.replace(/_FUNC_/g, 'onLostFocusInEditMode'));
 
 function callOnEnable (self, enable) {
     //if (CC_EDITOR) {
@@ -169,7 +163,6 @@ var Component = cc.Class({
     extends: cc.Object,
 
     ctor: (CC_EDITOR || CC_TEST) && function () {
-        //// 我们并不在构造函数中给 entity 赋值，因为那样到了反序列化时，子类的构造函数就还是会拿不到 entity。
         //Editor._AssetsWatcher.initComponent(this);
 
         // dont reset _id when destroyed

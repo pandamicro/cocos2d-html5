@@ -430,11 +430,6 @@ var Node = cc.Class({
 
         clone._onBatchCreated();
 
-        // activate components
-        if (clone._active) {
-            clone._onActivatedInHierarchy(true);
-        }
-
         return clone;
     },
 

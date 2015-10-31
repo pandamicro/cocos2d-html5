@@ -13,6 +13,7 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var handleErrors = require('../util/handleErrors');
+//var babelify = require('babelify');
 
 require('./build-cocos2d');
 
@@ -150,7 +151,11 @@ gulp.task('clean-test', function (done) {
 gulp.task('build-test', ['build-modular-cocos2d', 'clean-test'], function () {
     var engine = rebundle_test(createBundler(paths.jsEntry), '-for-test');
     if (Fs.existsSync(paths.test.jsEntryEditorExtends)) {
-        var editorExtends = rebundle_test(createBundler(paths.test.jsEntryEditorExtends), '-extends-for-test');
+        var bundler = createBundler(paths.test.jsEntryEditorExtends);
+        //bundler = bundler.transform(babelify.configure({
+        //    presets: ["es2015"]
+        //}));
+        var editorExtends = rebundle_test(bundler, '-extends-for-test');
         return es.merge(engine, editorExtends);
     }
     else {

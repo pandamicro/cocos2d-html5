@@ -70,6 +70,9 @@ cc.EScene = cc.Class({
     _onOpacityModifyRGBChanged: NIL,
 
     _onBatchCreated: function () {
+        if (this._sgNode) {
+            return;
+        }
         var sgNode = new cc.Scene();
 
         // retain immediately
