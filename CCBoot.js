@@ -296,7 +296,7 @@ function _load(config) {
             var modules = config["modules"] || [];
             var moduleMap = modulesJson["module"];
             var jsList = [];
-            if (cc.sys.supportWebGL && modules.indexOf("base4webgl") < 0) modules.splice(0, 0, "base4webgl");
+            if (cc.sys.capabilities["opengl"] && modules.indexOf("base4webgl") < 0) modules.splice(0, 0, "base4webgl");
             else if (modules.indexOf("core") < 0) modules.splice(0, 0, "core");
             for (var i = 0, li = modules.length; i < li; i++) {
                 var arr = _getJsListOfModule(moduleMap, modules[i], engineDir);

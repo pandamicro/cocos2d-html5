@@ -122,7 +122,7 @@ cc.game = /** @lends cc.game# */{
         if (this._paused) return;
         this._paused = true;
         // Pause audio engine
-        cc.audioEngine._pausePlaying();
+        cc.audioEngine && cc.audioEngine._pausePlaying();
         // Pause main loop
         if (this._intervalId)
             window.cancelAnimationFrame(this._intervalId);
@@ -136,7 +136,7 @@ cc.game = /** @lends cc.game# */{
         if (!this._paused) return;
         this._paused = false;
         // Resume audio engine
-        cc.audioEngine._resumePlaying();
+        cc.audioEngine && cc.audioEngine._resumePlaying();
         // Resume main loop
         this._runMainLoop();
     },
