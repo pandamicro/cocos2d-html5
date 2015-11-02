@@ -324,8 +324,12 @@ cc.game = /** @lends cc.game# */{
             return;
         var index = this._persistRootNodes.indexOf(node);
         if (index === -1) {
-            this._persistRootNodes.push(node);
-            node._persistNode = true;
+            var scene = cc.director._scene;
+            if (cc.isValid(scene)) {
+                node.parent = scene;
+                this._persistRootNodes.push(node);
+                node._persistNode = true;
+            }
         }
     },
 
