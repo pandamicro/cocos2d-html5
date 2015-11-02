@@ -107,26 +107,6 @@ var Node = cc.Class({
             }
         },
 
-        /**
-         * If true, the node will be destroyed automatically when loading a new scene. Default is true.
-         * @property destroyOnSceneExit
-         * @type {Boolean}
-         * @default true
-         */
-        destroyOnSceneExit: {
-            get: function () {
-                return !(this._objFlags | DontDestroy);
-            },
-            set: function (value) {
-                if (value) {
-                    this._objFlags &= ~DontDestroy;
-                }
-                else {
-                    this._objFlags |= DontDestroy;
-                }
-            }
-        },
-
         // internal properties
 
         _active: true,
@@ -149,6 +129,28 @@ var Node = cc.Class({
         _prefab: {
             default: null,
             editorOnly: true
+        },
+
+        /**
+         * If true, the node is an persist node which won't be destroyed during scene transition.
+         * If false, the node will be destroyed automatically when loading a new scene. Default is false.
+         * @property _persistNode
+         * @type {Boolean}
+         * @default false
+         * @private
+         */
+        _persistNode: {
+            get: function () {
+                return this._objFlags | DontDestroy;
+            },
+            set: function (value) {
+                if (value) {
+                    this._objFlags |= DontDestroy;
+                }
+                else {
+                    this._objFlags &= ~DontDestroy;
+                }
+            }
         },
 
         /**
