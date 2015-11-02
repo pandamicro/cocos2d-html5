@@ -192,6 +192,16 @@ test('life cycle logic for component', function () {
     comp.expect(CallbackTester.lateUpdate, 'fourth lateUpdate call', true);
     cc.game.step();
 
+    comp.expect(CallbackTester.OnDisable, 'disabled entity');
+    obj.active = false;
+    comp.onEnable = function () {
+        this._assert(CallbackTester.OnEnable);
+        comp.notExpect(CallbackTester.OnEnable, 'onEnable should only be called once');
+        this.enabled = true;
+    }
+    comp.expect(CallbackTester.OnEnable, 'onEnable should be called once after entity active');
+    obj.active = true;
+
     comp.stopTest();
 
     cc.js.unregisterClass(MyComponent);
