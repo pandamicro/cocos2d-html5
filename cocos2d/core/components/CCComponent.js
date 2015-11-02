@@ -46,6 +46,9 @@ function callOnEnable (self, enable) {
                 else {
                     self.onEnable();
                 }
+                if (!(self._objFlags & IsOnStartCalled) && self.start) {
+                    cc.director.once(cc.Director.EVENT_BEFORE_UPDATE, _callStart, self);
+                }
                 self.update && cc.director.on(cc.Director.EVENT_COMPONENT_UPDATE, _callUpdate, self);
                 self.lateUpdate && cc.director.on(cc.Director.EVENT_COMPONENT_LATE_UPDATE, _callLateUpdate, self);
             }
@@ -486,13 +489,6 @@ var Component = cc.Class({
             else {
                 this._objFlags |= IsOnLoadCalled;
             }
-
-            if (this.start)
-                cc.director.once(cc.Director.EVENT_BEFORE_UPDATE, _callStart, this);
-            if (this.update)
-                cc.director.on(cc.Director.EVENT_COMPONENT_UPDATE, _callUpdate, this);
-            if (this.lateUpdate)
-                cc.director.on(cc.Director.EVENT_COMPONENT_LATE_UPDATE, _callLateUpdate, this);
             //Editor._AssetsWatcher.start(this);
         }
 
@@ -505,13 +501,6 @@ var Component = cc.Class({
                 this.onLoad();
             }
             this._objFlags |= IsOnLoadCalled;
-
-            if (this.start)
-                cc.director.once(cc.Director.EVENT_BEFORE_UPDATE, _callStart, this);
-            if (this.update)
-                cc.director.on(cc.Director.EVENT_COMPONENT_UPDATE, _callUpdate, this);
-            if (this.lateUpdate)
-                cc.director.on(cc.Director.EVENT_COMPONENT_LATE_UPDATE, _callLateUpdate, this);
         }
 
         if (this._enabled) {
