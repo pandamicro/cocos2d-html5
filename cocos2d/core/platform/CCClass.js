@@ -448,6 +448,9 @@ function normalizeClassName (className) {
         if (className) {
             className = className.replace(/\./g, '_');
             className = className.split('').filter(function (x) { return /^[a-zA-Z0-9_$]/.test(x) }).join('');
+            if (/^[0-9]/.test(className[0])) {
+                className = '_' + className;
+            }
             try {
                 // validate name
                 eval('function ' + className + '(){}');

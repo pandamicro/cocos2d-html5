@@ -1,6 +1,5 @@
 module.exports = [
     [cc,   'Node',           require('./node'),            'Node'],
-    [cc,   'Sprite',         require('./sprite'),          'Sprite'],
     [cc,   'SpriteBatchNode',require('./sprite-batch-node'), 'SpriteBatchNode'],
     [cc,   'LabelBMFont',    require('./bitmap-font'),     'LabelBMFont'],
     [cc,   'LabelTTF',       require('./label-ttf'),       'LabelTTF'],
