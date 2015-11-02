@@ -321,7 +321,9 @@ if (CC_DEV) {
         '_initRendererCmd',
         '_createRenderCmd',
         'updateDisplayedOpacity',
-        'updateDisplayedColor'
+        'updateDisplayedColor',
+        'userData',
+        'userObject'
     ].forEach(function (prop) {
         function error () {
             cc.error('Sorry, cc.ENode.' + prop + ' is removed.');
