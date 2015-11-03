@@ -17,6 +17,7 @@
     "fire-fs": "0.2.1",
     "gulp": "3.8.11",
     "gulp-cached": "1.0.1",
+    "gulp-concat": "2.6.0",
     "gulp-fb": "0.5.0",
     "gulp-header": "1.2.2",
     "gulp-jshint": "1.11.0",
