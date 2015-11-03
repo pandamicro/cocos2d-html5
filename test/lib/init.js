@@ -30,10 +30,5 @@ var V2 = cc.Vec2;
 var v2 = cc.v2;
 var color = cc.fireColor;
 
-cc.RawTexture = cc.Class({
-    name: 'cc.RawTexture',
-    extends: cc.RawAsset
-});
-
 if (cc.isBrowser) {
 }

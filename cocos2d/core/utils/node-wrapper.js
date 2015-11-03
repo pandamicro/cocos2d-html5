@@ -137,8 +137,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         uuid: {
             get: function () {
                 return this._id || (this._id = Editor.uuid());
-            },
-            visible: false
+            }
         },
 
         skewX: {

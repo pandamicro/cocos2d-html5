@@ -381,7 +381,7 @@
             properties: {
                 textures: {
                     default: [],
-                    url: [cc.RawTexture]
+                    url: [cc.TextureAsset]
                 }
             }
         });
