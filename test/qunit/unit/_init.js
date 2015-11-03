@@ -28,11 +28,6 @@ var V2 = cc.Vec2;
 var v2 = cc.v2;
 var color = cc.fireColor;
 
-cc.RawTexture = cc.Class({
-    name: 'cc.RawTexture',
-    extends: cc.RawAsset
-});
-
 var TestScript = cc.Class({
     name: 'TestScript',
     extends: cc.Component,
