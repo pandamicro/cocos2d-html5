@@ -253,7 +253,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             get: SGProto._getAnchorX,
             set: function (value) {
                 this._anchorPoint.x = value;
-                this._sgNode.anchorX = value;
                 this._onAnchorChanged();
             },
         },
@@ -262,7 +261,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             get: SGProto._getAnchorY,
             set: function (value) {
                 this._anchorPoint.y = value;
-                this._sgNode.anchorY = value;
                 this._onAnchorChanged();
             },
         },
@@ -271,7 +269,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             get: SGProto._getWidth,
             set: function (value) {
                 this._contentSize.width = value;
-                this._sgNode.width = value;
                 this._onSizeChanged();
             },
         },
@@ -280,7 +277,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             get: SGProto._getHeight,
             set: function (value) {
                 this._contentSize.height = value;
-                this._sgNode.height = value;
                 this._onSizeChanged();
             },
         },
@@ -557,7 +553,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             locAnchorPoint.x = point;
             locAnchorPoint.y = y;
         }
-        this._sgNode.setAnchorPoint(point, y);
         this._onAnchorChanged();
     },
 
@@ -605,7 +600,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             locContentSize.width = size;
             locContentSize.height = height;
         }
-        this._sgNode.setContentSize(size, height);
         this._onSizeChanged();
     },
 
