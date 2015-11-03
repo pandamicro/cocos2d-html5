@@ -354,10 +354,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     },
 
     ctor: function () {
-        // SUPPORT OLD PUBLIC API
-        this.userData = null;
-        this.userObject = null;
-
         // dont reset _id when destroyed
         Object.defineProperty(this, '_id', {
             value: '',
