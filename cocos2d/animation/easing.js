@@ -254,4 +254,4 @@ Easing.bounceInOut = function (k) {
 };
 Easing.bounceOutIn = _makeOutIn(Easing.bounceIn, Easing.bounceOut);
 
-Fire.Easing = module.exports = Easing;
+cc.Easing = module.exports = Easing;

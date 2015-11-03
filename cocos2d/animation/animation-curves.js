@@ -1,4 +1,6 @@
 
+var bezier = require('./bezier');
+
 //
 // 动画数据类，相当于 AnimationClip。
 // 虽然叫做 AnimCurve，但除了曲线，可以保存任何类型的值。
@@ -7,7 +9,7 @@
 // @constructor
 //
 var AnimCurve = cc.Class({
-    name: 'Fire.AnimCurve',
+    name: 'cc.AnimCurve',
 
     //
     // @method sample
@@ -50,7 +52,7 @@ function binarySearch (array, value) {
 // @extends AnimCurve
 //
 var DynamicAnimCurve = cc.Class({
-    name: 'Fire.DynamicAnimCurve',
+    name: 'cc.DynamicAnimCurve',
     properties: {
 
         // The object being animated.
@@ -88,14 +90,18 @@ var DynamicAnimCurve = cc.Class({
         var values = this.values;
         var ratios = this.ratios;
         var frameCount = ratios.length;
+
         if (frameCount === 0) {
             return;
         }
+
         // evaluate value
         var value;
         var index = binarySearch(ratios, ratio);
+
         if (index < 0) {
             index = ~index;
+
             if (index <= 0) {
                 value = values[0];
             }
@@ -134,11 +140,13 @@ var DynamicAnimCurve = cc.Class({
         else {
             value = values[index];
         }
+
         var subProps = this.subProps;
         if (subProps) {
             // create batched value dynamically
             var mainProp = this.target[this.prop];
             var subProp = mainProp;
+
             for (var i = 0; i < subProps.length - 1; i++) {
                 var subPropName = subProps[i];
                 if (subProp) {
@@ -148,13 +156,16 @@ var DynamicAnimCurve = cc.Class({
                     return;
                 }
             }
+
             var propName = subProps[subProps.length - 1];
+
             if (subProp) {
                 subProp[propName] = value;
             }
             else {
                 return;
             }
+
             value = mainProp;
         }
         // apply value

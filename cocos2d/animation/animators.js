@@ -1,5 +1,7 @@
 var JS = cc.js;
-var Playable = require('../core/playable');
+var Playable = require('./playable');
+var AnimationNode = require('./types').AnimationNode;
+var DynamicAnimCurve = require('./animation-curves').DynamicAnimCurve;
 
 // The base of animators
 function Animator (target) {
@@ -32,27 +34,27 @@ animProto.update = function (deltaTime) {
 };
 
 animProto.onPlay = function () {
-    if (CC_EDITOR) {
-        if (cc.engine._isPlaying) {
-            cc.engine._animationManager.addAnimator(this);
-        }
-    }
-    else {
-        cc.engine._animationManager.addAnimator(this);
-    }
+    // if (CC_EDITOR) {
+    //     if (cc.engine._isPlaying) {
+    //         cc.engine._animationManager.addAnimator(this);
+    //     }
+    // }
+    // else {
+    //     cc.engine._animationManager.addAnimator(this);
+    // }
 };
 
 animProto.onStop = function () {
     this.playingAnims.length = 0;
 
-    if (CC_EDITOR) {
-        if (cc.engine._isPlaying) {
-            cc.engine._animationManager.removeAnimator(this);
-        }
-    }
-    else {
-        cc.engine._animationManager.removeAnimator(this);
-    }
+    // if (CC_EDITOR) {
+    //     if (cc.engine._isPlaying) {
+    //         cc.engine._animationManager.removeAnimator(this);
+    //     }
+    // }
+    // else {
+    //     cc.engine._animationManager.removeAnimator(this);
+    // }
 };
 
 
@@ -169,28 +171,30 @@ entProto._doAnimate = function (keyFrames, timingInput) {
         }
         lastRatio = ratio;
 
-        // TODO 先遍历每一帧，获得所有曲线
-
-        // parse keyframe
+        // 先遍历每一帧，获得所有曲线
         for (var key in frame) {
             // get component data
-            if (key === 'ratio' || key === 'offset') {
+            if (key === 'ratio' || key === 'computedRatio' || key === 'offset') {
                 continue;
             }
             var compName = key;
             var compData = frame[compName];
-            var comp = null;
+            var comp;
+
+            if (compName === '')
+                comp = this.target;
+            else
+                comp = this.target.getComponent(compName);
+
+            if (!comp) {
+                cc.error('[animate] Component %s is not found!', compName);
+                continue;
+            }
+
             for (var propName in compData) {
                 // get curve
                 var curve = findCurve(curves, comp, compName, propName);
                 if (! curve) {
-                    if (! comp) {
-                        comp = this.target.getComponent(compName);
-                        if (! comp) {
-                            cc.error('[animate] Component %s is not found!', compName);
-                            continue;
-                        }
-                    }
                     curve = new DynamicAnimCurve();
                     curves.push(curve);
                     // 缓存目标对象，所以 Component 必须一开始都创建好并且不能运行时动态替换……

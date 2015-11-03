@@ -23,6 +23,7 @@
  ****************************************************************************/
 
 require('./cocos2d/core');
+require('./cocos2d/animation');
 
 if (!(CC_EDITOR && Editor.isCoreLevel)) {
     if (cc.sys.isNative) {
