@@ -207,6 +207,10 @@ var Node = cc.Class({
             // destroy immediate so its _onPreDestroy can be called before
             component._destroyImmediate();
         }
+        // remove from persist
+        if (this._persistNode) {
+            cc.game.removePersistRootNode(this);
+        }
         // remove self
         if (parent) {
             if (!destroyByParent) {
@@ -387,6 +391,10 @@ var Node = cc.Class({
     },
 
     _onHierarchyChanged: function (oldParent) {
+        // Not allowed for persistent node
+        if (this._persistNode) {
+            cc.game.removePersistRootNode(this);
+        }
         var activeInHierarchyBefore = this._active && !!(oldParent && oldParent._activeInHierarchy);
         var shouldActiveNow = this._active && !!(this._parent && this._parent._activeInHierarchy);
         if (activeInHierarchyBefore !== shouldActiveNow) {

@@ -326,7 +326,13 @@ cc.game = /** @lends cc.game# */{
         if (index === -1) {
             var scene = cc.director._scene;
             if (cc.isValid(scene)) {
-                node.parent = scene;
+                if (!node.parent) {
+                    node.parent = scene;
+                }
+                else if (node.parent !== scene) {
+                    cc.warn('The node can not be made persist because it\'s not under root node.');
+                    return;
+                }
                 this._persistRootNodes.push(node);
                 node._persistNode = true;
             }
