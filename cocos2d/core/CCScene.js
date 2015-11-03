@@ -45,15 +45,11 @@ cc.EScene = cc.Class({
     destroy: function () {
         var children = this._children;
         var DontDestroy = cc.Object.Flags.DontDestroy;
-        var list = cc.director._dontDestroyNodes = [];
 
         for (var i = 0, len = children.length; i < len; ++i) {
             var child = children[i];
             if (child.isValid) {
-                if (child._objFlags & DontDestroy) {
-                    list.push(child);
-                }
-                else {
+                if (!(child._objFlags & DontDestroy)) {
                     child.destroy();
                 }
             }
@@ -120,15 +116,6 @@ if (CC_EDITOR) {
                 cc.error(ERR, 'activeInHierarchy');
                 return true;
             },
-        },
-        destroyOnSceneExit: {
-            get: function () {
-                cc.error(ERR, 'destroyOnSceneExit');
-                return true;
-            },
-            set: function () {
-                cc.error(ERR, 'destroyOnSceneExit');
-            }
         },
         getComponent: {
             get: function () {

@@ -107,26 +107,6 @@ var Node = cc.Class({
             }
         },
 
-        /**
-         * If true, the node will be destroyed automatically when loading a new scene. Default is true.
-         * @property destroyOnSceneExit
-         * @type {Boolean}
-         * @default true
-         */
-        destroyOnSceneExit: {
-            get: function () {
-                return !(this._objFlags | DontDestroy);
-            },
-            set: function (value) {
-                if (value) {
-                    this._objFlags &= ~DontDestroy;
-                }
-                else {
-                    this._objFlags |= DontDestroy;
-                }
-            }
-        },
-
         // internal properties
 
         _active: true,
@@ -149,6 +129,28 @@ var Node = cc.Class({
         _prefab: {
             default: null,
             editorOnly: true
+        },
+
+        /**
+         * If true, the node is an persist node which won't be destroyed during scene transition.
+         * If false, the node will be destroyed automatically when loading a new scene. Default is false.
+         * @property _persistNode
+         * @type {Boolean}
+         * @default false
+         * @private
+         */
+        _persistNode: {
+            get: function () {
+                return this._objFlags | DontDestroy;
+            },
+            set: function (value) {
+                if (value) {
+                    this._objFlags |= DontDestroy;
+                }
+                else {
+                    this._objFlags &= ~DontDestroy;
+                }
+            }
         },
 
         /**
@@ -204,6 +206,10 @@ var Node = cc.Class({
             var component = this._components[i];
             // destroy immediate so its _onPreDestroy can be called before
             component._destroyImmediate();
+        }
+        // remove from persist
+        if (this._persistNode) {
+            cc.game.removePersistRootNode(this);
         }
         // remove self
         if (parent) {
@@ -385,6 +391,10 @@ var Node = cc.Class({
     },
 
     _onHierarchyChanged: function (oldParent) {
+        // Not allowed for persistent node
+        if (this._persistNode) {
+            cc.game.removePersistRootNode(this);
+        }
         var activeInHierarchyBefore = this._active && !!(oldParent && oldParent._activeInHierarchy);
         var shouldActiveNow = this._active && !!(this._parent && this._parent._activeInHierarchy);
         if (activeInHierarchyBefore !== shouldActiveNow) {

@@ -96,9 +96,6 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     // The entity-component scene
     _scene: null,
 
-    // the temp array which contains cross-scene global nodes
-    _dontDestroyNodes: [],
-
     _totalFrames: 0,
     _secondsPerFrame: 0,
 
@@ -463,13 +460,12 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         }
         this.emit(cc.Director.EVENT_BEFORE_SCENE_LAUNCH, scene);
 
-        // Currently do nothing for _dontDestroyNodes
-        // var dontDestroyNodes = this._dontDestroyNodes;
-        // for (var i = 0; i < dontDestroyNodes.length; i++) {
-        //     var node = dontDestroyNodes[i];
-        //     node.parent = scene;
-        // }
-        // director._dontDestroyNodes = [];
+        // Re-add persist node root
+        var persistNodes = cc.game._persistRootNodes;
+        for (var i = 0; i < persistNodes.length; ++i) {
+            var node = persistNodes[i];
+            node.parent = scene;
+        }
 
         var sgScene = scene;
 

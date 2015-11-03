@@ -19,6 +19,8 @@ cc.game = /** @lends cc.game# */{
     _eventHide: null,
     _eventShow: null,
 
+    _persistRootNodes: [],
+
     /**
      * Key of config
      * @constant
@@ -310,6 +312,51 @@ cc.game = /** @lends cc.game# */{
             cc.error('[loadScene] Can not load the scene "%s" because it has not been added to the build settings before play.', sceneName);
             return false;
         }
+    },
+
+//  @ Persist root node section
+    /**
+     * Add a persistent root node to the game, the persistent node won't be destroyed during scene transition
+     * @param {cc.ENode} node - The node to be made persistent
+     */
+    addPersistRootNode: function (node) {
+        if (!node instanceof cc.ENode)
+            return;
+        var index = this._persistRootNodes.indexOf(node);
+        if (index === -1) {
+            var scene = cc.director._scene;
+            if (cc.isValid(scene)) {
+                if (!node.parent) {
+                    node.parent = scene;
+                }
+                else if (node.parent !== scene) {
+                    cc.warn('The node can not be made persist because it\'s not under root node.');
+                    return;
+                }
+                this._persistRootNodes.push(node);
+                node._persistNode = true;
+            }
+        }
+    },
+
+    /**
+     * Remove a persistent root node
+     * @param {cc.ENode} node - The node to be removed from persistent node list
+     */
+    removePersistRootNode: function (node) {
+        var index = this._persistRootNodes.indexOf(node);
+        if (index !== -1) {
+            this._persistRootNodes.splice(index, 1);
+        }
+        node._persistNode = false;
+    },
+
+    /**
+     * Check whether the node is a persistent root node
+     * @param {cc.ENode} node - The node to be checked
+     */
+    isPersistRootNode: function (node) {
+        return node._persistNode;
     },
 
 //@Private Methods
