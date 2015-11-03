@@ -1,9 +1,8 @@
 /**
  * Represents a Sprite object which obtained from Texture.
- * @class Sprite
+ * @class SpriteAsset
  * @extends Asset
  * @constructor
- * @param {Image} [img] - Specify the html image element to render so you can create Sprite dynamically.
  */
 var Sprite = cc.Class({
 
@@ -11,18 +10,20 @@ var Sprite = cc.Class({
 
     extends: cc.Asset,
 
-    ctor: function () {
-        var img = arguments[0];
-        if (img) {
-            this.texture = img.src;
-            this.width = img.width;
-            this.height = img.height;
-        }
-    },
+    //ctor: function () {
+    //    var img = arguments[0];
+    //    if (img) {
+    //        this.texture = img.src;
+    //        this.rawWidth = this.width = img.width;
+    //        this.rawHeight = this.height = img.height;
+    //    }
+    //},
+
     properties: {
+
         /**
          * @property pivot
-         * @type Vec2
+         * @type {cc.Vec2}
          * @default new cc.Vec2(0.5, 0.5)
          */
         pivot: {
@@ -31,73 +32,20 @@ var Sprite = cc.Class({
                      '(0,0) means the bottom-left corner and (1,1) means the top-right corner.\n' +
                      'But you can use values higher than (1,1) and lower than (0,0) too.'
         },
-        // trim info
-        /**
-         * @property trimX
-         * @type number
-         */
-        trimX: {
-            default: 0,
-            type: 'Integer'
-        },
-        /**
-         * @property trimY
-         * @type number
-         */
-        trimY: {
-            default: 0,
-            type: 'Integer'
-        },
-        /**
-         * @property width
-         * @type number
-         */
-        width: {
-            default: 0,
-            type: 'Integer'
-        },
-        /**
-         * @property height
-         * @type number
-         */
-        height: {
-            default: 0,
-            type: 'Integer'
-        },
-        /**
-         * @property texture
-         * @type Texture
-         */
-        texture: {
-            default: '',
-            url: cc.TextureAsset,
-            visible: false
-        },
-        /**
-         * @property rotated
-         * @type boolean
-         * @default false
-         */
-        rotated: {
-            default: false,
-            visible: false
-        },
-        // raw texture info (used for texture-offset calculation)
+
+        // LOCATION ON RENDERING TEXTURE
 
         /**
-         * uv of the sprite in atlas-texture
-         * @property x
-         * @type number
+         * @property {Number} x - The location of the sprite on rendering texture
          */
         x: {
             default: 0,
             type: 'Integer',
             visible: false
         },
+
         /**
-         * uv of the sprite in atlas-texture
-         * @property y
-         * @type number
+         * @property  {Number} y - The location of the sprite on rendering texture
          */
         y: {
             default: 0,
@@ -106,92 +54,156 @@ var Sprite = cc.Class({
         },
 
         /**
-         * @property rawWidth
-         * @type number
+         * @property {number} width - The width of the sprite on rendering texture (trimed width)
+         */
+        width: {
+            default: 0,
+            type: 'Integer'
+        },
+
+        /**
+         * @property {number} height - The height of the sprite on rendering texture (trimed height)
+         */
+        height: {
+            default: 0,
+            type: 'Integer'
+        },
+
+        //
+
+        /**
+         * The texture url, will be serialized as texture's uuid.
+         * @property texture
+         * @type {String}
+         */
+        texture: {
+            default: '',
+            url: cc.TextureAsset,
+            visible: false
+        },
+
+        /**
+         * @property rotated
+         * @type {Boolean}
+         * @default false
+         */
+        rotated: {
+            default: false,
+            visible: false
+        },
+
+        /**
+         * @property {number} trimLeft - left offset of the sprite on the raw texture
+         */
+        trimLeft: {
+            default: 0,
+            type: 'Integer'
+        },
+
+        /**
+         * @property {number} trimTop - top offset of the sprite on the raw texture
+         */
+        trimTop: {
+            default: 0,
+            type: 'Integer'
+        },
+
+        /**
+         * @property {Number} rawWidth - the original width of the raw texture
          */
         rawWidth: {
             default: 0,
             type: 'Integer',
             visible: false
         },
+
         /**
-         * @property rawHeight
-         * @type number
+         * @property {Number} rawHeight - the original height of the raw texture
          */
         rawHeight: {
             default: 0,
             type: 'Integer',
             visible: false
         },
-        /**
-         * Use pixel-level hit testing.
-         * @property pixelLevelHitTest
-         * @type boolean
-         * @default false
-         */
-        pixelLevelHitTest: {
-            default: false,
-            tooltip: 'Use pixel-level hit testing.'
-        },
-        /**
-         * The highest alpha channel value that is considered opaque for hit test. [0, 1]
-         * @property alphaThreshold
-         * @type number
-         * @default 0.1
-         */
-        alphaThreshold: {
-            default: 0.1,
-            tooltip: 'The highest alpha channel value that is considered opaque for hit test.',
-            watch: {
-                'pixelLevelHitTest': function (obj, propEL) {
-                    propEL.disabled = !obj.pixelLevelHitTest;
-                }
-            }
-        },
+
+        ///**
+        // * Use pixel-level hit testing.
+        // * @property pixelLevelHitTest
+        // * @type {Boolean}
+        // * @default false
+        // */
+        //pixelLevelHitTest: {
+        //    default: false,
+        //    tooltip: 'Use pixel-level hit testing.'
+        //},
+        //
+        ///**
+        // * The highest alpha channel value that is considered opaque for hit test. [0, 255]
+        // * @property alphaThreshold
+        // * @type {Number}
+        // * @default 25
+        // */
+        //alphaThreshold: {
+        //    default: 25,
+        //    tooltip: 'The highest alpha channel value that is considered opaque for hit test.',
+        //    //watch: {
+        //    //    'pixelLevelHitTest': function (obj, propEL) {
+        //    //        propEL.disabled = !obj.pixelLevelHitTest;
+        //    //    }
+        //    //}
+        //},
+
+        // BORDERS
+
         /**
          * Top border of the sprite
-         * @property borderTop
-         * @type number
+         * @property insetTop
+         * @type {Number}
          * @default 0
          */
-        borderTop: {
-            default: 0,
-            type: 'Integer'
-        },
-        /**
-         * Bottom border of the sprite
-         * @property borderTop
-         * @type number
-         * @default 0
-         */
-        borderBottom: {
-            default: 0,
-            type: 'Integer'
-        },
-        /**
-         * Left border of the sprite
-         * @property borderTop
-         * @type number
-         * @default 0
-         */
-        borderLeft: {
-            default: 0,
-            type: 'Integer'
-        },
-        /**
-         * Right border of the sprite
-         * @property borderTop
-         * @type number
-         * @default 0
-         */
-        borderRight: {
+        insetTop: {
             default: 0,
             type: 'Integer'
         },
 
         /**
+         * Bottom border of the sprite
+         * @property insetBottom
+         * @type {Number}
+         * @default 0
+         */
+        insetBottom: {
+            default: 0,
+            type: 'Integer'
+        },
+
+        /**
+         * Left border of the sprite
+         * @property insetLeft
+         * @type {Number}
+         * @default 0
+         */
+        insetLeft: {
+            default: 0,
+            type: 'Integer'
+        },
+
+        /**
+         * Right border of the sprite
+         * @property insetRight
+         * @type {Number}
+         * @default 0
+         */
+        insetRight: {
+            default: 0,
+            type: 'Integer'
+        },
+
+        //
+
+        /**
          * @property rotatedWidth
-         * @type number
+         * @type {Number}
          * @readOnly
          */
         rotatedWidth: {
@@ -202,7 +214,7 @@ var Sprite = cc.Class({
 
         /**
          * @property rotatedHeight
-         * @type number
+         * @type {Number}
          * @readOnly
          */
         rotatedHeight: {
@@ -213,6 +225,4 @@ var Sprite = cc.Class({
     }
 });
 
-cc.SpriteAsset = Sprite;
-
-module.exports = Sprite;
+cc.SpriteAsset = module.exports = Sprite;
