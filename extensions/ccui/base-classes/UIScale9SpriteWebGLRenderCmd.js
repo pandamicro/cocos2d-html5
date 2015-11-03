@@ -203,7 +203,7 @@
             var childrenSize= node._children.length;
             for(var i = 0; i< childrenSize; ++i)
             {
-                this._children[i]._renderCmd._updateDisplayOpacity(255);
+                node._children[i]._renderCmd._updateDisplayOpacity(255);
             }
 
             if (scale9Image != null)

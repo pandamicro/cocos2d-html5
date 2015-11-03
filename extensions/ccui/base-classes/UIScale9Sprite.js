@@ -91,6 +91,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         cc.Node.prototype.ctor.call(self);
         this._nonSliceSpriteAnchor = cc.p(0.5,0.5);
         this._originalSize = cc.size(0,0);
+        this._preferredSize = cc.rect(0,0,0,0);
         this._spriteRect = cc.rect(0,0,0,0);
         this._capInsetsInternal = cc.rect(0,0,0,0);
         this._blendFunc = cc.BlendFunc._disable();
@@ -175,7 +176,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         var ontextureLoadedCallback = function () {
             this._spriteFrameRotated = spriteFrame.isRotated();
             this._textureLoaded = true;
-            var sprite = cc.sprite.createWithSpriteFrame(spriteFrame);
+            var sprite = cc.Sprite.createWithSpriteFrame(spriteFrame);
             var opacity = this.getOpacity();
             var color = this.getColor();
             this._updateBlendFunc(sprite.getTexture());
@@ -184,11 +185,14 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
             this._scale9Image.setPosition(cc.p(0,0));
 
             if(this._spriteRect.equals(cc.rect(0,0,0,0))) {
-                this._spriteRect = cc.rect(priteFrame.getRect());
+                this._spriteRect = cc.rect(spriteFrame.getRect());
             }
 
             if(cc.sizeEqualToSize(this._originalSize, cc.size(0,0))) {
                 this._originalSize = cc.size(spriteFrame.getOriginalSize());
+            }
+            if(cc.sizeEqualToSize(this._preferredSize, cc.size(0,0))) {
+                this.setPreferredSize(this._originalSize);
             }
             //
             this._applyBlendFunc();
@@ -366,6 +370,9 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
             if(cc.sizeEqualToSize(this._originalSize, cc.size(0,0))) {
                 this._originalSize = cc.size(this._scale9Image.getTexture().getContentSize());
             }
+            if(cc.sizeEqualToSize(this._preferredSize, cc.size(0,0))) {
+                this.setPreferredSize(this._originalSize);
+            }
 
             this._applyBlendFunc();
             this.setState(this._brightState);
@@ -485,10 +492,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
      * @return Scale9Sprite's preferred size.
      */
     getPreferredSize : function(){
-        if(this._preferredSize == null)
-            return cc.size(this._originalSize);
-        else
-            return cc.size(this._preferredSize);
+        return cc.size(this._preferredSize);
     },
 
     /**
@@ -599,11 +603,13 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
      * @js NA
      */
     setScale9Enabled : function(enabled){
-        if (this._scale9Enabled == enabled)
-        {
+        if (this._scale9Enabled == enabled) {
             return;
         }
         this._scale9Enabled = enabled;
+        if(!this._scale9Enabled){
+            this.addChild(this._scale9Image);
+        }
         this._quadsDirty = true;
 
         //we must invalide the transform when toggling scale9enabled
