@@ -369,6 +369,16 @@ else {
                 .pipe(concat(Path.basename(paths.modularCocos2d)))
             .pipe(sourcemaps.write('./'))
             //.pipe(wrap(header, footer))
+
+            .pipe(es.through(
+                function (file) {
+                    var content = file.contents.toString();
+                    content = content.replace(/\r\n/g , '\n');
+                    file.contents = new Buffer(content);
+                    this.emit('data', file);
+                }
+            ))
+
             .pipe(gulp.dest(Path.dirname(paths.modularCocos2d)));
     });
 }
