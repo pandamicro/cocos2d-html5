@@ -492,7 +492,7 @@ cc._tmp.WebGLTexture2D = function () {
             self._hasMipmaps = false;
 
             //dispatch load event to listener.
-            self.dispatchEvent("load");
+            self.emit("load");
         },
 
         /**
@@ -754,18 +754,19 @@ cc._tmp.WebGLTexture2D = function () {
          * add listener for loaded event
          * @param {Function} callback
          * @param {cc.Node} target
-         * @deprecated since 3.1, please use addEventListener instead
+         * @deprecated since 3.1, please use EventTarget API instead
          */
         addLoadedEventListener: function (callback, target) {
-            this.addEventListener("load", callback, target);
+            this.once("load", callback, target);
         },
 
         /**
          * remove listener from listeners by target
+         * @param {Function} callback
          * @param {cc.Node} target
          */
-        removeLoadedEventListener: function (target) {
-            this.removeEventListener("load", target);
+        removeLoadedEventListener: function (callback, target) {
+            this.off("load", target);
         }
     });
 };
@@ -894,7 +895,7 @@ cc._tmp.WebGLTextureCache = function () {
             }
             else
             {
-                tex.addEventListener("load", function(){
+                tex.once("load", function(){
                    cb && cb.call(target, tex);
                 }, target);
                 return tex;

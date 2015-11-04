@@ -349,7 +349,7 @@ cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
                 }
                 else
                 {
-                    tex.addEventListener("load", function(){
+                    tex.once("load", function(){
                         cb && cb.call(target, tex);
                     }, target);
                     return tex;

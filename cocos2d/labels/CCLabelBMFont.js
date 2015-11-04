@@ -29,6 +29,9 @@
  http://slick.cokeandcode.com/demos/hiero.jnlp (Free, Java)
  http://www.angelcode.com/products/bmfont/ (Free, Windows only)
  ****************************************************************************/
+
+EventTarget = require("../cocos2d/core/event/event-target");
+
 /**
  * @constant
  * @type Number
@@ -172,10 +175,10 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
      * Will execute the callback in the loaded.
      * @param {Function} callback
      * @param {Object} target
-     * @deprecated since 3.1, please use addEventListener instead
+     * @deprecated since 3.1, please use EventTarget API instead
      */
     addLoadedEventListener: function (callback, target) {
-        this.addEventListener("load", callback, target);
+        this.once("load", callback, target);
     },
 
     /**
@@ -243,13 +246,13 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
             var locIsLoaded = texture.isLoaded();
             self._textureLoaded = locIsLoaded;
             if (!locIsLoaded) {
-                texture.addEventListener("load", function (sender) {
+                texture.once("load", function (event) {
                     var self1 = this;
                     self1._textureLoaded = true;
                     //reset the LabelBMFont
-                    self1.initWithTexture(sender, self1._initialString.length);
+                    self1.initWithTexture(texture, self1._initialString.length);
                     self1.setString(self1._initialString, true);
-                    self1.dispatchEvent("load");
+                    self1.emit("load");
                 }, self);
             }
         } else {
@@ -725,15 +728,15 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
             self._textureLoaded = locIsLoaded;
             self.texture = texture;
             if (!locIsLoaded) {
-                texture.addEventListener("load", function (sender) {
+                texture.once("load", function (event) {
                     var self1 = this;
                     self1._textureLoaded = true;
-                    self1.texture = sender;
+                    self1.texture = texture;
                     self1.createFontChars();
                     self1._changeTextureColor();
                     self1.updateLabel();
 
-                    self1.dispatchEvent("load");
+                    self1.emit("load");
                 }, self);
             } else {
                 self.createFontChars();
@@ -838,7 +841,7 @@ cc.LabelBMFont = cc.SpriteBatchNode.extend(/** @lends cc.LabelBMFont# */{
 
 (function(){
     var p = cc.LabelBMFont.prototype;
-    cc.EventHelper.prototype.apply(p);
+    EventTarget.polyfill(p);
 
     /** @expose */
     p.string;

@@ -134,7 +134,7 @@ cc.loader = (function () {
             }
             s.addEventListener('load', function () {
                 s.parentNode.removeChild(s);
-                this.removeEventListener('load', arguments.callee, false);
+                s.removeEventListener('load', arguments.callee, false);
                 cb();
             }, false);
             s.addEventListener('error', function () {
@@ -312,8 +312,8 @@ cc.loader = (function () {
                 img.crossOrigin = "Anonymous";
 
             var loadCallback = function () {
-                this.removeEventListener('load', loadCallback, false);
-                this.removeEventListener('error', errorCallback, false);
+                img.removeEventListener('load', loadCallback, false);
+                img.removeEventListener('error', errorCallback, false);
 
                 if (callback)
                     callback(null, img);
@@ -321,7 +321,7 @@ cc.loader = (function () {
 
             var self = this;
             var errorCallback = function () {
-                this.removeEventListener('error', errorCallback, false);
+                img.removeEventListener('error', errorCallback, false);
 
                 if(img.crossOrigin && img.crossOrigin.toLowerCase() === "anonymous"){
                     opt.isCrossOrigin = false;
