@@ -291,6 +291,8 @@ if (CC_DEV) {
         'shaderProgram',
         '_reorderChildDirty',
         '_normalizedPositionDirty',
+        '_normalizedPosition',
+        '_usingNormalizedPosition',
         '_renderCmd',
         '_vertexZ',
         '_showNode',
@@ -418,5 +420,32 @@ if (CC_DEV) {
     })();
 
     shouldNotUseNodeProp(cc.SpriteRenderer);
+
+    // cc.Node
+    [
+        '_normalizedPositionDirty',
+        '_normalizedPosition',
+        '_usingNormalizedPosition',
+        'grid',
+        'userData',
+        'userObject',
+        'getNormalizedPosition',
+        'setNormalizedPosition',
+        'getCamera',
+        'getUserData',
+        'setUserData',
+        'getUserObject',
+        'setUserObject',
+        'getComponent',
+        'addComponent',
+        'removeComponent',
+        'removeAllComponents',
+        'enumerateChildren'
+    ].forEach(function (prop) {
+        function error () {
+            cc.error('Sorry, cc.Node.' + prop + ' is removed.');
+        }
+        js.getset(cc.Node.prototype, prop, error, error);
+    });
 
 }

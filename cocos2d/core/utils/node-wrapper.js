@@ -67,8 +67,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         _scaleX: 1.0,
         _scaleY: 1.0,
         _position: cc.p(0, 0),
-        _normalizedPosition: cc.p(0, 0),
-        _usingNormalizedPosition: false,
         _skewX: 0,
         _skewY: 0,
         _localZOrder: 0,
@@ -487,34 +485,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     },
 
     /**
-     * returns the normalized position
-     * @returns {cc.Vec2}
-     */
-    getNormalizedPosition: SGProto.getNormalizedPosition,
-
-    /**
-     * <p>
-     * Sets the position (x,y) using values between 0 and 1.                                                <br/>
-     * The positions in pixels is calculated like the following:                                            <br/>
-     *   _position = _normalizedPosition * parent.getContentSize()
-     * </p>
-     * @param {cc.Vec2|Number} posOrX
-     * @param {Number} [y]
-     */
-    setNormalizedPosition: function(posOrX, y){
-        var locPosition = this._normalizedPosition;
-        if (y === undefined) {
-            locPosition.x = posOrX.x;
-            locPosition.y = posOrX.y;
-        } else {
-            locPosition.x = posOrX;
-            locPosition.y = y;
-        }
-        this._usingNormalizedPosition = true;
-        this._sgNode.setNormalizedPosition(posOrX, y);
-    },
-
-    /**
      *  <p>Returns a copy of the anchor point.<br/>
      *  Anchor point is the point around which all transformations and positioning manipulations take place.<br/>
      *  It's like a pin in the node where it is "attached" to its parent. <br/>
@@ -602,46 +572,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         }
         this._onSizeChanged();
     },
-
-    /**
-     * <p>
-     *     Returns a custom user data pointer                                                               <br/>
-     *     You can set everything in UserData pointer, a data block, a structure or an object.
-     * </p>
-     * @function
-     * @return {object}  A custom user data pointer
-     */
-    getUserData: SGProto.getUserData,
-
-    /**
-     * <p>
-     *    Sets a custom user data reference                                                                   <br/>
-     *    You can set everything in UserData reference, a data block, a structure or an object, etc.
-     * </p>
-     * @function
-     * @warning Don't forget to release the memory manually in JSB, especially before you change this data pointer, and before this node is autoreleased.
-     * @param {object} Var A custom user data
-     */
-    setUserData: SGProto.setUserData,
-
-    /**
-     * Returns a user assigned cocos2d object.                             <br/>
-     * Similar to userData, but instead of holding all kinds of data it can only hold a cocos2d object
-     * @function
-     * @return {object} A user assigned CCObject
-     */
-    getUserObject: SGProto.getUserObject,
-
-    /**
-     * <p>
-     *      Sets a user assigned cocos2d object                                                                                       <br/>
-     *      Similar to UserData, but instead of holding all kinds of data it can only hold a cocos2d object                        <br/>
-     *      In JSB, the UserObject will be retained once in this method, and the previous UserObject (if existed) will be release. <br/>
-     *      The UserObject will be released in CCNode's destruction.
-     * </p>
-     * @param {object} newValue A user cocos2d object
-     */
-    setUserObject: SGProto.setUserObject,
 
     /**
      * Returns a "local" axis aligned bounding box of the node. <br/>
@@ -953,16 +883,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     },
 
     /**
-     * Update will be called automatically every frame if "scheduleUpdate" is called when the node is "live".<br/>
-     * It will invoke update methods of every components<br/>
-     * @function
-     * @param {Number} dt Delta time since last update
-     */
-    update: function () {
-        // implemented by cc.ENode
-    },
-
-    /**
      * Returns a "world" axis aligned bounding box of the node.
      * @function
      * @return {cc.Rect}
@@ -1035,36 +955,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     isOpacityModifyRGB: function () {
         return this._opacityModifyRGB;
     },
-
-    /** Search the children of the receiving node to perform processing for nodes which share a name.
-     *
-     * @param name The name to search for, supports c++11 regular expression.
-     * Search syntax options:
-     * `//`: Can only be placed at the begin of the search string. This indicates that it will search recursively.
-     * `..`: The search should move up to the node's parent. Can only be placed at the end of string.
-     * `/` : When placed anywhere but the start of the search string, this indicates that the search should move to the node's children.
-     *
-     * @code
-     * enumerateChildren("//MyName", ...): This searches the children recursively and matches any node with the name `MyName`.
-     * enumerateChildren("[[:alnum:]]+", ...): This search string matches every node of its children.
-     * enumerateChildren("A[[:digit:]]", ...): This searches the node's children and returns any child named `A0`, `A1`, ..., `A9`.
-     * enumerateChildren("Abby/Normal", ...): This searches the node's grandchildren and returns any node whose name is `Normal`
-     * and whose parent is named `Abby`.
-     * enumerateChildren("//Abby/Normal", ...): This searches recursively and returns any node whose name is `Normal` and whose
-     * parent is named `Abby`.
-     * @endcode
-     *
-     * @warning Only support alpha or number for name, and not support unicode.
-     *
-     * @param callback A callback function to execute on nodes that match the `name` parameter. The function takes the following arguments:
-     *  `node`
-     *      A node that matches the name
-     *  And returns a boolean result. Your callback can return `true` to terminate the enumeration.
-     *
-     */
-    enumerateChildren: SGProto.enumerateChildren,
-    doEnumerateRecursive: SGProto.doEnumerateRecursive,
-    doEnumerate: SGProto.doEnumerate,
 
     // HIERARCHY METHODS
 
