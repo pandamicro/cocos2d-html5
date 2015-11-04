@@ -90,6 +90,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     _scenesStack: null,
     _projectionDelegate: null,
 
+    _loadingScene: '',
     // The root of rendering scene graph
     _runningScene: null,
 
@@ -499,6 +500,99 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         if (scene instanceof cc.EScene) {
             scene._onActivated();
         }
+    },
+
+    //  @Scene loading section
+
+    /**
+     * Loads the scene by its name.
+     * @method loadScene
+     * @param {string} sceneName - the name of the scene to load
+     * @param {function} [onLaunched] - callback, will be called after scene launched
+     * @param {function} [onUnloaded] - callback, will be called when the previous scene was unloaded
+     * @return {boolean} if error, return false
+     */
+    loadScene: function (sceneName, onLaunched, onUnloaded) {
+        var uuid, info;
+        if (this._loadingScene) {
+            cc.error('[loadScene] Failed to load scene "%s" because "%s" is already loading', sceneName, this._loadingScene);
+            return false;
+        }
+        if (typeof sceneName === 'string') {
+            if (!sceneName.endsWith('.fire')) {
+                sceneName += '.fire';
+            }
+            if (sceneName[0] !== '/' && !sceneName.startsWith('assets://')) {
+                sceneName = '/' + sceneName;    // 使用全名匹配
+            }
+            // search scene
+            for (var i = 0; i < cc.game._sceneInfos.length; i++) {
+                info = cc.game._sceneInfos[i];
+                var url = info.url;
+                if (url.endsWith(sceneName)) {
+                    uuid = info.uuid;
+                    break;
+                }
+            }
+        }
+        else {
+            info = cc.game._sceneInfos[sceneName];
+            if (typeof info === 'object') {
+                uuid = info.uuid;
+            }
+            else {
+                cc.error('[loadScene] The scene index to load (%s) is out of range.', sceneName);
+                return false;
+            }
+        }
+        if (uuid) {
+            this._loadingScene = sceneName;
+            this._loadSceneByUuid(uuid, onLaunched, onUnloaded);
+            return true;
+        }
+        else {
+            cc.error('[loadScene] Can not load the scene "%s" because it has not been added to the build settings before play.', sceneName);
+            return false;
+        }
+    },
+
+    /**
+     * Loads the scene by its uuid.
+     * @method _loadSceneByUuid
+     * @param {string} uuid - the uuid of the scene asset to load
+     * @param {function} [onLaunched]
+     * @param {function} [onUnloaded]
+     * @private
+     */
+    _loadSceneByUuid: function (uuid, onLaunched, onUnloaded) {
+        //cc.AssetLibrary.unloadAsset(uuid);     // force reload
+        cc.AssetLibrary.loadAsset(uuid, function (error, sceneAsset) {
+            var scene;
+            if (error) {
+                error = 'Failed to load scene: ' + error;
+                cc.error(error);
+                if (CC_EDITOR) {
+                    console.assert(false, error);
+                }
+            }
+            else {
+                var uuid = sceneAsset._uuid;
+                scene = sceneAsset.scene;
+                if (scene instanceof cc.EScene) {
+                    scene._id = uuid;
+                    cc.director.runScene(scene, onUnloaded);
+                }
+                else {
+                    error = 'The asset ' + uuid + ' is not a scene';
+                    cc.error(error);
+                    scene = null;
+                }
+            }
+            cc.director._loadingScene = '';
+            if (onLaunched) {
+                onLaunched(error, scene);
+            }
+        });
     },
 
     /**
