@@ -411,8 +411,10 @@ function define (className, baseClass, constructor, options) {
             var cls = doDefine(className, baseClass, constructor, options);
             if (uuid) {
                 JS._setClassId(uuid, cls);
-                //Editor.addComponentMenu(cls, 'Scripts/' + cc.js.getClassName(comp), -1);
-                cls.prototype.__scriptUuid = Editor.decompressUuid(uuid);
+                if (CC_EDITOR) {
+                    //Editor.addComponentMenu(cls, 'Scripts/' + cc.js.getClassName(comp), -1);
+                    cls.prototype.__scriptUuid = Editor.decompressUuid(uuid);
+                }
             }
             frame.beh = cls;
             return cls;
