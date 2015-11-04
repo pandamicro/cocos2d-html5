@@ -181,6 +181,10 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
             var color = this.getColor();
             this._updateBlendFunc(sprite.getTexture());
             this._scale9Image = sprite;
+            if (!this._scale9Enabled) {
+                this.addChild(this._scale9Image);
+                this._adjustScale9ImagePosition();
+            }
             this._scale9Image.setAnchorPoint(cc.p(0,0));
             this._scale9Image.setPosition(cc.p(0,0));
 
@@ -372,6 +376,11 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
             }
             if(cc.sizeEqualToSize(this._preferredSize, cc.size(0,0))) {
                 this.setPreferredSize(this._originalSize);
+            }
+
+            if (!this._scale9Enabled) {
+                this.addChild(this._scale9Image);
+                this._adjustScale9ImagePosition();
             }
 
             this._applyBlendFunc();
@@ -607,9 +616,17 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
             return;
         }
         this._scale9Enabled = enabled;
-        if(!this._scale9Enabled){
-            this.addChild(this._scale9Image);
+        if(this._scale9Image) {
+            if (!this._scale9Enabled) {
+                this.addChild(this._scale9Image);
+                this._adjustScale9ImagePosition();
+            }
+            else {
+                this.removeChild(this._scale9Image);
+            }
+
         }
+
         this._quadsDirty = true;
 
         //we must invalide the transform when toggling scale9enabled
