@@ -1,7 +1,7 @@
 require('./platform');
 require('./assets');
 
-if (!(CC_EDITOR && Editor.isCoreLevel)) {
+if (!CC_EDITOR || !Editor.isCoreLevel) {
     require('./CCNode');
     require('./CCScene');
 

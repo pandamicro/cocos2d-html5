@@ -72,10 +72,13 @@ var SpriteRenderer = cc.Class({
             get: function () {
                 return this._texture;
             },
-            set: function (value) {
+            set: function (value, force) {
                 this._texture = value;
 
                 if (this._sgNode) {
+                    if (CC_EDITOR && force) {
+                        this._sgNode.texture = null;
+                    }
                     this._sgNode.texture = value;
                     // color cleared after reset texture, should reapply color
                     this._sgNode.setColor(this.node._color);

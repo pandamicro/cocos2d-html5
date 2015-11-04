@@ -166,7 +166,9 @@ var Component = cc.Class({
     extends: cc.Object,
 
     ctor: (CC_EDITOR || CC_TEST) && function () {
-        //Editor._AssetsWatcher.initComponent(this);
+        if (CC_EDITOR) {
+            Editor._AssetsWatcher.initComponent(this);
+        }
 
         // dont reset _id when destroyed
         Object.defineProperty(this, '_id', {
@@ -489,7 +491,7 @@ var Component = cc.Class({
             else {
                 this._objFlags |= IsOnLoadCalled;
             }
-            //Editor._AssetsWatcher.start(this);
+            Editor._AssetsWatcher.start(this);
         }
 
         if (this._enabled) {
@@ -531,7 +533,7 @@ var Component = cc.Class({
         this.__eventTargets.length = 0;
         // onDestroy
         if (CC_EDITOR) {
-            //Editor._AssetsWatcher.stop(this);
+            Editor._AssetsWatcher.stop(this);
             if (cc.engine.isPlaying || this.constructor._executeInEditMode) {
                 if (this.onDestroy) {
                     callOnDestroyInTryCatch(this);
