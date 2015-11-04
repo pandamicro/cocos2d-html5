@@ -42,7 +42,10 @@ var AudioSource = cc.Class({
     },
 
     properties: {
-        _clip: '',
+        _clip: {
+            default: '',
+            url: cc.AudioClip
+        },
         _volume: 1,
         _mute: false,
         _loop: false,
@@ -63,8 +66,8 @@ var AudioSource = cc.Class({
 
         /**
          * The clip of the audio source.
-         * @property volume
-         * @type {number}
+         * @property clip
+         * @type {cc.AudioClip}
          * @default 1
          */
         clip: {

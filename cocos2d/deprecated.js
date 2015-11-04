@@ -256,6 +256,26 @@ if (CC_DEV) {
         }
     }
 
+    function shouldNotUseNodeProp (component) {
+        var compName = cc.js.getClassName(component);
+        var Info = 'Sorry, ' + compName + '.%s is removed, please use cc.ENode.%s instead.';
+        var compProto = component.prototype;
+        for (var prop in cc.ENode.prototype) {
+            (function (prop) {
+                if (!(prop in compProto) && prop[0] !== '_') {
+                    js.getset(compProto, prop,
+                        function () {
+                            cc.error(Info, prop, prop);
+                        },
+                        function () {
+                            cc.error(Info, prop, prop);
+                        }
+                    );
+                }
+            })(prop);
+        }
+    }
+
     // cc.ENode
 
     [
@@ -396,5 +416,7 @@ if (CC_DEV) {
         };
         provideClearError(cc.SpriteRenderer, StaticFunc);
     })();
+
+    shouldNotUseNodeProp(cc.SpriteRenderer);
 
 }
