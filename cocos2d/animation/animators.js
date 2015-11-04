@@ -125,26 +125,30 @@ entProto.animate = function (keyFrames, timingInput) {
 
 // 具体逻辑
 
-function findCurve (curves, comp, compName, propName) {
+function findCurve (curves, target, propName) {
     var i = 0, curve;
-    if (comp) {
-        for (; i < curves.length; i++) {
-            curve = curves[i];
-            if (curve.target === comp && curve.prop === propName) {
-                return curve;
-            }
+
+    for (; i < curves.length; i++) {
+        curve = curves[i];
+        if (curve.target === target && curve.prop === propName) {
+            return curve;
         }
     }
-    else {
-        for (; i < curves.length; i++) {
-            curve = curves[i];
-            var existsCompName = JS.getClassName(curve.target);
-            if (compName === existsCompName && curve.prop === propName) {
-                return curve;
-            }
-        }
-    }
+
     return null;
+}
+
+function createPropCurve (curves, target, propName, value, ratio) {
+    var curve = findCurve(curves, target, propName);
+    if (! curve) {
+        curve = new DynamicAnimCurve();
+        curves.push(curve);
+        // 缓存目标对象，所以 Component 必须一开始都创建好并且不能运行时动态替换……
+        curve.target = target;
+        curve.prop = propName;
+    }
+    curve.values.push(value);
+    curve.ratios.push(ratio);
 }
 
 entProto._doAnimate = function (keyFrames, timingInput) {
@@ -173,36 +177,23 @@ entProto._doAnimate = function (keyFrames, timingInput) {
 
         // 先遍历每一帧，获得所有曲线
         for (var key in frame) {
-            // get component data
-            if (key === 'ratio' || key === 'computedRatio' || key === 'offset') {
-                continue;
-            }
-            var compName = key;
-            var compData = frame[compName];
-            var comp;
 
-            if (compName === '')
-                comp = this.target;
-            else
-                comp = this.target.getComponent(compName);
+            var data = frame[key];
 
-            if (!comp) {
-                cc.error('[animate] Component %s is not found!', compName);
-                continue;
-            }
-
-            for (var propName in compData) {
-                // get curve
-                var curve = findCurve(curves, comp, compName, propName);
-                if (! curve) {
-                    curve = new DynamicAnimCurve();
-                    curves.push(curve);
-                    // 缓存目标对象，所以 Component 必须一开始都创建好并且不能运行时动态替换……
-                    curve.target = comp;
-                    curve.prop = propName;
+            if (key === 'props') {
+                for (var propName in data) {
+                    createPropCurve(curves, this.target, propName, data[propName], ratio);
                 }
-                curve.values.push(compData[propName]);
-                curve.ratios.push(ratio);
+            }
+            else if (key === 'comps') {
+                for (var compName in data) {
+                    var comp = this.target.getComponent(compName);
+                    var compData = data[compName];
+
+                    for (var propName in compData) {
+                        createPropCurve(curves, comp, propName, compData[propName], ratio);
+                    }
+                }
             }
         }
     }

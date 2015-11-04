@@ -62,12 +62,16 @@ test('EntityAnimator.animate', function () {
     var animator = new EntityAnimator(entity);
     var animation = animator.animate([
         {
-            '': { x: 50, scaleX: 10 },
-            'cc.Sprite': { color: Color.WHITE }
+            props: { x: 50, scaleX: 10 },
+            comps: {
+                'cc.Sprite': { color: Color.WHITE }
+            }
         },
         {
-            '': { x: 100, scaleX: 20 },
-            'cc.Sprite': { color: color(1, 1, 1, 0) }
+            props: { x: 100, scaleX: 20 },
+            comps: {
+                'cc.Sprite': { color: color(1, 1, 1, 0) }
+            }
         }
     ]);
 
@@ -144,12 +148,16 @@ test('AnimationNode', function () {
     var animator = new EntityAnimator(entity);
     var animation = animator.animate([
         {
-            '': { x: 50, scale: v2(1, 1) },
-            'cc.Sprite': { color: Color.WHITE }
+            props: { x: 50, scale: v2(1, 1) },
+            comps: {
+                'cc.Sprite': { color: Color.WHITE }
+            }
         },
         {
-            '': { x: 100, scale: v2(2, 2) },
-            'cc.Sprite': { color: color(255, 255, 255, 0) }
+            props: { x: 100, scale: v2(2, 2) },
+            comps: {
+                'cc.Sprite': { color: color(255, 255, 255, 0) }
+            }
         }
     ], {
         delay: 0.3,
@@ -187,10 +195,10 @@ test('wrapMode', function () {
     var animator = new EntityAnimator(entity);
     var animation = animator.animate([
         {
-            '': { x: 10 },
+            props: { x: 10 },
         },
         {
-            '': { x: 110 },
+            props: { x: 110 },
         }
     ], {
         delay: 0.3,
@@ -263,116 +271,65 @@ test('initClipData', function () {
     var childRenderer = childEntity.addComponent(cc.SpriteRenderer);
 
     entity.addChild(childEntity);
-    cc.director.getScene().addChild(entity);
 
     var clip = new cc.AnimationClip();
     var state = new cc.AnimationState(clip);
-    initClipData(state);
+    initClipData(entity, state);
     strictEqual(state.curves.length, 0, 'should create empty animation');
 
     clip = new cc.AnimationClip();
     clip._duration = 10;
     clip.curveData = {
-        'foo': [
-            {
-                property: 'position',
-                keys: [
-                    {
-                        frame: 0,
-                        value: v2(50, 100)
-                    },
-                    {
-                        frame: 5,
-                        value: v2(100, 75)
-                    },
-                    {
-                        frame: 10,
-                        value: v2(100, 50)
-                    },
-                ]
-            },
-            {
-                property: 'scale.x',
-                keys: [
-                    {
-                        frame: 0,
-                        value: 10
-                    },
-                    {
-                        frame: 10,
-                        value: 20
-                    }
-                ]
-            },
-            {
-                property: 'scale.y',
-                keys: [
-                    {
-                        frame: 0,
-                        value: 10
-                    },
-                    {
-                        frame: 5,
-                        value: 12
-                    },
-                    {
-                        frame: 10,
-                        value: 20
-                    }
-                ]
-            },
-            {
-                component: 'cc.Sprite',
-                property: 'color.a',
-                keys: [
-                    {
-                        frame: 0,
-                        value: 1
-                    },
-                    {
-                        frame: 10,
-                        value: 0
-                    }
+        props: {
+            position: [
+                { frame: 0, value: v2(50, 100) },
+                { frame: 5, value: v2(100, 75) },
+                { frame: 10, value: v2(100, 50) }
+            ],
+            'scale.x': [
+                { frame: 0, value: 10 },
+                { frame: 10, value: 20 }
+            ],
+            'scale.y': [
+                { frame: 0, value: 10 },
+                { frame: 5, value: 12 },
+                { frame: 10, value: 20 }
+            ]
+        },
+
+        comps: {
+            'cc.Sprite': {
+                'color.a': [
+                    { frame: 0, value: 1 },
+                    { frame: 10, value: 0 }
                 ]
             }
-        ],
-        'foo/bar': [
-            {
-                property: 'position',
-                keys: [
-                    {
-                        frame: 0,
-                        value: v2(50, 100)
-                    },
-                    {
-                        frame: 5,
-                        value: v2(100, 75)
-                    },
-                    {
-                        frame: 10,
-                        value: v2(100, 50)
-                    },
-                ]
-            },
-            {
-                component: 'cc.Sprite',
-                property: 'color.a',
-                keys: [
-                    {
-                        frame: 0,
-                        value: 1
-                    },
-                    {
-                        frame: 10,
-                        value: 0
+        },
+
+        paths: {
+            'bar': {
+                props: {
+                    position: [
+                        { frame: 0, value: v2(50, 100) },
+                        { frame: 5, value: v2(100, 75) },
+                        { frame: 10, value: v2(100, 50) },
+                    ]
+                },
+
+                comps: {
+                    'cc.Sprite': {
+                        'color.a': [
+                            { frame: 0, value: 1 },
+                            { frame: 10, value: 0 }
+                        ]
                     }
-                ]
+                }
             }
-        ]
+        }
     };
 
     state = new cc.AnimationState(clip);
-    initClipData(state);
+    initClipData(entity, state);
 
     var posCurve = state.curves[0];
     var scaleCurveX = state.curves[1];
@@ -395,6 +352,4 @@ test('initClipData', function () {
 
     deepEqual(posCurve.ratios, [0, 0.5, 1], 'ratios of posCurve should equals keyFrames');
     deepEqual(colorCurve.ratios, [0, 1], 'ratios of colorCurve should equals keyFrames');
-
-    cc.director.getScene().removeChild(entity);
 });
