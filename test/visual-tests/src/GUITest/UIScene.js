@@ -29,18 +29,19 @@ var UIScene  = TestScene.extend({
         cc.director.runScene(this);
     }
 });
-var UIMainLayer = cc.Layer.extend({
-    _widget: null,
-    _sceneTitle: null,
+var UIMainLayer = BaseTestLayer.extend({
     _topDisplayLabel:null,
     _bottomDisplayLabel:null,
     _mainNode:null,
-
-    ctor: function() {
-        this._super();
-        this._widget = null;
-        //this.init();
+    _widget: {
+        width: 480,
+        height: 320,
+        getContentSize: function () {
+            return cc.size(480, 320);
+        }
     },
+    _backgroundSize: cc.size(300, 170),
+
     init: function() {
         this._super();
 
@@ -49,39 +50,10 @@ var UIMainLayer = cc.Layer.extend({
         var scale = winSize.height/320;
         mainNode.attr({anchorX: 0, anchorY: 0, scale: scale, x: (winSize.width - 480 * scale) / 2, y: (winSize.height - 320 * scale) / 2});
         this.addChild(mainNode);
-
-        var widget;
-        var json = ccs.load("ccs-res/cocosui/UITest/UITest.json");
-        widget = json.node;
-        mainNode.addChild(widget,-1);
-
-        this._sceneTitle = widget.getChildByName("UItest");
-
-        var back_label = widget.getChildByName("back");
-        if(back_label){
-            back_label.addTouchEventListener(this.toExtensionsMainLayer, this);
-        }
-        else{
-            var label = new cc.LabelTTF("Back", "Arial", 20);
-            var menuItem = new cc.MenuItemLabel(label, this.toExtensionsMainLayer, this);
-            var menu = new cc.Menu(menuItem);
-            menu.x = 0;
-            menu.y = 0;
-            menuItem.x = winSize.width - 50;
-            menuItem.y = 25;
-            this.addChild(menu, 1);
-        }
-        var left_button = widget.getChildByName("left_Button");
-        left_button.addTouchEventListener(this.previousCallback ,this);
-
-        var middle_button = widget.getChildByName("middle_Button");
-        middle_button.addTouchEventListener(this.restartCallback ,this);
-
-        var right_button = widget.getChildByName("right_Button");
-        right_button.addTouchEventListener(this.nextCallback ,this);
+        this._mainNode = mainNode;
 
         //add topDisplayLabel
-        var widgetSize = widget.getContentSize();
+        var widgetSize = cc.size(480, 320);
         var topDisplayText = new ccui.Text();
         topDisplayText.attr({
             string: "",
@@ -109,32 +81,22 @@ var UIMainLayer = cc.Layer.extend({
         this._topDisplayLabel = topDisplayText;
         this._bottomDisplayLabel = bottomDisplayText;
         this._mainNode = mainNode;
-        this._widget = widget;
         return true;
     },
     setSceneTitle: function (title) {
-        this._sceneTitle.setString(title);
+        this._title = title;
     },
-    toExtensionsMainLayer: function (sender) {
+
+    onBackCallback: function (sender) {
+        cc.director.runScene(UISceneManager.getInstance().previousUIScene());
+    },
+
+    onRestartCallback: function (sender) {
         UISceneManager.purge();
         GUITestScene.prototype.runThisTest();
     },
 
-    previousCallback: function (sender, type) {
-        if (type == ccui.Widget.TOUCH_ENDED) {
-            cc.director.runScene(UISceneManager.getInstance().previousUIScene());
-        }
-    },
-
-    restartCallback: function (sender, type) {
-        if (type == ccui.Widget.TOUCH_ENDED) {
-            cc.director.runScene(UISceneManager.getInstance().currentUIScene());
-        }
-    },
-
-    nextCallback: function (sender, type) {
-        if (type == ccui.Widget.TOUCH_ENDED) {
-            cc.director.runScene(UISceneManager.getInstance().nextUIScene());
-        }
+    onNextCallback: function (sender) {
+        cc.director.runScene(UISceneManager.getInstance().nextUIScene());
     }
 });

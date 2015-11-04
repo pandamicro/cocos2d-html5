@@ -369,7 +369,7 @@ var UIButtonTextOnly = UIMainLayer.extend({
 
             // Create the button
             var button = new ccui.Button();
-            button.setNormalizedPosition(0.5, 0.5);
+            button.setPosition(0.5 * this.width, 0.5 * this.height);
 
             button.setTitleText("PLAY GAME");
             cc.log("content size should be greater than 0:  width = %f, height = %f", button.width, button.height);
@@ -398,7 +398,7 @@ var UIButtonIgnoreContentSizeTest = UIMainLayer.extend({
             var button = new ccui.Button("ccs-res/cocosui/animationbuttonnormal.png", "ccs-res/cocosui/animationbuttonpressed.png");
             button.ignoreContentAdaptWithSize(false);
             button.setContentSize(200,100);
-            button.setNormalizedPosition(0.3, 0.5);
+            button.setPosition(0.3 * this.width, 0.5 * this.height);
             button.setTitleText("PLAY GAME");
             button.setZoomScale(0.3);
             button.setPressedActionEnabled(true);
@@ -412,7 +412,7 @@ var UIButtonIgnoreContentSizeTest = UIMainLayer.extend({
             var button2 = new ccui.Button("ccs-res/cocosui/animationbuttonnormal.png", "ccs-res/cocosui/animationbuttonpressed.png");
             button2.ignoreContentAdaptWithSize(false);
             button2.setContentSize(200,100);
-            button2.setNormalizedPosition(0.8, 0.5);
+            button2.setPosition(0.8 * this.width, 0.5 * this.height);
             button2.setTitleText("PLAY GAME");
             button2.setZoomScale(0.3);
             button2.setPressedActionEnabled(true);
@@ -439,7 +439,7 @@ var UIButtonTitleEffectTest = UIMainLayer.extend({
 
             // Create the button
             var button = new ccui.Button("ccs-res/cocosui/animationbuttonnormal.png", "ccs-res/cocosui/animationbuttonpressed.png");
-            button.setNormalizedPosition(0.3, 0.5);
+            button.setPosition(0.3 * this.width, 0.5 * this.height);
             button.setTitleText("PLAY GAME");
             //button.setTitleFontName("Marker Felt");
             button.setZoomScale(0.3);
@@ -452,7 +452,7 @@ var UIButtonTitleEffectTest = UIMainLayer.extend({
 
             // Create the button
             var button2 = new ccui.Button("ccs-res/cocosui/animationbuttonnormal.png", "ccs-res/cocosui/animationbuttonpressed.png");
-            button2.setNormalizedPosition(0.8, 0.5);
+            button2.setPosition(0.8 * this.width, 0.5 * this.height);
             button2.setTitleText("PLAY GAME");
             var title2 = button2.getTitleRenderer();
             title2.enableStroke(cc.Color.GREEN, 3);
@@ -473,7 +473,7 @@ var UIButtonFlipTest = UIMainLayer.extend({
 
             // Create the button
             var button = new ccui.Button("ccs-res/cocosui/animationbuttonnormal.png", "ccs-res/cocosui/animationbuttonpressed.png");
-            button.setNormalizedPosition(0.3, 0.5);
+            button.setPosition(0.3 * this.width, 0.5 * this.height);
             button.setTitleText("PLAY GAME");
             //button.setTitleFontName("Marker Felt");
             button.setZoomScale(0.3);
@@ -483,18 +483,18 @@ var UIButtonFlipTest = UIMainLayer.extend({
             this.addChild(button);
 
             var titleLabel = new ccui.Text("Button X flipped", "Arial", 20);
-            titleLabel.setNormalizedPosition(0.3, 0.7);
+            titleLabel.setPosition(0.3 * this.width, 0.7 * this.height);
             this.addChild(titleLabel);
 
             // Create the button
             var button2 = new ccui.Button("ccs-res/cocosui/animationbuttonnormal.png", "ccs-res/cocosui/animationbuttonpressed.png");
-            button2.setNormalizedPosition(0.8, 0.5);
+            button2.setPosition(0.8 * this.width, 0.5 * this.height);
             button2.setTitleText("PLAY GAME");
             button2.setFlippedY(true);
             this.addChild(button2);
 
             titleLabel = new ccui.Text("Button Y flipped", "Arial", 20);
-            titleLabel.setNormalizedPosition(0.8, 0.7);
+            titleLabel.setPosition(0.8 * this.width, 0.7 * this.height);
             this.addChild(titleLabel);
             return true;
         }

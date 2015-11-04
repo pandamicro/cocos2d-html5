@@ -37,14 +37,10 @@ var UILayoutTestBase = UIMainLayer.extend({
             this._bottomDisplayLabel.x = widgetSize.width / 2;
             this._bottomDisplayLabel.y = widgetSize.height / 2 - this._bottomDisplayLabel.height * 3;
 
-            var background = this._widget.getChildByName("background_Panel");
-            this._mainNode.width = widgetSize.width;
-            this._mainNode.height = widgetSize.height;
-
             // Create the layout
             this.layout = this.createLayout();
             var layoutRect = this.layout.getContentSize();
-            var backgroundRect = background.getContentSize();
+            var backgroundRect = this._backgroundSize;
             this.layout.x = (widgetSize.width - backgroundRect.width) / 2 + (backgroundRect.width - layoutRect.width) / 2;
 	        this.layout.y = (widgetSize.height - backgroundRect.height) / 2 + (backgroundRect.height - layoutRect.height) / 2;
             this._mainNode.addChild(this.layout);
@@ -250,16 +246,13 @@ var UILayoutTest_Layout_Relative_Align_Parent = UIMainLayer.extend({
              alert.setPosition(widgetSize.width / 2.0, widgetSize.height / 2.0 - alert.getContentSize().height * 4.5);
              this._mainNode.addChild(alert);
 
-             var root = this._mainNode.getChildByTag(81);
-             var background = root.getChildByName("background_Panel");
-
              // Create the layout
              var layout = new ccui.Layout();
              layout.setLayoutType(ccui.Layout.Type.RELATIVE);
              layout.setContentSize(280, 150);
              layout.setBackGroundColorType(ccui.Layout.BG_COLOR_SOLID);
              layout.setBackGroundColor(cc.Color.GREEN);
-             var backgroundSize = background.getContentSize();
+             var backgroundSize = this._backgroundSize;
              layout.setPosition((widgetSize.width - backgroundSize.width) / 2.0 + (backgroundSize.width - layout.width) / 2.0,
                      (widgetSize.height - backgroundSize.height) / 2.0 + (backgroundSize.height - layout.height) / 2.0);
              this._mainNode.addChild(layout);
@@ -348,14 +341,11 @@ var UILayoutTest_Layout_Relative_Location = UIMainLayer.extend({
              alert.setPosition(widgetSize.width / 2.0, widgetSize.height / 2.0 - alert.height * 4.5);
              this._mainNode.addChild(alert);
 
-             var root = this._mainNode.getChildByTag(81);
-             var background = root.getChildByName("background_Panel");
-
              // Create the layout
              var layout = new ccui.Layout();
              layout.setLayoutType(ccui.Layout.Type.RELATIVE);
              layout.setContentSize(280, 150);
-             var backgroundSize = background.getContentSize();
+             var backgroundSize = this._backgroundSize;
              layout.setPosition((widgetSize.width - backgroundSize.width) / 2.0 + (backgroundSize.width - layout.width) / 2.0,
                      (widgetSize.height - backgroundSize.height) / 2.0 + (backgroundSize.height - layout.height) / 2.0 );
              this._mainNode.addChild(layout);
