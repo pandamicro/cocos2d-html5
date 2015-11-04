@@ -729,7 +729,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
             if(_t.texture)
                 _t.texture.removeEventListener("load", _t);
             texture.addEventListener("load", _t._renderCmd._textureLoadedCallback, _t);
-            _t.texture = texture;
+            _t.setTexture(texture);
             return true;
         }
 
@@ -838,12 +838,11 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
         var pNewTexture = newFrame.getTexture();
         var locTextureLoaded = newFrame.textureLoaded();
         if (!locTextureLoaded) {
+            if (pNewTexture !== _t._texture)
+                _t.setTexture(pNewTexture);
             _t._textureLoaded = false;
             newFrame.addEventListener("load", function (sender) {
                 _t._textureLoaded = true;
-                var locNewTexture = sender.getTexture();
-                if (locNewTexture !== _t._texture)
-                    _t.texture = locNewTexture;
                 _t.setTextureRect(sender.getRect(), sender.isRotated(), sender.getOriginalSize());
                 _t.dispatchEvent("load");
                 _t.setColor(_t.color);
@@ -851,7 +850,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
         }else{
             // update texture before updating texture rect
             if (pNewTexture !== _t._texture)
-                _t.texture = pNewTexture;
+                _t.setTexture(pNewTexture);
             _t.setTextureRect(newFrame.getRect(), newFrame.isRotated(), newFrame.getOriginalSize());
         }
         this._renderCmd._updateForSetSpriteFrame(pNewTexture);
@@ -948,9 +947,8 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
             this.setColor(this._realColor);
             this._textureLoaded = true;
         }else{
-            this._renderCmd._setTexture(null);
+            this._renderCmd._setTexture(texture, isFileName);
             texture.addEventListener("load", function(){
-                this._setTexture(texture, isFileName);
                 this.setColor(this._realColor);
                 this._textureLoaded = true;
             }, this);
