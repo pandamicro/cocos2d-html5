@@ -1034,8 +1034,6 @@ var SpriteZVertex = SpriteTestDemo.extend({
                 sprite.shaderProgram = alphaTestShader;
                 node.addChild(sprite, 0);
             }
-
-            this.runAction(cc.orbitCamera(10, 1, 0, 0, 360, 0, 0));
         } else {
             var label = new cc.LabelTTF("Not supported on HTML5-canvas", "Times New Roman", 30);
             this.addChild(label);
@@ -1160,8 +1158,6 @@ var SpriteBatchNodeZVertex = SpriteTestDemo.extend({
                 sprite.vertexZ = 10 + (10 - i) * 40;
                 batch.addChild(sprite, 0);
             }
-
-            this.runAction(cc.orbitCamera(10, 1, 0, 0, 360, 0, 0));
         } else {
             var label = new cc.LabelTTF("Not supported on HTML5-canvas", "Times New Roman", 30);
             this.addChild(label);

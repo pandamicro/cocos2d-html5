@@ -119,14 +119,11 @@ cc.s_globalOrderOfArrival = 1;
  * @property {cc.Node}              parent              - Parent node
  * @property {Boolean}              running             - <@readonly> Indicate whether node is running or not
  * @property {Number}               tag                 - Tag of node
- * @property {Object}               userData            - Custom user data
- * @property {Object}               userObject          - User assigned CCObject, similar to userData, but instead of holding a void* it holds an id
  * @property {Number}               arrivalOrder        - The arrival order, indicates which children is added previously
  * @property {cc.ActionManager}     actionManager       - The CCActionManager object that is used by all actions.
- * @property {cc.Scheduler}         scheduler           - cc.Scheduler used to schedule all "updates" and timers.
- * @property {cc.GridBase}          grid                - grid object that is used when applying effects
  * @property {cc.GLProgram}         shaderProgram       - The shader program currently used for this node
  * @property {Number}               glServerState       - The state of OpenGL server side
+ * @property {cc.Scheduler}         scheduler           - cc.Scheduler used to schedule all "updates" and timers
  */
 cc.Node = cc.Class(/** @lends cc.Node# */{
     name: 'cc._Node',
@@ -142,9 +139,6 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
         _scaleY: 1.0,
         _position: cc.p(0, 0),
 
-        _normalizedPosition: cc.p(0, 0),
-        _usingNormalizedPosition: false,
-
         _skewX: 0.0,
         _skewY: 0.0,
         _children: [],
@@ -156,9 +150,6 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
         // "whole screen" objects. like Scenes and Layers, should set _ignoreAnchorPointForPosition to true
         _ignoreAnchorPointForPosition: false,
         tag: cc.NODE_TAG_INVALID,
-        // userData is always initialized as nil
-        userData: null,
-        userObject: null,
 
         _showNode: false,
         _name: '',                     ///<a string label, an user defined string to identify this node
@@ -172,7 +163,6 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
     ctor: function() {
         var name = arguments[0];
 
-        this._normalizedPositionDirty = false;
         this._running = false;
         this._reorderChildDirty = false;
         this._shaderProgram = null;
@@ -186,12 +176,6 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
         this._scheduler = director.getScheduler();
         this._additionalTransform = cc.affineTransformMakeIdentity();
 
-        if (cc.ComponentContainer) {
-            this._componentContainer = new cc.ComponentContainer(this);
-        }
-
-        this.grid = null;
-        this._camera = null;
         this._initRendererCmd();
     },
 
@@ -636,29 +620,6 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
             locPosition.x = newPosOrxValue;
             locPosition.y = yValue;
         }
-        this._usingNormalizedPosition = false;
-        this._renderCmd.setDirtyFlag(cc.Node._dirtyFlags.transformDirty);
-    },
-
-    /**
-     * <p>
-     * Sets the position (x,y) using values between 0 and 1.                                                <br/>
-     * The positions in pixels is calculated like the following:                                            <br/>
-     *   _position = _normalizedPosition * parent.getContentSize()
-     * </p>
-     * @param {cc.Vec2|Number} posOrX
-     * @param {Number} [y]
-     */
-    setNormalizedPosition: function(posOrX, y){
-        var locPosition = this._normalizedPosition;
-        if (y === undefined) {
-            locPosition.x = posOrX.x;
-            locPosition.y = posOrX.y;
-        } else {
-            locPosition.x = posOrX;
-            locPosition.y = y;
-        }
-        this._normalizedPositionDirty = this._usingNormalizedPosition = true;
         this._renderCmd.setDirtyFlag(cc.Node._dirtyFlags.transformDirty);
     },
 
@@ -669,14 +630,6 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
      */
     getPosition: function () {
         return cc.p(this._position);
-    },
-
-    /**
-     * returns the normalized position
-     * @returns {cc.Vec2}
-     */
-    getNormalizedPosition: function(){
-        return cc.p(this._normalizedPosition);
     },
 
     /**
@@ -1007,56 +960,6 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
     getName: function(){
         return this._name;
     },
-
-    /**
-     * <p>
-     *     Returns a custom user data pointer                                                               <br/>
-     *     You can set everything in UserData pointer, a data block, a structure or an object.
-     * </p>
-     * @function
-     * @return {object}  A custom user data pointer
-     */
-    getUserData: function () {
-        return this.userData;
-    },
-
-    /**
-     * <p>
-     *    Sets a custom user data reference                                                                   <br/>
-     *    You can set everything in UserData reference, a data block, a structure or an object, etc.
-     * </p>
-     * @function
-     * @warning Don't forget to release the memory manually in JSB, especially before you change this data pointer, and before this node is autoreleased.
-     * @param {object} Var A custom user data
-     */
-    setUserData: function (Var) {
-        this.userData = Var;
-    },
-
-    /**
-     * Returns a user assigned cocos2d object.                             <br/>
-     * Similar to userData, but instead of holding all kinds of data it can only hold a cocos2d object
-     * @function
-     * @return {object} A user assigned CCObject
-     */
-    getUserObject: function () {
-        return this.userObject;
-    },
-
-    /**
-     * <p>
-     *      Sets a user assigned cocos2d object                                                                                       <br/>
-     *      Similar to UserData, but instead of holding all kinds of data it can only hold a cocos2d object                        <br/>
-     *      In JSB, the UserObject will be retained once in this method, and the previous UserObject (if existed) will be release. <br/>
-     *      The UserObject will be released in CCNode's destruction.
-     * </p>
-     * @param {object} newValue A user cocos2d object
-     */
-    setUserObject: function (newValue) {
-        if (this.userObject !== newValue)
-            this.userObject = newValue;
-    },
-
 
     /**
      * Returns the arrival order, indicates which children should be added previously.
@@ -1532,7 +1435,6 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
         this._running = false;
         this.pause();
         this._arrayMakeObjectsPerformSelector(this._children, cc.Node._stateCallbackType.onExit);
-        this.removeAllComponents();
     },
 
     // actions
@@ -1979,19 +1881,7 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
         var point = cc.director.convertToGL(touch.getLocation());
         return this.convertToNodeSpaceAR(point);
     },
-
-    /**
-     * Update will be called automatically every frame if "scheduleUpdate" is called when the node is "live".<br/>
-     * The default behavior is to invoke the visit function of node's componentContainer.<br/>
-     * Override me to implement your own update logic.
-     * @function
-     * @param {Number} dt Delta time since last update
-     */
-    update: function (dt) {
-        if (this._componentContainer && !this._componentContainer.isEmpty())
-            this._componentContainer.visit(dt);
-    },
-
+    
     /**
      * <p>
      * Calls children's updateTransform() method recursively.                                        <br/>
@@ -2037,50 +1927,6 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
      */
     release: function () {
     },
-
-    /**
-     * Returns a component identified by the name given.
-     * @function
-     * @param {String} name The name to search for
-     * @return {cc._Component} The component found
-     */
-    getComponent: function (name) {
-        if(this._componentContainer)
-            return this._componentContainer.getComponent(name);
-        return null;
-    },
-
-    /**
-     * Adds a component to the node's component container.
-     * @function
-     * @param {cc._Component} component
-     */
-    addComponent: function (component) {
-        if(this._componentContainer)
-            this._componentContainer.add(component);
-    },
-
-    /**
-     * Removes a component identified by the given name or removes the component object given
-     * @function
-     * @param {String|cc._Component} component
-     */
-    removeComponent: function (component) {
-        if(this._componentContainer)
-            return this._componentContainer.remove(component);
-        return false;
-    },
-
-    /**
-     * Removes all components of cc.Node, it called when cc.Node is exiting from stage.
-     * @function
-     */
-    removeAllComponents: function () {
-        if(this._componentContainer)
-            this._componentContainer.removeAll();
-    },
-
-    grid: null,
 
     /**
      * Recursive method that visit its children and draw them
@@ -2133,44 +1979,6 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
 
     getNodeToParentAffineTransform: function(ancestor){
         return this.getNodeToParentTransform(ancestor);
-    },
-
-    /**
-     * Returns a camera object that lets you move the node using a gluLookAt
-     * @function
-     * @return {cc.Camera} A CCCamera object that lets you move the node using a gluLookAt
-     * @deprecated since v3.0, no alternative function
-     * @example
-     * var camera = node.getCamera();
-     * camera.setEye(0, 0, 415/2);
-     * camera.setCenter(0, 0, 0);
-     */
-    getCamera: function () {
-        if (!this._camera)
-            this._camera = new cc.Camera();
-        return this._camera;
-    },
-
-    /**
-     * <p>Returns a grid object that is used when applying effects.<br/>
-     * This function have been deprecated, please use cc.NodeGrid to run grid actions</p>
-     * @function
-     * @return {cc.GridBase} A CCGrid object that is used when applying effects
-     * @deprecated since v3.0, no alternative function
-     */
-    getGrid: function () {
-        return this.grid;
-    },
-
-    /**
-     * <p>Changes a grid object that is used when applying effects<br/>
-     * This function have been deprecated, please use cc.NodeGrid to run grid actions</p>
-     * @function
-     * @param {cc.GridBase} grid A CCGrid object that is used when applying effects
-     * @deprecated since v3.0, no alternative function
-     */
-    setGrid: function (grid) {
-        this.grid = grid;
     },
 
     /**
@@ -2416,119 +2224,6 @@ cc.Node = cc.Class(/** @lends cc.Node# */{
             return new cc.Node.CanvasRenderCmd(this);
         else
             return new cc.Node.WebGLRenderCmd(this);
-    },
-
-    /** Search the children of the receiving node to perform processing for nodes which share a name.
-     *
-     * @param name The name to search for, supports c++11 regular expression.
-     * Search syntax options:
-     * `//`: Can only be placed at the begin of the search string. This indicates that it will search recursively.
-     * `..`: The search should move up to the node's parent. Can only be placed at the end of string.
-     * `/` : When placed anywhere but the start of the search string, this indicates that the search should move to the node's children.
-     *
-     * @code
-     * enumerateChildren("//MyName", ...): This searches the children recursively and matches any node with the name `MyName`.
-     * enumerateChildren("[[:alnum:]]+", ...): This search string matches every node of its children.
-     * enumerateChildren("A[[:digit:]]", ...): This searches the node's children and returns any child named `A0`, `A1`, ..., `A9`.
-     * enumerateChildren("Abby/Normal", ...): This searches the node's grandchildren and returns any node whose name is `Normal`
-     * and whose parent is named `Abby`.
-     * enumerateChildren("//Abby/Normal", ...): This searches recursively and returns any node whose name is `Normal` and whose
-     * parent is named `Abby`.
-     * @endcode
-     *
-     * @warning Only support alpha or number for name, and not support unicode.
-     *
-     * @param callback A callback function to execute on nodes that match the `name` parameter. The function takes the following arguments:
-     *  `node`
-     *      A node that matches the name
-     *  And returns a boolean result. Your callback can return `true` to terminate the enumeration.
-     *
-     */
-    enumerateChildren: function(name, callback){
-        cc.assert(name && name.length != 0, "Invalid name");
-        cc.assert(callback != null, "Invalid callback function");
-
-        var length = name.length;
-        var subStrStartPos = 0;
-        var subStrlength = length;
-
-        // Starts with '//'?
-        var searchRecursively = false;
-        if(length > 2 && name[0] === "/" && name[1] === "/"){
-            searchRecursively = true;
-            subStrStartPos = 2;
-            subStrlength -= 2;
-        }
-
-        var searchFromParent = false;
-        if(length > 3 && name[length-3] === "/" && name[length-2] === "." && name[length-1] === "."){
-            searchFromParent = true;
-            subStrlength -= 3;
-        }
-
-        var newName = name.substr(subStrStartPos, subStrlength);
-
-        if(searchFromParent)
-            newName = "[[:alnum:]]+/" + newName;
-
-        if(searchRecursively)
-            this.doEnumerateRecursive(this, newName, callback);
-        else
-            this.doEnumerate(newName, callback);
-    },
-
-    doEnumerateRecursive: function(node, name, callback){
-        var ret = false;
-        if(node.doEnumerate(name,callback)){
-            ret = true;
-        }else{
-            var child,
-                children = node.getChildren(),
-                length = children.length;
-            // search its children
-            for (var i=0; i<length; i++) {
-                child = children[i];
-                if (this.doEnumerateRecursive(child, name, callback)) {
-                    ret = true;
-                    break;
-                }
-            }
-        }
-    },
-
-    doEnumerate: function(name, callback){
-        // name may be xxx/yyy, should find its parent
-        var pos = name.indexOf('/');
-        var searchName = name;
-        var needRecursive = false;
-        if (pos !== -1){
-            searchName = name.substr(0, pos);
-            //name.erase(0, pos+1);
-            needRecursive = true;
-        }
-
-        var ret = false;
-        var child,
-            children = this._children,
-            length = children.length;
-        for (var i=0; i<length; i++){
-            child = children[i];
-            if (child._name.indexOf(searchName) !== -1){
-                if (!needRecursive){
-                    // terminate enumeration if callback return true
-                    if (callback(child)){
-                        ret = true;
-                        break;
-                    }
-                }else{
-                    ret = child.doEnumerate(name, callback);
-                    if (ret)
-                        break;
-                }
-            }
-        }
-
-        return ret;
     }
 });
 

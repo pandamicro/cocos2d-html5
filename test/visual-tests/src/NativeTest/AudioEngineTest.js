@@ -322,7 +322,7 @@ var PlaySimultaneouslyTest = AudioEngineBase.extend({
             var diff = Date.now() - startTime;
             cc.log("Diff time: " + diff);
         });
-        playItem.setNormalizedPosition(cc.p(0.5, 0.5));
+        playItem.setPosition(0.5 * this.width, 0.5 * this.height);
         this.addChild(playItem);
         this._playItem = playItem;
     }
@@ -378,7 +378,7 @@ var AudioProfileTest = AudioEngineBase.extend({
                 
             });
             playItem.setTag(index);
-            playItem.setNormalizedPosition(pos);
+            playItem.setPosition(pos.x * this.width, pos.y * this.height);
             this.addChild(playItem);
             pos.y -= 0.15;
         }
@@ -398,7 +398,7 @@ var AudioProfileTest = AudioEngineBase.extend({
         
         var timeSlider = new Slider();
         timeSlider.setEnabled(false);
-        timeSlider.setNormalizedPosition(pos);
+        timeSlider.setPosition(pos.x * this.width, pos.y * this.height);
         this.addChild(timeSlider);
         this._timeSlider = timeSlider;
         
@@ -429,13 +429,13 @@ var InvalidAudioFileTest = AudioEngineBase.extend({
                 jsb.AudioEngine.play2d("background.caf"); 
             }
         });
-        playItem.setNormalizedPosition(cc.p(0.5, 0.6));
+        playItem.setPosition(0.5 * this.width, 0.6 * this.height);
         this.addChild(playItem);
         
         var playItem2 = new TextButton("play not-existent file", function(button) {
             jsb.AudioEngine.play2d("not-existent file.mp3");
         });
-        playItem2.setNormalizedPosition(cc.p(0.5, 0.4));
+        playItem2.setPosition(0.5 * this.width, 0.4 * this.height);
         this.addChild(playItem2);
     }
 });
@@ -447,7 +447,7 @@ var LargeAudioFileTest = AudioEngineBase.extend({
         var playItem = new TextButton("play large audio file", function(button){
             jsb.AudioEngine.play2d("audio/LuckyDay.mp3");
         });
-        playItem.setNormalizedPosition(cc.p(0.5, 0.5));
+        playItem.setPosition(0.5 * this.width, 0.5 * this.height);
         this.addChild(playItem);
     }
 })

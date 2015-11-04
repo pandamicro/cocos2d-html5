@@ -65,7 +65,6 @@ var DontDestroy = cc.Object.Flags.DontDestroy;
  * @property {Number}               arrivalOrder        - The arrival order, indicates which children is added previously
  * @property {cc.ActionManager}     actionManager       - The CCActionManager object that is used by all actions.
  * @property {cc.Scheduler}         scheduler           - cc.Scheduler used to schedule all "updates" and timers.
- * @property {cc.GridBase}          grid                - grid object that is used when applying effects
  * @property {cc.GLProgram}         shaderProgram       - The shader program currently used for this node
  * @property {Number}               glServerState       - The state of OpenGL server side
  */

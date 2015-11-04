@@ -65,8 +65,7 @@ var TestScene = cc.Scene.extend({
         var scene = new cc.Scene();
         var layer = new TestController();
         scene.addChild(layer);
-        var transition = new cc.TransitionProgressRadialCCW(0.5,scene);
-        director.runScene(transition);
+        director.runScene(scene);
     },
 
     runThisTest:function () {
@@ -384,14 +383,6 @@ var testNames = [
         }
     },
     {
-        title:"MotionStreak Test",
-        platforms: PLATFORM_JSB_AND_WEBGL,
-        linksrc:"src/MotionStreakTest/MotionStreakTest.js",
-        testScene:function () {
-            return new MotionStreakTestScene();
-        }
-    },
-    {
         title:"Node Test",
         platforms: PLATFORM_ALL,
         linksrc:"src/CocosNodeTest/CocosNodeTest.js",
@@ -516,15 +507,6 @@ var testNames = [
         linksrc:"src/TileMapTest/TileMapTest.js",
         testScene:function () {
             return new TileMapTestScene();
-        }
-    },
-    {
-        title:"Transitions Test",
-        resource:g_transitions,
-        platforms: PLATFORM_ALL,
-        linksrc:"",
-        testScene:function () {
-            return new TransitionsTestScene();
         }
     },
     {

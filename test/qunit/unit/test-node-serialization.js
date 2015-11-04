@@ -28,8 +28,6 @@ if (TestEditorExtends) {
         '_scaleX',
         '_scaleY',
         '_position',
-        '_normalizedPosition',
-        '_usingNormalizedPosition',
         '_skewX',
         '_skewY',
         '_visible',
@@ -58,8 +56,6 @@ if (TestEditorExtends) {
             '_scaleX' : 1.5,
             '_scaleY' : 1.5,
             '_position' : cc.p(getRandomDouble(), getRandomDouble()),
-            '_normalizedPosition' : cc.p(getRandomDouble(), getRandomDouble()),
-            '_usingNormalizedPosition' : getRandomBool(),
             '_skewX' : getRandomDouble(),
             '_skewY' : getRandomDouble(),
             '_visible' : getRandomBool(),
@@ -90,8 +86,6 @@ if (TestEditorExtends) {
         ret._scaleX = 1.5;
         ret._scaleY = 1.5;
         ret._position = cc.p(getRandomDouble(), getRandomDouble());
-        ret._normalizedPosition = cc.p(getRandomDouble(), getRandomDouble());
-        ret._usingNormalizedPosition = getRandomBool();
         ret._skewX = getRandomDouble();
         ret._skewY = getRandomDouble();
         ret._visible = getRandomBool();
