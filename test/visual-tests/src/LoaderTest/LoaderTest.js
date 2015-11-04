@@ -49,23 +49,22 @@ var LoaderTestLayer = BaseTestLayer.extend({
             bg.y = winSize.height/2;
         });
 
-        cc.loader.load([s_Cowboy_plist, s_Cowboy_png], function(err, results){
-            if(err){
-                cc.log("Failed to load %s, %s .", s_Cowboy_plist, s_Cowboy_png);
-                return;
-            }
+        // cc.loader.load([s_Cowboy_plist, s_Cowboy_png], function(err, results){
+        //     if(err){
+        //         cc.log("Failed to load %s, %s .", s_Cowboy_plist, s_Cowboy_png);
+        //         return;
+        //     }
 
-            cc.log(s_Cowboy_plist + "--->");
-            cc.log(results[0]);
-            cc.log(s_Cowboy_png + "--->");
-            cc.log(results[1]);
-            cc.spriteFrameCache.addSpriteFrames(s_Cowboy_plist);
-            var frame = new cc.Sprite("#testAnimationResource/1.png");
-            self.addChild(frame);
-            frame.x = winSize.width/4;
-            frame.y = winSize.height/4;
-        });
-
+        //     cc.log(s_Cowboy_plist + "--->");
+        //     cc.log(results[0]);
+        //     cc.log(s_Cowboy_png + "--->");
+        //     cc.log(results[1]);
+        //     cc.spriteFrameCache.addSpriteFrames(s_Cowboy_plist);
+        //     var frame = new cc.Sprite("#testAnimationResource/1.png");
+        //     self.addChild(frame);
+        //     frame.x = winSize.width/4;
+        //     frame.y = winSize.height/4;
+        // });
 
         var str;
         if(cc.sys.isNative)  {
