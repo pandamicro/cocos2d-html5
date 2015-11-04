@@ -256,14 +256,14 @@ if (CC_DEV) {
         }
     }
 
-    function shouldNotUesNodeProp (component, node) {
-        var componentName = cc.js.getClassName(component), nodeName = cc.js.getClassName(node);
-        var Info = 'Sorry,' + componentName + '.%s is removed, please '+ nodeName + ' use %s instead.';
-        var compProp = component.prototype;
-        for (var prop in node.prototype) {
+    function shouldNotUseNodeProp (component) {
+        var compName = cc.js.getClassName(component);
+        var Info = 'Sorry, ' + compName + '.%s is removed, please use cc.ENode.%s instead.';
+        var compProto = component.prototype;
+        for (var prop in cc.ENode.prototype) {
             (function (prop) {
-                if (!(prop in compProp) && prop[0] !== '_') {
-                    js.getset(compProp, prop,
+                if (!(prop in compProto) && prop[0] !== '_') {
+                    js.getset(compProto, prop,
                         function () {
                             cc.error(Info, prop, prop);
                         },
@@ -417,8 +417,6 @@ if (CC_DEV) {
         provideClearError(cc.SpriteRenderer, StaticFunc);
     })();
 
-    (function () {
-        shouldNotUesNodeProp(cc.SpriteRenderer, cc.ENode);
-    })();
+    shouldNotUseNodeProp(cc.SpriteRenderer);
 
 }
