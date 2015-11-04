@@ -319,7 +319,7 @@ var RemoveListenerWhenDispatching =  EventDispatcherTestDemo.extend({
                 sprite1.setColor(cc.Color.WHITE);
             }
         });
-        this.setUserObject(listener1);
+        // this.setUserObject(listener1);
 
         cc.eventManager.addListener(listener1, sprite1);
 

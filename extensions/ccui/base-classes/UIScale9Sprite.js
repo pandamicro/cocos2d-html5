@@ -27,6 +27,8 @@
  Created by Jung Sang-Taik on 2012-03-16
  ****************************************************************************/
 
+EventTarget = require("../cocos2d/core/event/event-target");
+
 /**
  * <p>
  * A 9-slice sprite for cocos2d UI.                                                                    <br/>
@@ -103,10 +105,10 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
      * add texture loaded event listener
      * @param {Function} callback
      * @param {Object} target
-     * @deprecated since 3.1, please use addEventListener instead
+     * @deprecated since 3.1, please use EventTarget API instead
      */
     addLoadedEventListener:function(callback, target){
-        this.addEventListener("load", callback, target);
+        this.once("load", callback, target);
     },
 
     _updateCapInset: function () {
@@ -493,15 +495,15 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         var locLoaded = texture.isLoaded();
         this._textureLoaded = locLoaded;
         if(!locLoaded){
-            texture.addEventListener("load", function(sender){
+            texture.once("load", function (event) {
                 // the texture is rotated on Canvas render mode, so isRotated always is false.
                 var preferredSize = this._preferredSize, restorePreferredSize = preferredSize.width !== 0 && preferredSize.height !== 0;
                 if (restorePreferredSize) preferredSize = cc.size(preferredSize.width, preferredSize.height);
-                var size  = sender.getContentSize();
+                var size  = texture.getContentSize();
                 this.updateWithBatchNode(this._scale9Image, cc.rect(0,0,size.width,size.height), false, this._capInsets);
                 if (restorePreferredSize)this.setPreferredSize(preferredSize);
                 this._positionsAreDirty = true;
-                this.dispatchEvent("load");
+                this.emit("load");
             }, this);
         }
 
@@ -526,14 +528,14 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         var locLoaded = spriteFrame.textureLoaded();
         this._textureLoaded = locLoaded;
         if(!locLoaded){
-            spriteFrame.addEventListener("load", function(sender){
+            spriteFrame.once("load", function (event) {
                 // the texture is rotated on Canvas render mode, so isRotated always is false.
                 var preferredSize = this._preferredSize, restorePreferredSize = preferredSize.width !== 0 && preferredSize.height !== 0;
                 if (restorePreferredSize) preferredSize = cc.size(preferredSize.width, preferredSize.height);
-                this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc._renderType === cc.game.RENDER_TYPE_WEBGL && sender.isRotated(), this._capInsets);
+                this.updateWithBatchNode(this._scale9Image, spriteFrame.getRect(), cc._renderType === cc.game.RENDER_TYPE_WEBGL && spriteFrame.isRotated(), this._capInsets);
                 if (restorePreferredSize)this.setPreferredSize(preferredSize);
                 this._positionsAreDirty = true;
-                this.dispatchEvent("load");
+                this.emit("load");
             },this);
         }
         var batchNode = new cc.SpriteBatchNode(spriteFrame.getTexture(), 9);
@@ -859,11 +861,11 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         var locLoaded = tmpTexture && tmpTexture.isLoaded();
         this._textureLoaded = locLoaded;
         if(!locLoaded){
-            tmpTexture.addEventListener("load", function(sender){
+            tmpTexture.once("load", function (event) {
                 this._positionsAreDirty = true;
                 this.updateWithSprite(sprite, spriteRect, spriteFrameRotated, offset, originalSize, capInsets);
                 this.setVisible(true);
-                this.dispatchEvent("load");
+                this.emit("load");
             }, this);
             this.setVisible(false);
             return true;
@@ -912,11 +914,11 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         var locLoaded = tmpTexture.isLoaded();
         this._textureLoaded = locLoaded;
         if(!locLoaded){
-            tmpTexture.addEventListener("load", function(sender){
+            tmpTexture.once("load", function (event) {
                 this._positionsAreDirty = true;
                 this.updateWithBatchNode(batchNode, originalRect, rotated, capInsets);
                 this.setVisible(true);
-                this.dispatchEvent("load");
+                this.emit("load");
             }, this);
             this.setVisible(false);
             return true;
@@ -934,15 +936,15 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         var locLoaded = spriteFrame.textureLoaded();
         this._textureLoaded = locLoaded;
         if(!locLoaded){
-            spriteFrame.addEventListener("load", function(sender){
+            spriteFrame.once("load", function (event) {
                 // the texture is rotated on Canvas render mode, so isRotated always is false.
                 var preferredSize = this._preferredSize, restorePreferredSize = preferredSize.width !== 0 && preferredSize.height !== 0;
                 if (restorePreferredSize) preferredSize = cc.size(preferredSize.width, preferredSize.height);
-                this.updateWithBatchNode(this._scale9Image, sender.getRect(), cc._renderType === cc.game.RENDER_TYPE_WEBGL && sender.isRotated(), this._capInsets);
+                this.updateWithBatchNode(this._scale9Image, spriteFrame.getRect(), cc._renderType === cc.game.RENDER_TYPE_WEBGL && spriteFrame.isRotated(), this._capInsets);
                 if (restorePreferredSize)this.setPreferredSize(preferredSize);
                 this._positionsAreDirty = true;
-                this.dispatchEvent("load");
-            },this);
+                this.emit("load");
+            }, this);
         }
         this.updateWithSprite(sprite, spriteFrame.getRect(),spriteFrame.isRotated(),spriteFrame.getOffset(),spriteFrame.getOriginalSize(),capInsets);
         // Reset insets
@@ -1115,7 +1117,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
 });
 
 var _p = ccui.Scale9Sprite.prototype;
-cc.EventHelper.prototype.apply(_p);
+EventTarget.polyfill(_p);
 
 // Extended properties
 /** @expose */

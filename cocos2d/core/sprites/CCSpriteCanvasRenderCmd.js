@@ -240,21 +240,23 @@
         //this._updateColor();
     };
 
-    proto._spriteFrameLoadedCallback = function (spriteFrame) {
-        var node = this;
+    proto._spriteFrameLoadedCallback = function (event) {
+        var node = this, spriteFrame = event.currentTarget;
         node.setTextureRect(spriteFrame.getRect(), spriteFrame.isRotated(), spriteFrame.getOriginalSize());
 
         node._renderCmd._updateColor();
-        node.dispatchEvent("load");
+        node.emit("load");
     };
 
-    proto._textureLoadedCallback = function (sender) {
-        var node = this;
+    proto._textureLoadedCallback = function (event) {
+        var node = this, sender = event.currentTarget;
         if (node._textureLoaded)
             return;
 
         node._textureLoaded = true;
-        var locRect = node._rect, locRenderCmd = this._renderCmd;
+        var texture = node._texture,
+            locRect = node._rect, 
+            locRenderCmd = this._renderCmd;
         if (!locRect) {
             locRect = cc.rect(0, 0, sender.width, sender.height);
         } else if (cc._rectEqualToZero(locRect)) {
@@ -273,7 +275,7 @@
         // by default use "Self Render".
         // if the sprite is added to a batchnode, then it will automatically switch to "batchnode Render"
         node.setBatchNode(node._batchNode);
-        node.dispatchEvent("load");
+        node.emit("load");
     };
 
     proto._setTextureCoords = function (rect, needConvert) {

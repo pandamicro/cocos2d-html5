@@ -1,3 +1,5 @@
+EventTarget = require("../cocos2d/core/event/event-target");
+
 var gaf = gaf || {};
 
 gaf.Asset = cc._Class.extend
@@ -84,9 +86,6 @@ gaf.Asset = cc._Class.extend
             }
         }
     },
-
-/*    addEventListener: function(name, listener)
-    {},*/
 
     isAssetVersionPlayable: function ()
     {
@@ -352,7 +351,7 @@ gaf.Asset = cc._Class.extend
         if(Object.keys(this._atlasesToLoad).length === 0)
         {
             this._textureLoaded = true;
-            this.dispatchEvent("load");
+            this.emit("load");
         }
     },
 
@@ -382,7 +381,7 @@ gaf.Asset = cc._Class.extend
             this._onLoadTasks.forEach(function(fn){fn()});
             this._onLoadTasks.length = 0;
             this._textureLoaded = true;
-            this.dispatchEvent("load");
+            this.emit("load");
         }
     },
 
@@ -426,4 +425,4 @@ gaf.Asset.createWithBundle = function (zipFilePath, entryFile, delegate)
     return asset;
 };
 
-cc.EventHelper.prototype.apply(gaf.Asset.prototype);
+EventTarget.polyfill(gaf.Asset.prototype);

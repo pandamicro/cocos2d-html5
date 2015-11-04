@@ -215,7 +215,7 @@ var UITextFieldTest_LineWrap = UIMainLayer.extend({
             case ccui.TextField.EVENT_ATTACH_WITH_IME:
                 textField.runAction(cc.moveTo(0.225, cc.p(widgetSize.width / 2, widgetSize.height / 2 + 30)));
                 textField.setTextHorizontalAlignment(cc.TextAlignment.LEFT);
-                textField.setTextVerticalAlignment(cc.cc.VerticalTextAlignment.TOP);
+                textField.setTextVerticalAlignment(cc.VerticalTextAlignment.TOP);
                 this._topDisplayLabel.setString("attach with IME");
                 break;
             case ccui.TextField.EVENT_DETACH_WITH_IME:

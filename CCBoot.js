@@ -311,7 +311,7 @@ function _load(config) {
 }
 
 function _windowLoaded() {
-    this.removeEventListener('load', _windowLoaded, false);
+    window.removeEventListener('load', _windowLoaded, false);
     _load(cc.game.config);
 }
 
@@ -339,7 +339,7 @@ cc.initEngine = function (config, cb) {
 
     _determineRenderType(config);
 
-    document.body ? _load(config) : cc._addEventListener(window, 'load', _windowLoaded, false);
+    document.body ? _load(config) : window.addEventListener('load', _windowLoaded, false);
     _engineInitCalled = true;
 }
 

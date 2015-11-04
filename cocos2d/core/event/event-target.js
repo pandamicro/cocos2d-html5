@@ -246,7 +246,7 @@ JS.mixin(EventTarget.prototype, {
         _doDispatchEvent(this, event);
         cachedArray.length = 0;
         var notPrevented = ! event._defaultPrevented;
-        event.unuse();
+        // event.unuse();
         return notPrevented;
     },
 

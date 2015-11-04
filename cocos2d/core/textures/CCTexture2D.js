@@ -24,6 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+EventTarget = require("../cocos2d/core/event/event-target");
+
 //CONSTANTS:
 
 /**
@@ -200,7 +202,7 @@ cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
                 self._contentSize.height = locElement.height;
 
                 //dispatch load event to listener.
-                self.dispatchEvent("load");
+                self.emit("load");
             },
 
             /**
@@ -369,18 +371,19 @@ cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
              * add listener for loaded event
              * @param {Function} callback
              * @param {cc.Node} target
-             * @deprecated since 3.1, please use addEventListener instead
+             * @deprecated since 3.1, please use EventTarget API instead
              */
             addLoadedEventListener: function (callback, target) {
-                this.addEventListener("load", callback, target);
+                this.once("load", callback, target);
             },
 
             /**
              * remove listener from listeners by target
+             * @param {Function} callback
              * @param {cc.Node} target
              */
-            removeLoadedEventListener: function (target) {
-                this.removeEventListener("load", target);
+            removeLoadedEventListener: function (callback, target) {
+                this.off("load", callback, target);
             },
 
             _generateColorTexture: function(){/*overide*/},
@@ -603,7 +606,7 @@ cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
         delete cc._tmp.WebGLTexture2D;
     }
 
-    cc.EventHelper.prototype.apply(cc.Texture2D.prototype);
+    EventTarget.polyfill(cc.Texture2D.prototype);
 
     cc.assert(cc.js.isFunction(cc._tmp.PrototypeTexture2D), cc._LogInfos.MissingFile, "TexturesPropertyDefine.js");
     cc._tmp.PrototypeTexture2D();

@@ -24,6 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+EventTarget = require("../cocos2d/core/event/event-target");
+
 /**
  * <p>
  *    A cc.SpriteFrame has:<br/>
@@ -93,10 +95,10 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
      * Add a event listener for texture loaded event.
      * @param {Function} callback
      * @param {Object} target
-     * @deprecated since 3.1, please use addEventListener instead
+     * @deprecated since 3.1, please use EventTarget API instead
      */
     addLoadedEventListener:function(callback, target){
-        this.addEventListener("load", callback, target);
+        this.once("load", callback, target);
     },
 
     /**
@@ -241,7 +243,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
             this._textureLoaded = locLoaded;
             this._texture = texture;
             if(!locLoaded){
-                texture.addEventListener("load", function(sender){
+                texture.once("load", function (event) {
+                    var sender = event.currentTarget;
                     this._textureLoaded = true;
                     if(this._rotated && cc._renderType === cc.game.RENDER_TYPE_CANVAS){
                         var tempElement = sender.getHtmlElementObj();
@@ -266,7 +269,7 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
                         this._originalSize.height =  h;
                     }
                     //dispatch 'load' event of cc.SpriteFrame
-                    this.dispatchEvent("load");
+                    this.emit("load");
                 }, this);
             }
         }
@@ -377,7 +380,7 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     }
 });
 
-cc.EventHelper.prototype.apply(cc.SpriteFrame.prototype);
+EventTarget.polyfill(cc.SpriteFrame.prototype);
 
 /**
  * <p>
