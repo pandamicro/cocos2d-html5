@@ -81,46 +81,35 @@ function splitPropPath (propPath) {
     return array.length > 0 ? array : null;
 }
 
-function initClipData (target, state) {
+
+function initClipData (root, state) {
     var clip = state.clip;
-    state.duration = clip.length;
+
     var curves = state.curves;
     curves.length = 0;
-    var length = clip.length;
-    var frameCount = length * clip.frameRate;
-    if (frameCount === 0) {
-        return;
-    }
-    var frameCountReciprocal = 1 / frameCount;
 
-    // for each properties
-    var propDataArray = clip.curveData;
-    for (var i = 0, len = propDataArray.length; i < len; i++) {
-        var propData = propDataArray[i];
+    state.duration = clip.duration;
+    state.speed = clip.speed;
+    state.wrapMode = clip.wrapMode;
 
-        // get component data
-        var comp = target.getComponent(propData.component);
-        if (!comp) {
-            continue;
-        }
+    // create curves
 
-        // create curve
+    function createPropCurve (target, propPath, keyframes) {
         var curve = new DynamicAnimCurve();
-        curves.push(curve);
         // 缓存目标对象，所以 Component 必须一开始都创建好并且不能运行时动态替换……
-        curve.target = comp;
+        curve.target = target;
 
         var propName, propValue;
-        var propPath = propData.property;
         var dotIndex = propPath.indexOf('.');
         var hasSubProp = dotIndex !== -1;
         if (hasSubProp) {
             propName = propPath.slice(0, dotIndex);
-            propValue = comp[propName];
-            if (!(propValue instanceof ValueType)) {
-                cc.error('Only support sub animation property which is type ValueType');
-                continue;
-            }
+            propValue = target[propName];
+
+            // if (!(propValue instanceof cc.ValueType)) {
+            //     cc.error('Only support sub animation property which is type cc.ValueType');
+            //     continue;
+            // }
         }
         else {
             propName = propPath;
@@ -131,10 +120,9 @@ function initClipData (target, state) {
         curve.subProps = splitPropPath(propPath);
 
         // for each keyframes
-        var keyframes = propData.keys;
         for (var j = 0, l = keyframes.length; j < l; j++) {
             var keyframe = keyframes[j];
-            var ratio = keyframe.frame * frameCountReciprocal;
+            var ratio = keyframe.frame / state.duration;
             curve.ratios.push(ratio);
 
             var curveValue = keyframe.value;
@@ -158,6 +146,49 @@ function initClipData (target, state) {
             }
             curve.types.push(DynamicAnimCurve.Linear);
         }
+
+        return curve;
+    }
+
+    function createTargetCurves (target, curveData) {
+        var propsData = curveData.props;
+        var compsData = curveData.comps;
+
+        if (propsData) {
+            for (var propPath in propsData) {
+                var data = propsData[propPath];
+                var curve = createPropCurve(target, propPath, data);
+
+                curves.push(curve);
+            }
+        }
+
+        if (compsData) {
+            for (var compName in compsData) {
+                var comp = target.getComponent(compName);
+                var compData = compsData[compName];
+
+                for (var propPath in compData) {
+                    var data = compData[propPath];
+                    var curve = createPropCurve(comp, propPath, data);
+
+                    curves.push(curve);
+                }
+            }
+        }
+    }
+
+
+    var curveData = clip.curveData;
+    var childrenCurveDatas = curveData.paths;
+
+    createTargetCurves(root, curveData);
+
+    for (var namePath in childrenCurveDatas) {
+        var target = cc.find(namePath, root);
+        var childCurveDatas = childrenCurveDatas[namePath];
+
+        createTargetCurves(target, childCurveDatas);
     }
 }
 

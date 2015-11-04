@@ -1,27 +1,33 @@
 
 var AnimationClip = cc.Class({
-    name: 'Fire.AnimationClip',
+    name: 'cc.AnimationClip',
     extends: cc.Asset,
 
     properties: {
-        _length: {
+        _duration: {
             default: 0,
             type: 'Float',
         },
-        length: {
-            get: function () { return this._length; },
+        duration: {
+            get: function () { return this._duration; },
         },
-        frameRate: {
+        sample: {
             default: 60,
         },
+        speed: {
+            default: 1
+        },
+        wrapMode: {
+            default: cc.WrapMode.Normal
+        },
         curveData: {
-            default: [],
+            default: {},
             visible: false,
         },
         events: {
             default: [],
             visible: false,
-        },
+        }
     },
 
     addProperty: function ( compName, propName ) {
@@ -69,22 +75,53 @@ var AnimationClip = cc.Class({
     },
 
     // curveData structure:
-    // [
-    //     {
-    //         property: 'hello', keys: [
-    //             { frame: 0, value: 10, curve: [0,0.5,0.5,1] },
-    //             { frame: 5, value: 15, curve: [0.5,0.5,0.5,0.5] },
-    //             { frame: 10, value: 20, curve: null },
+    // {
+    //     // 根节点不用查找路径
+
+    //     // root properties
+    //     props: {
+    //         x: [
+    //             { frame: 0, value: 0, curve: [0,0.5,0.5,1] },
+    //             { frame: 1, value: 200, curve: null }
     //         ]
     //     },
-    //     {
-    //         component: 'foobar', property: 'world', keys: [
-    //             { frame: 0, value: 10, curve: [0,0.5,0.5,1] },
-    //             { frame: 5, value: 15, curve: [0.5,0.5,0.5,0.5] },
-    //             { frame: 10, value: 20, curve: null },
-    //         ]
+
+    //     comps: {
+    //         // component
+    //         'comp-1': {
+    //             // component properties
+    //             'prop-1': [
+    //                 { frame: 0, value: 10, curve: [0,0.5,0.5,1] },
+    //                 { frame: 1, value: 20, curve: null }
+    //             ]
+    //         }
     //     },
-    // ]
+
+    //     paths: {
+    //         // key 为节点到root的路径名, 通过cc.find找到
+    //         'foo/bar': {
+    //             // node properties
+    //             props: {
+    //                 x: [
+    //                     { frame: 0, value: 0, curve: [0,0.5,0.5,1] },
+    //                     { frame: 1, value: 200, curve: null }
+    //                 ]
+    //             },
+
+    //             comps: {
+    //                 // component
+    //                 'comp-1': {
+    //                     // component property
+    //                     'prop-1': [
+    //                         { frame: 0, value: 10, curve: [0,0.5,0.5,1] },
+    //                         { frame: 1, value: 20, curve: null }
+    //                     ]
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
+
 });
 
-Fire.AnimationClip = module.exports = AnimationClip;
+cc.AnimationClip = module.exports = AnimationClip;

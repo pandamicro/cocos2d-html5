@@ -60,6 +60,4 @@ state.onPlay = function () {
     this.time = 0;
 };
 
-module.exports = AnimationState;
-
-Fire.AnimationState = AnimationState;
+cc.AnimationState = module.exports = AnimationState;

@@ -1,5 +1,7 @@
 var JS = cc.js;
-var Playable = require('../core/playable');
+var Playable = require('./playable');
+var AnimationNode = require('./types').AnimationNode;
+var DynamicAnimCurve = require('./animation-curves').DynamicAnimCurve;
 
 // The base of animators
 function Animator (target) {
@@ -32,27 +34,27 @@ animProto.update = function (deltaTime) {
 };
 
 animProto.onPlay = function () {
-    if (CC_EDITOR) {
-        if (cc.engine._isPlaying) {
-            cc.engine._animationManager.addAnimator(this);
-        }
-    }
-    else {
-        cc.engine._animationManager.addAnimator(this);
-    }
+    // if (CC_EDITOR) {
+    //     if (cc.engine._isPlaying) {
+    //         cc.engine._animationManager.addAnimator(this);
+    //     }
+    // }
+    // else {
+    //     cc.engine._animationManager.addAnimator(this);
+    // }
 };
 
 animProto.onStop = function () {
     this.playingAnims.length = 0;
 
-    if (CC_EDITOR) {
-        if (cc.engine._isPlaying) {
-            cc.engine._animationManager.removeAnimator(this);
-        }
-    }
-    else {
-        cc.engine._animationManager.removeAnimator(this);
-    }
+    // if (CC_EDITOR) {
+    //     if (cc.engine._isPlaying) {
+    //         cc.engine._animationManager.removeAnimator(this);
+    //     }
+    // }
+    // else {
+    //     cc.engine._animationManager.removeAnimator(this);
+    // }
 };
 
 
@@ -123,26 +125,30 @@ entProto.animate = function (keyFrames, timingInput) {
 
 // 具体逻辑
 
-function findCurve (curves, comp, compName, propName) {
+function findCurve (curves, target, propName) {
     var i = 0, curve;
-    if (comp) {
-        for (; i < curves.length; i++) {
-            curve = curves[i];
-            if (curve.target === comp && curve.prop === propName) {
-                return curve;
-            }
+
+    for (; i < curves.length; i++) {
+        curve = curves[i];
+        if (curve.target === target && curve.prop === propName) {
+            return curve;
         }
     }
-    else {
-        for (; i < curves.length; i++) {
-            curve = curves[i];
-            var existsCompName = JS.getClassName(curve.target);
-            if (compName === existsCompName && curve.prop === propName) {
-                return curve;
-            }
-        }
-    }
+
     return null;
+}
+
+function createPropCurve (curves, target, propName, value, ratio) {
+    var curve = findCurve(curves, target, propName);
+    if (! curve) {
+        curve = new DynamicAnimCurve();
+        curves.push(curve);
+        // 缓存目标对象，所以 Component 必须一开始都创建好并且不能运行时动态替换……
+        curve.target = target;
+        curve.prop = propName;
+    }
+    curve.values.push(value);
+    curve.ratios.push(ratio);
 }
 
 entProto._doAnimate = function (keyFrames, timingInput) {
@@ -169,36 +175,25 @@ entProto._doAnimate = function (keyFrames, timingInput) {
         }
         lastRatio = ratio;
 
-        // TODO 先遍历每一帧，获得所有曲线
-
-        // parse keyframe
+        // 先遍历每一帧，获得所有曲线
         for (var key in frame) {
-            // get component data
-            if (key === 'ratio' || key === 'offset') {
-                continue;
-            }
-            var compName = key;
-            var compData = frame[compName];
-            var comp = null;
-            for (var propName in compData) {
-                // get curve
-                var curve = findCurve(curves, comp, compName, propName);
-                if (! curve) {
-                    if (! comp) {
-                        comp = this.target.getComponent(compName);
-                        if (! comp) {
-                            cc.error('[animate] Component %s is not found!', compName);
-                            continue;
-                        }
-                    }
-                    curve = new DynamicAnimCurve();
-                    curves.push(curve);
-                    // 缓存目标对象，所以 Component 必须一开始都创建好并且不能运行时动态替换……
-                    curve.target = comp;
-                    curve.prop = propName;
+
+            var data = frame[key];
+
+            if (key === 'props') {
+                for (var propName in data) {
+                    createPropCurve(curves, this.target, propName, data[propName], ratio);
                 }
-                curve.values.push(compData[propName]);
-                curve.ratios.push(ratio);
+            }
+            else if (key === 'comps') {
+                for (var compName in data) {
+                    var comp = this.target.getComponent(compName);
+                    var compData = data[compName];
+
+                    for (var propName in compData) {
+                        createPropCurve(curves, comp, propName, compData[propName], ratio);
+                    }
+                }
             }
         }
     }

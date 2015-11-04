@@ -1,6 +1,6 @@
 
 var JS = cc.js;
-var Playable = require('../core/playable');
+var Playable = require('./playable');
 
 var WrapModeMask = {
     Loop: 1 << 1,
@@ -64,7 +64,8 @@ var WrapMode = cc.Enum({
     PingPongReverse: WrapModeMask.PingPong | WrapModeMask.Reverse
 });
 
-Fire.WrapMode = WrapMode;
+cc.WrapMode = WrapMode;
+
 
 /**
  * The abstract interface for all playing animation.
@@ -160,7 +161,7 @@ function AnimationNode (animator, curves, timingInput) {
      *
      * @property wrapMode
      * @type {WrapMode}
-     * @default: Fire.WrapMode.Normal
+     * @default: WrapMode.Normal
      */
     this.wrapMode = WrapMode.Normal;
 
@@ -185,7 +186,7 @@ function AnimationNode (animator, curves, timingInput) {
                 this.wrapMode = wrapMode;
             }
             else {
-                this.wrapMode = Fire.WrapMode[wrapMode];
+                this.wrapMode = WrapMode[wrapMode];
             }
         }
 
@@ -267,13 +268,13 @@ JS.mixin(AnimationNode.prototype, {
     _calculateWrappedTime: function (iterationTime, currentIterations) {
         var duration = this.duration;
         var wrapMode = this.wrapMode;
-        if (wrapMode & WrapModeMask.PingPong) {
+        if ((wrapMode & WrapModeMask.PingPong) === WrapModeMask.PingPong) {
             var isOddIteration = currentIterations & 1;
             if (isOddIteration) {
                 iterationTime = duration - iterationTime;
             }
         }
-        if (wrapMode & WrapModeMask.Reverse) {
+        if ((wrapMode & WrapModeMask.Reverse) === WrapModeMask.Reverse) {
             iterationTime = duration - iterationTime;
         }
         return iterationTime;
@@ -327,7 +328,7 @@ JS.mixin(AnimationNode.prototype, {
     //}
 });
 
-Fire.AnimationNode = AnimationNode;
+cc.AnimationNode = AnimationNode;
 
 module.exports = {
     WrapModeMask: WrapModeMask,
