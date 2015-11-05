@@ -22,6 +22,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+var AnimationAnimator = require('../../animation/animation-animator');
+
 /**
  * Renders a sprite in the scene.
  * @class
@@ -61,6 +63,7 @@ var AnimationComponent = cc.Class({
                 }
             },
             type: cc.AnimationClip,
+            visible: false
         },
 
         _clips: {
@@ -233,7 +236,7 @@ var AnimationComponent = cc.Class({
             return;
         }
         this._didInit = true;
-        this._animator = new cc.AnimationAnimator(this.node, this);
+        this._animator = new AnimationAnimator(this.node, this);
         this._createStates();
     },
 

@@ -198,4 +198,4 @@ if (CC_TEST) {
 }
 
 
-cc.AnimationAnimator = module.exports = AnimationAnimator;
+module.exports = AnimationAnimator;

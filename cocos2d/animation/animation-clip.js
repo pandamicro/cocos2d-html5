@@ -4,12 +4,6 @@ var AnimationClip = cc.Class({
     extends: cc.Asset,
 
     properties: {
-        _name: {
-            default: ''
-        },
-        name: {
-            get: function () { return this._name; }
-        },
         _duration: {
             default: 0,
             type: 'Float',
@@ -34,60 +28,6 @@ var AnimationClip = cc.Class({
             default: [],
             visible: false,
         }
-    },
-
-    addProperty: function ( propName, compName, path ) {
-        var curves = this.getCurveInfo(compName, path, true);
-
-        if (!curves[propName]) {
-            curves[propName] = [];
-        }
-
-        return curves[propName];
-    },
-
-    removeProperty: function ( propName, compName, path ) {
-        var curves = this.getCurveInfo(compName, path);
-        if (curves) {
-            delete curves[propName];
-        }
-    },
-
-    getCurveInfo: function ( compName, path, createData ) {
-        var curveData = this.curveData;
-        var target, curves;
-
-        if (!path) {
-            target = curveData;
-        }
-        else {
-            if (!curveData.paths) {
-                if (createData) curveData.paths = {};
-                else return null;
-            }
-            if (!curveData.paths[path]) {
-                if (createData) curveData.paths[path] = {};
-                else return null;
-            }
-            target = curveData.paths[path];
-        }
-
-        if (!compName) {
-            if (!target.props) {
-                if (createData) target.props = {};
-                else return null;
-            }
-            curves = target.props;
-        }
-        else {
-            if (!target.comps) {
-                if (createData) target.comps = {};
-                else return null;
-            }
-            curves = target.comps;
-        }
-
-        return curves;
     },
 
     // curveData structure:
