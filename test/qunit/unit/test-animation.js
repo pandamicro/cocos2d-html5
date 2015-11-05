@@ -353,3 +353,48 @@ test('initClipData', function () {
     deepEqual(posCurve.ratios, [0, 0.5, 1], 'ratios of posCurve should equals keyFrames');
     deepEqual(colorCurve.ratios, [0, 1], 'ratios of colorCurve should equals keyFrames');
 });
+
+test('Animation Component', function () {
+    var initClipData = cc._Test.initClipData;
+
+    var entity = new cc.ENode();
+    var animation = entity.addComponent(cc.AnimationComponent);
+
+    entity.x = 400;
+
+    var clip = new cc.AnimationClip();
+    clip._duration = 10;
+    clip._name = 'test';
+    clip.curveData = {
+        props: {
+            x: [
+                { frame: 0, value: 0 },
+                { frame: 5, value: 50 },
+                { frame: 10, value: 100 }
+            ]
+        }
+    };
+
+    animation.addClip(clip);
+
+    strictEqual(animation._clips.length, 1, 'should add 1 clip');
+
+    var state = animation.getAnimationState('test');
+    strictEqual(state.clip, clip, 'should create state with clip');
+
+    animation.play('test');
+    animation.sample();
+    strictEqual(entity.x, 0, 'target property should equals value in frame 0s');
+
+    animation.play('test', 5);
+    animation.sample();
+    strictEqual(entity.x, 50, 'target property should equals value in frame 5s');
+
+    animation.play('test', 10);
+    animation.sample();
+    strictEqual(entity.x, 100, 'target property should equals value in frame 10s');
+
+    animation.removeClip(clip);
+    strictEqual(animation._clips.length, 0, 'should remove clip');
+    strictEqual(animation.getAnimationState('test'), null, 'should remove state');
+});
