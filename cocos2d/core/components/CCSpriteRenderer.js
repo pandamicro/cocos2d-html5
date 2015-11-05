@@ -36,7 +36,7 @@ var SpriteRenderer = cc.Class({
 
         _texture: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
         _atlasIndex: 0,
         _textureAtlas: '',
@@ -66,7 +66,7 @@ var SpriteRenderer = cc.Class({
         /**
          * The texture of the sprite node
          * @property texture
-         * @type {cc.TextureAsset}
+         * @type {cc.Texture2D}
          */
         texture: {
             get: function () {
@@ -85,7 +85,7 @@ var SpriteRenderer = cc.Class({
                     this._sgNode.setOpacity(this.node._opacity);
                 }
             },
-            url: cc.TextureAsset
+            url: cc.Texture2D
         }
     },
 

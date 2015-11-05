@@ -78,7 +78,7 @@ var Sprite = cc.Class({
          */
         texture: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             visible: false
         },
 

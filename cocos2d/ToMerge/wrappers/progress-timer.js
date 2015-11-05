@@ -107,7 +107,7 @@ var ProgressTimerWrapper = cc.Class({
 
         _texture: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         texture: {
@@ -118,7 +118,7 @@ var ProgressTimerWrapper = cc.Class({
             set: function (value) {
                 this.targetN.getSprite().texture = value;
             },
-            url: cc.TextureAsset
+            url: cc.Texture2D
         }
     },
 

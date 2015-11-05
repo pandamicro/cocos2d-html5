@@ -226,3 +226,5 @@ cc._tmp.PrototypeTextureAtlas = function () {
 
 };
 
+// init CCTexture2D
+require("../cocos2d/core/textures/CCTexture2D");

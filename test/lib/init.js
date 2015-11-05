@@ -9,10 +9,6 @@ var FObject = cc.Object;
 var Vec2 = cc.Vec2;
 var Rect = cc.Rect;
 var Color = cc.Color;
-//var Texture = cc.TextureAsset;
-//var Sprite = cc.SpriteAsset;
-//var Atlas = cc.Atlas;
-//var FontInfo = cc.FontInfo;
 
 var Ticker = cc._Ticker;
 var Time = cc.Time;

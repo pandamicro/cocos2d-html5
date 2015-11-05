@@ -48,33 +48,33 @@ cc._tmp.WebGLTexture2D = function () {
      * @property {Number}           maxT            - Texture max T
      */
         //Original : Texture2DWebGL
-    cc.Texture2D = cc._Class.extend(/** @lends cc.Texture2D# */{
-        // By default PVR images are treated as if they don't have the alpha channel premultiplied
-        _pVRHaveAlphaPremultiplied: true,
-        _pixelFormat: null,
-        _pixelsWide: 0,
-        _pixelsHigh: 0,
-        _name: "",
-        _contentSize: null,
-        maxS: 0,
-        maxT: 0,
-        _hasPremultipliedAlpha: false,
-        _hasMipmaps: false,
+    cc.Texture2D = cc.Class(/** @lends cc.Texture2D# */{
 
-        shaderProgram: null,
-
-        _textureLoaded: false,
-        _htmlElementObj: null,
-        _webTextureObj: null,
-
-        url: null,
+        name: 'cc.Texture2D',
+        extends: require('../cocos2d/core/assets/CCRawAsset'),
 
         /**
          * constructor of cc.Texture2D
          */
         ctor: function () {
-            this._contentSize = cc.size(0, 0);
+            // By default PVR images are treated as if they don't have the alpha channel premultiplied
+            this._pVRHaveAlphaPremultiplied = true;
             this._pixelFormat = cc.Texture2D.defaultPixelFormat;
+            this._pixelsWide = 0;
+            this._pixelsHigh = 0;
+            this._contentSize = cc.size(0, 0);
+            this.maxS = 0;
+            this.maxT = 0;
+            this._hasPremultipliedAlpha = false;
+            this._hasMipmaps = false;
+
+            this.shaderProgram = null;
+
+            this._textureLoaded = false;
+            this._htmlElementObj = null;
+            this._webTextureObj = null;
+
+            this.url = null;
         },
 
         /**
@@ -560,8 +560,8 @@ cc._tmp.WebGLTexture2D = function () {
          * If the texture size is NPOT (non power of 2), then in can only use gl.CLAMP_TO_EDGE in gl.TEXTURE_WRAP_{S,T}.
          * @param {Object|Number} texParams texParams object or minFilter
          * @param {Number} [magFilter]
-         * @param {Number} [wrapS]
-         * @param {Number} [wrapT]
+         * @param {Texture2D.WrapMode} [wrapS]
+         * @param {Texture2D.WrapMode} [wrapT]
          */
         setTexParameters: function (texParams, magFilter, wrapS, wrapT) {
             var _t = this;

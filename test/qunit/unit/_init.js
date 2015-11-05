@@ -28,6 +28,33 @@ var V2 = cc.Vec2;
 var v2 = cc.v2;
 var color = cc.fireColor;
 
+var TestTexture = cc.Class({
+    name: 'TestTexture',
+    extends: cc.Asset,
+
+    properties: {
+        /**
+         * @property width
+         * @type number
+         */
+        width: {
+            default: 0,
+            type: 'Integer',
+            readonly: true
+        },
+
+        /**
+         * @property height
+         * @type number
+         */
+        height: {
+            default: 0,
+            type: 'Integer',
+            readonly: true
+        },
+    }
+});
+
 var TestScript = cc.Class({
     name: 'TestScript',
     extends: cc.Component,
