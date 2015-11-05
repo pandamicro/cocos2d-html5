@@ -205,6 +205,7 @@ if (CC_DEV) {
         hasTypePrefixBefore = hasTypePrefixBefore !== false;
         var enumDef = eval(newPath);
         var entries = cc.Enum.getList(enumDef);
+        var delimiter = hasTypePrefixBefore ? '_' : '.';
         for (var i = 0; i < entries.length; i++) {
             var entry = entries[i].name;
             var oldPropName;
@@ -216,7 +217,7 @@ if (CC_DEV) {
                 oldPropName = entry;
             }
             js.get(obj, oldPropName, function (entry) {
-                cc.warn(INFO, oldPath + '_' + entry, newPath + '.' + entry);
+                cc.warn(INFO, oldPath + delimiter + entry, newPath + '.' + entry);
                 return enumDef[entry];
             }.bind(null, entry));
         }
@@ -233,9 +234,14 @@ if (CC_DEV) {
     deprecateEnum(ccui.RelativeLayoutParameter, 'ccui.RelativeLayoutParameter', 'ccui.RelativeLayoutParameter.Type', false);
     deprecateEnum(cc.ProgressTimer, 'cc.ProgressTimer.TYPE', 'cc.ProgressTimer.Type');
     deprecateEnum(cc.game, 'cc.game.DEBUG_MODE', 'cc.DebugMode');
-    deprecateEnum(cc, 'cc.KEYBOARD_RETURNTYPE', 'cc.KeyboardReturnType');
-    deprecateEnum(cc, 'cc.EDITBOX_INPUT_MODE', 'cc.EditBox.InputMode');
-    deprecateEnum(cc, 'cc.EDITBOX_INPUT_FLAG', 'cc.EditBox.InputFlag');
+    if (cc.EditBox) {
+        deprecateEnum(cc, 'cc.KEYBOARD_RETURNTYPE', 'cc.KeyboardReturnType');
+        deprecateEnum(cc, 'cc.EDITBOX_INPUT_MODE', 'cc.EditBox.InputMode');
+        deprecateEnum(cc, 'cc.EDITBOX_INPUT_FLAG', 'cc.EditBox.InputFlag');
+    }
+    cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
+        deprecateEnum(cc, 'cc', 'cc.Texture2D.WrapMode', false);
+    });
 
 
     function provideClearError (owner, obj) {

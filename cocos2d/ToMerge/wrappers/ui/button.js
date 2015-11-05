@@ -15,7 +15,7 @@ var ButtonWrapper = cc.Class({
                 this._normalTexture = value;
                 this.targetN.loadTextureNormal( value );
             },
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         pressedTexture: {
@@ -26,7 +26,7 @@ var ButtonWrapper = cc.Class({
                 this._pressedTexture = value;
                 this.targetN.loadTexturePressed( value );
             },
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         disabledTexture: {
@@ -37,7 +37,7 @@ var ButtonWrapper = cc.Class({
                 this._disabledTexture = value;
                 this.targetN.loadTextureDisabled( value );
             },
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         text: {
@@ -131,17 +131,17 @@ var ButtonWrapper = cc.Class({
 
         _normalTexture: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         _pressedTexture: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         _disabledTexture: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         }
     },
 

@@ -14,7 +14,7 @@ var CheckBoxWrapper = cc.Class({
                 this.bg = value;
                 this.targetN.loadTextureBackGround( value );
             },
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             displayName: 'Bg'
         },
 
@@ -26,7 +26,7 @@ var CheckBoxWrapper = cc.Class({
                 this.bgPressed = value;
                 this.targetN.loadTextureBackGroundSelected( value );
             },
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             displayName: 'Bg Pressed'
         },
 
@@ -38,7 +38,7 @@ var CheckBoxWrapper = cc.Class({
                 this.bgDisabled = value;
                 this.targetN.loadTextureBackGroundDisabled( value );
             },
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             displayName: 'Bg Disabled'
         },
 
@@ -50,7 +50,7 @@ var CheckBoxWrapper = cc.Class({
                 this.fg = value;
                 this.targetN.loadTextureFrontCross( value );
             },
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             displayName: 'Fg'
         },
 
@@ -62,7 +62,7 @@ var CheckBoxWrapper = cc.Class({
                 this.fgDisabled = value;
                 this.targetN.loadTextureFrontCrossDisabled( value );
             },
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             displayName: 'Fg Disabled'
         },
 
@@ -82,31 +82,31 @@ var CheckBoxWrapper = cc.Class({
 
         bg: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             visible: false
         },
 
         bgPressed: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             visible: false
         },
 
         bgDisabled: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             visible: false
         },
 
         fg: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             visible: false
         },
 
         fgDisabled: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             visible: false
         },
 

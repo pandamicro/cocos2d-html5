@@ -1,7 +1,7 @@
 var CCObject = require('../platform/CCObject');
 
 /**
- * The base class for registering asset types. This is a static class.
+ * The base class for registering asset types.
  *
  * You may want to override:
  * - createNode (static)

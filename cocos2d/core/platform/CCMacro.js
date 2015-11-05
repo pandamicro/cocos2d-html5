@@ -421,27 +421,6 @@ cc.ONE_MINUS_CONSTANT_COLOR	= 0x8002;
 cc.LINEAR	= 0x2601;
 
 /**
- * the constant variable equals gl.REPEAT for texture
- * @constant
- * @type Number
- */
-cc.REPEAT	= 0x2901;
-
-/**
- * the constant variable equals gl.CLAMP_TO_EDGE for texture
- * @constant
- * @type Number
- */
-cc.CLAMP_TO_EDGE	= 0x812f;
-
-/**
- * the constant variable equals gl.MIRRORED_REPEAT for texture
- * @constant
- * @type Number
- */
-cc.MIRRORED_REPEAT   = 0x8370;
-
-/**
  * default gl blend src function. Compatible with premultiplied alpha images.
  * @constant
  * @name cc.BLEND_SRC

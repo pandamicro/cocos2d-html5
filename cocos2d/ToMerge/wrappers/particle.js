@@ -149,7 +149,7 @@ var ParticleWrapper = cc.Class({
                 var texture = value ? cc.textureCache.addImage( value ) : null;
                 this.targetN.texture = texture;
             },
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         particleCount: {
@@ -705,7 +705,7 @@ var ParticleWrapper = cc.Class({
 
         _texture: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         _serializeObject: {

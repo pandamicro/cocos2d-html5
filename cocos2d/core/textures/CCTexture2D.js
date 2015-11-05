@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2013-2015 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-EventTarget = require("../cocos2d/core/event/event-target");
+var EventTarget = require("../event/event-target");
 
 //CONSTANTS:
 
@@ -90,30 +90,65 @@ cc.ALIGN_LEFT = 0x31;
  * @type Number
  */
 cc.ALIGN_TOP_LEFT = 0x11;
+
+/**
+ * The texture wrap mode
+ * @class WrapMode
+ * @static
+ * @namespace Texture2D
+ */
+var WrapMode = cc.Enum({
+    /**
+     * the constant variable equals gl.REPEAT for texture
+     * @property REPEAT
+     * @type {Number}
+     * @readonly
+     */
+    REPEAT: 0x2901,
+    /**
+     * the constant variable equals gl.CLAMP_TO_EDGE for texture
+     * @property CLAMP_TO_EDGE
+     * @type {Number}
+     * @readonly
+     */
+    CLAMP_TO_EDGE: 0x812f,
+    /**
+     * the constant variable equals gl.MIRRORED_REPEAT for texture
+     * @property MIRRORED_REPEAT
+     * @type {Number}
+     * @readonly
+     */
+    MIRRORED_REPEAT: 0x8370
+});
+
 //----------------------Possible texture pixel formats----------------------------
 
 
 // By default PVR images are treated as if they don't have the alpha channel premultiplied
 cc.PVRHaveAlphaPremultiplied_ = false;
 
-//cc.Texture2DWebGL move to TextureWebGL.js
+//cc.Texture2DWebGL move to TexturesWebGL.js
 
 cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
 
     if(cc._renderType === cc.game.RENDER_TYPE_CANVAS) {
 
         var proto = {
-            _contentSize: null,
-            _textureLoaded: false,
-            _htmlElementObj: null,
-            url: null,
-            _pattern: null,
+
+            name: 'cc.Texture2D',
+            extends: require('../assets/CCRawAsset'),
 
             ctor: function () {
+                this.url = null;
                 this._contentSize = cc.size(0, 0);
                 this._textureLoaded = false;
                 this._htmlElementObj = null;
                 this._pattern = "";
+
+                // hack for gray effect
+                this._grayElementObj = null;
+                this._backupElement = null;
+                this._isGray = false;
             },
 
             /**
@@ -323,21 +358,27 @@ cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
                 return false;
             },
 
+            /**
+             * @param texParams
+             * @param magFilter
+             * @param {Texture2D.WrapMode} wrapS
+             * @param {Texture2D.WrapMode} wrapT
+             */
             setTexParameters: function (texParams, magFilter, wrapS, wrapT) {
                 if(magFilter !== undefined)
                     texParams = {minFilter: texParams, magFilter: magFilter, wrapS: wrapS, wrapT: wrapT};
 
-                if(texParams.wrapS === cc.REPEAT && texParams.wrapT === cc.REPEAT){
+                if(texParams.wrapS === WrapMode.REPEAT && texParams.wrapT === WrapMode.REPEAT){
                     this._pattern = "repeat";
                     return;
                 }
 
-                if(texParams.wrapS === cc.REPEAT ){
+                if(texParams.wrapS === WrapMode.REPEAT ){
                     this._pattern = "repeat-x";
                     return;
                 }
 
-                if(texParams.wrapT === cc.REPEAT){
+                if(texParams.wrapT === WrapMode.REPEAT){
                     this._pattern = "repeat-y";
                     return;
                 }
@@ -402,10 +443,6 @@ cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
                 return this.channelCache = textureCache;
             },
 
-            //hack for gray effect
-            _grayElementObj: null,
-            _backupElement: null,
-            _isGray: false,
             _switchToGray: function(toGray){
                 if(!this._textureLoaded || this._isGray === toGray)
                     return;
@@ -567,7 +604,7 @@ cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
          * Be aware that the content of the generated textures will be upside-down! </p>
          * @name cc.Texture2D
          * @class
-         * @extends cc._Class
+         * @extends cc.RawAsset
          *
          * @property {WebGLTexture}     name            - <@readonly> WebGLTexture Object
          * @property {Number}           pixelFormat     - <@readonly> Pixel format of the texture
@@ -579,7 +616,7 @@ cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
          * @property {Number}           maxS            - Texture max S
          * @property {Number}           maxT            - Texture max T
          */
-        cc.Texture2D = cc._Class.extend(/** @lends cc.Texture2D# */proto);
+        cc.Texture2D = cc.Class(/** @lends cc.Texture2D# */proto);
 
         cc.Texture2D._generateGrayTexture = function(texture, rect, renderCanvas){
             if (texture === null)
@@ -605,6 +642,7 @@ cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
         cc._tmp.WebGLTexture2D();
         delete cc._tmp.WebGLTexture2D;
     }
+    cc.Texture2D.WrapMode = WrapMode;
 
     EventTarget.polyfill(cc.Texture2D.prototype);
 
@@ -612,3 +650,13 @@ cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
     cc._tmp.PrototypeTexture2D();
     delete cc._tmp.PrototypeTexture2D;
 });
+
+if (CC_EDITOR && Editor.isCoreLevel) {
+    cc.Texture2D = cc.Class({
+        name: 'cc.Texture2D',
+        extends: require('../assets/CCRawAsset'),
+        statics: {
+            WrapMode: WrapMode
+        }
+    });
+}

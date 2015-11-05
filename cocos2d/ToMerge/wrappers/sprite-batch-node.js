@@ -15,12 +15,12 @@ var SpriteBatchNodeWrapper = cc.Class({
             set: function (value) {
                 this.targetN.initWithFile(value);
             },
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         texture: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             visible: false
         },
 

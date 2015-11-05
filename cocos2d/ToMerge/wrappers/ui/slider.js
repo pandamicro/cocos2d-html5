@@ -14,7 +14,7 @@ var SliderWrapper = cc.Class({
                 this.bgBar = value;
                 this.targetN.loadBarTexture( value );
             },
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             displayName: 'Bg Bar'
         },
 
@@ -26,7 +26,7 @@ var SliderWrapper = cc.Class({
                 this.fgBar = value;
                 this.targetN.loadProgressBarTexture( value );
             },
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             displayName: 'Fg Bar'
         },
 
@@ -38,7 +38,7 @@ var SliderWrapper = cc.Class({
                 this.control = value;
                 this.targetN.loadSlidBallTextureNormal( value );
             },
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             displayName: 'Control'
         },
 
@@ -50,7 +50,7 @@ var SliderWrapper = cc.Class({
                 this.controlPressed = value;
                 this.targetN.loadSlidBallTexturePressed( value );
             },
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             displayName: 'Control Pressed'
         },
 
@@ -62,7 +62,7 @@ var SliderWrapper = cc.Class({
                 this.controlDisabled = value;
                 this.targetN.loadSlidBallTextureDisabled( value );
             },
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             displayName: 'Control Disabled'
         },
 
@@ -86,31 +86,31 @@ var SliderWrapper = cc.Class({
 
         bgBar: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             visible: false
         },
 
         fgBar: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             visible: false
         },
 
         control: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             visible: false
         },
 
         controlPressed: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             visible: false
         },
 
         controlDisabled: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             visible: false
         },
     },
