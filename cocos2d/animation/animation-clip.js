@@ -4,6 +4,12 @@ var AnimationClip = cc.Class({
     extends: cc.Asset,
 
     properties: {
+        _name: {
+            default: ''
+        },
+        name: {
+            get: function () { return this._name; }
+        },
         _duration: {
             default: 0,
             type: 'Float',
@@ -30,48 +36,58 @@ var AnimationClip = cc.Class({
         }
     },
 
-    addProperty: function ( compName, propName ) {
-        var result = this.curveData.some( function ( item ) {
-            return item.component === compName && item.property === propName;
-        });
-        if ( !result ) {
-            this.curveData.push({
-                component: compName,
-                property: propName,
-                keys: [],
-            });
+    addProperty: function ( propName, compName, path ) {
+        var curves = this.getCurveInfo(compName, path, true);
+
+        if (!curves[propName]) {
+            curves[propName] = [];
+        }
+
+        return curves[propName];
+    },
+
+    removeProperty: function ( propName, compName, path ) {
+        var curves = this.getCurveInfo(compName, path);
+        if (curves) {
+            delete curves[propName];
         }
     },
 
-    removeProperty: function ( compName, propName ) {
-        for ( var i = 0; i < this.curveData.length; ++i ) {
-            var curveInfo = this.curveData[i];
-            if ( curveInfo.component === compName &&
-                 curveInfo.property === propName ) {
-                this.curveData.splice( i, 1 );
-                break;
-            }
-        }
-    },
+    getCurveInfo: function ( compName, path, createData ) {
+        var curveData = this.curveData;
+        var target, curves;
 
-    getCurveInfo: function ( compName, propName ) {
-        for ( var i = 0; i < this.curveData.length; ++i ) {
-            var curveInfo = this.curveData[i];
-            if ( curveInfo.component === compName &&
-                 curveInfo.property === propName ) {
-                return curveInfo;
-            }
+        if (!path) {
+            target = curveData;
         }
-        return null;
-    },
-
-    sort: function () {
-        this.curveData.sort( function ( a, b ) {
-            if ( a.component !== b.component ) {
-                return a.component.localeCompare(b.component);
+        else {
+            if (!curveData.paths) {
+                if (createData) curveData.paths = {};
+                else return null;
             }
-            return a.property.localeCompare( b.property );
-        });
+            if (!curveData.paths[path]) {
+                if (createData) curveData.paths[path] = {};
+                else return null;
+            }
+            target = curveData.paths[path];
+        }
+
+        if (!compName) {
+            if (!target.props) {
+                if (createData) target.props = {};
+                else return null;
+            }
+            curves = target.props;
+        }
+        else {
+            if (!target.comps) {
+                if (createData) target.comps = {};
+                else return null;
+            }
+            curves = target.comps;
+        }
+
+        return curves;
     },
 
     // curveData structure:
