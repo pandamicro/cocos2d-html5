@@ -464,34 +464,6 @@ var AssetLibrary = {
     },
 
     /**
-     * !#en Kill references to the asset so it can be garbage collected.
-     * Fireball will reload the asset from disk or remote if loadAssetByUuid being called again.
-     * You rarely use this function in scripts, since it will be called automatically when the Asset is destroyed.
-     * !#zh 手动卸载指定的资源，这个方法会在 Asset 被 destroy 时自动调用，一般不需要用到这个方法。卸载以后，Fireball 可以重新从硬盘或网络加载这个资源。
-     *
-     * 如果还有地方引用到asset，除非 destroyImmediated 为true，否则不应该执行这个方法，因为那样可能会导致 asset 被多次创建。
-     *
-     * @method unloadAsset
-     * @param {Asset|string} assetOrUuid
-     * @param {Boolean} [destroy=false] - When destroyImmediate is true, if there are objects referencing the asset, the references will become invalid.
-     */
-    unloadAsset: function (assetOrUuid, destroy) {
-        var asset;
-        if (typeof assetOrUuid === 'string') {
-            asset = AssetLibrary._uuidToAsset[assetOrUuid];
-        }
-        else {
-            asset = assetOrUuid;
-        }
-        if (asset) {
-            if (destroy && asset.isValid) {
-                asset.destroy();
-            }
-            delete AssetLibrary._uuidToAsset[asset._uuid];
-        }
-    },
-
-    /**
      * init the asset library
      *
      * @method init

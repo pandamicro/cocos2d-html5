@@ -5307,7 +5307,7 @@ var TextureRotatedSpriteFrame = SpriteTestDemo.extend({
 var SpriteWithRepeatingTexture = SpriteTestDemo.extend({
 
     _title:"Sprite with Repeating texture",
-    _subtitle:"aTexture.setTexParameters(cc.LINEAR, cc.LINEAR, cc.REPEAT, cc.REPEAT);",
+    _subtitle:"aTexture.setTexParameters(cc.LINEAR, cc.LINEAR, cc.Texture2D.WrapMode.REPEAT, cc.Texture2D.WrapMode.REPEAT);",
 
     ctor:function () {
         //----start58----ctor
@@ -5319,7 +5319,7 @@ var SpriteWithRepeatingTexture = SpriteTestDemo.extend({
 
         block.setTextureRect(cc.rect(0,0, 320,240));
         block.setPosition(x, y);
-        block.getTexture().setTexParameters(cc.LINEAR, cc.LINEAR, cc.REPEAT, cc.REPEAT);
+        block.getTexture().setTexParameters(cc.LINEAR, cc.LINEAR, cc.Texture2D.WrapMode.REPEAT, cc.Texture2D.WrapMode.REPEAT);
         this.addChild(block);
         //----end58----
     }

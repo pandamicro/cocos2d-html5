@@ -25,12 +25,12 @@ var Scale9SpriteWrapper = cc.Class({
                 this.texture = value;
                 this.targetN.loadTexture( value );
             },
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         texture: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             visible: false
         }
     },

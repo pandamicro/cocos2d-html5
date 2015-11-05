@@ -49,7 +49,6 @@ var srcs = [
 
     "./cocos2d/core/textures/TexturesWebGL.js",
     "./cocos2d/core/textures/TexturesPropertyDefine.js",
-    "./cocos2d/core/textures/CCTexture2D.js",
     "./cocos2d/core/textures/CCTextureCache.js",
     "./cocos2d/core/textures/CCTextureAtlas.js",
 

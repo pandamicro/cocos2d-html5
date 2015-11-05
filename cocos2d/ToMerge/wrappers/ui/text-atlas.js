@@ -22,7 +22,7 @@ var TextAtlasWrapper = cc.Class({
 
         texture: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
 
             notify: function () {
                 this.updateProperties();

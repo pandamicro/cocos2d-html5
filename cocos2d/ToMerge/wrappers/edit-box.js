@@ -9,7 +9,7 @@ var EditBoxWrapper = cc.Class({
     properties: {
         normalBackground: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
 
             notify: function() {
                 if (!this.targetN) {

@@ -36,7 +36,7 @@ var SpriteRenderer = cc.Class({
 
         _texture: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
         _atlasIndex: 0,
         _textureAtlas: '',
@@ -66,23 +66,26 @@ var SpriteRenderer = cc.Class({
         /**
          * The texture of the sprite node
          * @property texture
-         * @type {cc.TextureAsset}
+         * @type {cc.Texture2D}
          */
         texture: {
             get: function () {
                 return this._texture;
             },
-            set: function (value) {
+            set: function (value, force) {
                 this._texture = value;
 
                 if (this._sgNode) {
+                    if (CC_EDITOR && force) {
+                        this._sgNode.texture = null;
+                    }
                     this._sgNode.texture = value;
                     // color cleared after reset texture, should reapply color
                     this._sgNode.setColor(this.node._color);
                     this._sgNode.setOpacity(this.node._opacity);
                 }
             },
-            url: cc.TextureAsset
+            url: cc.Texture2D
         }
     },
 

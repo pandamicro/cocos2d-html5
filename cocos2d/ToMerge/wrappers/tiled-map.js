@@ -49,7 +49,7 @@ var TiledMapWrapper = cc.Class({
 
         _textures: {
             default: [],
-            url: [cc.TextureAsset]
+            url: [cc.Texture2D]
         },
 
         file: {

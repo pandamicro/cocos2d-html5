@@ -14,7 +14,7 @@ var LoadingBarWrapper = cc.Class({
                 this.texture = value;
                 this.targetN.loadTexture( value );
             },
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             displayName: 'Texture'
         },
 
@@ -58,7 +58,7 @@ var LoadingBarWrapper = cc.Class({
 
         texture: {
             default: '',
-            url: cc.TextureAsset,
+            url: cc.Texture2D,
             visible: false
         }
     },

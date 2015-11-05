@@ -5,9 +5,9 @@ var _assetUrls = [
 
 describe( 'test asset', function () {
 
-    it( 'cc.TextureAsset.createNodeByUrl', function (done) {
+    it( 'cc.Texture2D.createNodeByUrl', function (done) {
 
-        cc.TextureAsset.createNodeByUrl(_assetUrls[0], function (err, node) {
+        cc.Texture2D.createNodeByUrl(_assetUrls[0], function (err, node) {
             if (err) throw err;
 
             assert( node );

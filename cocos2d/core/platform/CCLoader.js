@@ -1,8 +1,6 @@
 
 if (cc.loader) return;
 
-var FireUrl = CC_EDITOR && require('fire-url');
-
 /**
  * Loader for resource loading process. It's a singleton object.
  * @class
@@ -289,10 +287,6 @@ cc.loader = (function () {
          * @returns {Image}
          */
         loadImg: function (url, option, callback) {
-            if (CC_EDITOR && FireUrl) {
-                url = FireUrl.addRandomQuery(url);
-            }
-
             var opt = {
                 isCrossOrigin: true
             };

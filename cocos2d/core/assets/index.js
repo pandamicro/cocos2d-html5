@@ -33,7 +33,7 @@ require('./CCCoffeeScript');
 require('./CCJavaScript');
 require('./CCSceneAsset');
 require('./CCSpriteAsset');
-require('./CCTextureAsset');
+require('../textures/CCTexture2D');
 require('./CCTTFFont');
 require('./CCParticleAsset');
 require('./CCSpriteAnimation');
