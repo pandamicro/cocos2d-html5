@@ -11,7 +11,7 @@ function AnimationAnimator (target, animation) {
 JS.extend(AnimationAnimator, Animator);
 var p = AnimationAnimator.prototype;
 
-p.playState = function (state) {
+p.playState = function (state, startTime) {
     var clip = state.clip;
     if (!clip) {
         return;
@@ -22,6 +22,7 @@ p.playState = function (state) {
     }
     this.playingAnims.push(state);
     state.play();
+    state.time = startTime;
     this.play();
 };
 
@@ -197,4 +198,4 @@ if (CC_TEST) {
 }
 
 
-module.exports = AnimationAnimator;
+cc.AnimationAnimator = module.exports = AnimationAnimator;
