@@ -1,20 +1,20 @@
 require('../platform/CCSys');
 
 /**
- * @class
+ * @module cc
+ */
+
+/**
+ * @class path
  */
 cc.path = /** @lends cc.path# */{
     normalizeRE: /[^\.\/]+\/\.\.\//,
 
     /**
      * Join strings to be a path.
-     * @example
-     cc.path.join("a", "b.png");//-->"a/b.png"
-     cc.path.join("a", "b", "c.png");//-->"a/b/c.png"
-     cc.path.join("a", "b");//-->"a/b"
-     cc.path.join("a", "b", "/");//-->"a/b/"
-     cc.path.join("a", "b/", "/");//-->"a/b/"
-     * @returns {string}
+     * @method join
+     * @example {@link utils/api/cocos/docs/cocos2d/core/utils/CCPath/join.js}
+     * @returns {String}
      */
     join: function () {
         var l = arguments.length;
@@ -27,12 +27,9 @@ cc.path = /** @lends cc.path# */{
 
     /**
      * Get the ext name of a path.
-     * @example
-     cc.path.extname("a/b.png");//-->".png"
-     cc.path.extname("a/b.png?a=1&b=2");//-->".png"
-     cc.path.extname("a/b");//-->null
-     cc.path.extname("a/b?a=1&b=2");//-->null
-     * @param {string} pathStr
+     * @method extname
+     * @example {@link utils/api/cocos/docs/cocos2d/core/utils/CCPath/extname.js}
+     * @param {String} pathStr
      * @returns {*}
      */
     extname: function (pathStr) {
@@ -42,11 +39,13 @@ cc.path = /** @lends cc.path# */{
 
     /**
      * Get the main name of a file name
-     * @param {string} fileName
-     * @returns {string}
+     * @method mainFileName
+     * @param {String} fileName
+     * @returns {String}
      */
     mainFileName: function(fileName){
         if(fileName){
+            
             var idx = fileName.lastIndexOf(".");
             if(idx !== -1)
                 return fileName.substring(0,idx);
@@ -56,14 +55,10 @@ cc.path = /** @lends cc.path# */{
 
     /**
      * Get the file name of a file path.
-     * @example
-     cc.path.basename("a/b.png");//-->"b.png"
-     cc.path.basename("a/b.png?a=1&b=2");//-->"b.png"
-     cc.path.basename("a/b.png", ".png");//-->"b"
-     cc.path.basename("a/b.png?a=1&b=2", ".png");//-->"b"
-     cc.path.basename("a/b.png", ".txt");//-->"b.png"
-     * @param {string} pathStr
-     * @param {string} [extname]
+     * @method basename
+     * @example {@link utils/api/cocos/docs/cocos2d/core/utils/CCPath/basename.js}
+     * @param {String} pathStr
+     * @param {String} [extname]
      * @returns {*}
      */
     basename: function (pathStr, extname) {
@@ -80,16 +75,9 @@ cc.path = /** @lends cc.path# */{
 
     /**
      * Get dirname of a file path.
-     * @example
-     * unix
-     cc.path.driname("a/b/c.png");//-->"a/b"
-     cc.path.driname("a/b/c.png?a=1&b=2");//-->"a/b"
-     cc.path.dirname("a/b/");//-->"a/b"
-     cc.path.dirname("c.png");//-->""
-     * windows
-     cc.path.driname("a\\b\\c.png");//-->"a\b"
-     cc.path.driname("a\\b\\c.png?a=1&b=2");//-->"a\b"
-     * @param {string} pathStr
+     * @method dirname
+     * @example {@link utils/api/cocos/docs/cocos2d/core/utils/CCPath/dirname.js}
+     * @param {String} pathStr
      * @returns {*}
      */
     dirname: function (pathStr) {
@@ -98,12 +86,11 @@ cc.path = /** @lends cc.path# */{
 
     /**
      * Change extname of a file path.
-     * @example
-     cc.path.changeExtname("a/b.png", ".plist");//-->"a/b.plist"
-     cc.path.changeExtname("a/b.png?a=1&b=2", ".plist");//-->"a/b.plist?a=1&b=2"
-     * @param {string} pathStr
-     * @param {string} [extname]
-     * @returns {string}
+     * @method changeExtname
+     * @example {@link utils/api/cocos/docs/cocos2d/core/utils/CCPath/changeExtname.js}
+     * @param {String} pathStr
+     * @param {String} [extname]
+     * @returns {String}
      */
     changeExtname: function (pathStr, extname) {
         extname = extname || "";
@@ -119,16 +106,11 @@ cc.path = /** @lends cc.path# */{
     },
     /**
      * Change file name of a file path.
-     * @example
-     cc.path.changeBasename("a/b/c.plist", "b.plist");//-->"a/b/b.plist"
-     cc.path.changeBasename("a/b/c.plist?a=1&b=2", "b.plist");//-->"a/b/b.plist?a=1&b=2"
-     cc.path.changeBasename("a/b/c.plist", ".png");//-->"a/b/c.png"
-     cc.path.changeBasename("a/b/c.plist", "b");//-->"a/b/b"
-     cc.path.changeBasename("a/b/c.plist", "b", true);//-->"a/b/b.plist"
+     * @example {@link utils/api/cocos/docs/cocos2d/core/utils/CCPath/changeBasename.js}
      * @param {String} pathStr
      * @param {String} basename
      * @param {Boolean} [isSameExt]
-     * @returns {string}
+     * @returns {String}
      */
     changeBasename: function (pathStr, basename, isSameExt) {
         if (basename.indexOf(".") === 0) return this.changeExtname(pathStr, basename);

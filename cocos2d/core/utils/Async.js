@@ -1,4 +1,8 @@
 /**
+ * @module cc
+ */
+
+/**
  * Async Pool class, a helper of cc.async
  * @param {Object|Array} srcObj
  * @param {Number} limit the limit of parallel number
@@ -77,15 +81,16 @@ cc.AsyncPool = function(srcObj, limit, iterator, onEnd, target){
 };
 
 /**
- * @class
+ * @class async
  */
 cc.async = /** @lends cc.async# */{
     /**
      * Do tasks series.
+     * @method series
      * @param {Array|Object} tasks
-     * @param {function} [cb] callback
+     * @param {Function} [cb] - callback
      * @param {Object} [target]
-     * @return {cc.AsyncPool}
+     * @return {AsyncPool}
      */
     series : function(tasks, cb, target){
         var asyncPool = new cc.AsyncPool(tasks, 1, function(func, index, cb1){
@@ -97,10 +102,11 @@ cc.async = /** @lends cc.async# */{
 
     /**
      * Do tasks parallel.
+     * @method parallel
      * @param {Array|Object} tasks
-     * @param {function} cb callback
+     * @param {Function} cb - callback
      * @param {Object} [target]
-     * @return {cc.AsyncPool}
+     * @return {AsyncPool}
      */
     parallel : function(tasks, cb, target){
         var asyncPool = new cc.AsyncPool(tasks, 0, function(func, index, cb1){
@@ -112,10 +118,11 @@ cc.async = /** @lends cc.async# */{
 
     /**
      * Do tasks waterfall.
+     * @method waterfall
      * @param {Array|Object} tasks
-     * @param {function} cb callback
+     * @param {Function} cb - callback
      * @param {Object} [target]
-     * @return {cc.AsyncPool}
+     * @return {AsyncPool}
      */
     waterfall : function(tasks, cb, target){
         var args = [];
@@ -141,11 +148,12 @@ cc.async = /** @lends cc.async# */{
 
     /**
      * Do tasks by iterator.
+     * @method map
      * @param {Array|Object} tasks
-     * @param {function|Object} iterator
-     * @param {function} [callback]
+     * @param {Function|Object} iterator
+     * @param {Function} [callback]
      * @param {Object} [target]
-     * @return {cc.AsyncPool}
+     * @return {AsyncPool}
      */
     map : function(tasks, iterator, callback, target){
         var locIterator = iterator;
@@ -161,10 +169,11 @@ cc.async = /** @lends cc.async# */{
 
     /**
      * Do tasks by iterator limit.
+     * @method mapLimit
      * @param {Array|Object} tasks
      * @param {Number} limit
-     * @param {function} iterator
-     * @param {function} cb callback
+     * @param {Function} iterator
+     * @param {Function} cb callback
      * @param {Object} [target]
      */
     mapLimit : function(tasks, limit, iterator, cb, target){
