@@ -55,6 +55,43 @@ var TestTexture = cc.Class({
     }
 });
 
+var TestSprite = cc.Class({
+    name: 'TestSprite',
+    extends: cc.Asset,
+    properties: {
+        pivot: new cc.Vec2(0.5, 0.5),
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        texture: {
+            default: '',
+            url: TestTexture,
+        },
+        rotated: false,
+        trimLeft: 0,
+        trimTop: 0,
+        rawWidth: 0,
+        rawHeight: 0,
+        //pixelLevelHitTest: false,
+        //alphaThreshold: 25,
+        insetTop: 0,
+        insetBottom: 0,
+        insetLeft: 0,
+        insetRight: 0,
+        rotatedWidth: {
+            get: function () {
+                return this.rotated ? this.height : this.width;
+            }
+        },
+        rotatedHeight: {
+            get: function () {
+                return this.rotated ? this.width : this.height;
+            }
+        }
+    }
+});
+
 var TestScript = cc.Class({
     name: 'TestScript',
     extends: cc.Component,

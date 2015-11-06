@@ -38,7 +38,7 @@
     }
 
     asyncTest('load asset with depends asset', function () {
-        //var sprite = new cc.SpriteAsset();
+        //var sprite = new cc.SpriteFrame();
         //sprite.texture = new TestTexture();
         //sprite.texture._uuid = grossini_uuid;
         //cc.log(Editor.serialize(sprite));

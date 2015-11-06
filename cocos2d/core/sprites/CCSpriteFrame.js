@@ -78,13 +78,51 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
         var offset = arguments[3];
         var originalSize = arguments[4];
 
+        // the location of the sprite on rendering texture
         this._rect = new cc.Rect();
         this._rectInPixels = new cc.Rect();
+
+        // for trimming
         this._offset = new cc.Vec2();
         this._offsetInPixels = new cc.Vec2();
+
+        // for trimming
         this._originalSize = new cc.Size();
         this._originalSizeInPixels = new cc.Size();
+
         this._rotated = false;
+
+        /**
+         * Top border of the sprite
+         * @property insetTop
+         * @type {Number}
+         * @default 0
+         */
+        this.insetTop = 0;
+
+        /**
+         * Bottom border of the sprite
+         * @property insetBottom
+         * @type {Number}
+         * @default 0
+         */
+        this.insetBottom = 0;
+
+        /**
+         * Left border of the sprite
+         * @property insetLeft
+         * @type {Number}
+         * @default 0
+         */
+        this.insetLeft = 0;
+
+        /**
+         * Right border of the sprite
+         * @property insetRight
+         * @type {Number}
+         * @default 0
+         */
+        this.insetRight = 0;
 
         this._texture = null;
         this._textureFilename = '';
@@ -383,13 +421,26 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
             var rect = this._rect;
             var offset = this._offset;
             var size = this._originalSize;
-            var uuid = Editor.urlToUuid(url);
+            var url = this._textureFilename;
+            var uuid;
+            if (url) {
+                uuid = Editor.urlToUuid(url);
+            }
+            var capInsets = undefined;
+            if (this.insetLeft !== 0 ||
+                this.insetTop !== 0 ||
+                this.insetRight !== 0 ||
+                this.insetBottom !== 0) {
+                capInsets = [this.insetLeft, this.insetTop, this.insetRight, this.insetBottom];
+            }
             return {
+                name: this._name,
                 texture: uuid,
                 rect: [rect.x, rect.y, rect.width, rect.height],
                 offset: [offset.x, offset.y],
                 originalSize: [size.width, size.height],
-                rotated: this._rotated ? 1 : 0
+                rotated: this._rotated ? 1 : 0,
+                capInsets: capInsets
             };
         }
     },
@@ -403,6 +454,16 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
         var size = new cc.Size(data.originalSize[0], data.originalSize[1]);
         var sizeInP = cc.sizePointsToPixels(size);
         var rotated = data.rotated === 1;
+
+        // init properties not included in this.initWithTexture()
+        this._name = data.name;
+        var capInsets = data.capInsets;
+        if (capInsets) {
+            this.insetLeft = capInsets[0];
+            this.insetTop = capInsets[1];
+            this.insetRight = capInsets[2];
+            this.insetBottom = capInsets[3];
+        }
 
         var uuid = data.texture;
         if (uuid) {
