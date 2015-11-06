@@ -331,7 +331,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
                 color.r = value.r;
                 color.g = value.g;
                 color.b = value.b;
-                // Discard Alpha !!!
+                if (CC_DEV && value.a !== 255) {
+                    cc.warn('Should not set alpha via "color", use "opacity" please.');
+                }
                 this._sgNode.color = value;
                 this._onColorChanged();
             },
