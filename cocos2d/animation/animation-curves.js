@@ -1,5 +1,6 @@
 
-var bezier = require('./bezier');
+var bezier = require('./bezier').bezier;
+var fastBezier = require('./bezier').fastBezier;
 
 //
 // 动画数据类，相当于 AnimationClip。
@@ -86,6 +87,29 @@ var DynamicAnimCurve = cc.Class({
         subProps: null
     },
 
+    _calcValue: function (frameIndex, ratio) {
+        var values = this.values;
+        var fromVal = values[frameIndex - 1];
+        var toVal = values[frameIndex];
+
+        // lerp
+        if (typeof fromVal === 'number') {
+            value = fromVal + (toVal - fromVal) * ratio;
+        }
+        else {
+            var lerp = fromVal.lerp;
+            if (lerp) {
+                value = fromVal.lerp(toVal, ratio);
+            }
+            else {
+                // no linear lerp function, just return last frame
+                value = fromVal;
+            }
+        }
+
+        return value;
+    },
+
     sample: function (time, ratio, animator) {
         var values = this.values;
         var ratios = this.ratios;
@@ -111,8 +135,6 @@ var DynamicAnimCurve = cc.Class({
             else {
                 var fromRatio = ratios[index - 1];
                 var toRatio = ratios[index];
-                var fromVal = values[index - 1];
-                var toVal = values[index];
                 var type = this.types[index - 1];
                 var ratioBetweenFrames = (ratio - fromRatio) / (toRatio - fromRatio);
 
@@ -121,20 +143,7 @@ var DynamicAnimCurve = cc.Class({
                     ratioBetweenFrames = bezier(type, ratioBetweenFrames);
                 }
 
-                // lerp
-                if (typeof fromVal === 'number') {
-                    value = fromVal + (toVal - fromVal) * ratioBetweenFrames;
-                }
-                else {
-                    var lerp = fromVal.lerp;
-                    if (lerp) {
-                        value = fromVal.lerp(toVal, ratioBetweenFrames);
-                    }
-                    else {
-                        // no linear lerp function, just return last frame
-                        value = fromVal;
-                    }
-                }
+                value = this._calcValue(index, ratioBetweenFrames);
             }
         }
         else {
@@ -168,6 +177,7 @@ var DynamicAnimCurve = cc.Class({
 
             value = mainProp;
         }
+
         // apply value
         this.target[this.prop] = value;
     }
@@ -179,11 +189,78 @@ DynamicAnimCurve.Bezier = function (controlPoints) {
 };
 
 
+var MotionPathCurve = cc.Class({
+    name: 'cc.MotionPathCurve',
+    extends: DynamicAnimCurve,
+
+    properties: {
+
+        // @property motionPaths
+        // @param {object[]}
+        // Each array item with three control values:
+        // [point, point-in, point-y]
+        motionPaths: []
+    },
+
+    _calcValue: function (frameIndex, ratio) {
+        var values = this.values;
+        var fromVal = values[frameIndex - 1];
+        var toVal = values[frameIndex];
+
+        var motionPath = this.motionPaths[frameIndex - 1];
+
+        // if no motion path, lerp as normal number
+        if (!motionPath) {
+            return fromVal + (toVal - fromVal) * ratio;
+        }
+
+        if (!Array.isArray(motionPath)) {
+            cc.error('motionPath must be Array');
+            return fromVal + (toVal - fromVal) * ratio;
+        }
+
+        var bezierCount = motionPath.length + 1;
+        var eachRatio = 1 / bezierCount;
+        var bezierIndex = (ratio / eachRatio) | 0;
+        var realRatio = (ratio % eachRatio) / eachRatio;
+
+        var c1,c2,c3,c4;
+        if (bezierIndex === 0) {
+            var controlPont = motionPath[bezierIndex];
+
+            c1 = c2 = fromVal;
+            c3 = controlPont[1];
+            c4 = controlPont[0];
+        }
+        else if (bezierIndex === bezierCount - 1) {
+            var controlPont = motionPath[bezierIndex - 1];
+
+            c1 = controlPont[0];
+            c2 = controlPont[2];
+            c3 = c4 = toVal;
+        }
+        else {
+            var controlPont1 = motionPath[bezierIndex - 1];
+            var controlPont2 = motionPath[bezierIndex];
+
+            c1 = controlPont1[0];
+            c2 = controlPont1[2];
+            c3 = controlPont2[1];
+            c4 = controlPont2[0];
+        }
+
+        var value = fastBezier(c1, c2, c3, c4, realRatio);
+        return value;
+    }
+});
+
 if (CC_TEST) {
     cc._Test.DynamicAnimCurve = DynamicAnimCurve;
+    cc._Test.MotionPathCurve = MotionPathCurve;
 }
 
 module.exports = {
     AnimCurve: AnimCurve,
-    DynamicAnimCurve: DynamicAnimCurve
+    DynamicAnimCurve: DynamicAnimCurve,
+    MotionPathCurve: MotionPathCurve
 };

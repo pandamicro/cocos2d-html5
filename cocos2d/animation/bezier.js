@@ -14,13 +14,13 @@
 //
 //    return bezier;
 //})();
-//function bezier (C1, C2, C3, C4, t) {
-//    var t1 = 1 - t;
-//    return C1 * t * t * t +
-//           C2 * 3 * t * t * t1 +
-//           C3 * 3 * t * t1 * t1 +
-//           C4 * t1 * t1 * t1;
-//}
+function fastBezier (C1, C2, C3, C4, t) {
+   var t1 = 1 - t;
+   return C1 * t1 * t1 * t1 +
+          C2 * 3 * t1 * t1 * t +
+          C3 * 3 * t1 * t * t +
+          C4 * t * t * t;
+}
 //function bezier (c0, c1, c2, c3, t) {
 //    var cy = 3.0 * (c1);
 //    var by = 3.0 * (c3 - c1) - cy;
@@ -185,4 +185,7 @@ function bezier (controlPoints, x) {
            p3y * percent * percent * percent;
 }
 
-module.exports = bezier;
+module.exports = {
+    bezier: bezier,
+    fastBezier: fastBezier
+};

@@ -1,6 +1,7 @@
 var JS = cc.js;
 var Animator = require('./animators').Animator;
 var DynamicAnimCurve = require('./animation-curves').DynamicAnimCurve;
+var MotionPathCurve = require('./animation-curves').MotionPathCurve;
 
 // The actual animator for Animation Component
 
@@ -95,8 +96,30 @@ function initClipData (root, state) {
 
     // create curves
 
+    function checkMotionPath(motionPath) {
+        if (!Array.isArray(motionPath)) return false;
+
+        for (var i = 0, l = motionPath.length; i < l; i++) {
+            var controls = motionPath[i];
+
+            if (!Array.isArray(controls) || controls.length !== 3) return false;
+        }
+
+        return true;
+    }
+
     function createPropCurve (target, propPath, keyframes) {
-        var curve = new DynamicAnimCurve();
+        var curve;
+
+        var isMotionPathProp = target instanceof cc.ENode &&
+            ((propPath === 'x') ||
+             (propPath === 'y'));
+
+        if (isMotionPathProp)
+            curve = new MotionPathCurve();
+        else
+            curve = new DynamicAnimCurve();
+
         // 缓存目标对象，所以 Component 必须一开始都创建好并且不能运行时动态替换……
         curve.target = target;
 
@@ -146,6 +169,17 @@ function initClipData (root, state) {
                 }
             }
             curve.types.push(DynamicAnimCurve.Linear);
+
+            if (isMotionPathProp) {
+                var motionPath = keyframe.motionPath;
+
+                if (motionPath && !checkMotionPath(motionPath)) {
+                    cc.error('motion path of target [' + target.name + '] in prop [' + propPath + '] frame [' + j +'] is not valid');
+                    continue;
+                }
+
+                curve.motionPaths.push(motionPath);
+            }
         }
 
         return curve;
@@ -167,8 +201,13 @@ function initClipData (root, state) {
         if (compsData) {
             for (var compName in compsData) {
                 var comp = target.getComponent(compName);
-                var compData = compsData[compName];
 
+                if (!comp) {
+                    cc.error('Can\'t get component [' + compName + '] of target [' + target.name +']');
+                    continue;
+                }
+
+                var compData = compsData[compName];
                 for (var propPath in compData) {
                     var data = compData[propPath];
                     var curve = createPropCurve(comp, propPath, data);
@@ -187,8 +226,13 @@ function initClipData (root, state) {
 
     for (var namePath in childrenCurveDatas) {
         var target = cc.find(namePath, root);
-        var childCurveDatas = childrenCurveDatas[namePath];
 
+        if (!target) {
+            cc.error('Can\'t find child [' + namePath + '] of [' + root.name +']');
+            continue;
+        }
+
+        var childCurveDatas = childrenCurveDatas[namePath];
         createTargetCurves(target, childCurveDatas);
     }
 }
