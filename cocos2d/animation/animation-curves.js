@@ -198,7 +198,7 @@ var MotionPathCurve = cc.Class({
         // @property motionPaths
         // @param {object[]}
         // Each array item with three control values:
-        // [point, point-in, point-y]
+        // [point, point-in, point-out]
         motionPaths: []
     },
 
