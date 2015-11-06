@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2013-2015 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -115,13 +115,14 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
      * @param {cc.Rect} rectInPixels
      */
     setRectInPixels:function (rectInPixels) {
-        if (!this._rectInPixels){
-            this._rectInPixels = cc.rect(0,0,0,0);
+        var rect = this._rectInPixels;
+        if (!rect){
+            this._rectInPixels = rect = cc.rect();
         }
-        this._rectInPixels.x = rectInPixels.x;
-        this._rectInPixels.y = rectInPixels.y;
-        this._rectInPixels.width = rectInPixels.width;
-        this._rectInPixels.height = rectInPixels.height;
+        rect.x = rectInPixels.x;
+        rect.y = rectInPixels.y;
+        rect.width = rectInPixels.width;
+        rect.height = rectInPixels.height;
         this._rect = cc.rectPixelsToPoints(rectInPixels);
     },
 
@@ -210,11 +211,11 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
 
     /**
      * Sets the original size of the trimmed image
-     * @param {cc.Size} sizeInPixels
+     * @param {cc.Size} size
      */
-    setOriginalSize:function (sizeInPixels) {
-        this._originalSize.width = sizeInPixels.width;
-        this._originalSize.height = sizeInPixels.height;
+    setOriginalSize:function (size) {
+        this._originalSize.width = size.width;
+        this._originalSize.height = size.height;
     },
 
     /**
@@ -304,25 +305,6 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Copy the sprite frame
-     * @return {cc.SpriteFrame}
-     */
-    copyWithZone:function () {
-        var copy = new cc.SpriteFrame();
-        copy.initWithTexture(this._textureFilename, this._rectInPixels, this._rotated, this._offsetInPixels, this._originalSizeInPixels);
-        copy.setTexture(this._texture);
-        return copy;
-    },
-
-    /**
-     * Copy the sprite frame
-     * @returns {cc.SpriteFrame}
-     */
-    copy:function () {
-        return this.copyWithZone();
-    },
-
-    /**
      * Initializes SpriteFrame with Texture, rect, rotated, offset and originalSize in pixels.<br/>
      * Please pass parameters to the constructor to initialize the sprite, do not call this function yourself.
      * @param {String|cc.Texture2D} texture
@@ -380,7 +362,21 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     }
 });
 
-EventTarget.polyfill(cc.SpriteFrame.prototype);
+var proto = cc.SpriteFrame.prototype;
+
+/**
+ * Copy the sprite frame
+ * @return {SpriteFrame}
+ */
+proto.copyWithZone = proto.clone;
+
+/**
+ * Copy the sprite frame
+ * @returns {cc.SpriteFrame}
+ */
+proto.copy = proto.clone;
+
+EventTarget.polyfill(proto);
 
 /**
  * <p>

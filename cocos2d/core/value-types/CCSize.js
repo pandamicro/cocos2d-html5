@@ -9,26 +9,37 @@ var JS = require('../platform/js');
  * @param {Number} height
  * @see cc.size
  */
-cc.Size = function (width, height) {
+function Size (width, height) {
     this.width = width || 0;
     this.height = height || 0;
-};
-JS.extend(cc.Size, ValueType);
-require('../platform/CCClass').fastDefine('cc.Size', cc.Size, ['width', 'height']);
+}
+JS.extend(Size, ValueType);
+require('../platform/CCClass').fastDefine('cc.Size', Size, ['width', 'height']);
 
-var proto = cc.Size.prototype;
+/**
+ * return a Size object with width = 0 and height = 0
+ * @property zero
+ * @type {Size}
+ * @default new Size(0, 0)
+ * @static
+ */
+JS.get(Size, 'zero', function () {
+    return new Size(0.0, 0.0);
+});
+
+var proto = Size.prototype;
 
 /**
  * @method clone
  * @return {cc.Size}
  */
 proto.clone = function () {
-    return new cc.Size(this.width, this.height);
+    return new Size(this.width, this.height);
 };
 
 /**
  * @method equals
- * @param {cc.Size} other
+ * @param {Size} other
  * @return {Boolean}
  */
 proto.equals = function (other) {
@@ -41,11 +52,11 @@ proto.equals = function (other) {
  * @method lerp
  * @param {cc.Rect} to
  * @param {number} ratio - the interpolation coefficient
- * @param {cc.Size} [out] - optional, the receiving vector
- * @return {cc.Size}
+ * @param {Size} [out] - optional, the receiving vector
+ * @return {Size}
  */
 proto.lerp = function (to, ratio, out) {
-    out = out || new cc.Size();
+    out = out || new Size();
     var width = this.width;
     var height = this.height;
     out.width = width + (to.width - width) * ratio;
@@ -65,9 +76,9 @@ proto.toString = function () {
  * Helper function that creates a cc.Size.
  * Please use cc.p or cc.v2 instead, it will soon replace cc.Size
  * @function
- * @param {Number|cc.Size} w width or a size object
+ * @param {Number|Size} w width or a size object
  * @param {Number} h height
- * @return {cc.Size}
+ * @return {Size}
  * @example
  * var size1 = cc.size();
  * var size2 = cc.size(100,100);
@@ -76,21 +87,21 @@ proto.toString = function () {
  */
 cc.size = function (w, h) {
     if (w === undefined)
-        return new cc.Size(0, 0);
+        return new Size(0, 0);
     if (h === undefined)
-        return new cc.Size(w.width, w.height);
-    return new cc.Size(w, h);
+        return new Size(w.width, w.height);
+    return new Size(w, h);
 };
 
 /**
  * Check whether a point's value equals to another
  * @function
- * @param {cc.Size} size1
- * @param {cc.Size} size2
+ * @param {Size} size1
+ * @param {Size} size2
  * @return {Boolean}
  */
 cc.sizeEqualToSize = function (size1, size2) {
     return (size1 && size2 && (size1.width === size2.width) && (size1.height === size2.height));
 };
 
-module.exports = cc.Size;
+cc.Size = module.exports = Size;
