@@ -66,7 +66,6 @@ var srcs = [
     "./cocos2d/core/sprites/CCBakeSprite.js",
     "./cocos2d/core/sprites/CCAnimation.js",
     "./cocos2d/core/sprites/CCAnimationCache.js",
-    "./cocos2d/core/sprites/CCSpriteFrame.js",
     "./cocos2d/core/sprites/CCSpriteFrameCache.js",
     "./cocos2d/core/sprites/CCSpriteBatchNode.js",
     "./cocos2d/core/sprites/CCSpriteBatchNodeCanvasRenderCmd.js",

@@ -32,7 +32,7 @@ require('./CCBitmapFont');
 require('./CCCoffeeScript');
 require('./CCJavaScript');
 require('./CCSceneAsset');
-require('./CCSpriteAsset');
+require('../sprites/CCSpriteFrame');
 require('../textures/CCTexture2D');
 require('./CCTTFFont');
 require('./CCParticleAsset');

@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-EventTarget = require("../cocos2d/core/event/event-target");
+var EventTarget = require("../event/event-target");
 
 /**
  * <p>
@@ -35,7 +35,7 @@ EventTarget = require("../cocos2d/core/event/event-target");
  *    You can modify the frame of a cc.Sprite by doing:<br/>
  * </p>
  * @class
- * @extends cc._Class
+ * @extends cc.Asset
  *
  * @param {String|cc.Texture2D} filename
  * @param {cc.Rect} rect If parameters' length equal 2, rect in points, else rect in pixels
@@ -53,26 +53,41 @@ EventTarget = require("../cocos2d/core/event/event-target");
  * var frame1 = new cc.SpriteFrame(texture, cc.rect(0,0,90,128));
  * var frame2 = new cc.SpriteFrame(texture, cc.rect(0,0,90,128),false,0,cc.size(90,128));
  */
-cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
-    _offset:null,
-    _originalSize:null,
-    _rectInPixels:null,
-    _rotated:false,
-    _rect:null,
-    _offsetInPixels:null,
-    _originalSizeInPixels:null,
-    _texture:null,
-    _textureFilename:"",
-    _textureLoaded:false,
+cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
+    name:'cc.SpriteFrame',
+    extends:require('../assets/CCAsset'),
 
-    ctor:function (filename, rect, rotated, offset, originalSize) {
-        this._offset = cc.p(0, 0);
-        this._offsetInPixels = cc.p(0, 0);
-        this._originalSize = cc.size(0, 0);
+    //properties:{
+    //    /**
+    //     * @property pivot
+    //     * @type {cc.Vec2}
+    //     * @default new cc.Vec2(0.5, 0.5)
+    //     */
+    //    pivot: {
+    //        default: new cc.Vec2(0.5, 0.5),
+    //        tooltip: 'The pivot is normalized, like a percentage.\n' +
+    //                 '(0,0) means the bottom-left corner and (1,1) means the top-right corner.\n' +
+    //                 'But you can use values higher than (1,1) and lower than (0,0) too.'
+    //    },
+    //},
+
+    ctor:function () {
+        var filename = arguments[0];
+        var rect = arguments[1];
+        var rotated = arguments[2];
+        var offset = arguments[3];
+        var originalSize = arguments[4];
+
+        this._rect = new cc.Rect();
+        this._rectInPixels = new cc.Rect();
+        this._offset = new cc.Vec2();
+        this._offsetInPixels = new cc.Vec2();
+        this._originalSize = new cc.Size();
+        this._originalSizeInPixels = new cc.Size();
         this._rotated = false;
-        this._originalSizeInPixels = cc.size(0, 0);
-        this._textureFilename = "";
+
         this._texture = null;
+        this._textureFilename = '';
         this._textureLoaded = false;
 
         if(filename !== undefined && rect !== undefined ){
@@ -266,7 +281,7 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
                         this._rectInPixels = cc.rectPointsToPixels(this._rect);
                         this._originalSizeInPixels.width = this._rectInPixels.width;
                         this._originalSizeInPixels.height = this._rectInPixels.height;
-                        this._originalSize.width =  w;
+                        this._originalSize.width = w;
                         this._originalSize.height =  h;
                     }
                     //dispatch 'load' event of cc.SpriteFrame
@@ -295,9 +310,9 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
 
     /**
      * Clone the sprite frame
-     * @returns {SpriteFrame}
+     * @return {SpriteFrame}
      */
-    clone: function(){
+    clone:function(){
         var frame = new cc.SpriteFrame();
         frame.initWithTexture(this._textureFilename, this._rectInPixels, this._rotated, this._offsetInPixels, this._originalSizeInPixels);
         frame.setTexture(this._texture);
@@ -359,7 +374,63 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
         cc._sizePixelsToPointsOut(originalSize, this._originalSize);
         this._rotated = rotated;
         return true;
-    }
+    },
+
+    // SERIALIZATION
+
+    _serialize:  function () {
+        if (CC_EDITOR) {
+            var rect = this._rect;
+            var offset = this._offset;
+            var size = this._originalSize;
+            var uuid = Editor.urlToUuid(url);
+            return {
+                texture: uuid,
+                rect: [rect.x, rect.y, rect.width, rect.height],
+                offset: [offset.x, offset.y],
+                originalSize: [size.width, size.height],
+                rotated: this._rotated ? 1 : 0
+            };
+        }
+    },
+
+    _deserialize: function (data) {
+        var rect = data.rect;
+        rect = new cc.Rect(rect[0], rect[1], rect[2], rect[3]);
+        var rectInP = cc.rectPointsToPixels(rect);
+        var offset = new cc.Vec2(data.offset[0], data.offset[1]);
+        var offsetInP = cc.pointPointsToPixels(offset);
+        var size = new cc.Size(data.originalSize[0], data.originalSize[1]);
+        var sizeInP = cc.sizePointsToPixels(size);
+        var rotated = data.rotated === 1;
+
+        var uuid = data.texture;
+        if (uuid) {
+            var isAsync = CC_EDITOR;
+            if (isAsync) {
+                // Still needs to init property before async AssetLibrary.queryAssetInfo finished,
+                // to ensure subsequent operations in this frame can get the right value.
+                this._rect = rect;
+                this._rectInPixels = rectInP;
+                this._offset = offset;
+                this._offsetInPixels = offsetInP;
+                this._originalSize = size;
+                this._originalSizeInPixels = sizeInP;
+                this._rotated = rotated;
+            }
+            var self = this;
+            AssetLibrary.queryAssetInfo(uuid, function (err, url) {
+                if (err) {
+                    cc.error('SpriteFrame: Failed to sprite texture "%s", %s', uuid, err);
+                    // Fall through since we still need to initialze if not async
+                }
+                self.initWithTexture(url, rectInP, rotated, offsetInP, sizeInP);
+            });
+        }
+        else {
+            this.initWithTexture(null, rectInP, rotated, offsetInP, sizeInP);
+        }
+    },
 });
 
 var proto = cc.SpriteFrame.prototype;
