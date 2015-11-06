@@ -27,6 +27,10 @@
 EventTarget = require("../cocos2d/core/event/event-target");
 
 /**
+ * @module cc
+ */
+
+/**
  * <p>
  *    A cc.SpriteFrame has:<br/>
  *      - texture: A cc.Texture2D that will be used by the cc.Sprite<br/>
@@ -34,8 +38,8 @@ EventTarget = require("../cocos2d/core/event/event-target");
  *    <br/>
  *    You can modify the frame of a cc.Sprite by doing:<br/>
  * </p>
- * @class
- * @extends cc._Class
+ * @class SpriteFrame
+ * @extends _Class
  *
  * @param {String|cc.Texture2D} filename
  * @param {cc.Rect} rect If parameters' length equal 2, rect in points, else rect in pixels
@@ -102,7 +106,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Gets the rect of the frame in the texture
+     * Gets the rect of the frame in the texture.
+     * @method getRectInPixels
      * @return {cc.Rect}
      */
     getRectInPixels:function () {
@@ -111,7 +116,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Sets the rect of the frame in the texture
+     * Sets the rect of the frame in the texture.
+     * @method setRectInPixels
      * @param {cc.Rect} rectInPixels
      */
     setRectInPixels:function (rectInPixels) {
@@ -127,6 +133,7 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
 
     /**
      * Returns whether the sprite frame is rotated in the texture.
+     * @method isRotated
      * @return {Boolean}
      */
     isRotated:function () {
@@ -135,6 +142,7 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
 
     /**
      * Set whether the sprite frame is rotated in the texture.
+     * @method setRotated
      * @param {Boolean} bRotated
      */
     setRotated:function (bRotated) {
@@ -142,7 +150,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Returns the rect of the sprite frame in the texture
+     * Returns the rect of the sprite frame in the texture.
+     * @method getRect
      * @return {cc.Rect}
      */
     getRect:function () {
@@ -151,7 +160,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Sets the rect of the sprite frame in the texture
+     * Sets the rect of the sprite frame in the texture.
+     * @method setRect
      * @param {cc.Rect} rect
      */
     setRect:function (rect) {
@@ -166,7 +176,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Returns the offset of the sprite frame in the texture in pixel
+     * Returns the offset of the sprite frame in the texture in pixel.
+     * @method getOffsetInPixels
      * @return {cc.Vec2}
      */
     getOffsetInPixels:function () {
@@ -174,7 +185,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Sets the offset of the sprite frame in the texture in pixel
+     * Sets the offset of the sprite frame in the texture in pixel.
+     * @method setOffsetInPixels
      * @param {cc.Vec2} offsetInPixels
      */
     setOffsetInPixels:function (offsetInPixels) {
@@ -184,7 +196,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Returns the original size of the trimmed image
+     * Returns the original size of the trimmed image.
+     * @method setOffsetInPixels
      * @return {cc.Size}
      */
     getOriginalSizeInPixels:function () {
@@ -192,7 +205,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Sets the original size of the trimmed image
+     * Sets the original size of the trimmed image.
+     * @method setOriginalSizeInPixels
      * @param {cc.Size} sizeInPixels
      */
     setOriginalSizeInPixels:function (sizeInPixels) {
@@ -201,7 +215,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Returns the original size of the trimmed image
+     * Returns the original size of the trimmed image.
+     * @method getOriginalSize
      * @return {cc.Size}
      */
     getOriginalSize:function () {
@@ -209,7 +224,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Sets the original size of the trimmed image
+     * Sets the original size of the trimmed image.
+     * @method setOriginalSize
      * @param {cc.Size} sizeInPixels
      */
     setOriginalSize:function (sizeInPixels) {
@@ -218,7 +234,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Returns the texture of the frame
+     * Returns the texture of the frame.
+     * @method getTexture
      * @return {cc.Texture2D}
      */
     getTexture:function () {
@@ -234,7 +251,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Sets the texture of the frame, the texture is retained automatically
+     * Sets the texture of the frame, the texture is retained automatically.
+     * @method setTexture
      * @param {cc.Texture2D} texture
      */
     setTexture:function (texture) {
@@ -276,7 +294,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Returns the offset of the frame in the texture
+     * Returns the offset of the frame in the texture.
+     * @method getOffset
      * @return {cc.Vec2}
      */
     getOffset:function () {
@@ -284,7 +303,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Sets the offset of the frame in the texture
+     * Sets the offset of the frame in the texture.
+     * @method setOffset
      * @param {cc.Vec2} offsets
      */
     setOffset:function (offsets) {
@@ -293,7 +313,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Clone the sprite frame
+     * Clone the sprite frame.
+     * @method clone
      * @returns {SpriteFrame}
      */
     clone: function(){
@@ -304,7 +325,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Copy the sprite frame
+     * Copy the sprite frame.
+     * @method copyWithZone
      * @return {cc.SpriteFrame}
      */
     copyWithZone:function () {
@@ -315,7 +337,8 @@ cc.SpriteFrame = cc._Class.extend(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Copy the sprite frame
+     * Copy the sprite frame.
+     * @method copy
      * @returns {cc.SpriteFrame}
      */
     copy:function () {

@@ -39,13 +39,21 @@ function setMaxZOrder (node) {
     return z;
 }
 
-// A base internal wrapper for CCNode and CCScene, it will:
-// - the same api with origin cocos2d rendering node (SGNode)
-// - maintains the private _sgNode property which referenced to SGNode
-// - retain and release the SGNode
-// - serializations for SGNode (SGNode will not being serialized)
-// - notifications if some properties changed
+/**
+ * @module cc
+ */
 
+/**
+ * A base internal wrapper for CCNode and CCScene, it will:
+ * - the same api with origin cocos2d rendering node (SGNode)
+ * - maintains the private _sgNode property which referenced to SGNode
+ * - retain and release the SGNode
+ * - serializations for SGNode (SGNode will not being serialized)
+ * - notifications if some properties changed
+ *
+ * @class NodeWrapper
+ * @extends Object
+ */
 var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     extends: cc.Object,
 
@@ -138,6 +146,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             }
         },
 
+        /**
+         * Skew x
+         * @property skewX
+         * @type {Number}
+         */
         skewX: {
             get: SGProto.getSkewX,
             set: function (value) {
@@ -146,6 +159,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             }
         },
 
+        /**
+         * Skew y
+         * @property skewY
+         * @type {Number}
+         */
         skewY: {
             get: SGProto.getSkewY,
             set: function (value) {
@@ -154,6 +172,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             }
         },
 
+        /**
+         * Z order in depth which stands for the drawing order.
+         * @property zIndex
+         * @type {Number}
+         */
         zIndex: {
             get: SGProto.getLocalZOrder,
             set: function (value) {
@@ -162,6 +185,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             }
         },
 
+        /**
+         * WebGL Z vertex of this node, z order works OK if all the nodes uses the same openGL Z vertex.
+         * @property vertexZ
+         * @type {Number}
+         */
         vertexZ: {
             get: SGProto.getVertexZ,
             set: function (value) {
@@ -170,6 +198,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             }
         },
 
+        /**
+         * Rotation of node
+         * @property rotation
+         * @type {Number}
+         */
         rotation: {
             get: SGProto.getRotation,
             set: function (value) {
@@ -179,6 +212,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             tooltip: "The clockwise degrees of rotation relative to the parent"
         },
 
+        /**
+         * Rotation on x axis
+         * @property rotationX
+         * @type {Number}
+         */
         rotationX: {
             get: SGProto.getRotationX,
             set: function (value) {
@@ -187,6 +225,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * Rotation on y axis
+         * @property rotationX
+         * @type {Number}
+         */
         rotationY: {
             get: SGProto.getRotationY,
             set: function (value) {
@@ -195,6 +238,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * Scale on x axis
+         * @property scaleX
+         * @type {Number}
+         */
         scaleX: {
             get: SGProto.getScaleX,
             set: function (value) {
@@ -203,6 +251,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * Scale on y axis
+         * @property scaleY
+         * @type {Number}
+         */
         scaleY: {
             get: SGProto.getScaleY,
             set: function (value) {
@@ -211,6 +264,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * x axis position of node.
+         * @property x
+         * @type {Number}
+         */
         x: {
             get: SGProto.getPositionX,
             set: function (value) {
@@ -219,6 +277,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * y axis position of node.
+         * @property y
+         * @type {Number}
+         */
         y: {
             get: SGProto.getPositionY,
             set: function (value) {
@@ -227,18 +290,35 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * All children nodes
+         * @property children
+         * @type {ENode[]}
+         * @readOnly
+         */
         children: {
             get: function () {
                 return this._children;
             }
         },
 
+        /**
+         * All children nodes.
+         * @property childrenCount
+         * @type {Number}
+         * @readOnly
+         */
         childrenCount: {
             get: function () {
                 return this._children.length;
             }
         },
 
+        /**
+         * Indicate whether node is visible or not.
+         * @property visible
+         * @type {Boolean}
+         */
         visible: {
             get: SGProto.isVisible,
             set: function (value) {
@@ -247,6 +327,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * Anchor point's position on x axis.
+         * @property anchorX
+         * @type {Number}
+         */
         anchorX: {
             get: SGProto._getAnchorX,
             set: function (value) {
@@ -255,6 +340,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * Anchor point's position on y axis.
+         * @property anchorY
+         * @type {Number}
+         */
         anchorY: {
             get: SGProto._getAnchorY,
             set: function (value) {
@@ -263,6 +353,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * Width of node.
+         * @property width
+         * @type {Number}
+         */
         width: {
             get: SGProto._getWidth,
             set: function (value) {
@@ -271,6 +366,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * Height of node.
+         * @property height
+         * @type {Number}
+         */
         height: {
             get: SGProto._getHeight,
             set: function (value) {
@@ -283,6 +383,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         //    get: SGProto.isRunning
         //},
 
+        /**
+         * Indicate whether ignore the anchor point property for positioning.
+         * @property ignoreAnchor
+         * @type {Boolean}
+         */
         ignoreAnchor: {
             get: SGProto.isIgnoreAnchorPointForPosition,
             set: function (value) {
@@ -292,6 +397,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * Tag of node.
+         * @property tag
+         * @type {Number}
+         */
         tag: {
             get: function () {
                 return this._tag;
@@ -302,6 +412,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * Opacity of node, default value is 255.
+         * @property tag
+         * @type {Number}
+         */
         opacity: {
             get: function () {
                 return this._opacity;
@@ -313,6 +428,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * Indicate whether node's opacity value affect its child nodes, default value is false.
+         * @property cascadeOpacity
+         * @type {Boolean}
+         */
         cascadeOpacity: {
             get: SGProto.isCascadeOpacityEnabled,
             set: function (value) {
@@ -321,6 +441,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * Color of node, default value is white: (255, 255, 255).
+         * @property color
+         * @type {Color}
+         */
         color: {
             get: function () {
                 var color = this._color;
@@ -337,6 +462,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * Indicate whether node's color value affect its child nodes, default value is false.
+         * @property cascadeColor
+         * @type {Boolean}
+         */
         cascadeColor: {
             get: SGProto.isCascadeColorEnabled,
             set: function (value) {
@@ -369,8 +499,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     /**
      * Initializes the instance of cc.ENode
-     * @function
-     * @returns {boolean} Whether the initialization was successful.
+     * @method init
+     * @returns {Boolean} Whether the initialization was successful.
      * @deprecated, no need anymore
      */
     init: function () {
@@ -383,8 +513,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
      * when the setter of the node is available, </br>
      * the property will be set via setter function.</br>
      * </p>
-     * @function
-     * @param {Object} attrs Properties to be set to node
+     * @method attr
+     * @param {Object} attrs - Properties to be set to node
      */
     attr: SGProto.attr,
 
@@ -407,7 +537,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
      *                                                                                                                                    <br/>
      * Limitations: Global Z Order can't be used used by Nodes that have SpriteBatchNode as one of their ancestors.                       <br/>
      * And if ClippingNode is one of the ancestors, then "global Z order" will be relative to the ClippingNode.   </p>
-     * @function
+     * @method setGlobalZOrder
      * @param {Number} globalZOrder
      */
     setGlobalZOrder: function (globalZOrder) {
@@ -417,7 +547,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     /**
      * Return the Node's Global Z Order.
-     * @function
+     * @method getGlobalZOrder
      * @returns {number} The node's global Z order
      */
     getGlobalZOrder: SGProto.getGlobalZOrder,
@@ -425,15 +555,15 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     /**
      * Returns the scale factor of the node.
      * @warning: Assertion will fail when _scaleX != _scaleY.
-     * @function
+     * @method getScale
      * @return {Number} The scale factor
      */
     getScale: SGProto.getScale,
 
     /**
      * Sets the scale factor of the node. 1.0 is the default scale factor. This function can modify the X and Y scale at the same time.
-     * @function
-     * @param {Number} scale or scaleX value
+     * @method setScale
+     * @param {Number} scale - or scaleX value
      * @param {Number} [scaleY=]
      */
     setScale: function (scale, scaleY) {
@@ -449,8 +579,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     /**
      * <p>Returns a copy of the position (x,y) of the node in cocos2d coordinates. (0,0) is the left-bottom corner.</p>
-     * @function
-     * @return {cc.Vec2} The position (x,y) of the node in OpenGL coordinates
+     * @method getPosition
+     * @return {Vec2} The position (x,y) of the node in OpenGL coordinates
      */
     getPosition: SGProto.getPosition,
 
@@ -461,12 +591,10 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
      *     Usually we use cc.p(x,y) to compose CCPoint object.<br/>
      *     and Passing two numbers (x,y) is more efficient than passing CCPoint object.
      * </p>
-     * @function
-     * @param {cc.Vec2|Number} newPosOrxValue The position (x,y) of the node in coordinates or the X coordinate for position
-     * @param {Number} [yValue] Y coordinate for position
-     * @example
-     *    var size = cc.winSize;
-     *    node.setPosition(size.width/2, size.height/2);
+     * @method setPosition
+     * @param {Vec2|Number} newPosOrxValue - The position (x,y) of the node in coordinates or the X coordinate for position
+     * @param {Number} [yValue] - Y coordinate for position
+     * @example {@link utils/api/cocos/docs/cocos2d/core/utils/node-wrapper/setPosition.js}
      */
     setPosition: function (newPosOrxValue, yValue) {
         var locPosition = this._position;
@@ -491,8 +619,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
      *  The anchorPoint is normalized, like a percentage. (0,0) means the bottom-left corner and (1,1) means the top-right corner. <br/>
      *  But you can use values higher than (1,1) and lower than (0,0) too.  <br/>
      *  The default anchor point is (0.5,0.5), so it starts at the center of the node. <br/></p>
-     * @function
-     * @return {cc.Vec2}  The anchor point of node.
+     * @method getAnchorPoint
+     * @return {Vec2} The anchor point of node.
      */
     getAnchorPoint: SGProto.getAnchorPoint,
 
@@ -506,9 +634,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
      *     But you can use values higher than (1,1) and lower than (0,0) too.                                                             <br/>
      *     The default anchor point is (0.5,0.5), so it starts at the center of the node.
      * </p>
-     * @function
-     * @param {cc.Vec2|Number} point The anchor point of node or The x axis anchor of node.
-     * @param {Number} [y] The y axis anchor of node.
+     * @method setAnchorPoint
+     * @param {Vec2|Number} point - The anchor point of node or The x axis anchor of node.
+     * @param {Number} [y] - The y axis anchor of node.
      */
     setAnchorPoint: function (point, y) {
         var locAnchorPoint = this._anchorPoint;
@@ -530,8 +658,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
      * Returns a copy of the anchor point in absolute pixels.  <br/>
      * you can only read it. If you wish to modify it, use setAnchorPoint
      * @see cc.ENode#getAnchorPoint
-     * @function
-     * @return {cc.Vec2} The anchor point in absolute pixels.
+     * @method getAnchorPointInPoints
+     * @return {Vec2} The anchor point in absolute pixels.
      */
     getAnchorPointInPoints: function () {
         return this._sgNode.getAnchorPointInPoints();
@@ -541,8 +669,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
      * <p>Returns a copy the untransformed size of the node. <br/>
      * The contentSize remains the same no matter the node is scaled or rotated.<br/>
      * All nodes has a size. Layer and Scene has the same size of the screen by default. <br/></p>
-     * @function
-     * @return {cc.Size} The untransformed size of the node.
+     * @method getContentSize
+     * @return {Size} The untransformed size of the node.
      */
     getContentSize: SGProto.getContentSize,
 
@@ -553,9 +681,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
      *     The contentSize remains the same no matter the node is scaled or rotated.            <br/>
      *     All nodes has a size. Layer and Scene has the same size of the screen.
      * </p>
-     * @function
-     * @param {cc.Size|Number} size The untransformed size of the node or The untransformed size's width of the node.
-     * @param {Number} [height] The untransformed size's height of the node.
+     * @method setContentSize
+     * @param {Size|Number} size - The untransformed size of the node or The untransformed size's width of the node.
+     * @param {Number} [height] - The untransformed size's height of the node.
      */
     setContentSize: function (size, height) {
         var locContentSize = this._contentSize;
@@ -576,8 +704,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     /**
      * Returns a "local" axis aligned bounding box of the node. <br/>
      * The returned box is relative only to its parent.
-     * @function
-     * @return {cc.Rect} The calculated bounding box of the node
+     * @method getBoundingBox
+     * @return {Rect} The calculated bounding box of the node
      */
     getBoundingBox: function () {
         return this._sgNode.getBoundingBox();
@@ -585,7 +713,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     /**
      * Stops all running actions and schedulers
-     * @function
+     * @method cleanup
      */
     cleanup: function () {
         //// actions
@@ -603,17 +731,17 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     /**
      * Returns a child from the container given its tag
-     * @function
-     * @param {Number} aTag An identifier to find the child node.
-     * @return {cc.ENode} a CCNode object whose tag equals to the input parameter
+     * @method getChildByTag
+     * @param {Number} aTag - An identifier to find the child node.
+     * @return {ENode} a CCNode object whose tag equals to the input parameter
      */
     getChildByTag: SGProto.getChildByTag,
 
     /**
      * Returns a child from the container given its name
-     * @function
-     * @param {String} name A name to find the child node.
-     * @return {cc.ENode} a CCNode object whose name equals to the input parameter
+     * @method getChildByName
+     * @param {String} name - A name to find the child node.
+     * @return {ENode} a CCNode object whose name equals to the input parameter
      */
     getChildByName: SGProto.getChildByName,
 
@@ -622,10 +750,10 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     /** <p>"add" logic MUST only be in this method <br/> </p>
      *
      * <p>If the child is added to a 'running' node, then 'onEnter' and 'onEnterTransitionDidFinish' will be called immediately.</p>
-     * @function
-     * @param {cc.ENode} child  A child node
-     * @param {Number} [localZOrder=]  Z order for drawing priority. Please refer to setZOrder(int)
-     * @param {Number|String} [tag=]  An integer or a name to identify the node easily. Please refer to setTag(int) and setName(string)
+     * @method addChild
+     * @param {ENode} child - A child node
+     * @param {Number} [localZOrder=] - Z order for drawing priority. Please refer to setZOrder(int)
+     * @param {Number|String} [tag=] - An integer or a name to identify the node easily. Please refer to setTag(int) and setName(string)
      */
     addChild: function (child, localZOrder, tag) {
         localZOrder = localZOrder === undefined ? child._localZOrder : localZOrder;
@@ -677,8 +805,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
      * Remove itself from its parent node. If cleanup is true, then also remove all actions and callbacks. <br/>
      * If the cleanup parameter is not passed, it will force a cleanup. <br/>
      * If the node orphan, then nothing happens.
-     * @function
-     * @param {Boolean} [cleanup=true] true if all actions and callbacks on this node should be removed, false otherwise.
+     * @method removeFromParent
+     * @param {Boolean} [cleanup=true] - true if all actions and callbacks on this node should be removed, false otherwise.
      * @see cc.ENode#removeFromParentAndCleanup
      */
     removeFromParent: function (cleanup) {
@@ -694,9 +822,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
      * <p> "remove" logic MUST only be on this method  <br/>
      * If a class wants to extend the 'removeChild' behavior it only needs <br/>
      * to override this method </p>
-     * @function
-     * @param {cc.ENode} child  The child node which will be removed.
-     * @param {Boolean} [cleanup=true]  true if all running actions and callbacks on the child node will be cleanup, false otherwise.
+     * @method removeChild
+     * @param {ENode} child - The child node which will be removed.
+     * @param {Boolean} [cleanup=true] - true if all running actions and callbacks on the child node will be cleanup, false otherwise.
      */
     removeChild: function (child, cleanup) {
         // explicit nil handling
@@ -712,9 +840,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     /**
      * Removes a child from the container by tag value. It will also cleanup all running actions depending on the cleanup parameter.
      * If the cleanup parameter is not passed, it will force a cleanup. <br/>
-     * @function
-     * @param {Number} tag An integer number that identifies a child node
-     * @param {Boolean} [cleanup=true] true if all running actions and callbacks on the child node will be cleanup, false otherwise.
+     * @method removeChildByTag
+     * @param {Number} tag - An integer number that identifies a child node
+     * @param {Boolean} [cleanup=true] - true if all running actions and callbacks on the child node will be cleanup, false otherwise.
      * @see cc.ENode#removeChildByTag
      */
     removeChildByTag: function (tag, cleanup) {
@@ -731,8 +859,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     /**
      * Removes all children from the container and do a cleanup all running actions depending on the cleanup parameter. <br/>
      * If the cleanup parameter is not passed, it will force a cleanup. <br/>
-     * @function
-     * @param {Boolean} [cleanup=true] true if all running actions on all children nodes should be cleanup, false otherwise.
+     * @method removeAllChildren
+     * @param {Boolean} [cleanup=true] - true if all running actions on all children nodes should be cleanup, false otherwise.
      */
     removeAllChildren: function (cleanup) {
         // not using detachChild improves speed here
@@ -781,8 +909,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     /**
      * Returns the matrix that transform parent's space coordinates to the node's (local) space coordinates.<br/>
      * The matrix is in Pixels.
-     * @function
-     * @return {cc.AffineTransform}
+     * @method getParentToNodeTransform
+     * @return {AffineTransform}
      */
     getParentToNodeTransform: function () {
         return this._sgNode.getParentToNodeTransform();
@@ -790,8 +918,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     /**
      * Returns the world affine transform matrix. The matrix is in Pixels.
-     * @function
-     * @return {cc.AffineTransform}
+     * @method getNodeToWorldTransform
+     * @return {AffineTransform}
      */
     getNodeToWorldTransform: function () {
         return this._sgNode.getNodeToWorldTransform();
@@ -799,8 +927,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     /**
      * Returns the inverse world affine transform matrix. The matrix is in Pixels.
-     * @function
-     * @return {cc.AffineTransform}
+     * @method getWorldToNodeTransform
+     * @return {AffineTransform}
      */
     getWorldToNodeTransform: function () {
         return this._sgNode.getWorldToNodeTransform();
@@ -808,9 +936,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     /**
      * Converts a Point to node (local) space coordinates. The result is in Points.
-     * @function
-     * @param {cc.Vec2} worldPoint
-     * @return {cc.Vec2}
+     * @method convertToNodeSpace
+     * @param {Vec2} worldPoint
+     * @return {Vec2}
      */
     convertToNodeSpace: function (worldPoint) {
         return this._sgNode.convertToNodeSpace(worldPoint);
@@ -818,9 +946,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     /**
      * Converts a Point to world space coordinates. The result is in Points.
-     * @function
-     * @param {cc.Vec2} nodePoint
-     * @return {cc.Vec2}
+     * @method convertToWorldSpace
+     * @param {Vec2} nodePoint
+     * @return {Vec2}
      */
     convertToWorldSpace: function (nodePoint) {
         return this._sgNode.convertToWorldSpace(nodePoint);
@@ -829,9 +957,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     /**
      * Converts a Point to node (local) space coordinates. The result is in Points.<br/>
      * treating the returned/received node point as anchor relative.
-     * @function
-     * @param {cc.Vec2} worldPoint
-     * @return {cc.Vec2}
+     * @method convertToNodeSpaceAR
+     * @param {Vec2} worldPoint
+     * @return {Vec2}
      */
     convertToNodeSpaceAR: function (worldPoint) {
         return this._sgNode.convertToNodeSpaceAR(worldPoint);
@@ -840,9 +968,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     /**
      * Converts a local Point to world space coordinates.The result is in Points.<br/>
      * treating the returned/received node point as anchor relative.
-     * @function
-     * @param {cc.Vec2} nodePoint
-     * @return {cc.Vec2}
+     * @method convertToWorldSpaceAR
+     * @param {Vec2} nodePoint
+     * @return {Vec2}
      */
     convertToWorldSpaceAR: function (nodePoint) {
         return this._sgNode.convertToWorldSpaceAR(nodePoint);
@@ -854,9 +982,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     /**
      * convenience methods which take a cc.Touch instead of cc.Vec2
-     * @function
-     * @param {cc.Touch} touch The touch object
-     * @return {cc.Vec2}
+     * @method convertTouchToNodeSpace
+     * @param {Touch} touch - The touch object
+     * @return {Vec2}
      */
     convertTouchToNodeSpace: function (touch) {
         return this._sgNode.convertTouchToNodeSpace(touch)
@@ -864,9 +992,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     /**
      * converts a cc.Touch (world coordinates) into a local coordinate. This method is AR (Anchor Relative).
-     * @function
-     * @param {cc.Touch} touch The touch object
-     * @return {cc.Vec2}
+     * @method convertTouchToNodeSpaceAR
+     * @param {Touch} touch - The touch object
+     * @return {Vec2}
      */
     convertTouchToNodeSpaceAR: function (touch) {
         return this._sgNode.convertTouchToNodeSpaceAR(touch);
@@ -875,8 +1003,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     /**
      * Returns the matrix that transform the node's (local) space coordinates into the parent's space coordinates.<br/>
      * The matrix is in Pixels.
-     * @function
-     * @return {cc.AffineTransform} The affine transform object
+     * @method getNodeToParentTransform
+     * @return {AffineTransform} The affine transform object
      */
     getNodeToParentTransform: function (ancestor) {
         return this._sgNode.getNodeToParentTransform();
@@ -884,8 +1012,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     /**
      * Returns a "world" axis aligned bounding box of the node.
-     * @function
-     * @return {cc.Rect}
+     * @method getBoundingBoxToWorld
+     * @return {Rect}
      */
     getBoundingBoxToWorld: function () {
         return this._sgNode.getBoundingBoxToWorld();
@@ -898,7 +1026,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     /**
      * Returns the displayed opacity of Node,
      * the difference between displayed opacity and opacity is that displayed opacity is calculated based on opacity and parent node's opacity when cascade opacity enabled.
-     * @function
+     * @method getDisplayedOpacity
      * @returns {number} displayed opacity
      */
     getDisplayedOpacity: function () {
@@ -907,7 +1035,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     /**
      * Update displayed opacity
-     * @function
+     * @method
      * @param {Number} parentOpacity
      */
     _updateDisplayedOpacity: function (parentOpacity) {
@@ -917,8 +1045,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     /**
      * Returns the displayed color of Node,
      * the difference between displayed color and color is that displayed color is calculated based on color and parent node's color when cascade color enabled.
-     * @function
-     * @returns {cc.Color}
+     * @method getDisplayedColor
+     * @returns {Color}
      */
     getDisplayedColor: function () {
         return this._sgNode.getDisplayedColor();
@@ -926,8 +1054,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     /**
      * Update the displayed color of Node
-     * @function
-     * @param {cc.Color} parentColor
+     * @method
+     * @param {Color} parentColor
      */
     _updateDisplayedColor: function (parentColor) {
         this._sgNode._updateDisplayedColor(parentColor);
@@ -936,7 +1064,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     /**
      * Set whether color should be changed with the opacity value,
      * useless in cc.Node, but this function is override in some class to have such behavior.
-     * @function
+     * @method setOpacityModifyRGB
      * @param {Boolean} opacityValue
      */
     setOpacityModifyRGB: function (opacityValue) {
@@ -949,7 +1077,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     /**
      * Get whether color should be changed with the opacity value
-     * @function
+     * @method isOpacityModifyRGB
      * @return {Boolean}
      */
     isOpacityModifyRGB: function () {
@@ -976,8 +1104,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     /**
      * Set the sibling index of this node.
      *
-     * @function
-     * @param {number} index
+     * @method setSiblingIndex
+     * @param {Number} index
      */
     setSiblingIndex: function (index) {
         if (!this._parent) {
@@ -1007,8 +1135,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     /**
      * Is this node a child of the given node?
      *
-     * @function
-     * @param {cc.ENode} parent
+     * @method isChildOf
+     * @param {ENode} parent
      * @return {Boolean} - Returns true if this node is a child, deep child or identical to the given node.
      */
     isChildOf: function (parent) {

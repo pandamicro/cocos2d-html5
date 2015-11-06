@@ -25,10 +25,15 @@
 var NIL = function () {};
 
 /**
+ * @module cc
+ */
+
+/**
  * <p>cc.Scene is a subclass of cc.Node that is used only as an abstract concept.</p>
  * <p>cc.Scene and cc.Node are almost identical with the difference that users can not modify cc.Scene manually. </p>
  *
- * @class
+ * @class EScene
+ * @extends NodeWrapper
  */
 cc.EScene = cc.Class({
     name: 'cc.Scene',

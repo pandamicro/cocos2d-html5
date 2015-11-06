@@ -27,11 +27,14 @@ var Destroying = cc.Object.Flags.Destroying;
 var DontDestroy = cc.Object.Flags.DontDestroy;
 
 /**
+ * @module cc
+ */
+
+/*
  * Class of all entities in Fireball scenes.
- * @class
- * @name cc.ENode
+ * @class ENode
+ * @extends NodeWrapper
  * @param {string} [name] - the name of the node
- *
  * @property {Number}               x                   - x axis position of node
  * @property {Number}               y                   - y axis position of node
  * @property {Number}               width               - Width of node
@@ -68,6 +71,12 @@ var DontDestroy = cc.Object.Flags.DontDestroy;
  * @property {cc.GLProgram}         shaderProgram       - The shader program currently used for this node
  * @property {Number}               glServerState       - The state of OpenGL server side
  */
+
+/**
+ * Class of all entities in Fireball scenes.
+ * @class ENode
+ * @extends NodeWrapper
+ */
 var Node = cc.Class({
     name: 'cc.Node',
     extends: require('./utils/node-wrapper'),
@@ -76,7 +85,7 @@ var Node = cc.Class({
         /**
          * The local active state of this node.
          * @property active
-         * @type {boolean}
+         * @type {Boolean}
          * @default true
          */
         active: {
@@ -98,7 +107,7 @@ var Node = cc.Class({
         /**
          * Indicates whether this node is active in the scene.
          * @property activeInHierarchy
-         * @type {boolean}
+         * @type {Boolean}
          */
         activeInHierarchy: {
             get: function () {
@@ -235,9 +244,9 @@ var Node = cc.Class({
      * Returns the component of supplied type if the node has one attached, null if it doesn't.
      * You can also get component in the node by passing in the name of the script.
      *
-     * @function
-     * @param {function|string} typeOrClassName
-     * @returns {cc.Component}
+     * @method getComponent
+     * @param {Function|String} typeOrClassName
+     * @returns {Component}
      */
     getComponent: function (typeOrClassName) {
         if ( !typeOrClassName ) {
@@ -265,9 +274,9 @@ var Node = cc.Class({
     /**
      * Adds a component class to the node. You can also add component to entity by passing in the name of the script.
      *
-     * @function
-     * @param {function|string} typeOrClassName - the constructor or the class name of the component to add
-     * @returns {cc.Component} - the newly added component
+     * @method addComponent
+     * @param {Function|String} typeOrClassName - The constructor or the class name of the component to add
+     * @returns {Component} - The newly added component
      */
     addComponent: function (typeOrClassName) {
         var constructor;
@@ -310,8 +319,8 @@ var Node = cc.Class({
 
     /**
      * Removes a component identified by the given name or removes the component object given.
-     * @function
-     * @param {String|function|cc.Component} component
+     * @method removeComponent
+     * @param {String|Function|Component} component - The need remove component.
      * @deprecated please destroy the component to remove it.
      */
     removeComponent: function (component) {
@@ -332,7 +341,7 @@ var Node = cc.Class({
 
     /**
      * Removes all components of cc.ENode.
-     * @function
+     * @method removeAllComponents
      */
     removeAllComponents: function () {
         for (var i = 0; i < this._components.length; i++) {

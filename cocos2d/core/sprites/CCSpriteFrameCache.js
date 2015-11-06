@@ -25,6 +25,10 @@
  ****************************************************************************/
 
 /**
+ * @module cc
+ */
+
+/**
  * <p>
  * cc.spriteFrameCache is a singleton that handles the loading of the sprite frames. It saves in a cache the sprite frames.<br/>
  * <br/>
@@ -32,8 +36,7 @@
  * // add SpriteFrames to spriteFrameCache With File<br/>
  * cc.spriteFrameCache.addSpriteFrames(s_grossiniPlist);<br/>
  * </p>
- * @class
- * @name cc.spriteFrameCache
+ * @class spriteFrameCache
  */
 cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
     _CCNS_REG1 : /^\s*\{\s*([\-]?\d+[.]?\d*)\s*,\s*([\-]?\d+[.]?\d*)\s*\}\s*$/,
@@ -206,6 +209,7 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
      *   A texture will be loaded automatically. The texture name will composed by replacing the .plist or .json suffix with .png<br/>
      *   If you want to use another texture, you should use the addSpriteFrames:texture method.<br/>
      * </p>
+     * @method addSpriteFrames
      * @param {String} url file path
      * @param {HTMLImageElement|cc.Texture2D|string} texture
      * @example
@@ -242,6 +246,7 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
      *  Adds an sprite frame with a given name.<br/>
      *  If the name already exists, then the contents of the old name will be replaced with the new one.
      * </p>
+     * @method addSpriteFrame
      * @param {cc.SpriteFrame} frame
      * @param {String} frameName
      */
@@ -257,6 +262,7 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
      *   In the medium term: it will allocate more resources.<br/>
      *   In the long term: it will be the same.<br/>
      * </p>
+     * @method removeSpriteFrames
      */
     removeSpriteFrames: function () {
         this._spriteFrames = {};
@@ -265,6 +271,7 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
 
     /**
      * Deletes an sprite frame from the sprite frame cache.
+     * @method removeSpriteFrameByName
      * @param {String} name
      */
     removeSpriteFrameByName: function (name) {
@@ -289,6 +296,7 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
      *     Sprite Frames stored in this file will be removed.<br/>
      *     It is convinient to call this method when a specific texture needs to be removed.<br/>
      * </p>
+     * @method removeSpriteFramesFromFile
      * @param {String} url Plist filename
      */
     removeSpriteFramesFromFile: function (url) {
@@ -311,6 +319,7 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
      *    Removes all Sprite Frames associated with the specified textures.<br/>
      *    It is convenient to call this method when a specific texture needs to be removed.
      * </p>
+     * @method removeSpriteFramesFromTexture
      * @param {HTMLImageElement|HTMLCanvasElement|cc.Texture2D} texture
      */
     removeSpriteFramesFromTexture: function (texture) {
@@ -332,6 +341,7 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
      *   If the name is not found it will return nil.<br/>
      *   You should retain the returned copy if you are going to use it.<br/>
      * </p>
+     * @method getSpriteFrame
      * @param {String} name name of SpriteFrame
      * @return {cc.SpriteFrame}
      * @example
