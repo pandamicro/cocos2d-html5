@@ -154,8 +154,8 @@
         if (!tex)
             return;
 
-        var atlasWidth = tex.pixelsWidth;
-        var atlasHeight = tex.pixelsHeight;
+        var atlasWidth = tex.pixelWidth;
+        var atlasHeight = tex.pixelHeight;
 
         var left, right, top, bottom, tempSwap, locQuad = this._quad;
         if (node._rectRotated) {

@@ -141,8 +141,8 @@ var WrapMode = cc.Enum({
  *
  * @property {WebGLTexture}     name            - <@readonly> WebGLTexture Object
  * @property {Number}           pixelFormat     - <@readonly> Pixel format of the texture
- * @property {Number}           pixelsWidth     - <@readonly> Width in pixels
- * @property {Number}           pixelsHeight    - <@readonly> Height in pixels
+ * @property {Number}           pixelWidth     - <@readonly> Width in pixels
+ * @property {Number}           pixelHeight    - <@readonly> Height in pixels
  * @property {Number}           width           - Content width in points
  * @property {Number}           height          - Content height in points
  */
@@ -571,10 +571,10 @@ cc.defineGetterSetter(_p, "name", _p.getName);
 _p.pixelFormat;
 cc.defineGetterSetter(_p, "pixelFormat", _p.getPixelFormat);
 /** @expose */
-_p.pixelsWidth;
+_p.pixelWidth;
 cc.defineGetterSetter(_p, "pixelWidth", _p.getPixelWidth);
 /** @expose */
-_p.pixelsHeight;
+_p.pixelHeight;
 cc.defineGetterSetter(_p, "pixelHeight", _p.getPixelHeight);
 /** @expose */
 _p.width;
