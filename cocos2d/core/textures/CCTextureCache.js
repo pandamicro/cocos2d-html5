@@ -24,6 +24,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+var JS = require('../platform/js');
+var game = require('../CCGame');
+
 /**
  * cc.textureCache is a singleton object, it's the global cache for cc.Texture2D
  * @class
@@ -36,7 +39,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
 
     _loadedTexturesBefore: {},
 
-    //handleLoadedTexture move to Canvas/WebGL
+    handleLoadedTexture: null,
 
     _initializingRenderer: function () {
         var selPath;
@@ -48,34 +51,6 @@ cc.textureCache = /** @lends cc.textureCache# */{
             locTextures[selPath] = tex2d;
         }
         this._loadedTexturesBefore = {};
-    },
-
-    /**
-     * <p>
-     *     Returns a Texture2D object given an PVR filename                                                              <br/>
-     *     If the file image was not previously loaded, it will create a new CCTexture2D                                 <br/>
-     *     object and it will return it. Otherwise it will return a reference of a previously loaded image              <br/>
-     *     note: AddPVRTCImage does not support on HTML5
-     * </p>
-     * @param {String} filename
-     * @return {cc.Texture2D}
-     */
-    addPVRTCImage: function (filename) {
-        cc.log(cc._LogInfos.textureCache.addPVRTCImage);
-    },
-
-    /**
-     * <p>
-     *     Returns a Texture2D object given an ETC filename                                                               <br/>
-     *     If the file image was not previously loaded, it will create a new CCTexture2D                                  <br/>
-     *     object and it will return it. Otherwise it will return a reference of a previously loaded image                <br/>
-     *    note:addETCImage does not support on HTML5
-     * </p>
-     * @param {String} filename
-     * @return {cc.Texture2D}
-     */
-    addETCImage: function (filename) {
-        cc.log(cc._LogInfos.textureCache.addETCImage);
     },
 
     /**
@@ -155,17 +130,6 @@ cc.textureCache = /** @lends cc.textureCache# */{
     },
 
     /**
-     * <p>Returns a Texture2D object given an PVR filename<br />
-     * If the file image was not previously loaded, it will create a new Texture2D<br />
-     *  object and it will return it. Otherwise it will return a reference of a previously loaded image </p>
-     * @param {String} path
-     * @return {cc.Texture2D}
-     */
-    addPVRImage: function (path) {
-        cc.log(cc._LogInfos.textureCache.addPVRImage);
-    },
-
-    /**
      * <p>Purges the dictionary of loaded textures. <br />
      * Call this method if you receive the "Memory Warning"  <br />
      * In the short term: it will free some resources preventing your app from being killed  <br />
@@ -217,8 +181,23 @@ cc.textureCache = /** @lends cc.textureCache# */{
         if (this._textures[textureKeyName])
             delete(this._textures[textureKeyName]);
     },
-
-    //addImage move to Canvas/WebGL
+    
+    /**
+     * <p>Returns a Texture2D object given an file image <br />
+     * If the file image was not previously loaded, it will create a new Texture2D <br />
+     *  object and it will return it. It will use the filename as a key.<br />
+     * Otherwise it will return a reference of a previously loaded image. <br />
+     * Supported image extensions: .png, .jpg, .gif</p>
+     * @param {String} url
+     * @param {Function} cb
+     * @param {Object} target
+     * @return {cc.Texture2D}
+     * @example
+     * //example
+     * cc.textureCache.addImage("hello.png");
+     */
+    addImage: null,
+    addImageAsync: null,
 
     /**
      *  Cache the image data
@@ -305,11 +284,9 @@ cc.textureCache = /** @lends cc.textureCache# */{
     }
 };
 
-cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
-    if (cc._renderType === cc.game.RENDER_TYPE_CANVAS) {
-
-        var _p = cc.textureCache;
-
+game.once(game.EVENT_RENDERER_INITED, function () {
+    var _p = cc.textureCache;
+    if (cc._renderType === game.RENDER_TYPE_CANVAS) {
         _p.handleLoadedTexture = function (url) {
             var locTexs = this._textures;
             //remove judge
@@ -321,20 +298,6 @@ cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
             tex.handleLoadedTexture();
         };
 
-        /**
-         * <p>Returns a Texture2D object given an file image <br />
-         * If the file image was not previously loaded, it will create a new Texture2D <br />
-         *  object and it will return it. It will use the filename as a key.<br />
-         * Otherwise it will return a reference of a previously loaded image. <br />
-         * Supported image extensions: .png, .jpg, .gif</p>
-         * @param {String} url
-         * @param {Function} cb
-         * @param {Object} target
-         * @return {cc.Texture2D}
-         * @example
-         * //example
-         * cc.textureCache.addImage("hello.png");
-         */
         _p.addImage = function (url, cb, target) {
 
             cc.assert(url, cc._LogInfos.Texture2D.addImage);
@@ -372,11 +335,67 @@ cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
         };
 
         _p.addImageAsync = _p.addImage;
-        _p = null;
 
-    } else if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
-        cc.assert(cc.js.isFunction(cc._tmp.WebGLTextureCache), cc._LogInfos.MissingFile, "TexturesWebGL.js");
-        cc._tmp.WebGLTextureCache();
-        delete cc._tmp.WebGLTextureCache;
+    } else if (cc._renderType === game.RENDER_TYPE_WEBGL) {
+        
+        _p.handleLoadedTexture = function (url) {
+            var locTexs = this._textures, tex, ext;
+            //remove judge(webgl)
+            if (!cc.game._rendererInitialized) {
+                locTexs = this._loadedTexturesBefore;
+            }
+            tex = locTexs[url];
+            if (!tex) {
+                tex = locTexs[url] = new cc.Texture2D();
+                tex.url = url;
+            }
+            ext = cc.path.extname(url);
+            if (ext === ".png") {
+                tex.handleLoadedTexture(true);
+            }
+            else {
+                tex.handleLoadedTexture();
+            }
+        };
+
+        _p.addImage = function (url, cb, target) {
+            cc.assert(url, cc._LogInfos.Texture2D.addImage_2);
+
+            var locTexs = this._textures;
+            //remove judge(webgl)
+            if (!cc.game._rendererInitialized) {
+                locTexs = this._loadedTexturesBefore;
+            }
+            var tex = locTexs[url] || locTexs[cc.loader.getAliase(url)];
+            if (tex) {
+                if(tex.isLoaded()) {
+                    cb && cb.call(target, tex);
+                    return tex;
+                }
+                else
+                {
+                    tex.once("load", function(){
+                       cb && cb.call(target, tex);
+                    }, target);
+                    return tex;
+                }
+            }
+
+            tex = locTexs[url] = new cc.Texture2D();
+            tex.url = url;
+            var loadFunc = cc.loader._checkIsImageURL(url) ? cc.loader.load : cc.loader.loadImg;
+            loadFunc.call(cc.loader, url, function (err, img) {
+                if (err)
+                    return cb && cb.call(target, err);
+                cc.textureCache.handleLoadedTexture(url);
+
+                var texResult = locTexs[url];
+                cb && cb.call(target, texResult);
+            });
+
+            return tex;
+        };
+
+        _p.addImageAsync = _p.addImage;
     }
 });

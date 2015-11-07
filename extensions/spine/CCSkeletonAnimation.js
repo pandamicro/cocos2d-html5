@@ -30,8 +30,8 @@
 sp._atlasPage_createTexture_webGL = function (self, path) {
     var texture = cc.textureCache.addImage(path);
     self.rendererObject = new cc.TextureAtlas(texture, 128);
-    self.width = texture.getPixelsWide();
-    self.height = texture.getPixelsHigh();
+    self.width = texture.getPixelWidth();
+    self.height = texture.getPixelHeight();
 };
 
 sp._atlasPage_createTexture_canvas = function(self, path) {
