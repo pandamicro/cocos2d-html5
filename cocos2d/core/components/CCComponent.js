@@ -519,8 +519,6 @@ var Component = cc.Class({
         _60fpsInEditMode: false,
     },
 
-    __scriptUuid: '',
-
     _onPreDestroy: function () {
         var i, l, target;
         // ensure onDisable called
@@ -551,6 +549,8 @@ var Component = cc.Class({
         }
     }
 });
+
+Component.prototype.__scriptUuid = '';
 
 cc.Component = module.exports = Component;
 

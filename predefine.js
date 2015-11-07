@@ -30,7 +30,7 @@ cc = {};
 //to make sure the cc.log, cc.warn, cc.error, cc._throw and cc.assert would not throw error before init by debugger mode.
 cc.log = cc.warn = cc.error = cc._throw = cc.assert = function () {};
 
-if (CC_DEV || CC_TEST) {
+if (CC_DEV) {
     /**
      * contains internal apis for unit tests
      * @expose

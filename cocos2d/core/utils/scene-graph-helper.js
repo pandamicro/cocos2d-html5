@@ -16,7 +16,7 @@ var SceneGraphUtils = {
     },
 };
 
-if (CC_DEV || CC_TEST) {
+if (CC_DEV) {
     SceneGraphUtils._getChildrenOffset = function (entityParent) {
         if (entityParent) {
             var sgParent = entityParent._sgNode;
