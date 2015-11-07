@@ -57,6 +57,7 @@ if (CC_DEV) {
 require('./cocos2d/core/CCDirector');
 require('./cocos2d/core/CCDirectorWebGL');
 require('./cocos2d/core/CCDirectorCanvas');
+require('./cocos2d/core/textures');
 
 ccui = {};
 ccs = {};

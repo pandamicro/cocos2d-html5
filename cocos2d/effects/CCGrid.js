@@ -491,8 +491,8 @@ cc.Grid3D = cc.GridBase.extend(/** @lends cc.Grid3D# */{
     calculateVertexPoints:function () {
         var gl = cc._renderContext;
 
-        var width = this._texture.pixelsWidth;
-        var height = this._texture.pixelsHeight;
+        var width = this._texture.getPixelWidth();
+        var height = this._texture.getPixelHeight();
         var imageH = this._texture.getContentSizeInPixels().height;
         var locGridSize = this._gridSize;
 
@@ -748,8 +748,8 @@ cc.TiledGrid3D = cc.GridBase.extend(/** @lends cc.TiledGrid3D# */{
     },
 
     calculateVertexPoints:function () {
-        var width = this._texture.pixelsWidth;
-        var height = this._texture.pixelsHeight;
+        var width = this._texture.getPixelWidth();
+        var height = this._texture.getPixelHeight();
         var imageH = this._texture.getContentSizeInPixels().height;
         var locGridSize = this._gridSize;
 

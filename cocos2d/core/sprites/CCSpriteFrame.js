@@ -396,10 +396,10 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
                 _x = rect.x + rect.width;
                 _y = rect.y + rect.height;
             }
-            if(_x > texture.getPixelsWide()){
+            if(_x > texture.getPixelWidth()){
                 cc.error(cc._LogInfos.RectWidth, texture.url);
             }
-            if(_y > texture.getPixelsHigh()){
+            if(_y > texture.getPixelHeight()){
                 cc.error(cc._LogInfos.RectHeight, texture.url);
             }
         }
