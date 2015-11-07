@@ -11,7 +11,6 @@ var srcs = [
     "./Base64Images.js",
     "./CCBoot.js",
 
-    "./cocos2d/core/platform/_CCClass.js",
     "./cocos2d/core/platform/CCCommon.js",
     "./cocos2d/core/platform/CCSAXParser.js",
     "./cocos2d/core/platform/CCLoaders.js",

@@ -24,8 +24,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-var cc = cc || {};
-
 /**
  * @namespace
  * @name ClassManager
@@ -54,7 +52,7 @@ var fnTest = /\b_super\b/;
  * The base Class implementation (does nothing)
  * @class
  */
-cc._Class = function () {
+Class = function () {
 };
 
 /**
@@ -63,7 +61,7 @@ cc._Class = function () {
  * @param {object} props
  * @return {function}
  */
-cc._Class.extend = function (props) {
+Class.extend = function (props) {
     var _super = this.prototype;
 
     // Instantiate a base Class (but only create the instance,
@@ -82,25 +80,25 @@ cc._Class.extend = function (props) {
     prototype.__instanceId = null;
 
     // The dummy Class constructor
-    function Class() {
+    function _Class() {
 	    this.__instanceId = ClassManager.getNewInstanceId();
 	    // All construction is actually done in the init method
 	    if (this.ctor)
 		    this.ctor.apply(this, arguments);
     }
 
-    Class.id = classId;
+    _Class.id = classId;
     // desc = { writable: true, enumerable: false, configurable: true,
     //          value: XXX }; Again, we make this non-enumerable.
     desc.value = classId;
     Object.defineProperty(prototype, '__cid__', desc);
 
     // Populate our constructed prototype object
-    Class.prototype = prototype;
+    _Class.prototype = prototype;
 
     // Enforce the constructor to be what we expect
-    desc.value = Class;
-    Object.defineProperty(Class.prototype, 'constructor', desc);
+    desc.value = _Class;
+    Object.defineProperty(_Class.prototype, 'constructor', desc);
 
     for(var idx = 0, li = arguments.length; idx < li; ++idx) {
         var prop = arguments[idx];
@@ -137,18 +135,16 @@ cc._Class.extend = function (props) {
     }
 
     // And make this Class extendable
-    Class.extend = cc._Class.extend;
+    _Class.extend = Class.extend;
 
     //add implementation method
-    Class.implement = function (prop) {
+    _Class.implement = function (prop) {
         for (var name in prop) {
             prototype[name] = prop[name];
         }
     };
-    return Class;
+    return _Class;
 };
-
-module.exports = cc._Class;
 
 /**
  * Common getter setter configuration function
@@ -217,3 +213,5 @@ cc.clone = function (obj) {
     }
     return newObj;
 };
+
+cc._Class = module.exports = Class;
