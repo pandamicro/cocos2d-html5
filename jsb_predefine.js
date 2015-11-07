@@ -25,7 +25,7 @@
 
 // define cc
 
-if (CC_DEV || CC_TEST) {
+if (CC_DEV) {
     /**
      * contains internal apis for unit tests
      * @expose

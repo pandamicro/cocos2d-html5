@@ -42,7 +42,6 @@ var DontDestroy = cc.Object.Flags.DontDestroy;
  * @property {Number}               skewX               - Skew x
  * @property {Number}               skewY               - Skew y
  * @property {Number}               zIndex              - Z order in depth which stands for the drawing order
- * @property {Number}               vertexZ             - WebGL Z vertex of this node, z order works OK if all the nodes uses the same openGL Z vertex
  * @property {Number}               rotation            - Rotation of node
  * @property {Number}               rotationX           - Rotation on x axis
  * @property {Number}               rotationY           - Rotation on y axis
@@ -310,17 +309,15 @@ var Node = cc.Class({
 
     /**
      * Removes a component identified by the given name or removes the component object given.
+     * You can also use component.destroy() if you already have the reference.
      * @function
      * @param {String|function|cc.Component} component
      * @deprecated please destroy the component to remove it.
      */
     removeComponent: function (component) {
-        if (CC_DEV) {
-            cc.warn('cc.ENode.removeComponent(component) is deprecated, please use component.destroy() instead.');
-            if ( !component ) {
-                cc.error('removeComponent: Component must be non-nil');
-                return null;
-            }
+        if ( !component ) {
+            cc.error('removeComponent: Component must be non-nil');
+            return null;
         }
         if (typeof component !== 'object') {
             component = this.getComponent(component);

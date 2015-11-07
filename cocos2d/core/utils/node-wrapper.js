@@ -162,14 +162,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             }
         },
 
-        vertexZ: {
-            get: SGProto.getVertexZ,
-            set: function (value) {
-                this._vertexZ = value;
-                this._sgNode.vertexZ = value;
-            }
-        },
-
         rotation: {
             get: SGProto.getRotation,
             set: function (value) {
@@ -237,14 +229,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             get: function () {
                 return this._children.length;
             }
-        },
-
-        visible: {
-            get: SGProto.isVisible,
-            set: function (value) {
-                this._visible = value;
-                this._sgNode.visible = value;
-            },
         },
 
         anchorX: {
@@ -1033,14 +1017,13 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     // Define public getter and setter methods to ensure api compatibility.
 
-    var SameNameGetSets = ['name', 'skewX', 'skewY', 'vertexZ', 'rotation', 'rotationX', 'rotationY',
+    var SameNameGetSets = ['name', 'skewX', 'skewY', 'rotation', 'rotationX', 'rotationY',
                            'scale', 'scaleX', 'scaleY', 'children', 'childrenCount', 'parent', 'running',
                            /*'actionManager',*/ 'scheduler', /*'shaderProgram',*/ 'opacity', 'color', 'tag'];
     var DiffNameGetSets = {
         x: ['getPositionX', 'setPositionX'],
         y: ['getPositionY', 'setPositionY'],
         zIndex: ['getLocalZOrder', 'setLocalZOrder'],
-        visible: ['isVisible', 'setVisible'],
         //running: ['isRunning'],
         ignoreAnchor: ['isIgnoreAnchorPointForPosition', 'ignoreAnchorPointForPosition'],
         opacityModifyRGB: ['isOpacityModifyRGB'],
