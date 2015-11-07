@@ -146,7 +146,7 @@ var WrapMode = cc.Enum({
  * @property {Number}           width           - Content width in points
  * @property {Number}           height          - Content height in points
  */
-cc.Texture2D = cc.Class(/** @lends cc.Texture2D# */{
+var Texture2D = cc.Class(/** @lends cc.Texture2D# */{
 
     name: 'cc.Texture2D',
     extends: require('../assets/CCRawAsset'),
@@ -166,7 +166,7 @@ cc.Texture2D = cc.Class(/** @lends cc.Texture2D# */{
         }
         else if (cc._renderType === game.RENDER_TYPE_WEBGL) {
             this._hasPremultipliedAlpha = false;
-            this._pixelFormat = cc.Texture2D.defaultPixelFormat;
+            this._pixelFormat = Texture2D.defaultPixelFormat;
             this._pixelsWide = 0;
             this._pixelsHigh = 0;
             this._hasPremultipliedAlpha = false;
@@ -414,9 +414,9 @@ cc.Texture2D = cc.Class(/** @lends cc.Texture2D# */{
     }
 });
 
-cc.Texture2D.WrapMode = WrapMode;
+Texture2D.WrapMode = WrapMode;
 
-var _c = cc.Texture2D;
+var _c = Texture2D;
 
 /**
  * 32-bit texture: RGBA8888
@@ -537,7 +537,7 @@ _c.PIXEL_FORMAT_DEFAULT = _c.PIXEL_FORMAT_RGBA8888;
  */
 _c.defaultPixelFormat = _c.PIXEL_FORMAT_DEFAULT;
 
-var _M = cc.Texture2D._M = {};
+var _M = Texture2D._M = {};
 _M[_c.PIXEL_FORMAT_RGBA8888] = "RGBA8888";
 _M[_c.PIXEL_FORMAT_RGB888] = "RGB888";
 _M[_c.PIXEL_FORMAT_RGB565] = "RGB565";
@@ -549,7 +549,7 @@ _M[_c.PIXEL_FORMAT_RGB5A1] = "RGB5A1";
 _M[_c.PIXEL_FORMAT_PVRTC4] = "PVRTC4";
 _M[_c.PIXEL_FORMAT_PVRTC2] = "PVRTC2";
 
-var _B = cc.Texture2D._B = {};
+var _B = Texture2D._B = {};
 _B[_c.PIXEL_FORMAT_RGBA8888] = 32;
 _B[_c.PIXEL_FORMAT_RGB888] = 24;
 _B[_c.PIXEL_FORMAT_RGB565] = 16;
@@ -561,7 +561,7 @@ _B[_c.PIXEL_FORMAT_RGB5A1] = 16;
 _B[_c.PIXEL_FORMAT_PVRTC4] = 4;
 _B[_c.PIXEL_FORMAT_PVRTC2] = 3;
 
-var _p = cc.Texture2D.prototype;
+var _p = Texture2D.prototype;
 
 // Extended properties
 /** @expose */
@@ -583,7 +583,7 @@ cc.defineGetterSetter(_p, "width", _p._getWidth);
 _p.height;
 cc.defineGetterSetter(_p, "height", _p._getHeight);
 
-EventTarget.polyfill(cc.Texture2D.prototype);
+EventTarget.polyfill(Texture2D.prototype);
 
 game.once(game.EVENT_RENDERER_INITED, function () {
     if(cc._renderType === game.RENDER_TYPE_CANVAS) {
@@ -641,7 +641,7 @@ game.once(game.EVENT_RENDERER_INITED, function () {
             return renderCanvas;
         };
 
-        JS.mixin(cc.Texture2D.prototype, {
+        JS.mixin(Texture2D.prototype, {
             _generateTextureCacheForColor: function(){
                 if (this.channelCache)
                     return this.channelCache;
@@ -704,7 +704,7 @@ game.once(game.EVENT_RENDERER_INITED, function () {
                 );
                 if(onlyCanvas)
                     return canvas;
-                var newTexture = new cc.Texture2D();
+                var newTexture = new Texture2D();
                 newTexture.initWithElement(canvas);
                 newTexture.handleLoadedTexture();
                 return newTexture;
@@ -761,7 +761,7 @@ game.once(game.EVENT_RENDERER_INITED, function () {
                 if(onlyCanvas)
                     return canvas;
 
-                var newTexture = new cc.Texture2D();
+                var newTexture = new Texture2D();
                 newTexture.initWithElement(canvas);
                 newTexture.handleLoadedTexture();
                 return newTexture;
@@ -769,7 +769,7 @@ game.once(game.EVENT_RENDERER_INITED, function () {
         });
 
     } else if (cc._renderType === game.RENDER_TYPE_WEBGL) {
-        JS.mixin(cc.Texture2D.prototype, {
+        JS.mixin(Texture2D.prototype, {
             getPixelWidth: function () {
                 return this._pixelsWide;
             },
@@ -779,11 +779,11 @@ game.once(game.EVENT_RENDERER_INITED, function () {
             },
 
             initWithData: function (data, pixelFormat, pixelsWide, pixelsHigh, contentSize) {
-                var self = this, tex2d = cc.Texture2D;
+                var self = this, tex2d = Texture2D;
                 var gl = cc._renderContext;
                 var format = gl.RGBA, type = gl.UNSIGNED_BYTE;
 
-                var bitsPerPixel = cc.Texture2D._B[pixelFormat];
+                var bitsPerPixel = Texture2D._B[pixelFormat];
 
                 var bytesPerRow = pixelsWide * bitsPerPixel / 8;
                 if (bytesPerRow % 8 === 0) {
@@ -918,7 +918,7 @@ game.once(game.EVENT_RENDERER_INITED, function () {
 
                 self._pixelsWide = self._contentSize.width = pixelsWide;
                 self._pixelsHigh = self._contentSize.height = pixelsHigh;
-                self._pixelFormat = cc.Texture2D.PIXEL_FORMAT_RGBA8888;
+                self._pixelFormat = Texture2D.PIXEL_FORMAT_RGBA8888;
 
                 self._hasPremultipliedAlpha = premultiplied;
                 self._hasMipmaps = false;
@@ -977,19 +977,19 @@ game.once(game.EVENT_RENDERER_INITED, function () {
             },
 
             stringForFormat: function () {
-                return cc.Texture2D._M[this._pixelFormat];
+                return Texture2D._M[this._pixelFormat];
             },
 
             bitsPerPixelForFormat: function (format) {//TODO I want to delete the format argument, use this._pixelFormat
                 format = format || this._pixelFormat;
-                var value = cc.Texture2D._B[format];
+                var value = Texture2D._B[format];
                 if (value != null) return value;
                 cc.log(cc._LogInfos.Texture2D.bitsPerPixelForFormat, format);
                 return -1;
             },
 
             _initPremultipliedATextureWithImage: function (uiImage, width, height) {
-                var tex2d = cc.Texture2D;
+                var tex2d = Texture2D;
                 var tempData = uiImage.getData();
                 var inPixel32 = null;
                 var inPixel8 = null;
@@ -1094,3 +1094,5 @@ game.once(game.EVENT_RENDERER_INITED, function () {
         });
     }
 });
+
+cc.Texture2D = module.exports = Texture2D;

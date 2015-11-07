@@ -5,7 +5,7 @@ var EventTarget = require('./event/event-target');
  * @class
  * @name cc.game
  */
-game = /** @lends cc.game# */{
+var game = /** @lends cc.game# */{
 
     EVENT_HIDE: "game_on_hide",
     EVENT_SHOW: "game_on_show",

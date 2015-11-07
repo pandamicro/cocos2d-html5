@@ -52,7 +52,7 @@ var fnTest = /\b_super\b/;
  * The base Class implementation (does nothing)
  * @class
  */
-Class = function () {
+var Class = function () {
 };
 
 /**

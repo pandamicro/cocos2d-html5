@@ -46,7 +46,7 @@ var game = require('../CCGame');
  * @property {Number}   totalQuads      - <@readonly> Quantity of quads that are going to be drawn.
  * @property {Array}    quads           - <@readonly> Quads that are going to be rendered
  */
-cc.TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
+var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     dirty: false,
     texture: null,
 
@@ -604,7 +604,7 @@ cc.TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     }
 });
 
-var _p = cc.TextureAtlas.prototype;
+var _p = TextureAtlas.prototype;
 
 // Extended properties
 /** @expose */
@@ -619,7 +619,7 @@ cc.defineGetterSetter(_p, "quads", _p.getQuads, _p.setQuads);
 
 game.once(game.EVENT_RENDERER_INITED, function () {
 if (cc._renderType === game.RENDER_TYPE_WEBGL) {
-    JS.mixin(cc.TextureAtlas.prototype, {
+    JS.mixin(TextureAtlas.prototype, {
         _setupVBO: function () {
             var _t = this;
             var gl = cc._renderContext;
@@ -688,3 +688,5 @@ if (cc._renderType === game.RENDER_TYPE_WEBGL) {
     });
 }
 });
+
+cc.TextureAtlas = module.exports = TextureAtlas;

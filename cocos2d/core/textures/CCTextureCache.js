@@ -26,13 +26,14 @@
 
 var JS = require('../platform/js');
 var game = require('../CCGame');
+var Texture2D = require('./CCTexture2D');
 
 /**
  * cc.textureCache is a singleton object, it's the global cache for cc.Texture2D
  * @class
  * @name cc.textureCache
  */
-cc.textureCache = /** @lends cc.textureCache# */{
+var textureCache = /** @lends cc.textureCache# */{
     _textures: {},
     _textureColorsCache: {},
     _textureKeySeq: (0 | Math.random() * 1000),
@@ -205,11 +206,11 @@ cc.textureCache = /** @lends cc.textureCache# */{
      * @param {Image|HTMLImageElement|HTMLCanvasElement} texture
      */
     cacheImage: function (path, texture) {
-        if (texture instanceof  cc.Texture2D) {
+        if (texture instanceof Texture2D) {
             this._textures[path] = texture;
             return;
         }
-        var texture2d = new cc.Texture2D();
+        var texture2d = new Texture2D();
         texture2d.initWithElement(texture);
         texture2d.handleLoadedTexture();
         this._textures[path] = texture2d;
@@ -234,7 +235,7 @@ cc.textureCache = /** @lends cc.textureCache# */{
         }
 
         // prevents overloading the autorelease pool
-        var texture = new cc.Texture2D();
+        var texture = new Texture2D();
         texture.initWithImage(image);
         if (key != null)
             this._textures[key] = texture;
@@ -285,14 +286,14 @@ cc.textureCache = /** @lends cc.textureCache# */{
 };
 
 game.once(game.EVENT_RENDERER_INITED, function () {
-    var _p = cc.textureCache;
+    var _p = textureCache;
     if (cc._renderType === game.RENDER_TYPE_CANVAS) {
         _p.handleLoadedTexture = function (url) {
             var locTexs = this._textures;
             //remove judge
             var tex = locTexs[url];
             if (!tex) {
-                tex = locTexs[url] = new cc.Texture2D();
+                tex = locTexs[url] = new Texture2D();
                 tex.url = url;
             }
             tex.handleLoadedTexture();
@@ -319,13 +320,13 @@ game.once(game.EVENT_RENDERER_INITED, function () {
                 }
             }
 
-            tex = locTexs[url] = new cc.Texture2D();
+            tex = locTexs[url] = new Texture2D();
             tex.url = url;
             var loadFunc = cc.loader._checkIsImageURL(url) ? cc.loader.load : cc.loader.loadImg;
             loadFunc.call(cc.loader, url, function (err, img) {
                 if (err)
                     return cb && cb.call(target, err);
-                cc.textureCache.handleLoadedTexture(url);
+                textureCache.handleLoadedTexture(url);
 
                 var texResult = locTexs[url];
                 cb && cb.call(target, texResult);
@@ -346,7 +347,7 @@ game.once(game.EVENT_RENDERER_INITED, function () {
             }
             tex = locTexs[url];
             if (!tex) {
-                tex = locTexs[url] = new cc.Texture2D();
+                tex = locTexs[url] = new Texture2D();
                 tex.url = url;
             }
             ext = cc.path.extname(url);
@@ -381,13 +382,13 @@ game.once(game.EVENT_RENDERER_INITED, function () {
                 }
             }
 
-            tex = locTexs[url] = new cc.Texture2D();
+            tex = locTexs[url] = new Texture2D();
             tex.url = url;
             var loadFunc = cc.loader._checkIsImageURL(url) ? cc.loader.load : cc.loader.loadImg;
             loadFunc.call(cc.loader, url, function (err, img) {
                 if (err)
                     return cb && cb.call(target, err);
-                cc.textureCache.handleLoadedTexture(url);
+                textureCache.handleLoadedTexture(url);
 
                 var texResult = locTexs[url];
                 cb && cb.call(target, texResult);
@@ -399,3 +400,5 @@ game.once(game.EVENT_RENDERER_INITED, function () {
         _p.addImageAsync = _p.addImage;
     }
 });
+
+cc.textureCache = module.exports = textureCache;
