@@ -135,135 +135,86 @@
 
     test('asset reference', function () {
         var sprite = {};
-        sprite.sprite = new cc.SpriteAsset();
+        sprite.sprite = new cc.SpriteFrame();
 
         var clone = cc.instantiate(sprite);
 
         ok(sprite.sprite === clone.sprite, 'should not clone asset');
     });
 
-    test('mixin', function () {
-        function Node () {
-            TestNode.call(this);
-        }
-        cc.js.extend(Node, TestNode);
-        Node.prototype.init = function () {};
-        cc.Runtime.registerNodeType(Node, cc.Class({
-            extends: TestWrapper,
-            createNode: function () {
-                return new Node();
-            }
-        }));
-
+    test('component', function () {
         var Script = cc.Class({
             name: '2154648724566',
-            extends: cc.Behavior,
-            init: function () {},
+            extends: cc.Component,
         });
 
-        var node = new Node();
-        cc.mixin(node, Script);
+        var node = new cc.ENode();
+        node.addComponent(Script);
 
         var clone = cc.instantiate(node);
 
-        strictEqual(cc.hasMixin(clone, Script), true, 'should has mixin');
-        strictEqual(clone.init, Script.prototype.init, 'should override origin method');
+        strictEqual(!!clone.getComponent(Script), true, 'should be added');
 
         cc.js.unregisterClass(Script);
     });
 
-    test('redirect node reference', function () {
-        function Node () {
-            TestNode.apply(this, arguments);
-        }
-        cc.js.extend(Node, TestNode);
-        cc.Runtime.registerNodeType(Node, cc.Class({
-            extends: TestWrapper,
-            properties: {
-                nodeInWrapper: {
-                    default: null,
-                    type: Node
-                },
-                nodeArrayInWrapper: {
-                    default: [],
-                    type: Node
-                },
-                wrapper: null,
-                otherNodeInWrapper: {
-                    default: null,
-                    type: Node
-                },
-                otherWrapper: null,
-            }
-        }));
+    test('redirect reference', function () {
         var Script = cc.Class({
             name: '2154648724566',
-            extends: cc.Behavior,
+            extends: cc.Component,
             properties: {
-                nodeInBeh: {
+                nodeInComp: {
                     default: null,
-                    type: Node
+                    type: cc.ENode
                 },
-                nodeArrayInBeh: {
+                nodeArrayInComp: {
                     default: [],
-                    type: Node
+                    type: cc.ENode
                 },
-                otherNodeInBeh: {
+                otherNodeInComp: {
                     default: null,
-                    type: Node
+                    type: cc.ENode
                 },
+                childComp: null,
+                otherComp: null,
             }
         });
 
-        var parent = new Node('parent');
-        var child = new Node('child');
-        var other = new Node('other');
-        parent.children = [child];
+        var parent = new cc.ENode('parent');
+        var child = new cc.ENode('child');
+        var other = new cc.ENode('other');
+        parent.addChild(child);
         child.parent = parent;
-        cc.mixin(parent, Script);
-        cc.mixin(child, Script);
+        var parentComp = parent.addComponent(Script);
+        var childComp = child.addComponent(Script);
+        var otherComp = other.addComponent(Script);
 
-        parent.nodeInBeh = child;
-        parent.nodeArrayInBeh = [child, other];
-        parent.otherNodeInBeh = other;
-        child.nodeInBeh = parent;
-        child.nodeArrayInBeh = [parent, other];
-        child.otherNodeInBeh = other;
-
-        cc.getWrapper(parent).nodeInWrapper = child;
-        cc.getWrapper(parent).nodeArrayInWrapper = [child, other];
-        cc.getWrapper(child).nodeInWrapper = parent;
-        cc.getWrapper(child).nodeArrayInWrapper = [parent, other];
-        cc.getWrapper(parent).wrapper = cc.getWrapper(child);
-        cc.getWrapper(child).wrapper = cc.getWrapper(parent);
-        cc.getWrapper(parent).otherWrapper = cc.getWrapper(other);
-        cc.getWrapper(child).otherWrapper = cc.getWrapper(other);
-        cc.getWrapper(parent).otherNodeInWrapper = other;
-        cc.getWrapper(child).otherNodeInWrapper = other;
+        parentComp.nodeInComp = child;
+        parentComp.nodeArrayInComp = [child, other];
+        parentComp.otherNodeInComp = other;
+        parentComp.childComp = childComp;
+        parentComp.otherComp = otherComp;
+        childComp.nodeInComp = parent;
+        childComp.nodeArrayInComp = [parent, other];
+        childComp.otherNodeInComp = other;
 
         var cloneParent = cc.instantiate(parent);
-        var cloneChild = cloneParent.children[0];
+        var cloneChild = cloneParent._children[0];
+        var cloneParentComp = cloneParent.getComponent(Script);
+        var cloneChildComp = cloneChild.getComponent(Script);
 
         notEqual(child, cloneChild, 'should clone child');
         strictEqual(cloneChild.parent, cloneParent, 'should redirect parent reference');
 
-        ok(cloneParent.nodeInBeh === cloneChild, 'should redirect child reference in behavior');
-        fastArrayEqual(cloneParent.nodeArrayInBeh, [cloneChild, other], 'should redirect array of child reference in behavior');
-        ok(cloneChild.nodeInBeh === cloneParent, 'should redirect parent reference in behavior');
-        fastArrayEqual(cloneChild.nodeArrayInBeh, [cloneParent, other], 'should redirect array of parent reference in behavior');
-        ok(cloneParent.otherNodeInBeh === other, 'should not clone other node in parent behavior');
-        ok(cloneChild.otherNodeInBeh === other, 'should not clone other node in child behavior');
+        ok(cloneParentComp.nodeInComp === cloneChild, 'should redirect child reference');
+        fastArrayEqual(cloneParentComp.nodeArrayInComp, [cloneChild, other], 'should redirect array of child reference');
+        ok(cloneChildComp.nodeInComp === cloneParent, 'should redirect parent reference in component');
+        fastArrayEqual(cloneChildComp.nodeArrayInComp, [cloneParent, other], 'should redirect array of parent reference');
+        ok(cloneParentComp.otherNodeInComp === other, 'should not clone other node in parent');
+        ok(cloneChildComp.otherNodeInComp === other, 'should not clone other node in child');
 
-        ok(cc.getWrapper(cloneParent).nodeInWrapper === cloneChild, 'should redirect child reference in wrapper');
-        fastArrayEqual(cc.getWrapper(cloneParent).nodeArrayInWrapper, [cloneChild, other], 'should redirect array of child reference in wrapper');
-        ok(cc.getWrapper(cloneChild).nodeInWrapper === cloneParent, 'should redirect parent reference in wrapper');
-        fastArrayEqual(cc.getWrapper(cloneChild).nodeArrayInWrapper, [cloneParent, other], 'should redirect array of parent reference in wrapper');
-        ok(cc.getWrapper(cloneChild).otherNodeInWrapper === other, 'should not clone other node in child wrapper');
-        ok(cc.getWrapper(cloneParent).otherNodeInWrapper === other, 'should not clone other node in parent wrapper');
-        ok(cc.getWrapper(cloneChild).wrapper === cc.getWrapper(cloneParent), 'should redirect wrapper to new parent');
-        ok(cc.getWrapper(cloneParent).wrapper === cc.getWrapper(cloneChild), 'should redirect wrapper to new child');
-        ok(cc.getWrapper(cloneChild).otherWrapper === cc.getWrapper(other), 'should not clone other otherWrapper in child wrapper');
-        ok(cc.getWrapper(cloneParent).otherWrapper === cc.getWrapper(other), 'should not clone other otherWrapper in parent wrapper');
+        ok(cloneParentComp.childComp === cloneChildComp, 'should redirect child component');
+        ok(cloneParentComp.otherComp === otherComp, 'should not clone other component');
 
         cc.js.unregisterClass(Script);
     });

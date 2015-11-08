@@ -64,7 +64,7 @@ var LayerExtended = cc.Layer.extend({
 
         var widgetSize = widget.getContentSize();
 
-        var background = widget.getChildByName("background_Panel");
+        var background = this._backgroundSize;
         background.y += 50;
 
         // Create the scrollview

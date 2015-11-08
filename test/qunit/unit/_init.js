@@ -16,7 +16,6 @@ var Texture = cc.Texture;
 
 var Ticker = cc._Ticker;
 var Time = cc.Time;
-//var Entity = cc.Entity;
 //var Camera = cc.Camera;
 //var Component = cc.Component;
 var LoadManager = cc._LoadManager;
@@ -29,114 +28,91 @@ var V2 = cc.Vec2;
 var v2 = cc.v2;
 var color = cc.fireColor;
 
-cc.RawTexture = cc.Class({
-    name: 'cc.RawTexture',
-    extends: cc.RawAsset
-});
+var TestTexture = cc.Class({
+    name: 'TestTexture',
+    extends: cc.Asset,
 
-TestNode = function () {
-    this.children = [];
-    this.name = arguments[0] || '';
-    this.parent = null;
-    this.scale = cc.Vec2.one;
-};
-TestWrapper = cc.Class({
-    name: 'TestWrapper',
-    extends: cc.Runtime.NodeWrapper,
     properties: {
-        name: {
-            get: function () {
-                return this.targetN.name;
-            },
-            set: function (value) {
-                this.targetN.name = value;
-            }
+        /**
+         * @property width
+         * @type number
+         */
+        width: {
+            default: 0,
+            type: 'Integer',
+            readonly: true
         },
-        parentN: {
-            get: function () {
-                return this.targetN.parent;
-            },
-            set: function (value) {
-                if (this.targetN.parent) {
-                    cc.js.array.remove(this.targetN.parent.children, this.targetN);
-                }
-                this.targetN.parent = value;
-                if (value) {
-                    value.children.push(this.targetN);
-                }
-            }
-        },
-        childrenN: {
-            get: function () {
-                return this.targetN.children;
-            }
-        },
-        position: {
-            get: function () {
-                return cc.v2(123, 456);
-            }
-        },
-        worldPosition: {
-            get: function () {
-                return cc.Vec2.zero;
-            }
-        },
-        rotation: {
-            get: function () {
-                return 0;
-            }
-        },
-        worldRotation: {
-            get: function () {
-                return 0;
-            }
-        },
-        scale: {
-            get: function () {
-                return this.targetN.scale;
-            },
-            set: function (value) {
-                this.targetN.scale = value;
-            },
-        },
-        worldScale: {
-            get: function () {
-                return cc.Vec2.one;
-            }
-        },
-        _serializeData: {
-            default: {}
-        }
-    },
-    onBeforeSerialize: function () {
-        this._serializeData.name = this.name;
-        this._serializeData.scale = this.scale;
-    },
-    createNode: function (node) {
-        node = node || new TestNode();
-        node.name = this._serializeData.name;
-        node.scale = this._serializeData.scale;
-        return node;
-    },
-    attached: function () {
-    },
-});
-cc.Runtime.registerNodeType(TestNode, TestWrapper);
 
-var TestScript = cc.Class({
-    name: 'TestScript',
-    extends: cc.Behavior,
-    properties: {
-        target: {
-            default: null,
-            type: TestNode
-        },
-        target2: {
-            default: null,
-            type: TestNode
+        /**
+         * @property height
+         * @type number
+         */
+        height: {
+            default: 0,
+            type: 'Integer',
+            readonly: true
         },
     }
 });
+
+var TestSprite = cc.Class({
+    name: 'TestSprite',
+    extends: cc.Asset,
+    properties: {
+        pivot: new cc.Vec2(0.5, 0.5),
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        texture: {
+            default: '',
+            url: TestTexture,
+        },
+        rotated: false,
+        trimLeft: 0,
+        trimTop: 0,
+        rawWidth: 0,
+        rawHeight: 0,
+        //pixelLevelHitTest: false,
+        //alphaThreshold: 25,
+        insetTop: 0,
+        insetBottom: 0,
+        insetLeft: 0,
+        insetRight: 0,
+        rotatedWidth: {
+            get: function () {
+                return this.rotated ? this.height : this.width;
+            }
+        },
+        rotatedHeight: {
+            get: function () {
+                return this.rotated ? this.width : this.height;
+            }
+        }
+    }
+});
+
+var TestScript = cc.Class({
+    name: 'TestScript',
+    extends: cc.Component,
+    properties: {
+        target: {
+            default: null,
+            type: cc.ENode
+        },
+        target2: {
+            default: null,
+            type: cc.ENode
+        },
+    }
+});
+
+cc.engine = {
+    attachedObjsForEditor: {},
+    getInstanceById: function (uuid) {
+        return this.attachedObjsForEditor[uuid] || null;
+    },
+};
 
 var assetDir = '../test/qunit/assets';
 
@@ -187,9 +163,8 @@ function _resetGame (w, h) {
 
         cc.eventManager.dispatchCustomEvent('canvas-resize');
     }
-    //Engine._launchScene(new cc._Scene());
-
-    cc.director.pause();
+    cc.director.runScene(new cc.EScene());
+    //cc.director.pause();
 }
 
 _resetGame(64, 64);
@@ -203,8 +178,8 @@ var SetupEngine = {
     teardown: function () {
         //Engine._launchScene(new cc._Scene());
         cc.game.pause();
-        //// check error
-        //Engine._renderContext.checkMatchCurrentScene(true);
+        // check error
+        cc._Test.SceneGraphUtils.checkMatchCurrentScene();
     }
 };
 

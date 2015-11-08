@@ -113,13 +113,14 @@
 
     proto._updateForSetSpriteFrame = function () {};
 
-    proto._spriteFrameLoadedCallback = function (spriteFrame) {
+    proto._spriteFrameLoadedCallback = function (event) {
+        var spriteFrame = event.currentTarget;
         this.setTextureRect(spriteFrame.getRect(), spriteFrame.isRotated(), spriteFrame.getOriginalSize());
-        this.dispatchEvent("load");
+        this.emit("load");
     };
 
-    proto._textureLoadedCallback = function (sender) {
-        var renderCmd = this._renderCmd;
+    proto._textureLoadedCallback = function (event) {
+        var renderCmd = this._renderCmd, sender = event.currentTarget;
         if (this._textureLoaded)
             return;
 
@@ -139,7 +140,7 @@
         // if the sprite is added to a batchnode, then it will automatically switch to "batchnode Render"
         this.setBatchNode(this._batchNode);
         renderCmd._quadDirty = true;
-        this.dispatchEvent("load");
+        this.emit("load");
     };
 
     proto._setTextureCoords = function (rect, needConvert) {
@@ -153,8 +154,8 @@
         if (!tex)
             return;
 
-        var atlasWidth = tex.pixelsWidth;
-        var atlasHeight = tex.pixelsHeight;
+        var atlasWidth = tex.pixelWidth;
+        var atlasHeight = tex.pixelHeight;
 
         var left, right, top, bottom, tempSwap, locQuad = this._quad;
         if (node._rectRotated) {

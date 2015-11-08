@@ -1,6 +1,6 @@
 {
-    "__type__": "cc.TextureAsset",
+    "__type__": "TestTexture",
     "name": "",
     "width": 321,
     "height": 123
-} 
+}

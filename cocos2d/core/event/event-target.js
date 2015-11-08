@@ -96,7 +96,7 @@ var _doSendEvent = function (owner, event) {
  * @class cc.EventTarget
  */
 var EventTarget = function () {
-}
+};
 
 JS.mixin(EventTarget.prototype, {
     /**
@@ -134,13 +134,19 @@ JS.mixin(EventTarget.prototype, {
      * @param {function} callback - The callback that will be invoked when the event is dispatched.
      *                              The callback is ignored if it is a duplicate (the callbacks are unique).
      * @param {Event} callback.param event
+     * @param {Object} [target] - The target to invoke the callback, can be null
      * @param {Boolean} [useCapture=false] - When set to true, the capture argument prevents callback
      *                              from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE.
      *                              When false, callback will NOT be invoked when event's eventPhase attribute value is CAPTURING_PHASE.
      *                              Either way, callback will be invoked when event's eventPhase attribute value is AT_TARGET.
      */
-    on: function (type, callback, useCapture) {
-        useCapture = typeof useCapture !== "undefined" ? useCapture : false;
+    on: function (type, callback, target, useCapture) {
+        // Accept also patameters like: (type, callback, useCapture)
+        if (typeof target === 'boolean') {
+            useCapture = target;
+            target = undefined;
+        }
+        else useCapture = !!useCapture;
         if (!callback) {
             cc.error('Callback of event must be non-nil');
             return;
@@ -152,32 +158,57 @@ JS.mixin(EventTarget.prototype, {
         else {
             listeners = this._bubblingListeners = this._bubblingListeners || new EventListeners();
         }
-        if ( ! listeners.has(type, callback) ) {
-            listeners.add(type, callback);
+        if ( ! listeners.has(type, callback, target) ) {
+            listeners.add(type, callback, target);
+
+            if (target && target.__eventTargets)
+                target.__eventTargets.push(this);
         }
     },
 
     /**
-     * Removes the callback previously registered with the same type, callback, and capture.
+     * Removes the callback previously registered with the same type, callback, target and or useCapture.
      * This method is merely an alias to removeEventListener.
      *
      * @method off
      * @param {string} type - A string representing the event type being removed.
      * @param {function} callback - The callback to remove.
+     * @param {Object} [target] - The target to invoke the callback, if it's not given, only callback without target will be removed
      * @param {Boolean} [useCapture=false] - Specifies whether the callback being removed was registered as a capturing callback or not.
      *                              If not specified, useCapture defaults to false. If a callback was registered twice,
      *                              one with capture and one without, each must be removed separately. Removal of a capturing callback
      *                              does not affect a non-capturing version of the same listener, and vice versa.
      */
-    off: function (type, callback, useCapture) {
-        useCapture = typeof useCapture !== "undefined" ? useCapture : false;
+    off: function (type, callback, target, useCapture) {
+        // Accept also patameters like: (type, callback, useCapture)
+        if (typeof target === 'boolean') {
+            useCapture = target;
+            target = undefined;
+        }
+        else useCapture = !!useCapture;
         if (!callback) {
             return;
         }
         var listeners = useCapture ? this._capturingListeners : this._bubblingListeners;
         if (listeners) {
-            listeners.remove(type, callback);
+            listeners.remove(type, callback, target);
+
+            if (target && target.__eventTargets) {
+                var index = target.__eventTargets.indexOf(this);
+                target.__eventTargets.splice(index, 1);
+            }
         }
+    },
+
+    /**
+     * Removes all callbacks previously registered with the same target.
+     *
+     * @method targetOff
+     * @param {object} target - The target to be searched for all related callbacks
+     */
+    targetOff: function (target) {
+        this._capturingListeners.removeAll(target);
+        this._bubblingListeners.removeAll(target);
     },
 
     /**
@@ -188,18 +219,19 @@ JS.mixin(EventTarget.prototype, {
      * @param {function} callback - The callback that will be invoked when the event is dispatched.
      *                              The callback is ignored if it is a duplicate (the callbacks are unique).
      * @param {Event} callback.param event
+     * @param {Object} [target] - The target to invoke the callback, can be null
      * @param {Boolean} [useCapture=false] - When set to true, the capture argument prevents callback
      *                              from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE.
      *                              When false, callback will NOT be invoked when event's eventPhase attribute value is CAPTURING_PHASE.
      *                              Either way, callback will be invoked when event's eventPhase attribute value is AT_TARGET.
      */
-    once: function (type, callback, useCapture) {
+    once: function (type, callback, target, useCapture) {
         var self = this;
         var cb = function (event) {
-            self.off(type, cb, useCapture);
-            callback(event);
+            self.off(type, cb, target, useCapture);
+            callback.call(this, event);
         };
-        this.on(type, cb, useCapture);
+        this.on(type, cb, target, useCapture);
     },
 
     /**
@@ -214,7 +246,7 @@ JS.mixin(EventTarget.prototype, {
         _doDispatchEvent(this, event);
         cachedArray.length = 0;
         var notPrevented = ! event._defaultPrevented;
-        event.unuse();
+        // event.unuse();
         return notPrevented;
     },
 
@@ -312,6 +344,6 @@ EventTarget.polyfill = function (object) {
         object._getCapturingTargets = proto._getCapturingTargets;
     if (!object._getBubblingTargets)
         object._getBubblingTargets = proto._getBubblingTargets;
-}
+};
 
 cc.EventTarget = module.exports = EventTarget;

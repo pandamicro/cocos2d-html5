@@ -23,19 +23,13 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
- 
+
+var EventTarget = require('./event/event-target');
+var Class = require('./platform/_CCClass');
+var CCObject = require('./platform/CCObject');
+
 cc.g_NumberOfDraws = 0;
 
-cc.GLToClipTransform = function (transformOut) {
-    //var projection = new cc.math.Matrix4();
-    //cc.kmGLGetMatrix(cc.KM_GL_PROJECTION, projection);
-    cc.kmGLGetMatrix(cc.KM_GL_PROJECTION, transformOut);
-
-    var modelview = new cc.math.Matrix4();
-    cc.kmGLGetMatrix(cc.KM_GL_MODELVIEW, modelview);
-
-    transformOut.multiply(modelview);
-};
 //----------------------------------------------------------------------------------------------------------------------
 
 /**
@@ -73,7 +67,7 @@ cc.GLToClipTransform = function (transformOut) {
  * @class
  * @name cc.Director
  */
-cc.Director = cc._Class.extend(/** @lends cc.Director# */{
+cc.Director = Class.extend(/** @lends cc.Director# */{
     //Variables
     _landscape: false,
     _nextDeltaTimeZero: false,
@@ -95,7 +89,13 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
     _openGLView: null,
     _scenesStack: null,
     _projectionDelegate: null,
+
+    _loadingScene: '',
+    // The root of rendering scene graph
     _runningScene: null,
+
+    // The entity-component scene
+    _scene: null,
 
     _totalFrames: 0,
     _secondsPerFrame: 0,
@@ -104,10 +104,6 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
 
     _scheduler: null,
     _actionManager: null,
-    _eventProjectionChanged: null,
-    _eventAfterUpdate: null,
-    _eventAfterVisit: null,
-    _eventAfterDraw: null,
 
     ctor: function () {
         var self = this;
@@ -141,9 +137,10 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
         this._openGLView = null;
         this._contentScaleFactor = 1.0;
 
-        //scheduler
+        // Scheduler for user registration update
         this._scheduler = new cc.Scheduler();
-        //action manager
+
+        // Action manager
         if(cc.ActionManager){
             this._actionManager = new cc.ActionManager();
             this._scheduler.scheduleUpdate(this._actionManager, cc.Scheduler.PRIORITY_SYSTEM, false);
@@ -151,14 +148,8 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
             this._actionManager = null;
         }
 
-        this._eventAfterUpdate = new cc.Event.EventCustom(cc.Director.EVENT_AFTER_UPDATE);
-        this._eventAfterUpdate.setUserData(this);
-        this._eventAfterVisit = new cc.Event.EventCustom(cc.Director.EVENT_AFTER_VISIT);
-        this._eventAfterVisit.setUserData(this);
-        this._eventAfterDraw = new cc.Event.EventCustom(cc.Director.EVENT_AFTER_DRAW);
-        this._eventAfterDraw.setUserData(this);
-        this._eventProjectionChanged = new cc.Event.EventCustom(cc.Director.EVENT_PROJECTION_CHANGED);
-        this._eventProjectionChanged.setUserData(this);
+        // Event target
+        EventTarget.polyfill(this);
 
         return true;
     },
@@ -203,22 +194,9 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
      */
     convertToUI: null,
 
-    gameUpdate: function (deltaTime) {
-
-    },
-
     engineUpdate: function (deltaTime) {
         //tick before glClear: issue #533
-        if (!this._paused) {
-            this._scheduler.update(deltaTime);
-            cc.eventManager.dispatchEvent(this._eventAfterUpdate);
-        }
-
-        /* to avoid flickr, nextScene MUST be here: after tick and before draw.
-         XXX: Which bug is this one. It seems that it can't be reproduced with v0.9 */
-        if (this._nextScene) {
-            this.setNextScene();
-        }
+        this._scheduler.update(deltaTime);
     },
 
     visit: function (deltaTime) {
@@ -241,7 +219,7 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
         if (this._notificationNode)
             this._notificationNode.visit();
 
-        cc.eventManager.dispatchEvent(this._eventAfterVisit);
+        this.emit(cc.Director.EVENT_AFTER_VISIT, this);
 
         if (this._afterVisitScene)
             this._afterVisitScene();
@@ -254,7 +232,7 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
         cc.renderer.rendering(cc._renderContext);
         this._totalFrames++;
 
-        cc.eventManager.dispatchEvent(this._eventAfterDraw);
+        this.emit(cc.Director.EVENT_AFTER_DRAW, this);
     },
 
     /**
@@ -264,8 +242,27 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
         // calculate "global" dt
         this.calculateDeltaTime();
 
-        this.gameUpdate(this._deltaTime);
-        this.engineUpdate(this._deltaTime);
+        if (!this._paused) {
+            // Call start for new added components
+            this.emit(cc.Director.EVENT_BEFORE_UPDATE, this);
+            // Update for components
+            this.emit(cc.Director.EVENT_COMPONENT_UPDATE, this);
+            // Destroy entities that have been removed recently
+            CCObject._deferredDestroy();
+            // Engine update with scheduler
+            this.engineUpdate(this._deltaTime);
+            // Late update for components
+            this.emit(cc.Director.EVENT_COMPONENT_LATE_UPDATE, this);
+            // User can use this event to do things after update
+            this.emit(cc.Director.EVENT_AFTER_UPDATE, this);
+        }
+
+        /* to avoid flickr, nextScene MUST be here: after tick and before draw.
+         XXX: Which bug is this one. It seems that it can't be reproduced with v0.9 */
+        if (this._nextScene) {
+            this.setNextScene();
+        }
+
         this.visit(this._deltaTime);
         this.render(this._deltaTime);
 
@@ -444,32 +441,158 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
     /**
      * Run a scene. Replaces the running scene with a new one or enter the first scene.
      * @param {cc.Scene} scene
+     * @param {function} [onBeforeLoadScene]
      */
-    runScene: function (scene) {
-
+    runScene: function (scene, onBeforeLoadScene) {
         cc.assert(scene, cc._LogInfos.Director.pushScene);
 
+        // unload scene
+        var oldScene = this._scene;
+        if (cc.isValid(oldScene)) {
+            oldScene.destroy();
+        }
+        this._scene = null;
+
+        // purge destroyed nodes belongs to old scene
+        cc.Object._deferredDestroy();
+
+        if (onBeforeLoadScene) {
+            onBeforeLoadScene();
+        }
+        this.emit(cc.Director.EVENT_BEFORE_SCENE_LAUNCH, scene);
+
+        // Re-add persist node root
+        var persistNodes = cc.game._persistRootNodes;
+        for (var i = 0; i < persistNodes.length; ++i) {
+            var node = persistNodes[i];
+            node.parent = scene;
+        }
+
+        var sgScene = scene;
+
+        // Run an Entity Scene
+        if (scene instanceof cc.EScene) {
+            // init scene
+            scene._onBatchCreated();
+
+            this._scene = scene;
+            sgScene = scene._sgNode;
+        }
+
+        // Run or replace rendering scene
         if (!this._runningScene) {
             //start scene
-            this.pushScene(scene);
+            this.pushScene(sgScene);
             this.startAnimation();
         } else {
             //replace scene
             var i = this._scenesStack.length;
-            if (i === 0) {
-                this._sendCleanupToScene = true;
-                this._scenesStack[i] = scene;
-                this._nextScene = scene;
-            } else {
-                this._sendCleanupToScene = true;
-                this._scenesStack[i - 1] = scene;
-                this._nextScene = scene;
-            }
+            this._scenesStack[Math.max(i - 1, 0)] = sgScene;
+            this._sendCleanupToScene = true;
+            this._nextScene = sgScene;
         }
 
         if (this._nextScene) {
             this.setNextScene();
         }
+
+        // Activate
+        if (scene instanceof cc.EScene) {
+            scene._onActivated();
+        }
+    },
+
+    //  @Scene loading section
+
+    /**
+     * Loads the scene by its name.
+     * @method loadScene
+     * @param {string} sceneName - the name of the scene to load
+     * @param {function} [onLaunched] - callback, will be called after scene launched
+     * @param {function} [onUnloaded] - callback, will be called when the previous scene was unloaded
+     * @return {boolean} if error, return false
+     */
+    loadScene: function (sceneName, onLaunched, onUnloaded) {
+        var uuid, info;
+        if (this._loadingScene) {
+            cc.error('[loadScene] Failed to load scene "%s" because "%s" is already loading', sceneName, this._loadingScene);
+            return false;
+        }
+        if (typeof sceneName === 'string') {
+            if (!sceneName.endsWith('.fire')) {
+                sceneName += '.fire';
+            }
+            if (sceneName[0] !== '/' && !sceneName.startsWith('assets://')) {
+                sceneName = '/' + sceneName;    // 使用全名匹配
+            }
+            // search scene
+            for (var i = 0; i < cc.game._sceneInfos.length; i++) {
+                info = cc.game._sceneInfos[i];
+                var url = info.url;
+                if (url.endsWith(sceneName)) {
+                    uuid = info.uuid;
+                    break;
+                }
+            }
+        }
+        else {
+            info = cc.game._sceneInfos[sceneName];
+            if (typeof info === 'object') {
+                uuid = info.uuid;
+            }
+            else {
+                cc.error('[loadScene] The scene index to load (%s) is out of range.', sceneName);
+                return false;
+            }
+        }
+        if (uuid) {
+            this._loadingScene = sceneName;
+            this._loadSceneByUuid(uuid, onLaunched, onUnloaded);
+            return true;
+        }
+        else {
+            cc.error('[loadScene] Can not load the scene "%s" because it has not been added to the build settings before play.', sceneName);
+            return false;
+        }
+    },
+
+    /**
+     * Loads the scene by its uuid.
+     * @method _loadSceneByUuid
+     * @param {string} uuid - the uuid of the scene asset to load
+     * @param {function} [onLaunched]
+     * @param {function} [onUnloaded]
+     * @private
+     */
+    _loadSceneByUuid: function (uuid, onLaunched, onUnloaded) {
+        //cc.AssetLibrary.unloadAsset(uuid);     // force reload
+        cc.AssetLibrary.loadAsset(uuid, function (error, sceneAsset) {
+            var scene;
+            if (error) {
+                error = 'Failed to load scene: ' + error;
+                cc.error(error);
+                if (CC_EDITOR) {
+                    console.assert(false, error);
+                }
+            }
+            else {
+                var uuid = sceneAsset._uuid;
+                scene = sceneAsset.scene;
+                if (scene instanceof cc.EScene) {
+                    scene._id = uuid;
+                    cc.director.runScene(scene, onUnloaded);
+                }
+                else {
+                    error = 'The asset ' + uuid + ' is not a scene';
+                    cc.error(error);
+                    scene = null;
+                }
+            }
+            cc.director._loadingScene = '';
+            if (onLaunched) {
+                onLaunched(error, scene);
+            }
+        });
     },
 
     /**
@@ -665,6 +788,14 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
     },
 
     /**
+     * Returns current running Scene. Director can only run one Scene at the time
+     * @return {cc.EScene}
+     */
+    getScene: function () {
+        return this._scene;
+    },
+
+    /**
      * Returns the FPS value
      * @return {Number}
      */
@@ -820,7 +951,7 @@ cc.Director = cc._Class.extend(/** @lends cc.Director# */{
  * @constant
  * @type {string}
  * @example
- *   cc.eventManager.addCustomListener(cc.Director.EVENT_PROJECTION_CHANGED, function(event) {
+ *   cc.director.on(cc.Director.EVENT_PROJECTION_CHANGED, function(event) {
  *           cc.log("Projection changed.");
  *       });
  */
@@ -830,10 +961,34 @@ cc.Director.EVENT_PROJECTION_CHANGED = "director_projection_changed";
  * The event after update of cc.Director
  * @constant
  * @type {string}
- * @example
- *   cc.eventManager.addCustomListener(cc.Director.EVENT_AFTER_UPDATE, function(event) {
- *           cc.log("after update event.");
- *       });
+ */
+cc.Director.EVENT_BEFORE_SCENE_LAUNCH = "director_before_scene_launch";
+
+/**
+ * The event after update of cc.Director
+ * @constant
+ * @type {string}
+ */
+cc.Director.EVENT_BEFORE_UPDATE = "director_before_update";
+
+/**
+ * The event after update of cc.Director
+ * @constant
+ * @type {string}
+ */
+cc.Director.EVENT_COMPONENT_UPDATE = "director_component_update";
+
+/**
+ * The event after update of cc.Director
+ * @constant
+ * @type {string}
+ */
+cc.Director.EVENT_COMPONENT_LATE_UPDATE = "director_component_late_update";
+
+/**
+ * The event after update of cc.Director
+ * @constant
+ * @type {string}
  */
 cc.Director.EVENT_AFTER_UPDATE = "director_after_update";
 
@@ -841,10 +996,6 @@ cc.Director.EVENT_AFTER_UPDATE = "director_after_update";
  * The event after visit of cc.Director
  * @constant
  * @type {string}
- * @example
- *   cc.eventManager.addCustomListener(cc.Director.EVENT_AFTER_VISIT, function(event) {
- *           cc.log("after visit event.");
- *       });
  */
 cc.Director.EVENT_AFTER_VISIT = "director_after_visit";
 
@@ -852,10 +1003,6 @@ cc.Director.EVENT_AFTER_VISIT = "director_after_visit";
  * The event after draw of cc.Director
  * @constant
  * @type {string}
- * @example
- *   cc.eventManager.addCustomListener(cc.Director.EVENT_AFTER_DRAW, function(event) {
- *           cc.log("after draw event.");
- *       });
  */
 cc.Director.EVENT_AFTER_DRAW = "director_after_draw";
 

@@ -180,7 +180,7 @@ ccui.Widget = ccui.ProtectedNode.extend(/** @lends ccui.Widget# */{
     },
 
     /**
-     * initializes state of widget. please do not call this function by yourself, you should pass the parameters to constructor to initialize it .
+     * initializes state of widget. please do not call this function by yourself, you should pass the parameters to constructor to initialize it.
      * @returns {boolean}
      */
     init: function () {

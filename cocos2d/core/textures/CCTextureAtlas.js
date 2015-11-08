@@ -24,6 +24,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+var Class = require('../platform/_CCClass');
+var JS = require('../platform/js');
+var game = require('../CCGame');
+
 /**
  * <p>A class that implements a Texture Atlas. <br />
  * Supported features: <br />
@@ -42,7 +46,7 @@
  * @property {Number}   totalQuads      - <@readonly> Quantity of quads that are going to be drawn.
  * @property {Array}    quads           - <@readonly> Quads that are going to be rendered
  */
-cc.TextureAtlas = cc._Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
+var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     dirty: false,
     texture: null,
 
@@ -196,26 +200,6 @@ cc.TextureAtlas = cc._Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
                 locIndices[i * 6 + 5] = i * 4 + 1;
             }
         }
-    },
-
-    _setupVBO: function () {
-        var gl = cc._renderContext;
-        //create WebGLBuffer
-        this._buffersVBO[0] = gl.createBuffer();
-        this._buffersVBO[1] = gl.createBuffer();
-
-        this._quadsWebBuffer = gl.createBuffer();
-        this._mapBuffers();
-    },
-
-    _mapBuffers: function () {
-        var gl = cc._renderContext;
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, this._quadsWebBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, this._quadsArrayBuffer, gl.DYNAMIC_DRAW);
-
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._buffersVBO[1]);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this._indices, gl.STATIC_DRAW);
     },
 
     /**
@@ -589,14 +573,23 @@ cc.TextureAtlas = cc._Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
             clearReader[i] = 0;
     },
 
+    _setupVBO: function () {},
+    _mapBuffers: function () {},
+
     // TextureAtlas - Drawing
 
     /**
      * Draws all the Atlas's Quads
      */
-    drawQuads: function () {
-        this.drawNumberOfQuads(this._totalQuads, 0);
-    },
+    drawQuads: function () {},
+
+    /**
+     * <p>Draws n quads from an index (offset). <br />
+     * n + start can't be greater than the capacity of the atlas</p>
+     * @param {Number} n
+     * @param {Number} start
+     */
+    drawNumberOfQuads: null,
 
     _releaseBuffer: function () {
         var gl = cc._renderContext;
@@ -611,7 +604,7 @@ cc.TextureAtlas = cc._Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     }
 });
 
-var _p = cc.TextureAtlas.prototype;
+var _p = TextureAtlas.prototype;
 
 // Extended properties
 /** @expose */
@@ -624,32 +617,76 @@ cc.defineGetterSetter(_p, "capacity", _p.getCapacity);
 _p.quads;
 cc.defineGetterSetter(_p, "quads", _p.getQuads, _p.setQuads);
 
-/**
- * <p>Creates a TextureAtlas with an filename and with an initial capacity for Quads. <br />
- * The TextureAtlas capacity can be increased in runtime. </p>
- * @deprecated since v3.0, please use new cc.TextureAtlas(fileName, capacity) instead
- * @param {String|cc.Texture2D} fileName
- * @param {Number} capacity
- * @return {cc.TextureAtlas|Null}
- */
-cc.TextureAtlas.create = function (fileName, capacity) {
-    return new cc.TextureAtlas(fileName, capacity);
-};
+game.once(game.EVENT_RENDERER_INITED, function () {
+if (cc._renderType === game.RENDER_TYPE_WEBGL) {
+    JS.mixin(TextureAtlas.prototype, {
+        _setupVBO: function () {
+            var _t = this;
+            var gl = cc._renderContext;
+            //create WebGLBuffer
+            _t._buffersVBO[0] = gl.createBuffer();
+            _t._buffersVBO[1] = gl.createBuffer();
 
-/**
- * @deprecated  since v3.0, please use new cc.TextureAtlas(texture) instead
- * @function
- */
-cc.TextureAtlas.createWithTexture = cc.TextureAtlas.create;
+            _t._quadsWebBuffer = gl.createBuffer();
+            _t._mapBuffers();
+        },
 
-cc.game.addEventListener(cc.game.EVENT_RENDERER_INITED, function () {
-    if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
-        cc.assert(cc.js.isFunction(cc._tmp.WebGLTextureAtlas), cc._LogInfos.MissingFile, "TexturesWebGL.js");
-        cc._tmp.WebGLTextureAtlas();
-        delete cc._tmp.WebGLTextureAtlas;
-    }
+        _mapBuffers: function () {
+            var _t = this;
+            var gl = cc._renderContext;
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, _t._quadsWebBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, _t._quadsArrayBuffer, gl.DYNAMIC_DRAW);
+
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, _t._buffersVBO[1]);
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, _t._indices, gl.STATIC_DRAW);
+
+            //cc.checkGLErrorDebug();
+        },
+
+        drawQuads: function () {
+            this.drawNumberOfQuads(this._totalQuads, 0);
+        },
+
+        drawNumberOfQuads: function (n, start) {
+            var _t = this;
+            start = start || 0;
+            if (0 === n || !_t.texture || !_t.texture.isLoaded())
+                return;
+
+            var gl = cc._renderContext;
+            cc.glBindTexture2D(_t.texture);
+
+            //
+            // Using VBO without VAO
+            //
+            //vertices
+            //gl.bindBuffer(gl.ARRAY_BUFFER, _t._buffersVBO[0]);
+            // XXX: update is done in draw... perhaps it should be done in a timer
+            cc.glEnableVertexAttribs(cc.VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, _t._quadsWebBuffer);
+            if (_t.dirty){
+                gl.bufferData(gl.ARRAY_BUFFER, _t._quadsArrayBuffer, gl.DYNAMIC_DRAW);
+                _t.dirty = false;
+            }
+
+            gl.vertexAttribPointer(cc.VERTEX_ATTRIB_POSITION, 3, gl.FLOAT, false, 24, 0);               // vertices
+            gl.vertexAttribPointer(cc.VERTEX_ATTRIB_COLOR, 4, gl.UNSIGNED_BYTE, true, 24, 12);          // colors
+            gl.vertexAttribPointer(cc.VERTEX_ATTRIB_TEX_COORDS, 2, gl.FLOAT, false, 24, 16);            // tex coords
+
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, _t._buffersVBO[1]);
+
+            if (cc.TEXTURE_ATLAS_USE_TRIANGLE_STRIP)
+                gl.drawElements(gl.TRIANGLE_STRIP, n * 6, gl.UNSIGNED_SHORT, start * 6 * _t._indices.BYTES_PER_ELEMENT);
+            else
+                gl.drawElements(gl.TRIANGLES, n * 6, gl.UNSIGNED_SHORT, start * 6 * _t._indices.BYTES_PER_ELEMENT);
+
+            cc.g_NumberOfDraws++;
+            //cc.checkGLErrorDebug();
+        }
+    });
+}
 });
 
-cc.assert(cc.js.isFunction(cc._tmp.PrototypeTextureAtlas), cc._LogInfos.MissingFile, "TexturesPropertyDefine.js");
-cc._tmp.PrototypeTextureAtlas();
-delete cc._tmp.PrototypeTextureAtlas;
+cc.TextureAtlas = module.exports = TextureAtlas;

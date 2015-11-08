@@ -13,6 +13,7 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var handleErrors = require('../util/handleErrors');
+//var babelify = require('babelify');
 
 require('./build-cocos2d');
 
@@ -129,7 +130,8 @@ function createBundler(entryFiles) {
         //standalone: 'engine-framework',
         //basedir: tempScriptDir
     };
-    return new browserify(entryFiles, options);
+    return new browserify(entryFiles, options)
+        .exclude('package.json');
 }
 
 gulp.task('build-html5', ['build-modular-cocos2d'], function () {
@@ -139,13 +141,21 @@ gulp.task('build-html5', ['build-modular-cocos2d'], function () {
 
 
 gulp.task('clean-test', function (done) {
-    Del([paths.test.destEditorExtends, paths.test.dest], done);
+    Del([paths.test.destEditorExtends, paths.test.dest],
+        // sometimes it may need to delay 100ms to ensure build-test will be execute...
+        setTimeout(function () {
+            done();
+        }, 100));
 });
 
 gulp.task('build-test', ['build-modular-cocos2d', 'clean-test'], function () {
     var engine = rebundle_test(createBundler(paths.jsEntry), '-for-test');
     if (Fs.existsSync(paths.test.jsEntryEditorExtends)) {
-        var editorExtends = rebundle_test(createBundler(paths.test.jsEntryEditorExtends), '-extends-for-test');
+        var bundler = createBundler(paths.test.jsEntryEditorExtends);
+        //bundler = bundler.transform(babelify.configure({
+        //    presets: ["es2015"]
+        //}));
+        var editorExtends = rebundle_test(bundler, '-extends-for-test');
         return es.merge(engine, editorExtends);
     }
     else {

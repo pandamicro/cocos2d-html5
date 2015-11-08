@@ -65,8 +65,7 @@ var TestScene = cc.Scene.extend({
         var scene = new cc.Scene();
         var layer = new TestController();
         scene.addChild(layer);
-        var transition = new cc.TransitionProgressRadialCCW(0.5,scene);
-        director.runScene(transition);
+        director.runScene(scene);
     },
 
     runThisTest:function () {
@@ -259,14 +258,6 @@ var testNames = [
         }
     },
     {
-        title:"Chipmunk Test",
-        platforms: PLATFORM_ALL,
-        linksrc:"src/ChipmunkTest/ChipmunkTest.js",
-        testScene:function () {
-            return new ChipmunkTestScene();
-        }
-    },
-    {
         title:"ClippingNode Test",
         platforms: PLATFORM_ALL,
         linksrc:"src/ClippingNodeTest/ClippingNodeTest.js",
@@ -318,22 +309,6 @@ var testNames = [
         }
     },
     {
-        title:"Effects Test",
-        platforms: PLATFORM_JSB_AND_WEBGL,
-        linksrc:"src/EffectsTest/EffectsTest.js",
-        testScene:function () {
-            return new EffectsTestScene();
-        }
-    },
-    {
-        title:"Effects Advanced Test",
-        platforms: PLATFORM_JSB_AND_WEBGL,
-        linksrc:"src/EffectsAdvancedTest/EffectsAdvancedTest.js",
-        testScene:function () {
-            return new EffectAdvanceScene();
-        }
-    },
-    {
         title:"Native Test",
         platforms: PLATFORM_JSB,
         linksrc:"src/NativeTest/NativeTest.js",
@@ -381,14 +356,6 @@ var testNames = [
         linksrc:"src/LoaderTest/LoaderTest.js",
         testScene:function () {
             return new LoaderTestScene();
-        }
-    },
-    {
-        title:"MotionStreak Test",
-        platforms: PLATFORM_JSB_AND_WEBGL,
-        linksrc:"src/MotionStreakTest/MotionStreakTest.js",
-        testScene:function () {
-            return new MotionStreakTestScene();
         }
     },
     {
@@ -516,15 +483,6 @@ var testNames = [
         linksrc:"src/TileMapTest/TileMapTest.js",
         testScene:function () {
             return new TileMapTestScene();
-        }
-    },
-    {
-        title:"Transitions Test",
-        resource:g_transitions,
-        platforms: PLATFORM_ALL,
-        linksrc:"",
-        testScene:function () {
-            return new TransitionsTestScene();
         }
     },
     {

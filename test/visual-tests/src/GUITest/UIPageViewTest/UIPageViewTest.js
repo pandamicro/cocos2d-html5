@@ -35,7 +35,7 @@ var UIPageViewTest = UIMainLayer.extend({
             this._bottomDisplayLabel.x = widgetSize.width / 2;
             this._bottomDisplayLabel.y = widgetSize.height / 2 - this._bottomDisplayLabel.height * 3;
 
-            var background = this._widget.getChildByName("background_Panel");
+            var background = this._backgroundSize;
 
             // Create the page view
             var pageView = new ccui.PageView();
@@ -103,13 +103,10 @@ var UIPageViewButtonTest = UIMainLayer.extend({
             this._bottomDisplayLabel.setString("PageView with Buttons");
             this._bottomDisplayLabel.setPosition(widgetSize.width / 2.0, widgetSize.height / 2.0 - this._bottomDisplayLabel.height * 3.075);
 
-            var root = this._mainNode.getChildByTag(81);
-            var background = root.getChildByName("background_Panel");
-
             // Create the page view
             var pageView = new ccui.PageView();
             pageView.setContentSize(cc.size(240.0, 130.0));
-            var backgroundSize = background.getContentSize();
+            var backgroundSize = this._backgroundSize;
             pageView.setPosition(cc.p((widgetSize.width - backgroundSize.width) / 2.0 +
                 (backgroundSize.width - pageView.getContentSize().width) / 2.0,
                 (widgetSize.height - backgroundSize.height) / 2.0 +
@@ -179,13 +176,10 @@ var UIPageViewCustomScrollThreshold = UIMainLayer.extend({
             this._bottomDisplayLabel.setString("PageView");
             this._bottomDisplayLabel.setPosition(cc.p(widgetSize.width / 2.0, widgetSize.height / 2.0 - this._bottomDisplayLabel.height * 3.075));
 
-            var root = this._mainNode.getChildByTag(81);
-            var background = root.getChildByName("background_Panel");
-
             // Create the page view
             var pageView = new ccui.PageView();
             pageView.setContentSize(cc.size(240.0, 100.0));
-            var backgroundSize = background.getContentSize();
+            var backgroundSize = this._backgroundSize;
             pageView.setPosition(cc.p((widgetSize.width - backgroundSize.width) / 2.0 +
                 (backgroundSize.width - pageView.getContentSize().width) / 2.0,
                 (widgetSize.height - backgroundSize.height) / 2.0 +
@@ -254,14 +248,11 @@ var UIPageViewTouchPropagationTest = UIMainLayer.extend({
             this._bottomDisplayLabel.setString("PageView Touch Propagation");
             this._bottomDisplayLabel.setPosition(widgetSize.width / 2.0, widgetSize.height / 2.0 - this._bottomDisplayLabel.height * 3.075);
 
-            var root = this._mainNode.getChildByTag(81);
-            var background = root.getChildByName("background_Panel");
-
             // Create the page view
             var pageView = new ccui.PageView();
             pageView.setContentSize(cc.size(240.0, 130.0));
             pageView.setAnchorPoint(cc.p(0.5,0.5));
-            var backgroundSize = background.getContentSize();
+            var backgroundSize = this._backgroundSize;
             pageView.setPosition(cc.p(widgetSize.width / 2.0 ,widgetSize.height / 2.0));
             pageView.setBackGroundColor(cc.Color.GREEN);
             pageView.setBackGroundColorType(ccui.Layout.BG_COLOR_SOLID);
@@ -411,14 +402,11 @@ var UIPageViewDynamicAddAndRemoveTest = UIMainLayer.extend({
             this._bottomDisplayLabel.setString("PageView Dynamic Modification");
             this._bottomDisplayLabel.setPosition(widgetSize.width / 2.0, widgetSize.height / 2.0 - this._bottomDisplayLabel.height * 3.075);
 
-            var root = this._mainNode.getChildByTag(81);
-            var background = root.getChildByName("background_Panel");
-
             // Create the page view
             var pageView = new ccui.PageView();
             pageView.setContentSize(cc.size(240.0, 130.0));
             pageView.setAnchorPoint(cc.p(0.5,0.5));
-            var backgroundSize = background.getContentSize();
+            var backgroundSize = this._backgroundSize;
             pageView.setPosition(cc.p(widgetSize.width / 2.0 ,widgetSize.height / 2.0));
             pageView.setBackGroundColor(cc.Color.GREEN);
             pageView.setBackGroundColorType(ccui.Layout.BG_COLOR_SOLID);
@@ -544,9 +532,8 @@ var UIPageViewDisableTouchTest = UIMainLayer.extend({
             this._bottomDisplayLabel.setString("PageView");
             this._bottomDisplayLabel.x = widgetSize.width / 2;
             this._bottomDisplayLabel.y = widgetSize.height / 2 - this._bottomDisplayLabel.height * 3;
-
-            var background = this._widget.getChildByName("background_Panel");
-            var backgroundSize = background.getContentSize();
+            
+            var backgroundSize = this._backgroundSize;
 
             var pageView = new ccui.PageView();
             pageView.setContentSize(cc.size(240, 130));

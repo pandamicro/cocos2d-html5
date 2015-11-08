@@ -8,8 +8,8 @@ var PrefabInfo = cc.Class({
         //    default: 1
         //},
 
-        // the most top wrapper of this prefab in the scene
-        rootWrapper: {
+        // the most top node of this prefab in the scene
+        root: {
             default: null,
         },
 

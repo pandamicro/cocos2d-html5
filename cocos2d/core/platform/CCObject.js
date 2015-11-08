@@ -37,12 +37,15 @@ var DontDestroy = 1 << 5;
 var Destroying = 1 << 9;
 var HideInGame = 1 << 10;
 var HideInEditor = 1 << 11;
-//var Prefab = 1 << 12,
+
+var IsOnEnableCalled = 1 << 12;
 var IsOnLoadCalled = 1 << 13;
+var IsOnStartCalled = 1 << 14;
+
 var Hide = HideInGame | HideInEditor;
 // should not clone or serialize these flags
 var PersistentMask = ~(ToDestroy | Dirty | Destroying | DontDestroy |
-                       IsOnLoadCalled);
+                        IsOnEnableCalled | IsOnLoadCalled | IsOnStartCalled);
 
 /**
  * Bit mask that controls object states.
@@ -109,7 +112,8 @@ CCObject.Flags = {
     // FLAGS FOR COMPONENT
 
     IsOnLoadCalled: IsOnLoadCalled,
-
+    IsOnEnableCalled: IsOnEnableCalled,
+    IsOnStartCalled: IsOnStartCalled
 };
 
 require('./CCClass').fastDefine('cc.Object', CCObject, ['_name', '_objFlags']);
@@ -137,7 +141,7 @@ Object.defineProperty(CCObject, '_deferredDestroy', {
         }
 
         if (CC_EDITOR) {
-            deferredDestroyTimer = -1;
+            deferredDestroyTimer = null;
         }
     },
     enumerable: false
@@ -146,9 +150,9 @@ Object.defineProperty(CCObject, '_deferredDestroy', {
 if (CC_EDITOR) {
     Object.defineProperty(CCObject, '_clearDeferredDestroyTimer', {
         value: function () {
-            if (deferredDestroyTimer !== -1) {
-                clearTimeout(deferredDestroyTimer);
-                deferredDestroyTimer = -1;
+            if (deferredDestroyTimer !== null) {
+                clearImmediate(deferredDestroyTimer);
+                deferredDestroyTimer = null;
             }
         },
         enumerable: false
@@ -185,7 +189,7 @@ JS.get(prototype, 'isValid', function () {
     return !(this._objFlags & Destroyed);
 });
 
-var deferredDestroyTimer = -1;
+var deferredDestroyTimer = null;
 
 /**
  * Destroy this CCObject, and release all its own references to other resources.
@@ -208,9 +212,9 @@ prototype.destroy = function () {
     this._objFlags |= ToDestroy;
     objectsToDestroy.push(this);
 
-    if (deferredDestroyTimer === -1 && cc.engine && ! cc.engine._isUpdating && CC_EDITOR) {
+    if (deferredDestroyTimer === null && cc.engine && ! cc.engine._isUpdating && CC_EDITOR) {
         // auto destroy immediate in edit mode
-        deferredDestroyTimer = setTimeout(CCObject._deferredDestroy, 1);
+        deferredDestroyTimer = setImmediate(CCObject._deferredDestroy);
     }
     return true;
 };
@@ -224,7 +228,6 @@ prototype.destroy = function () {
  * @private
  */
 prototype._destruct = function () {
-    // 允许重载destroy
     // 所有可枚举到的属性，都会被清空
     for (var key in this) {
         if (this.hasOwnProperty(key)) {

@@ -24,7 +24,6 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-//var NodeSavedAsWrapper = require('./object').Flags.NodeSavedAsWrapper;
 var JS = require('./js');
 var CCObject = require('./CCObject');
 
@@ -32,50 +31,6 @@ var EDITOR = CC_EDITOR || CC_TEST;
 var ENABLE_TARGET = EDITOR;
 
 // HELPERS
-
-// redirect wrapper to node
-function W2NMapper () {
-    // list of the nodes serialized as wrapper, should be convert to node after scene created
-    this.objList = [];
-    // the corresponding field name which serialized as wrapper
-    this.keyList = [];
-}
-W2NMapper.prototype.register = function (obj, key) {
-    this.objList.push(obj);
-    this.keyList.push(key);
-};
-W2NMapper.prototype.apply = function () {
-    var NodeWrapper = cc.Runtime.NodeWrapper;
-    var objs = this.objList;
-    var keys = this.keyList;
-    for (var i = 0; i < objs.length; i++) {
-        var obj = objs[i];
-        var key = keys[i];
-        var wrapper = obj[key];
-        if (Array.isArray(wrapper)) {
-            for (var j = 0; j < wrapper.length; j++) {
-                var item = wrapper[j];
-                if (item instanceof NodeWrapper && item.targetN) {
-                    wrapper[j] = item.targetN;
-                }
-            }
-        }
-        else {
-            if (wrapper instanceof NodeWrapper && wrapper.targetN) {
-                obj[key] = wrapper.targetN;
-            }
-        }
-    }
-    return this;
-};
-W2NMapper.prototype.reset = function () {
-    this.objList.length = 0;
-    this.keyList.length = 0;
-};
-W2NMapper.prototype.concat = function (other) {
-    this.objList = this.objList.concat(other.objList);
-    this.keyList = this.keyList.concat(other.keyList);
-};
 
 /**
  * !#en Contains information collected during deserialization
@@ -116,8 +71,6 @@ var Details = function () {
      */
     this.rawProp = '';
 
-    this.wrapperToNode = new W2NMapper();
-
     if (EDITOR) {
         /**
          * 用户可以指定一个在反序列化结束时会被触发的回调，该回调会传回反序列化时统计到的所有解析过的字段。
@@ -146,7 +99,6 @@ Details.prototype.reset = function () {
     this.rawProp = '';
     //this.rawObjList.length = 0;
     //this.rawPropList.length = 0;
-    this.wrapperToNode.reset();
 
     if (EDITOR) {
         this.visitorInEditor = null;
@@ -410,10 +362,6 @@ var _Deserializer = (function () {
                         else {
                             self._deserializeObjField(obj, prop, propName);
                         }
-
-                        if (cc.isRuntimeNode(attrs.ctor)) {
-                            self.result.wrapperToNode.register(obj, propName);
-                        }
                     }
                     else {
                         obj[propName] = null;
@@ -567,66 +515,3 @@ cc.deserialize = function (data, result, options) {
 };
 
 cc.deserialize.Details = Details;
-cc.deserialize.W2NMapper = W2NMapper;
-
-// used after scene created
-cc.deserialize.applyMixinProps = function (deserializedData, classToMix, target, wrapperToNode) {
-    var props = classToMix.__props__;
-    for (var p = 0; p < props.length; p++) {
-        var propName = props[p];
-        var attrs = cc.Class.attr(classToMix, propName);
-        // assume all prop in __props__ must have attr
-        if (attrs.serializable === false) {
-            continue;   // skip nonSerialized
-        }
-        if (!EDITOR && attrs.editorOnly) {
-            continue;   // skip editor only if not editor
-        }
-        var prop = deserializedData[propName];
-
-        // ignore types not equals to specified
-        if (!Array.isArray(attrs.default)) {
-            if (attrs.saveUrlAsAsset) {
-                if (typeof prop !== 'string') {
-                    continue;
-                }
-            }
-            else if (attrs.expectedTypeOf && typeof prop !== attrs.expectedTypeOf) {
-                continue;
-            }
-        }
-        else if (prop && !Array.isArray(prop)) {
-            // expected array but not
-            continue;
-        }
-
-        if (prop && typeof prop === 'object') {
-            if (cc.isRuntimeNode(attrs.ctor)) {
-                if (prop.targetN) {
-                    target[propName] = prop.targetN;
-                }
-                else {
-                    target[propName] = prop;
-                    wrapperToNode.register(target, propName);
-                }
-            }
-            else {
-                if (attrs.ctor) {
-                    // check class type
-                    if (!cc.isChildClassOf(prop.constructor, attrs.ctor) && !Array.isArray(prop)) {
-                        // ignore types not inherit from specified
-                        continue;
-                    }
-                }
-                target[propName] = prop;
-            }
-        }
-        else if (typeof prop !== 'undefined') {
-            target[propName] = prop;
-        }
-    }
-    //if (props[props.length - 1] === '_$erialized') {
-    //    // save original serialized deserializedData
-    //    target._$erialized = deserializedData;
-    //}
-};

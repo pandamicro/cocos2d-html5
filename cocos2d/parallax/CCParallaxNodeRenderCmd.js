@@ -44,7 +44,7 @@
     }
 })();
 
-cc.game.addEventListener(cc.game.EVENT_RENDERER_INITED, function () {
+cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
     if(cc._renderType !== cc.game.RENDER_TYPE_WEBGL)
         return;
 

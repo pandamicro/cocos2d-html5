@@ -441,6 +441,10 @@ cc.js.unregisterClass to remove the id of unused class';
  * @param {Boolean} [enumerable=false]
  */
 js.getset = function (obj, prop, getter, setter, enumerable) {
+    if (typeof setter !== 'function') {
+        enumerable = setter;
+        setter = undefined;
+    }
     Object.defineProperty(obj, prop, {
         get: getter,
         set: setter,

@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2013-2015 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -78,28 +78,6 @@ function parseNotify (val, propName, notify, properties) {
     }
 }
 
-// auto set wrapper's type
-function parseWrapper (val, propName, wrapperOf, classname) {
-    if (CC_EDITOR) {
-        cc.info('The "wrapper" attribute of %s.%s is obsoleted, use "type" instead please.', classname, propName);
-        if (val.type) {
-            cc.warn('The "wrapper" attribute of %s.%s can not be used with "type"', classname, propName);
-        }
-        if (cc.Class.isChildClassOf(wrapperOf, cc.Runtime.NodeWrapper)) {
-            val.type = wrapperOf;
-            return;
-        }
-        var wrapper = cc.getWrapperType(wrapperOf);
-        if (wrapper) {
-            val.type = wrapper;
-        }
-        else {
-            cc.warn('Can not declare "wrapper" attribute for %s.%s, the registered wrapper of "%s" is not found.',
-                name, propName, cc.js.getClassName(wrapperOf));
-        }
-    }
-}
-
 function checkUrl (val, className, propName, url) {
     if (Array.isArray(url)) {
         if (url.length > 0) {
@@ -110,6 +88,9 @@ function checkUrl (val, className, propName, url) {
         }
     }
     if (CC_EDITOR) {
+        if (url == null) {
+            return cc.warn('The "url" attribute of "%s.%s" is undefined when loading script.', className, propName);
+        }
         if (typeof url !== 'function' || !cc.isChildClassOf(url, cc.RawAsset)) {
             return cc.error('The "url" type of "%s.%s" must be child class of cc.RawAsset.', className, propName);
         }
@@ -139,14 +120,17 @@ function parseType (val, type, className, propName) {
             return cc.error('Invalid type of %s.%s', className, propName);
         }
     }
-    if (typeof type === 'function') {
-        if (CC_EDITOR) {
+    if (CC_EDITOR) {
+        if (typeof type === 'function') {
             var isRaw = cc.isChildClassOf(type, cc.RawAsset) && !cc.isChildClassOf(type, cc.Asset);
             if (isRaw) {
                 cc.warn('The "type" attribute of "%s.%s" must be child class of cc.Asset, ' +
                           'otherwise you should use "url: %s" instead', className, propName,
                     cc.js.getClassName(type));
             }
+        }
+        else if (type == null) {
+            cc.warn('The "type" attribute of "%s.%s" is undefined when loading script.', className, propName);
         }
     }
 }
@@ -176,26 +160,16 @@ module.exports = function (properties, className) {
                 parseNotify(val, propName, notify, properties);
             }
 
-            var type = val.type;
-            if (type) {
-                parseType(val, type, className, propName);
+            if ('type' in val) {
+                parseType(val, val.type, className, propName);
             }
 
-            if (CC_EDITOR) {
-                var wrapperOf = val.wrapper;
-                if (wrapperOf) {
-                    parseWrapper(val, propName, wrapperOf, className);
-                }
+            if ('url' in val) {
+                checkUrl(val, className, propName, val.url);
             }
 
-            var url = val.url;
-            if (url) {
-                checkUrl(val, className, propName, url);
-            }
-
-            type = val.type;
-            if (type) {
-                postCheckType(val, type, className, propName);
+            if ('type' in val) {
+                postCheckType(val, val.type, className, propName);
             }
         }
     }
