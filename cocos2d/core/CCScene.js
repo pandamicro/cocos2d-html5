@@ -36,10 +36,7 @@ cc.EScene = cc.Class({
 
     ctor: function () {
         this._activeInHierarchy = false;
-        if (!cc.game._isCloning) {
-            // create dynamically
-            this._onBatchCreated();
-        }
+        this._inited = false;
     },
 
     destroy: function () {
@@ -64,22 +61,12 @@ cc.EScene = cc.Class({
     _onSizeChanged: NIL,
     _onAnchorChanged: NIL,
     _onOpacityModifyRGBChanged: NIL,
+    _onCascadeChanged: NIL,
 
     _onBatchCreated: function () {
-        if (this._sgNode) {
-            return;
-        }
-        var sgNode = new cc.Scene();
-
-        // retain immediately
-        sgNode.retain();
-        this._sgNode = sgNode;
-
-        sgNode.setAnchorPoint(0, 0);
-
-        var children = this._children;
-        for (var i = 0; i < children.length; i++) {
-            children[i]._onBatchCreated();
+        if ( ! this._inited) {
+            this._super();
+            this._inited = true;
         }
     },
 

@@ -237,7 +237,7 @@ var Component = cc.Class({
             },
             displayName: 'Script',
             type: cc.JavaScript,
-            visible: true
+            visible: false
         },
 
         /**

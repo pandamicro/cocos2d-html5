@@ -23,6 +23,7 @@
  ****************************************************************************/
 
 var AnimationAnimator = require('../../animation/animation-animator');
+var AnimationClip = require('../../animation/animation-clip');
 
 /**
  * Renders a sprite in the scene.
@@ -47,7 +48,7 @@ var AnimationComponent = cc.Class({
     properties: {
         defaultClip: {
             default: null,
-            type: cc.AnimationClip,
+            type: AnimationClip,
             displayName: 'Animation'
         },
 
@@ -62,13 +63,13 @@ var AnimationComponent = cc.Class({
                     this.sample();
                 }
             },
-            type: cc.AnimationClip,
+            type: AnimationClip,
             visible: false
         },
 
         _clips: {
             default: [],
-            type: [cc.AnimationClip],
+            type: [AnimationClip],
             displayName: 'Animations'
         },
 
