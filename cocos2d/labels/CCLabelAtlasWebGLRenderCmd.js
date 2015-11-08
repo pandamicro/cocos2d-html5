@@ -60,8 +60,8 @@
         var locTextureAtlas = this._textureAtlas;
 
         var texture = locTextureAtlas.texture;
-        var textureWide = texture.pixelsWidth;
-        var textureHigh = texture.pixelsHeight;
+        var textureWide = texture.getPixelWidth();
+        var textureHigh = texture.getPixelHeight();
         var itemWidthInPixels = node._itemWidth;
         var itemHeightInPixels = node._itemHeight;
         if (!node._ignoreContentScaleFactor) {

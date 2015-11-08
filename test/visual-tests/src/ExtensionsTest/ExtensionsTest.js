@@ -34,23 +34,17 @@ var TEST_HTTPCLIENT = 3;
 
 var extensionsTestItemNames = [
     {
-        itemTitle:"TableViewTest",
-        testScene:function () {
-            runTableViewTest();
-        }
-    },
-    {
         itemTitle:"WebSocketTest",
         testScene:function () {
             runWebSocketTest();
         }
     },
-    {
-        itemTitle:"SocketIOTest",
-        testScene:function () {
-            runSocketIOTest();
-        }
-    },
+    // {
+    //     itemTitle:"SocketIOTest",
+    //     testScene:function () {
+    //         runSocketIOTest();
+    //     }
+    // },
     {
         itemTitle:"CCPoolTest",
         testScene:function () {
@@ -58,15 +52,6 @@ var extensionsTestItemNames = [
         }
     }
 ];
-
-if(!cc.sys.isNative || cc.sys.OS_LINUX !== cc.sys.os){
-    extensionsTestItemNames.push({
-        itemTitle:"EditBoxTest",
-        testScene:function () {
-            runEditBoxTest();
-        }
-    });
-}
 
 if (cc.sys.isNative && cc.sys.OS_WINDOWS != cc.sys.os) {
     extensionsTestItemNames.push({

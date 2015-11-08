@@ -107,7 +107,7 @@
                 },
                 texture: {
                     default: null,
-                    type: cc.TextureAsset,
+                    type: cc.Texture2D,
                     visible: false
                 },
                 rotated: {

@@ -24,6 +24,9 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+// init CCSpriteFrame
+require("../cocos2d/core/sprites/CCSpriteFrame");
+
 /**
  * <p>
  * cc.spriteFrameCache is a singleton that handles the loading of the sprite frames. It saves in a cache the sprite frames.<br/>

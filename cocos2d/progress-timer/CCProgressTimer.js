@@ -58,7 +58,7 @@ cc.ProgressTimer = cc.Node.extend(/** @lends cc.ProgressTimer# */{
     _className:"ProgressTimer",
 
     /**
-     * constructor of cc.cc.ProgressTimer
+     * constructor of cc.ProgressTimer
      * @function
      * @param {cc.Sprite} sprite
      */

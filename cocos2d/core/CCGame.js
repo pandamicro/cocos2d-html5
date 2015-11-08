@@ -1,9 +1,11 @@
+var EventTarget = require('./event/event-target');
+
 /**
  * An object to boot the game.
  * @class
  * @name cc.game
  */
-cc.game = /** @lends cc.game# */{
+var game = /** @lends cc.game# */{
 
     EVENT_HIDE: "game_on_hide",
     EVENT_SHOW: "game_on_show",
@@ -16,6 +18,8 @@ cc.game = /** @lends cc.game# */{
 
     _eventHide: null,
     _eventShow: null,
+
+    _persistRootNodes: [],
 
     /**
      * Key of config
@@ -51,7 +55,6 @@ cc.game = /** @lends cc.game# */{
     _lastTime: null,
     _frameTime: null,
 
-    _loadingScene: '',
     // Scenes list
     _sceneInfos: [],
 
@@ -117,8 +120,11 @@ cc.game = /** @lends cc.game# */{
      * Pause the game.
      */
     pause: function () {
+        if (this._paused) return;
         this._paused = true;
-
+        // Pause audio engine
+        cc.audioEngine && cc.audioEngine._pausePlaying();
+        // Pause main loop
         if (this._intervalId)
             window.cancelAnimationFrame(this._intervalId);
         this._intervalId = 0;
@@ -128,7 +134,11 @@ cc.game = /** @lends cc.game# */{
      * Resume the game from pause.
      */
     resume: function () {
+        if (!this._paused) return;
         this._paused = false;
+        // Resume audio engine
+        cc.audioEngine && cc.audioEngine._resumePlaying();
+        // Resume main loop
         this._runMainLoop();
     },
 
@@ -147,7 +157,7 @@ cc.game = /** @lends cc.game# */{
         // Clean up audio
         cc.audioEngine && cc.audioEngine.end();
 
-        cc.game.onStart();
+        game.onStart();
     },
 
 //  @Game loading
@@ -235,72 +245,63 @@ cc.game = /** @lends cc.game# */{
      */
     run: function (config, onStart) {
         if (typeof config === 'function') {
-            cc.game.onStart = config;
+            game.onStart = config;
         }
         else {
             if (config) {
-                cc.game.config = config;
+                game.config = config;
             }
             if (typeof onStart === 'function') {
-                cc.game.onStart = onStart;
+                game.onStart = onStart;
             }
         }
 
-        this.prepare(cc.game.onStart && cc.game.onStart.bind(cc.game));
+        this.prepare(game.onStart && game.onStart.bind(game));
     },
 
-
-//  @Scene Loading
+//  @ Persist root node section
     /**
-     * Loads the scene by its name.
-     * @method loadScene
-     * @param {string} sceneName - the name of the scene to load
-     * @param {function} [onLaunched] - callback, will be called after scene launched
-     * @param {function} [onUnloaded] - callback, will be called when the previous scene was unloaded
-     * @return {boolean} if error, return false
+     * Add a persistent root node to the game, the persistent node won't be destroyed during scene transition
+     * @param {cc.ENode} node - The node to be made persistent
      */
-    loadScene: function (sceneName, onLaunched, onUnloaded) {
-        var uuid, info;
-        if (this._loadingScene) {
-            cc.error('[loadScene] Failed to load scene "%s" because "%s" is already loading', sceneName, this._loadingScene);
-            return false;
-        }
-        if (typeof sceneName === 'string') {
-            if (!sceneName.endsWith('.fire')) {
-                sceneName += '.fire';
-            }
-            if (sceneName[0] !== '/' && !sceneName.startsWith('assets://')) {
-                sceneName = '/' + sceneName;    // 使用全名匹配
-            }
-            // search scene
-            for (var i = 0; i < this._sceneInfos.length; i++) {
-                info = this._sceneInfos[i];
-                var url = info.url;
-                if (url.endsWith(sceneName)) {
-                    uuid = info.uuid;
-                    break;
+    addPersistRootNode: function (node) {
+        if (!node instanceof cc.ENode)
+            return;
+        var index = this._persistRootNodes.indexOf(node);
+        if (index === -1) {
+            var scene = cc.director._scene;
+            if (cc.isValid(scene)) {
+                if (!node.parent) {
+                    node.parent = scene;
                 }
+                else if (node.parent !== scene) {
+                    cc.warn('The node can not be made persist because it\'s not under root node.');
+                    return;
+                }
+                this._persistRootNodes.push(node);
+                node._persistNode = true;
             }
         }
-        else {
-            info = this._sceneInfos[sceneName];
-            if (typeof info === 'object') {
-                uuid = info.uuid;
-            }
-            else {
-                cc.error('[loadScene] The scene index to load (%s) is out of range.', sceneName);
-                return false;
-            }
+    },
+
+    /**
+     * Remove a persistent root node
+     * @param {cc.ENode} node - The node to be removed from persistent node list
+     */
+    removePersistRootNode: function (node) {
+        var index = this._persistRootNodes.indexOf(node);
+        if (index !== -1) {
+            this._persistRootNodes.splice(index, 1);
         }
-        if (uuid) {
-            this._loadingScene = sceneName;
-            this._loadSceneByUuid(uuid, onLaunched, onUnloaded);
-            return true;
-        }
-        else {
-            cc.error('[loadScene] Can not load the scene "%s" because it has not been added to the build settings before play.', sceneName);
-            return false;
-        }
+        node._persistNode = false;
+    },
+
+    /**
+     * Check whether the node is a persistent root node
+     * @param {cc.ENode} node - The node to be checked
+     */
+    isPersistRootNode: function (node) {
+        return node._persistNode;
     },
 
 //@Private Methods
@@ -308,8 +309,8 @@ cc.game = /** @lends cc.game# */{
 //  @Time ticker section
     _setAnimFrame: function () {
         this._lastTime = new Date();
-        this._frameTime = 1000 / cc.game.config[cc.game.CONFIG_KEY.frameRate];
-        if((cc.sys.os === cc.sys.OS_IOS && cc.sys.browserType === cc.sys.BROWSER_TYPE_WECHAT) || cc.game.config[cc.game.CONFIG_KEY.frameRate] !== 60) {
+        this._frameTime = 1000 / game.config[game.CONFIG_KEY.frameRate];
+        if((cc.sys.os === cc.sys.OS_IOS && cc.sys.browserType === cc.sys.BROWSER_TYPE_WECHAT) || game.config[game.CONFIG_KEY.frameRate] !== 60) {
             window.requestAnimFrame = this._stTime;
             window.cancelAnimationFrame = this._ctTime;
         }
@@ -335,10 +336,10 @@ cc.game = /** @lends cc.game# */{
     },
     _stTime: function(callback){
         var currTime = new Date().getTime();
-        var timeToCall = Math.max(0, cc.game._frameTime - (currTime - cc.game._lastTime));
+        var timeToCall = Math.max(0, game._frameTime - (currTime - game._lastTime));
         var id = window.setTimeout(function() { callback(); },
             timeToCall);
-        cc.game._lastTime = currTime + timeToCall;
+        game._lastTime = currTime + timeToCall;
         return id;
     },
     _ctTime: function(id){
@@ -441,7 +442,7 @@ cc.game = /** @lends cc.game# */{
             throw new Error("The renderer doesn't support the renderMode " + this.config[this.CONFIG_KEY.renderMode]);
         }
 
-        var el = this.config[cc.game.CONFIG_KEY.id],
+        var el = this.config[game.CONFIG_KEY.id],
             win = window,
             element = cc.$(el) || cc.$('#' + el),
             localCanvas, localContainer, localConStyle;
@@ -484,7 +485,7 @@ cc.game = /** @lends cc.game# */{
         localConStyle.overflow = 'hidden';
         localContainer.top = '100%';
 
-        if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
+        if (cc._renderType === game.RENDER_TYPE_WEBGL) {
             this._renderContext = cc._renderContext = cc.webglContext
              = cc.create3DContext(localCanvas, {
                 'stencil': true,
@@ -507,11 +508,11 @@ cc.game = /** @lends cc.game# */{
         }
 
         cc._gameDiv = localContainer;
-        cc.game.canvas.oncontextmenu = function () {
+        game.canvas.oncontextmenu = function () {
             if (!cc._isContextMenuEnable) return false;
         };
 
-        this.dispatchEvent(this.EVENT_RENDERER_INITED, true);
+        this.emit(this.EVENT_RENDERER_INITED, true);
 
         this._rendererInitialized = true;
     },
@@ -543,12 +544,12 @@ cc.game = /** @lends cc.game# */{
         }
 
         var onHidden = function () {
-            if (cc.eventManager && cc.game._eventHide)
-                cc.eventManager.dispatchEvent(cc.game._eventHide);
+            if (cc.eventManager && game._eventHide)
+                cc.eventManager.dispatchEvent(game._eventHide);
         };
         var onShow = function () {
-            if (cc.eventManager && cc.game._eventShow)
-                cc.eventManager.dispatchEvent(cc.game._eventShow);
+            if (cc.eventManager && game._eventShow)
+                cc.eventManager.dispatchEvent(game._eventShow);
         };
 
         if (hidden) {
@@ -570,155 +571,15 @@ cc.game = /** @lends cc.game# */{
             win.addEventListener("pageshow", onShow, false);
         }
 
-        cc.eventManager.addCustomListener(cc.game.EVENT_HIDE, function () {
-            cc.audioEngine._pausePlaying();
+        cc.eventManager.addCustomListener(game.EVENT_HIDE, function () {
+            game.pause();
         });
-        cc.eventManager.addCustomListener(cc.game.EVENT_SHOW, function () {
-            cc.audioEngine._resumePlaying();
-        });
-
-        cc.eventManager.addCustomListener(cc.game.EVENT_SHOW, function () {
-            if(self._intervalId){
-                window.cancelAnimationFrame(self._intervalId);
-
-                self._runMainLoop();
-            }
-        });
-    },
-
-//  @Scene loading section
-    _initScene: function (sceneWrapper, callback) {
-        if (sceneWrapper._needCreate) {
-            sceneWrapper.create(callback);
-        }
-        else {
-            callback();
-        }
-    },
-
-    // for editor
-    _onPreLaunchScene: null,
-
-    /**
-     * Launch loaded scene.
-     * @method _launchScene
-     * @param {SceneWrapper} scene
-     * @param {function} [onBeforeLoadScene]
-     * @private
-     */
-    _launchScene: function (scene, onBeforeLoadScene) {
-        if (!scene) {
-            cc.error('Argument must be non-nil');
-            return;
-        }
-
-        if (scene._needCreate && CC_EDITOR) {
-            cc.error('The scene wrapper %s is not yet fully created', scene.name);
-            return;
-        }
-
-        //Engine._dontDestroyEntities.length = 0;
-
-        //// unload scene
-        //var oldScene = Engine._scene;
-        //
-        ////editorCallback.onStartUnloadScene(oldScene);
-        //
-        //if (cc.isValid(oldScene)) {
-        //    // destroyed and unload
-        //    AssetLibrary.unloadAsset(oldScene, true);
-        //}
-        //
-        //// purge destroyed entities belongs to old scene
-        //CCObject._deferredDestroy();
-        //
-        //Engine._scene = null;
-
-        // destroy last scene
-        if (CC_EDITOR && cc.engine && cc.engine._emptySceneN) {
-            cc.director.runScene(cc.engine._emptySceneN);
-        }
-
-        if (onBeforeLoadScene) {
-            onBeforeLoadScene();
-        }
-
-        if (this._onPreLaunchScene) {
-            this._onPreLaunchScene();
-        }
-
-        //// init scene
-        //Engine._renderContext.onSceneLoaded(scene);
-
-        ////if (editorCallback.onSceneLoaded) {
-        ////    editorCallback.onSceneLoaded(scene);
-        ////}
-
-        //// launch scene
-        //scene.entities = scene.entities.concat(Engine._dontDestroyEntities);
-        //Engine._dontDestroyEntities.length = 0;
-        cc.director.runScene(scene.targetN);
-        //Engine._renderContext.onSceneLaunched(scene);
-
-        //editorCallback.onBeforeActivateScene(scene);
-
-        scene._onActivated();
-
-        //editorCallback.onSceneLaunched(scene);
-    },
-
-    /**
-     * Loads the scene by its uuid.
-     * @method _loadSceneByUuid
-     * @param {string} uuid - the uuid of the scene asset to load
-     * @param {function} [onLaunched]
-     * @param {function} [onUnloaded]
-     * @private
-     */
-    _loadSceneByUuid: function (uuid, onLaunched, onUnloaded) {
-        var self = this;
-        //cc.AssetLibrary.unloadAsset(uuid);     // force reload
-        cc.AssetLibrary.loadAsset(uuid, function (error, scene) {
-            if (error) {
-                error = 'Failed to load scene: ' + error;
-                if (CC_EDITOR) {
-                    console.assert(false, error);
-                }
-            }
-            else {
-                var uuid = scene._uuid;
-                scene = scene.scene;    // Currently our scene not inherited from Asset, so need to extract scene from dummy asset
-                if (scene instanceof cc.Runtime.SceneWrapper) {
-                    scene.uuid = uuid;
-                }
-                else {
-                    error = 'The asset ' + uuid + ' is not a scene';
-                    scene = null;
-                }
-            }
-            if (scene) {
-                self._initScene(scene, function () {
-                    self._launchScene(scene, onUnloaded);
-                    self._loadingScene = '';
-                    if (onLaunched) {
-                        onLaunched(error, scene);
-                    }
-                });
-            }
-            else {
-                cc.error(error);
-                self._loadingScene = '';
-                if (onLaunched) {
-                    onLaunched(error, scene);
-                }
-            }
+        cc.eventManager.addCustomListener(game.EVENT_SHOW, function () {
+            game.resume();
         });
     }
-
-    //launchNewScene: function () {
-    //    var SceneWrapperImpl = cc.getWrapper(cc.director.getRunningScene()).constructor;
-    //    var sceneWrapper = new SceneWrapperImpl();
-    //    sceneWrapper.createAndAttachNode();
-    //    cc.game._launchScene(sceneWrapper);
-    //}
 };
+
+EventTarget.polyfill(game);
+
+cc.game = module.exports = game;

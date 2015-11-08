@@ -1,8 +1,6 @@
 
 if (cc.loader) return;
 
-var FireUrl = CC_EDITOR && require('fire-url');
-
 /**
  * Loader for resource loading process. It's a singleton object.
  * @class
@@ -134,7 +132,7 @@ cc.loader = (function () {
             }
             s.addEventListener('load', function () {
                 s.parentNode.removeChild(s);
-                this.removeEventListener('load', arguments.callee, false);
+                s.removeEventListener('load', arguments.callee, false);
                 cb();
             }, false);
             s.addEventListener('error', function () {
@@ -184,7 +182,7 @@ cc.loader = (function () {
          */
         loadTxt: function (url, cb) {
             if (!cc._isNodeJs) {
-                var xhr = this. getXMLHttpRequest(),
+                var xhr = this.getXMLHttpRequest(),
                     errInfo = "load " + url + " failed!";
                 xhr.open("GET", url, true);
                 if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
@@ -289,10 +287,6 @@ cc.loader = (function () {
          * @returns {Image}
          */
         loadImg: function (url, option, callback) {
-            if (CC_EDITOR && FireUrl) {
-                url = FireUrl.addRandomQuery(url);
-            }
-
             var opt = {
                 isCrossOrigin: true
             };
@@ -312,8 +306,8 @@ cc.loader = (function () {
                 img.crossOrigin = "Anonymous";
 
             var loadCallback = function () {
-                this.removeEventListener('load', loadCallback, false);
-                this.removeEventListener('error', errorCallback, false);
+                img.removeEventListener('load', loadCallback, false);
+                img.removeEventListener('error', errorCallback, false);
 
                 if (callback)
                     callback(null, img);
@@ -321,7 +315,7 @@ cc.loader = (function () {
 
             var self = this;
             var errorCallback = function () {
-                this.removeEventListener('error', errorCallback, false);
+                img.removeEventListener('error', errorCallback, false);
 
                 if(img.crossOrigin && img.crossOrigin.toLowerCase() === "anonymous"){
                     opt.isCrossOrigin = false;

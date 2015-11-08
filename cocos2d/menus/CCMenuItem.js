@@ -749,9 +749,9 @@ cc.MenuItemSprite = cc.MenuItem.extend(/** @lends cc.MenuItemSprite# */{
         this._updateImagesVisibility();
 
         if (normalImage.textureLoaded && !normalImage.textureLoaded()) {
-            normalImage.addEventListener("load", function (sender) {
-                this.width = sender.width;
-                this.height = sender.height;
+            normalImage.once("load", function (event) {
+                this.width = normalImage.width;
+                this.height = normalImage.height;
             }, this);
         }
     },
@@ -835,9 +835,9 @@ cc.MenuItemSprite = cc.MenuItem.extend(/** @lends cc.MenuItemSprite# */{
             this.height = locNormalImage.height;
 
             if (locNormalImage.textureLoaded && !locNormalImage.textureLoaded()) {
-                locNormalImage.addEventListener("load", function (sender) {
-                    this.width = sender.width;
-                    this.height = sender.height;
+                locNormalImage.once("load", function (event) {
+                    this.width = locNormalImage.width;
+                    this.height = locNormalImage.height;
                     this.setCascadeColorEnabled(true);
                     this.setCascadeOpacityEnabled(true);
                 }, this);

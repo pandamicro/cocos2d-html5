@@ -1,7 +1,7 @@
 ﻿/****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2013-2015 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -216,7 +216,7 @@ var _metaClass = {
             }
         }
 
-        if (CC_EDITOR) {
+        if (CC_EDITOR || CC_TEST) {
             Object.defineProperty(this.prototype, name, {
                 //set: function setter_editorWrapper (value) {
                 //    if (this._observing) {
@@ -321,9 +321,6 @@ function instantiateProps (instance, itsClass) {
 cc.isChildClassOf = function (subclass, superclass) {
     if (subclass && superclass) {
         if (typeof subclass !== 'function') {
-            if (CC_DEV) {
-                cc.warn('[isChildClassOf] subclass should be function type, not', subclass);
-            }
             return false;
         }
         if (typeof superclass !== 'function') {
@@ -360,7 +357,8 @@ function doDefine (className, baseClass, constructor, options) {
     // occupy some non-inherited static members
     for (var staticMember in _metaClass) {
         Object.defineProperty(fireClass, staticMember, {
-            value: _metaClass[staticMember]
+            value: _metaClass[staticMember],
+            writable: true
         });
     }
 
@@ -387,35 +385,39 @@ function doDefine (className, baseClass, constructor, options) {
 }
 
 function define (className, baseClass, constructor, options) {
-    if (cc.isChildClassOf(baseClass, cc.Behavior)) {
+    if (cc.isChildClassOf(baseClass, cc.Component)) {
         var frame = cc._RFpeek();
         if (frame) {
             if (CC_DEV && constructor) {
-                cc.warn('cc.Class: Should not define constructor for cc.Behavior.');
+                cc.warn('cc.Class: Should not define constructor for cc.Component.');
             }
             if (frame.beh) {
-                cc.error('Each script can have at most one Behavior.');
+                cc.error('Each script can have at most one Component.');
                 return;
             }
-            var isInProject = frame.uuid;
-            if (isInProject) {
-                if (className) {
-                    cc.warn('Should not specify class name for Behavior which defines in project.');
+            var uuid = frame.uuid;
+            if (uuid) {
+                if (className && CC_EDITOR) {
+                    cc.warn('Should not specify class name for Component which defines in project.');
                 }
             }
             //else {
-            //    builtin plugin behavior
+            //    builtin
             //}
             className = className || frame.script;
             var cls = doDefine(className, baseClass, constructor, options);
-            if (frame.uuid) {
-                JS._setClassId(frame.uuid, cls);
+            if (uuid) {
+                JS._setClassId(uuid, cls);
+                if (CC_EDITOR) {
+                    //Editor.addComponentMenu(cls, 'Scripts/' + cc.js.getClassName(comp), -1);
+                    cls.prototype.__scriptUuid = Editor.decompressUuid(uuid);
+                }
             }
             frame.beh = cls;
             return cls;
         }
     }
-    // not project behavior
+    // not project component
     return doDefine(className, baseClass, constructor, options);
 }
 
@@ -445,6 +447,9 @@ function normalizeClassName (className) {
         if (className) {
             className = className.replace(/\./g, '_');
             className = className.split('').filter(function (x) { return /^[a-zA-Z0-9_$]/.test(x) }).join('');
+            if (/^[0-9]/.test(className[0])) {
+                className = '_' + className;
+            }
             try {
                 // validate name
                 eval('function ' + className + '(){}');
@@ -580,9 +585,9 @@ function _boundSuperCall (func, funcName, base) {
             }
         }
         else if (pd.get) {
-            superFunc = pd.get();
-            if (typeof superFunc !== 'function') {
-                superFunc = null;
+            var got = pd.get();
+            if (typeof got === 'function') {
+                superFunc = got;
             }
         }
     }

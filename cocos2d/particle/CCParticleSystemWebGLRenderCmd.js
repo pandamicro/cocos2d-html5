@@ -221,8 +221,8 @@
         var high = pointRect.height;
 
         if (texture) {
-            wide = texture.pixelsWidth;
-            high = texture.pixelsHeight;
+            wide = texture.getPixelWidth();
+            high = texture.getPixelHeight();
         }
 
         var left, bottom, right, top;

@@ -35,7 +35,7 @@ var UIScrollViewTest_Vertical = UIMainLayer.extend({
             this._bottomDisplayLabel.x = widgetSize.width / 2;
             this._bottomDisplayLabel.y = widgetSize.height / 2 - this._bottomDisplayLabel.height * 3;
 
-            var background = this._widget.getChildByName("background_Panel");
+            var background = this._backgroundSize;
 
             // Create the scrollview
             var scrollView = new ccui.ScrollView();
@@ -102,7 +102,7 @@ var UIScrollViewTest_Horizontal = UIMainLayer.extend({
             this._bottomDisplayLabel.x = widgetSize.width / 2;
             this._bottomDisplayLabel.y = widgetSize.height / 2 - this._bottomDisplayLabel.height * 3;
 
-            var background = this._widget.getChildByName("background_Panel");
+            var background = this._backgroundSize;
 
             // Create the scrollview
             var scrollView = new ccui.ScrollView();
@@ -171,7 +171,7 @@ var UIScrollViewTest_Both = UIMainLayer.extend({
             this._bottomDisplayLabel.x = widgetSize.width / 2;
             this._bottomDisplayLabel.y = widgetSize.height / 2 - this._bottomDisplayLabel.height * 3;
 
-            var background = this._widget.getChildByName("background_Panel");
+            var background = this._backgroundSize;
 
             // Create the scrollview
             var scrollView = new ccui.ScrollView();
@@ -211,7 +211,7 @@ var UIScrollViewTest_ScrollToPercentBothDirection = UIMainLayer.extend({
             this._bottomDisplayLabel.x = widgetSize.width / 2;
             this._bottomDisplayLabel.y = widgetSize.height / 2 - this._bottomDisplayLabel.height * 3;
 
-            var background = this._widget.getChildByName("background_Panel");
+            var background = this._backgroundSize;
 
             // Create the scrollview
             var scrollView = new ccui.ScrollView();
@@ -251,7 +251,7 @@ var UIScrollViewTest_ScrollToPercentBothDirection_Bounce = UIMainLayer.extend({
             this._bottomDisplayLabel.x = widgetSize.width / 2;
             this._bottomDisplayLabel.y = widgetSize.height / 2 - this._bottomDisplayLabel.height * 3;
 
-            var background = this._widget.getChildByName("background_Panel");
+            var background = this._backgroundSize;
 
             // Create the scrollview
             var scrollView = new ccui.ScrollView();
@@ -295,15 +295,11 @@ var UIScrollViewNestTest = UIMainLayer.extend({
             this._bottomDisplayLabel.setString("ScrollView vertical");
             this._bottomDisplayLabel.setPosition(widgetSize.width / 2.0, widgetSize.height / 2.0 - this._bottomDisplayLabel.height * 3.075);
 
-            var root = this._mainNode.getChildByTag(81);
-
-            var background = root.getChildByName("background_Panel");
-
             // Create the scrollview by vertical
             var scrollView = new ccui.ScrollView();
             scrollView.setContentSize(cc.size(280.0, 150.0));
             scrollView.setDirection(ccui.ScrollView.Dir.BOTH);
-            var backgroundSize = background.getContentSize();
+            var backgroundSize = this._backgroundSize;
             scrollView.setPosition(cc.p((widgetSize.width - backgroundSize.width) / 2.0 +
                 (backgroundSize.width - scrollView.getContentSize().width) / 2.0,
                 (widgetSize.height - backgroundSize.height) / 2.0 +
@@ -370,14 +366,11 @@ var UIScrollViewRotated = UIMainLayer.extend({
             this._bottomDisplayLabel.setString("ScrollView vertical");
             this._bottomDisplayLabel.setPosition(widgetSize.width / 2.0, widgetSize.height / 2.0 - this._bottomDisplayLabel.height * 3.075);
 
-            var root = this._mainNode.getChildByTag(81);
-            var background = root.getChildByName("background_Panel");
-
             // Create the scrollview by vertical
             var scrollView = new ccui.ScrollView();
             scrollView.setContentSize(cc.size(280.0, 150.0));
             scrollView.setDirection(ccui.ScrollView.Dir.BOTH);
-            var backgroundSize = background.getContentSize();
+            var backgroundSize = this._backgroundSize;
             scrollView.setPosition(cc.p((widgetSize.width - backgroundSize.width) / 2.0 +
                 (backgroundSize.width - scrollView.getContentSize().width) / 2.0,
                 (widgetSize.height - backgroundSize.height) / 2.0 +
@@ -426,9 +419,8 @@ var UIScrollViewDisableTest = UIMainLayer.extend({
             this._bottomDisplayLabel.setString("ScrollView vertical");
             this._bottomDisplayLabel.x = widgetSize.width / 2;
             this._bottomDisplayLabel.y = widgetSize.height / 2 - this._bottomDisplayLabel.height * 3;
-
-            var background = this._widget.getChildByName("background_Panel");
-            var backgroundSize = background.getContentSize();
+            
+            var backgroundSize = this._backgroundSize;
 
             var scrollView = new ccui.ScrollView();
             scrollView.setContentSize(cc.size(280, 150));
@@ -495,7 +487,7 @@ var UIScrollViewTest_Vertical_Multiple = UIMainLayer.extend({
             this._bottomDisplayLabel.x = widgetSize.width / 2;
             this._bottomDisplayLabel.y = widgetSize.height / 2 - this._bottomDisplayLabel.height * 4;
 
-            var background = this._widget.getChildByName("background_Panel");
+            var background = this._backgroundSize;
 
             // Create the scrollview
             var scrollView = this._scrollView = new ccui.ScrollView();

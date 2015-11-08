@@ -114,11 +114,13 @@ cc.profiler = (function () {
         },
 
         resumeProfiling: function () {
-            cc.eventManager.addListener(_afterVisitListener, 1);
+            cc.director.on(cc.Director.EVENT_AFTER_VISIT, afterVisit);
+            cc.director.on(cc.Director.EVENT_PROJECTION_CHANGED, afterProjection);
         },
 
         stopProfiling: function () {
-            cc.eventManager.removeListener(_afterVisitListener);
+            cc.director.off(cc.Director.EVENT_AFTER_VISIT, afterVisit);
+            cc.director.off(cc.Director.EVENT_PROJECTION_CHANGED, afterProjection);
         },
 
         isShowingStats: function () {
@@ -143,8 +145,7 @@ cc.profiler = (function () {
 
         init: function () {
             if (!_inited) {
-                _afterVisitListener = cc.eventManager.addCustomListener(cc.Director.EVENT_AFTER_VISIT, afterVisit);
-                _afterProjection = cc.eventManager.addCustomListener(cc.Director.EVENT_PROJECTION_CHANGED, afterProjection);
+                this.resumeProfiling();
                 _inited = true;
             }
         }

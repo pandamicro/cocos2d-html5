@@ -17,7 +17,7 @@
 
     if (TestHostFile) {
         asyncTest('load asset with raw', function () {
-            //var texture = new cc.TextureAsset();
+            //var texture = new TestTexture();
             //texture.height = 123;
             //texture.width = 321;
             //cc.log(Editor.serialize(texture));
@@ -38,8 +38,8 @@
     }
 
     asyncTest('load asset with depends asset', function () {
-        //var sprite = new cc.SpriteAsset();
-        //sprite.texture = new cc.TextureAsset();
+        //var sprite = new cc.SpriteFrame();
+        //sprite.texture = new TestTexture();
         //sprite.texture._uuid = grossini_uuid;
         //cc.log(Editor.serialize(sprite));
 

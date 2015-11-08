@@ -22,12 +22,19 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-require('./cocos2d/core/platform');
-require('./cocos2d/core/assets');
+require('./cocos2d/core');
+require('./cocos2d/animation');
 
-var isCoreLevel = CC_EDITOR && Editor.isCoreLevel;
-if (!isCoreLevel) {
-    //require('./cocos2d/core/CCComponent');
-    cc.Runtime = require('./wrapper');
-    cc.isRuntimeNode = cc.getWrapperType;   // 由于是借助 wrapper 来判断，所以该方法只有在 wrapper 都注册好后才有效
+if (!(CC_EDITOR && Editor.isCoreLevel)) {
+    if (cc.sys.isNative) {
+        // TODO - add to jsb ?
+        function log () {
+            var text = cc.formatStr.apply(this, arguments);
+            console.log(text);
+        }
+        cc.log   = log;
+        cc.error = log;
+        cc.warn  = log;
+        cc.info  = log;
+    }
 }

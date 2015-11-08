@@ -29,10 +29,6 @@ var UIFocusTestBase = UIMainLayer.extend({
 
     init: function(){
         if (this._super()) {
-            var root = this._mainNode.getChildByTag(81);
-            var background = root.getChildByName("background_Panel");
-            background.removeFromParent(true);
-
             this._dpadMenu = new cc.Menu();
 
             cc.MenuItemFont.setFontSize(20);

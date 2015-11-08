@@ -107,7 +107,6 @@ cc.game.run({
         "src/SchedulerTest/SchedulerTest.js",
         "src/ActionsTest/ActionsTest.js",
         "src/TileMapTest/TileMapTest.js",
-        "src/TransitionsTest/TransitionsTest.js",
         "src/DrawPrimitivesTest/DrawPrimitivesTest.js",
         "src/ParticleTest/ParticleTest.js",
         "src/ProgressActionsTest/ProgressActionsTest.js",
@@ -126,16 +125,12 @@ cc.game.run({
         "src/NewEventManagerTest/NewEventManagerTest.js",
         "src/SysTest/SysTest.js",
         "src/SysTest/ScriptTestTempFile.js",
-        "src/EffectsTest/EffectsTest.js",
-        "src/EffectsAdvancedTest/EffectsAdvancedTest.js",
-        "src/MotionStreakTest/MotionStreakTest.js",
         "src/ClippingNodeTest/ClippingNodeTest.js",
         "src/OpenGLTest/OpenGLTest.js",
 
         "src/ExtensionsTest/ExtensionsTest.js",
         "src/ExtensionsTest/AssetsManagerTest/AssetsManagerTest.js",
         "src/ExtensionsTest/CCPoolTest/CCPoolTest.js",
-        "src/ExtensionsTest/EditBoxTest/EditBoxTest.js",
         "src/ExtensionsTest/S9SpriteTest/S9SpriteTest.js",
         "src/ExtensionsTest/NetworkTest/WebSocketTest.js",
         "src/ExtensionsTest/NetworkTest/SocketIOTest.js",
@@ -164,8 +159,6 @@ cc.game.run({
 
         "src/XHRTest/XHRTest.js",
         "src/XHRTest/XHRArrayBufferTest.js",
-
-        "src/ChipmunkTest/ChipmunkTest.js",
 
         "src/ReflectionTest/ReflectionTest.js",
 

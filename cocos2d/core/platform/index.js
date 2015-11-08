@@ -33,8 +33,8 @@ require('./deserialize');
 require('./instantiate');
 require('./prefab-info');
 require('./requiring-frame');
-require('./CCSys')
-require('./CCLoader')
+require('./CCSys');
+require('./CCLoader');
 
 if (cc.sys.isBrowser || cc.sys.isNative) {
     require('./load-manager');

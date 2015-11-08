@@ -25,7 +25,7 @@ var _uuidToCallbacks = new CallbacksInvoker();
 var _tdInfo = new cc.deserialize.Details();
 
 // create a loading context which reserves all relevant parameters
-function LoadingHandle (readMainCache, writeMainCache, recordAssets, reassociateNode, deserializeInfo) {
+function LoadingHandle (readMainCache, writeMainCache, recordAssets, deserializeInfo) {
     //this.readMainCache = readMainCache;
     //this.writeMainCache = writeMainCache;
 
@@ -45,8 +45,6 @@ function LoadingHandle (readMainCache, writeMainCache, recordAssets, reassociate
     this.assetsNeedPostLoad = recordAssets ? [] : null;
     // 需要让场景 preload 的 url
     this.urlsNeedPreload = {};
-
-    this.wrapperToNode = reassociateNode ? new cc.deserialize.W2NMapper() : null;
 
     // 可以提供一个反序列化句柄，用来在执行反序列化任务时，做一些特殊处理
     this.deserializeInfo = deserializeInfo;
@@ -106,7 +104,7 @@ var AssetLibrary = {
             deserializeInfo = options.deserializeInfo;
         }
 
-        var handle = new LoadingHandle(readMainCache, writeMainCache, null, null, deserializeInfo);
+        var handle = new LoadingHandle(readMainCache, writeMainCache, null, deserializeInfo);
         this._loadAssetByUuid(uuid, callback, handle, existingAsset);
     },
 
@@ -300,12 +298,11 @@ var AssetLibrary = {
      * @param {loadCallback} callback
      * @param {boolean} [dontCache=false] - If false, the result will cache to AssetLibrary, and MUST be unload by user manually.
      * @param {boolean} [recordAssets=false] - 是否统计新加载的需要让场景 preload 的 asset（所有包含 raw file 后缀名的 asset 并且不含 rawType 属性的 asset）
-     * * @param {boolean} [reassociateNode=false] - 是否统计需要重新关联的节点数据
      * @return {LoadingHandle}
      * @private
      */
-    loadJson: function (json, callback, dontCache, recordAssets, reassociateNode) {
-        var handle = new LoadingHandle(!dontCache, !dontCache, recordAssets, reassociateNode);
+    loadJson: function (json, callback, dontCache, recordAssets) {
+        var handle = new LoadingHandle(!dontCache, !dontCache, recordAssets);
         var thisTick = true;
         this._deserializeWithDepends(json, '', '', function (p1, p2) {
             if (thisTick) {
@@ -437,10 +434,6 @@ var AssetLibrary = {
             target: existingAsset
         });
 
-        if (handle.wrapperToNode && tdInfo.wrapperToNode) {
-            handle.wrapperToNode.concat(tdInfo.wrapperToNode);
-        }
-
         var hasRawType = !!tdInfo.rawProp;
 
         if (uuid) {
@@ -468,34 +461,6 @@ var AssetLibrary = {
      */
     getAssetByUuid: function (uuid) {
         return AssetLibrary._uuidToAsset[uuid] || null;
-    },
-
-    /**
-     * !#en Kill references to the asset so it can be garbage collected.
-     * Fireball will reload the asset from disk or remote if loadAssetByUuid being called again.
-     * You rarely use this function in scripts, since it will be called automatically when the Asset is destroyed.
-     * !#zh 手动卸载指定的资源，这个方法会在 Asset 被 destroy 时自动调用，一般不需要用到这个方法。卸载以后，Fireball 可以重新从硬盘或网络加载这个资源。
-     *
-     * 如果还有地方引用到asset，除非 destroyImmediated 为true，否则不应该执行这个方法，因为那样可能会导致 asset 被多次创建。
-     *
-     * @method unloadAsset
-     * @param {Asset|string} assetOrUuid
-     * @param {Boolean} [destroy=false] - When destroyImmediate is true, if there are objects referencing the asset, the references will become invalid.
-     */
-    unloadAsset: function (assetOrUuid, destroy) {
-        var asset;
-        if (typeof assetOrUuid === 'string') {
-            asset = AssetLibrary._uuidToAsset[assetOrUuid];
-        }
-        else {
-            asset = assetOrUuid;
-        }
-        if (asset) {
-            if (destroy && asset.isValid) {
-                asset.destroy();
-            }
-            delete AssetLibrary._uuidToAsset[asset._uuid];
-        }
     },
 
     /**

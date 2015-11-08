@@ -19,7 +19,7 @@ function Benchmarks () {
 Benchmarks.prototype.add = function (benchmark) {
   this.benchmarks.push (benchmark);
   return this.benchmarks.length - 1;
-}
+};
 
 Benchmarks.prototype.runOne = function (benchmark) {
 
@@ -80,7 +80,7 @@ Benchmarks.prototype.runOne = function (benchmark) {
   }
 
   return true;
-}
+};
 
 Benchmarks.prototype.report = function (benchmark, outputFunctions) {
 
@@ -122,7 +122,7 @@ Benchmarks.prototype.report = function (benchmark, outputFunctions) {
   outputFunctions.timeData.datasets[1].data.push(benchmark.nonSimdTime);
   outputFunctions.speedupData.labels.push(benchmark.config.kernelName);
   outputFunctions.speedupData.datasets[0].data.push(ratio);
-}
+};
 
 Benchmarks.prototype.runAll = function (outputFunctions, useAutoIterations) {
   if (typeof useAutoIterations === "undefined") {
@@ -134,6 +134,6 @@ Benchmarks.prototype.runAll = function (outputFunctions, useAutoIterations) {
     this.runOne(benchmark);
     this.report(benchmark, outputFunctions);
   }
-}
+};
 
 var benchmarks = new Benchmarks ();
