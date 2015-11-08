@@ -321,9 +321,6 @@ function instantiateProps (instance, itsClass) {
 cc.isChildClassOf = function (subclass, superclass) {
     if (subclass && superclass) {
         if (typeof subclass !== 'function') {
-            if (CC_DEV) {
-                cc.warn('[isChildClassOf] subclass should be function type, not', subclass);
-            }
             return false;
         }
         if (typeof superclass !== 'function') {

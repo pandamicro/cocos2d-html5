@@ -300,8 +300,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         cascadeOpacity: {
             get: SGProto.isCascadeOpacityEnabled,
             set: function (value) {
-                this._cascadeOpacityEnabled = value;
-                this._sgNode.cascadeOpacity = value;
+                if (this._cascadeOpacityEnabled !== value) {
+                    this._cascadeOpacityEnabled = value;
+                    this._sgNode.cascadeOpacity = value;
+                    this._onCascadeChanged();
+                }
             },
         },
 
@@ -326,8 +329,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         cascadeColor: {
             get: SGProto.isCascadeColorEnabled,
             set: function (value) {
-                this._cascadeColorEnabled = value;
-                this._sgNode.cascadeColor = value;
+                if (this._cascadeColorEnabled !== value) {
+                    this._cascadeColorEnabled = value;
+                    this._sgNode.cascadeColor = value;
+                    this._onCascadeChanged();
+                }
             },
         },
     },
@@ -338,6 +344,10 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             value: '',
             enumerable: false
         });
+
+        var sgNode = this._sgNode = new cc.Node();
+        sgNode.retain();
+        sgNode.cascadeOpacity = true;
     },
 
     // ABSTRACT INTERFACES
@@ -350,8 +360,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     _onSizeChanged: null,
     // called when the node's anchor changed
     _onAnchorChanged: null,
+    // called when the node's cascadeOpacity or cascadeColor changed
+    _onCascadeChanged: null,
+    // called when the node's isOpacityModifyRGB changed
+    _onOpacityModifyRGBChanged: null,
 
-    //
 
     /**
      * Initializes the instance of cc.ENode
@@ -1007,6 +1020,37 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         }
         while (child);
         return false;
+    },
+
+    // The deserializer for sgNode which will be called before creating component
+    _onBatchCreated: function () {
+        var sgNode = this._sgNode;
+        sgNode.setOpacity(this._opacity);
+        sgNode.setColor(this._color);
+        sgNode.setCascadeOpacityEnabled(this._cascadeOpacityEnabled);
+        sgNode.setCascadeColorEnabled(this._cascadeColorEnabled);
+        sgNode.setAnchorPoint(this._anchorPoint);
+        sgNode.setContentSize(this._contentSize);
+        sgNode.setRotationX(this._rotationX);
+        sgNode.setRotationY(this._rotationY);
+        sgNode.setScale(this._scaleX, this._scaleY);
+        sgNode.setPosition(this._position);
+        sgNode.setSkewX(this._skewX);
+        sgNode.setSkewY(this._skewY);
+        sgNode.setLocalZOrder(this._localZOrder);
+        sgNode.setGlobalZOrder(this._globalZOrder);
+        sgNode.ignoreAnchorPointForPosition(this._ignoreAnchorPointForPosition);
+        sgNode.setTag(this._tag);
+        sgNode.setOpacityModifyRGB(this._opacityModifyRGB);
+
+        if (this._parent) {
+            this._parent._sgNode.addChild(sgNode);
+        }
+
+        var children = this._children;
+        for (var i = 0, len = children.length; i < len; i++) {
+            children[i]._onBatchCreated();
+        }
     },
 
     _removeSgNode: SceneGraphHelper.removeSgNode,
