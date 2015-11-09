@@ -303,6 +303,16 @@ var Component = cc.Class({
         __eventTargets: {
             default: [],
             serializable: false
+        },
+
+        /**
+         * Only for editor to calculate bounding box
+         */
+        localSize: {
+            get: function () {
+                return cc.size(0, 0);
+            },
+            visible: false
         }
     },
 

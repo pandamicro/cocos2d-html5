@@ -86,6 +86,16 @@ var SpriteRenderer = cc.Class({
                 }
             },
             url: cc.Texture2D
+        },
+
+        /**
+         * Only for editor to calculate bounding box
+         */
+        localSize: {
+            get: function () {
+                return this._sgNode.getContentSize();
+            },
+            visible: false
         }
     },
 
