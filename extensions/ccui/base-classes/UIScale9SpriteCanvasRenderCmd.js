@@ -28,6 +28,8 @@
         //this._cachedParent = null;
         //this._cacheDirty = false;
         this._needDraw = true;
+        this._state = ccui.Scale9Sprite.state.NORMAL;
+        this._needSwitchTexture = false;
         //this._state = ccui.Scale9Sprite.state.NORMAL;
 
         //var node = this._node;
@@ -211,10 +213,13 @@
     //};
 
     proto.setState = function(state){
+        if(this._state == state) return;
+
         var locScale9Image = this._node._scale9Image;
         if(!locScale9Image)
             return;
         this._state = state;
+        this._needSwitchTexture = true;
         //this._cacheScale9Sprite();
     };
 
@@ -234,6 +239,15 @@
         wrapper.setGlobalAlpha(alpha);
 
         if(locTexture != null) {
+            if(this._needSwitchTexture) {
+                this._needSwitchTexture = false;
+                if (cc.Scale9Sprite.state.Normal == this._state) {
+                    locTexture._switchToGray(false);
+                }
+                else{
+                    locTexture._switchToGray(true);
+                }
+            }
             if(node._quadsDirty){
                 node._cleanupSlicedSprites();
                 node._createSlicedSprites();
