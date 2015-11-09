@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-EventTarget = require("../cocos2d/core/event/event-target");
+var EventTarget = require("../cocos2d/core/event/event-target");
 
 /**
  * <p>cc.Sprite is a 2d image ( http://en.wikipedia.org/wiki/Sprite_(computer_graphics) )  <br/>
@@ -950,8 +950,9 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
             this.setColor(this._realColor);
             this._textureLoaded = true;
         }else{
-            this._renderCmd._setTexture(texture, isFileName);
-            texture.addEventListener("load", function(once){
+            this._renderCmd._setTexture(texture);
+            texture.once("load", function (event) {
+                this._setTexture(texture, isFileName);
                 this.setColor(this._realColor);
                 this._textureLoaded = true;
             }, this);
