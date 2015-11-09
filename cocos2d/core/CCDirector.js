@@ -182,7 +182,8 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
      * Useful to convert (multi) touches coordinates to the current layout (portrait or landscape)<br/>
      * Implementation can be found in CCDirectorWebGL.
      * @method convertToGL
-     * @return {Vec2} uiPoint
+     * @param {Vec2} uiPoint
+     * @return {Vec2}
      */
     convertToGL: null,
 
@@ -191,7 +192,8 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
      * Useful to convert node points to window points for calls such as glScissor<br/>
      * Implementation can be found in CCDirectorWebGL.
      * @method convertToUI
-     * @return {Vec2} glPoint
+     * @param {Vec2} glPoint
+     * @return {Vec2}
      */
     convertToUI: null,
 
@@ -437,7 +439,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
      * Try to avoid big stacks of pushed scenes to reduce memory allocation.<br/>
      * ONLY call it if there is a running scene.
      * @method pushScene
-     * @param {Escene} scene
+     * @param {EScene} scene
      */
     pushScene: function (scene) {
 

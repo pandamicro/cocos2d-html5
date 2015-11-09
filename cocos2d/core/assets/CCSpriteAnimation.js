@@ -1,3 +1,13 @@
+/**
+ * @module cc
+ */
+
+/**
+ * Class for sprite animation asset handling.
+ * @class SpriteAnimationAsset
+ * @extends Asset
+ * @constructor
+ */
 var SpriteAnimationAsset = cc.Class({
     name: 'cc.SpriteAnimationAsset',
     extends: cc.Asset,
@@ -53,11 +63,22 @@ var SpriteAnimationAsset = cc.Class({
             url: cc.Texture2D
         },
 
-
+        /**
+         *
+         *
+         * @property loop
+         * @type {Boolean}
+         */
         loop: {
             default: true
         },
 
+        /**
+         *
+         *
+         * @property delay
+         * @type {Number}
+         */
         delay: {
             default: 0.5
         }
