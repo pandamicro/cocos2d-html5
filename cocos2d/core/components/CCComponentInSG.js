@@ -4,9 +4,8 @@ var SceneGraphHelper = require('../utils/scene-graph-helper');
  * Component in scene graph.
  * This is the base class for components which will attach a node to the cocos2d scene graph.
  *
- * @class
- * @name cc.ComponentInSG
- * @extend cc.Component
+ * @class ComponentInSG
+ * @extend Component
  */
 var ComponentInSG = cc.Class({
     extends: require('./CCComponent'),
@@ -32,22 +31,27 @@ var ComponentInSG = cc.Class({
     onDestroy: SceneGraphHelper.removeSgNode,
 
     _appendSgNode: function (sgNode) {
-        // update color
-        sgNode.setColor(this.node._color);
-        sgNode.setOpacity(this.node._opacity);
-        // update Size
-        sgNode.setContentSize(this.node._contentSize);
-        // update color
-        sgNode.setAnchorPoint(this.node._anchorPoint);
-        sgNode.ignoreAnchorPointForPosition(this.node._ignoreAnchorPointForPosition);
+        var node = this.node;
 
-        sgNode.setOpacityModifyRGB(this.node._opacityModifyRGB);
+        if ( !node._cascadeColorEnabled ) {
+            sgNode.setColor(node._color);
+        }
+        if ( !node._cascadeOpacityEnabled ) {
+            sgNode.setOpacity(node._opacity);
+        }
+
+        sgNode.setContentSize(node._contentSize);
+
+        sgNode.setAnchorPoint(node._anchorPoint);
+        sgNode.ignoreAnchorPointForPosition(node._ignoreAnchorPointForPosition);
+
+        sgNode.setOpacityModifyRGB(node._opacityModifyRGB);
 
         // set z order to -1 to make sure component will rendered before all of its entity's children.
 
         sgNode.setLocalZOrder(-1);
 
-        var sgParent = this.node._sgNode;
+        var sgParent = node._sgNode;
         sgParent.addChild(sgNode);
 
         // retain immediately

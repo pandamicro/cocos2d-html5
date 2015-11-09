@@ -206,10 +206,6 @@ require('../cocos2d/core/CCGame');
 //+++++++++++++++++++++++++Engine initialization function begin+++++++++++++++++++++++++++
 (function () {
 
-//to make sure the cc.log, cc.warn, cc.error, cc._throw and cc.assert would not throw error before init by debugger mode.
-cc.log = cc.warn = cc.error = cc._throw = cc.assert = function () {
-};
-
 var _jsAddedCache = {}, //cache for js and module that has added into jsList to be loaded.
     _engineInitCalled = false,
     _engineLoadedCallback = null;

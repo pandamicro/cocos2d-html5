@@ -239,8 +239,8 @@
     });
 
     test('test asset property', function () {
-        var sprite = new cc.SpriteAsset();
-        sprite.texture = new cc.Texture2D();
+        var sprite = new TestSprite();
+        sprite.texture = new TestTexture();
         var uuid = '541020432560';
         sprite.texture._uuid = uuid;
 

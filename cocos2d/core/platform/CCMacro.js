@@ -317,7 +317,7 @@ cc.rectPixelsToPoints = cc.IS_RETINA_DISPLAY_SUPPORTED ? function (pixel) {
     return cc.rect(pixel.x / scale, pixel.y / scale,
         pixel.width / scale, pixel.height / scale);
 } : function (p) {
-    return p;
+    return cc.rect(p);
 };
 
 /**
@@ -331,7 +331,7 @@ cc.rectPointsToPixels = cc.IS_RETINA_DISPLAY_SUPPORTED ? function (point) {
     return cc.rect(point.x * scale, point.y * scale,
         point.width * scale, point.height * scale);
 } : function (p) {
-    return p;
+    return cc.rect(p);
 };
 
 //some gl constant variable

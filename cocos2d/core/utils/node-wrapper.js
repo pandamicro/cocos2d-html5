@@ -85,6 +85,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
         // API
 
+        /**
+         * Name of node
+         * @property name
+         * @type {String}
+         */
         name: {
             get: function () {
                 return this._name;
@@ -94,6 +99,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             },
         },
 
+        /**
+         * Parent node
+         * @property name
+         * @type {ENode}
+         */
         parent: {
             get: function () {
                 return this._parent;
@@ -182,19 +192,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             set: function (value) {
                 this._localZOrder = value;
                 this._sgNode.zIndex = value;
-            }
-        },
-
-        /**
-         * WebGL Z vertex of this node, z order works OK if all the nodes uses the same openGL Z vertex.
-         * @property vertexZ
-         * @type {Number}
-         */
-        vertexZ: {
-            get: SGProto.getVertexZ,
-            set: function (value) {
-                this._vertexZ = value;
-                this._sgNode.vertexZ = value;
             }
         },
 
@@ -315,19 +312,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         },
 
         /**
-         * Indicate whether node is visible or not.
-         * @property visible
-         * @type {Boolean}
-         */
-        visible: {
-            get: SGProto.isVisible,
-            set: function (value) {
-                this._visible = value;
-                this._sgNode.visible = value;
-            },
-        },
-
-        /**
          * Anchor point's position on x axis.
          * @property anchorX
          * @type {Number}
@@ -436,8 +420,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         cascadeOpacity: {
             get: SGProto.isCascadeOpacityEnabled,
             set: function (value) {
-                this._cascadeOpacityEnabled = value;
-                this._sgNode.cascadeOpacity = value;
+                if (this._cascadeOpacityEnabled !== value) {
+                    this._cascadeOpacityEnabled = value;
+                    this._sgNode.cascadeOpacity = value;
+                    this._onCascadeChanged();
+                }
             },
         },
 
@@ -456,7 +443,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
                 color.r = value.r;
                 color.g = value.g;
                 color.b = value.b;
-                // Discard Alpha !!!
+                if (CC_DEV && value.a !== 255) {
+                    cc.warn('Should not set alpha via "color", use "opacity" please.');
+                }
                 this._sgNode.color = value;
                 this._onColorChanged();
             },
@@ -470,8 +459,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         cascadeColor: {
             get: SGProto.isCascadeColorEnabled,
             set: function (value) {
-                this._cascadeColorEnabled = value;
-                this._sgNode.cascadeColor = value;
+                if (this._cascadeColorEnabled !== value) {
+                    this._cascadeColorEnabled = value;
+                    this._sgNode.cascadeColor = value;
+                    this._onCascadeChanged();
+                }
             },
         },
     },
@@ -482,6 +474,10 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             value: '',
             enumerable: false
         });
+
+        var sgNode = this._sgNode = new cc.Node();
+        sgNode.retain();
+        sgNode.cascadeOpacity = true;
     },
 
     // ABSTRACT INTERFACES
@@ -494,8 +490,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     _onSizeChanged: null,
     // called when the node's anchor changed
     _onAnchorChanged: null,
+    // called when the node's cascadeOpacity or cascadeColor changed
+    _onCascadeChanged: null,
+    // called when the node's isOpacityModifyRGB changed
+    _onOpacityModifyRGBChanged: null,
 
-    //
 
     /**
      * Initializes the instance of cc.ENode
@@ -1151,6 +1150,37 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         return false;
     },
 
+    // The deserializer for sgNode which will be called before creating component
+    _onBatchCreated: function () {
+        var sgNode = this._sgNode;
+        sgNode.setOpacity(this._opacity);
+        sgNode.setColor(this._color);
+        sgNode.setCascadeOpacityEnabled(this._cascadeOpacityEnabled);
+        sgNode.setCascadeColorEnabled(this._cascadeColorEnabled);
+        sgNode.setAnchorPoint(this._anchorPoint);
+        sgNode.setContentSize(this._contentSize);
+        sgNode.setRotationX(this._rotationX);
+        sgNode.setRotationY(this._rotationY);
+        sgNode.setScale(this._scaleX, this._scaleY);
+        sgNode.setPosition(this._position);
+        sgNode.setSkewX(this._skewX);
+        sgNode.setSkewY(this._skewY);
+        sgNode.setLocalZOrder(this._localZOrder);
+        sgNode.setGlobalZOrder(this._globalZOrder);
+        sgNode.ignoreAnchorPointForPosition(this._ignoreAnchorPointForPosition);
+        sgNode.setTag(this._tag);
+        sgNode.setOpacityModifyRGB(this._opacityModifyRGB);
+
+        if (this._parent) {
+            this._parent._sgNode.addChild(sgNode);
+        }
+
+        var children = this._children;
+        for (var i = 0, len = children.length; i < len; i++) {
+            children[i]._onBatchCreated();
+        }
+    },
+
     _removeSgNode: SceneGraphHelper.removeSgNode,
 });
 
@@ -1159,14 +1189,13 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     // Define public getter and setter methods to ensure api compatibility.
 
-    var SameNameGetSets = ['name', 'skewX', 'skewY', 'vertexZ', 'rotation', 'rotationX', 'rotationY',
+    var SameNameGetSets = ['name', 'skewX', 'skewY', 'rotation', 'rotationX', 'rotationY',
                            'scale', 'scaleX', 'scaleY', 'children', 'childrenCount', 'parent', 'running',
                            /*'actionManager',*/ 'scheduler', /*'shaderProgram',*/ 'opacity', 'color', 'tag'];
     var DiffNameGetSets = {
         x: ['getPositionX', 'setPositionX'],
         y: ['getPositionY', 'setPositionY'],
         zIndex: ['getLocalZOrder', 'setLocalZOrder'],
-        visible: ['isVisible', 'setVisible'],
         //running: ['isRunning'],
         ignoreAnchor: ['isIgnoreAnchorPointForPosition', 'ignoreAnchorPointForPosition'],
         opacityModifyRGB: ['isOpacityModifyRGB'],
@@ -1203,5 +1232,99 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         }
     }
 })();
+
+/**
+ * Scale of node
+ * @property scale
+ * @type {Number}
+ */
+
+/**
+ * <p>Sets the x axis position of the node in cocos2d coordinates.</p>
+ * @method getPositionX
+ * @param {Number} x - The new position in x axis
+ */
+
+/**
+ * <p>Returns the x axis position of the node in cocos2d coordinates.</p>
+ * @method setPositionX
+ * @return {Number}
+ */
+
+/**
+ * <p>Returns the y axis position of the node in cocos2d coordinates.</p>
+ * @method getPositionY
+ * @return {Number}
+ */
+
+/**
+ * <p>Sets the y axis position of the node in cocos2d coordinates.</p>
+ * @method setPositionY
+ * @param {Number} y - The new position in y axis
+ */
+
+/**
+ * Returns the local Z order of this node.
+ * @method getLocalZOrder
+ * @returns {Number} The local (relative to its siblings) Z order.
+ */
+
+/**
+ * <p> LocalZOrder is the 'key' used to sort the node relative to its siblings.                                    <br/>
+ *                                                                                                                 <br/>
+ * The Node's parent will sort all its children based ont the LocalZOrder value.                                   <br/>
+ * If two nodes have the same LocalZOrder, then the node that was added first to the children's array              <br/>
+ * will be in front of the other node in the array.                                                                <br/>
+ * <br/>
+ * Also, the Scene Graph is traversed using the "In-Order" tree traversal algorithm ( http://en.wikipedia.org/wiki/Tree_traversal#In-order )
+ * <br/>
+ * And Nodes that have LocalZOder values < 0 are the "left" subtree                                                 <br/>
+ * While Nodes with LocalZOder >=0 are the "right" subtree.    </p>
+ * @method setLocalZOrder
+ * @param {Number} localZOrder
+ */
+
+/**
+ * Returns whether the anchor point will be ignored when you position this node.<br/>
+ * When anchor point ignored, position will be calculated based on the origin point (0, 0) in parent's coordinates.
+ * @method isIgnoreAnchorPointForPosition
+ * @return {Boolean} true if the anchor point will be ignored when you position this node.
+ */
+
+/**
+ * <p>
+ *     Sets whether the anchor point will be ignored when you position this node.                              <br/>
+ *     When anchor point ignored, position will be calculated based on the origin point (0, 0) in parent's coordinates.  <br/>
+ *     This is an internal method, only used by CCLayer and CCScene. Don't call it outside framework.        <br/>
+ *     The default value is false, while in CCLayer and CCScene are true
+ * </p>
+ * @method ignoreAnchorPointForPosition
+ * @param {Boolean} newValue - true if anchor point will be ignored when you position this node
+ */
+
+/**
+ * Returns whether node's opacity value affect its child nodes.
+ * @method isCascadeOpacityEnabled
+ * @returns {Boolean}
+ */
+
+/**
+ * Enable or disable cascade opacity, if cascade enabled, child nodes' opacity will be the multiplication of parent opacity and its own opacity.
+ * @method setCascadeOpacityEnabled
+ * @param {Boolean} cascadeOpacityEnabled
+ */
+
+/**
+ * Returns whether node's color value affect its child nodes.
+ * @method isCascadeColorEnabled
+ * @returns {Boolean}
+ */
+
+/**
+ * Enable or disable cascade color, if cascade enabled, child nodes' opacity will be the cascade value of parent color and its own color.
+ * @method setCascadeColorEnabled
+ * @param {Boolean} cascadeColorEnabled
+ */
+
 
 module.exports = NodeWrapper;

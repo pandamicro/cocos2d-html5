@@ -158,7 +158,7 @@ var getNewId = (CC_EDITOR || CC_TEST) && function () {
  *       because Component is created by the engine.
  *
  * @class Component
- * @extends cc.Object
+ * @extends Object
  * @constructor
  */
 var Component = cc.Class({
@@ -181,7 +181,7 @@ var Component = cc.Class({
         /**
          * The node this component is attached to. A component is always attached to a node.
          * @property node
-         * @type {cc.Node}
+         * @type {ENode}
          */
         node: {
             default: null,
@@ -195,6 +195,7 @@ var Component = cc.Class({
 
         /**
          * The uuid for editor
+         * @property uuid
          * @type {String}
          * @readOnly
          */
@@ -237,7 +238,7 @@ var Component = cc.Class({
             },
             displayName: 'Script',
             type: cc.JavaScript,
-            visible: true
+            visible: false
         },
 
         /**
@@ -250,7 +251,7 @@ var Component = cc.Class({
         /**
          * indicates whether this component is enabled or not.
          * @property enabled
-         * @type boolean
+         * @type {Boolean}
          * @default true
          */
         enabled: {
@@ -271,7 +272,7 @@ var Component = cc.Class({
         /**
          * indicates whether this component is enabled and its entity is also active in the hierarchy.
          * @property enabledInHierarchy
-         * @type {boolean}
+         * @type {Boolean}
          * @readOnly
          */
         enabledInHierarchy: {
@@ -283,7 +284,7 @@ var Component = cc.Class({
 
         /**
          * @property _isOnLoadCalled
-         * @type {boolean}
+         * @type {Boolean}
          * @readOnly
          */
         _isOnLoadCalled: {
@@ -297,7 +298,7 @@ var Component = cc.Class({
          * Register all related EventTargets, 
          * all event callbacks will be removed in _onPreDestroy
          * @property __eventTargets
-         * @type array
+         * @type {Array}
          * @private
          */
         __eventTargets: {
@@ -373,7 +374,7 @@ var Component = cc.Class({
      * script.
      *
      * @method addComponent
-     * @param {function|string} typeOrName - the constructor or the class name of the component to add
+     * @param {Function|String} typeOrName - the constructor or the class name of the component to add
      * @return {Component} - the newly added component
      */
     addComponent: function (typeOrTypename) {
@@ -385,7 +386,7 @@ var Component = cc.Class({
      * component in the entity by passing in the name of the script.
      *
      * @method getComponent
-     * @param {function|string} typeOrName
+     * @param {Function|String} typeOrName
      * @return {Component}
      */
     getComponent: function (typeOrTypename) {
@@ -519,8 +520,6 @@ var Component = cc.Class({
         _60fpsInEditMode: false,
     },
 
-    __scriptUuid: '',
-
     _onPreDestroy: function () {
         var i, l, target;
         // ensure onDisable called
@@ -551,6 +550,8 @@ var Component = cc.Class({
         }
     }
 });
+
+Component.prototype.__scriptUuid = '';
 
 cc.Component = module.exports = Component;
 

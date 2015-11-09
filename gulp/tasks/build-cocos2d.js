@@ -11,7 +11,6 @@ var srcs = [
     "./Base64Images.js",
     "./CCBoot.js",
 
-    "./cocos2d/core/platform/_CCClass.js",
     "./cocos2d/core/platform/CCCommon.js",
     "./cocos2d/core/platform/CCSAXParser.js",
     "./cocos2d/core/platform/CCLoaders.js",
@@ -47,11 +46,6 @@ var srcs = [
     "./cocos2d/core/base-nodes/CCAtlasNodeCanvasRenderCmd.js",
     "./cocos2d/core/base-nodes/CCAtlasNodeWebGLRenderCmd.js",
 
-    "./cocos2d/core/textures/TexturesWebGL.js",
-    "./cocos2d/core/textures/TexturesPropertyDefine.js",
-    "./cocos2d/core/textures/CCTextureCache.js",
-    "./cocos2d/core/textures/CCTextureAtlas.js",
-
     "./cocos2d/core/scenes/CCScene.js",
     "./cocos2d/core/scenes/CCLoaderScene.js",
 
@@ -66,7 +60,6 @@ var srcs = [
     "./cocos2d/core/sprites/CCBakeSprite.js",
     "./cocos2d/core/sprites/CCAnimation.js",
     "./cocos2d/core/sprites/CCAnimationCache.js",
-    "./cocos2d/core/sprites/CCSpriteFrame.js",
     "./cocos2d/core/sprites/CCSpriteFrameCache.js",
     "./cocos2d/core/sprites/CCSpriteBatchNode.js",
     "./cocos2d/core/sprites/CCSpriteBatchNodeCanvasRenderCmd.js",

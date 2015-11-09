@@ -8,7 +8,7 @@ var EventTarget = require('./event/event-target');
  * An object to boot the game.
  * @class game
  */
-cc.game = /** @lends cc.game# */{
+var game = /** @lends cc.game# */{
 
     EVENT_HIDE: "game_on_hide",
     EVENT_SHOW: "game_on_show",
@@ -172,7 +172,7 @@ cc.game = /** @lends cc.game# */{
         // Clean up audio
         cc.audioEngine && cc.audioEngine.end();
 
-        cc.game.onStart();
+        game.onStart();
     },
 
 //  @Game loading
@@ -262,18 +262,18 @@ cc.game = /** @lends cc.game# */{
      */
     run: function (config, onStart) {
         if (typeof config === 'function') {
-            cc.game.onStart = config;
+            game.onStart = config;
         }
         else {
             if (config) {
-                cc.game.config = config;
+                game.config = config;
             }
             if (typeof onStart === 'function') {
-                cc.game.onStart = onStart;
+                game.onStart = onStart;
             }
         }
 
-        this.prepare(cc.game.onStart && cc.game.onStart.bind(cc.game));
+        this.prepare(game.onStart && game.onStart.bind(game));
     },
 
 //  @ Persist root node section
@@ -330,8 +330,8 @@ cc.game = /** @lends cc.game# */{
 //  @Time ticker section
     _setAnimFrame: function () {
         this._lastTime = new Date();
-        this._frameTime = 1000 / cc.game.config[cc.game.CONFIG_KEY.frameRate];
-        if((cc.sys.os === cc.sys.OS_IOS && cc.sys.browserType === cc.sys.BROWSER_TYPE_WECHAT) || cc.game.config[cc.game.CONFIG_KEY.frameRate] !== 60) {
+        this._frameTime = 1000 / game.config[game.CONFIG_KEY.frameRate];
+        if((cc.sys.os === cc.sys.OS_IOS && cc.sys.browserType === cc.sys.BROWSER_TYPE_WECHAT) || game.config[game.CONFIG_KEY.frameRate] !== 60) {
             window.requestAnimFrame = this._stTime;
             window.cancelAnimationFrame = this._ctTime;
         }
@@ -357,10 +357,10 @@ cc.game = /** @lends cc.game# */{
     },
     _stTime: function(callback){
         var currTime = new Date().getTime();
-        var timeToCall = Math.max(0, cc.game._frameTime - (currTime - cc.game._lastTime));
+        var timeToCall = Math.max(0, game._frameTime - (currTime - game._lastTime));
         var id = window.setTimeout(function() { callback(); },
             timeToCall);
-        cc.game._lastTime = currTime + timeToCall;
+        game._lastTime = currTime + timeToCall;
         return id;
     },
     _ctTime: function(id){
@@ -463,7 +463,7 @@ cc.game = /** @lends cc.game# */{
             throw new Error("The renderer doesn't support the renderMode " + this.config[this.CONFIG_KEY.renderMode]);
         }
 
-        var el = this.config[cc.game.CONFIG_KEY.id],
+        var el = this.config[game.CONFIG_KEY.id],
             win = window,
             element = cc.$(el) || cc.$('#' + el),
             localCanvas, localContainer, localConStyle;
@@ -506,7 +506,7 @@ cc.game = /** @lends cc.game# */{
         localConStyle.overflow = 'hidden';
         localContainer.top = '100%';
 
-        if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
+        if (cc._renderType === game.RENDER_TYPE_WEBGL) {
             this._renderContext = cc._renderContext = cc.webglContext
              = cc.create3DContext(localCanvas, {
                 'stencil': true,
@@ -529,7 +529,7 @@ cc.game = /** @lends cc.game# */{
         }
 
         cc._gameDiv = localContainer;
-        cc.game.canvas.oncontextmenu = function () {
+        game.canvas.oncontextmenu = function () {
             if (!cc._isContextMenuEnable) return false;
         };
 
@@ -565,12 +565,12 @@ cc.game = /** @lends cc.game# */{
         }
 
         var onHidden = function () {
-            if (cc.eventManager && cc.game._eventHide)
-                cc.eventManager.dispatchEvent(cc.game._eventHide);
+            if (cc.eventManager && game._eventHide)
+                cc.eventManager.dispatchEvent(game._eventHide);
         };
         var onShow = function () {
-            if (cc.eventManager && cc.game._eventShow)
-                cc.eventManager.dispatchEvent(cc.game._eventShow);
+            if (cc.eventManager && game._eventShow)
+                cc.eventManager.dispatchEvent(game._eventShow);
         };
 
         if (hidden) {
@@ -592,13 +592,15 @@ cc.game = /** @lends cc.game# */{
             win.addEventListener("pageshow", onShow, false);
         }
 
-        cc.eventManager.addCustomListener(cc.game.EVENT_HIDE, function () {
-            cc.game.pause();
+        cc.eventManager.addCustomListener(game.EVENT_HIDE, function () {
+            game.pause();
         });
-        cc.eventManager.addCustomListener(cc.game.EVENT_SHOW, function () {
-            cc.game.resume();
+        cc.eventManager.addCustomListener(game.EVENT_SHOW, function () {
+            game.resume();
         });
     }
 };
 
-EventTarget.polyfill(cc.game);
+EventTarget.polyfill(game);
+
+cc.game = module.exports = game;
