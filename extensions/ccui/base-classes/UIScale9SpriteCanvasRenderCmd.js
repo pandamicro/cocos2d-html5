@@ -64,7 +64,6 @@
     //};
 
     proto.transform = function(parentCmd){
-        var node = this._node;
         cc.Node.CanvasRenderCmd.prototype.transform.call(this, parentCmd);
         //if (node._positionsAreDirty) {
         //    node._updatePositions();
@@ -83,10 +82,9 @@
         cc.Node.WebGLRenderCmd.prototype._updateDisplayOpacity.call(this, parentOpacity);
         var node = this._node;
         var scale9Image = node._scale9Image;
-
+        var childrenSize= node._children.length;
         if (node._cascadeOpacityEnabled)
         {
-            var childrenSize= node._children.length;
             for(var i = 0; i< childrenSize; ++i)
             {
                 node._children[i]._renderCmd._updateDisplayOpacity(this._displayedOpacity);
@@ -103,7 +101,6 @@
         {
             node._displayedOpacity = node._realOpacity;
 
-            var childrenSize= node._children.length;
             for(var i = 0; i< childrenSize; ++i)
             {
                 node._children[i]._renderCmd._updateDisplayOpacity(255);
@@ -121,15 +118,13 @@
         var node = this._node;
         var scale9Image = node._scale9Image;
 
-
-
+        var childrenSize= node._children.length;
         if (this._cascadeColorEnabled)
         {
             node._displayedColor.r = node._realColor.r * parentColor.r/255.0;
             node._displayedColor.g = node._realColor.g * parentColor.g/255.0;
             node._displayedColor.b = node._realColor.b * parentColor.b/255.0;
             this._updateColor();
-            var childrenSize= node._children.length;
             for(var i = 0; i< childrenSize; ++i)
             {
                 node._children[i]._renderCmd._updateDisplayColor(node._displayedColor);
@@ -143,7 +138,6 @@
         }
         else
         {
-            var childrenSize= node._children.length;
             for(var i = 0; i< childrenSize; ++i)
             {
                 node._children[i]._renderCmd._updateDisplayColor(cc.Color.WHITE);
@@ -258,7 +252,7 @@
                 h = quads[i]._tr.vertices.y - quads[i]._bl.vertices.y;
                 y = - y - h;
 
-                var textureWidth = locTexture.getPixelsWide(); textureHeight = locTexture.getPixelsHigh();
+                var textureWidth = locTexture.getPixelWidth(); textureHeight = locTexture.getPixelHeight();
 
                 sx = quads[i]._bl.texCoords.u * textureWidth;
                 sy = quads[i]._bl.texCoords.v * textureHeight;

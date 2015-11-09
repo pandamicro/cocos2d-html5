@@ -216,7 +216,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
 
         if (!locLoaded) {
 
-            spriteFrame.addEventListener("load", ontextureLoadedCallback, this);
+            spriteFrame.once("load", ontextureLoadedCallback, this);
         }
         else {
             ontextureLoadedCallback.call(this);
@@ -403,7 +403,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         else {
             var texture = sprite.getTexture();
             if(texture)
-                texture.addEventListener("load",onLoadedCallBack, this);
+                texture.once("load",onLoadedCallBack, this);
         }
 
         return true;
@@ -866,8 +866,8 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
     },
 
     _calculateUV : function(texture, capInsets, spriteRectSize){
-        var atlasWidth = texture.getPixelsWide();
-        var atlasHeight = texture.getPixelsHigh();
+        var atlasWidth = texture.getPixelWidth();
+        var atlasHeight = texture.getPixelHeight();
 
         //caculate texture coordinate
         var leftWidth = 0, centerWidth = 0, rightWidth = 0;
