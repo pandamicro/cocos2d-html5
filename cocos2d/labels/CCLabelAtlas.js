@@ -93,10 +93,10 @@ cc.LabelAtlas = cc.AtlasNode.extend(/** @lends cc.LabelAtlas# */{
      * Add texture loaded event listener.
      * @param {Function} callback
      * @param {cc.Node} target
-     * @deprecated since 3.1, please use addEventListener instead
+     * @deprecated since 3.1, please use EventTarget API instead
      */
     addLoadedEventListener: function (callback, target) {
-        this.addEventListener("load", callback, target);
+        this.once("load", callback, target);
     },
 
     /**
@@ -144,11 +144,11 @@ cc.LabelAtlas = cc.AtlasNode.extend(/** @lends cc.LabelAtlas# */{
         this._textureLoaded = locLoaded;
         if (!locLoaded) {
             this._string = label;
-            texture.addEventListener("load", function (sender) {
+            texture.once("load", function (event) {
                 this.initWithTexture(texture, width, height, label.length);
                 this.string = this._string;
                 this.setColor(this._renderCmd._displayedColor);
-                this.dispatchEvent("load");
+                this.emit("load");
             }, this);
         }
         if (this.initWithTexture(texture, width, height, label.length)) {

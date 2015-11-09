@@ -206,10 +206,6 @@ require('../cocos2d/core/CCGame');
 //+++++++++++++++++++++++++Engine initialization function begin+++++++++++++++++++++++++++
 (function () {
 
-//to make sure the cc.log, cc.warn, cc.error, cc._throw and cc.assert would not throw error before init by debugger mode.
-cc.log = cc.warn = cc.error = cc._throw = cc.assert = function () {
-};
-
 var _jsAddedCache = {}, //cache for js and module that has added into jsList to be loaded.
     _engineInitCalled = false,
     _engineLoadedCallback = null;
@@ -296,7 +292,7 @@ function _load(config) {
             var modules = config["modules"] || [];
             var moduleMap = modulesJson["module"];
             var jsList = [];
-            if (cc.sys.supportWebGL && modules.indexOf("base4webgl") < 0) modules.splice(0, 0, "base4webgl");
+            if (cc.sys.capabilities["opengl"] && modules.indexOf("base4webgl") < 0) modules.splice(0, 0, "base4webgl");
             else if (modules.indexOf("core") < 0) modules.splice(0, 0, "core");
             for (var i = 0, li = modules.length; i < li; i++) {
                 var arr = _getJsListOfModule(moduleMap, modules[i], engineDir);
@@ -311,7 +307,7 @@ function _load(config) {
 }
 
 function _windowLoaded() {
-    this.removeEventListener('load', _windowLoaded, false);
+    window.removeEventListener('load', _windowLoaded, false);
     _load(cc.game.config);
 }
 
@@ -339,7 +335,7 @@ cc.initEngine = function (config, cb) {
 
     _determineRenderType(config);
 
-    document.body ? _load(config) : cc._addEventListener(window, 'load', _windowLoaded, false);
+    document.body ? _load(config) : window.addEventListener('load', _windowLoaded, false);
     _engineInitCalled = true;
 }
 

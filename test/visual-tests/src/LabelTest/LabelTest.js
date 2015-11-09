@@ -1079,7 +1079,7 @@ var LabelTTFStrokeShadowTest = AtlasDemo.extend({
         fontDefRedShadow.fontName = "Arial";
         fontDefRedShadow.fontSize = 32;
         fontDefRedShadow.textAlign = cc.TextAlignment.CENTER;
-        fontDefRedShadow.verticalAlign = cc.cc.VerticalTextAlignment.TOP;
+        fontDefRedShadow.verticalAlign = cc.VerticalTextAlignment.TOP;
         fontDefRedShadow.fillStyle = redColor;
         fontDefRedShadow.boundingWidth = blockSize.width;
 	    fontDefRedShadow.boundingHeight = blockSize.height;
@@ -1100,7 +1100,7 @@ var LabelTTFStrokeShadowTest = AtlasDemo.extend({
         fontDefBlueStroke.fontName = "Arial";
         fontDefBlueStroke.fontSize = 32;
         fontDefBlueStroke.textAlign = cc.TextAlignment.CENTER;
-        fontDefBlueStroke.verticalAlign = cc.cc.VerticalTextAlignment.TOP;
+        fontDefBlueStroke.verticalAlign = cc.VerticalTextAlignment.TOP;
         fontDefBlueStroke.fillStyle = blueColor;
         fontDefBlueStroke.boundingWidth = blockSize.width;
 	    fontDefBlueStroke.boundingHeight = blockSize.height;
@@ -1119,7 +1119,7 @@ var LabelTTFStrokeShadowTest = AtlasDemo.extend({
         fontDefRedStrokeShadow.fontName = "Arial";
         fontDefRedStrokeShadow.fontSize = 32;
         fontDefRedStrokeShadow.textAlign = cc.TextAlignment.CENTER;
-        fontDefRedStrokeShadow.verticalAlign = cc.cc.VerticalTextAlignment.TOP;
+        fontDefRedStrokeShadow.verticalAlign = cc.VerticalTextAlignment.TOP;
         fontDefRedStrokeShadow.fillStyle = blueColor;
         fontDefRedStrokeShadow.boundingWidth = blockSize.width;
 	    fontDefRedStrokeShadow.boundingHeight = blockSize.height;
@@ -1192,7 +1192,7 @@ var LabelTTFTest = AtlasDemo.extend({
 
         this._label = null;
         this._horizAlign = cc.TextAlignment.LEFT;
-        this._vertAlign = cc.cc.VerticalTextAlignment.TOP;
+        this._vertAlign = cc.VerticalTextAlignment.TOP;
 
         this.updateAlignment();
         //----end19----
@@ -1229,15 +1229,15 @@ var LabelTTFTest = AtlasDemo.extend({
         this.updateAlignment();
     },
     setAlignmentTop:function (sender) {
-        this._vertAlign = cc.cc.VerticalTextAlignment.TOP;
+        this._vertAlign = cc.VerticalTextAlignment.TOP;
         this.updateAlignment();
     },
     setAlignmentMiddle:function (sender) {
-        this._vertAlign = cc.cc.VerticalTextAlignment.CENTER;
+        this._vertAlign = cc.VerticalTextAlignment.CENTER;
         this.updateAlignment();
     },
     setAlignmentBottom:function (sender) {
-        this._vertAlign = cc.cc.VerticalTextAlignment.BOTTOM;
+        this._vertAlign = cc.VerticalTextAlignment.BOTTOM;
         this.updateAlignment();
     },
     getCurrentAlignment:function () {
@@ -1245,13 +1245,13 @@ var LabelTTFTest = AtlasDemo.extend({
         var vertical = null;
         var horizontal = null;
         switch (this._vertAlign) {
-            case cc.cc.VerticalTextAlignment.TOP:
+            case cc.VerticalTextAlignment.TOP:
                 vertical = "Top";
                 break;
-            case cc.cc.VerticalTextAlignment.CENTER:
+            case cc.VerticalTextAlignment.CENTER:
                 vertical = "Middle";
                 break;
-            case cc.cc.VerticalTextAlignment.BOTTOM:
+            case cc.VerticalTextAlignment.BOTTOM:
                 vertical = "Bottom";
                 break;
         }
@@ -1286,7 +1286,7 @@ var LabelTTFMultiline = AtlasDemo.extend({
 
         // cc.LabelBMFont
         var center = new cc.LabelTTF("word wrap \"testing\" (bla0) bla1 'bla2' [bla3] (bla4) {bla5} {bla6} [bla7] (bla8) [bla9] 'bla0' \"bla1\"",
-            "Arial", 32, cc.size(s.width / 2, 200), cc.TextAlignment.CENTER, cc.cc.VerticalTextAlignment.TOP);
+            "Arial", 32, cc.size(s.width / 2, 200), cc.TextAlignment.CENTER, cc.VerticalTextAlignment.TOP);
         center.setDimensions(s.width / 2, 200);
         center.x = s.width / 2;
         center.y = 150;

@@ -27,8 +27,7 @@ var UIListViewTest_Vertical = UIMainLayer.extend({
     init: function () {
         if (this._super()) {
             var widgetSize = this._widget.getContentSize();
-            var background = this._widget.getChildByName("background_Panel");
-            var backgroundSize = background.getContentSize();
+            var backgroundSize = this._backgroundSize;
 
             this._topDisplayLabel.setString("Scroll listview is disabled.");
             this._topDisplayLabel.x = widgetSize.width / 2.0;
@@ -161,8 +160,7 @@ var UIListViewTest_Horizontal = UIMainLayer.extend({
     init: function () {
         if (this._super()) {
             var widgetSize = this._widget.getContentSize();
-            var background = this._widget.getChildByName("background_Panel");
-            var backgroundSize = background.getContentSize();
+            var backgroundSize = this._backgroundSize;
 
             // create list view ex data
             this._array = [];
@@ -288,8 +286,7 @@ var UIListViewTest_TouchIntercept = UIMainLayer.extend({
     init: function () {
         if(this._super()) {
             var widgetSize = this._widget.getContentSize();
-            var background = this._widget.getChildByName("background_Panel");
-            var backgroundSize = background.getContentSize();
+            var backgroundSize = this._backgroundSize;
 
             this._topDisplayLabel.setString("TouchIntercept");
             this._topDisplayLabel.x = widgetSize.width / 2.0;

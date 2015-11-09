@@ -1123,9 +1123,9 @@ cc.ParticleSystem = cc.Node.extend(/** @lends cc.ParticleSystem# */{
             this.setTextureWithRect(texture, cc.rect(0, 0, texture.width, texture.height));
         } else {
             this._textureLoaded = false;
-            texture.addEventListener("load", function(sender){
+            texture.once("load", function (event) {
                 this._textureLoaded = true;
-                this.setTextureWithRect(sender, cc.rect(0, 0, sender.width, sender.height));
+                this.setTextureWithRect(texture, cc.rect(0, 0, texture.width, texture.height));
             }, this);
         }
     },

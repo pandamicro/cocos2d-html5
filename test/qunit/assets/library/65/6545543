@@ -1,5 +1,5 @@
 {
-    "__type__": "cc.TextureAsset",
+    "__type__": "TestTexture",
     "width": 512,
     "height": 512,
     "_rawFiles": ["png"]

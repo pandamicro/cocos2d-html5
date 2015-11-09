@@ -27,6 +27,8 @@
  Created by Jung Sang-Taik on 2012-03-16
  ****************************************************************************/
 
+EventTarget = require("../cocos2d/core/event/event-target");
+
 /**
  * <p>
  * A 9-slice sprite for cocos2d UI.                                                                    <br/>
@@ -1046,7 +1048,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
 });
 
 var _p = ccui.Scale9Sprite.prototype;
-cc.EventHelper.prototype.apply(_p);
+EventTarget.polyfill(_p);
 
 // Extended properties
 /** @expose */

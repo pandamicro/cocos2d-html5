@@ -205,6 +205,7 @@ if (CC_DEV) {
         hasTypePrefixBefore = hasTypePrefixBefore !== false;
         var enumDef = eval(newPath);
         var entries = cc.Enum.getList(enumDef);
+        var delimiter = hasTypePrefixBefore ? '_' : '.';
         for (var i = 0; i < entries.length; i++) {
             var entry = entries[i].name;
             var oldPropName;
@@ -216,7 +217,7 @@ if (CC_DEV) {
                 oldPropName = entry;
             }
             js.get(obj, oldPropName, function (entry) {
-                cc.warn(INFO, oldPath + '_' + entry, newPath + '.' + entry);
+                cc.warn(INFO, oldPath + delimiter + entry, newPath + '.' + entry);
                 return enumDef[entry];
             }.bind(null, entry));
         }
@@ -233,7 +234,224 @@ if (CC_DEV) {
     deprecateEnum(ccui.RelativeLayoutParameter, 'ccui.RelativeLayoutParameter', 'ccui.RelativeLayoutParameter.Type', false);
     deprecateEnum(cc.ProgressTimer, 'cc.ProgressTimer.TYPE', 'cc.ProgressTimer.Type');
     deprecateEnum(cc.game, 'cc.game.DEBUG_MODE', 'cc.DebugMode');
-    deprecateEnum(cc, 'cc.KEYBOARD_RETURNTYPE', 'cc.KeyboardReturnType');
-    deprecateEnum(cc, 'cc.EDITBOX_INPUT_MODE', 'cc.EditBox.InputMode');
-    deprecateEnum(cc, 'cc.EDITBOX_INPUT_FLAG', 'cc.EditBox.InputFlag');
+    if (cc.EditBox) {
+        deprecateEnum(cc, 'cc.KEYBOARD_RETURNTYPE', 'cc.KeyboardReturnType');
+        deprecateEnum(cc, 'cc.EDITBOX_INPUT_MODE', 'cc.EditBox.InputMode');
+        deprecateEnum(cc, 'cc.EDITBOX_INPUT_FLAG', 'cc.EditBox.InputFlag');
+    }
+    cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
+        deprecateEnum(cc, 'cc', 'cc.Texture2D.WrapMode', false);
+    });
+
+
+    function provideClearError (owner, obj) {
+        var className = cc.js.getClassName(owner);
+        var Info = 'Sorry,' + className + '.%s is removed, please use %s instead.';
+        for (var prop in obj) {
+            (function (prop) {
+                var getset = obj[prop];
+                js.getset(owner, prop,
+                    function () {
+                        cc.error(Info, prop, getset[0]);
+                    },
+                    getset[1] && function () {
+                        cc.error(Info, prop, getset[1]);
+                    }
+                );
+            })(prop);
+        }
+    }
+
+    function shouldNotUseNodeProp (component) {
+        var compName = cc.js.getClassName(component);
+        var Info = 'Sorry, ' + compName + '.%s is removed, please use cc.ENode.%s instead.';
+        var compProto = component.prototype;
+        for (var prop in cc.ENode.prototype) {
+            (function (prop) {
+                if (!(prop in compProto) && prop[0] !== '_') {
+                    js.getset(compProto, prop,
+                        function () {
+                            cc.error(Info, prop, prop);
+                        },
+                        function () {
+                            cc.error(Info, prop, prop);
+                        }
+                    );
+                }
+            })(prop);
+        }
+    }
+
+    // cc.ENode
+
+    [
+        '_componentContainer',
+        '_camera',
+        '_additionalTransform',
+        '_scheduler',
+        '_actionManager',
+        'actionManager',
+        '_isTransitionFinished',
+        '_additionalTransformDirty',
+        '_shaderProgram',
+        'shaderProgram',
+        '_reorderChildDirty',
+        '_normalizedPositionDirty',
+        '_normalizedPosition',
+        '_usingNormalizedPosition',
+        '_renderCmd',
+        '_vertexZ',
+        '_showNode',
+        '_arrayMakeObjectsPerformSelector',
+        'getActionManager',
+        'setActionManager',
+        'getScheduler',
+        'setScheduler',
+        'sortAllChildren',
+        'reorderChild',
+        'draw',
+        'transformAncestors',
+        'onEnter',
+        'onEnterTransitionDidFinish',
+        'onExitTransitionDidStart',
+        'onExit',
+        'runAction',
+        'stopAllActions',
+        'stopAction',
+        'stopActionByTag',
+        'getActionByTag',
+        'getNumberOfRunningActions',
+        'scheduleUpdate',
+        'scheduleUpdateWithPriority',
+        'unscheduleUpdate',
+        'schedule',
+        'scheduleOnce',
+        'unschedule',
+        'unscheduleAllCallbacks',
+        'resumeSchedulerAndActions',
+        'resume',
+        'pauseSchedulerAndActions',
+        'pause',
+        'setAdditionalTransform',
+        'updateTransform',
+        'retain',
+        'release',
+        'visit',
+        'transform',
+        'getCamera',
+        'grid',
+        'getGrid',
+        'setGrid',
+        'getShaderProgram',
+        'setShaderProgram',
+        'getGLServerState',
+        'setGLServerState',
+        '_initRendererCmd',
+        '_createRenderCmd',
+        'updateDisplayedOpacity',
+        'updateDisplayedColor',
+        'userData',
+        'userObject'
+    ].forEach(function (prop) {
+        function error () {
+            cc.error('Sorry, cc.ENode.' + prop + ' is removed.');
+        }
+        js.getset(cc.ENode.prototype, prop, error, error);
+    });
+
+    (function () {
+        var GetSet = {
+            arrivalOrder: ['getSiblingIndex', 'setSiblingIndex'],
+            _visible: ['_activeInHierarchy', 'active'],
+            _running: ['_activeInHierarchy', 'active'],
+            running: ['activeInHierarchy', 'active'],
+            _realOpacity: ['_opacity', '_opacity'],
+            _realColor: ['_color', '_color'],
+            getZOrder: ['getLocalZOrder'],
+            setZOrder: ['setLocalZOrder'],
+            getOrderOfArrival: ['getSiblingIndex'],
+            setOrderOfArrival: ['setSiblingIndex'],
+            boundingBox: ['getBoundingBox'],
+            removeFromParentAndCleanup: ['removeFromParent'],
+            removeAllChildrenWithCleanup: ['removeAllChildren'],
+            parentToNodeTransform: ['getParentToNodeTransform'],
+            nodeToWorldTransform: ['getNodeToWorlshaderProgramdTransform'],
+            worldToNodeTransform: ['getWorldToNodeTransform'],
+            nodeToParentTransform: ['getNodeToParentTransform'],
+            getNodeToParentAffineTransform: ['getNodeToParentTransform'],
+        };
+        provideClearError(cc.ENode.prototype, GetSet);
+    })();
+
+    // cc.SpriteRenderer
+
+    [
+        'textureLoaded',
+        'addLoadedEventListener',
+        'isDirty',
+        'setDirty',
+        'sortAllChildren',
+        'reorderChild',
+        'removeChild',
+        'init',
+        'removeAllChildren',
+        'setOpacityModifyRGB',
+        'isOpacityModifyRGB',
+        'addChild',
+        'getQuad',
+        'getBlendFunc',
+        'setBlendFunc',
+        'useBatchNode',
+        'getBatchNode',
+        'setBatchNode',
+        'updateTransform',
+        'ignoreAnchorPointForPosition',
+
+    ].forEach(function (prop) {
+        function error () {
+            cc.error('Sorry, cc.SpriteRenderer.' + prop + ' is removed.');
+        }
+        js.getset(cc.SpriteRenderer.prototype, prop, error, error);
+    });
+
+    (function () {
+        var StaticFunc = {
+            create: ['addComponent'],
+            createWithTexture: ['addComponent'],
+            createWithSpriteFrameName: ['addComponent'],
+            createWithSpriteFrame: ['addComponent'],
+            ignoreAnchorPointForPosition: ['node.ignoreAnchor'],
+        };
+        provideClearError(cc.SpriteRenderer, StaticFunc);
+    })();
+
+    shouldNotUseNodeProp(cc.SpriteRenderer);
+
+    // cc.Node
+    [
+        '_normalizedPositionDirty',
+        '_normalizedPosition',
+        '_usingNormalizedPosition',
+        'grid',
+        'userData',
+        'userObject',
+        'getNormalizedPosition',
+        'setNormalizedPosition',
+        'getCamera',
+        'getUserData',
+        'setUserData',
+        'getUserObject',
+        'setUserObject',
+        'getComponent',
+        'addComponent',
+        'removeComponent',
+        'removeAllComponents',
+        'enumerateChildren'
+    ].forEach(function (prop) {
+        function error () {
+            cc.error('Sorry, cc.Node.' + prop + ' is removed.');
+        }
+        js.getset(cc.Node.prototype, prop, error, error);
+    });
+
 }

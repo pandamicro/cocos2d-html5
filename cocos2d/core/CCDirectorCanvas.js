@@ -24,7 +24,10 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-cc.game.addEventListener(cc.game.EVENT_RENDERER_INITED, function () {
+require('./CCDirector');
+require('./CCGame');
+
+cc.game.once(cc.game.EVENT_RENDERER_INITED, function () {
 
     if (cc._renderType === cc.game.RENDER_TYPE_CANVAS) {
         var _p = cc.Director.prototype;
@@ -35,7 +38,7 @@ cc.game.addEventListener(cc.game.EVENT_RENDERER_INITED, function () {
 
         _p.setProjection = function (projection) {
             this._projection = projection;
-            cc.eventManager.dispatchEvent(this._eventProjectionChanged);
+            this.emit(cc.Director.EVENT_PROJECTION_CHANGED, this);
         };
 
         _p.setDepthTest = function () {

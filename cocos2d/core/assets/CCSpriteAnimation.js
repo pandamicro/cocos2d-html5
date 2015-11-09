@@ -5,52 +5,52 @@ var SpriteAnimationAsset = cc.Class({
     properties: {
         0: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         1: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         2: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         3: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         4: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         5: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         6: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         7: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         8: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
         9: {
             default: '',
-            url: cc.TextureAsset
+            url: cc.Texture2D
         },
 
 

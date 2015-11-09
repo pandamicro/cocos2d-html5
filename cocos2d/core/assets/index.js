@@ -1,7 +1,7 @@
 /****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2013-2015 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -32,8 +32,8 @@ require('./CCBitmapFont');
 require('./CCCoffeeScript');
 require('./CCJavaScript');
 require('./CCSceneAsset');
-require('./CCSpriteAsset');
-require('./CCTextureAsset');
+require('../sprites/CCSpriteFrame');
+require('../textures/CCTexture2D');
 require('./CCTTFFont');
 require('./CCParticleAsset');
 require('./CCSpriteAnimation');

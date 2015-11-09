@@ -828,7 +828,7 @@ cc.LabelTTF.__labelHeightDiv.style.lineHeight = "normal";
 document.body ?
     document.body.appendChild(cc.LabelTTF.__labelHeightDiv) :
     window.addEventListener('load', function () {
-        this.removeEventListener('load', arguments.callee, false);
+        window.removeEventListener('load', arguments.callee, false);
         document.body.appendChild(cc.LabelTTF.__labelHeightDiv);
     }, false);
 

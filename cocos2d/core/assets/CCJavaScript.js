@@ -1,6 +1,6 @@
 var JavaScript = cc.Class({
     name: 'cc.JavaScript',
-    extends: cc.RawAsset,
+    extends: cc.Asset,
 });
 
 cc.JavaScript = JavaScript;

@@ -18,7 +18,10 @@ if (!Function.prototype.bind) {
                     aArgs.concat(Array.prototype.slice.call(arguments)));
             };
 
-        fNOP.prototype = this.prototype;
+        // test this.prototype in case of native functions binding:
+        //  - https://gist.github.com/jacomyal/4b7ae101a1cf6b985c60
+        if (this.prototype)
+            fNOP.prototype = this.prototype;
         fBound.prototype = new fNOP();
 
         return fBound;

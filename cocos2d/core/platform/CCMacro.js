@@ -317,7 +317,7 @@ cc.rectPixelsToPoints = cc.IS_RETINA_DISPLAY_SUPPORTED ? function (pixel) {
     return cc.rect(pixel.x / scale, pixel.y / scale,
         pixel.width / scale, pixel.height / scale);
 } : function (p) {
-    return p;
+    return cc.rect(p);
 };
 
 /**
@@ -331,7 +331,7 @@ cc.rectPointsToPixels = cc.IS_RETINA_DISPLAY_SUPPORTED ? function (point) {
     return cc.rect(point.x * scale, point.y * scale,
         point.width * scale, point.height * scale);
 } : function (p) {
-    return p;
+    return cc.rect(p);
 };
 
 //some gl constant variable
@@ -419,27 +419,6 @@ cc.ONE_MINUS_CONSTANT_COLOR	= 0x8002;
  * @type Number
  */
 cc.LINEAR	= 0x2601;
-
-/**
- * the constant variable equals gl.REPEAT for texture
- * @constant
- * @type Number
- */
-cc.REPEAT	= 0x2901;
-
-/**
- * the constant variable equals gl.CLAMP_TO_EDGE for texture
- * @constant
- * @type Number
- */
-cc.CLAMP_TO_EDGE	= 0x812f;
-
-/**
- * the constant variable equals gl.MIRRORED_REPEAT for texture
- * @constant
- * @type Number
- */
-cc.MIRRORED_REPEAT   = 0x8370;
 
 /**
  * default gl blend src function. Compatible with premultiplied alpha images.

@@ -24,6 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+var EventTarget = require("../cocos2d/core/event/event-target");
+
 /**
  * <p>cc.Sprite is a 2d image ( http://en.wikipedia.org/wiki/Sprite_(computer_graphics) )  <br/>
  *
@@ -144,10 +146,10 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
      * Add a event listener for texture loaded event.
      * @param {Function} callback
      * @param {Object} target
-     * @deprecated since 3.1, please use addEventListener instead
+     * @deprecated since 3.1, please use EventTarget instead
      */
     addLoadedEventListener:function(callback, target){
-        this.addEventListener("load", callback, target);
+        this.once("load", callback, target);
     },
 
     /**
@@ -250,7 +252,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
         if(!spriteFrame.textureLoaded()){
             //add event listener
             this._textureLoaded = false;
-            spriteFrame.addEventListener("load", this._renderCmd._spriteFrameLoadedCallback, this);
+            spriteFrame.once("load", this._renderCmd._spriteFrameLoadedCallback, this);
         }
 
         //TODO
@@ -727,8 +729,8 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
                 _t._rect.height = rect.height;
             }
             if(_t.texture)
-                _t.texture.removeEventListener("load", _t);
-            texture.addEventListener("load", _t._renderCmd._textureLoadedCallback, _t);
+                _t.texture.off("load", _t._renderCmd._textureLoadedCallback, _t);
+            texture.once("load", _t._renderCmd._textureLoadedCallback, _t);
             _t.setTexture(texture);
             return true;
         }
@@ -841,10 +843,11 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
             if (pNewTexture !== _t._texture)
                 _t.setTexture(pNewTexture);
             _t._textureLoaded = false;
-            newFrame.addEventListener("load", function (sender) {
+            newFrame.once("load", function (event) {
+                var sender = event.currentTarget;
                 _t._textureLoaded = true;
                 _t.setTextureRect(sender.getRect(), sender.isRotated(), sender.getOriginalSize());
-                _t.dispatchEvent("load");
+                _t.emit("load");
                 _t.setColor(_t.color);
             }, _t);
         }else{
@@ -947,8 +950,9 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
             this.setColor(this._realColor);
             this._textureLoaded = true;
         }else{
-            this._renderCmd._setTexture(texture, isFileName);
-            texture.addEventListener("load", function(){
+            this._renderCmd._setTexture(texture);
+            texture.once("load", function (event) {
+                this._setTexture(texture, isFileName);
                 this.setColor(this._realColor);
                 this._textureLoaded = true;
             }, this);
@@ -1018,7 +1022,7 @@ cc.Sprite.createWithSpriteFrame = cc.Sprite.create;
  */
 cc.Sprite.INDEX_NOT_INITIALIZED = -1;
 
-cc.EventHelper.prototype.apply(cc.Sprite.prototype);
+EventTarget.polyfill(cc.Sprite.prototype);
 
 cc.assert(cc.js.isFunction(cc._tmp.PrototypeSprite), cc._LogInfos.MissingFile, "SpritesPropertyDefine.js");
 cc._tmp.PrototypeSprite();

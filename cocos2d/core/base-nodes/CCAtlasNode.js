@@ -24,6 +24,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+EventTarget = require("../cocos2d/core/event/event-target");
+
 /**
  * <p>cc.AtlasNode is a subclass of cc.Node, it knows how to render a TextureAtlas object. </p>
  *
@@ -277,7 +279,7 @@ _p.textureAtlas;
 /** @expose */
 _p.quadsToDraw;
 
-cc.EventHelper.prototype.apply(_p);
+EventTarget.polyfill(_p);
 
 /**
  * Creates a cc.AtlasNode with an Atlas file the width and height of each item and the quantity of items to render

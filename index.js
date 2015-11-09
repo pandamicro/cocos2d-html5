@@ -27,13 +27,13 @@
 // if "global_defs" not preprocessed by uglify, just declare them globally
 // (use eval to prevent the uglify from renaming symbols)
 if (typeof CC_TEST === 'undefined') {
-    eval('CC_TEST=typeof describe!=="undefined"||typeof QUnit!=="undefined"');
+    eval('CC_TEST=typeof describe!=="undefined"||typeof QUnit=="object"');
 }
 if (typeof CC_EDITOR === 'undefined') {
-    eval('CC_EDITOR=typeof Editor!=="undefined"&&typeof process!=="undefined"&&"electron" in process.versions');
+    eval('CC_EDITOR=typeof Editor=="object"&&typeof process=="object"&&"electron" in process.versions');
 }
 if (typeof CC_DEV === 'undefined') {
-    eval('CC_DEV=CC_EDITOR');
+    eval('CC_DEV=CC_EDITOR||CC_TEST');
 }
 
 // PREDEFINE
@@ -67,15 +67,9 @@ if (CC_EDITOR) {
 }
 
 if (isCoreLevel) {
-    cc.isRuntimeNode = function () {
-        return false;
-    };
-    cc._setWrapperGetter(function () {
-        return null;
-    });
     Editor.versions['cocos2d'] = require('./package.json').version;
 }
-else {
+else if (CC_DEV) {
     require('./cocos2d/deprecated');
 }
 
