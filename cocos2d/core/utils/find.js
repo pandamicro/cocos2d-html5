@@ -9,6 +9,7 @@
  * It is recommended to not use this function every frame instead cache the result at startup.
  *
  * @method find
+ * @static
  * @param {String} path
  * @param {ENode} [referenceNode]
  * @return {ENode} the node or null if not found

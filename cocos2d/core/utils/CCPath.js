@@ -6,6 +6,7 @@ require('../platform/CCSys');
 
 /**
  * @class path
+ * @static
  */
 cc.path = /** @lends cc.path# */{
     normalizeRE: /[^\.\/]+\/\.\.\//,

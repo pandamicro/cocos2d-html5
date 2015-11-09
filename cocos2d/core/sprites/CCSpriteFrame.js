@@ -40,6 +40,13 @@ var EventTarget = require("../event/event-target");
  * </p>
  * @class SpriteFrame
  * @extends Asset
+ * @constructor
+ * @param {String|Texture2D} filename
+ * @param {Rect} rect - If parameters' length equal 2, rect in points, else rect in pixels
+ * @param {Boolean} [rotated] - Whether the frame is rotated in the texture
+ * @param {Vec2} [offset] - The offset of the frame in the texture
+ * @param {Size} [originalSize] - The size of the frame in the texture
+ * @example {@link utils/api/cocos/docs/cocos2d/core/sprites/SpriteFrame.js}
  */
 cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
     name:'cc.SpriteFrame',
@@ -59,16 +66,6 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
     //    },
     //},
 
-    /**
-     * create sprite frame.
-     * @method SpriteFrame
-     * @param {String|Texture2D} filename
-     * @param {Rect} rect - If parameters' length equal 2, rect in points, else rect in pixels
-     * @param {Boolean} [rotated] - Whether the frame is rotated in the texture
-     * @param {Vec2} [offset] - The offset of the frame in the texture
-     * @param {Size} [originalSize] - The size of the frame in the texture
-     * @example {@link utils/api/cocos/docs/cocos2d/core/sprites/SpriteFrame.js}
-     */
     ctor:function () {
         var filename = arguments[0];
         var rect = arguments[1];
@@ -245,7 +242,7 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
 
     /**
      * Returns the original size of the trimmed image.
-     * @method setOffsetInPixels
+     * @method getOriginalSizeInPixels
      * @return {Size}
      */
     getOriginalSizeInPixels:function () {
@@ -273,6 +270,7 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
 
     /**
      * Sets the original size of the trimmed image.
+     * @method setOriginalSize
      * @param {Size} size
      */
     setOriginalSize:function (size) {

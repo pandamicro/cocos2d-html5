@@ -26,48 +26,6 @@ var JS = cc.js;
 var Destroying = cc.Object.Flags.Destroying;
 var DontDestroy = cc.Object.Flags.DontDestroy;
 
-/*
- * Class of all entities in Fireball scenes.
- * @class ENode
- * @extends NodeWrapper
- * @param {string} [name] - the name of the node
- *
- * @property {Number}               x                   - x axis position of node
- * @property {Number}               y                   - y axis position of node
- * @property {Number}               width               - Width of node
- * @property {Number}               height              - Height of node
- * @property {Number}               anchorX             - Anchor point's position on x axis
- * @property {Number}               anchorY             - Anchor point's position on y axis
- * @property {Boolean}              ignoreAnchor        - Indicate whether ignore the anchor point property for positioning
- * @property {Number}               skewX               - Skew x
- * @property {Number}               skewY               - Skew y
- * @property {Number}               zIndex              - Z order in depth which stands for the drawing order
- * @property {Number}               rotation            - Rotation of node
- * @property {Number}               rotationX           - Rotation on x axis
- * @property {Number}               rotationY           - Rotation on y axis
- * @property {Number}               scale               - Scale of node
- * @property {Number}               scaleX              - Scale on x axis
- * @property {Number}               scaleY              - Scale on y axis
- * @property {Boolean}              visible             - Indicate whether node is visible or not
- * @property {cc.Color}             color               - Color of node, default value is white: (255, 255, 255)
- * @property {Boolean}              cascadeColor        - Indicate whether node's color value affect its child nodes, default value is false
- * @property {Number}               opacity             - Opacity of node, default value is 255
- * @property {Boolean}              opacityModifyRGB    - Indicate whether opacity affect the color value, default value is false
- * @property {Boolean}              cascadeOpacity      - Indicate whether node's opacity value affect its child nodes, default value is false
- * @property {Array}                children            - <@readonly> All children nodes
- * @property {Number}               childrenCount       - <@readonly> Number of children
- * @property {cc.Node}              parent              - Parent node
- * @property {Boolean}              running             - <@readonly> Indicate whether node is running or not
- * @property {Number}               tag                 - Tag of node
- * @property {Object}               userData            - Custom user data
- * @property {Object}               userObject          - User assigned CCObject, similar to userData, but instead of holding a void* it holds an id
- * @property {Number}               arrivalOrder        - The arrival order, indicates which children is added previously
- * @property {cc.ActionManager}     actionManager       - The CCActionManager object that is used by all actions.
- * @property {cc.Scheduler}         scheduler           - cc.Scheduler used to schedule all "updates" and timers.
- * @property {cc.GLProgram}         shaderProgram       - The shader program currently used for this node
- * @property {Number}               glServerState       - The state of OpenGL server side
- */
-
 /**
  * @module cc
  */
@@ -417,7 +375,7 @@ var Node = cc.Class({
     },
 
     _deactivateChildComponents: function () {
-        // 和_onActivatedInHierarchy 类似但不修改 this._activeInHierarchy
+        // 和 _onActivatedInHierarchy 类似但不修改 this._activeInHierarchy
         var originCount = this._components.length;
         for (var c = 0; c < originCount; ++c) {
             var component = this._components[c];

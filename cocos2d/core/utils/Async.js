@@ -4,12 +4,13 @@
 
 /**
  * Async Pool class, a helper of cc.async
+ * @class AsyncPool
+ * @constructor
  * @param {Object|Array} srcObj
  * @param {Number} limit the limit of parallel number
- * @param {function} iterator
- * @param {function} onEnd
- * @param {object} target
- * @constructor
+ * @param {Function} iterator
+ * @param {Function} onEnd
+ * @param {Object} target
  */
 cc.AsyncPool = function(srcObj, limit, iterator, onEnd, target){
     var self = this;
