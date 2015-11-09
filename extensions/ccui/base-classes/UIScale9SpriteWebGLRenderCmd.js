@@ -41,7 +41,7 @@
         if(!node._scale9Enabled)
             return;
 
-        var node = this._node, locTexture = null;
+        var locTexture = null;
         if(node.getSprite()) locTexture = node.getSprite()._texture;
         if (!node.textureLoaded() || this._displayedOpacity === 0)
             return;
