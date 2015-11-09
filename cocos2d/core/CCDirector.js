@@ -1069,7 +1069,7 @@ cc.DisplayLinkDirector = cc.Director.extend(/** @lends cc.Director# */{
 
     /**
      * Sets animation interval
-     * @param {Number} [value] - The animation interval desired.
+     * @param {Number} value - The animation interval desired.
      */
     setAnimationInterval: function (value) {
         this._animationInterval = value;
