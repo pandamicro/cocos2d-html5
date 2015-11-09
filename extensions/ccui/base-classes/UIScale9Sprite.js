@@ -147,7 +147,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
             throw new Error("ccui.Scale9Sprite.initWithFile(): file should be non-null");
         }
 
-        var sprite = cc.Sprite.create(file);
+        var sprite = cc.Sprite.create(file,rect);
 
         this.init(sprite, rect, capInsets);
     },
