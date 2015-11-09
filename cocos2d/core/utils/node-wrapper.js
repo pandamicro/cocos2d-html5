@@ -162,14 +162,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             }
         },
 
-        vertexZ: {
-            get: SGProto.getVertexZ,
-            set: function (value) {
-                this._vertexZ = value;
-                this._sgNode.vertexZ = value;
-            }
-        },
-
         rotation: {
             get: SGProto.getRotation,
             set: function (value) {
@@ -237,14 +229,6 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             get: function () {
                 return this._children.length;
             }
-        },
-
-        visible: {
-            get: SGProto.isVisible,
-            set: function (value) {
-                this._visible = value;
-                this._sgNode.visible = value;
-            },
         },
 
         anchorX: {
@@ -316,8 +300,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         cascadeOpacity: {
             get: SGProto.isCascadeOpacityEnabled,
             set: function (value) {
-                this._cascadeOpacityEnabled = value;
-                this._sgNode.cascadeOpacity = value;
+                if (this._cascadeOpacityEnabled !== value) {
+                    this._cascadeOpacityEnabled = value;
+                    this._sgNode.cascadeOpacity = value;
+                    this._onCascadeChanged();
+                }
             },
         },
 
@@ -331,7 +318,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
                 color.r = value.r;
                 color.g = value.g;
                 color.b = value.b;
-                // Discard Alpha !!!
+                if (CC_DEV && value.a !== 255) {
+                    cc.warn('Should not set alpha via "color", use "opacity" please.');
+                }
                 this._sgNode.color = value;
                 this._onColorChanged();
             },
@@ -340,8 +329,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         cascadeColor: {
             get: SGProto.isCascadeColorEnabled,
             set: function (value) {
-                this._cascadeColorEnabled = value;
-                this._sgNode.cascadeColor = value;
+                if (this._cascadeColorEnabled !== value) {
+                    this._cascadeColorEnabled = value;
+                    this._sgNode.cascadeColor = value;
+                    this._onCascadeChanged();
+                }
             },
         },
     },
@@ -352,6 +344,10 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
             value: '',
             enumerable: false
         });
+
+        var sgNode = this._sgNode = new cc.Node();
+        sgNode.retain();
+        sgNode.cascadeOpacity = true;
     },
 
     // ABSTRACT INTERFACES
@@ -364,8 +360,11 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
     _onSizeChanged: null,
     // called when the node's anchor changed
     _onAnchorChanged: null,
+    // called when the node's cascadeOpacity or cascadeColor changed
+    _onCascadeChanged: null,
+    // called when the node's isOpacityModifyRGB changed
+    _onOpacityModifyRGBChanged: null,
 
-    //
 
     /**
      * Initializes the instance of cc.ENode
@@ -1023,6 +1022,37 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         return false;
     },
 
+    // The deserializer for sgNode which will be called before creating component
+    _onBatchCreated: function () {
+        var sgNode = this._sgNode;
+        sgNode.setOpacity(this._opacity);
+        sgNode.setColor(this._color);
+        sgNode.setCascadeOpacityEnabled(this._cascadeOpacityEnabled);
+        sgNode.setCascadeColorEnabled(this._cascadeColorEnabled);
+        sgNode.setAnchorPoint(this._anchorPoint);
+        sgNode.setContentSize(this._contentSize);
+        sgNode.setRotationX(this._rotationX);
+        sgNode.setRotationY(this._rotationY);
+        sgNode.setScale(this._scaleX, this._scaleY);
+        sgNode.setPosition(this._position);
+        sgNode.setSkewX(this._skewX);
+        sgNode.setSkewY(this._skewY);
+        sgNode.setLocalZOrder(this._localZOrder);
+        sgNode.setGlobalZOrder(this._globalZOrder);
+        sgNode.ignoreAnchorPointForPosition(this._ignoreAnchorPointForPosition);
+        sgNode.setTag(this._tag);
+        sgNode.setOpacityModifyRGB(this._opacityModifyRGB);
+
+        if (this._parent) {
+            this._parent._sgNode.addChild(sgNode);
+        }
+
+        var children = this._children;
+        for (var i = 0, len = children.length; i < len; i++) {
+            children[i]._onBatchCreated();
+        }
+    },
+
     _removeSgNode: SceneGraphHelper.removeSgNode,
 });
 
@@ -1031,14 +1061,13 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
     // Define public getter and setter methods to ensure api compatibility.
 
-    var SameNameGetSets = ['name', 'skewX', 'skewY', 'vertexZ', 'rotation', 'rotationX', 'rotationY',
+    var SameNameGetSets = ['name', 'skewX', 'skewY', 'rotation', 'rotationX', 'rotationY',
                            'scale', 'scaleX', 'scaleY', 'children', 'childrenCount', 'parent', 'running',
                            /*'actionManager',*/ 'scheduler', /*'shaderProgram',*/ 'opacity', 'color', 'tag'];
     var DiffNameGetSets = {
         x: ['getPositionX', 'setPositionX'],
         y: ['getPositionY', 'setPositionY'],
         zIndex: ['getLocalZOrder', 'setLocalZOrder'],
-        visible: ['isVisible', 'setVisible'],
         //running: ['isRunning'],
         ignoreAnchor: ['isIgnoreAnchorPointForPosition', 'ignoreAnchorPointForPosition'],
         opacityModifyRGB: ['isOpacityModifyRGB'],

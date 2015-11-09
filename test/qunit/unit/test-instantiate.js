@@ -135,7 +135,7 @@
 
     test('asset reference', function () {
         var sprite = {};
-        sprite.sprite = new cc.SpriteAsset();
+        sprite.sprite = new cc.SpriteFrame();
 
         var clone = cc.instantiate(sprite);
 

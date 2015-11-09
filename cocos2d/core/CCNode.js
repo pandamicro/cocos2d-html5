@@ -42,7 +42,6 @@ var DontDestroy = cc.Object.Flags.DontDestroy;
  * @property {Number}               skewX               - Skew x
  * @property {Number}               skewY               - Skew y
  * @property {Number}               zIndex              - Z order in depth which stands for the drawing order
- * @property {Number}               vertexZ             - WebGL Z vertex of this node, z order works OK if all the nodes uses the same openGL Z vertex
  * @property {Number}               rotation            - Rotation of node
  * @property {Number}               rotationX           - Rotation on x axis
  * @property {Number}               rotationY           - Rotation on y axis
@@ -169,11 +168,6 @@ var Node = cc.Class({
         var name = arguments[0];
         this._name = typeof name !== 'undefined' ? name : 'New Node';
         this._activeInHierarchy = false;
-
-        if (!cc.game._isCloning) {
-            // create dynamically
-            this._onBatchCreated();
-        }
     },
 
     // OVERRIDES
@@ -310,17 +304,15 @@ var Node = cc.Class({
 
     /**
      * Removes a component identified by the given name or removes the component object given.
+     * You can also use component.destroy() if you already have the reference.
      * @function
      * @param {String|function|cc.Component} component
      * @deprecated please destroy the component to remove it.
      */
     removeComponent: function (component) {
-        if (CC_DEV) {
-            cc.warn('cc.ENode.removeComponent(component) is deprecated, please use component.destroy() instead.');
-            if ( !component ) {
-                cc.error('removeComponent: Component must be non-nil');
-                return null;
-            }
+        if ( !component ) {
+            cc.error('removeComponent: Component must be non-nil');
+            return null;
         }
         if (typeof component !== 'object') {
             component = this.getComponent(component);
@@ -442,31 +434,32 @@ var Node = cc.Class({
         return clone;
     },
 
-    _onBatchCreated: function () {
-        var sgNode = new cc.Node();
-
-        // retain immediately
-        sgNode.retain();
-        this._sgNode = sgNode;
-
-        sgNode.setAnchorPoint(0, 1);
-        if (this._parent) {
-            this._parent._sgNode.addChild(sgNode);
-        }
-
-        var children = this._children;
-        for (var i = 0, len = children.length; i < len; i++) {
-            children[i]._onBatchCreated();
+    _onColorChanged: function () {
+        // update components if also in scene graph
+        if ( !this._cascadeColorEnabled || !this._cascadeOpacityEnabled ) {
+            for (var c = 0; c < this._components.length; ++c) {
+                var comp = this._components[c];
+                if (comp instanceof cc._ComponentInSG && comp.isValid) {
+                    if (!this._cascadeColorEnabled) {
+                        comp._sgNode.setColor(this._color);
+                    }
+                    if (!this._cascadeOpacityEnabled) {
+                        comp._sgNode.setOpacity(this._opacity);
+                    }
+                }
+            }
         }
     },
 
-    _onColorChanged: function () {
-        // update components if also in scene graph
+    _onCascadeChanged: function () {
+        // update components which also in scene graph
+        var color = this._cascadeColorEnabled ? cc.Color.WHITE : this._color;
+        var opacity = this._cascadeOpacityEnabled ? 255 : this._opacity;
         for (var c = 0; c < this._components.length; ++c) {
             var comp = this._components[c];
             if (comp instanceof cc._ComponentInSG && comp.isValid) {
-                comp._sgNode.setColor(this._color);
-                comp._sgNode.setOpacity(this._opacity / 255);
+                comp._sgNode.setColor(color);
+                comp._sgNode.setOpacity(opacity);
             }
         }
     },

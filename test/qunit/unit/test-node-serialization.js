@@ -22,7 +22,6 @@ if (TestEditorExtends) {
     var compareKeys = [
         '_localZOrder',
         '_globalZOrder',
-        '_vertexZ',
         '_rotationX',
         '_rotationY',
         '_scaleX',
@@ -30,17 +29,14 @@ if (TestEditorExtends) {
         '_position',
         '_skewX',
         '_skewY',
-        '_visible',
         '_anchorPoint',
         '_contentSize',
         '_ignoreAnchorPointForPosition',
         'tag',
-        'userData',
-        'userObject',
         '_name',
-        '_showNode',
-        '_realOpacity',
-        '_realColor',
+        '_opacity',
+        '_color',
+        '_active',
         '_cascadeColorEnabled',
         '_cascadeOpacityEnabled',
         '__type__'
@@ -50,7 +46,6 @@ if (TestEditorExtends) {
         return {
             '_localZOrder' : getRandomInt(),
             '_globalZOrder' : getRandomInt(),
-            '_vertexZ' : getRandomDouble(),
             '_rotationX' : getRandomDouble(),
             '_rotationY' : getRandomDouble(),
             '_scaleX' : 1.5,
@@ -58,17 +53,14 @@ if (TestEditorExtends) {
             '_position' : cc.p(getRandomDouble(), getRandomDouble()),
             '_skewX' : getRandomDouble(),
             '_skewY' : getRandomDouble(),
-            '_visible' : getRandomBool(),
+            '_active' : getRandomBool(),
             '_anchorPoint' : cc.p(getRandomDouble(), getRandomDouble()),
             '_contentSize' : cc.size(getRandomDouble(), getRandomDouble()),
             '_ignoreAnchorPointForPosition' : getRandomBool(),
             'tag' : getRandomInt(),
-            'userData' : {mydata: nodeName},
-            'userObject' : {myobj: nodeName},
             '_name' : nodeName,
-            '_showNode' : getRandomBool(),
-            '_realOpacity' : getSpecRandomInt(0, 256),
-            '_realColor' : cc.color(getSpecRandomInt(0, 256), getSpecRandomInt(0, 256), getSpecRandomInt(0, 256), getSpecRandomInt(0, 256)),
+            '_opacity' : getSpecRandomInt(0, 256),
+            '_color' : cc.color(getSpecRandomInt(0, 256), getSpecRandomInt(0, 256), getSpecRandomInt(0, 256), getSpecRandomInt(0, 256)),
             '_cascadeColorEnabled' : getRandomBool(),
             '_cascadeOpacityEnabled' : getRandomBool(),
             '__type__' : 'cc.Node'
@@ -80,7 +72,6 @@ if (TestEditorExtends) {
 
         ret._localZOrder = getRandomInt();
         ret._globalZOrder = getRandomInt();
-        ret._vertexZ = getRandomDouble();
         ret._rotationX = getRandomDouble();
         ret._rotationY = getRandomDouble();
         ret._scaleX = 1.5;
@@ -88,17 +79,14 @@ if (TestEditorExtends) {
         ret._position = cc.p(getRandomDouble(), getRandomDouble());
         ret._skewX = getRandomDouble();
         ret._skewY = getRandomDouble();
-        ret._visible = getRandomBool();
+        ret._active = getRandomBool();
         ret._anchorPoint = cc.p(getRandomDouble(), getRandomDouble());
         ret._contentSize = cc.size(getRandomDouble(), getRandomDouble());
         ret._ignoreAnchorPointForPosition = getRandomBool();
         ret.tag = getRandomInt();
-        ret.userData = {mydata: nodeName};
-        ret.userObject = {myobj: nodeName};
         ret._name = nodeName;
-        ret._showNode = getRandomBool();
-        ret._realOpacity = getSpecRandomInt(0, 256);
-        ret._realColor = cc.color(getSpecRandomInt(0, 256), getSpecRandomInt(0, 256), getSpecRandomInt(0, 256), getSpecRandomInt(0, 256));
+        ret._opacity = getSpecRandomInt(0, 256);
+        ret._color = cc.color(getSpecRandomInt(0, 256), getSpecRandomInt(0, 256), getSpecRandomInt(0, 256), getSpecRandomInt(0, 256));
         ret._cascadeColorEnabled = getRandomBool();
         ret._cascadeOpacityEnabled = getRandomBool();
         ret.__type__ = 'cc.Node';
