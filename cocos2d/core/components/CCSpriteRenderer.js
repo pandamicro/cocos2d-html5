@@ -93,10 +93,11 @@ var SpriteRenderer = cc.Class({
          */
         localSize: {
             get: function () {
-                if (!this._sgNode) {
+                var texture = this._sgNode ? this._sgNode.texture : null;
+                if (!texture) {
                     return cc.size(0, 0);
                 }
-                return this._sgNode.getContentSize();
+                return cc.size(texture.width, texture.height);
             },
             visible: false
         }
