@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 var ValueType = require('./CCValueType');
 var JS = require('../platform/js');
 var FireClass = require('../platform/CCClass');
@@ -6,7 +10,7 @@ var FireClass = require('../platform/CCClass');
  * Representation of 2D vectors and points.
  *
  * see {% crosslink cc.Vec2 cc.v2 %}
- * @class cc.Vec2
+ * @class Vec2
  * @extends ValueType
  * @constructor
  * @param {number} [x=0]

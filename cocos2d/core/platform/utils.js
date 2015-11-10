@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 /****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
@@ -44,7 +48,7 @@ module.exports = {
 if (CC_DEV) {
     cc.js.mixin(module.exports, {
         ///**
-        // * @param {object} obj
+        // * @param {Object} obj
         // * @return {Boolean} is {} ?
         // */
         isPlainEmptyObj_DEV: function (obj) {

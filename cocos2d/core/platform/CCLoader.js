@@ -1,9 +1,13 @@
-
 if (cc.loader) return;
 
 /**
+ * @module cc
+ */
+
+/**
  * Loader for resource loading process. It's a singleton object.
- * @class
+ * @class loader
+ * @static
  */
 cc.loader = (function () {
     var _jsCache = {}, //cache for js
@@ -82,9 +86,10 @@ cc.loader = (function () {
          * Load js files.
          * If the third parameter doesn't exist, then the baseDir turns to be "".
          *
-         * @param {string} [baseDir]   The pre path for jsList or the list of js path.
-         * @param {array} jsList    List of js path.
-         * @param {function} [cb]  Callback function
+         * @method loadJs
+         * @param {String} [baseDir] - The pre path for jsList or the list of js path.
+         * @param {Array} jsList - List of js path.
+         * @param {Function} [cb] - Callback function
          * @returns {*}
          */
         loadJs: function (baseDir, jsList, cb) {
@@ -105,9 +110,10 @@ cc.loader = (function () {
         /**
          * Load js width loading image.
          *
-         * @param {string} [baseDir]
-         * @param {array} jsList
-         * @param {function} [cb]
+         * @method loadJsWithImg
+         * @param {String} [baseDir]
+         * @param {Array} jsList
+         * @param {Function} [cb]
          */
         loadJsWithImg: function (baseDir, jsList, cb) {
             var self = this, jsLoadingImg = self._loadJsImg(),
@@ -177,8 +183,10 @@ cc.loader = (function () {
 
         /**
          * Load a single resource as txt.
-         * @param {string} url
-         * @param {function} [cb] arguments are : err, txt
+         *
+         * @method loadTxt
+         * @param {String} url
+         * @param {Function} [cb] - arguments are : err, txt
          */
         loadTxt: function (url, cb) {
             if (!cc._isNodeJs) {
@@ -254,8 +262,10 @@ cc.loader = (function () {
 
         /**
          * Load a single resource as json.
-         * @param {string} url
-         * @param {function} [cb] arguments are : err, json
+         *
+         * @method loadJson
+         * @param {String} url
+         * @param {Function} [cb] - arguments are : err, json
          */
         loadJson: function (url, cb) {
             this.loadTxt(url, function (err, txt) {
@@ -281,9 +291,11 @@ cc.loader = (function () {
         },
         /**
          * Load a single image.
-         * @param {!string} url
-         * @param {object} [option]
-         * @param {function} callback
+         *
+         * @method loadImg
+         * @param {String} url
+         * @param {Object} [option]
+         * @param {Function} callback
          * @returns {Image}
          */
         loadImg: function (url, option, callback) {
@@ -333,10 +345,12 @@ cc.loader = (function () {
         },
 
         /**
-         * Iterator function to load res
-         * @param {object} item
-         * @param {number} index
-         * @param {function} [cb]
+         * Iterator function to load res.
+         *
+         * @method _loadResIterator
+         * @param {Object} item
+         * @param {Number} index
+         * @param {Function} [cb]
          * @returns {*}
          * @private
          */
@@ -391,8 +405,10 @@ cc.loader = (function () {
 
         /**
          * Get url with basePath.
-         * @param {string} basePath
-         * @param {string} [url]
+         *
+         * @method getUrl
+         * @param {String} basePath
+         * @param {String} [url]
          * @returns {*}
          */
         getUrl: function (basePath, url) {
@@ -419,10 +435,12 @@ cc.loader = (function () {
 
         /**
          * Load resources then call the callback.
-         * @param {string} resources
-         * @param {function} [option] callback or trigger
-         * @param {function|Object} [loadCallback]
-         * @return {cc.AsyncPool}
+         *
+         * @method load
+         * @param {String} resources
+         * @param {Function} [option] - callback or trigger
+         * @param {Function|Object} [loadCallback]
+         * @return {AsyncPool}
          */
         load : function(resources, option, loadCallback){
             var self = this;
@@ -498,7 +516,9 @@ cc.loader = (function () {
          *                 </dict>                                                                                         <br/>
          *              </plist>                                                                                           <br/>
          * </p>
-         * @param {String} url  The plist file name.
+         *
+         * @method loadAliases
+         * @param {String} url - The plist file name.
          * @param {Function} [callback]
          */
         loadAliases: function (url, callback) {
@@ -513,8 +533,10 @@ cc.loader = (function () {
 
         /**
          * Register a resource loader into loader.
-         * @param {string} extNames
-         * @param {function} loader
+         *
+         * @method register
+         * @param {String} extNames
+         * @param {Function} loader
          */
         register: function (extNames, loader) {
             if (!extNames || !loader) return;
@@ -528,6 +550,8 @@ cc.loader = (function () {
 
         /**
          * Get resource data by url.
+         *
+         * @method getRes
          * @param url
          * @returns {*}
          */
@@ -537,6 +561,8 @@ cc.loader = (function () {
 
         /**
          * Get aliase by url.
+         *
+         * @method getAliase
          * @param url
          * @returns {*}
          */
@@ -546,6 +572,8 @@ cc.loader = (function () {
 
         /**
          * Release the cache of resource by url.
+         *
+         * @method release
          * @param url
          */
         release: function (url) {
@@ -557,6 +585,8 @@ cc.loader = (function () {
 
         /**
          * Resource cache of all resources.
+         *
+         * @method releaseAll
          */
         releaseAll: function () {
             var locCache = this.cache;

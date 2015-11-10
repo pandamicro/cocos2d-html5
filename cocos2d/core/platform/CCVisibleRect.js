@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 /****************************************************************************
  Copyright (c) 2011-2012 cocos2d-x.org
  Copyright (c) 2013-2014 Chukong Technologies Inc.
@@ -28,20 +32,7 @@
  * cc.visibleRect is a singleton object which defines the actual visible rect of the current view,
  * it should represent the same rect as cc.view.getViewportRect()
  *
- * @property {cc.Vec2}      topLeft         - Top left coordinate of the screen related to the game scene
- * @property {cc.Vec2}      topRight        - Top right coordinate of the screen related to the game scene
- * @property {cc.Vec2}      top             - Top center coordinate of the screen related to the game scene
- * @property {cc.Vec2}      bottomLeft      - Bottom left coordinate of the screen related to the game scene
- * @property {cc.Vec2}      bottomRight     - Bottom right coordinate of the screen related to the game scene
- * @property {cc.Vec2}      bottom          - Bottom center coordinate of the screen related to the game scene
- * @property {cc.Vec2}      center          - Center coordinate of the screen related to the game scene
- * @property {cc.Vec2}      left            - Left center coordinate of the screen related to the game scene
- * @property {cc.Vec2}      right           - Right center coordinate of the screen related to the game scene
- * @property {Number}       width           - Width of the screen
- * @property {Number}       height          - Height of the screen
- *
- * @class
- * @name cc.visibleRect
+ * @class visibleRect
  */
 cc.visibleRect = {
     topLeft:cc.p(0,0),
@@ -58,7 +49,7 @@ cc.visibleRect = {
 
     /**
      * initialize
-     * @param {cc.Rect} visibleRect
+     * @param {Rect} visibleRect
      */
     init:function(visibleRect){
 
@@ -98,3 +89,70 @@ cc.visibleRect = {
         this.right.y = b + h/2;
     }
 };
+
+/**
+ * Top left coordinate of the screen related to the game scene.
+ * @property topLeft
+ * @type {Vec2}
+ */
+
+/**
+ * Top right coordinate of the screen related to the game scene.
+ * @property topRight
+ * @type {Vec2}
+ */
+
+/**
+ * Top center coordinate of the screen related to the game scene.
+ * @property top
+ * @type {Vec2}
+ */
+
+/**
+ * Bottom left coordinate of the screen related to the game scene.
+ * @property bottomLeft
+ * @type {Vec2}
+ */
+
+/**
+ * Bottom right coordinate of the screen related to the game scene.
+ * @property bottomRight
+ * @type {Vec2}
+ */
+
+/**
+ * Bottom center coordinate of the screen related to the game scene.
+ * @property bottom
+ * @type {Vec2}
+ */
+
+/**
+ * Center coordinate of the screen related to the game scene.
+ * @property center
+ * @type {Vec2}
+ */
+
+/**
+ * Left center coordinate of the screen related to the game scene.
+ * @property left
+ * @type {Vec2}
+ */
+
+/**
+ * Right center coordinate of the screen related to the game scene.
+ * @property right
+ * @type {Vec2}
+ */
+
+/**
+ * Width of the screen.
+ * @property width
+ * @type {Number}
+ */
+
+/**
+ * Height of the screen.
+ * @property height
+ * @type {Number}
+ */
+

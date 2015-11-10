@@ -1,4 +1,8 @@
-﻿/****************************************************************************
+﻿/**
+ * @module cc
+ */
+
+/****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
  Copyright (c) 2013-2014 Chukong Technologies Inc.
@@ -32,23 +36,11 @@ var isPlainEmptyObj = require('./utils').isPlainEmptyObj_DEV;
  * This function holds only the attributes, not their implementations.
  *
  * @method attr
- * @param {function|object} constructor - the class or instance. If instance, the attribute will be dynamic and only available for the specified instance.
- * @param {string} propertyName - the name of property or function, used to retrieve the attributes
- * @param {object} [attributes] - the attribute table to mark, new attributes will merged with existed attributes. Attribute whose key starts with '_' will be ignored.
- * @return {object|undefined} return all attributes associated with the property. if none undefined will be returned
- *
- * @example
- * ```js
- *  var myClass = function () { this.value = 0.5 };
- *  cc.Class.attr(myClass, 'value');         // return undefined
- *  cc.Class.attr(myClass, 'value', {}).min = 0;  // assign new attribute table
- *              //associated with 'value', and set its min = 0
- *  cc.Class.attr(myClass, 'value', {       // set values max and default
- *     max: 1,
- *     default: 0.5,
- *  });
- *  cc.Class.attr(myClass, 'value');  // return { default: 0.5, min: 0, max: 1 }
- * ```
+ * @param {Function|Object} constructor - the class or instance. If instance, the attribute will be dynamic and only available for the specified instance.
+ * @param {String} propertyName - the name of property or function, used to retrieve the attributes
+ * @param {Object} [attributes] - the attribute table to mark, new attributes will merged with existed attributes. Attribute whose key starts with '_' will be ignored.
+ * @return {Object|Undefined} return all attributes associated with the property. if none undefined will be returned
+ * @example {@link utils/api/cocos/docs/cocos2d/core/platform/attribute/attr.js}
  */
 function attr (constructor, propertyName, attributes) {
     var key = '_attr$' + propertyName;
@@ -281,10 +273,10 @@ function Nullable (boolPropName, hasValueByDefault) {
 
 //
 // @method Watch
-// @param {string} names - the name of target property to watch, array is also acceptable.
-// @param {function} callback - the callback function to invoke when target property(s) is changed.
-// @param {object} callback.param object - the instance object which contains watching property(s).
-// @param {object} callback.param element - the property element which displays watching property(s).
+// @param {String} names - the name of target property to watch, array is also acceptable.
+// @param {Function} callback - the callback function to invoke when target property(s) is changed.
+// @param {Object} callback.param object - the instance object which contains watching property(s).
+// @param {Object} callback.param element - the property element which displays watching property(s).
 // @return {object} the attribute
 // @private
 //

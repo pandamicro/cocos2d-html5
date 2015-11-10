@@ -1,4 +1,8 @@
-﻿var JS = require('./js');
+﻿/**
+ * @module cc
+ */
+
+var JS = require('./js');
 
 /**
  * The CallbacksHandler is an abstract class that can register and unregister callbacks by key.
@@ -13,9 +17,9 @@ var CallbacksHandler = (function () {
 
 /**
  * @method add
- * @param {string} key
- * @param {function} callback - can be null
- * @param {object} target - can be null
+ * @param {String} key
+ * @param {Function} callback - can be null
+ * @param {Object} target - can be null
  * @return {Boolean} whether the key is new
  */
 CallbacksHandler.prototype.add = function (key, callback, target) {
@@ -52,9 +56,9 @@ CallbacksHandler.prototype.add = function (key, callback, target) {
  * Check if the specified key has any registered callback. If a callback is also specified,
  * it will only return true if the callback is registered.
  * @method has
- * @param {string} key
- * @param {function} [callback]
- * @param {object} [target]
+ * @param {String} key
+ * @param {Function} [callback]
+ * @param {Object} [target]
  * @return {Boolean}
  */
 CallbacksHandler.prototype.has = function (key, callback, target) {
@@ -87,7 +91,7 @@ CallbacksHandler.prototype.has = function (key, callback, target) {
 /**
  * Removes all callbacks registered in a certain event type or all callbacks registered with a certain target
  * @method removeAll
- * @param {string|object} key - The event key to be removed or the target to be removed
+ * @param {String|Object} key - The event key to be removed or the target to be removed
  */
 CallbacksHandler.prototype.removeAll = function (key) {
     if (typeof key === 'object') {
@@ -112,9 +116,9 @@ CallbacksHandler.prototype.removeAll = function (key) {
 
 /**
  * @method remove
- * @param {string} key
- * @param {function} callback
- * @param {object} target
+ * @param {String} key
+ * @param {Function} callback
+ * @param {Object} target
  * @return {Boolean} removed
  */
 CallbacksHandler.prototype.remove = function (key, callback, target) {
@@ -157,7 +161,7 @@ if (CC_TEST) {
 
 /**
  * @method invoke
- * @param {string} key
+ * @param {String} key
  * @param {any} [p1]
  * @param {any} [p2]
  * @param {any} [p3]
@@ -183,7 +187,7 @@ CallbacksInvoker.prototype.invoke = function (key, p1, p2, p3, p4, p5) {
 
 /**
  * @method invokeAndRemove
- * @param {string} key
+ * @param {String} key
  * @param {any} [p1]
  * @param {any} [p2]
  * @param {any} [p3]
@@ -212,9 +216,9 @@ CallbacksInvoker.prototype.invokeAndRemove = function (key, p1, p2, p3, p4, p5) 
 
 /**
  * @method bindKey
- * @param {string} key
+ * @param {String} key
  * @param {Boolean} [remove=false] - remove callbacks after invoked
- * @return {function} the new callback which will invoke all the callbacks binded with the same supplied key
+ * @return {Function} the new callback which will invoke all the callbacks binded with the same supplied key
  */
 CallbacksInvoker.prototype.bindKey = function (key, remove) {
     var self = this;

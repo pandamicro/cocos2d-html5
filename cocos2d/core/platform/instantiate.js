@@ -1,4 +1,8 @@
-﻿/****************************************************************************
+﻿/**
+ * @module cc
+ */
+
+/****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
  Copyright (c) 2013-2014 Chukong Technologies Inc.
@@ -41,8 +45,8 @@ var _isDomNode = require('./utils').isDomNode;
  * <del>对于 Entity / Component 等 Scene Object，如果对方也会被一起 Instantiate，则重定向到新的引用，否则保留为原来的引用。</del>
  *
  * @method instantiate
- * @param {object} original - An existing object that you want to make a copy of.
- * @return {object} the newly instantiated object
+ * @param {Object} original - An existing object that you want to make a copy of.
+ * @return {Object} the newly instantiated object
  */
 function instantiate (original) {
     if (typeof original !== 'object' || Array.isArray(original)) {
@@ -93,9 +97,9 @@ var objsToClearTmpVar = [];   // 用于重设临时变量
 // * 之后可以给各种类型重载快速实例化的特殊实现，但应该在单元测试中将结果和这个方法的结果进行对比。
 // * 值得注意的是，这个方法不可重入，不支持 mixin。
 // *
-// * @param {object} obj - 该方法仅供内部使用，用户需负责保证参数合法。什么参数是合法的请参考 cc.instantiate 的实现。
-// * @param {cc.ENode} [parent] - 只有在该对象下的场景物体会被克隆。
-// * @return {object}
+// * @param {Object} obj - 该方法仅供内部使用，用户需负责保证参数合法。什么参数是合法的请参考 cc.instantiate 的实现。
+// * @param {ENode} [parent] - 只有在该对象下的场景物体会被克隆。
+// * @return {Object}
 // * @private
 // */
 function doInstantiate (obj, parent) {
@@ -119,8 +123,8 @@ function doInstantiate (obj, parent) {
 }
 
 ///**
-// * @param {object} obj - The object to instantiate, typeof must be 'object' and should not be an array.
-// * @return {object} - the instantiated instance
+// * @param {Object} obj - The object to instantiate, typeof must be 'object' and should not be an array.
+// * @return {Object} - the instantiated instance
 // */
 var enumerateObject = function (obj, parent) {
     var value, type, key;
@@ -176,7 +180,7 @@ var enumerateObject = function (obj, parent) {
 };
 
 ///**
-// * @return {object} - the original non-nil object, typeof must be 'object'
+// * @return {Object} - the original non-nil object, typeof must be 'object'
 // */
 function instantiateObj (obj, parent, ownerObj, ownerKey) {
     // 目前使用“_iN$t”这个特殊字段来存实例化后的对象，这样做主要是为了防止循环引用

@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 require('../platform/CCObject');
 require('../CCNode');
 
@@ -243,7 +247,7 @@ var Component = cc.Class({
 
         /**
          * @property _enabled
-         * @type boolean
+         * @type {Boolean}
          * @private
          */
         _enabled: true,
@@ -564,8 +568,8 @@ if (CC_EDITOR) {
 /**
  * Register a component to the editors "Component" menu.
  *
- * @param {function} constructor - the class you want to register, must inherit from Component
- * @param {string} menuPath - the menu path name. Eg. "Rendering/Camera"
+ * @param {Function} constructor - the class you want to register, must inherit from Component
+ * @param {String} menuPath - the menu path name. Eg. "Rendering/Camera"
  * @param {number} [priority] - the order which the menu item are displayed
  */
 cc.addComponentMenu = function (constructor, menuPath, priority) {
@@ -590,7 +594,7 @@ cc.addComponentMenu = function (constructor, menuPath, priority) {
  *
  * @method executeInEditMode
  * @param {Component} constructor - The class you want to register, must inherit from Component.
- * @param {boolean} [prefer60FPS=false] - If true, the scene view will keep updating this entity in 60 fps when it is selected,
+ * @param {Boolean} [prefer60FPS=false] - If true, the scene view will keep updating this entity in 60 fps when it is selected,
  *                         otherwise, it will update only if necessary.
  */
 cc.executeInEditMode = function (constructor, prefer60FPS) {

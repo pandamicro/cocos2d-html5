@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 /****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
@@ -25,8 +29,8 @@
  ****************************************************************************/
 
 /**
- * the device accelerometer reports values for each axis in units of g-force
- * @class cc.Acceleration
+ * the device accelerometer reports values for each axis in units of g-force.
+ * @class Acceleration
  * @constructor
  * @param {Number} x
  * @param {Number} y
@@ -41,8 +45,8 @@ cc.Acceleration = function (x, y, z, timestamp) {
 };
 
 /**
- * Blend Function used for textures
- * @Class cc.BlendFunc
+ * Blend Function used for textures.
+ * @Class BlendFunc
  * @Constructor
  * @param {Number} src1 source blend function
  * @param {Number} dst1 destination blend function
@@ -79,8 +83,8 @@ cc.BlendFunc.ADDITIVE;
 cc.js.get(cc.BlendFunc, "ADDITIVE", cc.BlendFunc._additive);
 
 /**
- * @function
- * @returns {cc.BlendFunc}
+ * @method blendFuncDisable
+ * @returns {BlendFunc}
  */
 cc.blendFuncDisable = function () {
     return new cc.BlendFunc(cc.ONE, cc.ZERO);
@@ -101,9 +105,7 @@ cc.blendFuncDisable = function () {
  *  fontSize: 12
  * });
  *
- *
- *
- * @class cc.FontDefinition
+ * @class FontDefinition
  * @param {Object} properties - (OPTIONAL) Allow inline FontDefinition
  * @constructor
  */
@@ -148,22 +150,40 @@ cc.FontDefinition.prototype._getCanvasFontStr = function(){
 /**
  * Enum for text alignment
  * @readonly
- * @enum {number}
+ * @enum TextAlignment
  */
 cc.TextAlignment = cc.Enum({
+    /**
+     * @property {Number} LEFT
+     */
     LEFT: 0,
+    /**
+     * @property {Number} CENTER
+     */
     CENTER: 1,
+    /**
+     * @property {Number} RIGHT
+     */
     RIGHT: 2
 });
 
 /**
  * Enum for vertical text alignment
  * @readonly
- * @enum {number}
+ * @enum VerticalTextAlignment
  */
 cc.VerticalTextAlignment = cc.Enum({
+    /**
+     * @property {Number} TOP
+     */
     TOP: 0,
+    /**
+     * @property {Number} CENTER
+     */
     CENTER: 1,
+    /**
+     * @property {Number} BOTTOM
+     */
     BOTTOM: 2
 });
 

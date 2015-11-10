@@ -3,7 +3,7 @@ var TextAlign = cc.TextAlignment;
 
 /**
  * Enum for text anchor
- * @readonly
+ * @readOnly
  * @enum {number}
  */
 var TextAnchor = cc.Enum({
