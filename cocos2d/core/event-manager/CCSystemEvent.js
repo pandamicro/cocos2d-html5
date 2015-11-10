@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 /****************************************************************************
  Copyright (c) 2011-2012 cocos2d-x.org
  Copyright (c) 2013-2015 Chukong Technologies Inc.
@@ -28,43 +32,43 @@ var JS = cc.js;
 /**
  * The type code of Touch event.
  * @constant
- * @type {string}
+ * @type {String}
  */
 cc.Event.TOUCH = 'touch';
 /**
  * The type code of Mouse event.
  * @constant
- * @type {string}
+ * @type {String}
  */
 cc.Event.MOUSE = 'mouse';
 /**
  * The type code of UI focus event.
  * @constant
- * @type {string}
+ * @type {String}
  */
 cc.Event.FOCUS = 'focus';
 /**
  * The type code of Keyboard event.
  * @constant
  * @memberof cc.Event
- * @type {string}
+ * @type {String}
  */
 cc.Event.KEYBOARD = 'keyboard';
 /**
  * The type code of Acceleration event.
  * @constant
  * @memberof cc.Event
- * @type {string}
+ * @type {String}
  */
 cc.Event.ACCELERATION = 'acceleration';
 
 /**
  * The mouse event
- * @class cc.Event.EventMouse
+ * @class Event.EventMouse
  * @constructor
- * @extends cc.Event
- * @param {number} eventType - The mouse event type, UP, DOWN, MOVE, CANCELED
- * @param {boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
+ * @extends Event
+ * @param {Number} eventType - The mouse event type, UP, DOWN, MOVE, CANCELED
+ * @param {Boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
  */
 var EventMouse = function (eventType, bubbles) {
     cc.Event.call(this, cc.Event.MOUSE, bubbles);
@@ -81,9 +85,10 @@ var EventMouse = function (eventType, bubbles) {
 JS.extend(EventMouse, cc.Event);
 JS.mixin(EventMouse.prototype, {
     /**
-     * Sets scroll data
-     * @param {number} scrollX
-     * @param {number} scrollY
+     * Sets scroll data.
+     * @method setScrollData
+     * @param {Number} scrollX
+     * @param {Number} scrollY
      */
     setScrollData: function (scrollX, scrollY) {
         this._scrollX = scrollX;
@@ -91,25 +96,28 @@ JS.mixin(EventMouse.prototype, {
     },
 
     /**
-     * Returns the x axis scroll value
-     * @returns {number}
+     * Returns the x axis scroll value.
+     * @method getScrollX
+     * @returns {Number}
      */
     getScrollX: function () {
         return this._scrollX;
     },
 
     /**
-     * Returns the y axis scroll value
-     * @returns {number}
+     * Returns the y axis scroll value.
+     * @method getScrollY
+     * @returns {Number}
      */
     getScrollY: function () {
         return this._scrollY;
     },
 
     /**
-     * Sets cursor location
-     * @param {number} x
-     * @param {number} y
+     * Sets cursor location.
+     * @method setLocation
+     * @param {Number} x
+     * @param {Number} y
      */
     setLocation: function (x, y) {
         this._x = x;
@@ -117,16 +125,18 @@ JS.mixin(EventMouse.prototype, {
     },
 
 	/**
-	 * Returns cursor location
-	 * @return {cc.Vec2} location
+	 * Returns cursor location.
+     * @method getLocation
+	 * @return {Vec2} location
 	 */
     getLocation: function () {
         return {x: this._x, y: this._y};
     },
 
 	/**
-	 * Returns the current cursor location in screen coordinates
-	 * @return {cc.Vec2}
+	 * Returns the current cursor location in screen coordinates.
+     * @method getLocationInView
+     * @return {Vec2}
 	 */
 	getLocationInView: function() {
 		return {x: this._x, y: cc.view._designResolutionSize.height - this._y};
@@ -138,15 +148,17 @@ JS.mixin(EventMouse.prototype, {
     },
 
     /**
-     * Returns the delta distance from the previous location to current location
-     * @return {cc.Vec2}
+     * Returns the delta distance from the previous location to current location.
+     * @method getDelta
+     * @return {Vec2}
      */
     getDelta: function () {
         return {x: this._x - this._prevX, y: this._y - this._prevY};
     },
 
     /**
-     * Returns the X axis delta distance from the previous location to current location
+     * Returns the X axis delta distance from the previous location to current location.
+     * @method getDeltaX
      * @return {Number}
      */
     getDeltaX: function () {
@@ -154,7 +166,8 @@ JS.mixin(EventMouse.prototype, {
     },
 
     /**
-     * Returns the Y axis delta distance from the previous location to current location
+     * Returns the Y axis delta distance from the previous location to current location.
+     * @method getDeltaY
      * @return {Number}
      */
     getDeltaY: function () {
@@ -162,32 +175,36 @@ JS.mixin(EventMouse.prototype, {
     },
 
     /**
-     * Sets mouse button
-     * @param {number} button
+     * Sets mouse button.
+     * @method setButton
+     * @param {Number} button
      */
     setButton: function (button) {
         this._button = button;
     },
 
     /**
-     * Returns mouse button
-     * @returns {number}
+     * Returns mouse button.
+     * @method getButton
+     * @returns {Number}
      */
     getButton: function () {
         return this._button;
     },
 
     /**
-     * Returns location X axis data
-     * @returns {number}
+     * Returns location X axis data.
+     * @method getLocationX
+     * @returns {Number}
      */
     getLocationX: function () {
         return this._x;
     },
 
     /**
-     * Returns location Y axis data
-     * @returns {number}
+     * Returns location Y axis data.
+     * @method getLocationY
+     * @returns {Number}
      */
     getLocationY: function () {
         return this._y;
@@ -198,31 +215,31 @@ JS.mixin(EventMouse.prototype, {
 /**
  * The none event code of mouse event.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 EventMouse.NONE = 0;
 /**
  * The event type code of mouse down event.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 EventMouse.DOWN = 1;
 /**
  * The event type code of mouse up event.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 EventMouse.UP = 2;
 /**
  * The event type code of mouse move event.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 EventMouse.MOVE = 3;
 /**
  * The event type code of mouse scroll event.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 EventMouse.SCROLL = 4;
 
@@ -284,11 +301,11 @@ EventMouse.BUTTON_8 = 7;
 
 /**
  * The touch event
- * @class cc.Event.EventTouch
+ * @class Event.EventTouch
  * @constructor
- * @extends cc.Event
+ * @extends Event
  * @param {Array} [touchArr=[]] - The array of the touches
- * @param {boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
+ * @param {Boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
  */
 EventTouch = function (touchArr, bubbles) {
     cc.Event.call(this, cc.Event.TOUCH, bubbles);
@@ -300,15 +317,17 @@ EventTouch = function (touchArr, bubbles) {
 JS.extend(EventTouch, cc.Event);
 JS.mixin(EventTouch.prototype, {
     /**
-     * Returns event code
-     * @returns {number}
+     * Returns event code.
+     * @method getEventCode
+     * @returns {Number}
      */
     getEventCode: function () {
         return this._eventCode;
     },
 
     /**
-     * Returns touches of event
+     * Returns touches of event.
+     * @method getTouches
      * @returns {Array}
      */
     getTouches: function () {
@@ -334,36 +353,36 @@ EventTouch.MAX_TOUCHES = 5;
 /**
  * The event type code of touch began event.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 EventTouch.BEGAN = 0;
 /**
  * The event type code of touch moved event.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 EventTouch.MOVED = 1;
 /**
  * The event type code of touch ended event.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 EventTouch.ENDED = 2;
 /**
  * The event type code of touch cancelled event.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 EventTouch.CANCELED = 3;
 
 /**
  * Focus change event for UI widget
- * @class cc.Event.EventFocus
+ * @class Event.EventFocus
  * @constructor
- * @extends cc.Event
- * @param {ccui.Widget} widgetLoseFocus
- * @param {ccui.Widget} widgetGetFocus
- * @param {boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
+ * @extends Event
+ * @param {Widget} widgetLoseFocus
+ * @param {Widget} widgetGetFocus
+ * @param {Boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
  */
 EventFocus = function (widgetGetFocus, widgetLoseFocus, bubbles) {
     cc.Event.call(this, cc.Event.FOCUS, bubbles);
@@ -374,11 +393,11 @@ JS.extend(EventFocus, cc.Event);
 
 /**
  * The acceleration event
- * @class cc.Event.EventAcceleration
- * @extends cc.Event
+ * @class Event.EventAcceleration
+ * @extends Event
  * @constructor
  * @param {Object} acc - The acceleration
- * @param {boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
+ * @param {Boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
  */
 EventAcceleration = function (acc, bubbles) {
     cc.Event.call(this, Event.ACCELERATION, bubbles);
@@ -388,12 +407,12 @@ JS.extend(EventAcceleration, cc.Event);
 
 /**
  * The keyboard event
- * @class cc.Event.EventKeyboard
- * @extends cc.Event
+ * @class Event.EventKeyboard
+ * @extends Event
  * @constructor
  * @param {Number} keyCode - The key code of which triggered this event
- * @param {boolean} isPressed - A boolean indicating whether the key have been pressed
- * @param {boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
+ * @param {Boolean} isPressed - A boolean indicating whether the key have been pressed
+ * @param {Boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
  */
 EventKeyboard = function (keyCode, isPressed, bubbles) {
     cc.Event.call(this, Event.KEYBOARD, bubbles);

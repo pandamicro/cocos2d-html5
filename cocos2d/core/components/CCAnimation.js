@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 /****************************************************************************
  Copyright (c) 2015 Chukong Technologies Inc.
 
@@ -28,7 +32,7 @@ var AnimationClip = require('../../animation/animation-clip');
 /**
  * Renders a sprite in the scene.
  * @class AnimationComponent
- * @extend CCComponent
+ * @extends CCComponent
  */
 var AnimationComponent = cc.Class({
     name: 'cc.AnimationComponent',
@@ -102,7 +106,7 @@ var AnimationComponent = cc.Class({
     /**
      * Plays an animation.
      * @method play
-     * @param {string} [name] - The name of animation to play. If no name is supplied then the default animation will be played.
+     * @param {String} [name] - The name of animation to play. If no name is supplied then the default animation will be played.
      * @return {AnimationState} - The AnimationState of playing animation. In cases where the animation can't be played (ie, there is no default animation or no animation with the specified name), the function will return null.
      */
     play: function (name, startTime) {
@@ -123,7 +127,7 @@ var AnimationComponent = cc.Class({
      * Stops an animation named name. If no name is supplied then stops all playing animations that were started with this Animation.
      * Stopping an animation also Rewinds it to the Start.
      * @method stop
-     * @param {string} [name] - The animation to stop, if not supplied then stops all playing animations.
+     * @param {String} [name] - The animation to stop, if not supplied then stops all playing animations.
      */
     stop: function (name) {
         if (!this._didInit) {
@@ -143,7 +147,7 @@ var AnimationComponent = cc.Class({
     /**
      * Returns the animation state named name. If no animation with the specified name, the function will return null.
      * @method getAnimationState
-     * @param {string} name
+     * @param {String} name
      * @return {AnimationState}
      */
     getAnimationState: function (name) {
@@ -154,7 +158,7 @@ var AnimationComponent = cc.Class({
      * Adds a clip to the animation with name newName. If a clip with that name already exists it will be replaced with the new clip.
      * @method addClip
      * @param {AnimationClip} clip - the clip to add
-     * @param {string} [newName]
+     * @param {String} [newName]
      * @return {AnimationState} - The AnimationState which gives full control over the animation clip.
      */
     addClip: function (clip, newName) {

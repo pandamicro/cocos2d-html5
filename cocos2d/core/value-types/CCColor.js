@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 var ValueType = require('./CCValueType');
 var JS = require('../platform/js');
 
@@ -13,10 +17,10 @@ var Color = (function () {
      * @class Color
      * @extends ValueType
      * @constructor
-     * @param {number} [r=0] - red component of the color
-     * @param {number} [g=0] - green component of the color
-     * @param {number} [b=0] - blue component of the color
-     * @param {number} [a=255] - alpha component of the color
+     * @param {Number} [r=0] - red component of the color.
+     * @param {Number} [g=0] - green component of the color.
+     * @param {Number} [b=0] - blue component of the color.
+     * @param {Number} [a=255] - alpha component of the color.
      */
     function Color( r, g, b, a ) {
         this.r = typeof r === 'number' ? r : 0;
@@ -31,67 +35,67 @@ var Color = (function () {
         // color: [r, g, b, a]
         /**
          * @property WHITE
-         * @type Color
+         * @type {Color}
          * @static
          */
         WHITE:      [255, 255, 255, 255],
         /**
          * @property BLACK
-         * @type Color
+         * @type {Color}
          * @static
          */
         BLACK:      [0, 0, 0, 255],
         /**
          * @property TRANSPARENT
-         * @type Color
+         * @type {Color}
          * @static
          */
         TRANSPARENT:[0, 0, 0, 0],
         /**
          * @property GRAY
-         * @type Color
+         * @type {Color}
          * @static
          */
         GRAY:       [127.5, 127.5, 127.5],
         /**
          * @property RED
-         * @type Color
+         * @type {Color}
          * @static
          */
         RED:        [255, 0, 0],
         /**
          * @property GREEN
-         * @type Color
+         * @type {Color}
          * @static
          */
         GREEN:      [0, 255, 0],
         /**
          * @property BLUE
-         * @type Color
+         * @type {Color}
          * @static
          */
         BLUE:       [0, 0, 255],
         /**
          * @property YELLOW
-         * @type Color
+         * @type {Color}
          * @static
          */
         YELLOW:     [255, 235, 4],
         /**
          * @property ORANGE
-         * @type Color
+         * @type {Color}
          * @static
          */
         ORANGE:     [255, 127, 0],
         /**
          * @property CYAN
-         * @type Color
+         * @type {Color}
          * @static
          */
         CYAN:       [0, 255, 255],
         /**
          * @property MAGENTA
-         * @type Color
+         * @type {Color}
          * @static
          */
         MAGENTA:    [255, 0, 255]
@@ -130,8 +134,8 @@ var Color = (function () {
     /**
      * @method lerp
      * @param {Color} to
-     * @param {number} ratio - the interpolation coefficient
-     * @param {Color} [out] - optional, the receiving vector
+     * @param {number} ratio - the interpolation coefficient.
+     * @param {Color} [out] - optional, the receiving vector.
      * @return {Color}
      */
     Color.prototype.lerp = function (to, ratio, out) {
@@ -149,7 +153,7 @@ var Color = (function () {
 
     /**
      * @method toString
-     * @return {string}
+     * @return {String}
      */
     Color.prototype.toString = function () {
         return "rgba(" +
@@ -162,8 +166,8 @@ var Color = (function () {
 
     /**
      * @method setR
-     * @param {number} red - the new Red component
-     * @return {Color} this color
+     * @param {Number} red - the new Red component.
+     * @return {Color} this color.
      */
     Color.prototype.setR = function (red) {
         this.r = red;
@@ -171,8 +175,8 @@ var Color = (function () {
     };
     /**
      * @method setG
-     * @param {number} green - the new Green component
-     * @return {Color} this color
+     * @param {Number} green - the new Green component.
+     * @return {Color} this color.
      */
     Color.prototype.setG = function (green) {
         this.g = green;
@@ -180,8 +184,8 @@ var Color = (function () {
     };
     /**
      * @method setB
-     * @param {number} blue - the new Blue component
-     * @return {Color} this color
+     * @param {Number} blue - the new Blue component.
+     * @return {Color} this color.
      */
     Color.prototype.setB = function (blue) {
         this.b = blue;
@@ -189,8 +193,8 @@ var Color = (function () {
     };
     /**
      * @method setA
-     * @param {number} alpha - the new Alpha component
-     * @return {Color} this color
+     * @param {Number} alpha - the new Alpha component.
+     * @return {Color} this color.
      */
     Color.prototype.setA = function (alpha) {
         this.a = alpha;
@@ -199,8 +203,8 @@ var Color = (function () {
 
     /**
      * @method toCSS
-     * @param {string} opt - "rgba", "rgb", "#rgb" or "#rrggbb"
-     * @return {string}
+     * @param {String} opt - "rgba", "rgb", "#rgb" or "#rrggbb".
+     * @return {String}
      */
     Color.prototype.toCSS = function ( opt ) {
         if ( opt === 'rgba' ) {
@@ -236,7 +240,7 @@ var Color = (function () {
 
     /**
      * @method fromHEX
-     * @param {string} hexString
+     * @param {String} hexString
      * @return {Color}
      * @chainable
      */
@@ -250,8 +254,8 @@ var Color = (function () {
 
     /**
      * @method toHEX
-     * @param {string} fmt - "#rgb" or "#rrggbb"
-     * @return {string}
+     * @param {String} fmt - "#rgb" or "#rrggbb".
+     * @return {String}
      */
     Color.prototype.toHEX = function ( fmt ) {
         var hex = [
@@ -278,9 +282,9 @@ var Color = (function () {
     };
 
     /**
-     * Convert to 24bit rgb value
+     * Convert to 24bit rgb value.
      * @method toRGBValue
-     * @return {number}
+     * @return {Number}
      */
     Color.prototype.toRGBValue = function () {
         return (cc.clampf(this.r, 0, 255) << 16) +
@@ -290,9 +294,9 @@ var Color = (function () {
 
     /**
      * @method fromHSV
-     * @param {number} h
-     * @param {number} s
-     * @param {number} v
+     * @param {Number} h
+     * @param {Number} s
+     * @param {Number} v
      * @return {Color}
      * @chainable
      */
@@ -306,7 +310,7 @@ var Color = (function () {
 
     /**
      * @method toHSV
-     * @return {object} - {h: number, s: number, v: number}
+     * @return {Object} - {h: number, s: number, v: number}.
      */
     Color.prototype.toHSV = function () {
         return Color.rgb2hsv( this.r, this.g, this.b );
@@ -316,11 +320,11 @@ var Color = (function () {
 })();
 
 /**
- * @param {Number} r - red, must be [0, 255]
- * @param {Number} g - red, must be [0, 255]
- * @param {Number} b - red, must be [0, 255]
- * @return {Object} - {h: number, s: number, v: number}
- * @function
+ * @method rgb2hsv
+ * @param {Number} r - red, must be [0, 255].
+ * @param {Number} g - red, must be [0, 255].
+ * @param {Number} b - red, must be [0, 255].
+ * @return {Object} - {h: number, s: number, v: number}.
  */
 Color.rgb2hsv = function ( r, g, b ) {
     r = r / 255;
@@ -345,11 +349,11 @@ Color.rgb2hsv = function ( r, g, b ) {
 };
 
 /**
+ * @method hsv2rgb
  * @param {Number} h
  * @param {Number} s
  * @param {Number} v
- * @return {Object} - {r: number, g: number, b: number}}, rgb will be in [0, 255]
- * @function
+ * @return {Object} - {r: number, g: number, b: number}}, rgb will be in [0, 255].
  */
 Color.hsv2rgb = function ( h, s, v ) {
     var rgb = { r: 0, g: 0, b: 0 };
@@ -419,24 +423,15 @@ cc.Color = Color;
 
 /**
  * The convenience method to create a new <% crosslink cc.Color color %>
- * @example
- *
- * // 1. All channels seperately as parameters
- * var color1 = cc.color(255, 255, 255, 255);
- *
- * // 2. Convert a hex string to a color
- * var color2 = cc.color("#000000");
- *
- * // 3. An color object as parameter
- * var color3 = cc.color({r: 255, g: 255, b: 255, a: 255});
- *
- * Alpha channel is optional. Default value is 255
+ * Alpha channel is optional. Default value is 255.
  * @method color
- * @param {number} [r=0]
- * @param {number} [g=0]
- * @param {number} [b=0]
- * @param {number} [a=255]
+ * @param {Number} [r=0]
+ * @param {Number} [g=0]
+ * @param {Number} [b=0]
+ * @param {Number} [a=255]
  * @return {Color}
+ *
+ * @examples {@link utils/api/cocos/docs/cocos2d/core/value-types/CCColor/color.js}
  */
 cc.color = function color (r, g, b, a) {
     if (r === undefined) {
@@ -457,10 +452,10 @@ cc.color = function color (r, g, b, a) {
 
 /**
  * returns true if both ccColor3B are equal. Otherwise it returns false.
- * @function
- * @param {cc.Color} color1
- * @param {cc.Color} color2
- * @return {Boolean}  true if both ccColor3B are equal. Otherwise it returns false.
+ * @method colorEqual
+ * @param {Color} color1
+ * @param {Color} color2
+ * @return {Boolean} true if both ccColor3B are equal. Otherwise it returns false.
  */
 cc.colorEqual = function (color1, color2) {
     return color1.r === color2.r && color1.g === color2.g && color1.b === color2.b;
@@ -469,9 +464,9 @@ cc.colorEqual = function (color1, color2) {
 /**
  * convert a string of color for style to Color.
  * e.g. "#ff06ff"  to : cc.color(255,6,255)
- * @function
+ * @method hexToColor
  * @param {String} hex
- * @return {cc.Color}
+ * @return {Color}
  */
 cc.hexToColor = function (hex) {
     hex = hex.replace(/^#?/, "0x");
@@ -485,8 +480,8 @@ cc.hexToColor = function (hex) {
 /**
  * convert Color to a string of color for style.
  * e.g.  cc.color(255,6,255)  to : "#ff06ff"
- * @function
- * @param {cc.Color} color
+ * @method colorToHex
+ * @param {Color} color
  * @return {String}
  */
 cc.colorToHex = function (color) {

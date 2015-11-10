@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 /****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
@@ -29,9 +33,9 @@ cc._tmp = cc._tmp || {};
 
 /**
  * Function added for JS bindings compatibility. Not needed in cocos2d-html5.
- * @function
- * @param {object} jsObj subclass
- * @param {object} superclass
+ * @method associateWithNative
+ * @param {Object} jsObj subclass
+ * @param {Object} superclass
  */
 cc.associateWithNative = function (jsObj, superclass) {
 };
@@ -41,15 +45,7 @@ cc.associateWithNative = function (jsObj, superclass) {
  *
  * @constant
  * @type {Object}
- * @example
-    cc.eventManager.addListener({
-        event: cc.EventListener.KEYBOARD,
-        onKeyPressed:  function(keyCode, event){
-            if (cc.KEY["a"] == keyCode) {
-                cc.log("A is pressed");
-            }
-        }
-    }, this);
+ * @example {@link utils/api/cocos/docs/cocos2d/core/platform/CCCommon/KEY.js}
  */
 cc.KEY = {
     none:0,
@@ -221,7 +217,7 @@ cc.FMT_UNKNOWN = 5;
 
 /**
  * get image format by image data
- * @function
+ * @method getImageFormatByData
  * @param {Array} imgData
  * @returns {Number}
  */
@@ -250,7 +246,7 @@ cc.getImageFormatByData = function (imgData) {
 /**
  * Another way to subclass: Using Google Closure.
  * The following code was copied + pasted from goog.base / goog.inherits
- * @function
+ * @method inherits
  * @param {Function} childCtor
  * @param {Function} parentCtor
  */

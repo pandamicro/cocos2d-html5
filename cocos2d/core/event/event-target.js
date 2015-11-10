@@ -73,6 +73,9 @@ var _doSendEvent = function (owner, event) {
         owner._bubblingListeners.invoke(event);
     }
 };
+/**
+ * @module cc
+ */
 
 /**
  * EventTarget is an object to which an event is dispatched when something has occurred.
@@ -93,7 +96,7 @@ var _doSendEvent = function (owner, event) {
  *  - _getCapturingTargets
  *  - _getBubblingTargets
  *
- * @class cc.EventTarget
+ * @class EventTarget
  */
 var EventTarget = function () {
 };
@@ -118,7 +121,7 @@ JS.mixin(EventTarget.prototype, {
     /**
      * Checks whether the EventTarget object has any callback registered for a specific type of event.
      *
-     * @param {string} type - The type of event.
+     * @param {String} type - The type of event.
      * @param {Boolean} A value of true if a callback of the specified type is registered; false otherwise.
      */
     hasEventListener: function (type) {
@@ -130,8 +133,8 @@ JS.mixin(EventTarget.prototype, {
      * This method is merely an alias to addEventListener.
      *
      * @method on
-     * @param {string} type - A string representing the event type to listen for.
-     * @param {function} callback - The callback that will be invoked when the event is dispatched.
+     * @param {String} type - A string representing the event type to listen for.
+     * @param {Function} callback - The callback that will be invoked when the event is dispatched.
      *                              The callback is ignored if it is a duplicate (the callbacks are unique).
      * @param {Event} callback.param event
      * @param {Object} [target] - The target to invoke the callback, can be null
@@ -171,8 +174,8 @@ JS.mixin(EventTarget.prototype, {
      * This method is merely an alias to removeEventListener.
      *
      * @method off
-     * @param {string} type - A string representing the event type being removed.
-     * @param {function} callback - The callback to remove.
+     * @param {String} type - A string representing the event type being removed.
+     * @param {Function} callback - The callback to remove.
      * @param {Object} [target] - The target to invoke the callback, if it's not given, only callback without target will be removed
      * @param {Boolean} [useCapture=false] - Specifies whether the callback being removed was registered as a capturing callback or not.
      *                              If not specified, useCapture defaults to false. If a callback was registered twice,
@@ -204,7 +207,7 @@ JS.mixin(EventTarget.prototype, {
      * Removes all callbacks previously registered with the same target.
      *
      * @method targetOff
-     * @param {object} target - The target to be searched for all related callbacks
+     * @param {Object} target - The target to be searched for all related callbacks
      */
     targetOff: function (target) {
         this._capturingListeners.removeAll(target);
@@ -215,8 +218,8 @@ JS.mixin(EventTarget.prototype, {
      * Register an callback of a specific event type on the EventTarget, the callback will remove itself after the first time it is triggered.
      *
      * @method once
-     * @param {string} type - A string representing the event type to listen for.
-     * @param {function} callback - The callback that will be invoked when the event is dispatched.
+     * @param {String} type - A string representing the event type to listen for.
+     * @param {Function} callback - The callback that will be invoked when the event is dispatched.
      *                              The callback is ignored if it is a duplicate (the callbacks are unique).
      * @param {Event} callback.param event
      * @param {Object} [target] - The target to invoke the callback, can be null
@@ -255,7 +258,7 @@ JS.mixin(EventTarget.prototype, {
      * The event will be created from the supplied message, you can get the "detail" argument from event.detail.
      *
      * @method emit
-     * @param {string} message - the message to send
+     * @param {String} message - the message to send
      * @param {any} [detail] - whatever argument the message needs
      */
     emit: function (message, detail) {
@@ -275,8 +278,8 @@ JS.mixin(EventTarget.prototype, {
      *
      * Subclasses can override this method to make event target active or inactive.
      * @method _isTargetActive
-     * @param {string} type - the event type
-     * @return {boolean} - A boolean value indicates the event target is active or not
+     * @param {String} type - the event type
+     * @return {Boolean} - A boolean value indicates the event target is active or not
      */
     _isTargetActive: function (type) {
         return true;
@@ -289,17 +292,9 @@ JS.mixin(EventTarget.prototype, {
      *
      * Subclasses can override this method to make event propagable.
      * @method _getCapturingTargets
-     * @param {string} type - the event type
-     * @param {array} array - the array to receive targets
-     * @example
-     * Subclasses can override this method to make event propagable
-     * ```js
-     * for (var target = this._parent; target; target = target._parent) {
-     *     if (target._capturingListeners && target._capturingListeners.has(type)) {
-     *         array.push(target);
-     *     }
-     * }
-     * ```
+     * @param {String} type - the event type
+     * @param {Array} array - the array to receive targets
+     * @example {@link utils/api/cocos/docs/cocos2d/core/event/_getCapturingTargets.js}
      */
     _getCapturingTargets: function (type, array) {
 
@@ -312,8 +307,8 @@ JS.mixin(EventTarget.prototype, {
      *
      * Subclasses can override this method to make event propagable.
      * @method _getBubblingTargets
-     * @param {string} type - the event type
-     * @param {array} array - the array to receive targets
+     * @param {String} type - the event type
+     * @param {Array} array - the array to receive targets
      */
     _getBubblingTargets: function (type, array) {
         // Object can override this method to make event propagable.
@@ -321,9 +316,9 @@ JS.mixin(EventTarget.prototype, {
 });
 
 /**
- * Polyfill the functionalities of EventTarget into a existing object
+ * Polyfill the functionalities of EventTarget into a existing object.
  * @static
- * @memberof cc.EventTarget
+ * @memberof EventTarget
  * @param {Object} object - An object to be extended with EventTarget capability
  */
 EventTarget.polyfill = function (object) {

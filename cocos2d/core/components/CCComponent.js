@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 require('../platform/CCObject');
 require('../CCNode');
 
@@ -243,7 +247,7 @@ var Component = cc.Class({
 
         /**
          * @property _enabled
-         * @type boolean
+         * @type {Boolean}
          * @private
          */
         _enabled: true,

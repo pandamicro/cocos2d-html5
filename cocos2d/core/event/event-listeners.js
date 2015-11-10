@@ -1,4 +1,8 @@
-﻿var JS = cc.js;
+﻿/**
+ * @module cc
+ */
+
+var JS = cc.js;
 var CallbacksHandler = require('../platform/callbacks-invoker').CallbacksHandler;
 
 // Extends CallbacksHandler to handle and invoke event callbacks.

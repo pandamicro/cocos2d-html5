@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 /****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
@@ -28,7 +32,7 @@
  * <p>cc.AffineTransform class represent an affine transform matrix. It's composed basically by translation, rotation, scale transformations.<br/>
  * Please do not use its constructor directly, use cc.affineTransformMake alias function instead.
  * </p>
- * @class cc.AffineTransform
+ * @class AffineTransform
  * @param {Number} a
  * @param {Number} b
  * @param {Number} c
@@ -48,7 +52,7 @@ cc.AffineTransform = function (a, b, c, d, tx, ty) {
 
 /**
  * Create a cc.AffineTransform object with all contents in the matrix
- * @function
+ * @method affineTransformMake
  * 
  * @param {Number} a
  * @param {Number} b
@@ -56,7 +60,7 @@ cc.AffineTransform = function (a, b, c, d, tx, ty) {
  * @param {Number} d
  * @param {Number} tx
  * @param {Number} ty
- * @return {cc.AffineTransform}
+ * @return {AffineTransform}
  */
 cc.affineTransformMake = function (a, b, c, d, tx, ty) {
     return {a: a, b: b, c: c, d: d, tx: tx, ty: ty};
@@ -64,12 +68,12 @@ cc.affineTransformMake = function (a, b, c, d, tx, ty) {
 
 /**
  * Apply the affine transformation on a point.
- * @function
+ * @method pointApplyAffineTransform
  * 
- * @param {cc.Vec2|Number} point or x
- * @param {cc.AffineTransform|Number} transOrY transform matrix or y
- * @param {cc.AffineTransform} t transform matrix or y
- * @return {cc.Vec2}
+ * @param {Vec2|Number} point - or x.
+ * @param {AffineTransform|Number} transOrY - transform matrix or y.
+ * @param {AffineTransform} t - transform matrix or y.
+ * @return {Vec2}
  */
 cc.pointApplyAffineTransform = function (point, transOrY, t) {
     var x, y;
@@ -90,11 +94,11 @@ cc._pointApplyAffineTransform = function (x, y, t) {   //it will remove.
 
 /**
  * Apply the affine transformation on a size.
- * @function
+ * @method sizeApplyAffineTransform
  * 
- * @param {cc.Size} size
- * @param {cc.AffineTransform} t
- * @return {cc.Size}
+ * @param {Size} size
+ * @param {AffineTransform} t
+ * @return {Size}
  */
 cc.sizeApplyAffineTransform = function (size, t) {
     return {width: t.a * size.width + t.c * size.height, height: t.b * size.width + t.d * size.height};
@@ -104,9 +108,9 @@ cc.sizeApplyAffineTransform = function (size, t) {
  * <p>Create a identity transformation matrix: <br/>
  * [ 1, 0, 0, <br/>
  *   0, 1, 0 ]</p>
- * @function
- * 
- * @return {cc.AffineTransform}
+ *
+ * @method affineTransformMakeIdentity
+ * @return {AffineTransform}
  */
 cc.affineTransformMakeIdentity = function () {
     return {a: 1.0, b: 0.0, c: 0.0, d: 1.0, tx: 0.0, ty: 0.0};
@@ -116,9 +120,9 @@ cc.affineTransformMakeIdentity = function () {
  * <p>Create a identity transformation matrix: <br/>
  * [ 1, 0, 0, <br/>
  *   0, 1, 0 ]</p>
- * @function
- * 
- * @return {cc.AffineTransform}
+ *
+ * @method affineTransformIdentity
+ * @return {AffineTransform}
  * @deprecated since v3.0, please use cc.affineTransformMakeIdentity() instead
  * @see cc.affineTransformMakeIdentity
  */
@@ -128,11 +132,11 @@ cc.affineTransformIdentity = function () {
 
 /**
  * Apply the affine transformation on a rect.
- * @function
- * 
- * @param {cc.Rect} rect
- * @param {cc.AffineTransform} anAffineTransform
- * @return {cc.Rect}
+ *
+ * @method rectApplyAffineTransform
+ * @param {Rect} rect
+ * @param {AffineTransform} anAffineTransform
+ * @return {Rect}
  */
 cc.rectApplyAffineTransform = function (rect, anAffineTransform) {
     var top = cc.rectGetMinY(rect);
@@ -178,12 +182,12 @@ cc._rectApplyAffineTransformIn = function(rect, anAffineTransform){
 
 /**
  * Create a new affine transformation with a base transformation matrix and a translation based on it.
- * @function
- * 
- * @param {cc.AffineTransform} t The base affine transform object
- * @param {Number} tx The translation on x axis
- * @param {Number} ty The translation on y axis
- * @return {cc.AffineTransform}
+ *
+ * @method affineTransformTranslate
+ * @param {AffineTransform} t - The base affine transform object.
+ * @param {Number} tx - The translation on x axis.
+ * @param {Number} ty - The translation on y axis.
+ * @return {AffineTransform}
  */
 cc.affineTransformTranslate = function (t, tx, ty) {
     return {
@@ -198,11 +202,11 @@ cc.affineTransformTranslate = function (t, tx, ty) {
 
 /**
  * Create a new affine transformation with a base transformation matrix and a scale based on it.
- * @function
- * @param {cc.AffineTransform} t The base affine transform object
- * @param {Number} sx The scale on x axis
- * @param {Number} sy The scale on y axis
- * @return {cc.AffineTransform}
+ * @method affineTransformScale
+ * @param {AffineTransform} t - The base affine transform object.
+ * @param {Number} sx - The scale on x axis.
+ * @param {Number} sy - The scale on y axis.
+ * @return {AffineTransform}
  */
 cc.affineTransformScale = function (t, sx, sy) {
     return {a: t.a * sx, b: t.b * sx, c: t.c * sy, d: t.d * sy, tx: t.tx, ty: t.ty};
@@ -210,10 +214,10 @@ cc.affineTransformScale = function (t, sx, sy) {
 
 /**
  * Create a new affine transformation with a base transformation matrix and a rotation based on it.
- * @function
- * @param {cc.AffineTransform} aTransform The base affine transform object
- * @param {Number} anAngle  The angle to rotate
- * @return {cc.AffineTransform}
+ * @method affineTransformRotate
+ * @param {AffineTransform} aTransform - The base affine transform object.
+ * @param {Number} anAngle - The angle to rotate.
+ * @return {AffineTransform}
  */
 cc.affineTransformRotate = function (aTransform, anAngle) {
     var fSin = Math.sin(anAngle);
@@ -230,10 +234,10 @@ cc.affineTransformRotate = function (aTransform, anAngle) {
 /**
  * Concatenate a transform matrix to another and return the result:<br/>
  * t' = t1 * t2
- * @function
- * @param {cc.AffineTransform} t1 The first transform object
- * @param {cc.AffineTransform} t2 The transform object to concatenate
- * @return {cc.AffineTransform} The result of concatenation
+ * @method affineTransformConcat
+ * @param {AffineTransform} t1 - The first transform object.
+ * @param {AffineTransform} t2 - The transform object to concatenate.
+ * @return {AffineTransform} The result of concatenation.
  */
 cc.affineTransformConcat = function (t1, t2) {
     return {a: t1.a * t2.a + t1.b * t2.c,                          //a
@@ -248,10 +252,10 @@ cc.affineTransformConcat = function (t1, t2) {
  * Concatenate a transform matrix to another<br/>
  * The results are reflected in the first matrix.<br/>
  * t' = t1 * t2
- * @function
- * @param {cc.AffineTransform} t1 The first transform object
- * @param {cc.AffineTransform} t2 The transform object to concatenate
- * @return {cc.AffineTransform} The result of concatenation
+ * @method affineTransformConcatIn
+ * @param {cc.AffineTransform} t1 - The first transform object.
+ * @param {cc.AffineTransform} t2 - The transform object to concatenate.
+ * @return {cc.AffineTransform} The result of concatenation.
  */
 cc.affineTransformConcatIn = function (t1, t2) {
     var a = t1.a, b = t1.b, c = t1.c, d = t1.d, tx = t1.tx, ty = t1.ty;
@@ -266,9 +270,9 @@ cc.affineTransformConcatIn = function (t1, t2) {
 
 /**
  * Return true if an affine transform equals to another, false otherwise.
- * @function
- * @param {cc.AffineTransform} t1
- * @param {cc.AffineTransform} t2
+ * @method affineTransformEqualToTransform
+ * @param {AffineTransform} t1
+ * @param {AffineTransform} t2
  * @return {Boolean}
  */
 cc.affineTransformEqualToTransform = function (t1, t2) {
@@ -276,10 +280,10 @@ cc.affineTransformEqualToTransform = function (t1, t2) {
 };
 
 /**
- * Get the invert transform of an AffineTransform object
- * @function
- * @param {cc.AffineTransform} t
- * @return {cc.AffineTransform} The inverted transform object
+ * Get the invert transform of an AffineTransform object.
+ * @method affineTransformInvert
+ * @param {AffineTransform} t
+ * @return {AffineTransform} The inverted transform object.
  */
 cc.affineTransformInvert = function (t) {
     var determinant = 1 / (t.a * t.d - t.b * t.c);

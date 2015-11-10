@@ -330,7 +330,7 @@ cc._formatString = function (arg) {
 
 /**
  * Enum for debug modes.
- * @readonly
+ * @readOnly
  * @enum DebugMode
  */
 cc.DebugMode = cc.Enum({

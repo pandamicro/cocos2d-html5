@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 /****************************************************************************
  Copyright (c) 2011-2012 cocos2d-x.org
  Copyright (c) 2013-2014 Chukong Technologies Inc.
@@ -27,7 +31,7 @@ var inputManager = require("./CCInputManager");
 
 /**
  * whether enable accelerometer event
- * @function
+ * @method setAccelerometerEnabled
  * @param {Boolean} isEnable
  */
 inputManager.setAccelerometerEnabled = function(isEnable){
@@ -48,7 +52,7 @@ inputManager.setAccelerometerEnabled = function(isEnable){
 
 /**
  * set accelerometer interval value
- * @function
+ * @method setAccelerometerInterval
  * @param {Number} interval
  */
 inputManager.setAccelerometerInterval = function(interval){

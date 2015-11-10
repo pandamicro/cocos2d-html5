@@ -1,4 +1,8 @@
-﻿/****************************************************************************
+﻿/**
+ * @module cc
+ */
+
+/****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
  Copyright (c) 2013-2015 Chukong Technologies Inc.
@@ -47,7 +51,7 @@ var INVALID_STATICS = (CC_EDITOR || CC_TEST) && ['name', '__ctors__', '__props__
 
 ///**
 // * both getter and prop must register the name into __props__ array
-// * @param {string} name - prop name
+// * @param {String} name - prop name
 // */
 var _appendProp = function (cls, name/*, isGetter*/) {
     if (CC_DEV) {
@@ -254,8 +258,8 @@ var _metaClass = {
 
     /**
      * Create a new Class that inherits from this Class
-     * @param {object} options
-     * @return {function}
+     * @param {Object} options
+     * @return {Function}
      * @deprecated
      */
     extend: function (options) {
@@ -314,8 +318,8 @@ function instantiateProps (instance, itsClass) {
  * Checks whether subclass is child of superclass or equals to superclass
  *
  * @method isChildClassOf
- * @param {function} subclass
- * @param {function} superclass
+ * @param {Function} subclass
+ * @param {Function} superclass
  * @return {Boolean}
  */
 cc.isChildClassOf = function (subclass, superclass) {
@@ -633,8 +637,8 @@ function boundSuperCalls (baseClass, options) {
  * !#en Defines a FireClass using the given specification, please see [Class](/en/scripting/class/) for details.
  * !#zh 定义一个 FireClass，传入参数必须是一个包含类型参数的字面量对象，具体用法请查阅[类型定义](/zh/scripting/class/)。
  *
- * @param {object} options
- * @return {function} - the created class
+ * @param {Object} options
+ * @return {Function} - the created class
  * @memberof cc
  *
  * @example
@@ -791,7 +795,7 @@ function FireClass (options) {
  * Checks whether the constructor is created by cc.Class
  *
  * @method _isCCClass
- * @param {function} constructor
+ * @param {Function} constructor
  * @return {Boolean}
  * @private
  */
@@ -801,7 +805,7 @@ FireClass._isCCClass = function (constructor) {
 
 //
 // @method _convertToFireClass
-// @param {function} constructor
+// @param {Function} constructor
 // @private
 //
 //FireClass._convertToFireClass = function (constructor) {
@@ -812,8 +816,8 @@ FireClass._isCCClass = function (constructor) {
 // Specially optimized define function only for internal base classes
 //
 // @method _fastDefine
-// @param {string} className
-// @param {function} constructor
+// @param {String} className
+// @param {Function} constructor
 // @param {string[]} serializableFields
 // @private
 //
@@ -1018,8 +1022,8 @@ function parseAttributes (attrs, className, propName) {
 }
 
 /**
- * @param {object} options
- * @return {function}
+ * @param {Object} options
+ * @return {Function}
  * @deprecated
  */
 FireClass.extend = FireClass;

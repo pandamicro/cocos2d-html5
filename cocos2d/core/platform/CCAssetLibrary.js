@@ -1,4 +1,8 @@
-﻿var JS = require('./js');
+﻿/**
+ * @module cc
+ */
+
+var JS = require('./js');
 var Asset = require('../assets/CCAsset');
 var callInNextTick = require('./utils').callInNextTick;
 var LoadManager = require('./load-manager');
@@ -80,17 +84,17 @@ LoadingHandle.prototype.writeCache = function (uuid, asset, hasRawType) {
 var AssetLibrary = {
     /**
      * @callback loadCallback
-     * @param {string} error - null or the error info
+     * @param {String} error - null or the error info
      * @param {Asset} data - the loaded asset or null
      */
 
     /**
      * @method loadAsset
-     * @param {string} uuid
+     * @param {String} uuid
      * @param {loadCallback} callback - the callback function once load finished
-     * @param {object} options
-     * @param {boolean} options.readMainCache - Default is true. If false, the asset and all its depends assets will reload and create new instances from library.
-     * @param {boolean} options.writeMainCache - Default is true. If true, the result will cache to AssetLibrary, and MUST be unload by user manually.
+     * @param {Object} options
+     * @param {Boolean} options.readMainCache - Default is true. If false, the asset and all its depends assets will reload and create new instances from library.
+     * @param {Boolean} options.writeMainCache - Default is true. If true, the result will cache to AssetLibrary, and MUST be unload by user manually.
      * @param {Asset} options.existingAsset - load to existing asset, this argument is only available in editor
      * @param {deserialize.Details} options.deserializeInfo - specified a DeserializeInfo object if you want
      * @private
@@ -154,12 +158,12 @@ var AssetLibrary = {
 
     /**
      * @method queryAssetInfo
-     * @param {string} uuid
-     * @param {function} callback
+     * @param {String} uuid
+     * @param {Function} callback
      * @param {Error} callback.error
-     * @param {string} callback.url - the url of raw asset or imported asset
-     * @param {boolean} callback.raw - indicates whether the asset is raw asset
-     * @param {function} callback.ctorInEditor - the actual type of asset, used in editor only
+     * @param {String} callback.url - the url of raw asset or imported asset
+     * @param {Boolean} callback.raw - indicates whether the asset is raw asset
+     * @param {Function} callback.ctorInEditor - the actual type of asset, used in editor only
      */
     queryAssetInfo: function (uuid, callback) {
         if (CC_EDITOR && !CC_TEST) {
@@ -206,7 +210,7 @@ var AssetLibrary = {
      * 4. 递归加载Asset及其引用到的其它Asset
      *
      * @method _loadAssetByUuid
-     * @param {string} uuid
+     * @param {String} uuid
      * @param {loadCallback} callback - the callback to receive the asset, can be null
      * @param {LoadingHandle} handle - the loading context which reserves all relevant parameters
      * @param {Asset} [existingAsset] - load to existing asset, this argument is only available in editor
@@ -294,10 +298,10 @@ var AssetLibrary = {
 
     /**
      * @method loadJson
-     * @param {string|object} json
+     * @param {String|Object} json
      * @param {loadCallback} callback
-     * @param {boolean} [dontCache=false] - If false, the result will cache to AssetLibrary, and MUST be unload by user manually.
-     * @param {boolean} [recordAssets=false] - 是否统计新加载的需要让场景 preload 的 asset（所有包含 raw file 后缀名的 asset 并且不含 rawType 属性的 asset）
+     * @param {Boolean} [dontCache=false] - If false, the result will cache to AssetLibrary, and MUST be unload by user manually.
+     * @param {Boolean} [recordAssets=false] - 是否统计新加载的需要让场景 preload 的 asset（所有包含 raw file 后缀名的 asset 并且不含 rawType 属性的 asset）
      * @return {LoadingHandle}
      * @private
      */
@@ -406,11 +410,11 @@ var AssetLibrary = {
 
     /**
      * @method _deserializeWithDepends
-     * @param {string|object} json
-     * @param {string} url
-     * @param {string} uuid
+     * @param {String|Object} json
+     * @param {String} url
+     * @param {String} uuid
      * @param {loadCallback} callback
-     * @param {object} handle - the loading context which reserves all relevant parameters
+     * @param {Object} handle - the loading context which reserves all relevant parameters
      * @param {Asset} [existingAsset] - existing asset to reload
      * @private
      */
@@ -455,7 +459,7 @@ var AssetLibrary = {
      * Get the exists asset by uuid.
      *
      * @method getAssetByUuid
-     * @param {string} uuid
+     * @param {String} uuid
      * @return {Asset} - the existing asset, if not loaded, just returns null.
      * @private
      */
@@ -467,9 +471,9 @@ var AssetLibrary = {
      * init the asset library
      *
      * @method init
-     * @param {string} libraryPath - 能接收的任意类型的路径，通常在编辑器里使用绝对的，在网页里使用相对的。
-     * @param {string} rawAssetsBase - base of raw asset's urls (only used in runtime)
-     * @param {object} rawAssets - uuid to raw asset's urls (only used in runtime)
+     * @param {String} libraryPath - 能接收的任意类型的路径，通常在编辑器里使用绝对的，在网页里使用相对的。
+     * @param {String} rawAssetsBase - base of raw asset's urls (only used in runtime)
+     * @param {Object} rawAssets - uuid to raw asset's urls (only used in runtime)
      */
     init: function (libraryPath, rawAssetsBase, rawAssets) {
         if (CC_EDITOR && _libraryBase && !CC_TEST) {
