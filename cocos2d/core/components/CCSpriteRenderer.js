@@ -32,6 +32,10 @@ var SpriteRenderer = cc.Class({
     name: 'cc.Sprite',
     extends: require('./CCComponentInSG'),
 
+    editor: CC_EDITOR && {
+        menu: 'Sprite'
+    },
+
     properties: {
 
         _texture: {

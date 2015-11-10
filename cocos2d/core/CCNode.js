@@ -23,8 +23,10 @@
  ****************************************************************************/
 
 var JS = cc.js;
-var Destroying = cc.Object.Flags.Destroying;
-var DontDestroy = cc.Object.Flags.DontDestroy;
+var Flags = cc.Object.Flags;
+var Destroying = Flags.Destroying;
+var DontDestroy = Flags.DontDestroy;
+//var RegisteredInEditor = Flags.RegisteredInEditor;
 
 /**
  * Class of all entities in Fireball scenes.
@@ -217,10 +219,8 @@ var Node = cc.Class({
             children[i]._destroyImmediate();
         }
 
-        if (CC_EDITOR) {
-            // detach
-            delete cc.engine.attachedObjsForEditor[this._id];
-        }
+        // detach
+        this._registerIfAttached(false);
     },
 
     // COMPONENT
@@ -353,6 +353,18 @@ var Node = cc.Class({
 
     // INTERNAL
 
+    _registerIfAttached: function (register) {
+        if (CC_EDITOR || CC_TEST) {
+            if (register) {
+                cc.engine.attachedObjsForEditor[this.uuid] = this;
+                //this._objFlags |= RegisteredInEditor;
+            }
+            else {
+                delete cc.engine.attachedObjsForEditor[this._id];
+            }
+        }
+    },
+
     _onActivatedInHierarchy: function (newActive) {
         this._activeInHierarchy = newActive;
 
@@ -382,26 +394,28 @@ var Node = cc.Class({
     },
 
     _onHierarchyChanged: function (oldParent) {
-        // Not allowed for persistent node
-        if (this._persistNode) {
+        if (this._persistNode && !(this._parent instanceof cc.EScene)) {
             cc.game.removePersistRootNode(this);
+            if (CC_EDITOR) {
+                cc.warn('Set "%s" to normal node (not persist root node).');
+            }
         }
         var activeInHierarchyBefore = this._active && !!(oldParent && oldParent._activeInHierarchy);
         var shouldActiveNow = this._active && !!(this._parent && this._parent._activeInHierarchy);
         if (activeInHierarchyBefore !== shouldActiveNow) {
             this._onActivatedInHierarchy(shouldActiveNow);
         }
-        if (CC_EDITOR) {
+        if (CC_EDITOR || CC_TEST) {
             var scene = cc.director.getScene();
             var inCurrentSceneBefore = oldParent && oldParent.isChildOf(scene);
             var inCurrentSceneNow = this._parent && this._parent.isChildOf(scene);
             if (!inCurrentSceneBefore && inCurrentSceneNow) {
-                // attach
-                cc.engine.attachedObjsForEditor[this.uuid] = this;
+                // attached
+                this._registerIfAttached(true);
             }
             else if (inCurrentSceneBefore && !inCurrentSceneNow) {
-                // detach
-                delete cc.engine.attachedObjsForEditor[this._id];
+                // detached
+                this._registerIfAttached(false);
             }
         }
     },

@@ -1,7 +1,24 @@
-﻿//// jshint ignore: start
-//
-//largeModule('Component', TestEnv);
-//
+﻿largeModule('Component', SetupEngine);
+
+test('Inheritance of editor properties', function () {
+    var base = cc.Class({
+        extends: cc.Component,
+        editor: {
+            inspector: 'jare.html',
+            icon: 'guo.png',
+            executeInEditMode: true,
+            playOnFocus: true,
+        }
+    });
+    var child = cc.Class({
+        extends: base
+    });
+    ok(!child._inspector, 'should not inherit inspector from base component');
+    ok(!child._icon, 'should not inherit icon from base component');
+    strictEqual(child._executeInEditMode, true, 'should inherit executeInEditMode from base component');
+    strictEqual(child._playOnFocus, true, 'should inherit playOnFocus from base component');
+});
+
 //asyncTest('invoke using name', function () {
 //    var cb = new Callback().setDisabledMessage('method should not invokes in this frame');
 //    var cb2 = new Callback().disable('method should not being called after destroyed');
@@ -155,5 +172,3 @@
 //        start();
 //    }, 100);
 //});
-//
-//// jshint ignore: end

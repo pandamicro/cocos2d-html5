@@ -36,7 +36,7 @@ cc.EScene = cc.Class({
 
     ctor: function () {
         this._activeInHierarchy = false;
-        this._inited = false;
+        this._inited = !cc.game._isCloning;
     },
 
     destroy: function () {
@@ -63,26 +63,40 @@ cc.EScene = cc.Class({
     _onOpacityModifyRGBChanged: NIL,
     _onCascadeChanged: NIL,
 
-    _onBatchCreated: function () {
+    _load: function () {
         if ( ! this._inited) {
-            this._super();
+            this._onBatchCreated();
             this._inited = true;
         }
     },
 
-    _onActivated: function () {
+    _activate: function () {
+        if (CC_EDITOR || CC_TEST) {
+            // register all nodes to editor
+            registerAllNodes(this);
+        }
+
         this._activeInHierarchy = true;
 
         // invoke onLoad and onEnable
         var children = this._children;
         for (var i = 0; i < children.length; ++i) {
-            var entity = children[i];
-            if (entity._active) {
-                entity._onActivatedInHierarchy(true);
+            var child = children[i];
+            if (child._active) {
+                child._onActivatedInHierarchy(true);
             }
         }
     }
 });
+
+function registerAllNodes (node) {
+    var children = node._children;
+    for (var i = 0; i < children.length; ++i) {
+        var child = children[i];
+        child._registerIfAttached(true);
+        registerAllNodes(child);
+    }
+}
 
 module.exports = cc.EScene;
 

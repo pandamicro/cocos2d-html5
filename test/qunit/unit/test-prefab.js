@@ -5,13 +5,15 @@
     var MyComponent = cc.Class({
         name: '45664564',
         extends: CallbackTester,
+        editor: {
+            executeInEditMode: true
+        },
         //_assert: function (actual) {
         //    if (testingCompCallback) {
         //        this._super(actual);
         //    }
         //}
     });
-    cc.executeInEditMode(MyComponent);
 
     largeModule('Prefab', {
         setup: function () {
