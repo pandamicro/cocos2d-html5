@@ -33,6 +33,10 @@ cc.g_NumberOfDraws = 0;
 //----------------------------------------------------------------------------------------------------------------------
 
 /**
+ * @module cc
+ */
+
+/**
  * <p>
  *    ATTENTION: USE cc.director INSTEAD OF cc.Director.<br/>
  *    cc.director is a singleton object which manage your game's logic flow.<br/>
@@ -64,8 +68,7 @@ cc.g_NumberOfDraws = 0;
  *      - Scheduled timers & drawing are synchronizes with the refresh rate of the display<br/>
  *      - Only supports animation intervals of 1/60 1/30 & 1/15<br/>
  * </p>
- * @class
- * @name cc.Director
+ * @class Director
  */
 cc.Director = Class.extend(/** @lends cc.Director# */{
     //Variables
@@ -177,20 +180,20 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     /**
      * Converts a view coordinate to an WebGL coordinate<br/>
      * Useful to convert (multi) touches coordinates to the current layout (portrait or landscape)<br/>
-     * Implementation can be found in CCDirectorWebGL
-     * @function
-     * @param {cc.Vec2} uiPoint
-     * @return {cc.Vec2}
+     * Implementation can be found in CCDirectorWebGL.
+     * @method convertToGL
+     * @param {Vec2} uiPoint
+     * @return {Vec2}
      */
     convertToGL: null,
 
     /**
      * Converts an WebGL coordinate to a view coordinate<br/>
      * Useful to convert node points to window points for calls such as glScissor<br/>
-     * Implementation can be found in CCDirectorWebGL
-     * @function
-     * @param {cc.Vec2} glPoint
-     * @return {cc.Vec2}
+     * Implementation can be found in CCDirectorWebGL.
+     * @method convertToUI
+     * @param {Vec2} glPoint
+     * @return {Vec2}
      */
     convertToUI: null,
 
@@ -282,6 +285,8 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     /**
      * Returns the size in pixels of the surface. It could be different than the screen size.<br/>
      * High-res devices might have a higher surface size than the screen size.
+     *
+     * @method getContentScaleFactor
      * @return {Number}
      */
     getContentScaleFactor: function () {
@@ -291,8 +296,10 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     /**
      * This object will be visited after the main scene is visited.<br/>
      * This object MUST implement the "visit" selector.<br/>
-     * Useful to hook a notification object
-     * @return {cc.Node}
+     * Useful to hook a notification object.
+     *
+     * @method getNotificationNode
+     * @return {ENode}
      */
     getNotificationNode: function () {
         return this._notificationNode;
@@ -300,8 +307,10 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
 
     /**
      * Returns the size of the WebGL view in points.<br/>
-     * It takes into account any possible rotation (device orientation) of the window
-     * @return {cc.Size}
+     * It takes into account any possible rotation (device orientation) of the window.
+     *
+     * @method getWinSize
+     * @return {Size}
      */
     getWinSize: function () {
         return cc.size(this._winSizeInPoints);
@@ -311,7 +320,9 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
      * Returns the size of the OpenGL view in pixels.<br/>
      * It takes into account any possible rotation (device orientation) of the window.<br/>
      * On Mac winSize and winSizeInPixels return the same value.
-     * @return {cc.Size}
+     *
+     * @method getWinSizeInPixels
+     * @return {Size}
      */
     getWinSizeInPixels: function () {
         return cc.size(this._winSizeInPoints.width * this._contentScaleFactor, this._winSizeInPoints.height * this._contentScaleFactor);
@@ -323,28 +334,29 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
      */
 
     /**
-     * Returns the visible size of the running scene
-     * @function
-     * @return {cc.Size}
+     * Returns the visible size of the running scene.
+     * @method getVisibleSize
+     * @return {Size}
      */
     getVisibleSize: null,
 
     /**
-     * Returns the visible origin of the running scene
-     * @function
-     * @return {cc.Vec2}
+     * Returns the visible origin of the running scene.
+     * @method getVisibleOrigin
+     * @return {Vec2}
      */
     getVisibleOrigin: null,
 
     /**
-     * Returns the z eye, only available in WebGL mode
-     * @function
+     * Returns the z eye, only available in WebGL mode.
+     * @method getZEye
      * @return {Number}
      */
     getZEye: null,
 
     /**
      * Pause the director's ticker
+     * @method pause
      */
     pause: function () {
         if (this._paused)
@@ -426,7 +438,8 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
      * The new scene will be executed.<br/>
      * Try to avoid big stacks of pushed scenes to reduce memory allocation.<br/>
      * ONLY call it if there is a running scene.
-     * @param {cc.Scene} scene
+     * @method pushScene
+     * @param {EScene} scene
      */
     pushScene: function (scene) {
 
@@ -440,8 +453,9 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
 
     /**
      * Run a scene. Replaces the running scene with a new one or enter the first scene.
-     * @param {cc.Scene} scene
-     * @param {function} [onBeforeLoadScene]
+     * @method runScene
+     * @param {EScene} scene - The need run scene.
+     * @param {Function} [onBeforeLoadScene] - The function at the scene before loading.
      */
     runScene: function (scene, onBeforeLoadScene) {
         cc.assert(scene, cc._LogInfos.Director.pushScene);
@@ -472,8 +486,8 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
 
         // Run an Entity Scene
         if (scene instanceof cc.EScene) {
-            // init scene
-            scene._onBatchCreated();
+            // ensure scene initialized
+            scene._load();
 
             this._scene = scene;
             sgScene = scene._sgNode;
@@ -498,7 +512,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
 
         // Activate
         if (scene instanceof cc.EScene) {
-            scene._onActivated();
+            scene._activate();
         }
     },
 
@@ -507,10 +521,10 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     /**
      * Loads the scene by its name.
      * @method loadScene
-     * @param {string} sceneName - the name of the scene to load
-     * @param {function} [onLaunched] - callback, will be called after scene launched
-     * @param {function} [onUnloaded] - callback, will be called when the previous scene was unloaded
-     * @return {boolean} if error, return false
+     * @param {String} sceneName - The name of the scene to load.
+     * @param {Function} [onLaunched] - callback, will be called after scene launched.
+     * @param {Function} [onUnloaded] - callback, will be called when the previous scene was unloaded.
+     * @return {Boolean} if error, return false
      */
     loadScene: function (sceneName, onLaunched, onUnloaded) {
         var uuid, info;
@@ -559,9 +573,9 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     /**
      * Loads the scene by its uuid.
      * @method _loadSceneByUuid
-     * @param {string} uuid - the uuid of the scene asset to load
-     * @param {function} [onLaunched]
-     * @param {function} [onUnloaded]
+     * @param {String} uuid - the uuid of the scene asset to load
+     * @param {Function} [onLaunched]
+     * @param {Function} [onUnloaded]
      * @private
      */
     _loadSceneByUuid: function (uuid, onLaunched, onUnloaded) {
@@ -597,6 +611,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
 
     /**
      * Resume director after pause, if the current scene is not paused, nothing will happen.
+     * @method resume
      */
     resume: function () {
         if (!this._paused) {
@@ -627,7 +642,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     /**
      * Enables or disables WebGL depth test.<br/>
      * Implementation can be found in CCDirectorCanvas.js/CCDirectorWebGL.js
-     * @function
+     * @method setDepthTest
      * @param {Boolean} on
      */
     setDepthTest: null,
@@ -635,8 +650,8 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     /**
      * set color for clear screen.<br/>
      * Implementation can be found in CCDirectorCanvas.js/CCDirectorWebGL.js
-     * @function
-     * @param {cc.color} clearColor
+     * @method setClearColor
+     * @param {Color} clearColor
      */
     setClearColor: null,
     /**
@@ -690,7 +705,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
 
     /**
      * Sets Notification Node
-     * @param {cc.Node} node
+     * @param {ENode} node
      */
     setNotificationNode: function (node) {
         cc.renderer.childrenOrderDirty = true;
@@ -725,15 +740,15 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     /**
      * Sets the view, where everything is rendered, do not call this function.<br/>
      * Implementation can be found in CCDirectorCanvas.js/CCDirectorWebGL.js.
-     * @function
-     * @param {cc.view} openGLView
+     * @method setOpenGLView
+     * @param {EGLView} openGLView
      */
     setOpenGLView: null,
 
     /**
      * Sets an OpenGL projection.<br/>
      * Implementation can be found in CCDirectorCanvas.js/CCDirectorWebGL.js.
-     * @function
+     * @method setProjection
      * @param {Number} projection
      */
     setProjection: null,
@@ -741,22 +756,22 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     /**
      * Update the view port.<br/>
      * Implementation can be found in CCDirectorCanvas.js/CCDirectorWebGL.js.
-     * @function
+     * @method setViewport
      */
     setViewport: null,
 
     /**
      * Get the CCEGLView, where everything is rendered.<br/>
      * Implementation can be found in CCDirectorCanvas.js/CCDirectorWebGL.js.
-     * @function
-     * @return {cc.view}
+     * @method getOpenGLView
+     * @return {EGLView}
      */
     getOpenGLView: null,
 
     /**
      * Sets an OpenGL projection.<br/>
      * Implementation can be found in CCDirectorCanvas.js/CCDirectorWebGL.js.
-     * @function
+     * @method getProjection
      * @return {Number}
      */
     getProjection: null,
@@ -764,7 +779,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     /**
      * Enables/disables OpenGL alpha blending.<br/>
      * Implementation can be found in CCDirectorCanvas.js/CCDirectorWebGL.js.
-     * @function
+     * @method setAlphaBlending
      * @param {Boolean} on
      */
     setAlphaBlending: null,
@@ -773,6 +788,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
      * Returns whether or not the replaced scene will receive the cleanup message.<br>
      * If the new scene is pushed, then the old scene won't receive the "cleanup" message.<br/>
      * If the new scene replaces the old one, the it will receive the "cleanup" message.
+     * @method isSendCleanupToScene
      * @return {Boolean}
      */
     isSendCleanupToScene: function () {
@@ -780,23 +796,26 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     },
 
     /**
-     * Returns current running Scene. Director can only run one Scene at the time
-     * @return {cc.Scene}
+     * Returns current running Scene. Director can only run one Scene at the time.
+     * @method getRunningScene
+     * @return {EScene}
      */
     getRunningScene: function () {
         return this._runningScene;
     },
 
     /**
-     * Returns current running Scene. Director can only run one Scene at the time
-     * @return {cc.EScene}
+     * Returns current running Scene. Director can only run one Scene at the time.
+     * @method getScene
+     * @return {EScene}
      */
     getScene: function () {
         return this._scene;
     },
 
     /**
-     * Returns the FPS value
+     * Returns the FPS value.
+     * @method getAnimationInterval
      * @return {Number}
      */
     getAnimationInterval: function () {
@@ -804,7 +823,8 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     },
 
     /**
-     * Returns whether or not to display the FPS informations
+     * Returns whether or not to display the FPS informations.
+     * @method isDisplayStats
      * @return {Boolean}
      */
     isDisplayStats: function () {
@@ -812,7 +832,8 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     },
 
     /**
-     * Sets whether display the FPS on the bottom-left corner
+     * Sets whether display the FPS on the bottom-left corner.
+     * @method setDisplayStats
      * @param {Boolean} displayStats
      */
     setDisplayStats: function (displayStats) {
@@ -822,7 +843,8 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     },
 
     /**
-     * Returns seconds per frame
+     * Returns seconds per frame.
+     * @method getSecondsPerFrame
      * @return {Number}
      */
     getSecondsPerFrame: function () {
@@ -831,6 +853,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
 
     /**
      * Returns whether next delta time equals to zero
+     * @method isNextDeltaTimeZero
      * @return {Boolean}
      */
     isNextDeltaTimeZero: function () {
@@ -839,6 +862,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
 
     /**
      * Returns whether or not the Director is paused
+     * @method isPaused
      * @return {Boolean}
      */
     isPaused: function () {
@@ -847,6 +871,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
 
     /**
      * Returns how many frames were called since the director started
+     * @method getTotalFrames
      * @return {Number}
      */
     getTotalFrames: function () {
@@ -856,7 +881,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     /**
      * Pops out all scenes from the queue until the root scene in the queue. <br/>
      * This scene will replace the running one.  <br/>
-     * Internally it will call "popToSceneStackLevel(1)"
+     * Internally it will call "popToSceneStackLevel(1)".
      */
     popToRootScene: function () {
         this.popToSceneStackLevel(1);
@@ -898,16 +923,18 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     },
 
     /**
-     * Returns the cc.Scheduler associated with this director
-     * @return {cc.Scheduler}
+     * Returns the cc.Scheduler associated with this director.
+     * @method getScheduler
+     * @return {Scheduler}
      */
     getScheduler: function () {
         return this._scheduler;
     },
 
     /**
-     * Sets the cc.Scheduler associated with this director
-     * @param {cc.Scheduler} scheduler
+     * Sets the cc.Scheduler associated with this director.
+     * @method setScheduler
+     * @param {Scheduler} scheduler
      */
     setScheduler: function (scheduler) {
         if (this._scheduler !== scheduler) {
@@ -916,15 +943,17 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     },
 
     /**
-     * Returns the cc.ActionManager associated with this director
-     * @return {cc.ActionManager}
+     * Returns the cc.ActionManager associated with this director.
+     * @method getActionManager
+     * @return {ActionManager}
      */
     getActionManager: function () {
         return this._actionManager;
     },
     /**
-     * Sets the cc.ActionManager associated with this director
-     * @param {cc.ActionManager} actionManager
+     * Sets the cc.ActionManager associated with this director.
+     * @method setActionManager
+     * @param {ActionManager} actionManager
      */
     setActionManager: function (actionManager) {
         if (this._actionManager !== actionManager) {
@@ -933,7 +962,8 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     },
 
     /**
-     * Returns the delta time since last frame
+     * Returns the delta time since last frame.
+     * @method getDeltaTime
      * @return {Number}
      */
     getDeltaTime: function () {
@@ -1042,7 +1072,7 @@ cc.DisplayLinkDirector = cc.Director.extend(/** @lends cc.Director# */{
 
     /**
      * Sets animation interval
-     * @param {Number} value the animation interval desired
+     * @param {Number} value - The animation interval desired.
      */
     setAnimationInterval: function (value) {
         this._animationInterval = value;

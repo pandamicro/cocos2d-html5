@@ -27,8 +27,13 @@
 require('../platform/CCLoader');
 
 /**
+ * @module cc
+ * @class loader
+ */
+
+/**
  * Load binary data by url.
- * @function
+ * @method loadBinary
  * @param {String} url
  * @param {Function} [cb]
  */
@@ -70,8 +75,8 @@ cc.loader._str2Uint8Array = function (strData) {
 };
 
 /**
- * Load binary data by url synchronously
- * @function
+ * Load binary data by url synchronously.
+ * @method loadBinarySync
  * @param {String} url
  * @return {Uint8Array}
  */

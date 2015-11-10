@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 /****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
@@ -27,8 +31,7 @@
 /**
  * The fullscreen API provides an easy way for web content to be presented using the user's entire screen.
  * It's invalid on safari, QQbrowser and android browser
- * @class
- * @name cc.screen
+ * @class screen
  */
 cc.screen = /** @lends cc.screen# */{
     _supportsFullScreen: false,
@@ -77,7 +80,7 @@ cc.screen = /** @lends cc.screen# */{
     
     /**
      * initialize
-     * @function
+     * @method init
      */
     init: function () {
         this._fn = {};
@@ -98,6 +101,7 @@ cc.screen = /** @lends cc.screen# */{
     
     /**
      * return true if it's full now.
+     * @method fullScreen
      * @returns {Boolean}
      */
     fullScreen: function () {
@@ -110,6 +114,7 @@ cc.screen = /** @lends cc.screen# */{
     
     /**
      * change the screen to full mode.
+     * @method requestFullScreen
      * @param {Element} element
      * @param {Function} onFullScreenChange
      */
@@ -134,6 +139,7 @@ cc.screen = /** @lends cc.screen# */{
     
     /**
      * exit the full mode.
+     * @method exitFullScreen
      * @return {Boolean}
      */
     exitFullScreen: function () {
@@ -142,6 +148,7 @@ cc.screen = /** @lends cc.screen# */{
     
     /**
      * Automatically request full screen with a touch/click event
+     * @method autoFullScreen
      * @param {Element} element
      * @param {Function} onFullScreenChange
      */

@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 /****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
@@ -48,26 +52,26 @@ var Details = function () {
     /**
      * list of the depends assets' uuid
      * @property uuidList
-     * @type {string[]}
+     * @type {String[]}
      */
     this.uuidList = [];
     /**
      * the obj list whose field needs to load asset by uuid
      * @property uuidObjList
-     * @type {object[]}
+     * @type {Object[]}
      */
     this.uuidObjList = [];
     /**
      * the corresponding field name which referenced to the asset
      * @property uuidPropList
-     * @type {string[]}
+     * @type {String[]}
      */
     this.uuidPropList = [];
 
     /**
      * the corresponding field name which referenced to the raw object
      * @property rawProp
-     * @type {string}
+     * @type {String}
      */
     this.rawProp = '';
 
@@ -78,9 +82,9 @@ var Details = function () {
          * - 会被传回的字段仅限于非 Asset 类型，并且如果字段值为 null 或 undefined，则可能不会被传回。
          * - 该回调在 DeserializeInfo 第一次调用 reset 时就会被清空。
          * @callback visitorInEditor
-         * @param {object[]} objs
-         * @param {string[]} propNames
-         * @param {object} _Deserializer
+         * @param {Object[]} objs
+         * @param {String[]} propNames
+         * @param {Object} _Deserializer
          * @private
          */
         this.visitorInEditor = null;
@@ -114,9 +118,9 @@ if (EDITOR) {
 }
 /**
  * @method getUuidOf
- * @param {object} obj
- * @param {string} propName
- * @return {string}
+ * @param {Object} obj
+ * @param {String} propName
+ * @return {String}
  */
 Details.prototype.getUuidOf = function (obj, propName) {
     for (var i = 0; i < this.uuidObjList.length; i++) {
@@ -128,7 +132,7 @@ Details.prototype.getUuidOf = function (obj, propName) {
 };
 /**
  * @method assignAssetsBy
- * @param {function} getter
+ * @param {Function} getter
  * @return {Boolean} success
  */
 Details.prototype.assignAssetsBy = function (getter) {
@@ -386,8 +390,8 @@ var _Deserializer = (function () {
     }
 
     ///**
-    // * @param {object} serialized - The obj to deserialize, must be non-nil
-    // * @param {object} [target=null]
+    // * @param {Object} serialized - The obj to deserialize, must be non-nil
+    // * @param {Object} [target=null]
     // */
     var _deserializeObject = function (self, serialized, target) {
         var propName, prop;
@@ -481,9 +485,9 @@ var _Deserializer = (function () {
  * 也不会将 uuid 保存到 result 对象中。
  *
  * @method deserialize
- * @param {(string|object)} data - the serialized cc.Asset json string or json object.
+ * @param {(String|Object)} data - the serialized cc.Asset json string or json object.
  * @param {deserialize.Details} [result] - additional loading result
- * @param {object} [options]
+ * @param {Object} [options]
  * @return {object} the main data(asset)
  */
 cc.deserialize = function (data, result, options) {

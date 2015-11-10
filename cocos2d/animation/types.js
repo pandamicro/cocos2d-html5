@@ -1,3 +1,6 @@
+/**
+ * @module cc
+ */
 
 var JS = cc.js;
 var Playable = require('./playable');
@@ -12,8 +15,8 @@ var WrapModeMask = {
 
 /**
  * Specifies how time is treated when it is outside of the keyframe range of an Animation.
- * @readonly
- * @enum {number}
+ * @readOnly
+ * @enum WrapMode
  * @memberof cc
  */
 var WrapMode = cc.Enum({
@@ -21,24 +24,28 @@ var WrapMode = cc.Enum({
     /**
      * !#en Reads the default wrap mode set higher up.
      * !#zh 向 Animation Component 或者 AnimationClip 查找 wrapMode
+     * @property {Number} Default
      */
     Default: 0,
 
     /**
      * !#en All iterations are played as specified.
      * !#zh 动画只播放一遍
+     * @property {Number} Normal
      */
     Normal: 1,
 
     /**
      * !#en All iterations are played in the reverse direction from the way they are specified.
      * !#zh 从最后一帧或结束位置开始反向播放，到第一帧或开始位置停止
+     * @property {Number} Reverse
      */
     Reverse: WrapModeMask.Reverse,
 
     /**
      * !#en When time reaches the end of the animation, time will continue at the beginning.
      * !#zh 循环播放
+     * @property {Number} Loop
      */
     Loop: WrapModeMask.Loop,
 
@@ -46,6 +53,7 @@ var WrapMode = cc.Enum({
      * !#en All iterations are played in the reverse direction from the way they are specified.
      * And when time reaches the start of the animation, time will continue at the ending.
      * !#zh 反向循环播放
+     * @property {Number} LoopReverse
      */
     LoopReverse: WrapModeMask.Loop | WrapModeMask.Reverse,
 
@@ -53,6 +61,7 @@ var WrapMode = cc.Enum({
      * !#en Even iterations are played as specified, odd iterations are played in the reverse direction from the way they
      * are specified.
      * !#zh 从第一帧播放到最后一帧，然后反向播放回第一帧，到第一帧后再正向播放，如此循环
+     * @property {Number} PingPong
      */
     PingPong: WrapModeMask.PingPong,
 
@@ -60,6 +69,7 @@ var WrapMode = cc.Enum({
      * !#en Even iterations are played in the reverse direction from the way they are specified, odd iterations are played
      * as specified.
      * !#zh 从最后一帧开始反向播放，其他同 PingPong
+     * @property {Number} PingPongReverse
      */
     PingPongReverse: WrapModeMask.PingPong | WrapModeMask.Reverse
 });
@@ -93,7 +103,7 @@ AnimationNodeBase.prototype.update = function (deltaTime) {};
  * @constructor
  * @param {Animator} animator
  * @param {AnimCurve[]} [curves]
- * @param {object} [timingInput] - This dictionary is used as a convenience for specifying the timing properties of an Animation in bulk.
+ * @param {Object} [timingInput] - This dictionary is used as a convenience for specifying the timing properties of an Animation in bulk.
  */
 function AnimationNode (animator, curves, timingInput) {
     AnimationNodeBase.call(this);
@@ -114,7 +124,7 @@ function AnimationNode (animator, curves, timingInput) {
      * !#zh 延迟多少秒播放
      *
      * @property delay
-     * @type {number}
+     * @type {Number}
      * @default 0
      */
     this.delay = 0;
@@ -131,7 +141,7 @@ function AnimationNode (animator, curves, timingInput) {
      * !#zh 迭代次数, 指动画播放多少次后结束, normalize time. 如 2.5 ( 2次半 )
      *
      * @property repeatCount
-     * @type {number}
+     * @type {Number}
      * @default 1
      */
     this.repeatCount = 1;
@@ -141,7 +151,7 @@ function AnimationNode (animator, curves, timingInput) {
      * !#zh 单次动画的持续时间, 秒
      *
      * @property duration
-     * @type {number}
+     * @type {Number}
      * @readOnly
      */
     this.duration = 1;
@@ -150,7 +160,7 @@ function AnimationNode (animator, curves, timingInput) {
      * !#en The animation's playback speed. 1 is normal playback speed.
      * !#zh 播放速率
      * @property speed
-     * @type {number}
+     * @type {Number}
      * @default: 1.0
      */
     this.speed = 1;
@@ -202,7 +212,7 @@ function AnimationNode (animator, curves, timingInput) {
     /**
      * The current time of this animation in seconds.
      * @property time
-     * @type {number}
+     * @type {Number}
      * @default 0
      */
     this.time = 0;

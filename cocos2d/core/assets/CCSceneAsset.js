@@ -1,3 +1,13 @@
+/**
+ * @module cc
+ */
+
+/**
+ * Class for scene handling.
+ * @class Scene
+ * @extends Asset
+ * @constructor
+ */
 var Scene = cc.Class({
     name: 'cc.SceneAsset',
     extends: cc.Asset,

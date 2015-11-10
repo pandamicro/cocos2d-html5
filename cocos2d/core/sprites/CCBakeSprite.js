@@ -25,7 +25,7 @@
 /**
  * cc.BakeSprite is a type of sprite that will be cached.
  * @class
- * @extend cc.Sprite
+ * @extends cc.Sprite
  */
 cc.BakeSprite = cc.Sprite.extend(/** @lends cc.BakeSprite# */{
     _cacheCanvas: null,
