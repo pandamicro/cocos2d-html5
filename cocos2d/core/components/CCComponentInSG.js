@@ -9,7 +9,7 @@ var SceneGraphHelper = require('../utils/scene-graph-helper');
  * This is the base class for components which will attach a node to the cocos2d scene graph.
  *
  * @class ComponentInSG
- * @extend Component
+ * @extends Component
  */
 var ComponentInSG = cc.Class({
     extends: require('./CCComponent'),

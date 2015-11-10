@@ -31,7 +31,7 @@
 /**
  * Audio Source.
  * @class AudioScource
- * @extend CCComponent
+ * @extends CCComponent
  */
 
 var audioEngine = cc.audioEngine;

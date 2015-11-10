@@ -32,7 +32,7 @@ var AnimationClip = require('../../animation/animation-clip');
 /**
  * Renders a sprite in the scene.
  * @class AnimationComponent
- * @extend CCComponent
+ * @extends CCComponent
  */
 var AnimationComponent = cc.Class({
     name: 'cc.AnimationComponent',

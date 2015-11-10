@@ -120,7 +120,7 @@ switch(cc.__BrowserGetter.adaptationType){
  *  - cc.view.methodName(); <br/>
  *
  * @class EGLView
- * @extend _Class
+ * @extends _Class
  */
 cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
     _delegate: null,
