@@ -58,19 +58,20 @@ test('EntityAnimator.animate', function () {
     var EntityAnimator = cc._Test.EntityAnimator;
     var entity = new cc.ENode();
     var renderer = entity.addComponent(cc.SpriteRenderer);
+    renderer.colorProp = Color.BLACK;
 
     var animator = new EntityAnimator(entity);
     var animation = animator.animate([
         {
             props: { x: 50, scaleX: 10 },
             comps: {
-                'cc.Sprite': { color: Color.WHITE }
+                'cc.Sprite': { colorProp: Color.WHITE }
             }
         },
         {
             props: { x: 100, scaleX: 20 },
             comps: {
-                'cc.Sprite': { color: color(1, 1, 1, 0) }
+                'cc.Sprite': { colorProp: color(1, 1, 1, 0) }
             }
         }
     ]);
@@ -84,7 +85,7 @@ test('EntityAnimator.animate', function () {
     strictEqual(scaleCurve.target, entity, 'target of scaleCurve should be entity');
     strictEqual(scaleCurve.prop, 'scaleX', 'propName of scaleCurve should be scaleX');
     strictEqual(colorCurve.target, renderer, 'target of colorCurve should be sprite renderer');
-    strictEqual(colorCurve.prop, 'color', 'propName of colorCurve should be color');
+    strictEqual(colorCurve.prop, 'colorProp', 'propName of colorCurve should be color');
 
     deepEqual(posCurve.values, [50, 100], 'values of posCurve should equals keyFrames');
     deepEqual(scaleCurve.values, [10, 20], 'values of scaleCurve should equals keyFrames');
@@ -144,19 +145,20 @@ test('AnimationNode', function () {
     var entity = new cc.ENode();
     entity.x = 321;
     var renderer = entity.addComponent(cc.SpriteRenderer);
+    renderer.colorProp = Color.BLACK;
 
     var animator = new EntityAnimator(entity);
     var animation = animator.animate([
         {
             props: { x: 50, scale: v2(1, 1) },
             comps: {
-                'cc.Sprite': { color: Color.WHITE }
+                'cc.Sprite': { colorProp: Color.WHITE }
             }
         },
         {
             props: { x: 100, scale: v2(2, 2) },
             comps: {
-                'cc.Sprite': { color: color(255, 255, 255, 0) }
+                'cc.Sprite': { colorProp: color(255, 255, 255, 0) }
             }
         }
     ], {
@@ -177,14 +179,14 @@ test('AnimationNode', function () {
     deepEqual(entity.scale, 1.5, 'should play second key frame');
 
     animation.update(actualDuration / 2);
-    deepEqual(renderer.color, color(255, 255, 255, 0), 'should play the last key frame');
+    deepEqual(renderer.colorProp, color(255, 255, 255, 0), 'should play the last key frame');
 
     animation.update(actualDuration / 4);
-    deepEqual(renderer.color, color(255, 255, 255, 255 * 0.75), 'should repeat animation');
+    deepEqual(renderer.colorProp, color(255, 255, 255, 255 * 0.75), 'should repeat animation');
     strictEqual(animation.isPlaying, false, 'should stop animation');
 
     animation.update(actualDuration / 4);
-    deepEqual(renderer.color, color(255, 255, 255, 255 * 0.75), 'should not animate if stopped');
+    deepEqual(renderer.colorProp, color(255, 255, 255, 255 * 0.75), 'should not animate if stopped');
 });
 
 test('wrapMode', function () {
@@ -265,10 +267,12 @@ test('initClipData', function () {
     var entity = new cc.ENode();
     entity.name = 'foo';
     var renderer = entity.addComponent(cc.SpriteRenderer);
+    renderer.testColor = Color.BLACK;
 
     var childEntity = new cc.ENode();
     childEntity.name = 'bar';
     var childRenderer = childEntity.addComponent(cc.SpriteRenderer);
+    childRenderer.testColor = Color.BLACK;
 
     entity.addChild(childEntity);
 
@@ -299,7 +303,7 @@ test('initClipData', function () {
 
         comps: {
             'cc.Sprite': {
-                'color.a': [
+                'testColor.a': [
                     { frame: 0, value: 1 },
                     { frame: 10, value: 0 }
                 ]
@@ -318,7 +322,7 @@ test('initClipData', function () {
 
                 comps: {
                     'cc.Sprite': {
-                        'color.a': [
+                        'testColor.a': [
                             { frame: 0, value: 1 },
                             { frame: 10, value: 0 }
                         ]
@@ -342,7 +346,7 @@ test('initClipData', function () {
     strictEqual(scaleCurveX.target, entity, 'target of scaleCurve should be transform');
     strictEqual(scaleCurveX.prop, 'scale', 'propName of scaleCurve should be scale');
     strictEqual(colorCurve.target, renderer, 'target of colorCurve should be sprite renderer');
-    strictEqual(colorCurve.prop, 'color', 'propName of colorCurve should be color');
+    strictEqual(colorCurve.prop, 'testColor', 'propName of colorCurve should be testColor');
 
     deepEqual(posCurve.values, [v2(50, 100), v2(100, 75), v2(100, 50)], 'values of posCurve should equals keyFrames');
 
