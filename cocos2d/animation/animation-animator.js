@@ -2,6 +2,8 @@ var JS = cc.js;
 var Animator = require('./animators').Animator;
 var DynamicAnimCurve = require('./animation-curves').DynamicAnimCurve;
 var MotionPathCurve = require('./animation-curves').MotionPathCurve;
+var sampleMotionPaths = require('./motion-path-helper').sampleMotionPaths;
+var WrapModeMask = require('./types').WrapModeMask;
 
 // The actual animator for Animation Component
 
@@ -23,7 +25,7 @@ p.playState = function (state, startTime) {
     }
     this.playingAnims.push(state);
     state.play();
-    state.time = startTime;
+    state.time = startTime || 0;
     this.play();
 };
 
@@ -94,6 +96,10 @@ function initClipData (root, state) {
     state.speed = clip.speed;
     state.wrapMode = clip.wrapMode;
 
+    if ((state.wrapMode & WrapModeMask.Loop) === WrapModeMask.Loop) {
+        state.repeatCount = Infinity;
+    }
+
     // create curves
 
     function checkMotionPath(motionPath) {
@@ -102,7 +108,7 @@ function initClipData (root, state) {
         for (var i = 0, l = motionPath.length; i < l; i++) {
             var controls = motionPath[i];
 
-            if (!Array.isArray(controls) || controls.length !== 3) return false;
+            if (!Array.isArray(controls) || controls.length !== 6) return false;
         }
 
         return true;
@@ -111,9 +117,7 @@ function initClipData (root, state) {
     function createPropCurve (target, propPath, keyframes) {
         var curve;
 
-        var isMotionPathProp = target instanceof cc.ENode &&
-            ((propPath === 'x') ||
-             (propPath === 'y'));
+        var isMotionPathProp = (target instanceof cc.ENode) && (propPath === 'motionPath');
 
         if (isMotionPathProp)
             curve = new MotionPathCurve();
@@ -149,6 +153,17 @@ function initClipData (root, state) {
             var ratio = keyframe.frame / state.duration;
             curve.ratios.push(ratio);
 
+            if (isMotionPathProp) {
+                var motionPath = keyframe.motionPath;
+
+                if (motionPath && !checkMotionPath(motionPath)) {
+                    cc.error('motion path of target [' + target.name + '] in prop [' + propPath + '] frame [' + j +'] is not valid');
+                    motionPath = null;
+                }
+
+                curve.motionPaths.push(motionPath);
+            }
+
             var curveValue = keyframe.value;
             //if (hasSubProp) {
             //    curveValue = createBatchedProperty(propPath, dotIndex, propValue, curveValue);
@@ -169,17 +184,10 @@ function initClipData (root, state) {
                 }
             }
             curve.types.push(DynamicAnimCurve.Linear);
+        }
 
-            if (isMotionPathProp) {
-                var motionPath = keyframe.motionPath;
-
-                if (motionPath && !checkMotionPath(motionPath)) {
-                    cc.error('motion path of target [' + target.name + '] in prop [' + propPath + '] frame [' + j +'] is not valid');
-                    continue;
-                }
-
-                curve.motionPaths.push(motionPath);
-            }
+        if (isMotionPathProp) {
+            sampleMotionPaths(curve, clip.duration, clip.sample);
         }
 
         return curve;

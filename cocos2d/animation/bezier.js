@@ -14,7 +14,7 @@
 //
 //    return bezier;
 //})();
-function fastBezier (C1, C2, C3, C4, t) {
+function bezier (C1, C2, C3, C4, t) {
    var t1 = 1 - t;
    return C1 * t1 * t1 * t1 +
           C2 * 3 * t1 * t1 * t +
@@ -172,7 +172,7 @@ function cardano (curve, x) {
     }
 }
 
-function bezier (controlPoints, x) {
+function bezierByTime (controlPoints, x) {
     var percent = cardano(controlPoints, x);    // t
     var p0y = 0;                // a
     var p1y = controlPoints[1]; // b
@@ -187,5 +187,5 @@ function bezier (controlPoints, x) {
 
 module.exports = {
     bezier: bezier,
-    fastBezier: fastBezier
+    bezierByTime: bezierByTime
 };

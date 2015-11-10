@@ -138,68 +138,6 @@ test('DynamicAnimCurve', function () {
     deepEqual(target.foo, { bar: color(0.5, 0.5, 0.5, 0.55) }, 'The composed color should animated');
 });
 
-test('MotionPathCurve', function () {
-    var MotionPathCurve = cc._Test.MotionPathCurve;
-
-    // var points = [
-    //     {
-    //         pos: [0, 0]
-    //     },
-
-    //     {
-    //         pos: [100, 100],
-    //         in:  [50,  100],
-    //         out: [150, 50]
-    //     },
-
-    //     {
-    //         pos: [300, 200],
-    //         in:  [300, 300],
-    //         out: [200, 200]
-    //     },
-
-    //     {
-    //         pos: [400, 0]
-    //     }
-    // ];
-
-    var xCurve = new MotionPathCurve();
-    var target = {
-        x: 0,
-        y: 0
-    };
-
-    xCurve.target = target;
-    xCurve.prop = 'x';
-    xCurve.values = [100, 0, 400];
-    xCurve.ratios = [0, 0.5, 1];
-    xCurve.motionPaths = [null, [[100, 50, 150], [300, 300, 200]], null];
-
-    xCurve.sample(null, 0.25, null);
-    strictEqual(target.x, 50, 'should not calc motion path if from value have no motion path');
-
-    xCurve.sample(null, 0.5, null);
-    strictEqual(target.x, 0, 'should calc motion path');
-
-    xCurve.sample(null, 0.5 + (0.5 / 3 * 0.2), null);
-    close(target.x, cc.bezierAt(0, 0, 50, 100, 0.2), 000001, 'should calc motion path at ratio 0.2 of first motion path section');
-
-    xCurve.sample(null, 0.5 + (0.5 / 3), null);
-    close(target.x, 100, 000001, 'should calc motion path at ratio 0 of second motion path');
-
-    xCurve.sample(null, 0.5 + (0.5 / 3 * 1.5), null);
-    close(target.x, cc.bezierAt(100, 150, 300, 300, 0.5), 000001, 'should calc motion path at ratio 0.5 of second motion path');
-
-    xCurve.sample(null, 0.5 + (0.5 / 3 * 2), null);
-    close(target.x, 300, 000001, 'should calc motion path at ratio 0 of third motion path');
-
-    xCurve.sample(null, 0.5 + (0.5 / 3 * 2.9), null);
-    close(target.x, cc.bezierAt(300, 200, 400, 400, 0.9), 000001, 'should calc motion path at ratio 0.9 of third motion path');
-
-    xCurve.sample(null, 1.1, null);
-    strictEqual(target.x, 400, 'should calc motion path at ratio 0.9 of third motion path');
-});
-
 test('AnimationNode', function () {
     var EntityAnimator = cc._Test.EntityAnimator;
 
@@ -416,85 +354,6 @@ test('initClipData', function () {
     deepEqual(colorCurve.ratios, [0, 1], 'ratios of colorCurve should equals keyFrames');
 });
 
-test('initClipData with motionPath', function () {
-    var MotionPathCurve = cc._Test.MotionPathCurve;
-    var initClipData = cc._Test.initClipData;
-
-    var entity = new cc.ENode();
-    entity.name = 'foo';
-    var renderer = entity.addComponent(cc.SpriteRenderer);
-
-    var childEntity = new cc.ENode();
-    childEntity.name = 'bar';
-    var childRenderer = childEntity.addComponent(cc.SpriteRenderer);
-
-    entity.addChild(childEntity);
-
-    var clip = new cc.AnimationClip();
-    clip._duration = 10;
-    clip.curveData = {
-        props: {
-            x: [
-                { frame: 0, value: 0 },
-                { frame: 5, value: 50, motionPath: [[100, 50, 150], [300, 300, 200]] },
-                { frame: 10, value: 400 }
-            ],
-
-            rotation: [
-                {frame: 0, value: 30},
-                {frame: 3, value: 100}
-            ]
-        },
-
-        comps: {
-            'cc.Sprite': {
-                'color.a': [
-                    { frame: 0, value: 1 },
-                    { frame: 10, value: 0 }
-                ]
-            }
-        },
-
-        paths: {
-            'bar': {
-                props: {
-                    y: [
-                        { frame: 0, value: 0 },
-                        { frame: 5, value: 50 },
-                        { frame: 10, value: 100 }
-                    ]
-                },
-
-                comps: {
-                    'cc.Sprite': {
-                        'color.a': [
-                            { frame: 0, value: 1 },
-                            { frame: 10, value: 0 }
-                        ]
-                    }
-                }
-            }
-        }
-    };
-
-    var state = new cc.AnimationState(clip);
-    initClipData(entity, state);
-
-    strictEqual(state.curves.length, 5, 'should create 5 curves');
-    strictEqual(state.curves[0] instanceof MotionPathCurve, true, 'entity x prop should create MotionPathCurve');
-    strictEqual(state.curves[1] instanceof MotionPathCurve, false, 'entity rotation prop should not create MotionPathCurve');
-    strictEqual(state.curves[3] instanceof MotionPathCurve, true, 'entity x prop should create MotionPathCurve');
-
-    deepEqual(state.curves[0].motionPaths, [undefined, [[100, 50, 150], [300, 300, 200]], undefined], 'should add motion path to curve');
-
-    // make first frame perfect
-    state.update(0);
-
-    // update time
-    state.update(5 + (5 / 3 * 1.5));
-    close(entity.x, cc.bezierAt(100, 150, 300, 300, 0.5), 000001, 'should calc motion path at ratio 0.5 of second motion path');
-
-});
 
 test('Animation Component', function () {
     var initClipData = cc._Test.initClipData;
@@ -540,3 +399,38 @@ test('Animation Component', function () {
     strictEqual(animation._clips.length, 0, 'should remove clip');
     strictEqual(animation.getAnimationState('test'), null, 'should remove state');
 });
+
+test('sampleMotionPaths', function () {
+    var sampleMotionPaths = cc._Test.sampleMotionPaths;
+
+    var data = {
+        prop: 'motionPath',
+        ratios: [
+            0.2,
+            0.7
+        ],
+        values: [
+            [0, 0],
+            [640, 480]
+        ],
+        types: [
+            null,
+            null
+        ],
+        motionPaths: [
+            [[320, 240, 0, 240, 640, 240], [640, 0, 400, 0, 1000, 0]],
+            null
+        ]
+    };
+
+    sampleMotionPaths(data, 2, 100);
+
+    var motionPath = data.motionPaths[0];
+    strictEqual(motionPath.length, 100, 'motionPath length should be 100');
+    strictEqual(motionPath[0] instanceof cc.Vec2, true, 'motionPath item should be cc.Vec2');
+
+    var middlePoint = motionPath[50];
+    close(middlePoint.x, 523.9331134718055, 0.0001, 'middlePoint.x should equal value');
+    close(middlePoint.y, 55.549144506852244, 0.0001, 'middlePoint.x should equal value');
+});
+
