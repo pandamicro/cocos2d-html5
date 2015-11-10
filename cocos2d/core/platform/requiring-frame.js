@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 var requiringFrames = [];  // the requiring frame infos
 
 cc._RFpush = function (module, uuid, script) {

@@ -65,7 +65,7 @@ var LoadManager = {
     /**
      * Max allowed concurrent request count
      * @property maxConcurrent
-     * @type {number}
+     * @type {Number}
      * @default 2
      */
     maxConcurrent: 2,
@@ -73,7 +73,7 @@ var LoadManager = {
     /**
      * Current concurrent request count
      * @property _curConcurrent
-     * @type {number}
+     * @type {Number}
      * @readOnly
      */
     _curConcurrent: 0,
@@ -81,10 +81,10 @@ var LoadManager = {
     /**
      * NOTE: Request the same url with different loader is disallowed
      * @method loadByLoader
-     * @param {function} loader
-     * @param {string} url
-     * @param {function} callback
-     * @param {string} callback.param error - null or the error info
+     * @param {Function} loader
+     * @param {String} url
+     * @param {Function} callback
+     * @param {String} callback.param error - null or the error info
      * @param {any} callback.param data - the loaded data
      * @private
      */
@@ -106,11 +106,11 @@ var LoadManager = {
 
     /**
      * @method load
-     * @param {string} url
-     * @param {string} rawType
-     * @param {string} [rawExtname]
-     * @param {function} callback
-     * @param {string} callback.param error - null or the error info
+     * @param {String} url
+     * @param {String} rawType
+     * @param {String} [rawExtname]
+     * @param {Function} callback
+     * @param {String} callback.param error - null or the error info
      * @param {any} callback.param data - the loaded data
      * @private
      */
@@ -138,9 +138,9 @@ var LoadManager = {
 
     /**
      * @method registerRawTypes
-     * @param {string} rawType
-     * @param {function} loader
-     * @param {string} defaultExtname
+     * @param {String} rawType
+     * @param {Function} loader
+     * @param {String} defaultExtname
      */
     registerRawTypes: function (rawType, loader, defaultExtname) {
         if (CC_DEV) {

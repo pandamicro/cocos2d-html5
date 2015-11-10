@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 /****************************************************************************
  Copyright (c) 2011-2012 cocos2d-x.org
  Copyright (c) 2013-2014 Chukong Technologies Inc.
@@ -27,13 +31,25 @@ Enum = require("../value-types/CCEnum");
 
 /**
  * Enum for UIOrientation.
- * @readonly
- * @enum {Number}
+ * @readOnly
+ * @enum UIOrientation
  */
 cc.UIOrientation = cc.Enum({
+    /**
+     * @property {number} PORTRAIT
+     */
     PORTRAIT: 0,
+    /**
+     * @property {number} LANDSCAPE_LEFT
+     */
     LANDSCAPE_LEFT: -90,
+    /**
+     * @property {number} LANDSCAPE_RIGHT
+     */
     LANDSCAPE_RIGHT: 90,
+    /**
+     * @property {number} PORTRAIT_UPSIDE_DOWN
+     */
     PORTRAIT_UPSIDE_DOWN: 180,
 });
 
@@ -41,8 +57,7 @@ cc.UIOrientation = cc.Enum({
  * <p>
  *  This class manages all events of input. include: touch, mouse, accelerometer, keyboard                                       <br/>
  * </p>
- * @class
- * @name cc.inputManager
+ * @class inputManager
  */
 var inputManager = /** @lends cc.inputManager# */{
     _mousePressed: false,
@@ -95,7 +110,7 @@ var inputManager = /** @lends cc.inputManager# */{
     _glView: null,
 
     /**
-     * @function
+     * @method handleTouchesBegin
      * @param {Array} touches
      */
     handleTouchesBegin: function (touches) {
@@ -127,7 +142,7 @@ var inputManager = /** @lends cc.inputManager# */{
     },
 
     /**
-     * @function
+     * @method handleTouchesMove
      * @param {Array} touches
      */
     handleTouchesMove: function(touches){
@@ -156,7 +171,7 @@ var inputManager = /** @lends cc.inputManager# */{
     },
 
     /**
-     * @function
+     * @method handleTouchesEnd
      * @param {Array} touches
      */
     handleTouchesEnd: function(touches){
@@ -170,7 +185,7 @@ var inputManager = /** @lends cc.inputManager# */{
     },
 
     /**
-     * @function
+     * @method handleTouchesCancel
      * @param {Array} touches
      */
     handleTouchesCancel: function(touches){
@@ -184,7 +199,7 @@ var inputManager = /** @lends cc.inputManager# */{
     },
 
     /**
-     * @function
+     * @method getSetOfTouchesEndOrCancel
      * @param {Array} touches
      * @returns {Array}
      */
@@ -210,7 +225,7 @@ var inputManager = /** @lends cc.inputManager# */{
     },
 
     /**
-     * @function
+     * @method getHTMLElementPosition
      * @param {HTMLElement} element
      * @return {Object}
      */
@@ -246,9 +261,9 @@ var inputManager = /** @lends cc.inputManager# */{
     },
 
     /**
-     * @function
-     * @param {cc.Touch} touch
-     * @return {cc.Touch}
+     * @method getPreTouch
+     * @param {Touch} touch
+     * @return {Touch}
      */
     getPreTouch: function(touch){
         var preTouch = null;
@@ -266,8 +281,8 @@ var inputManager = /** @lends cc.inputManager# */{
     },
 
     /**
-     * @function
-     * @param {cc.Touch} touch
+     * @method setPreTouch
+     * @param {Touch} touch
      */
     setPreTouch: function(touch){
         var find = false;
@@ -291,11 +306,11 @@ var inputManager = /** @lends cc.inputManager# */{
     },
 
     /**
-     * @function
+     * @method getTouchByXY
      * @param {Number} tx
      * @param {Number} ty
-     * @param {cc.Vec2} pos
-     * @return {cc.Touch}
+     * @param {Vec2} pos
+     * @return {Touch}
      */
     getTouchByXY: function(tx, ty, pos){
         var locPreTouch = this._preTouchPoint;
@@ -308,11 +323,11 @@ var inputManager = /** @lends cc.inputManager# */{
     },
 
     /**
-     * @function
-     * @param {cc.Vec2} location
-     * @param {cc.Vec2} pos
+     * @method getTouchByXY
+     * @param {Vec2} location
+     * @param {Vec2} pos
      * @param {Number} eventType
-     * @returns {cc.Event.EventMouse}
+     * @returns {Event.EventMouse}
      */
     getMouseEvent: function(location, pos, eventType){
         var locPreMouse = this._prevMousePoint;
@@ -326,10 +341,10 @@ var inputManager = /** @lends cc.inputManager# */{
     },
 
     /**
-     * @function
+     * @method getPointByEvent
      * @param {Touch} event
-     * @param {cc.Vec2} pos
-     * @return {cc.Vec2}
+     * @param {Vec2} pos
+     * @return {Vec2}
      */
     getPointByEvent: function(event, pos){
         if (event.pageX != null)  //not avalable in <= IE8
@@ -341,9 +356,9 @@ var inputManager = /** @lends cc.inputManager# */{
     },
 
     /**
-     * @function
+     * @method getTouchesByEvent
      * @param {Touch} event
-     * @param {cc.Vec2} pos
+     * @param {Vec2} pos
      * @returns {Array}
      */
     getTouchesByEvent: function(event, pos){
@@ -379,7 +394,7 @@ var inputManager = /** @lends cc.inputManager# */{
     },
 
     /**
-     * @function
+     * @method registerSystemEvent
      * @param {HTMLElement} element
      */
     registerSystemEvent: function(element){
@@ -587,7 +602,7 @@ var inputManager = /** @lends cc.inputManager# */{
     _registerAccelerometerEvent: function(){},
 
     /**
-     * @function
+     * @method update
      * @param {Number} dt
      */
     update:function(dt){

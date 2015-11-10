@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 var JS = require('../platform/js');
 
 /**

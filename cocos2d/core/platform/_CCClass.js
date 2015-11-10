@@ -1,3 +1,7 @@
+/**
+ * @module cc
+ */
+
 /****************************************************************************
  Copyright (c) 2008-2010 Ricardo Quesada
  Copyright (c) 2011-2012 cocos2d-x.org
@@ -50,7 +54,7 @@ var fnTest = /\b_super\b/;
 
 /**
  * The base Class implementation (does nothing)
- * @class
+ * @class Class
  */
 var Class = function () {
 };
@@ -58,8 +62,8 @@ var Class = function () {
 /**
  * Create a new Class that inherits from this Class
  * @static
- * @param {object} props
- * @return {function}
+ * @param {Object} props
+ * @return {Function}
  */
 Class.extend = function (props) {
     var _super = this.prototype;
@@ -148,13 +152,13 @@ Class.extend = function (props) {
 
 /**
  * Common getter setter configuration function
- * @function
- * @param {Object}   proto      A class prototype or an object to config<br/>
- * @param {String}   prop       Property name
- * @param {function} getter     Getter function for the property
- * @param {function} setter     Setter function for the property
- * @param {String}   getterName Name of getter function for the property
- * @param {String}   setterName Name of setter function for the property
+ * @method defineGetterSetter
+ * @param {Object}   proto      - A class prototype or an object to config<br/>
+ * @param {String}   prop       - Property name
+ * @param {Function} getter     - Getter function for the property
+ * @param {Function} setter     - Setter function for the property
+ * @param {String}   getterName - Name of getter function for the property
+ * @param {String}   setterName - Name of setter function for the property
  */
 cc.defineGetterSetter = function (proto, prop, getter, setter, getterName, setterName){
     if (proto.__defineGetter__) {
@@ -172,9 +176,9 @@ cc.defineGetterSetter = function (proto, prop, getter, setter, getterName, sette
 
 /**
  * Create a new object and copy all properties in an exist object to the new object
- * @function
- * @param {object|Array} obj The source object
- * @return {Array|object} The created object
+ * @method clone
+ * @param {Object|Array} obj - The source object
+ * @return {Array|Object} The created object
  */
 cc.clone = function (obj) {
     // Cloning is better if the new object is having the same prototype chain
