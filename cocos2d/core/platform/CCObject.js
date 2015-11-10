@@ -1,7 +1,3 @@
-/**
- * @module cc
- */
-
 var JS = require('./js');
 
 /**

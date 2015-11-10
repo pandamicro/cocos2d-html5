@@ -1,7 +1,3 @@
-/**
- * @module cc
- */
-
 /****************************************************************************
  Copyright (c) 2011-2012 cocos2d-x.org
  Copyright (c) 2013-2015 Chukong Technologies Inc.

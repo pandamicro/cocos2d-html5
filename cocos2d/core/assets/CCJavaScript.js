@@ -1,8 +1,4 @@
 /**
- * @module cc
- */
-
-/**
  * Class for javascript handling.
  * @class JavaScript
  * @extends Asset

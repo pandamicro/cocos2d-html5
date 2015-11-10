@@ -1,8 +1,4 @@
-﻿/**
- * @module cc
- */
-
-var JS = require('./js');
+﻿var JS = require('./js');
 var Asset = require('../assets/CCAsset');
 var callInNextTick = require('./utils').callInNextTick;
 var LoadManager = require('./load-manager');

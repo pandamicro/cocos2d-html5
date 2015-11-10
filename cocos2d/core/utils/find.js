@@ -1,8 +1,4 @@
 /**
- * @module cc
- */
-
-/**
  * Finds a node by hierarchy path, the path is case-sensitive.
  * It will traverse the hierarchy by splitting the path using '/' character.
  * This function will still returns the node even if it is inactive.

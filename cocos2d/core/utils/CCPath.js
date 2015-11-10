@@ -1,9 +1,4 @@
 require('../platform/CCSys');
-
-/**
- * @module cc
- */
-
 /**
  * @class path
  * @static

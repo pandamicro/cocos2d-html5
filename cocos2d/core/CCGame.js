@@ -1,7 +1,3 @@
-/**
- * @module cc
- */
-
 var EventTarget = require('./event/event-target');
 
 /**

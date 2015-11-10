@@ -1,8 +1,4 @@
 /**
- * @module cc
- */
-
-/**
  * Class for coffee script handling.
  * @class CoffeeScript
  * @extends RawAsset

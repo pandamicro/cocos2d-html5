@@ -1,8 +1,4 @@
-﻿/**
- * @module cc
- */
-
-var JS = require('./js');
+﻿var JS = require('./js');
 
 /**
  * The CallbacksHandler is an abstract class that can register and unregister callbacks by key.

@@ -275,10 +275,6 @@ var getTargetId = function (target) {
 }
 
 /**
- * @module cc
- */
-
-/**
  * <p>
  *    Scheduler is responsible of triggering the scheduled callbacks.<br/>
  *    You should not use NSTimer. Instead use this class.<br/>
