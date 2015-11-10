@@ -29,45 +29,13 @@ var DontDestroy = Flags.DontDestroy;
 //var RegisteredInEditor = Flags.RegisteredInEditor;
 
 /**
+ * @module cc
+ */
+
+/**
  * Class of all entities in Fireball scenes.
- * @class
- * @name cc.ENode
- * @param {string} [name] - the name of the node
- *
- * @property {Number}               x                   - x axis position of node
- * @property {Number}               y                   - y axis position of node
- * @property {Number}               width               - Width of node
- * @property {Number}               height              - Height of node
- * @property {Number}               anchorX             - Anchor point's position on x axis
- * @property {Number}               anchorY             - Anchor point's position on y axis
- * @property {Boolean}              ignoreAnchor        - Indicate whether ignore the anchor point property for positioning
- * @property {Number}               skewX               - Skew x
- * @property {Number}               skewY               - Skew y
- * @property {Number}               zIndex              - Z order in depth which stands for the drawing order
- * @property {Number}               rotation            - Rotation of node
- * @property {Number}               rotationX           - Rotation on x axis
- * @property {Number}               rotationY           - Rotation on y axis
- * @property {Number}               scale               - Scale of node
- * @property {Number}               scaleX              - Scale on x axis
- * @property {Number}               scaleY              - Scale on y axis
- * @property {Boolean}              visible             - Indicate whether node is visible or not
- * @property {cc.Color}             color               - Color of node, default value is white: (255, 255, 255)
- * @property {Boolean}              cascadeColor        - Indicate whether node's color value affect its child nodes, default value is false
- * @property {Number}               opacity             - Opacity of node, default value is 255
- * @property {Boolean}              opacityModifyRGB    - Indicate whether opacity affect the color value, default value is false
- * @property {Boolean}              cascadeOpacity      - Indicate whether node's opacity value affect its child nodes, default value is false
- * @property {Array}                children            - <@readonly> All children nodes
- * @property {Number}               childrenCount       - <@readonly> Number of children
- * @property {cc.Node}              parent              - Parent node
- * @property {Boolean}              running             - <@readonly> Indicate whether node is running or not
- * @property {Number}               tag                 - Tag of node
- * @property {Object}               userData            - Custom user data
- * @property {Object}               userObject          - User assigned CCObject, similar to userData, but instead of holding a void* it holds an id
- * @property {Number}               arrivalOrder        - The arrival order, indicates which children is added previously
- * @property {cc.ActionManager}     actionManager       - The CCActionManager object that is used by all actions.
- * @property {cc.Scheduler}         scheduler           - cc.Scheduler used to schedule all "updates" and timers.
- * @property {cc.GLProgram}         shaderProgram       - The shader program currently used for this node
- * @property {Number}               glServerState       - The state of OpenGL server side
+ * @class ENode
+ * @extends NodeWrapper
  */
 var Node = cc.Class({
     name: 'cc.Node',
@@ -77,7 +45,7 @@ var Node = cc.Class({
         /**
          * The local active state of this node.
          * @property active
-         * @type {boolean}
+         * @type {Boolean}
          * @default true
          */
         active: {
@@ -99,7 +67,7 @@ var Node = cc.Class({
         /**
          * Indicates whether this node is active in the scene.
          * @property activeInHierarchy
-         * @type {boolean}
+         * @type {Boolean}
          */
         activeInHierarchy: {
             get: function () {
@@ -229,9 +197,9 @@ var Node = cc.Class({
      * Returns the component of supplied type if the node has one attached, null if it doesn't.
      * You can also get component in the node by passing in the name of the script.
      *
-     * @function
-     * @param {function|string} typeOrClassName
-     * @returns {cc.Component}
+     * @method getComponent
+     * @param {Function|String} typeOrClassName
+     * @returns {Component}
      */
     getComponent: function (typeOrClassName) {
         if ( !typeOrClassName ) {
@@ -259,9 +227,9 @@ var Node = cc.Class({
     /**
      * Adds a component class to the node. You can also add component to entity by passing in the name of the script.
      *
-     * @function
-     * @param {function|string} typeOrClassName - the constructor or the class name of the component to add
-     * @returns {cc.Component} - the newly added component
+     * @method addComponent
+     * @param {Function|String} typeOrClassName - The constructor or the class name of the component to add
+     * @returns {Component} - The newly added component
      */
     addComponent: function (typeOrClassName) {
         var constructor;
@@ -305,8 +273,8 @@ var Node = cc.Class({
     /**
      * Removes a component identified by the given name or removes the component object given.
      * You can also use component.destroy() if you already have the reference.
-     * @function
-     * @param {String|function|cc.Component} component
+     * @method removeComponent
+     * @param {String|Function|Component} component - The need remove component.
      * @deprecated please destroy the component to remove it.
      */
     removeComponent: function (component) {
@@ -324,7 +292,7 @@ var Node = cc.Class({
 
     /**
      * Removes all components of cc.ENode.
-     * @function
+     * @method removeAllComponents
      */
     removeAllComponents: function () {
         for (var i = 0; i < this._components.length; i++) {

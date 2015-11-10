@@ -37,15 +37,11 @@ var game = require('../CCGame');
  * Quads can be removed in runtime <br />
  * Quads can be re-ordered in runtime <br />
  * The TextureAtlas capacity can be increased or decreased in runtime.</p>
- * @class
- * @extends cc._Class
- *
- * @property {Boolean}  dirty           - Indicates whether or not the array buffer of the VBO needs to be updated.
- * @property {Image}    texture         - Image texture for cc.TextureAtlas.
- * @property {Number}   capacity        - <@readonly> Quantity of quads that can be stored with the current texture atlas size.
- * @property {Number}   totalQuads      - <@readonly> Quantity of quads that are going to be drawn.
- * @property {Array}    quads           - <@readonly> Quads that are going to be rendered
+ * @class TextureAtlas
+ * @extends _Class
+ * @constructor
  */
+
 var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     dirty: false,
     texture: null,
@@ -64,16 +60,10 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
      * <p>Creates a TextureAtlas with an filename and with an initial capacity for Quads. <br />
      * The TextureAtlas capacity can be increased in runtime. </p>
      * Constructor of cc.TextureAtlas
-     * @param {String|cc.Texture2D} fileName
+     * @constructor
+     * @param {String|Texture2D} fileName
      * @param {Number} capacity
-     * @example
-     * 1.
-     * //creates a TextureAtlas with  filename
-     * var textureAtlas = new cc.TextureAtlas("res/hello.png", 3);
-     * 2.
-     * //creates a TextureAtlas with texture
-     * var texture = cc.textureCache.addImage("hello.png");
-     * var textureAtlas = new cc.TextureAtlas(texture, 3);
+     * @example {@link utils/api/cocos/docs/cocos2d/core/textures/TextureAtlas.js}
      */
     ctor: function (fileName, capacity) {
         this._buffersVBO = [];
@@ -87,6 +77,7 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
 
     /**
      * Quantity of quads that are going to be drawn.
+     * @method getTotalQuads
      * @return {Number}
      */
     getTotalQuads: function () {
@@ -95,7 +86,8 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     },
 
     /**
-     * Quantity of quads that can be stored with the current texture atlas size
+     * Quantity of quads that can be stored with the current texture atlas size.
+     * @method getCapacity
      * @return {Number}
      */
     getCapacity: function () {
@@ -103,7 +95,8 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     },
 
     /**
-     * Texture of the texture atlas
+     * Texture of the texture atlas.
+     * @method getTexture
      * @return {Image}
      */
     getTexture: function () {
@@ -111,6 +104,8 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     },
 
     /**
+     * Set texture for texture atlas.
+     * @method setTexture
      * @param {Image} texture
      */
     setTexture: function (texture) {
@@ -118,7 +113,8 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     },
 
     /**
-     * specify if the array buffer of the VBO needs to be updated
+     * specify if the array buffer of the VBO needs to be updated.
+     * @method setDirty
      * @param {Boolean} dirty
      */
     setDirty: function (dirty) {
@@ -126,15 +122,17 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     },
 
     /**
-     * whether or not the array buffer of the VBO needs to be updated
-     * @returns {boolean}
+     * whether or not the array buffer of the VBO needs to be updated.
+     * @method isDirty
+     * @returns {Boolean}
      */
     isDirty: function () {
         return this.dirty;
     },
 
     /**
-     * Quads that are going to be rendered
+     * Quads that are going to be rendered.
+     * @method getQuads
      * @return {Array}
      */
     getQuads: function () {
@@ -142,6 +140,7 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     },
 
     /**
+     * @method setQuads
      * @param {Array} quads
      */
     setQuads: function (quads) {
@@ -206,13 +205,11 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
      * <p>Initializes a TextureAtlas with a filename and with a certain capacity for Quads.<br />
      * The TextureAtlas capacity can be increased in runtime.<br />
      * WARNING: Do not reinitialize the TextureAtlas because it will leak memory. </p>
+     * @method initWithFile
      * @param {String} file
      * @param {Number} capacity
      * @return {Boolean}
-     * @example
-     * //example
-     * var textureAtlas = new cc.TextureAtlas();
-     * textureAtlas.initWithTexture("hello.png", 3);
+     * @example {@link utils/api/cocos/docs/cocos2d/core/textures/initWithFile.js}
      */
     initWithFile: function (file, capacity) {
         // retained in property
@@ -230,14 +227,11 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
      * with an initial capacity for Quads.<br />
      * The TextureAtlas capacity can be increased in runtime.<br />
      * WARNING: Do not reinitialize the TextureAtlas because it will leak memory</p>
+     * @method initWithTexture
      * @param {Image} texture
      * @param {Number} capacity
      * @return {Boolean}
-     * @example
-     * //example
-     * var texture = cc.textureCache.addImage("hello.png");
-     * var textureAtlas = new cc.TextureAtlas();
-     * textureAtlas.initWithTexture(texture, 3);
+     * @example {@link utils/api/cocos/docs/cocos2d/core/textures/initWithTexture.js}
      */
     initWithTexture: function (texture, capacity) {
         cc.assert(texture, cc._LogInfos.TextureAtlas.initWithTexture);
@@ -272,7 +266,8 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     /**
      * <p>Updates a Quad (texture, vertex and color) at a certain index <br />
      * index must be between 0 and the atlas capacity - 1 </p>
-     * @param {cc.V3F_C4B_T2F_Quad} quad
+     * @method updateQuad
+     * @param {V3F_C4B_T2F_Quad} quad
      * @param {Number} index
      */
     updateQuad: function (quad, index) {
@@ -287,7 +282,8 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     /**
      * <p>Inserts a Quad (texture, vertex and color) at a certain index<br />
      * index must be between 0 and the atlas capacity - 1 </p>
-     * @param {cc.V3F_C4B_T2F_Quad} quad
+     * @method insertQuad
+     * @param {V3F_C4B_T2F_Quad} quad
      * @param {Number} index
      */
     insertQuad: function (quad, index) {
@@ -316,6 +312,8 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
      *      index must be between 0 and the atlas capacity - 1                                    <br />
      *      this method doesn't enlarge the array when amount + index > totalQuads                <br />
      * </p>
+     *
+     * @method insertQuads
      * @param {Array} quads
      * @param {Number} index
      * @param {Number} amount
@@ -351,6 +349,7 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     /**
      * <p>Removes the quad that is located at a certain index and inserts it at a new index <br />
      * This operation is faster than removing and inserting in a quad in 2 different steps</p>
+     * @method insertQuadFromIndex
      * @param {Number} fromIndex
      * @param {Number} newIndex
      */
@@ -383,6 +382,7 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     /**
      * <p>Removes a quad at a given index number.<br />
      * The capacity remains the same, but the total number of quads to be drawn is reduced in 1 </p>
+     * @method removeQuadAtIndex
      * @param {Number} index
      */
     removeQuadAtIndex: function (index) {
@@ -401,7 +401,8 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     },
 
     /**
-     * Removes a given number of quads at a given index
+     * Removes a given number of quads at a given index.
+     * @method removeQuadsAtIndex
      * @param {Number} index
      * @param {Number} amount
      */
@@ -425,6 +426,7 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
      * <p>Removes all Quads. <br />
      * The TextureAtlas capacity remains untouched. No memory is freed.<br />
      * The total number of quads to be drawn will be 0</p>
+     * @method removeAllQuads
      */
     removeAllQuads: function () {
         this._quads.length = 0;
@@ -441,6 +443,7 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
      * It returns YES if the resize was successful. <br />
      * If it fails to resize the capacity it will return NO with a new capacity of 0. <br />
      * no used for js</p>
+     * @method resizeCapacity
      * @param {Number} newCapacity
      * @return {Boolean}
      */
@@ -510,7 +513,8 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
 
     /**
      * Used internally by CCParticleBatchNode                                    <br/>
-     * don't use this unless you know what you're doing
+     * don't use this unless you know what you're doing.
+     * @method increaseTotalQuadsWith
      * @param {Number} amount
      */
     increaseTotalQuadsWith: function (amount) {
@@ -518,7 +522,8 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     },
 
     /**
-     * Moves an amount of quads from oldIndex at newIndex
+     * Moves an amount of quads from oldIndex at newIndex.
+     * @method moveQuadsFromIndex
      * @param {Number} oldIndex
      * @param {Number} amount
      * @param {Number} newIndex
@@ -562,7 +567,8 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
 
     /**
      * Ensures that after a realloc quads are still empty                                <br/>
-     * Used internally by CCParticleBatchNode
+     * Used internally by CCParticleBatchNode.
+     * @method fillWithEmptyQuadsFromIndex
      * @param {Number} index
      * @param {Number} amount
      */
@@ -586,6 +592,8 @@ var TextureAtlas = Class.extend(/** @lends cc.TextureAtlas# */{  //WebGL only
     /**
      * <p>Draws n quads from an index (offset). <br />
      * n + start can't be greater than the capacity of the atlas</p>
+     *
+     * @method drawNumberOfQuads
      * @param {Number} n
      * @param {Number} start
      */
@@ -688,5 +696,38 @@ if (cc._renderType === game.RENDER_TYPE_WEBGL) {
     });
 }
 });
+
+/**
+ * Indicates whether or not the array buffer of the VBO needs to be updated.
+ * @property dirty
+ * @type {Boolean}
+ */
+
+/**
+ * Image texture for cc.TextureAtlas.
+ * @property texture
+ * @type {Image}
+ */
+
+/**
+ * Quantity of quads that can be stored with the current texture atlas size.
+ * @property capacity
+ * @type {Number}
+ * @readonly
+ */
+
+/**
+ * Quantity of quads that are going to be drawn.
+ * @property totalQuads
+ * @type {Number}
+ * @readonly
+ */
+
+/**
+ * Quads that are going to be rendered.
+ * @property quads
+ * @type {Array}
+ * @readonly
+ */
 
 cc.TextureAtlas = module.exports = TextureAtlas;

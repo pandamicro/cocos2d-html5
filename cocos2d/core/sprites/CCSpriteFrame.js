@@ -27,6 +27,10 @@
 var EventTarget = require("../event/event-target");
 
 /**
+ * @module cc
+ */
+
+/**
  * <p>
  *    A cc.SpriteFrame has:<br/>
  *      - texture: A cc.Texture2D that will be used by the cc.Sprite<br/>
@@ -34,24 +38,15 @@ var EventTarget = require("../event/event-target");
  *    <br/>
  *    You can modify the frame of a cc.Sprite by doing:<br/>
  * </p>
- * @class
- * @extends cc.Asset
- *
- * @param {String|cc.Texture2D} filename
- * @param {cc.Rect} rect If parameters' length equal 2, rect in points, else rect in pixels
- * @param {Boolean} [rotated] Whether the frame is rotated in the texture
- * @param {cc.Vec2} [offset] The offset of the frame in the texture
- * @param {cc.Size} [originalSize] The size of the frame in the texture
- *
- * @example
- * // 1. Create a cc.SpriteFrame with image path
- * var frame1 = new cc.SpriteFrame("res/grossini_dance.png",cc.rect(0,0,90,128));
- * var frame2 = new cc.SpriteFrame("res/grossini_dance.png",cc.rect(0,0,90,128),false,0,cc.size(90,128));
- *
- * // 2. Create a cc.SpriteFrame with a texture, rect, rotated, offset and originalSize in pixels.
- * var texture = cc.textureCache.addImage("res/grossini_dance.png");
- * var frame1 = new cc.SpriteFrame(texture, cc.rect(0,0,90,128));
- * var frame2 = new cc.SpriteFrame(texture, cc.rect(0,0,90,128),false,0,cc.size(90,128));
+ * @class SpriteFrame
+ * @extends Asset
+ * @constructor
+ * @param {String|Texture2D} filename
+ * @param {Rect} rect - If parameters' length equal 2, rect in points, else rect in pixels
+ * @param {Boolean} [rotated] - Whether the frame is rotated in the texture
+ * @param {Vec2} [offset] - The offset of the frame in the texture
+ * @param {Size} [originalSize] - The size of the frame in the texture
+ * @example {@link utils/api/cocos/docs/cocos2d/core/sprites/SpriteFrame.js}
  */
 cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
     name:'cc.SpriteFrame',
@@ -155,8 +150,9 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Gets the rect of the frame in the texture
-     * @return {cc.Rect}
+     * Gets the rect of the frame in the texture.
+     * @method getRectInPixels
+     * @return {Rect}
      */
     getRectInPixels:function () {
         var locRectInPixels = this._rectInPixels;
@@ -164,8 +160,9 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Sets the rect of the frame in the texture
-     * @param {cc.Rect} rectInPixels
+     * Sets the rect of the frame in the texture.
+     * @method setRectInPixels
+     * @param {Rect} rectInPixels
      */
     setRectInPixels:function (rectInPixels) {
         var rect = this._rectInPixels;
@@ -181,6 +178,7 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
 
     /**
      * Returns whether the sprite frame is rotated in the texture.
+     * @method isRotated
      * @return {Boolean}
      */
     isRotated:function () {
@@ -189,6 +187,7 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
 
     /**
      * Set whether the sprite frame is rotated in the texture.
+     * @method setRotated
      * @param {Boolean} bRotated
      */
     setRotated:function (bRotated) {
@@ -196,8 +195,9 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Returns the rect of the sprite frame in the texture
-     * @return {cc.Rect}
+     * Returns the rect of the sprite frame in the texture.
+     * @method getRect
+     * @return {Rect}
      */
     getRect:function () {
         var locRect = this._rect;
@@ -205,8 +205,9 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Sets the rect of the sprite frame in the texture
-     * @param {cc.Rect} rect
+     * Sets the rect of the sprite frame in the texture.
+     * @method setRect
+     * @param {Rect} rect
      */
     setRect:function (rect) {
         if (!this._rect){
@@ -220,16 +221,18 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Returns the offset of the sprite frame in the texture in pixel
-     * @return {cc.Vec2}
+     * Returns the offset of the sprite frame in the texture in pixel.
+     * @method getOffsetInPixels
+     * @return {Vec2}
      */
     getOffsetInPixels:function () {
         return cc.p(this._offsetInPixels);
     },
 
     /**
-     * Sets the offset of the sprite frame in the texture in pixel
-     * @param {cc.Vec2} offsetInPixels
+     * Sets the offset of the sprite frame in the texture in pixel.
+     * @method setOffsetInPixels
+     * @param {Vec2} offsetInPixels
      */
     setOffsetInPixels:function (offsetInPixels) {
         this._offsetInPixels.x = offsetInPixels.x;
@@ -238,16 +241,18 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Returns the original size of the trimmed image
-     * @return {cc.Size}
+     * Returns the original size of the trimmed image.
+     * @method getOriginalSizeInPixels
+     * @return {Size}
      */
     getOriginalSizeInPixels:function () {
         return cc.size(this._originalSizeInPixels);
     },
 
     /**
-     * Sets the original size of the trimmed image
-     * @param {cc.Size} sizeInPixels
+     * Sets the original size of the trimmed image.
+     * @method setOriginalSizeInPixels
+     * @param {Size} sizeInPixels
      */
     setOriginalSizeInPixels:function (sizeInPixels) {
         this._originalSizeInPixels.width = sizeInPixels.width;
@@ -255,16 +260,18 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Returns the original size of the trimmed image
-     * @return {cc.Size}
+     * Returns the original size of the trimmed image.
+     * @method getOriginalSize
+     * @return {Size}
      */
     getOriginalSize:function () {
         return cc.size(this._originalSize);
     },
 
     /**
-     * Sets the original size of the trimmed image
-     * @param {cc.Size} size
+     * Sets the original size of the trimmed image.
+     * @method setOriginalSize
+     * @param {Size} size
      */
     setOriginalSize:function (size) {
         this._originalSize.width = size.width;
@@ -272,8 +279,9 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Returns the texture of the frame
-     * @return {cc.Texture2D}
+     * Returns the texture of the frame.
+     * @method getTexture
+     * @return {Texture2D}
      */
     getTexture:function () {
         if (this._texture)
@@ -288,8 +296,9 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Sets the texture of the frame, the texture is retained automatically
-     * @param {cc.Texture2D} texture
+     * Sets the texture of the frame, the texture is retained automatically.
+     * @method setTexture
+     * @param {Texture2D} texture
      */
     setTexture:function (texture) {
         if (this._texture !== texture) {
@@ -330,16 +339,18 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Returns the offset of the frame in the texture
-     * @return {cc.Vec2}
+     * Returns the offset of the frame in the texture.
+     * @method getOffset
+     * @return {Vec2}
      */
     getOffset:function () {
         return cc.p(this._offset);
     },
 
     /**
-     * Sets the offset of the frame in the texture
-     * @param {cc.Vec2} offsets
+     * Sets the offset of the frame in the texture.
+     * @method setOffset
+     * @param {Vec2} offsets
      */
     setOffset:function (offsets) {
         this._offset.x = offsets.x;
@@ -347,7 +358,8 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
     },
 
     /**
-     * Clone the sprite frame
+     * Clone the sprite frame.
+     * @method clone
      * @return {SpriteFrame}
      */
     clone:function(){
@@ -361,10 +373,10 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
      * Initializes SpriteFrame with Texture, rect, rotated, offset and originalSize in pixels.<br/>
      * Please pass parameters to the constructor to initialize the sprite, do not call this function yourself.
      * @param {String|cc.Texture2D} texture
-     * @param {cc.Rect} rect if parameters' length equal 2, rect in points, else rect in pixels
+     * @param {Rect} rect - if parameters' length equal 2, rect in points, else rect in pixels
      * @param {Boolean} [rotated=false]
-     * @param {cc.Vec2} [offset=cc.p(0,0)]
-     * @param {cc.Size} [originalSize=rect.size]
+     * @param {Vec2} [offset=cc.p(0,0)]
+     * @param {Size} [originalSize=rect.size]
      * @return {Boolean}
      */
     initWithTexture:function (texture, rect, rotated, offset, originalSize) {

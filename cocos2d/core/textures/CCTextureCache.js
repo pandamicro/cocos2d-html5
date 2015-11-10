@@ -30,8 +30,7 @@ var Texture2D = require('./CCTexture2D');
 
 /**
  * cc.textureCache is a singleton object, it's the global cache for cc.Texture2D
- * @class
- * @name cc.textureCache
+ * @class textureCache
  */
 var textureCache = /** @lends cc.textureCache# */{
     _textures: {},
@@ -56,6 +55,7 @@ var textureCache = /** @lends cc.textureCache# */{
 
     /**
      * Description
+     * @method description
      * @return {String}
      */
     description: function () {
@@ -64,12 +64,11 @@ var textureCache = /** @lends cc.textureCache# */{
 
     /**
      * Returns an already created texture. Returns null if the texture doesn't exist.
+     * @method textureForKey
      * @param {String} textureKeyName
-     * @return {cc.Texture2D|Null}
+     * @return {Texture2D|Null}
      * @deprecated
-     * @example
-     * //example
-     * var key = cc.textureCache.textureForKey("hello.png");
+     * @example {@link utils/api/cocos/docs/cocos2d/core/textures/textureForKey.js}
      */
     textureForKey: function (textureKeyName) {
         cc.log(cc._LogInfos.textureCache.textureForKey);
@@ -78,22 +77,20 @@ var textureCache = /** @lends cc.textureCache# */{
 
     /**
      * Returns an already created texture. Returns null if the texture doesn't exist.
+     * @method getTextureForKey
      * @param {String} textureKeyName
-     * @return {cc.Texture2D|Null}
-     * @example
-     * //example
-     * var key = cc.textureCache.getTextureForKey("hello.png");
+     * @return {Texture2D|Null}
+     * @example {@link utils/api/cocos/docs/cocos2d/core/textures/getTextureForKey.js}
      */
     getTextureForKey: function(textureKeyName){
         return this._textures[textureKeyName] || this._textures[cc.loader.getAliase(textureKeyName)];
     },
 
     /**
+     * @method getKeyByTexture
      * @param {Image} texture
      * @return {String|Null}
-     * @example
-     * //example
-     * var key = cc.textureCache.getKeyByTexture(texture);
+     * @example {@link utils/api/cocos/docs/cocos2d/core/textures/getKeyByTexture.js}
      */
     getKeyByTexture: function (texture) {
         for (var key in this._textures) {
@@ -109,11 +106,10 @@ var textureCache = /** @lends cc.textureCache# */{
     },
 
     /**
+     * @method getTextureColors
      * @param {Image} texture
      * @return {Array}
-     * @example
-     * //example
-     * var cacheTextureForColor = cc.textureCache.getTextureColors(texture);
+     * @example {@link utils/api/cocos/docs/cocos2d/core/textures/getTextureColors.js}
      */
     getTextureColors: function (texture) {
         var image = texture._htmlElementObj;
@@ -136,9 +132,8 @@ var textureCache = /** @lends cc.textureCache# */{
      * In the short term: it will free some resources preventing your app from being killed  <br />
      * In the medium term: it will allocate more resources <br />
      * In the long term: it will be the same</p>
-     * @example
-     * //example
-     * cc.textureCache.removeAllTextures();
+     * @method removeAllTextures
+     * @example {@link utils/api/cocos/docs/cocos2d/core/textures/removeAllTextures.js}
      */
     removeAllTextures: function () {
         var locTextures = this._textures;
@@ -150,11 +145,10 @@ var textureCache = /** @lends cc.textureCache# */{
     },
 
     /**
-     * Deletes a texture from the cache given a texture
+     * Deletes a texture from the cache given a texture.
+     * @method removeTexture
      * @param {Image} texture
-     * @example
-     * //example
-     * cc.textureCache.removeTexture(texture);
+     * @example {@link utils/api/cocos/docs/cocos2d/core/textures/removeTexture.js}
      */
     removeTexture: function (texture) {
         if (!texture)
@@ -170,11 +164,10 @@ var textureCache = /** @lends cc.textureCache# */{
     },
 
     /**
-     * Deletes a texture from the cache given a its key name
+     * Deletes a texture from the cache given a its key name.
+     * @method removeTextureForKey
      * @param {String} textureKeyName
-     * @example
-     * //example
-     * cc.textureCache.removeTexture("hello.png");
+     * @example {@link utils/api/cocos/docs/cocos2d/core/textures/removeTextureForKey.js}
      */
     removeTextureForKey: function (textureKeyName) {
         if (textureKeyName == null)
@@ -189,19 +182,19 @@ var textureCache = /** @lends cc.textureCache# */{
      *  object and it will return it. It will use the filename as a key.<br />
      * Otherwise it will return a reference of a previously loaded image. <br />
      * Supported image extensions: .png, .jpg, .gif</p>
+     * @method addImage
      * @param {String} url
      * @param {Function} cb
      * @param {Object} target
-     * @return {cc.Texture2D}
-     * @example
-     * //example
-     * cc.textureCache.addImage("hello.png");
+     * @return {Texture2D}
+     * @example {@link utils/api/cocos/docs/cocos2d/core/textures/addImage.js}
      */
     addImage: null,
     addImageAsync: null,
 
     /**
-     *  Cache the image data
+     * Cache the image data.
+     * @method cacheImage
      * @param {String} path
      * @param {Image|HTMLImageElement|HTMLCanvasElement} texture
      */
@@ -222,9 +215,10 @@ var textureCache = /** @lends cc.textureCache# */{
      * Otherwise it will return a reference of a previously loaded image<br />
      * The "key" parameter will be used as the "key" for the cache.<br />
      * If "key" is null, then a new texture will be created each time.</p>
+     * @method addUIImage
      * @param {HTMLImageElement|HTMLCanvasElement} image
      * @param {String} key
-     * @return {cc.Texture2D}
+     * @return {Texture2D}
      */
     addUIImage: function (image, key) {
         cc.assert(image, cc._LogInfos.textureCache.addUIImage_2);

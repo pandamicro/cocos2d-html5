@@ -1,8 +1,11 @@
 /**
+ * @module cc
+ */
+
+/**
  * Class for BitmapFont handling.
- *
  * @class BitmapFont
- * @extends Asset
+ * @extends RawAsset
  * @constructor
  */
 var BitmapFont = cc.Class({
