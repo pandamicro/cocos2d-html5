@@ -11,6 +11,10 @@ var SceneGraphHelper = require('../utils/scene-graph-helper');
 var ComponentInSG = cc.Class({
     extends: require('./CCComponent'),
 
+    editor: {
+        executeInEditMode: true
+    },
+
     ctor: function () {
         this._sgNode = null;
     },
@@ -61,5 +65,4 @@ var ComponentInSG = cc.Class({
     }
 });
 
-cc.executeInEditMode(ComponentInSG);
 cc._ComponentInSG = module.exports = ComponentInSG;

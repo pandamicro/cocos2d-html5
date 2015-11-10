@@ -37,6 +37,10 @@ var AudioSource = cc.Class({
     name: 'cc.Audio',
     extends: require('./CCComponent'),
 
+    editor: CC_EDITOR && {
+        menu: 'Audio'
+    },
+
     ctor: function () {
         this.audio = null;
     },

@@ -33,7 +33,7 @@ var Attr = require('./attribute');
 var getTypeChecker = Attr.getTypeChecker;
 var preprocessAttrs = require('./preprocess-attrs');
 
-var BUILTIN_ENTRIES = ['name', 'extends', 'ctor', 'properties', 'statics'];
+var BUILTIN_ENTRIES = ['name', 'extends', 'ctor', 'properties', 'statics', 'editor'];
 
 var TYPO_TO_CORRECT = (CC_EDITOR || CC_TEST) && {
     extend: 'extends',
@@ -754,7 +754,7 @@ function FireClass (options) {
 
     // define functions
     for (var funcName in options) {
-        if (BUILTIN_ENTRIES.indexOf(funcName) !== -1) {
+        if (BUILTIN_ENTRIES.indexOf(funcName) >= 0) {
             continue;
         }
         var func = options[funcName];
@@ -768,6 +768,18 @@ function FireClass (options) {
             }
             else {
                 cc.error('Unknown parameter of %s.%s, property should be defined in "properties" or "ctor"', name, funcName);
+            }
+        }
+    }
+
+    if (CC_EDITOR || CC_TEST) {
+        var editor = options.editor;
+        if (editor) {
+            if ( cc.isChildClassOf(base, cc.Component) ) {
+                cc.Component._registerEditorProps(cls, editor);
+            }
+            else {
+                cc.warn('Can only define "editor" attribute for sub class of Components.');
             }
         }
     }

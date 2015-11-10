@@ -472,8 +472,8 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
 
         // Run an Entity Scene
         if (scene instanceof cc.EScene) {
-            // init scene
-            scene._onBatchCreated();
+            // ensure scene initialized
+            scene._load();
 
             this._scene = scene;
             sgScene = scene._sgNode;
@@ -498,7 +498,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
 
         // Activate
         if (scene instanceof cc.EScene) {
-            scene._onActivated();
+            scene._activate();
         }
     },
 

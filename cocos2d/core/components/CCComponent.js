@@ -200,14 +200,14 @@ var Component = cc.Class({
          */
         uuid: {
             get: function () {
-                var existsId = this._id;
-                if (existsId) {
-                    return existsId;
+                var id = this._id;
+                if (id) {
+                    return id;
                 }
                 if (CC_EDITOR || CC_TEST) {
-                    this._id = getNewId();
-                    cc.engine.attachedObjsForEditor[this._id] = this;
-                    return this._id;
+                    id = this._id = getNewId();
+                    cc.engine.attachedObjsForEditor[id] = this;
+                    return id;
                 }
             },
             visible: false
@@ -520,15 +520,6 @@ var Component = cc.Class({
         }
     },
 
-    statics: {
-        _executeInEditMode: false,
-
-        // This property is only available if _executeInEditMode is true.
-        // If true, the engine will keep updating this node in 60 fps when it is selected,
-        // otherwise, it will update only if necessary
-        _60fpsInEditMode: false,
-    },
-
     _onPreDestroy: function () {
         var i, l, target;
         // ensure onDisable called
@@ -560,55 +551,131 @@ var Component = cc.Class({
     }
 });
 
+// INHERITABLE STATIC MEMBERS
+
+/**
+ * Makes a component execute in edit mode.
+ * By default, all components are only executed in play mode,
+ * which means they will not have their callback functions executed while the Editor is in edit mode.
+ *
+ * @property _executeInEditMode
+ * @type {Boolean}
+ * @default false
+ * @static
+ * @readonly
+ * @private
+ */
+Component._executeInEditMode = false;
+
+/**
+ * This property is only available if _executeInEditMode is true.
+ * If specified, the editor's scene view will keep updating this node in 60 fps when it is selected,
+ * otherwise, it will update only if necessary.
+ *
+ * @property _playOnFocus
+ * @type {Boolean}
+ * @default false
+ * @static
+ * @readonly
+ * @private
+ */
+Component._playOnFocus = false;
+
+// NON-INHERITED STATIC MEMBERS
+
+/**
+ * Specifying the url of the custom html to draw the component in inspector.
+ *
+ * @property _inspector
+ * @type {String}
+ * @default ""
+ * @static
+ * @readonly
+ * @private
+ */
+Object.defineProperty(Component, '_inspector', { value: '', enumerable: false });
+
+/**
+ * Specifying the url of the icon to display in inspector.
+ *
+ * @property _icon
+ * @type {String}
+ * @default ""
+ * @static
+ * @readonly
+ * @private
+ */
+Object.defineProperty(Component, '_icon', { value: '', enumerable: false });
+
+//
+
 Component.prototype.__scriptUuid = '';
 
 cc.Component = module.exports = Component;
 
 // COMPONENT HELPERS
 
-if (CC_EDITOR) {
+if (CC_EDITOR || CC_TEST) {
     cc._componentMenuItems = [];
+
+    Object.defineProperty(Component, '_registerEditorProps', {
+        // use defineProperty to prevent inherited by sub classes
+        value: function (cls, props) {
+            var name = cc.js.getClassName(cls);
+            for (var key in props) {
+                var val = props[key];
+                switch (key) {
+
+                    case 'executeInEditMode':
+                        if (val) {
+                            cls._executeInEditMode = true;
+                        }
+                        break;
+
+                    case 'playOnFocus':
+                        if (val) {
+                            if (props.executeInEditMode) {
+                                cls._playOnFocus = true;
+                            }
+                            else {
+                                cc.warn('The editor property "playOnFocus" should be used with "executeInEditMode" in class "%s".', name);
+                            }
+                        }
+                        break;
+
+                    case 'inspector':
+                        Object.defineProperty(cls, '_inspector', { value: val });
+                        break;
+
+                    case 'icon':
+                        Object.defineProperty(cls, '_icon', { value: val });
+                        break;
+
+                    // {String} menu
+                    // The menu path to register a component to the editors "Component" menu. Eg. "Rendering/Camera"
+                    case 'menu':
+                        break;
+
+                    // {Number} menuPriority
+                    // the order which the menu item are displayed
+                    case 'menuPriority':
+                        if (!props.menu) {
+                            cc.warn('The editor property "menuPriority" should be used with "menu" in class "%s".', name);
+                        }
+                        break;
+
+                    default:
+                        cc.warn('Unknown editor property "%s" in class "%s".', key, name);
+                        break;
+                }
+            }
+            if (props.menu) {
+                cc._componentMenuItems.push({
+                    component: cls,
+                    menuPath: props.menu,
+                    priority: props.menuPriority
+                });
+            }
+        }
+    });
 }
-
-/**
- * Register a component to the editors "Component" menu.
- *
- * @param {function} constructor - the class you want to register, must inherit from Component
- * @param {string} menuPath - the menu path name. Eg. "Rendering/Camera"
- * @param {number} [priority] - the order which the menu item are displayed
- */
-cc.addComponentMenu = function (constructor, menuPath, priority) {
-    if (CC_EDITOR) {
-        if ( !cc.isChildClassOf(constructor, Component) ) {
-            cc.error('cc.addComponentMenu: constructor must inherit from Component');
-            return;
-        }
-        cc._componentMenuItems.push({
-            component: constructor,
-            menuPath: menuPath,
-            priority: priority
-        });
-    }
-};
-
-/**
- * Makes a component execute in edit mode.
- * By default, all components are only executed in play mode,
- * which means they will not have their callback functions executed while the Editor is in edit mode.
- * By calling this function, each component will also have its callback executed in edit mode.
- *
- * @method executeInEditMode
- * @param {Component} constructor - The class you want to register, must inherit from Component.
- * @param {boolean} [prefer60FPS=false] - If true, the scene view will keep updating this entity in 60 fps when it is selected,
- *                         otherwise, it will update only if necessary.
- */
-cc.executeInEditMode = function (constructor, prefer60FPS) {
-    if (CC_EDITOR || CC_TEST) {
-        if ( !cc.isChildClassOf(constructor, Component) ) {
-            cc.error('[cc.executeInEditMode] constructor must inherit from Component');
-            return;
-        }
-        constructor._executeInEditMode = true;
-        constructor._60fpsInEditMode = !!prefer60FPS;
-    }
-};

@@ -35,6 +35,10 @@ var AnimationComponent = cc.Class({
     name: 'cc.AnimationComponent',
     extends: require('./CCComponent'),
 
+    editor: CC_EDITOR && {
+        menu: 'Animation'
+    },
+
     ctor: function () {
         // The actual implement for Animation
         this._animator = null;

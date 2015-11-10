@@ -33,10 +33,10 @@ var DontSave = 1 << 2;
 var EditorOnly  = 1 << 3;
 var Dirty = 1 << 4;
 var DontDestroy = 1 << 5;
-//var NodeSavedAsWrapper = 1 << 6;
-var Destroying = 1 << 9;
-var HideInGame = 1 << 10;
-var HideInEditor = 1 << 11;
+var Destroying = 1 << 6;
+//var RegisteredInEditor = 1 << 8;
+var HideInGame = 1 << 9;
+var HideInEditor = 1 << 10;
 
 var IsOnEnableCalled = 1 << 12;
 var IsOnLoadCalled = 1 << 13;
@@ -45,7 +45,8 @@ var IsOnStartCalled = 1 << 14;
 var Hide = HideInGame | HideInEditor;
 // should not clone or serialize these flags
 var PersistentMask = ~(ToDestroy | Dirty | Destroying | DontDestroy |
-                        IsOnEnableCalled | IsOnLoadCalled | IsOnStartCalled);
+                       IsOnEnableCalled | IsOnLoadCalled | IsOnStartCalled
+                       /*RegisteredInEditor*/);
 
 /**
  * Bit mask that controls object states.
@@ -108,6 +109,9 @@ CCObject.Flags = {
      * @type number
      */
     Hide: Hide,
+
+    //// UUID Registered in editor
+    //RegisteredInEditor: RegisteredInEditor,
 
     // FLAGS FOR COMPONENT
 
