@@ -84,6 +84,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
     _brightState: 0,
     _nonSliceSpriteAnchor: null,
     _textureLoaded:false,
+    _renderingType:1,
 
     _quads:[],
     _quadsDirty : true,
@@ -504,6 +505,13 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
      */
     getPreferredSize : function(){
         return cc.size(this._preferredSize);
+    },
+
+
+    setRenderingType: function(type) {
+        if(this._renderingType == type) return;
+        this._renderingType = type;
+        this._quadsDirty = true;
     },
 
     /**
@@ -1006,6 +1014,39 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
 
     _calculateQuads : function(uv, vertices){
         var color = this._scale9Image.getDisplayedColor();
+        if(this._renderingType == ccui.Scale9Sprite.RenderingType.SIMPLE)
+        {
+            var quad = new cc.V3F_C4B_T2F_Quad();
+            quad._bl.colors = color;
+            quad._br.colors = color;
+            quad._tl.colors = color;
+            quad._tr.colors = color;
+
+            quad._bl.vertices = new cc.Vertex3F(vertices[0].x,vertices[0].y,0);
+            quad._br.vertices = new cc.Vertex3F(vertices[3].x,vertices[0].y,0);
+            quad._tl.vertices = new cc.Vertex3F(vertices[0].x,vertices[3].y,0);
+            quad._tr.vertices = new cc.Vertex3F(vertices[3].x,vertices[3].y,0);
+
+            if (this._spriteFrameRotated)
+            {
+                quad._bl.texCoords = new cc.Tex2F(uv[0].x,uv[0].y);
+                quad._br.texCoords = new cc.Tex2F(uv[0].x,uv[3].y);
+                quad._tl.texCoords = new cc.Tex2F(uv[3].x,uv[0].y);
+                quad._tr.texCoords = new cc.Tex2F(uv[3].x,uv[3].y);
+            }
+            else
+            {
+                quad._bl.texCoords = new cc.Tex2F(uv[0].x,uv[0].y);
+                quad._br.texCoords = new cc.Tex2F(uv[3].x,uv[0].y);
+                quad._tl.texCoords = new cc.Tex2F(uv[0].x,uv[3].y);
+                quad._tr.texCoords = new cc.Tex2F(uv[3].x,uv[3].y);
+
+            }
+            this._quads.push(quad);
+
+            return;
+        }
+
         for(var j = 0; j < 3; ++j) {        //row
             for(var i = 0; i < 3; ++i){     //column
                 var quad = new cc.V3F_C4B_T2F_Quad();
@@ -1120,3 +1161,4 @@ ccui.Scale9Sprite.POSITIONS_TOPLEFT = 6;
 ccui.Scale9Sprite.POSITIONS_BOTTOMRIGHT = 7;
 
 ccui.Scale9Sprite.state = {NORMAL: 0, GRAY: 1};
+ccui.Scale9Sprite.RenderingType = {SIMPLE: 0, SLICE: 1};
