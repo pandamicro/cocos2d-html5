@@ -40,10 +40,6 @@ function setMaxZOrder (node) {
 }
 
 /**
- * @module cc
- */
-
-/**
  * A base internal wrapper for CCNode and CCScene, it will:
  * - the same api with origin cocos2d rendering node (SGNode)
  * - maintains the private _sgNode property which referenced to SGNode

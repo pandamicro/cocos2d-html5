@@ -1,8 +1,4 @@
 /**
- * @module cc
- */
-
-/**
  * Class for sprite atlas handling.
  * @class SpriteAtlas
  * @extends RawAsset

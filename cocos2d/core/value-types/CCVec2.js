@@ -1,7 +1,3 @@
-/**
- * @module cc
- */
-
 var ValueType = require('./CCValueType');
 var JS = require('../platform/js');
 var FireClass = require('../platform/CCClass');
@@ -440,9 +436,7 @@ JS.get(Vec2, 'right', function () {
 cc.Vec2 = Vec2;
 var proto = Vec2.prototype;
 
-/**
- * @module cc
- */
+
 /**
  * The convenience method to create a new {% crosslink Vec2 Vec2 %}
  * @method v2

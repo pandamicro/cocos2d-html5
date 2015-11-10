@@ -1,8 +1,4 @@
 /**
- * @module cc
- */
-
-/**
  * Class for audio data handling.
  * @class AudioClip
  * @extends RawAsset

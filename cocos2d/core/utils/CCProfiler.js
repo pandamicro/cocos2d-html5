@@ -1,8 +1,4 @@
 /**
- * @module cc
- */
-
-/**
  * @class profiler
  */
 cc.profiler = (function () {

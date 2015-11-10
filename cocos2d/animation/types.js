@@ -1,7 +1,3 @@
-/**
- * @module cc
- */
-
 var JS = cc.js;
 var Playable = require('./playable');
 

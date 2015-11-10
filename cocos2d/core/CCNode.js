@@ -28,9 +28,7 @@ var Destroying = Flags.Destroying;
 var DontDestroy = Flags.DontDestroy;
 //var RegisteredInEditor = Flags.RegisteredInEditor;
 
-/**
- * @module cc
- */
+
 
 /**
  * Class of all entities in Fireball scenes.

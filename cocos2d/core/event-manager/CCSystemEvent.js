@@ -1,7 +1,3 @@
-/**
- * @module cc
- */
-
 /****************************************************************************
  Copyright (c) 2011-2012 cocos2d-x.org
  Copyright (c) 2013-2015 Chukong Technologies Inc.
@@ -124,23 +120,23 @@ JS.mixin(EventMouse.prototype, {
         this._y = y;
     },
 
-	/**
-	 * Returns cursor location.
+    /**
+     * Returns cursor location.
      * @method getLocation
-	 * @return {Vec2} location
-	 */
+     * @return {Vec2} location
+     */
     getLocation: function () {
         return {x: this._x, y: this._y};
     },
 
-	/**
-	 * Returns the current cursor location in screen coordinates.
+    /**
+     * Returns the current cursor location in screen coordinates.
      * @method getLocationInView
      * @return {Vec2}
-	 */
-	getLocationInView: function() {
-		return {x: this._x, y: cc.view._designResolutionSize.height - this._y};
-	},
+     */
+    getLocationInView: function() {
+        return {x: this._x, y: cc.view._designResolutionSize.height - this._y};
+    },
 
     _setPrevCursor: function (x, y) {
         this._prevX = x;

@@ -1,7 +1,3 @@
-﻿/**
- * @module cc
- */
-
 var JS = cc.js;
 var CallbacksHandler = require('../platform/callbacks-invoker').CallbacksHandler;
 

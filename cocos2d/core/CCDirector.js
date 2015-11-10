@@ -33,10 +33,6 @@ cc.g_NumberOfDraws = 0;
 //----------------------------------------------------------------------------------------------------------------------
 
 /**
- * @module cc
- */
-
-/**
  * <p>
  *    ATTENTION: USE cc.director INSTEAD OF cc.Director.<br/>
  *    cc.director is a singleton object which manage your game's logic flow.<br/>

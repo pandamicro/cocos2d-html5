@@ -1,7 +1,3 @@
-/**
- * @module cc
- */
-
 var SceneGraphHelper = require('../utils/scene-graph-helper');
 
 /**

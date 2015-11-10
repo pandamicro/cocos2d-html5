@@ -1,9 +1,4 @@
 var RawAsset = require('./CCRawAsset');
-
-/**
- * @module cc
- */
-
 /**
  * Base class for handling assets used in Fireball. This class can be instantiate.
  *

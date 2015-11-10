@@ -1,7 +1,3 @@
-/**
- * @module cc
- */
-
 var ValueType = require('./CCValueType');
 var JS = require('../platform/js');
 

@@ -1,7 +1,3 @@
-/**
- * @module cc
- */
-
 if (cc.sys) return;
 
 /**

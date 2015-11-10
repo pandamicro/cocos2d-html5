@@ -1,8 +1,4 @@
 /**
- * @module cc
- */
-
-/**
  * Class for TTFFont handling.
  * @class TTFFont
  * @extends Asset

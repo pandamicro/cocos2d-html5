@@ -1,8 +1,4 @@
 /**
- * @module cc
- */
-
-/**
  * Class for BitmapFont handling.
  * @class BitmapFont
  * @extends RawAsset
