@@ -1,5 +1,8 @@
 
-var bezier = require('./bezier');
+var bezier = require('./bezier').bezier;
+var bezierByTime = require('./bezier').bezierByTime;
+
+var binarySearch = require('./binary-search');
 
 //
 // 动画数据类，相当于 AnimationClip。
@@ -20,29 +23,6 @@ var AnimCurve = cc.Class({
     sample: function (time, ratio, animator) {}
 });
 
-//
-// Searches the entire sorted Array for an element and returns the zero-based index of the element.
-// @method binarySearch
-// @param {number[]} array
-// @param {number} value
-// @return {number} The zero-based index of item in the sorted Array, if item is found; otherwise, a negative number that is the bitwise complement of the index of the next element that is larger than item or, if there is no larger element, the bitwise complement of array's length.
-//
-function binarySearch (array, value) {
-    var l = 0, h = array.length - 1;
-    while (l <= h) {
-        var m = ((l + h) >> 1);
-        if (array[m] === value) {
-            return m;
-        }
-        if (array[m] > value) {
-            h = m - 1;
-        }
-        else {
-            l = m + 1;
-        }
-    }
-    return ~l;
-}
 
 //
 // 区别于 SampledAnimCurve。
@@ -86,6 +66,35 @@ var DynamicAnimCurve = cc.Class({
         subProps: null
     },
 
+    _calcValue: function (frameIndex, ratio) {
+        var values = this.values;
+        var fromVal = values[frameIndex - 1];
+        var toVal = values[frameIndex];
+
+        // lerp
+        if (typeof fromVal === 'number') {
+            value = fromVal + (toVal - fromVal) * ratio;
+        }
+        else {
+            var lerp = fromVal.lerp;
+            if (lerp) {
+                value = fromVal.lerp(toVal, ratio);
+            }
+            else {
+                // no linear lerp function, just return last frame
+                value = fromVal;
+            }
+        }
+
+        return value;
+    },
+
+    _applyValue: function (target, prop, value) {
+        target[prop] = value;
+    },
+
+    _findFrameIndex: binarySearch,
+
     sample: function (time, ratio, animator) {
         var values = this.values;
         var ratios = this.ratios;
@@ -97,7 +106,7 @@ var DynamicAnimCurve = cc.Class({
 
         // evaluate value
         var value;
-        var index = binarySearch(ratios, ratio);
+        var index = this._findFrameIndex(ratios, ratio);
 
         if (index < 0) {
             index = ~index;
@@ -111,30 +120,15 @@ var DynamicAnimCurve = cc.Class({
             else {
                 var fromRatio = ratios[index - 1];
                 var toRatio = ratios[index];
-                var fromVal = values[index - 1];
-                var toVal = values[index];
                 var type = this.types[index - 1];
                 var ratioBetweenFrames = (ratio - fromRatio) / (toRatio - fromRatio);
 
                 if (Array.isArray(type)) {
                     // bezier curve
-                    ratioBetweenFrames = bezier(type, ratioBetweenFrames);
+                    ratioBetweenFrames = bezierByTime(type, ratioBetweenFrames);
                 }
 
-                // lerp
-                if (typeof fromVal === 'number') {
-                    value = fromVal + (toVal - fromVal) * ratioBetweenFrames;
-                }
-                else {
-                    var lerp = fromVal.lerp;
-                    if (lerp) {
-                        value = fromVal.lerp(toVal, ratioBetweenFrames);
-                    }
-                    else {
-                        // no linear lerp function, just return last frame
-                        value = fromVal;
-                    }
-                }
+                value = this._calcValue(index, ratioBetweenFrames);
             }
         }
         else {
@@ -160,7 +154,7 @@ var DynamicAnimCurve = cc.Class({
             var propName = subProps[subProps.length - 1];
 
             if (subProp) {
-                subProp[propName] = value;
+                this._applyValue(subProp, propName, value);
             }
             else {
                 return;
@@ -168,8 +162,9 @@ var DynamicAnimCurve = cc.Class({
 
             value = mainProp;
         }
+
         // apply value
-        this.target[this.prop] = value;
+        this._applyValue(this.target, this.prop, value);
     }
 });
 
@@ -179,11 +174,26 @@ DynamicAnimCurve.Bezier = function (controlPoints) {
 };
 
 
+var SampledAnimCurve = cc.Class({
+    name: 'cc.SampledAnimCurve',
+    extends: DynamicAnimCurve,
+
+    _findFrameIndex: function (ratios, ratio) {
+        var length = ratios.length - 1;
+        var eachLength = 1 / length;
+
+        var index = (ratio / eachLength) | 0;
+        return index;
+    }
+});
+
 if (CC_TEST) {
     cc._Test.DynamicAnimCurve = DynamicAnimCurve;
+    cc._Test.SampledAnimCurve = SampledAnimCurve;
 }
 
 module.exports = {
     AnimCurve: AnimCurve,
-    DynamicAnimCurve: DynamicAnimCurve
+    DynamicAnimCurve: DynamicAnimCurve,
+    SampledAnimCurve: SampledAnimCurve
 };

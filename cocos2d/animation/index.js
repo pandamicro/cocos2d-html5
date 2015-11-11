@@ -1,5 +1,6 @@
 require('./bezier');
 require('./types');
+require('./motion-path-helper');
 require('./animation-curves');
 require('./animation-clip');
 require('./animators');

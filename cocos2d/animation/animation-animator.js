@@ -1,6 +1,9 @@
 var JS = cc.js;
 var Animator = require('./animators').Animator;
 var DynamicAnimCurve = require('./animation-curves').DynamicAnimCurve;
+var SampledAnimCurve = require('./animation-curves').SampledAnimCurve;
+var sampleMotionPaths = require('./motion-path-helper').sampleMotionPaths;
+var WrapModeMask = require('./types').WrapModeMask;
 
 // The actual animator for Animation Component
 
@@ -22,7 +25,7 @@ p.playState = function (state, startTime) {
     }
     this.playingAnims.push(state);
     state.play();
-    state.time = startTime;
+    state.time = startTime || 0;
     this.play();
 };
 
@@ -93,10 +96,36 @@ function initClipData (root, state) {
     state.speed = clip.speed;
     state.wrapMode = clip.wrapMode;
 
+    if ((state.wrapMode & WrapModeMask.Loop) === WrapModeMask.Loop) {
+        state.repeatCount = Infinity;
+    }
+
     // create curves
 
+    function checkMotionPath(motionPath) {
+        if (!Array.isArray(motionPath)) return false;
+
+        for (var i = 0, l = motionPath.length; i < l; i++) {
+            var controls = motionPath[i];
+
+            if (!Array.isArray(controls) || controls.length !== 6) return false;
+        }
+
+        return true;
+    }
+
     function createPropCurve (target, propPath, keyframes) {
-        var curve = new DynamicAnimCurve();
+        var curve;
+
+        var isMotionPathProp = (target instanceof cc.ENode) && (propPath === 'position');
+        var motionPaths = [];
+        var curve;
+
+        if (isMotionPathProp)
+            curve = new SampledAnimCurve();
+        else
+            curve = new DynamicAnimCurve();
+
         // 缓存目标对象，所以 Component 必须一开始都创建好并且不能运行时动态替换……
         curve.target = target;
 
@@ -126,6 +155,17 @@ function initClipData (root, state) {
             var ratio = keyframe.frame / state.duration;
             curve.ratios.push(ratio);
 
+            if (isMotionPathProp) {
+                var motionPath = keyframe.motionPath;
+
+                if (motionPath && !checkMotionPath(motionPath)) {
+                    cc.error('motion path of target [' + target.name + '] in prop [' + propPath + '] frame [' + j +'] is not valid');
+                    motionPath = null;
+                }
+
+                motionPaths.push(motionPath);
+            }
+
             var curveValue = keyframe.value;
             //if (hasSubProp) {
             //    curveValue = createBatchedProperty(propPath, dotIndex, propValue, curveValue);
@@ -148,6 +188,10 @@ function initClipData (root, state) {
             curve.types.push(DynamicAnimCurve.Linear);
         }
 
+        if (isMotionPathProp) {
+            sampleMotionPaths(motionPaths, curve, clip.duration, clip.sample);
+        }
+
         return curve;
     }
 
@@ -167,8 +211,13 @@ function initClipData (root, state) {
         if (compsData) {
             for (var compName in compsData) {
                 var comp = target.getComponent(compName);
-                var compData = compsData[compName];
 
+                if (!comp) {
+                    cc.error('Can\'t get component [' + compName + '] of target [' + target.name +']');
+                    continue;
+                }
+
+                var compData = compsData[compName];
                 for (var propPath in compData) {
                     var data = compData[propPath];
                     var curve = createPropCurve(comp, propPath, data);
@@ -187,8 +236,13 @@ function initClipData (root, state) {
 
     for (var namePath in childrenCurveDatas) {
         var target = cc.find(namePath, root);
-        var childCurveDatas = childrenCurveDatas[namePath];
 
+        if (!target) {
+            cc.error('Can\'t find child [' + namePath + '] of [' + root.name +']');
+            continue;
+        }
+
+        var childCurveDatas = childrenCurveDatas[namePath];
         createTargetCurves(target, childCurveDatas);
     }
 }
