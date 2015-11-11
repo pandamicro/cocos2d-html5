@@ -77,7 +77,7 @@ var AnimationClip = cc.Class({
     //         },
     //         'hello': {
     //             props: {
-    //                 motionPath: [
+    //                 position: [
     //                     {
     //                         frame: 0,
     //                         value: [0,0],
