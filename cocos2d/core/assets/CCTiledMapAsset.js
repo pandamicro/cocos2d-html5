@@ -1,8 +1,4 @@
 /**
- * @module cc
- */
-
-/**
  * Class for tiled map asset handling.
  * @class TiledMapAsset
  * @extends RawAsset

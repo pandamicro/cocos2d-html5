@@ -73,9 +73,6 @@ var _doSendEvent = function (owner, event) {
         owner._bubblingListeners.invoke(event);
     }
 };
-/**
- * @module cc
- */
 
 /**
  * EventTarget is an object to which an event is dispatched when something has occurred.

@@ -1,7 +1,3 @@
-/**
- * @module cc
- */
-
 require('../platform/CCObject');
 require('../CCNode');
 

@@ -1,7 +1,3 @@
-/**
- * @module cc
- */
-
 /****************************************************************************
  Copyright (c) 2011-2012 cocos2d-x.org
  Copyright (c) 2013-2014 Chukong Technologies Inc.
@@ -208,7 +204,7 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
      * you need to manually invoke release function when you think this object is no longer needed, otherwise, there will be memory learks.<br/>
      * retain and release function call should be paired in developer's game code.</p>
      *
-     * @module retain
+     * @method retain
      * @see cc.EventListener#release
      */
     retain:function () {
@@ -224,7 +220,7 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
      * you need to manually invoke release function when you think this object is no longer needed, otherwise, there will be memory learks.<br/>
      * retain and release function call should be paired in developer's game code.</p>
      *
-     * @module release
+     * @method release
      * @see cc.EventListener#retain
      */
     release:function () {
@@ -451,7 +447,7 @@ cc._EventListenerTouchAllAtOnce.create = function(){
 
 /**
  * Create a EventListener object by json object
- * @module create
+ * @method create
  * @static
  * @param {Object} argObj a json object
  * @returns {EventListener}

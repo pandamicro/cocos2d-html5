@@ -1,7 +1,3 @@
-/**
- * @module cc
- */
-
 /****************************************************************************
  Copyright (c) 2011-2012 cocos2d-x.org
  Copyright (c) 2013-2015 Chukong Technologies Inc.
@@ -109,7 +105,7 @@ cc.Event.prototype = {
 
     /**
      * Reset the event for being stored in the object pool.
-     * @module unuse
+     * @method unuse
      * @returns {String}
      */
     unuse: function () {
@@ -124,7 +120,7 @@ cc.Event.prototype = {
 
     /**
      * Reuse the event for being used again by the object pool.
-     * @module reuse
+     * @method reuse
      * @returns {String}
      */
     reuse: function (type, bubbles) {
@@ -142,7 +138,7 @@ cc.Event.prototype = {
 
     /**
      * Stops propagation for current event.
-     * @module stopPropagation
+     * @method stopPropagation
      */
     stopPropagation: function () {
         this._propagationStopped = true;
@@ -151,7 +147,7 @@ cc.Event.prototype = {
     /**
      * Stops propagation for current event immediately, 
      * the event won't even be dispatched to the listeners attached in the current target.
-     * @module stopPropagationImmediate
+     * @method stopPropagationImmediate
      */
     stopPropagationImmediate: function () {
         this._propagationImmediateStopped = true;
@@ -159,7 +155,7 @@ cc.Event.prototype = {
 
     /**
      * Checks whether the event has been stopped.
-     * @module isStopped
+     * @method isStopped
      * @returns {Boolean}
      */
     isStopped: function () {
@@ -172,7 +168,7 @@ cc.Event.prototype = {
      *     note: It only be available when the event listener is associated with node.                <br/>
      *          It returns 0 when the listener is associated with fixed priority.
      * </p>
-     * @module getCurrentTarget
+     * @method getCurrentTarget
      * @returns {ENode}  The target with which the event associates.
      */
     getCurrentTarget: function () {
@@ -181,7 +177,7 @@ cc.Event.prototype = {
     
     /**
      * Gets the event type.
-     * @module getType
+     * @method getType
      * @returns {String}
      */
     getType: function () {

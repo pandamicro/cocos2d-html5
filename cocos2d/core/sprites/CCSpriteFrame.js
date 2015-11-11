@@ -26,9 +26,7 @@
 
 var EventTarget = require("../event/event-target");
 
-/**
- * @module cc
- */
+
 
 /**
  * <p>

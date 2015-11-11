@@ -1,8 +1,4 @@
 /**
- * @module cc
- */
-
-/**
  * Class for scene handling.
  * @class Scene
  * @extends Asset

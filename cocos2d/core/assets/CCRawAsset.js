@@ -1,9 +1,4 @@
 var CCObject = require('../platform/CCObject');
-
-/**
- * @module cc
- */
-
 /**
  * The base class for registering asset types.
  *

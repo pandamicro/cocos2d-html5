@@ -1,8 +1,4 @@
 /**
- * @module cc
- */
-
-/**
  * Async Pool class, a helper of cc.async
  * @class AsyncPool
  * @constructor

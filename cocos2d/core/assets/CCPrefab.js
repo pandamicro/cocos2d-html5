@@ -8,10 +8,6 @@ function visitWrapper (wrapper, visitor) {
 }
 
 /**
- * @module cc
- */
-
-/**
  * Class for prefab handling.
  * @class Prefab
  * @extends Asset

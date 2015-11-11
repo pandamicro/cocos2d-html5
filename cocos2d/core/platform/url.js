@@ -1,8 +1,4 @@
 /**
- * @module cc
- */
-
-/**
  * @class url
  * @static
  */

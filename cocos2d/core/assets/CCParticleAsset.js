@@ -1,8 +1,4 @@
 /**
- * @module cc
- */
-
-/**
  * Class for particle asset handling.
  * @class ParticleAsset
  * @extends RawAsset

@@ -1,10 +1,6 @@
 if (cc.loader) return;
 
 /**
- * @module cc
- */
-
-/**
  * Loader for resource loading process. It's a singleton object.
  * @class loader
  * @static

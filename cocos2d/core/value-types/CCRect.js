@@ -1,7 +1,3 @@
-/**
- * @module cc
- */
-
 var ValueType = require('./CCValueType');
 var JS = require('../platform/js');
 
@@ -243,9 +239,7 @@ proto.containsRect = function (rect) {
 cc.Rect = Rect;
 
 
-/**
- * @module cc
- */
+
 /**
  * The convenience method to create a new Rect.
  * @method rect

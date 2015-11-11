@@ -1,8 +1,4 @@
 /**
- * @module cc
- */
-
-/**
  * Class for sprite animation asset handling.
  * @class SpriteAnimationAsset
  * @extends Asset
