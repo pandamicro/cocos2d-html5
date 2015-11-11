@@ -63,8 +63,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         _cascadeOpacityEnabled: true,
         _cascadeColorEnabled: false,
         _parent: null,
-        _anchorPoint: cc.p(0, 0),
-        _contentSize: cc.size(0, 0),
+        _anchorPoint: cc.p(0.5, 0.5),
+        _contentSize: cc.size(100, 100),
         _children: [],
         _rotationX: 0,
         _rotationY: 0.0,
@@ -422,6 +422,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
                 this._sgNode.opacity = value;
                 this._onColorChanged();
             },
+            range: [0, 255]
         },
 
         /**
@@ -489,7 +490,9 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
 
         var sgNode = this._sgNode = new cc.Node();
         sgNode.retain();
-        sgNode.cascadeOpacity = true;
+        if (!cc.game._isCloning) {
+            sgNode.cascadeOpacity = true;
+        }
     },
 
     // ABSTRACT INTERFACES
@@ -1162,15 +1165,17 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         return false;
     },
 
-    // The deserializer for sgNode which will be called before creating component
+    // The deserializer for sgNode which will be called before creating components
     _onBatchCreated: function () {
         var sgNode = this._sgNode;
         sgNode.setOpacity(this._opacity);
         sgNode.setColor(this._color);
         sgNode.setCascadeOpacityEnabled(this._cascadeOpacityEnabled);
         sgNode.setCascadeColorEnabled(this._cascadeColorEnabled);
+        /* DISABLE: unused in SGNode
         sgNode.setAnchorPoint(this._anchorPoint);
         sgNode.setContentSize(this._contentSize);
+        */
         sgNode.setRotationX(this._rotationX);
         sgNode.setRotationY(this._rotationY);
         sgNode.setScale(this._scaleX, this._scaleY);

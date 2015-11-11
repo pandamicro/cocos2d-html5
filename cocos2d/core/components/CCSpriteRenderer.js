@@ -25,7 +25,7 @@
 /**
  * Renders a sprite in the scene.
  * @class SpriteRenderer
- * @extends CCComponentInSG
+ * @extends _ComponentInSG
  */
 var SpriteRenderer = cc.Class({
     name: 'cc.Sprite',
