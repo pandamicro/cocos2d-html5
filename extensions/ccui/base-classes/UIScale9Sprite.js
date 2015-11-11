@@ -52,7 +52,7 @@ EventTarget = require("../cocos2d/core/event/event-target");
  */
 
 ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
-    _spritesGenerated:false,
+    _textureInited:false,
     _spriteRect: null,
     _spriteFrameRotated:false,
     _capInsetsInternal:null,
@@ -90,8 +90,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
     _quadsDirty : true,
 
     ctor: function(file, rect, capInsets) {
-        var self = this;
-        cc.Node.prototype.ctor.call(self);
+        cc.Node.prototype.ctor.call(this);
         this._nonSliceSpriteAnchor = cc.p(0.5,0.5);
         this._originalSize = cc.size(0,0);
         this._preferredSize = cc.rect(0,0,0,0);
@@ -107,7 +106,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
             }
             else{
                 var frame = cc.spriteFrameCache.getSpriteFrame(file);
-                if(frame != null){
+                if(frame){
                     this.initWithSpriteFrame(frame, rect);
                 }
                 else
@@ -176,7 +175,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
 
         this._capInsetsInternal = capInsets;
         this._textureLoaded = false;
-        var ontextureLoadedCallback = function () {
+        var _onTextureLoadedCallback = function () {
             this._spriteFrameRotated = spriteFrame.isRotated();
             this._textureLoaded = true;
             var sprite = cc.Sprite.createWithSpriteFrame(spriteFrame);
@@ -204,23 +203,23 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
             //
             this._applyBlendFunc();
             this.setState(this._brightState);
-            if (this._spritesGenerated)
+            if (this._textureInited)
             {
                 // Restore color and opacity
                 this.setOpacity(opacity);
                 this.setColor(color);
             }
-            this._spritesGenerated = true;
+            this._textureInited = true;
             //notify quads need to be rebuild
             this._quadsDirty = true;
         };
 
         if (!locLoaded) {
 
-            spriteFrame.once("load", ontextureLoadedCallback, this);
+            spriteFrame.once("load", _onTextureLoadedCallback, this);
         }
         else {
-            ontextureLoadedCallback.call(this);
+            _onTextureLoadedCallback.call(this);
         }
     },
 
@@ -242,7 +241,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
 
         var frame = cc.spriteFrameCache.getSpriteFrame(spriteFrameName);
 
-        if (frame == null) {
+        if (!frame) {
             cc.log("ccui.Scale9Sprite.initWithSpriteFrameName(): can't find the sprite frame by spriteFrameName");
             return false;
         }
@@ -265,7 +264,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
      * @return True if initializes success, false otherwise.
      */
     init : function(sprite,rect,rotated,offset,originalSize,capInsets){
-        if(sprite == null) return true;
+        if(sprite === null) return true;
 
         sprite = sprite || null;
         rect = rect || cc.rect(0,0,0,0);
@@ -355,13 +354,13 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         this._capInsetsInternal = capInsets;
         this._textureLoaded = false;
 
-        if(sprite == null){
+        if(sprite === null){
             this._quadsDirty = true;
             return true;
         }
 
         var textureloaded = sprite.textureLoaded();
-        var onLoadedCallBack = function() {
+        var _onTextureLoadedCallback = function() {
             //do
             this._textureLoaded = true;
             var opacity = this.getOpacity();
@@ -388,23 +387,23 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
 
             this._applyBlendFunc();
             this.setState(this._brightState);
-            if (this._spritesGenerated)
+            if (this._textureInited)
             {
                 // Restore color and opacity
                 this.setOpacity(opacity);
                 this.setColor(color);
             }
-            this._spritesGenerated = true;
+            this._textureInited = true;
             this._quadsDirty = true;
         };
 
         if(textureloaded) {
-            onLoadedCallBack.call(this);
+            _onTextureLoadedCallback.call(this);
         }
         else {
             var texture = sprite.getTexture();
             if(texture)
-                texture.once("load",onLoadedCallBack, this);
+                texture.once("load",_onTextureLoadedCallback, this);
         }
 
         return true;
@@ -450,7 +449,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         cc.Node.prototype.setAnchorPoint.call(this, anchorPoint);
         if (!this._scale9Enabled)
         {
-            if (this._scale9Image != null)
+            if (this._scale9Image !== null)
             {
                 this._nonSliceSpriteAnchor = anchorPoint;
                 this._scale9Image.setAnchorPoint(anchorPoint);
@@ -638,36 +637,6 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         }
 
         this._quadsDirty = true;
-
-        //we must invalide the transform when toggling scale9enabled
-        //this._transformUpdated = this._transformDirty = this._inverseDirty = true;
-        //
-        //if (this._scale9Enabled)
-        //{
-        //    if (this._scale9Image)
-        //    {
-        //        this.updateWithSprite(this._scale9Image,
-        //            this._spriteRect,
-        //            this._spriteFrameRotated,
-        //            cc.p(0,0),
-        //            this._originalSize,
-        //            this._capInsetsInternal);
-        //    }
-        //}
-        //else
-        //{
-        //    if (this._scale9Image)
-        //    {
-        //        //todo verify this code
-        //        //var quad = this._scale9Image->getQuad();
-        //        //PolygonInfo polyInfo;
-        //        //polyInfo.setQuad(&quad);
-        //        //_scale9Image->setPolygonInfo(polyInfo);
-        //    }
-        //
-        //}
-        //
-        //this._adjustScale9ImagePosition();
     },
 
     /**
@@ -754,12 +723,8 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         cc.Node.prototype.setScaleY.call(this,scaleY);
     },
 
-    setScale : function(scale){
-        this.setScaleX(scale);
-        this.setScaleY(scale);
-    },
-
     setScale : function(scaleX, scaleY){
+        if(scaleY === undefined) scaleY = scaleX;
         this.setScaleX(scaleX);
         this.setScaleY(scaleY);
     },
@@ -833,7 +798,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
 
     //calculate the quads used for scale 9 rendering.
 
-    _createSlicedSprites : function(){
+    _buildQuads : function(){
         if (this._scale9Enabled)
         {
             var tex = null;
@@ -869,7 +834,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         }
     },
 
-    _cleanupSlicedSprites : function(){
+    _cleanupQuads : function(){
         this._quads = [];
     },
 

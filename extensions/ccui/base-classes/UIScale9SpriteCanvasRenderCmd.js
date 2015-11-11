@@ -93,8 +93,8 @@
                 }
             }
             if(node._quadsDirty){
-                node._cleanupSlicedSprites();
-                node._createSlicedSprites();
+                node._cleanupQuads();
+                node._buildQuads();
                 node._quadsDirty = false;
             }
 
