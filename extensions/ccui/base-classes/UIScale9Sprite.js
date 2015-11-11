@@ -419,7 +419,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
      * @param capInsets The values to use for the cap insets.
      */
     setSpriteFrame : function(spriteFrame, capInsets){
-        var sprite = cc.sprite.createWithTexture(spriteFrame.getTexture());
+        var sprite = cc.Sprite.createWithTexture(spriteFrame.getTexture());
         this.updateWithSprite(sprite,
             spriteFrame.getRect(),
             spriteFrame.isRotated(),
@@ -428,10 +428,10 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
             capInsets);
 
         // Reset insets
-        this._insetLeft = capInsets.origin.x;
-        this._insetTop = capInsets.origin.y;
-        this._insetRight = this._originalSize.width - this._insetLeft - capInsets.size.width;
-        this._insetBottom = this._originalSize.height - this._insetTop - capInsets.size.height;
+        this._insetLeft = capInsets.x;
+        this._insetTop = capInsets.y;
+        this._insetRight = this._originalSize.width - this._insetLeft - capInsets.width;
+        this._insetBottom = this._originalSize.height - this._insetTop - capInsets.height;
     },
 
     // overrides
