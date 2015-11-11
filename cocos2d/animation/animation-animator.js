@@ -1,7 +1,7 @@
 var JS = cc.js;
 var Animator = require('./animators').Animator;
 var DynamicAnimCurve = require('./animation-curves').DynamicAnimCurve;
-var MotionPathCurve = require('./animation-curves').MotionPathCurve;
+var SampledAnimCurve = require('./animation-curves').SampledAnimCurve;
 var sampleMotionPaths = require('./motion-path-helper').sampleMotionPaths;
 var WrapModeMask = require('./types').WrapModeMask;
 
@@ -117,10 +117,12 @@ function initClipData (root, state) {
     function createPropCurve (target, propPath, keyframes) {
         var curve;
 
-        var isMotionPathProp = (target instanceof cc.ENode) && (propPath === 'motionPath');
+        var isMotionPathProp = (target instanceof cc.ENode) && (propPath === 'position');
+        var motionPaths = [];
+        var curve;
 
         if (isMotionPathProp)
-            curve = new MotionPathCurve();
+            curve = new SampledAnimCurve();
         else
             curve = new DynamicAnimCurve();
 
@@ -161,7 +163,7 @@ function initClipData (root, state) {
                     motionPath = null;
                 }
 
-                curve.motionPaths.push(motionPath);
+                motionPaths.push(motionPath);
             }
 
             var curveValue = keyframe.value;
@@ -187,7 +189,7 @@ function initClipData (root, state) {
         }
 
         if (isMotionPathProp) {
-            sampleMotionPaths(curve, clip.duration, clip.sample);
+            sampleMotionPaths(motionPaths, curve, clip.duration, clip.sample);
         }
 
         return curve;

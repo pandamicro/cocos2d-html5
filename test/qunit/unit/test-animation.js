@@ -285,7 +285,7 @@ test('initClipData', function () {
     clip._duration = 10;
     clip.curveData = {
         props: {
-            position: [
+            pos: [
                 { frame: 0, value: v2(50, 100) },
                 { frame: 5, value: v2(100, 75) },
                 { frame: 10, value: v2(100, 50) }
@@ -313,7 +313,7 @@ test('initClipData', function () {
         paths: {
             'bar': {
                 props: {
-                    position: [
+                    pos: [
                         { frame: 0, value: v2(50, 100) },
                         { frame: 5, value: v2(100, 75) },
                         { frame: 10, value: v2(100, 50) },
@@ -342,7 +342,7 @@ test('initClipData', function () {
 
     strictEqual(state.curves.length, 6, 'should create 6 curve');
     strictEqual(posCurve.target, entity, 'target of posCurve should be transform');
-    strictEqual(posCurve.prop, 'position', 'propName of posCurve should be position');
+    strictEqual(posCurve.prop, 'pos', 'propName of posCurve should be pos');
     strictEqual(scaleCurveX.target, entity, 'target of scaleCurve should be transform');
     strictEqual(scaleCurveX.prop, 'scale', 'propName of scaleCurve should be scale');
     strictEqual(colorCurve.target, renderer, 'target of colorCurve should be sprite renderer');
@@ -408,33 +408,52 @@ test('sampleMotionPaths', function () {
     var sampleMotionPaths = cc._Test.sampleMotionPaths;
 
     var data = {
-        prop: 'motionPath',
+        prop: 'position',
         ratios: [
-            0.2,
-            0.7
+            0,
+            0.198,
+            1
         ],
         values: [
+            [0, 480],
             [0, 0],
             [640, 480]
         ],
         types: [
             null,
-            null
-        ],
-        motionPaths: [
-            [[320, 240, 0, 240, 640, 240], [640, 0, 400, 0, 1000, 0]],
+            null,
             null
         ]
     };
 
-    sampleMotionPaths(data, 2, 100);
+    var motionPaths = [
+        null,
+        [[320, 240, 0, 240, 640, 240], [640, 0, 400, 0, 1000, 0]],
+        null
+    ];
 
-    var motionPath = data.motionPaths[0];
-    strictEqual(motionPath.length, 100, 'motionPath length should be 100');
-    strictEqual(motionPath[0] instanceof cc.Vec2, true, 'motionPath item should be cc.Vec2');
+    sampleMotionPaths(motionPaths, data, 2, 60);
 
-    var middlePoint = motionPath[50];
-    close(middlePoint.x, 523.9331134718055, 0.0001, 'middlePoint.x should equal value');
-    close(middlePoint.y, 55.549144506852244, 0.0001, 'middlePoint.x should equal value');
+    var values = data.values;
+    var ratios = data.ratios;
+
+    strictEqual(values.length, 120 + 1, 'motionPath length should be 120');
+    strictEqual(values[0] instanceof cc.Vec2, true, 'motionPath item should be cc.Vec2');
+
+    close(values[0].x, 0, 0.0001, 'value[0].x should equal value');
+    close(values[0].y, 480, 0.0001, 'value[0].y should equal value');
+
+    close(values[120].x, 640, 0.0001, 'value[119].x should equal value');
+    close(values[120].y, 480, 0.0001, 'value[119].x should equal value');
+
+    var index = ( (0.198 / (1/120)) | 0 ) + 1;
+    close(values[index].x, 0.1327874, 0.0001, 'value[index].x should equal value');
+    close(values[index].y, 3.8064457, 0.0001, 'value[index].x should equal value');
+
+    var betweenRatio = 1 / (values.length - 1);
+
+    for (var i = 0; i < values.length - 1; i++) {
+        close(ratios[i + 1] - ratios[i], betweenRatio, 0.0001, 'betweenRatio should be same');
+    }
 });
 

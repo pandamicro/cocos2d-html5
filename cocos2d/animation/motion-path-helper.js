@@ -188,7 +188,7 @@ Bezier.prototype.getUtoTmapping = function ( u, distance ) {
 };
 
 
-function sampleMotionPaths (data, duration, fps) {
+function sampleMotionPaths (motionPaths, data, duration, fps) {
 
     function createControlPoints(array) {
         if (array instanceof cc.Vec2) {
@@ -213,76 +213,111 @@ function sampleMotionPaths (data, duration, fps) {
         };
     }
 
-    var i, l;
-    var motionPaths = data.motionPaths;
     var values = data.values;
 
-    // convert value from array to v2
-    for (i = 0, l = values.length; i < l; i++) {
-        var value = values[i];
-        values[i] = v2(value[0], value[1]);
+    values = values.map(function (value) {
+        return v2(value[0], value[1]);
+    });
+
+    var types = data.types;
+    var ratios = data.ratios;
+
+    var newValues = data.values = [];
+    var newTypes = data.types = [];
+    var newRatios = data.ratios = [];
+
+    function addNewDatas (value, type, ratio) {
+        newValues.push(value);
+        newTypes.push(type);
+        newRatios.push(ratio);
     }
 
+    // ensure every ratio section's length is the same
+    var startRatioOffset = 0;
+
     // do not need to compute last path
-    for (i = 0, l = motionPaths.length; i < l-1; i++) {
+    for (var i = 0, l = motionPaths.length; i < l-1; i++) {
         var motionPath = motionPaths[i];
 
-        if (!motionPath) continue;
-
-        var ratio = data.ratios[i];
-        var nextRatio = data.ratios[i + 1];
+        var ratio = ratios[i];
+        var nextRatio = ratios[i + 1];
+        var betweenRatio = nextRatio - ratio;
 
         var value = values[i];
         var nextValue = values[i + 1];
 
-        var type = data.types[i];
+        var type = types[i];
 
-        var points = [];
-        points.push(createControlPoints(value));
-
-        for (var j = 0, ml = motionPath.length; j < ml; j++) {
-            var controlPoints = createControlPoints(motionPath[j]);
-            points.push(controlPoints);
-        }
-
-        points.push(createControlPoints(nextValue));
-
-        // create Curve to compute beziers
-        var curve = new Curve(points);
-        curve.computeBeziers();
-
-        // sample beziers
         var results = [];
-        var progress = 0;
-        var bezierIndex = 0;
-        var speed = 1 / ((nextRatio - ratio) * duration * fps);
-        var progresses = curve.progresses;
+        var progress = startRatioOffset / betweenRatio;
+        var speed = 1 / (betweenRatio * duration * fps);
 
-        while (progress <= 1) {
-            var finalProgress = progress;
+        if (motionPath) {
+            var points = [];
+            points.push(createControlPoints(value));
 
-            if (Array.isArray(type)) {
-                // bezier curve
-                finalProgress = bezierByTime(type, finalProgress);
+            for (var j = 0, l2 = motionPath.length; j < l2; j++) {
+                var controlPoints = createControlPoints(motionPath[j]);
+                points.push(controlPoints);
             }
 
-            var bezierIndex = binarySearch(progresses, finalProgress);
-            if (bezierIndex < 0) bezierIndex = ~bezierIndex;
+            points.push(createControlPoints(nextValue));
 
-            finalProgress -= bezierIndex > 0 ? progresses[bezierIndex - 1] : 0;
-            finalProgress = finalProgress / curve.ratios[bezierIndex];
+            // create Curve to compute beziers
+            var curve = new Curve(points);
+            curve.computeBeziers();
 
-            var pos = curve.beziers[bezierIndex].getPointAt(finalProgress);
-            results.push(pos);
+            // sample beziers
+            var progresses = curve.progresses;
 
-            progress += speed;
+            while ( 1 - progress > Number.EPSILON) {
+                var finalProgress = progress;
+
+                if (Array.isArray(type)) {
+                    // bezier curve
+                    finalProgress = bezierByTime(type, finalProgress);
+                }
+
+                var bezierIndex = binarySearch(progresses, finalProgress);
+                if (bezierIndex < 0) bezierIndex = ~bezierIndex;
+
+                finalProgress -= bezierIndex > 0 ? progresses[bezierIndex - 1] : 0;
+                finalProgress = finalProgress / curve.ratios[bezierIndex];
+
+                var pos = curve.beziers[bezierIndex].getPointAt(finalProgress);
+                results.push(pos);
+
+                progress += speed;
+            }
+
+        }
+        else {
+            while ( 1 - progress > Number.EPSILON) {
+                var finalProgress = progress;
+
+                if (Array.isArray(type)) {
+                    // bezier curve
+                    finalProgress = bezierByTime(type, finalProgress);
+                }
+
+                results.push(value.lerp(nextValue, finalProgress));
+
+                progress += speed;
+            }
         }
 
-        results.type = type;
-        data.types[i] = DynamicAnimCurve.Linear;
+        for (var j = 0, l2 = results.length; j < l2; j++) {
+            var newRatio = ratio + startRatioOffset + speed * j * betweenRatio;
+            addNewDatas(results[j], DynamicAnimCurve.Linear, newRatio);
+        }
 
-        motionPaths[i] = results;
+        if (Math.abs(progress - 1) > Number.EPSILON) // progress > 1
+            startRatioOffset = (progress - 1) * betweenRatio;
+        else
+            startRatioOffset = 0;
     }
+
+    addNewDatas(values[values.length - 1], DynamicAnimCurve.Linear, 1);
 }
 
 if (CC_TEST) {
@@ -291,4 +326,4 @@ if (CC_TEST) {
 
 module.exports = {
     sampleMotionPaths: sampleMotionPaths
-}
+};

@@ -93,6 +93,8 @@ var DynamicAnimCurve = cc.Class({
         target[prop] = value;
     },
 
+    _findFrameIndex: binarySearch,
+
     sample: function (time, ratio, animator) {
         var values = this.values;
         var ratios = this.ratios;
@@ -104,7 +106,7 @@ var DynamicAnimCurve = cc.Class({
 
         // evaluate value
         var value;
-        var index = binarySearch(ratios, ratio);
+        var index = this._findFrameIndex(ratios, ratio);
 
         if (index < 0) {
             index = ~index;
@@ -172,60 +174,26 @@ DynamicAnimCurve.Bezier = function (controlPoints) {
 };
 
 
-var MotionPathCurve = cc.Class({
-    name: 'cc.MotionPathCurve',
+var SampledAnimCurve = cc.Class({
+    name: 'cc.SampledAnimCurve',
     extends: DynamicAnimCurve,
 
-    properties: {
-
-        // @property motionPaths
-        // @param {object[]}
-        // Each array item with three control values:
-        // [point, point-in, point-out]
-        motionPaths: []
-    },
-
-    _calcValue: function (frameIndex, ratio) {
-        var motionPath = this.motionPaths[frameIndex - 1];
-
-        // if no motion path, lerp as normal number
-        if (!motionPath) {
-            var values = this.values;
-            var fromVal = values[frameIndex - 1];
-            var toVal = values[frameIndex];
-
-            return fromVal.lerp(toVal, ratio);
-        }
-
-        var length = motionPath.length - 1;
-        var value;
-
+    _findFrameIndex: function (ratios, ratio) {
+        var length = ratios.length - 1;
         var eachLength = 1 / length;
 
-        var index = (ratio / eachLength) | 0 + 1;
-        if (index === length) return motionPath[index];
-
-        var innerRatio = ratio % eachLength;
-
-        var from = motionPath[index - 1];
-        var to = motionPath[index];
-        value = from.lerp(to, innerRatio);
-
-        return value;
-    },
-
-    _applyValue: function (target, prop, value) {
-        target.setPosition(value);
+        var index = (ratio / eachLength) | 0;
+        return index;
     }
 });
 
 if (CC_TEST) {
     cc._Test.DynamicAnimCurve = DynamicAnimCurve;
-    cc._Test.MotionPathCurve = MotionPathCurve;
+    cc._Test.SampledAnimCurve = SampledAnimCurve;
 }
 
 module.exports = {
     AnimCurve: AnimCurve,
     DynamicAnimCurve: DynamicAnimCurve,
-    MotionPathCurve: MotionPathCurve
+    SampledAnimCurve: SampledAnimCurve
 };

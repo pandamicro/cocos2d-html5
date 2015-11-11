@@ -258,6 +258,22 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         },
 
         /**
+         * position of node.
+         * @property position
+         * @type {Vec2}
+         */
+        position: {
+            get: SGProto.getPosition,
+            set: function (value) {
+                this._position.x = value.x;
+                this._sgNode.x = value.x;
+
+                this._position.y = value.y;
+                this._sgNode.y = value.y;
+            }
+        },
+
+        /**
          * x axis position of node.
          * @property x
          * @type {Number}
