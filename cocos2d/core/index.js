@@ -7,3 +7,5 @@ if (!CC_EDITOR || !Editor.isCoreLevel) {
 
     require('./components');
 }
+
+require('./base-ui/CCWidgetManager');

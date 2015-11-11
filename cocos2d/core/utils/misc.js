@@ -29,4 +29,19 @@ misc.propertyDefine = function (ctor, sameNameGetSets, diffNameGetSets) {
     }
 };
 
+var DirtyFlags = misc.DirtyFlags = {
+    TRANSFORM: 1 << 0,
+    SIZE: 1 << 1,
+    //Visible:
+    //Color:
+    //Opacity
+    //Cache
+    //Order
+    //Text
+    //Gradient
+    ALL: (1 << 2) - 1
+};
+
+DirtyFlags.WIDGET = DirtyFlags.TRANSFORM | DirtyFlags.SIZE;
+
 module.exports = misc;

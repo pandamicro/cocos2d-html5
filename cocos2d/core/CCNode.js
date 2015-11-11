@@ -37,7 +37,7 @@ var DontDestroy = Flags.DontDestroy;
  */
 var Node = cc.Class({
     name: 'cc.Node',
-    extends: require('./utils/node-wrapper'),
+    extends: require('./utils/base-node'),
 
     properties: {
         /**
@@ -125,6 +125,9 @@ var Node = cc.Class({
         this._name = typeof name !== 'undefined' ? name : 'New Node';
         this._activeInHierarchy = false;
 
+        // cache component
+        this._widget = null;
+
         /**
          * Register all related EventTargets,
          * all event callbacks will be removed in _onPreDestroy
@@ -133,6 +136,10 @@ var Node = cc.Class({
          * @private
          */
         this.__eventTargets = [];
+    },
+
+    statics: {
+        _DirtyFlags: require('./utils/misc').DirtyFlags
     },
 
     // OVERRIDES

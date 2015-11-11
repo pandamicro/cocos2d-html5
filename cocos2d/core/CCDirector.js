@@ -150,6 +150,9 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         // Event target
         EventTarget.polyfill(this);
 
+        // WidgetManager
+        cc._widgetManager.init(this);
+
         return true;
     },
 
@@ -199,12 +202,20 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
     },
 
     visit: function (deltaTime) {
-        var renderer = cc.renderer;
+        this.emit(cc.Director.EVENT_BEFORE_VISIT, this);
+
         if (this._beforeVisitScene)
             this._beforeVisitScene();
 
+        // visit EC
+        if (this._scene) {
+            // clear flags
+            clearFlags(this._scene);
+        }
+
         // update the scene
         if (this._runningScene) {
+            var renderer = cc.renderer;
             if (renderer.childrenOrderDirty === true) {
                 renderer.clearRenderCommands();
                 this._runningScene._renderCmd._curLevel = 0;                          //level start from 0;
@@ -1026,6 +1037,13 @@ cc.Director.EVENT_AFTER_UPDATE = "director_after_update";
 cc.Director.EVENT_AFTER_VISIT = "director_after_visit";
 
 /**
+ * The event after visit of cc.Director
+ * @constant
+ * @type {string}
+ */
+cc.Director.EVENT_BEFORE_VISIT = "director_before_visit";
+
+/**
  * The event after draw of cc.Director
  * @constant
  * @type {string}
@@ -1125,3 +1143,13 @@ cc.Director.PROJECTION_CUSTOM = 3;
  * @type {Number}
  */
 cc.Director.PROJECTION_DEFAULT = cc.Director.PROJECTION_3D;
+
+// clear dirtyFlags for EC
+function clearFlags (node) {
+    var children = node._children;
+    for (var i = 0, len = children.length; i < len; i++) {
+        var child = children[i];
+        child._dirtyFlags = 0;
+        clearFlags(child);
+    }
+}

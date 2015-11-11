@@ -26,6 +26,7 @@ var JS = cc.js;
 var SceneGraphHelper = require('./scene-graph-helper');
 var SGProto = cc.Node.prototype;
 var Destroying = require('../platform/CCObject').Flags.Destroying;
+var DirtyFlags = require('./misc').DirtyFlags;
 
 // called after changing parent
 function setMaxZOrder (node) {
@@ -40,17 +41,18 @@ function setMaxZOrder (node) {
 }
 
 /**
- * A base internal wrapper for CCNode and CCScene, it will:
- * - the same api with origin cocos2d rendering node (SGNode)
- * - maintains the private _sgNode property which referenced to SGNode
+ * A base node for CCENode and CCEScene, it will:
+ * - provide the same api with origin cocos2d rendering node (SGNode)
+ * - maintains properties of the internal SGNode
  * - retain and release the SGNode
- * - serializations for SGNode (SGNode will not being serialized)
+ * - serialize datas for SGNode (but SGNode itself will not being serialized)
  * - notifications if some properties changed
+ * - define some interfaces shares between CCENode and CCEScene
  *
- * @class NodeWrapper
+ * @class BaseNode
  * @extends Object
  */
-var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
+var BaseNode = cc.Class(/** @lends cc.ENode# */{
     extends: cc.Object,
 
     properties: {
@@ -493,6 +495,8 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         if (!cc.game._isCloning) {
             sgNode.cascadeOpacity = true;
         }
+
+        this._dirtyFlags = DirtyFlags.ALL;
     },
 
     // ABSTRACT INTERFACES
@@ -1224,7 +1228,7 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
         //anchorX: ['_getAnchorX', '_setAnchorX'],
         //anchorY: ['_getAnchorY', '_setAnchorY'],
     };
-    var propName, np = NodeWrapper.prototype;
+    var propName, np = BaseNode.prototype;
     for (var i = 0; i < SameNameGetSets.length; i++) {
         propName = SameNameGetSets[i];
         var suffix = propName[0].toUpperCase() + propName.slice(1);
@@ -1344,4 +1348,4 @@ var NodeWrapper = cc.Class(/** @lends cc.ENode# */{
  */
 
 
-module.exports = NodeWrapper;
+module.exports = BaseNode;
