@@ -81,7 +81,7 @@
             bufferOffset = 0;
             for(var i = 0; i < quads.length; ++i)
             {
-                gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 24, 0 + bufferOffset);                   //cc.VERTEX_ATTRIB_POSITION
+                gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 24, bufferOffset);                   //cc.VERTEX_ATTRIB_POSITION
                 gl.vertexAttribPointer(1, 4, gl.UNSIGNED_BYTE, true, 24, 12 + bufferOffset);           //cc.VERTEX_ATTRIB_COLOR
                 gl.vertexAttribPointer(2, 2, gl.FLOAT, false, 24, 16 + bufferOffset);                  //cc.VERTEX_ATTRIB_TEX_COORDS
                 gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -92,41 +92,6 @@
 
         }
 
-        //do scale9 draw
-        //{
-        //    cc.log("I am doing the real scale9 draw");
-        //}
-    };
-
-    proto.transform = function(parentCmd, recursive){
-        var node = this._node;
-        cc.Node.WebGLRenderCmd.prototype.transform.call(this, parentCmd, recursive);
-        //if (node._positionsAreDirty) {
-        //    node._updatePositions();
-        //    node._positionsAreDirty = false;
-        //    node._scale9Dirty = true;
-        //}
-        //if(node._scale9Enabled) {
-        //    var locRenderers = node._renderers;
-        //    var protectChildLen = locRenderers.length;
-        //    for(var j=0; j < protectChildLen; j++) {
-        //        var pchild = locRenderers[j];
-        //        if(pchild) {
-        //            var tempCmd = pchild._renderCmd;
-        //            tempCmd.transform(this, true);
-        //        }
-        //        else
-        //            break;
-        //    }
-        //}
-        //else {
-        //    node._adjustScale9ImagePosition();
-        //    node._scale9Image._renderCmd.transform(this, true);
-        //}
-        //if(node._scale9Image)
-        //{
-        //    node._scale9Image._renderCmd.transform(this, true);
-        //}
     };
 
     proto._syncStatus = function (parentCmd){
@@ -135,81 +100,26 @@
         this._updateDisplayOpacity(this._displayedOpacity);
     };
 
-    proto._updateDisplayColor = function(parentColor){
-        cc.Node.WebGLRenderCmd.prototype._updateDisplayColor.call(this, parentColor);
-        var node = this._node;
-        var scale9Image = node._scale9Image;
-
-
-
-        if (this._cascadeColorEnabled)
-        {
-            node._displayedColor.r = node._realColor.r * parentColor.r/255.0;
-            node._displayedColor.g = node._realColor.g * parentColor.g/255.0;
-            node._displayedColor.b = node._realColor.b * parentColor.b/255.0;
-            this._updateColor();
-            var childrenSize= node._children.length;
-            for(var i = 0; i< childrenSize; ++i)
-            {
-                node._children[i]._renderCmd._updateDisplayColor(node._displayedColor);
-            }
-
-            if (scale9Image)
-            {
-                scale9Image._renderCmd._updateDisplayColor(node._displayedColor);
-            }
-
-        }
-        else
-        {
-            var childrenSize= node._children.length;
-            for(var i = 0; i< childrenSize; ++i)
-            {
-                node._children[i]._renderCmd._updateDisplayColor(cc.Color.WHITE);
-            }
-
-            if (scale9Image)
-            {
-                scale9Image._renderCmd._updateDisplayColor(cc.Color.WHITE);
-            }
-        }
-
-    };
-
     proto._updateDisplayOpacity = function(parentOpacity){
         cc.Node.WebGLRenderCmd.prototype._updateDisplayOpacity.call(this, parentOpacity);
         var node = this._node;
         var scale9Image = node._scale9Image;
-
-        if (node._cascadeOpacityEnabled)
-        {
-            var childrenSize= node._children.length;
-            for(var i = 0; i< childrenSize; ++i)
-            {
-                node._children[i]._renderCmd._updateDisplayOpacity(node._displayedOpacity);
-            }
-            node._displayedOpacity = node._realOpacity * parentOpacity/255.0;
-            this._updateColor();
-
-            if (scale9Image != null)
-            {
-                scale9Image._renderCmd._updateDisplayOpacity(node._displayedOpacity);
-            }
+        if(scale9Image) {
+            var opacity = 255;
+            if (node._cascadeOpacityEnabled) opacity = this._displayedOpacity;
+            scale9Image._renderCmd._updateDisplayOpacity(opacity);
         }
-        else
-        {
-            node._displayedOpacity = node._realOpacity;
+    };
 
-            var childrenSize= node._children.length;
-            for(var i = 0; i< childrenSize; ++i)
-            {
-                node._children[i]._renderCmd._updateDisplayOpacity(255);
-            }
-
-            if (scale9Image != null)
-            {
-                scale9Image._renderCmd._updateDisplayOpacity(255);
-            }
+    proto._updateDisplayColor = function(parentColor){
+        cc.Node.WebGLRenderCmd.prototype._updateDisplayColor.call(this, parentColor);
+        var node = this._node;
+        var scale9Image = node._scale9Image;
+        if(scale9Image){
+            var color = cc.Color.WHITE;
+            if(this._cascadeColorEnabled) color = node._displayedColor;
+            scale9Image._renderCmd._updateDisplayColor(color);
+            scale9Image._renderCmd._updateColor();
         }
     };
 
