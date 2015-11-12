@@ -310,7 +310,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
      * @lua NA
      */
     getBlendFunc : function(){
-        return cc.BlendFunc(this._blendFunc.src, this._blendFunc.dst);
+        return  new cc.BlendFunc(this._blendFunc.src, this._blendFunc.dst);
     },
 
     /**
@@ -977,8 +977,23 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         return vertices;
     },
 
+    _onColorOpacityDirty : function() {
+        var color = this.getDisplayedColor();
+        color.a = this.getDisplayedOpacity();
+        var index;
+        var quadLength = this._quads.length;
+        for(index = 0; index < quadLength; ++index) {
+            //svar quad = this._quads[index];
+            this._quads[index]._bl.colors = color;
+            this._quads[index]._br.colors = color;
+            this._quads[index]._tl.colors = color;
+            this._quads[index]._tr.colors = color;
+        }
+    },
+
     _calculateQuads : function(uv, vertices){
-        var color = this._scale9Image.getDisplayedColor();
+        var color = this.getDisplayedColor();
+        color.a = this.getDisplayedOpacity() ;
         if(this._renderingType == ccui.Scale9Sprite.RenderingType.SIMPLE)
         {
             var quad = new cc.V3F_C4B_T2F_Quad();

@@ -31,6 +31,7 @@
         this._cachedParent = null;
         this._cacheDirty = false;
         this._quadWebBuffer = cc._renderContext.createBuffer();
+        this._colorOpacityDirty = false;
     };
 
     var proto = ccui.Scale9Sprite.WebGLRenderCmd.prototype = Object.create(cc.Node.WebGLRenderCmd.prototype);
@@ -50,6 +51,12 @@
             node._cleanupQuads();
             node._buildQuads();
             node._quadsDirty = false;
+            this._colorOpacityDirty = false;
+            needRebuildWebBuffer = true;
+        }
+        if(this._colorOpacityDirty) {
+            node._onColorOpacityDirty();
+            this._colorOpacityDirty = false;
             needRebuildWebBuffer = true;
         }
         var gl = ctx || cc._renderContext ;
@@ -109,6 +116,8 @@
             if (node._cascadeOpacityEnabled) opacity = this._displayedOpacity;
             scale9Image._renderCmd._updateDisplayOpacity(opacity);
         }
+
+        this._colorOpacityDirty = true;
     };
 
     proto._updateDisplayColor = function(parentColor){
@@ -121,6 +130,8 @@
             scale9Image._renderCmd._updateDisplayColor(color);
             scale9Image._renderCmd._updateColor();
         }
+
+        this._colorOpacityDirty = true;
     };
 
     proto.setState = function (state) {

@@ -27,7 +27,7 @@
         cc.Node.CanvasRenderCmd.call(this, renderable);
         this._needDraw = true;
         this._state = ccui.Scale9Sprite.state.NORMAL;
-        this._needSwitchTexture = false;
+        this._textureToRender = null;
     };
 
     var proto = ccui.Scale9Sprite.CanvasRenderCmd.prototype = Object.create(cc.Node.CanvasRenderCmd.prototype);
@@ -54,6 +54,7 @@
             scale9Image._renderCmd._updateDisplayColor(color);
             scale9Image._renderCmd._updateColor();
         }
+        this._textureToRender = null;
     };
 
     proto.setState = function(state){
@@ -63,7 +64,7 @@
         if(!locScale9Image)
             return;
         this._state = state;
-        this._needSwitchTexture = true;
+        this._textureToRender = null;
     };
 
     proto.rendering = function (ctx, scaleX, scaleY) {
@@ -76,22 +77,22 @@
         if(node.getSprite()) locTexture = node.getSprite()._texture;
         if (!node._textureLoaded || locDisplayOpacity === 0)
             return;
+        if(this._textureToRender === null){
+            this._textureToRender = locTexture;
+            if (cc.Scale9Sprite.state.GRAY === this._state) {
+                this._textureToRender = this._textureToRender._generateGrayTexture();
+            }
+            var color = node.getDisplayedColor();
+            if(locTexture && (color.r !== 255 || color.g !==255 || color.b !== 255))
+                this._textureToRender = locTexture._generateColorTexture(color.r,color.g,color.b);
+        }
 
         var wrapper = ctx || cc._renderContext, context = wrapper.getContext();
         wrapper.setTransform(this._worldTransform, scaleX, scaleY);
         wrapper.setCompositeOperation(node._blendFunc);
         wrapper.setGlobalAlpha(alpha);
 
-        if(locTexture) {
-            if(this._needSwitchTexture) {
-                this._needSwitchTexture = false;
-                if (cc.Scale9Sprite.state.Normal === this._state) {
-                    locTexture._switchToGray(false);
-                }
-                else{
-                    locTexture._switchToGray(true);
-                }
-            }
+        if(this._textureToRender) {
             if(node._quadsDirty){
                 node._cleanupQuads();
                 node._buildQuads();
@@ -110,8 +111,8 @@
                 h = quads[i]._tr.vertices.y - quads[i]._bl.vertices.y;
                 y = - y - h;
 
-                var textureWidth = locTexture.getPixelWidth();
-                var textureHeight = locTexture.getPixelHeight();
+                var textureWidth = this._textureToRender.getPixelWidth();
+                var textureHeight = this._textureToRender.getPixelHeight();
 
                 sx = quads[i]._bl.texCoords.u * textureWidth;
                 sy = quads[i]._bl.texCoords.v * textureHeight;
@@ -123,9 +124,9 @@
                 w = w * scaleX;
                 h = h * scaleY;
 
-                var image = locTexture._htmlElementObj;
-                if (locTexture._pattern !== "") {
-                    wrapper.setFillStyle(context.createPattern(image, locTexture._pattern));
+                var image = this._textureToRender._htmlElementObj;
+                if (this._textureToRender._pattern !== "") {
+                    wrapper.setFillStyle(context.createPattern(image, this._textureToRender._pattern));
                     context.fillRect(x, y, w, h);
                 } else {
                     context.drawImage(image,
