@@ -176,42 +176,8 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         this._capInsetsInternal = capInsets;
         this._textureLoaded = false;
         var _onTextureLoadedCallback = function () {
-            this._spriteFrameRotated = spriteFrame.isRotated();
-            this._textureLoaded = true;
             var sprite = cc.Sprite.createWithSpriteFrame(spriteFrame);
-            var opacity = this.getOpacity();
-            var color = this.getColor();
-            this._updateBlendFunc(sprite.getTexture());
-            this._scale9Image = sprite;
-            if (!this._scale9Enabled) {
-                this.addChild(this._scale9Image);
-                this._adjustScale9ImagePosition();
-            }
-            this._scale9Image.setAnchorPoint(cc.p(0,0));
-            this._scale9Image.setPosition(cc.p(0,0));
-
-            if(this._spriteRect.equals(cc.rect(0,0,0,0))) {
-                this._spriteRect = cc.rect(spriteFrame.getRect());
-            }
-
-            if(cc.sizeEqualToSize(this._originalSize, cc.size(0,0))) {
-                this._originalSize = cc.size(spriteFrame.getOriginalSize());
-            }
-            if(cc.sizeEqualToSize(this._preferredSize, cc.size(0,0))) {
-                this.setPreferredSize(this._originalSize);
-            }
-            //
-            this._applyBlendFunc();
-            this.setState(this._brightState);
-            if (this._textureInited)
-            {
-                // Restore color and opacity
-                this.setOpacity(opacity);
-                this.setColor(color);
-            }
-            this._textureInited = true;
-            //notify quads need to be rebuild
-            this._quadsDirty = true;
+            this._onScale9ResourcesLoaded(sprite,spriteFrame.isRotated(),spriteFrame.getRect(),spriteFrame.getOriginalSize());
         };
 
         if (!locLoaded) {
@@ -329,7 +295,40 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
     },
 
 
-    /**
+    _onScale9ResourcesLoaded: function (sprite, rotated, rect, size) {
+        this._spriteFrameRotated = rotated;
+        this._textureLoaded = true;
+        var opacity = this.getOpacity();
+        var color = this.getColor();
+        this._updateBlendFunc(sprite.getTexture());
+        this._scale9Image = sprite;
+        this._scale9Image.setAnchorPoint(cc.p(0, 0));
+        this._scale9Image.setPosition(cc.p(0, 0));
+        if (this._spriteRect.equals(cc.rect(0, 0, 0, 0))) {
+            this._spriteRect = cc.rect(rect);
+        }
+        if (cc.sizeEqualToSize(this._originalSize, cc.size(0, 0))) {
+            this._originalSize = cc.size(size);
+        }
+        if (cc.sizeEqualToSize(this._preferredSize, cc.size(0, 0))) {
+            this.setPreferredSize(this._originalSize);
+        }
+
+        if (!this._scale9Enabled) {
+            this.addChild(this._scale9Image);
+            this._adjustScale9ImagePosition();
+        }
+
+        this._applyBlendFunc();
+        this.setState(this._brightState);
+        if (this._textureInited) {
+            // Restore color and opacity
+            this.setOpacity(opacity);
+            this.setColor(color);
+        }
+        this._textureInited = true;
+        this._quadsDirty = true;
+    }, /**
      * @brief Update Scale9Sprite with a specified sprite.
      *
      * @param sprite A sprite pointer.
@@ -362,39 +361,8 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         var textureloaded = sprite.textureLoaded();
         var _onTextureLoadedCallback = function() {
             //do
-            this._textureLoaded = true;
-            var opacity = this.getOpacity();
-            var color = this.getColor();
-            this._updateBlendFunc(sprite.getTexture());
-            this._scale9Image = sprite;
-            this._scale9Image.setAnchorPoint(cc.p(0,0));
-            this._scale9Image.setPosition(cc.p(0,0));
-            if(this._spriteRect.equals(cc.rect(0,0,0,0))) {
-                var textureSize = this._scale9Image.getTexture().getContentSize();
-                this._spriteRect = cc.rect(0,0,textureSize.width,textureSize.height);
-            }
-            if(cc.sizeEqualToSize(this._originalSize, cc.size(0,0))) {
-                this._originalSize = cc.size(this._scale9Image.getTexture().getContentSize());
-            }
-            if(cc.sizeEqualToSize(this._preferredSize, cc.size(0,0))) {
-                this.setPreferredSize(this._originalSize);
-            }
-
-            if (!this._scale9Enabled) {
-                this.addChild(this._scale9Image);
-                this._adjustScale9ImagePosition();
-            }
-
-            this._applyBlendFunc();
-            this.setState(this._brightState);
-            if (this._textureInited)
-            {
-                // Restore color and opacity
-                this.setOpacity(opacity);
-                this.setColor(color);
-            }
-            this._textureInited = true;
-            this._quadsDirty = true;
+            var textureSize = sprite.getTexture().getContentSize();
+            this._onScale9ResourcesLoaded(sprite,rotated,cc.rect(0, 0, textureSize.width, textureSize.height),textureSize);
         };
 
         if(textureloaded) {
