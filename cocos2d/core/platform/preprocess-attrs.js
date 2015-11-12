@@ -129,6 +129,9 @@ function parseType (val, type, className, propName) {
                     cc.js.getClassName(type));
             }
         }
+        else if (type === 'Number') {
+            cc.warn('The "type" attribute of "%s.%s" can not be "Number", use "Float" or "Integer" instead please.', className, propName);
+        }
         else if (type == null) {
             cc.warn('The "type" attribute of "%s.%s" is undefined when loading script.', className, propName);
         }

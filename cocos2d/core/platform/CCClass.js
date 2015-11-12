@@ -840,23 +840,23 @@ function parseAttributes (attrs, className, propName) {
             // Specify that the input value must be integer in Inspector.
             // Also used to indicates that the type of elements in array or the type of value in dictionary is integer.
             case 'Integer':
-                result.push( { type: 'Integer', expectedTypeOf: 'number' } );
+                result.push( { type: 'Integer'/*, expectedTypeOf: 'number'*/ } );
                 break;
             // Indicates that the type of elements in array or the type of value in dictionary is double.
             case 'Float':
-                result.push( { type: 'Float', expectedTypeOf: 'number' } );
+                result.push( { type: 'Float'/*, expectedTypeOf: 'number'*/ } );
                 break;
             case 'Boolean':
                 result.push({
                     type: 'Boolean',
-                    expectedTypeOf: 'number',
+                    //expectedTypeOf: 'number',
                     _onAfterProp: getTypeChecker('Boolean', 'Boolean')
                 });
                 break;
             case 'String':
                 result.push({
                     type: 'String',
-                    expectedTypeOf: 'number',
+                    //expectedTypeOf: 'string',
                     _onAfterProp: getTypeChecker('String', 'String')
                 });
                 break;
@@ -876,7 +876,7 @@ function parseAttributes (attrs, className, propName) {
                         if (Enum.isEnum(type)) {
                             result.push({
                                 type: 'Enum',
-                                expectedTypeOf: 'number',
+                                //expectedTypeOf: 'number',
                                 enumList: Enum.getList(type)
                             });
                         }
@@ -886,7 +886,7 @@ function parseAttributes (attrs, className, propName) {
                     }
                     else if (typeof type === 'function') {
                         result.push(Attr.ObjectType(type));
-                        result.push( { expectedTypeOf: 'object' } );
+                        //result.push( { expectedTypeOf: 'object' } );
                     }
                     else if (CC_EDITOR || CC_TEST) {
                         cc.error('Unknown "type" parameter of %s.%s：%s', className, propName, type);
@@ -895,13 +895,13 @@ function parseAttributes (attrs, className, propName) {
                 break;
         }
     }
-    else {
-        if (attrs.default != null) {
-            result.push({
-                expectedTypeOf: typeof attrs.default,
-            });
-        }
-    }
+    //else {
+    //    if (attrs.default != null) {
+    //        result.push({
+    //            expectedTypeOf: typeof attrs.default,
+    //        });
+    //    }
+    //}
 
     function parseSimpleAttr (attrName, expectType, attrCreater) {
         var val = attrs[attrName];

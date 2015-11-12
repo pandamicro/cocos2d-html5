@@ -33,7 +33,7 @@ var NIL = function () {};
  */
 cc.EScene = cc.Class({
     name: 'cc.Scene',
-    extends: require('./utils/node-wrapper'),
+    extends: require('./utils/base-node'),
 
     ctor: function () {
         this._activeInHierarchy = false;
