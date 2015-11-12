@@ -521,10 +521,10 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
     setCapInsets : function(capInsets){
         this._quadsDirty = true;
         this._capInsetsInternal = capInsets;
-        this._insetLeft = capInsets.origin.x;
-        this._insetTop = capInsets.origin.y;
-        this._insetRight = this._originalSize.width - this._insetLeft - capInsets.size.width;
-        this._insetBottom = this._originalSize.height - this._insetTop - capInsets.size.height;
+        this._insetLeft = capInsets.x;
+        this._insetTop = capInsets.y;
+        this._insetRight = this._originalSize.width - this._insetLeft - capInsets.width;
+        this._insetBottom = this._originalSize.height - this._insetTop - capInsets.height;
     },
 
     /**
