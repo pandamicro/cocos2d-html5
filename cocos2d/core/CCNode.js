@@ -117,18 +117,6 @@ var Node = cc.Class({
                     this._objFlags &= ~DontDestroy;
                 }
             }
-        },
-
-        /**
-         * Register all related EventTargets, 
-         * all event callbacks will be removed in _onPreDestroy
-         * @property __eventTargets
-         * @type array
-         * @private
-         */
-        __eventTargets: {
-            default: [],
-            serializable: false
         }
     },
 
@@ -136,6 +124,15 @@ var Node = cc.Class({
         var name = arguments[0];
         this._name = typeof name !== 'undefined' ? name : 'New Node';
         this._activeInHierarchy = false;
+
+        /**
+         * Register all related EventTargets,
+         * all event callbacks will be removed in _onPreDestroy
+         * @property __eventTargets
+         * @type {EventTarget[]}
+         * @private
+         */
+        this.__eventTargets = [];
     },
 
     // OVERRIDES
@@ -230,6 +227,14 @@ var Node = cc.Class({
      * @returns {Component} - The newly added component
      */
     addComponent: function (typeOrClassName) {
+
+        if ((this._objFlags & Destroying) && CC_EDITOR) {
+            cc.error('isDestroying');
+            return null;
+        }
+
+        // check component
+
         var constructor;
         if (typeof typeOrClassName === 'string') {
             constructor = JS.getClassByName(typeOrClassName);
@@ -248,14 +253,20 @@ var Node = cc.Class({
             }
             constructor = typeOrClassName;
         }
-        if ((this._objFlags & Destroying) && CC_EDITOR) {
-            cc.error('isDestroying');
-            return null;
-        }
         if (typeof constructor !== 'function') {
             cc.error("addComponent: The component to add must be a constructor");
             return null;
         }
+        if (constructor._disallowMultiple && CC_EDITOR) {
+            if (this.getComponent(constructor._disallowMultiple)) {
+                cc.error("The component %s can't be added because %s already contains the same (or subtype) component.",
+                    JS.getClassName(typeOrClassName), this._name);
+                return null;
+            }
+        }
+
+        //
+
         var component = new constructor();
         component.node = this;
         this._components.push(component);

@@ -552,71 +552,78 @@ var Component = cc.Class({
     }
 });
 
-// INHERITABLE STATIC MEMBERS
-
-/**
- * Makes a component execute in edit mode.
- * By default, all components are only executed in play mode,
- * which means they will not have their callback functions executed while the Editor is in edit mode.
- *
- * @property _executeInEditMode
- * @type {Boolean}
- * @default false
- * @static
- * @readonly
- * @private
- */
-Component._executeInEditMode = false;
-
-/**
- * This property is only available if _executeInEditMode is true.
- * If specified, the editor's scene view will keep updating this node in 60 fps when it is selected,
- * otherwise, it will update only if necessary.
- *
- * @property _playOnFocus
- * @type {Boolean}
- * @default false
- * @static
- * @readonly
- * @private
- */
-Component._playOnFocus = false;
-
-// NON-INHERITED STATIC MEMBERS
-
-/**
- * Specifying the url of the custom html to draw the component in inspector.
- *
- * @property _inspector
- * @type {String}
- * @default ""
- * @static
- * @readonly
- * @private
- */
-Object.defineProperty(Component, '_inspector', { value: '', enumerable: false });
-
-/**
- * Specifying the url of the icon to display in inspector.
- *
- * @property _icon
- * @type {String}
- * @default ""
- * @static
- * @readonly
- * @private
- */
-Object.defineProperty(Component, '_icon', { value: '', enumerable: false });
-
-//
-
-Component.prototype.__scriptUuid = '';
-
-cc.Component = module.exports = Component;
-
-// COMPONENT HELPERS
-
 if (CC_EDITOR || CC_TEST) {
+
+    // INHERITABLE STATIC MEMBERS
+
+    /**
+     * Makes a component execute in edit mode.
+     * By default, all components are only executed in play mode,
+     * which means they will not have their callback functions executed while the Editor is in edit mode.
+     *
+     * @property _executeInEditMode
+     * @type {Boolean}
+     * @default false
+     * @static
+     * @readonly
+     * @private
+     */
+    Component._executeInEditMode = false;
+
+    /**
+     * This property is only available if _executeInEditMode is true.
+     * If specified, the editor's scene view will keep updating this node in 60 fps when it is selected,
+     * otherwise, it will update only if necessary.
+     *
+     * @property _playOnFocus
+     * @type {Boolean}
+     * @default false
+     * @static
+     * @readonly
+     * @private
+     */
+    Component._playOnFocus = false;
+
+    /**
+     * If specified to a type, prevents Component of the same type (or subtype) to be added more than once to a Node.
+     *
+     * @property _disallowMultiple
+     * @type {Function}
+     * @default false
+     * @static
+     * @readonly
+     * @private
+     */
+    Component._disallowMultiple = null;
+
+    // NON-INHERITED STATIC MEMBERS
+
+    /**
+     * Specifying the url of the custom html to draw the component in inspector.
+     *
+     * @property _inspector
+     * @type {String}
+     * @default ""
+     * @static
+     * @readonly
+     * @private
+     */
+    Object.defineProperty(Component, '_inspector', { value: '', enumerable: false });
+
+    /**
+     * Specifying the url of the icon to display in inspector.
+     *
+     * @property _icon
+     * @type {String}
+     * @default ""
+     * @static
+     * @readonly
+     * @private
+     */
+    Object.defineProperty(Component, '_icon', { value: '', enumerable: false });
+
+    // COMPONENT HELPERS
+
     cc._componentMenuItems = [];
 
     Object.defineProperty(Component, '_registerEditorProps', {
@@ -628,9 +635,7 @@ if (CC_EDITOR || CC_TEST) {
                 switch (key) {
 
                     case 'executeInEditMode':
-                        if (val) {
-                            cls._executeInEditMode = true;
-                        }
+                        cls._executeInEditMode = !!val;
                         break;
 
                     case 'playOnFocus':
@@ -657,6 +662,10 @@ if (CC_EDITOR || CC_TEST) {
                     case 'menu':
                         break;
 
+                    case 'disallowMultiple':
+                        cls._disallowMultiple = cls;
+                        break;
+
                     // {Number} menuPriority
                     // the order which the menu item are displayed
                     case 'menuPriority':
@@ -680,3 +689,7 @@ if (CC_EDITOR || CC_TEST) {
         }
     });
 }
+
+Component.prototype.__scriptUuid = '';
+
+cc.Component = module.exports = Component;
