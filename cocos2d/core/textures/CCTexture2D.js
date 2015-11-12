@@ -681,6 +681,16 @@ game.once(game.EVENT_RENDERER_INITED, function () {
                 }
             },
 
+            _generateGrayTexture: function() {
+                if(!this._textureLoaded)
+                    return null;
+                var grayElement = generateGrayTexture(this._htmlElementObj);;
+                var newTexture = new Texture2D();
+                newTexture.initWithElement(grayElement);
+                newTexture.handleLoadedTexture();
+                return newTexture;
+            },
+
             //change color function
             _generateColorTexture: sys._supportCanvasNewBlendModes ? function(r, g, b, rect, canvas) {
                 var onlyCanvas = false;
