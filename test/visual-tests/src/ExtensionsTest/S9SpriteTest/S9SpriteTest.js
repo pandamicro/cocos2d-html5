@@ -365,6 +365,59 @@ var S9ChangeCapInsetsTest = S9SpriteTestDemo.extend({
     },
 });
 
+//S9ChangeColorOpacityTest
+var S9ChangeColorOpacityTest = S9SpriteTestDemo.extend({
+
+    _title:"Scale9 Change CapInsets Test",
+    _subtitle:"Slice and Simple s9sprite will behave differently",
+    _s9sprite1: null,
+    _s9sprite2: null,
+    _dt: 0,
+    ctor:function() {
+        this._super();
+
+        var x = winSize.width;
+        var y = 0 + (winSize.height/2);
+
+        this._s9sprite1 = cc.Scale9Sprite.create(cc.rect(20,20,30,30),"Images/blocks9.png");
+
+        this._s9sprite2 = cc.Scale9Sprite.create(cc.rect(20,20,30,30),"Images/blocks9.png");
+        var s9sprite1 = this._s9sprite1;
+        var s9sprite2 = this._s9sprite2;
+        s9sprite1.setPreferredSize(cc.size(150,150));
+        s9sprite2.setPreferredSize(cc.size(150,150));
+        s9sprite1.setBlendFunc(cc.BlendFunc.ALPHA_NON_PREMULTIPLIED);
+        s9sprite2.setBlendFunc(cc.BlendFunc.ALPHA_NON_PREMULTIPLIED);
+        this.scheduleUpdate();
+
+
+        s9sprite1.x = x/4; s9sprite1.y = y;
+
+        s9sprite2.x = 3 * x/4; s9sprite2.y = y;
+
+        this.addChild(s9sprite1);
+        this.addChild(s9sprite2);
+    },
+
+    update: function(dt) {
+        this._dt += dt;
+        if(this._dt > 3) this._dt = 3;
+        var opacity = 1;
+        var color = cc.Color.WHITE;
+        if(this._dt < 1.5){
+            opacity = 1 - this._dt * 2 / 3;
+        }
+        else{
+            opacity = (this._dt-1.5) * 2 / 3;
+        }
+
+        color.r = color.g = opacity * 255;
+        this._s9sprite1.setOpacity(opacity * 255);
+        this._s9sprite2.setColor(color);
+        if(this._dt === 3) this.unscheduleUpdate();
+    },
+});
+
 ////old tests
 //var S9BatchNodeBasic = S9SpriteTestDemo.extend({
 //
@@ -863,6 +916,7 @@ var arrayOfS9SpriteTest = [
     S9Actiontest,
     S9ChangePreferredSizeTest,
     S9ChangeCapInsetsTest,
+    S9ChangeColorOpacityTest,
     //old ones
     //S9BatchNodeBasic,
     //S9FrameNameSpriteSheet,
