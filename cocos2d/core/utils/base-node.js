@@ -357,7 +357,16 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
          * @type {Number}
          */
         width: {
-            get: SGProto._getWidth,
+            get: function () {
+                if (this._sizeProvider) {
+                    var w = this._sizeProvider._getWidth();
+                    this._contentSize.width = w;
+                    return w;
+                }
+                else {
+                    return this._contentSize.width;
+                }
+            },
             set: function (value) {
                 this._contentSize.width = value;
                 this._onSizeChanged();
@@ -370,7 +379,16 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
          * @type {Number}
          */
         height: {
-            get: SGProto._getHeight,
+            get: function () {
+                if (this._sizeProvider) {
+                    var h = this._sizeProvider._getHeight();
+                    this._contentSize.height = h;
+                    return h;
+                }
+                else {
+                    return this._contentSize.height;
+                }
+            },
             set: function (value) {
                 this._contentSize.height = value;
                 this._onSizeChanged();
@@ -497,6 +515,15 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
         }
 
         this._dirtyFlags = DirtyFlags.ALL;
+
+        /**
+         * Current active scene graph node which provides content size.
+         *
+         * @property _sizeProvider
+         * @type {cc.Node}
+         * @private
+         */
+        this._sizeProvider = null;
     },
 
     // ABSTRACT INTERFACES
@@ -690,7 +717,16 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
      * @method getContentSize
      * @return {Size} The untransformed size of the node.
      */
-    getContentSize: SGProto.getContentSize,
+    getContentSize: function () {
+        if (this._sizeProvider) {
+            var size = this._sizeProvider.getContentSize();
+            this._contentSize = size;
+            return size;
+        }
+        else {
+            return cc.size(this._contentSize);
+        }
+    },
 
     /**
      * <p>
@@ -1169,17 +1205,13 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
         return false;
     },
 
-    // The deserializer for sgNode which will be called before creating components
+    // The deserializer for sgNode which will be called before components onLoad
     _onBatchCreated: function () {
         var sgNode = this._sgNode;
         sgNode.setOpacity(this._opacity);
         sgNode.setColor(this._color);
         sgNode.setCascadeOpacityEnabled(this._cascadeOpacityEnabled);
         sgNode.setCascadeColorEnabled(this._cascadeColorEnabled);
-        /* DISABLE: unused in SGNode
-        sgNode.setAnchorPoint(this._anchorPoint);
-        sgNode.setContentSize(this._contentSize);
-        */
         sgNode.setRotationX(this._rotationX);
         sgNode.setRotationY(this._rotationY);
         sgNode.setScale(this._scaleX, this._scaleY);
