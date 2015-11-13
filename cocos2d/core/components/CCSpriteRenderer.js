@@ -404,7 +404,6 @@ var SpriteRenderer = cc.Class({
 
     _createSgNode: function () {
         var sprite = new cc.Sprite();
-        sprite.setAnchorPoint(0, 1);
 
         if (this._texture) {
             sprite.texture = this._texture;

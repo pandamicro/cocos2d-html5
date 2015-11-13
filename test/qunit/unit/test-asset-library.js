@@ -59,7 +59,7 @@
         var timerId = setTimeout(function () {
             ok(false, 'time out!');
             start();
-        }, 100);
+        }, 200);
     });
 
     asyncTest('load asset with depends asset recursively if no cache', function () {
@@ -78,7 +78,7 @@
         var timerId = setTimeout(function () {
             ok(false, 'time out!');
             start();
-        }, 100);
+        }, 200);
     });
 
 })();
