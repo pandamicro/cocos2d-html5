@@ -3,7 +3,10 @@ var Animator = require('./animators').Animator;
 var DynamicAnimCurve = require('./animation-curves').DynamicAnimCurve;
 var SampledAnimCurve = require('./animation-curves').SampledAnimCurve;
 var sampleMotionPaths = require('./motion-path-helper').sampleMotionPaths;
+var EventAnimCurve = require('./animation-curves').EventAnimCurve;
+var EventInfo = require('./animation-curves').EventInfo;
 var WrapModeMask = require('./types').WrapModeMask;
+var binarySearch = require('./binary-search');
 
 // The actual animator for Animation Component
 
@@ -95,6 +98,7 @@ function initClipData (root, state) {
     state.duration = clip.duration;
     state.speed = clip.speed;
     state.wrapMode = clip.wrapMode;
+    state.frameRate = clip.sample;
 
     if ((state.wrapMode & WrapModeMask.Loop) === WrapModeMask.Loop) {
         state.repeatCount = Infinity;
@@ -228,6 +232,43 @@ function initClipData (root, state) {
         }
     }
 
+    // events curve
+
+    var events = clip.events;
+
+    if (!CC_EDITOR && events) {
+        var curve;
+
+        for (var compName in events) {
+            var compData = events[compName];
+
+            for (var i = 0, l = compData.length; i < l; i++) {
+                if (!curve) {
+                    curve = new EventAnimCurve();
+                    curve.target = root;
+                    curves.push(curve);
+                }
+
+                var eventData = compData[i];
+                var ratio = eventData.frame / state.duration;
+
+                var eventInfo;
+                var index = binarySearch(curve.ratios, ratio);
+                if (index >= 0) {
+                    eventInfo = curve.events[index];
+                }
+                else {
+                    eventInfo = new EventInfo();
+                    curve.ratios.push(ratio);
+                    curve.events.push(eventInfo);
+                }
+
+                eventInfo.add(eventData.func, eventData.params, compName);
+            }
+        }
+    }
+
+    // property curves
 
     var curveData = clip.curveData;
     var childrenCurveDatas = curveData.paths;

@@ -3,6 +3,8 @@ var bezier = require('./bezier').bezier;
 var bezierByTime = require('./bezier').bezierByTime;
 
 var binarySearch = require('./binary-search');
+var WrapMode = require('./types').WrapMode;
+var WrapModeMask = require('./types').WrapModeMask;
 
 //
 // 动画数据类，相当于 AnimationClip。
@@ -18,9 +20,11 @@ var AnimCurve = cc.Class({
     // @method sample
     // @param {number} time
     // @param {number} ratio - The normalized time specified as a number between 0.0 and 1.0 inclusive.
-    // @param {Animator} animator
+    // @param {AnimationNode} animationNode
     //
-    sample: function (time, ratio, animator) {}
+    sample: function (time, ratio, animationNode) {},
+
+    reset: function () {}
 });
 
 
@@ -33,6 +37,8 @@ var AnimCurve = cc.Class({
 //
 var DynamicAnimCurve = cc.Class({
     name: 'cc.DynamicAnimCurve',
+    extends: AnimCurve,
+
     properties: {
 
         // The object being animated.
@@ -95,7 +101,7 @@ var DynamicAnimCurve = cc.Class({
 
     _findFrameIndex: binarySearch,
 
-    sample: function (time, ratio, animator) {
+    sample: function (time, ratio, animationNode) {
         var values = this.values;
         var ratios = this.ratios;
         var frameCount = ratios.length;
@@ -174,6 +180,15 @@ DynamicAnimCurve.Bezier = function (controlPoints) {
 };
 
 
+
+/**
+ * SampledAnimCurve, 这里面的数值需要是已经都预先sample好了的,
+ * 所以 SampledAnimCurve 中查找 frame index 的速度会非常快
+ *
+ * @class SampledAnimCurve
+ * @constructor
+ * @extends DynamicAnimCurve
+ */
 var SampledAnimCurve = cc.Class({
     name: 'cc.SampledAnimCurve',
     extends: DynamicAnimCurve,
@@ -187,13 +202,169 @@ var SampledAnimCurve = cc.Class({
     }
 });
 
+
+
+/**
+ * Event information,
+ * @class EventInfo
+ * @constructor
+ */
+var EventInfo = function () {
+    this.events = [];
+};
+
+/**
+ * @param {Function} [func] event function
+ * @param {Object[]} [params] event params
+ * @param {Object} [comp] event target
+ */
+EventInfo.prototype.add = function (func, params, comp) {
+    this.events.push({
+        comp: comp || '',
+        func: func || '',
+        params: params || []
+    });
+};
+
+
+/**
+ *
+ * @class EventAnimCurve
+ * @constructor
+ * @extends AnimCurve
+ */
+var EventAnimCurve = cc.Class({
+    name: 'cc.EventAnimCurve',
+    extends: AnimCurve,
+
+    properties: {
+        /**
+         * The object being animated.
+         * @property target
+         * @type {object}
+         */
+        target: null,
+
+        /** The keyframe ratio of the keyframe specified as a number between 0.0 and 1.0 inclusive. (x)
+         * @property ratios
+         * @type {number[]}
+         */
+        ratios: [],
+
+        /**
+         * @property events
+         * @type {EventInfo[]}
+         */
+        events: [],
+
+        /**
+         * Last event index
+         * @property _lastEventIndex
+         * @type {Number}
+         * @default null
+         */
+        _lastEventIndex: null,
+
+        /**
+         * Last loop iterations
+         * @property _lastIterations
+         * @type {Number}
+         * @default -1
+         */
+        _lastTime: 0
+    },
+
+    sample: function (time, ratio, animationNode) {
+        if (this.events.length === 0) return;
+
+        var delta = 1 / animationNode.frameRate * animationNode.speed;
+
+        time = animationNode.time;
+
+        var lastIndex = this._lastEventIndex;
+        var lastTime = lastIndex === null ? time : this._lastTime;
+        var events = this.events;
+        var length = events.length;
+
+        while (delta > 0 ? lastTime <= time : lastTime >= time) {
+            lastTime += delta;
+
+            var tempTime = lastTime;
+            if (delta > 0 ? tempTime > time : tempTime < time) tempTime = time;
+
+            var info = animationNode.getWrappedInfo(tempTime);
+            var direction = info.direction;
+
+            var currentIndex = binarySearch(this.ratios, info.ratio);
+            if (currentIndex < 0) {
+                currentIndex = ~currentIndex - 1;
+
+                // if direction is inverse, then increase index
+                if (direction < 0) currentIndex += 1;
+            }
+
+            if (direction < 0 && lastIndex === -1) lastIndex = length;
+
+            if (currentIndex !== lastIndex) {
+                if (currentIndex >= 0 && currentIndex < length) {
+                    this._fireEvent(events[currentIndex]);
+                }
+            }
+
+            // ensure ping pong wrape mode only trigger last or first event once when loop back
+            if (lastIndex === length - 1 && currentIndex === length) continue;
+            else if (lastIndex === 0 && currentIndex === -1) continue;
+
+            lastIndex = currentIndex;
+        }
+
+        this._lastTime = time;
+        this._lastEventIndex = lastIndex;
+    },
+
+    _fireEvent: function (eventInfo) {
+        var events = eventInfo.events;
+
+        for (var i = 0;  i < events.length; i++) {
+            var event = events[i];
+            var target = this.target;
+            var comp = event.comp;
+            if (comp) {
+                target = target.getComponent(comp);
+
+                if (!target) {
+                    cc.error('Can\'t find component [' + comp + ']');
+                    return;
+                }
+            }
+
+            var func = target[event.func];
+            if (!func) {
+                cc.error('Can\'t find function [' + event.func + ']');
+                return;
+            }
+
+            func.apply(target, event.params);
+        }
+    },
+
+    reset: function () {
+        this._lastEventIndex = null;
+        this._lastTime = 0;
+    }
+});
+
+
 if (CC_TEST) {
     cc._Test.DynamicAnimCurve = DynamicAnimCurve;
     cc._Test.SampledAnimCurve = SampledAnimCurve;
+    cc._Test.EventAnimCurve = EventAnimCurve;
 }
 
 module.exports = {
     AnimCurve: AnimCurve,
     DynamicAnimCurve: DynamicAnimCurve,
-    SampledAnimCurve: SampledAnimCurve
+    SampledAnimCurve: SampledAnimCurve,
+    EventAnimCurve: EventAnimCurve,
+    EventInfo: EventInfo
 };
