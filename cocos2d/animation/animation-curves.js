@@ -24,7 +24,7 @@ var AnimCurve = cc.Class({
     //
     sample: function (time, ratio, animationNode) {},
 
-    reset: function () {}
+    onTimeChangedManually: function () {}
 });
 
 
@@ -348,7 +348,7 @@ var EventAnimCurve = cc.Class({
         }
     },
 
-    reset: function () {
+    onTimeChangedManually: function () {
         this._lastEventIndex = null;
         this._lastTime = 0;
     }
