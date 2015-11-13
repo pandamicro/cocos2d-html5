@@ -1181,8 +1181,9 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
             var siblings = this._parent._children;
             for (var i = 0, len = siblings.length; i < len; i++) {
                 var sibling = siblings[i];
-                sibling._sgNode.setOrderOfArrival(i);
+                sibling._sgNode.arrivalOrder = i;
             }
+            cc.renderer.childrenOrderDirty = this._parent._sgNode._reorderChildDirty = true;
         }
     },
 
