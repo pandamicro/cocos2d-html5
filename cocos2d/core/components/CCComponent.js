@@ -215,9 +215,7 @@ var Component = cc.Class({
         },
 
         __scriptAsset: CC_EDITOR && {
-            get: function () {
-                return this.__scriptUuid && Editor.serialize.asAsset(this.__scriptUuid);
-            },
+            get: function () {},
             set: function (value) {
                 if (this.__scriptUuid !== value) {
                     if (value && Editor.isUuid(value._uuid)) {
@@ -237,8 +235,7 @@ var Component = cc.Class({
                 }
             },
             displayName: 'Script',
-            type: cc.JavaScript,
-            visible: false
+            type: cc._Script
         },
 
         /**
