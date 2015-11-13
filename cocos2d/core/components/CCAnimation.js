@@ -48,13 +48,23 @@ var AnimationComponent = cc.Class({
     },
 
     properties: {
+        /**
+         * Animation will play the default clip when start game
+         * @property defaultClip
+         * @type {cc.AnimationClip}
+         */
         defaultClip: {
             default: null,
             type: AnimationClip,
             displayName: 'Animation'
         },
 
-        currentCip: {
+        /**
+         * Current played clip
+         * @property currentClip
+         * @type {cc.AnimationClip}
+         */
+        currentClip: {
             get: function () {
                 return this._currentClip;
             },
@@ -69,13 +79,24 @@ var AnimationComponent = cc.Class({
             visible: false
         },
 
+        /**
+         * All the clips used in this animation
+         * @property _clips
+         * @type {[cc.AnimationClip]}
+         */
         _clips: {
             default: [],
             type: [AnimationClip],
-            displayName: 'Animations'
+            displayName: 'Animations',
+            visible: true
         },
 
-
+        /**
+         * Whether the animation should auto play the default clip when start game.
+         * @property playAutomatically
+         * @type {bool}
+         * @default true
+         */
         playAutomatically: true,
     },
 
@@ -102,6 +123,7 @@ var AnimationComponent = cc.Class({
      * Plays an animation.
      * @method play
      * @param {String} [name] - The name of animation to play. If no name is supplied then the default animation will be played.
+     * @param {Number} [startTime] - play an animation from startTime
      * @return {AnimationState} - The AnimationState of playing animation. In cases where the animation can't be played (ie, there is no default animation or no animation with the specified name), the function will return null.
      */
     play: function (name, startTime) {
@@ -113,7 +135,7 @@ var AnimationComponent = cc.Class({
             }
             this._animator.playState(state, startTime);
 
-            this.currentCip = state.clip;
+            this.currentClip = state.clip;
         }
         return state;
     },
