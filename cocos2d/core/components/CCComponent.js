@@ -623,6 +623,14 @@ if (CC_EDITOR || CC_TEST) {
 
     cc._componentMenuItems = [];
 
+    Component._addMenuItem = function (cls, path, priority) {
+        cc._componentMenuItems.push({
+            component: cls,
+            menuPath: path,
+            priority: priority
+        });
+    };
+
     Object.defineProperty(Component, '_registerEditorProps', {
         // use defineProperty to prevent inherited by sub classes
         value: function (cls, props) {
@@ -657,6 +665,7 @@ if (CC_EDITOR || CC_TEST) {
                     // {String} menu
                     // The menu path to register a component to the editors "Component" menu. Eg. "Rendering/Camera"
                     case 'menu':
+                        Component._addMenuItem(cls, val, props.menuPriority);
                         break;
 
                     case 'disallowMultiple':
@@ -675,13 +684,6 @@ if (CC_EDITOR || CC_TEST) {
                         cc.warn('Unknown editor property "%s" in class "%s".', key, name);
                         break;
                 }
-            }
-            if (props.menu) {
-                cc._componentMenuItems.push({
-                    component: cls,
-                    menuPath: props.menu,
-                    priority: props.menuPriority
-                });
             }
         }
     });

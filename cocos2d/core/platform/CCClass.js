@@ -409,7 +409,7 @@ function define (className, baseClass, constructor, options) {
             if (uuid) {
                 JS._setClassId(uuid, cls);
                 if (CC_EDITOR) {
-                    //Editor.addComponentMenu(cls, 'Scripts/' + cc.js.getClassName(comp), -1);
+                    cc.Component._addMenuItem(cls, 'Scripts/' + className, -1);
                     cls.prototype.__scriptUuid = Editor.decompressUuid(uuid);
                 }
             }

@@ -107,7 +107,7 @@ var Node = cc.Class({
          */
         _persistNode: {
             get: function () {
-                return this._objFlags | DontDestroy;
+                return (this._objFlags & DontDestroy) > 0;
             },
             set: function (value) {
                 if (value) {
