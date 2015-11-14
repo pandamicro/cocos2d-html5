@@ -256,71 +256,87 @@ var EventAnimCurve = cc.Class({
         events: [],
 
         /**
-         * Last event index
-         * @property _lastEventIndex
-         * @type {Number}
+         * Last wrapped info
+         * @property _lastWrappedInfo
+         * @type {Object}
          * @default null
          */
-        _lastEventIndex: null,
+        _lastWrappedInfo: null
+    },
 
-        /**
-         * Last loop iterations
-         * @property _lastIterations
-         * @type {Number}
-         * @default -1
-         */
-        _lastTime: 0
+    _wrapIterations: function (iterations) {
+        if (iterations - (iterations | 0) === 0) iterations -= 1;
+        return iterations | 0;
     },
 
     sample: function (time, ratio, animationNode) {
-        if (this.events.length === 0) return;
+        var length = this.ratios.length;
 
-        var delta = 1 / animationNode.frameRate * animationNode.speed;
+        var currentWrappedInfo = animationNode.getWrappedInfo(animationNode.time);
+        var direction = currentWrappedInfo.direction;
+        var currentIndex = binarySearch(this.ratios, currentWrappedInfo.ratio);
+        if (currentIndex < 0) {
+            currentIndex = ~currentIndex - 1;
 
-        time = animationNode.time;
-
-        var lastIndex = this._lastEventIndex;
-        var lastTime = lastIndex === null ? time : this._lastTime;
-        var events = this.events;
-        var length = events.length;
-
-        while (delta > 0 ? lastTime <= time : lastTime >= time) {
-            lastTime += delta;
-
-            var tempTime = lastTime;
-            if (delta > 0 ? tempTime > time : tempTime < time) tempTime = time;
-
-            var info = animationNode.getWrappedInfo(tempTime);
-            var direction = info.direction;
-
-            var currentIndex = binarySearch(this.ratios, info.ratio);
-            if (currentIndex < 0) {
-                currentIndex = ~currentIndex - 1;
-
-                // if direction is inverse, then increase index
-                if (direction < 0) currentIndex += 1;
-            }
-
-            if (direction < 0 && lastIndex === -1) lastIndex = length;
-
-            if (currentIndex !== lastIndex) {
-                if (currentIndex >= 0 && currentIndex < length) {
-                    this._fireEvent(events[currentIndex]);
-                }
-            }
-
-            // ensure ping pong wrape mode only trigger last or first event once when loop back
-            if (lastIndex === length - 1 && currentIndex === length) continue;
-            else if (lastIndex === 0 && currentIndex === -1) continue;
-
-            lastIndex = currentIndex;
+            // if direction is inverse, then increase index
+            if (direction < 0) currentIndex += 1;
         }
 
-        this._lastTime = time;
-        this._lastEventIndex = lastIndex;
+        var lastWrappedInfo = this._lastWrappedInfo;
+        var lastIndex = lastWrappedInfo ? lastWrappedInfo.frameIndex : currentWrappedInfo.frameIndex;
+
+        if (!lastWrappedInfo) {
+            this._fireEvent(currentIndex);
+        }
+        else if (lastIndex !== currentIndex) {
+
+            var wrapMode = animationNode.wrapMode;
+
+            var currentIterations = this._wrapIterations(currentWrappedInfo.iterations);
+            var lastIntIterations = this._wrapIterations(lastWrappedInfo.iterations);
+
+            direction = lastWrappedInfo.direction;
+
+            do {
+                if (lastIntIterations <= currentIterations) {
+                    if (direction === -1 && lastIndex === 0) {
+                        if ((wrapMode & WrapModeMask.PingPong) === WrapModeMask.PingPong) {
+                            direction *= -1;
+                        }
+                        else {
+                            lastIndex = length;
+                        }
+
+                        lastIntIterations ++;
+                    }
+                    else if (direction === 1 && lastIndex === length - 1) {
+                        if ((wrapMode & WrapModeMask.PingPong) === WrapModeMask.PingPong) {
+                            direction *= -1;
+                        }
+                        else {
+                            lastIndex = -1;
+                        }
+
+                        lastIntIterations ++;
+                    }
+
+                    if (lastIndex === currentIndex) break;
+                }
+
+                lastIndex += direction;
+
+                this._fireEvent(lastIndex);
+            } while (lastIndex !== currentIndex);
+        }
+
+        currentWrappedInfo.frameIndex = currentIndex;
+        this._lastWrappedInfo = currentWrappedInfo;
     },
 
-    _fireEvent: function (eventInfo) {
+    _fireEvent: function (index) {
+        if (index < 0 || index >= this.events.length) return;
+
+        var eventInfo = this.events[index];
         var events = eventInfo.events;
         var components = this.target._components;
 
@@ -338,8 +354,7 @@ var EventAnimCurve = cc.Class({
     },
 
     onTimeChangedManually: function () {
-        this._lastEventIndex = null;
-        this._lastTime = 0;
+        this._lastWrappedInfo = null;
     }
 });
 

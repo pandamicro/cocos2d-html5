@@ -276,9 +276,8 @@ JS.mixin(AnimationNode.prototype, {
         var needRevers = false;
 
         if ((wrapMode & WrapModeMask.PingPong) === WrapModeMask.PingPong) {
-            var isComplete = currentIterations >= this.repeatCount;
             var isEnd = currentIterations - (currentIterations | 0) === 0;
-            if (isComplete || isEnd) {
+            if (isEnd) {
                 currentIterations -= 1;
             }
 
@@ -296,9 +295,11 @@ JS.mixin(AnimationNode.prototype, {
     getWrappedInfo: function (time) {
         var stopped = false;
         var duration = this.duration;
-        var currentIterations = Math.abs(time / duration);
         var ratio = 0;
         var wrapMode = this.wrapMode;
+
+        var currentIterations = Math.abs(time / duration);
+        if (currentIterations > this.repeatCount) currentIterations = this.repeatCount;
 
         var needRevers = false;
         if (wrapMode & WrapModeMask.ShouldWrap) {
@@ -311,7 +312,7 @@ JS.mixin(AnimationNode.prototype, {
         if (currentIterations >= this.repeatCount) {
             stopped = true;
             var tempRatio = this.repeatCount - (this.repeatCount | 0);
-            if (currentIterations > 0 && tempRatio === 0) {
+            if (tempRatio === 0) {
                 tempRatio = 1;  // 如果播放过，动画不复位
             }
             time = tempRatio * duration * (time > 0 ? 1 : -1);
@@ -337,7 +338,8 @@ JS.mixin(AnimationNode.prototype, {
             ratio: ratio,
             time: time,
             direction: direction,
-            stopped: stopped
+            stopped: stopped,
+            iterations: currentIterations
         }
     },
 
