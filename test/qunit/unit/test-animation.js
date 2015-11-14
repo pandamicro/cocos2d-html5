@@ -494,17 +494,15 @@ test('EventAnimCurve', function () {
     clip._duration = 2;
     clip._name = 'test';
     clip.sample = 10;
-    clip.events = {
-        'MyComp': [
-            {frame: 0.2, func: 'func1', params: ['Frame 0 Event triggered']},
-            {frame: 0.4, func: 'func2', params: [1, 2]},
-            {frame: 0.4, func: 'func3', params: ['Second event on frame 0.4']},
-            {frame: 1, func: 'func1', params: ['Frame 2 Event triggered']},
-            {frame: 1.2, func: 'func1', params: ['Frame 3 Event triggered']},
-            {frame: 1.4, func: 'func1', params: ['Frame 4 Event triggered']},
-            {frame: 1.8, func: 'func1', params: ['Frame 5 Event triggered']}
-        ]
-    };
+    clip.events = [
+        {frame: 0.2, func: 'func1', params: ['Frame 0 Event triggered']},
+        {frame: 0.4, func: 'func2', params: [1, 2]},
+        {frame: 0.4, func: 'func3', params: ['Second event on frame 0.4']},
+        {frame: 1, func: 'func1', params: ['Frame 2 Event triggered']},
+        {frame: 1.2, func: 'func1', params: ['Frame 3 Event triggered']},
+        {frame: 1.4, func: 'func1', params: ['Frame 4 Event triggered']},
+        {frame: 1.8, func: 'func1', params: ['Frame 5 Event triggered']}
+    ];
 
     state = new cc.AnimationState(clip);
     initClipData(entity, state);

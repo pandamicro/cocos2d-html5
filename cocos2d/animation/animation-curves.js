@@ -216,11 +216,9 @@ var EventInfo = function () {
 /**
  * @param {Function} [func] event function
  * @param {Object[]} [params] event params
- * @param {Object} [comp] event target
  */
-EventInfo.prototype.add = function (func, params, comp) {
+EventInfo.prototype.add = function (func, params) {
     this.events.push({
-        comp: comp || '',
         func: func || '',
         params: params || []
     });
@@ -324,27 +322,18 @@ var EventAnimCurve = cc.Class({
 
     _fireEvent: function (eventInfo) {
         var events = eventInfo.events;
+        var components = this.target._components;
 
         for (var i = 0;  i < events.length; i++) {
             var event = events[i];
-            var target = this.target;
-            var comp = event.comp;
-            if (comp) {
-                target = target.getComponent(comp);
+            var funcName = event.func;
 
-                if (!target) {
-                    cc.error('Can\'t find component [' + comp + ']');
-                    return;
-                }
+            for (var j = 0; j < components.length; j++) {
+                var component = components[j];
+                var func = component[funcName];
+
+                if (func) func.apply(component, event.params);
             }
-
-            var func = target[event.func];
-            if (!func) {
-                cc.error('Can\'t find function [' + event.func + ']');
-                return;
-            }
-
-            func.apply(target, event.params);
         }
     },
 
