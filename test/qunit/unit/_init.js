@@ -159,7 +159,7 @@ function _resetGame (w, h) {
         cc.container.style.height = h;
 
         var size = view.getDesignResolutionSize();
-        view.setDesignResolutionSize(size.width, size.height, view.getResolutionPolicy());
+        view.setDesignResolutionSize(size.width, size.height, cc.ResolutionPolicy.SHOW_ALL);
 
         cc.eventManager.dispatchCustomEvent('canvas-resize');
     }

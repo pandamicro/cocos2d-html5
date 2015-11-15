@@ -3,6 +3,8 @@ var bezier = require('./bezier').bezier;
 var bezierByTime = require('./bezier').bezierByTime;
 
 var binarySearch = require('./binary-search');
+var WrapMode = require('./types').WrapMode;
+var WrapModeMask = require('./types').WrapModeMask;
 
 //
 // 动画数据类，相当于 AnimationClip。
@@ -18,9 +20,11 @@ var AnimCurve = cc.Class({
     // @method sample
     // @param {number} time
     // @param {number} ratio - The normalized time specified as a number between 0.0 and 1.0 inclusive.
-    // @param {Animator} animator
+    // @param {AnimationNode} animationNode
     //
-    sample: function (time, ratio, animator) {}
+    sample: function (time, ratio, animationNode) {},
+
+    onTimeChangedManually: function () {}
 });
 
 
@@ -33,6 +37,8 @@ var AnimCurve = cc.Class({
 //
 var DynamicAnimCurve = cc.Class({
     name: 'cc.DynamicAnimCurve',
+    extends: AnimCurve,
+
     properties: {
 
         // The object being animated.
@@ -95,7 +101,7 @@ var DynamicAnimCurve = cc.Class({
 
     _findFrameIndex: binarySearch,
 
-    sample: function (time, ratio, animator) {
+    sample: function (time, ratio, animationNode) {
         var values = this.values;
         var ratios = this.ratios;
         var frameCount = ratios.length;
@@ -174,6 +180,15 @@ DynamicAnimCurve.Bezier = function (controlPoints) {
 };
 
 
+
+/**
+ * SampledAnimCurve, 这里面的数值需要是已经都预先sample好了的,
+ * 所以 SampledAnimCurve 中查找 frame index 的速度会非常快
+ *
+ * @class SampledAnimCurve
+ * @constructor
+ * @extends DynamicAnimCurve
+ */
 var SampledAnimCurve = cc.Class({
     name: 'cc.SampledAnimCurve',
     extends: DynamicAnimCurve,
@@ -187,13 +202,173 @@ var SampledAnimCurve = cc.Class({
     }
 });
 
+
+
+/**
+ * Event information,
+ * @class EventInfo
+ * @constructor
+ */
+var EventInfo = function () {
+    this.events = [];
+};
+
+/**
+ * @param {Function} [func] event function
+ * @param {Object[]} [params] event params
+ */
+EventInfo.prototype.add = function (func, params) {
+    this.events.push({
+        func: func || '',
+        params: params || []
+    });
+};
+
+
+/**
+ *
+ * @class EventAnimCurve
+ * @constructor
+ * @extends AnimCurve
+ */
+var EventAnimCurve = cc.Class({
+    name: 'cc.EventAnimCurve',
+    extends: AnimCurve,
+
+    properties: {
+        /**
+         * The object being animated.
+         * @property target
+         * @type {object}
+         */
+        target: null,
+
+        /** The keyframe ratio of the keyframe specified as a number between 0.0 and 1.0 inclusive. (x)
+         * @property ratios
+         * @type {number[]}
+         */
+        ratios: [],
+
+        /**
+         * @property events
+         * @type {EventInfo[]}
+         */
+        events: [],
+
+        /**
+         * Last wrapped info
+         * @property _lastWrappedInfo
+         * @type {Object}
+         * @default null
+         */
+        _lastWrappedInfo: null
+    },
+
+    _wrapIterations: function (iterations) {
+        if (iterations - (iterations | 0) === 0) iterations -= 1;
+        return iterations | 0;
+    },
+
+    sample: function (time, ratio, animationNode) {
+        var length = this.ratios.length;
+
+        var currentWrappedInfo = animationNode.getWrappedInfo(animationNode.time);
+        var direction = currentWrappedInfo.direction;
+        var currentIndex = binarySearch(this.ratios, currentWrappedInfo.ratio);
+        if (currentIndex < 0) {
+            currentIndex = ~currentIndex - 1;
+
+            // if direction is inverse, then increase index
+            if (direction < 0) currentIndex += 1;
+        }
+
+        var lastWrappedInfo = this._lastWrappedInfo;
+        var lastIndex = lastWrappedInfo ? lastWrappedInfo.frameIndex : currentWrappedInfo.frameIndex;
+
+        if (!lastWrappedInfo) {
+            this._fireEvent(currentIndex);
+        }
+        else if (lastIndex !== currentIndex) {
+
+            var wrapMode = animationNode.wrapMode;
+
+            var currentIterations = this._wrapIterations(currentWrappedInfo.iterations);
+            var lastIntIterations = this._wrapIterations(lastWrappedInfo.iterations);
+
+            direction = lastWrappedInfo.direction;
+
+            do {
+                if (lastIntIterations <= currentIterations) {
+                    if (direction === -1 && lastIndex === 0) {
+                        if ((wrapMode & WrapModeMask.PingPong) === WrapModeMask.PingPong) {
+                            direction *= -1;
+                        }
+                        else {
+                            lastIndex = length;
+                        }
+
+                        lastIntIterations ++;
+                    }
+                    else if (direction === 1 && lastIndex === length - 1) {
+                        if ((wrapMode & WrapModeMask.PingPong) === WrapModeMask.PingPong) {
+                            direction *= -1;
+                        }
+                        else {
+                            lastIndex = -1;
+                        }
+
+                        lastIntIterations ++;
+                    }
+
+                    if (lastIndex === currentIndex) break;
+                }
+
+                lastIndex += direction;
+
+                this._fireEvent(lastIndex);
+            } while (lastIndex !== currentIndex);
+        }
+
+        currentWrappedInfo.frameIndex = currentIndex;
+        this._lastWrappedInfo = currentWrappedInfo;
+    },
+
+    _fireEvent: function (index) {
+        if (index < 0 || index >= this.events.length) return;
+
+        var eventInfo = this.events[index];
+        var events = eventInfo.events;
+        var components = this.target._components;
+
+        for (var i = 0;  i < events.length; i++) {
+            var event = events[i];
+            var funcName = event.func;
+
+            for (var j = 0; j < components.length; j++) {
+                var component = components[j];
+                var func = component[funcName];
+
+                if (func) func.apply(component, event.params);
+            }
+        }
+    },
+
+    onTimeChangedManually: function () {
+        this._lastWrappedInfo = null;
+    }
+});
+
+
 if (CC_TEST) {
     cc._Test.DynamicAnimCurve = DynamicAnimCurve;
     cc._Test.SampledAnimCurve = SampledAnimCurve;
+    cc._Test.EventAnimCurve = EventAnimCurve;
 }
 
 module.exports = {
     AnimCurve: AnimCurve,
     DynamicAnimCurve: DynamicAnimCurve,
-    SampledAnimCurve: SampledAnimCurve
+    SampledAnimCurve: SampledAnimCurve,
+    EventAnimCurve: EventAnimCurve,
+    EventInfo: EventInfo
 };

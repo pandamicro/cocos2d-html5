@@ -57,7 +57,15 @@ JS.getset(state, 'curveLoaded',
 
 state.onPlay = function () {
     // replay
-    this.time = 0;
+    this.setTime(0);
 };
+
+state.setTime = function (time) {
+    this.time = time || 0;
+
+    this.curves.forEach(function (curve) {
+        curve.onTimeChangedManually();
+    });
+}
 
 cc.AnimationState = module.exports = AnimationState;

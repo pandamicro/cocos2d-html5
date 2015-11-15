@@ -271,60 +271,91 @@ JS.mixin(AnimationNode.prototype, {
         }
     },
 
-    _calculateWrappedTime: function (iterationTime, currentIterations) {
-        var duration = this.duration;
+    _needRevers: function (currentIterations) {
         var wrapMode = this.wrapMode;
+        var needRevers = false;
+
         if ((wrapMode & WrapModeMask.PingPong) === WrapModeMask.PingPong) {
+            var isEnd = currentIterations - (currentIterations | 0) === 0;
+            if (isEnd) {
+                currentIterations -= 1;
+            }
+
             var isOddIteration = currentIterations & 1;
             if (isOddIteration) {
-                iterationTime = duration - iterationTime;
+                needRevers = !needRevers;
             }
         }
         if ((wrapMode & WrapModeMask.Reverse) === WrapModeMask.Reverse) {
-            iterationTime = duration - iterationTime;
+            needRevers = !needRevers;
         }
-        return iterationTime;
+        return needRevers;
+    },
+
+    getWrappedInfo: function (time) {
+        var stopped = false;
+        var duration = this.duration;
+        var ratio = 0;
+        var wrapMode = this.wrapMode;
+
+        var currentIterations = Math.abs(time / duration);
+        if (currentIterations > this.repeatCount) currentIterations = this.repeatCount;
+
+        var needRevers = false;
+        if (wrapMode & WrapModeMask.ShouldWrap) {
+            needRevers = this._needRevers(currentIterations);
+        }
+
+        var direction = needRevers ? -1 : 1;
+        if (this.speed < 0) direction *= -1;
+
+        if (currentIterations >= this.repeatCount) {
+            stopped = true;
+            var tempRatio = this.repeatCount - (this.repeatCount | 0);
+            if (tempRatio === 0) {
+                tempRatio = 1;  // 如果播放过，动画不复位
+            }
+            time = tempRatio * duration * (time > 0 ? 1 : -1);
+        }
+
+        if (time > duration) {
+            var tempTime = time % duration;
+            time = tempTime === 0 ? duration : tempTime;
+        }
+        else if (time < 0) {
+            time = time % duration;
+            if (time !== 0 ) time += duration;
+        }
+
+        // calculate wrapped time
+        if (wrapMode & WrapModeMask.ShouldWrap) {
+            if (needRevers) time = duration - time;
+        }
+
+        ratio = time / duration;
+
+        return {
+            ratio: ratio,
+            time: time,
+            direction: direction,
+            stopped: stopped,
+            iterations: currentIterations
+        }
     },
 
     sample: function () {
 
-        // calculate times
-
-        var stopped = false;
-        var duration = this.duration;
-        var ratio = 0;         // computed ratio
-        var time = this.time;   // computed time
-        var currentIterations = time / duration;
-        if (currentIterations < this.repeatCount) {
-            // calculate iteration time
-            if (time > duration) {
-                time %= duration;
-            }
-            // calculate wrapped time
-            if (this.wrapMode & WrapModeMask.ShouldWrap) {
-                time = this._calculateWrappedTime(time, currentIterations);
-            }
-            ratio = time / duration;
-        }
-        else {
-            stopped = true;
-            ratio = this.repeatCount - (this.repeatCount | 0);
-            if (currentIterations > 0 && ratio === 0) {
-                ratio = 1; // 如果播放过，动画不复位
-            }
-            time = ratio * duration;
-        }
-
         // sample
 
+        var info = this.getWrappedInfo(this.time);
+
         var curves = this.curves;
-        var animator = this.animator;
         for (var i = 0, len = curves.length; i < len; i++) {
             var curve = curves[i];
-            curve.sample(time, ratio, animator);
+            curve.sample(info.time, info.ratio, this);
         }
 
-        return stopped;
+        return info.stopped;
     }
 
     //onPlay: function () {
