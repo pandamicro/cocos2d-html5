@@ -492,7 +492,7 @@ cc.deserialize = function (data, result, options) {
     var createAssetRefs = (options && options.createAssetRefs) || cc.sys.platform === cc.sys.EDITOR_CORE;
     var target = ENABLE_TARGET && (options && options.target);
 
-    if (EDITOR && cc._isNodeJs && Buffer.isBuffer(data)) {
+    if (CC_EDITOR && Buffer.isBuffer(data)) {
         data = data.toString();
     }
 
