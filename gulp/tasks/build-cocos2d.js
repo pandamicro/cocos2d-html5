@@ -16,7 +16,6 @@ var srcs = [
     "./cocos2d/core/platform/CCLoaders.js",
     "./cocos2d/core/platform/CCConfig.js",
     "./cocos2d/core/platform/miniFramework.js",
-    "./cocos2d/core/platform/CCMacro.js",
     "./cocos2d/core/platform/CCEGLView.js",
     "./cocos2d/core/platform/CCScreen.js",
     "./cocos2d/core/platform/CCVisibleRect.js",
