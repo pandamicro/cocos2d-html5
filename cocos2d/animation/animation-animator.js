@@ -46,6 +46,24 @@ p.stopState = function (state) {
     }
 };
 
+p.pauseState = function (state) {
+    if (state) {
+        state.pause();
+    }
+};
+
+p.resumeState = function (state) {
+    if (state) {
+        state.resume();
+    }
+};
+
+p.setStateTime = function (state, time) {
+    if (state) {
+        state.setTime(time);
+    }
+}
+
 if (CC_EDITOR) {
     p.reloadClip = function (state) {
         if (state.isPlaying) {

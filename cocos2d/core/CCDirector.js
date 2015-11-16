@@ -147,6 +147,15 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
             this._actionManager = null;
         }
 
+        // Animation manager
+        if (cc.AnimationManager) {
+            this._animationManager = new cc.AnimationManager();
+            this._scheduler.scheduleUpdate(this._animationManager, cc.Scheduler.PRIORITY_SYSTEM, false);
+        }
+        else {
+            this._animationManager = null;
+        }
+
         // Event target
         EventTarget.polyfill(this);
 
@@ -966,6 +975,15 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         if (this._actionManager !== actionManager) {
             this._actionManager = actionManager;
         }
+    },
+
+    /**
+     * Returns the cc.AnimationManager associated with this director.
+     * @method getAnimationManager
+     * @return {AnimationManager}
+     */
+    getAnimationManager: function () {
+        return this._animationManager;
     },
 
     /**

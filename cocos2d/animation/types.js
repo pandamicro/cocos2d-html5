@@ -216,19 +216,12 @@ function AnimationNode (animator, curves, timingInput) {
     this._timeNoScale = 0;
     this._firstFramePlayed = false;
 
-    ///**
-    // * The current iteration index beginning with zero for the first iteration.
-    // * @property currentIterations
-    // * @type {number}
-    // * @default 0
-    // * @readOnly
-    // */
-    //this.currentIterations = 0.0;
+    this._duringDelay = false;
 
     // play
 
     if (this.delay > 0) {
-        this.pause();
+        this._duringDelay = true;
     }
     this.play();
 }
@@ -240,15 +233,14 @@ JS.mixin(AnimationNode.prototype, {
 
         // calculate delay time
 
-        if (this._isPaused) {
+        if (this._duringDelay) {
             this._timeNoScale += delta;
             if (this._timeNoScale < this.delay) {
                 // still waiting
                 return;
             }
             else {
-                // play
-                this.play();
+                this._duringDelay = false;
             }
             //// start play
             // delta -= (this._timeNoScale - this.delay);
