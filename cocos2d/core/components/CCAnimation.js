@@ -102,16 +102,15 @@ var AnimationComponent = cc.Class({
 
     onLoad: function () {
         this._init();
-    },
 
-    start: function () {
-        if (/*this.enabled && */this.playAutomatically && this.defaultClip) {
+        if (this.enabled && this.playAutomatically && this.defaultClip) {
             var state = this.getAnimationState(this.defaultClip.name);
             this._animator.playState(state);
         }
     },
 
     onDisable: function () {
+        this.setCurrentTime(0);
         this.stop();
     },
 
@@ -158,6 +157,67 @@ var AnimationComponent = cc.Class({
         }
         else {
             this._animator.stop();
+        }
+    },
+
+    /**
+     * Pauses an animation named name. If no name is supplied then pauses all playing animations that were started with this Animation.
+     * @method pause
+     * @param {String} [name] - The animation to pauses, if not supplied then pauses all playing animations.
+     */
+    pause: function (name) {
+        if (!this._didInit) {
+            return;
+        }
+        if (name) {
+            var state = this._nameToState[name];
+            if (state) {
+                this._animator.pauseState(state);
+            }
+        }
+        else {
+            this._animator.pause();
+        }
+    },
+
+    /**
+     * Resumes an animation named name. If no name is supplied then resumes all paused animations that were started with this Animation.
+     * @method pause
+     * @param {String} [name] - The animation to resumes, if not supplied then resumes all paused animations.
+     */
+    resume: function (name) {
+        if (!this._didInit) {
+            return;
+        }
+        if (name) {
+            var state = this._nameToState[name];
+            if (state) {
+                this._animator.resumeState(state);
+            }
+        }
+        else {
+            this._animator.resume();
+        }
+    },
+
+    /**
+     * Make an animation named name go to the specified time. If no name is supplied then make all animations go to the specified time.
+     * @method setCurrentTime
+     * @param {Number} [time] - The time to go to
+     * @param {String} [name] - Specified animation name, if not supplied then make all animations go to the time.
+     */
+    setCurrentTime: function (time, name) {
+        if (name) {
+            var state = this._nameToState[name];
+            if (state) {
+                this._animator.setStateTime(state, time);
+            }
+        }
+        else {
+            for (var name in this._nameToState) {
+                state = this._nameToState[name];
+                this._animator.setStateTime(state, time);
+            }
         }
     },
 
