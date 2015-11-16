@@ -103,7 +103,7 @@ var AnimationComponent = cc.Class({
     onLoad: function () {
         this._init();
 
-        if (this.enabled && this.playAutomatically && this.defaultClip) {
+        if (this.playAutomatically && this.defaultClip) {
             var state = this.getAnimationState(this.defaultClip.name);
             this._animator.playState(state);
         }
