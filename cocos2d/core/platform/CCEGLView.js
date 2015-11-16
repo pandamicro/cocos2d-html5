@@ -501,8 +501,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
         container.style.width = width + 'px';
         container.style.height = height + 'px';
 
-        // make canvas size works
-        this.setDesignResolutionSize(this._designResolutionSize.width, this._designResolutionSize.height, this.getResolutionPolicy());
+        this._resizeEvent();
     },
 
     /**
