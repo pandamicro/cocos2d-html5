@@ -49,7 +49,7 @@ function parseNotify (val, propName, notify, properties) {
     if (val.hasOwnProperty('default')) {
         // 添加新的内部属性，将原来的属性修改为 getter/setter 形式
         // 以 _ 开头将自动设置property 为 visible: false
-        var newKey = "_valOf$" + propName;
+        var newKey = "_N$" + propName;
 
         val.get = function () {
             return this[newKey];
@@ -128,6 +128,9 @@ function parseType (val, type, className, propName) {
                           'otherwise you should use "url: %s" instead', className, propName,
                     cc.js.getClassName(type));
             }
+        }
+        else if (type === 'Number') {
+            cc.warn('The "type" attribute of "%s.%s" can not be "Number", use "Float" or "Integer" instead please.', className, propName);
         }
         else if (type == null) {
             cc.warn('The "type" attribute of "%s.%s" is undefined when loading script.', className, propName);

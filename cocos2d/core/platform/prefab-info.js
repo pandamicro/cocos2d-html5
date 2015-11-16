@@ -1,4 +1,3 @@
-
 // 保存编辑器下用到的 prefab 相关信息
 var PrefabInfo = cc.Class({
     name: 'cc.PrefabInfo',

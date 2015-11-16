@@ -98,27 +98,27 @@ cc.ALIGN_TOP_LEFT = 0x11;
 
 /**
  * The texture wrap mode
- * @class WrapMode
+ * @class Texture2D.WrapMode
  * @static
  * @namespace Texture2D
  */
 var WrapMode = cc.Enum({
     /**
-     * the constant variable equals gl.REPEAT for texture
+     * The constant variable equals gl.REPEAT for texture
      * @property REPEAT
      * @type {Number}
      * @readonly
      */
     REPEAT: 0x2901,
     /**
-     * the constant variable equals gl.CLAMP_TO_EDGE for texture
+     * The constant variable equals gl.CLAMP_TO_EDGE for texture
      * @property CLAMP_TO_EDGE
      * @type {Number}
      * @readonly
      */
     CLAMP_TO_EDGE: 0x812f,
     /**
-     * the constant variable equals gl.MIRRORED_REPEAT for texture
+     * The constant variable equals gl.MIRRORED_REPEAT for texture
      * @property MIRRORED_REPEAT
      * @type {Number}
      * @readonly
@@ -135,16 +135,9 @@ var WrapMode = cc.Enum({
  * Depending on how you create the cc.Texture2D object, the actual image area of the texture might be smaller than the texture dimensions <br/>
  *  i.e. "contentSize" != (pixelsWide, pixelsHigh) and (maxS, maxT) != (1.0, 1.0).                                           <br/>
  * Be aware that the content of the generated textures will be upside-down! </p>
- * @name cc.Texture2D
- * @class
- * @extends cc.RawAsset
- *
- * @property {WebGLTexture}     name            - <@readonly> WebGLTexture Object
- * @property {Number}           pixelFormat     - <@readonly> Pixel format of the texture
- * @property {Number}           pixelWidth     - <@readonly> Width in pixels
- * @property {Number}           pixelHeight    - <@readonly> Height in pixels
- * @property {Number}           width           - Content width in points
- * @property {Number}           height          - Content height in points
+
+ * @class Texture2D
+ * @extends RawAsset
  */
 var Texture2D = cc.Class(/** @lends cc.Texture2D# */{
 
@@ -177,7 +170,8 @@ var Texture2D = cc.Class(/** @lends cc.Texture2D# */{
     },
 
     /**
-     * Get width in pixels
+     * Get width in pixels.
+     * @method getPixelWidth
      * @return {Number}
      */
     getPixelWidth: function () {
@@ -185,7 +179,8 @@ var Texture2D = cc.Class(/** @lends cc.Texture2D# */{
     },
 
     /**
-     * Get height of in pixels
+     * Get height of in pixels.
+     * @method getPixelHeight
      * @return {Number}
      */
     getPixelHeight: function () {
@@ -193,8 +188,9 @@ var Texture2D = cc.Class(/** @lends cc.Texture2D# */{
     },
 
     /**
-     * get content size
-     * @returns {cc.Size}
+     * Get content size.
+     * @method getContentSize
+     * @returns {Size}
      */
     getContentSize: function () {
         var locScaleFactor = cc.contentScaleFactor();
@@ -209,15 +205,17 @@ var Texture2D = cc.Class(/** @lends cc.Texture2D# */{
     },
 
     /**
-     * get content size in pixels
-     * @returns {cc.Size}
+     * Get content size in pixels.
+     * @method getContentSizeInPixels
+     * @returns {Size}
      */
     getContentSizeInPixels: function () {
         return this._contentSize;
     },
 
     /**
-     * init with HTML element
+     * Init with HTML element.
+     * @method initWithElement
      * @param {HTMLImageElement|HTMLCanvasElement} element
      */
     initWithElement: function (element) {
@@ -230,12 +228,13 @@ var Texture2D = cc.Class(/** @lends cc.Texture2D# */{
     },
 
     /**
-     * Intializes with a texture2d with data
+     * Intializes with a texture2d with data.
+     * @method initWithData
      * @param {Array} data
      * @param {Number} pixelFormat
      * @param {Number} pixelsWide
      * @param {Number} pixelsHigh
-     * @param {cc.Size} contentSize
+     * @param {Size} contentSize
      * @return {Boolean}
      */
     initWithData: function (data, pixelFormat, pixelsWide, pixelsHigh, contentSize) {
@@ -244,10 +243,11 @@ var Texture2D = cc.Class(/** @lends cc.Texture2D# */{
     },
 
     /**
-     * Initializes a texture from a UIImage object
+     * Initializes a texture from a UIImage object.
      * Extensions to make it easy to create a CCTexture2D object from an image file.
      * Note that RGBA type textures will have their alpha premultiplied - use the blending mode (gl.ONE, gl.ONE_MINUS_SRC_ALPHA).
-     * @param uiImage
+     * @method initWithImage
+     * @param {HTMLImageElement} uiImage
      * @return {Boolean}
      */
     initWithImage: function (uiImage) {
@@ -256,7 +256,8 @@ var Texture2D = cc.Class(/** @lends cc.Texture2D# */{
     },
 
     /**
-     * HTMLElement Object getter
+     * HTMLElement Object getter.
+     * @method getHtmlElementObj
      * @return {HTMLImageElement|HTMLCanvasElement}
      */
     getHtmlElementObj: function () {
@@ -264,16 +265,18 @@ var Texture2D = cc.Class(/** @lends cc.Texture2D# */{
     },
 
     /**
-     * check whether texture is loaded
-     * @returns {boolean}
+     * Check whether texture is loaded.
+     * @method isLoaded
+     * @returns {Boolean}
      */
     isLoaded: function () {
         return this._textureLoaded;
     },
 
     /**
-     * handler of texture loaded event
-     * @param {Boolean} [premultiplied=false]
+     * Handler of texture loaded event.
+     * @method handleLoadedTexture
+     * @param {Boolean} [premultiplied]
      */
     handleLoadedTexture: function () {
         var self = this;
@@ -293,15 +296,17 @@ var Texture2D = cc.Class(/** @lends cc.Texture2D# */{
     },
 
     /**
-     * description of cc.Texture2D
-     * @returns {string}
+     * Description of cc.Texture2D.
+     * @method description
+     * @returns {String}
      */
     description: function () {
         return "<cc.Texture2D | Name = " + this.getName() + " | Dimensions = " + this.getPixelWidth() + " x " + this.getPixelHeight() + ">";
     },
 
     /**
-     * release texture
+     * Release texture.
+     * @method releaseTexture
      */
     releaseTexture: function () {
         if (this._webTextureObj)
@@ -314,7 +319,8 @@ var Texture2D = cc.Class(/** @lends cc.Texture2D# */{
     },
 
     /**
-     * pixel format of the texture
+     * Pixel format of the texture.
+     * @method getPixelFormat
      * @return {Number}
      */
     getPixelFormat: function () {
@@ -324,7 +330,8 @@ var Texture2D = cc.Class(/** @lends cc.Texture2D# */{
 
     /**
      * Whether or not the texture has their Alpha premultiplied,
-     * support only in WebGl rendering mode
+     * support only in WebGl rendering mode.
+     * @method hasPremultipliedAlpha
      * @return {Boolean}
      */
     hasPremultipliedAlpha: function () {
@@ -332,7 +339,8 @@ var Texture2D = cc.Class(/** @lends cc.Texture2D# */{
     },
 
     /**
-     * Whether or not use mipmap, support only in WebGl rendering mode
+     * Whether or not use mipmap, support only in WebGl rendering mode.
+     * @method hasMipmaps
      * @return {Boolean}
      */
     hasMipmaps: function () {
@@ -340,8 +348,9 @@ var Texture2D = cc.Class(/** @lends cc.Texture2D# */{
     },
 
     /**
-     * sets the min filter, mag filter, wrap s and wrap t texture parameters. <br/>
+     * Sets the min filter, mag filter, wrap s and wrap t texture parameters. <br/>
      * If the texture size is NPOT (non power of 2), then in can only use gl.CLAMP_TO_EDGE in gl.TEXTURE_WRAP_{S,T}.
+     * @method setTexParameters
      * @param {Object|Number} texParams texParams object or minFilter
      * @param {Number} [magFilter]
      * @param {Texture2D.WrapMode} [wrapS]
@@ -670,6 +679,16 @@ game.once(game.EVENT_RENDERER_INITED, function () {
                     if(this._backupElement !== null)
                         this._htmlElementObj = this._backupElement;
                 }
+            },
+
+            _generateGrayTexture: function() {
+                if(!this._textureLoaded)
+                    return null;
+                var grayElement = generateGrayTexture(this._htmlElementObj);;
+                var newTexture = new Texture2D();
+                newTexture.initWithElement(grayElement);
+                newTexture.handleLoadedTexture();
+                return newTexture;
             },
 
             //change color function
@@ -1094,5 +1113,45 @@ game.once(game.EVENT_RENDERER_INITED, function () {
         });
     }
 });
+
+/**
+ * WebGLTexture Object.
+ * @property name
+ * @type {WebGLTexture}
+ * @readonly
+ */
+
+/**
+ * Pixel format of the texture.
+ * @property pixelFormat
+ * @type {Number}
+ * @readonly
+ */
+
+/**
+ * Width in pixels.
+ * @property pixelWidth
+ * @type {Number}
+ * @readonly
+ */
+
+/**
+ * Height in pixels.
+ * @property pixelHeight
+ * @type {Number}
+ * @readonly
+ */
+
+/**
+ * Content width in points.
+ * @property width
+ * @type {Number}
+ */
+
+/**
+ * Content height in points.
+ * @property height
+ * @type {Number}
+ */
 
 cc.Texture2D = module.exports = Texture2D;

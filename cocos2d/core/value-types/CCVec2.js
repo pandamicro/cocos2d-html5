@@ -6,7 +6,7 @@ var FireClass = require('../platform/CCClass');
  * Representation of 2D vectors and points.
  *
  * see {% crosslink cc.Vec2 cc.v2 %}
- * @class cc.Vec2
+ * @class Vec2
  * @extends ValueType
  * @constructor
  * @param {number} [x=0]
@@ -436,9 +436,7 @@ JS.get(Vec2, 'right', function () {
 cc.Vec2 = Vec2;
 var proto = Vec2.prototype;
 
-/**
- * @module cc
- */
+
 /**
  * The convenience method to create a new {% crosslink Vec2 Vec2 %}
  * @method v2

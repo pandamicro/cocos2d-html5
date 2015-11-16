@@ -26,9 +26,8 @@
 
 /**
  * Audio Source.
- * @class
- * @name cc.AudioScource
- * @extend cc.CCComponent
+ * @class AudioScource
+ * @extends CCComponent
  */
 
 var audioEngine = cc.audioEngine;
@@ -36,6 +35,10 @@ var audioEngine = cc.audioEngine;
 var AudioSource = cc.Class({
     name: 'cc.Audio',
     extends: require('./CCComponent'),
+
+    editor: CC_EDITOR && {
+        menu: 'Audio'
+    },
 
     ctor: function () {
         this.audio = null;
@@ -53,7 +56,7 @@ var AudioSource = cc.Class({
         /**
          * Is the audio source playing (Read Only)
          * @property isPlaying
-         * @type {boolean}
+         * @type {Boolean}
          * @readOnly
          * @default false
          */
@@ -67,7 +70,7 @@ var AudioSource = cc.Class({
         /**
          * The clip of the audio source.
          * @property clip
-         * @type {cc.AudioClip}
+         * @type {AudioClip}
          * @default 1
          */
         clip: {
@@ -83,7 +86,7 @@ var AudioSource = cc.Class({
         /**
          * The volume of the audio source.
          * @property volume
-         * @type {number}
+         * @type {Number}
          * @default 1
          */
         volume: {
@@ -99,7 +102,7 @@ var AudioSource = cc.Class({
         /**
          * Is the audio source mute?
          * @property mute
-         * @type {boolean}
+         * @type {Boolean}
          * @default false
          */
         mute: {
@@ -122,7 +125,7 @@ var AudioSource = cc.Class({
         /**
          * Is the audio source looping?
          * @property loop
-         * @type {boolean}
+         * @type {Boolean}
          * @default false
          */
         loop: {
@@ -138,7 +141,7 @@ var AudioSource = cc.Class({
         /**
          * If set to true, the audio source will automatically start playing on onLoad.
          * @property playOnLoad
-         * @type {boolean}
+         * @type {Boolean}
          * @default true
          */
         playOnLoad: true

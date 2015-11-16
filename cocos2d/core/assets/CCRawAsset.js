@@ -1,5 +1,4 @@
 var CCObject = require('../platform/CCObject');
-
 /**
  * The base class for registering asset types.
  *
@@ -17,11 +16,12 @@ cc.RawAsset = cc.Class({
         /**
          * Create a new node in the scene.
          * If this type of asset dont have its corresponding node type, this method should be null.
+         *
          * @method createNodeByUrl
-         * @param {string} url
-         * @param {function} callback
-         * @param {string} callback.error - null or the error info
-         * @param {object} callback.node - the created node or null
+         * @param {String} url
+         * @param {Function} callback
+         * @param {String} callback.error - null or the error info
+         * @param {Object} callback.node - the created node or null
          */
         createNodeByUrl: null,
     }

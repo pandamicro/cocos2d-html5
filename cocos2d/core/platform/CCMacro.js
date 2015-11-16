@@ -26,45 +26,45 @@
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.INVALID_INDEX = -1;
 
 /**
  * PI is the ratio of a circle's circumference to its diameter.
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.PI = Math.PI;
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.FLT_MAX = parseFloat('3.402823466e+38F');
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.FLT_MIN = parseFloat("1.175494351e-38F");
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.RAD = cc.PI / 180;
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.DEG = 180 / cc.PI;
 
 /**
  * maximum unsigned int value
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.UINT_MAX = 0xffffffff;
 
@@ -77,7 +77,7 @@ cc.UINT_MAX = 0xffffffff;
  * @param {String} x
  * @param {String} y
  * @param {Object} ref
- * @function
+ * @method swap
  * @deprecated since v3.0
  */
 cc.swap = function (x, y, ref) {
@@ -96,10 +96,8 @@ cc.swap = function (x, y, ref) {
  * @param {Number} a number A
  * @param {Number} b number B
  * @param {Number} r ratio between 0 and 1
- * @function
- * @example
- * cc.lerp(2,10,0.5)//returns 6<br/>
- * cc.lerp(2,10,0.2)//returns 3.6
+ * @method lerp
+ * @example {@link utils/api/cocos/docs/cocos2d/core/platform/CCMacro/.js}
  */
 cc.lerp = function (a, b, r) {
     return a + (b - a) * r;
@@ -107,8 +105,8 @@ cc.lerp = function (a, b, r) {
 
 /**
  * get a random number from 0 to 0xffffff
- * @function
- * @returns {number}
+ * @method rand
+ * @returns {Number}
  */
 cc.rand = function () {
 	return Math.random() * 0xffffff;
@@ -117,7 +115,7 @@ cc.rand = function () {
 /**
  * returns a random float between -1 and 1
  * @return {Number}
- * @function
+ * @method randomMinus1To1
  */
 cc.randomMinus1To1 = function () {
     return (Math.random() - 0.5) * 2;
@@ -126,7 +124,7 @@ cc.randomMinus1To1 = function () {
 /**
  * returns a random float between 0 and 1
  * @return {Number}
- * @function
+ * @method random0To1
  */
 cc.random0To1 = Math.random;
 
@@ -134,7 +132,7 @@ cc.random0To1 = Math.random;
  * converts degrees to radians
  * @param {Number} angle
  * @return {Number}
- * @function
+ * @method degreesToRadians
  */
 cc.degreesToRadians = function (angle) {
     return angle * cc.RAD;
@@ -144,7 +142,7 @@ cc.degreesToRadians = function (angle) {
  * converts radians to degrees
  * @param {Number} angle
  * @return {Number}
- * @function
+ * @method radiansToDegrees
  */
 cc.radiansToDegrees = function (angle) {
     return angle * cc.DEG;
@@ -153,7 +151,7 @@ cc.radiansToDegrees = function (angle) {
  * converts radians to degrees
  * @param {Number} angle
  * @return {Number}
- * @function
+ * @method radiansToDegress
  */
 cc.radiansToDegress = function (angle) {
     cc.log(cc._LogInfos.radiansToDegress);
@@ -168,8 +166,8 @@ cc.REPEAT_FOREVER = Number.MAX_VALUE - 1;
 
 /**
  * Helpful macro that setups the GL server state, the correct GL program and sets the Model View Projection matrix
- * @param {cc.Node} node setup node
- * @function
+ * @param {ENode} node setup node
+ * @method nodeDrawSetup
  */
 cc.nodeDrawSetup = function (node) {
     //cc.glEnable(node._glServerState);
@@ -188,7 +186,7 @@ cc.nodeDrawSetup = function (node) {
  *       - GL_TEXTURE_COORD_ARRAY<br/>
  *       - GL_COLOR_ARRAY<br/>
  * </p>
- * @function
+ * @method enableDefaultGLStates
  */
 cc.enableDefaultGLStates = function () {
     //TODO OPENGL STUFF
@@ -206,7 +204,7 @@ cc.enableDefaultGLStates = function () {
  *     - GL_TEXTURE_COORD_ARRAY<br/>
  *     - GL_COLOR_ARRAY<br/>
  * </p>
- * @function
+ * @method disableDefaultGLStates
  */
 cc.disableDefaultGLStates = function () {
     //TODO OPENGL
@@ -224,7 +222,7 @@ cc.disableDefaultGLStates = function () {
  *  The number of calls per frame are displayed on the screen when the CCDirector's stats are enabled.<br/>
  * </p>
  * @param {Number} addNumber
- * @function
+ * @method incrementGLDraws
  */
 cc.incrementGLDraws = function (addNumber) {
     cc.g_NumberOfDraws += addNumber;
@@ -232,7 +230,7 @@ cc.incrementGLDraws = function (addNumber) {
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.FLT_EPSILON = 0.0000001192092896;
 
@@ -242,7 +240,7 @@ cc.FLT_EPSILON = 0.0000001192092896;
  *     On iPhone it returns 2 if RetinaDisplay is On. Otherwise it returns 1
  * </p>
  * @return {Number}
- * @function
+ * @method contentScaleFactor
  */
 cc.contentScaleFactor = cc.IS_RETINA_DISPLAY_SUPPORTED ? function () {
     return cc.director.getContentScaleFactor();
@@ -252,9 +250,9 @@ cc.contentScaleFactor = cc.IS_RETINA_DISPLAY_SUPPORTED ? function () {
 
 /**
  * Converts a Point in points to pixels
- * @param {cc.Vec2} points
- * @return {cc.Vec2}
- * @function
+ * @param {Vec2} points
+ * @return {Vec2}
+ * @method pointPointsToPixels
  */
 cc.pointPointsToPixels = function (points) {
     var scale = cc.contentScaleFactor();
@@ -263,9 +261,9 @@ cc.pointPointsToPixels = function (points) {
 
 /**
  * Converts a Point in pixels to points
- * @param {cc.Rect} pixels
- * @return {cc.Vec2}
- * @function
+ * @param {Rect} pixels
+ * @return {Vec2}
+ * @method pointPixelsToPoints
  */
 cc.pointPixelsToPoints = function (pixels) {
 	var scale = cc.contentScaleFactor();
@@ -280,9 +278,9 @@ cc._pointPixelsToPointsOut = function(pixels, outPoint){
 
 /**
  * Converts a Size in points to pixels
- * @param {cc.Size} sizeInPoints
- * @return {cc.Size}
- * @function
+ * @param {Size} sizeInPoints
+ * @return {Size}
+ * @method sizePointsToPixels
  */
 cc.sizePointsToPixels = function (sizeInPoints) {
     var scale = cc.contentScaleFactor();
@@ -291,9 +289,9 @@ cc.sizePointsToPixels = function (sizeInPoints) {
 
 /**
  * Converts a size in pixels to points
- * @param {cc.Size} sizeInPixels
- * @return {cc.Size}
- * @function
+ * @param {Size} sizeInPixels
+ * @return {Size}
+ * @method sizePixelsToPoints
  */
 cc.sizePixelsToPoints = function (sizeInPixels) {
     var scale = cc.contentScaleFactor();
@@ -308,9 +306,9 @@ cc._sizePixelsToPointsOut = function (sizeInPixels, outSize) {
 
 /**
  * Converts a rect in pixels to points
- * @param {cc.Rect} pixel
- * @return {cc.Rect}
- * @function
+ * @param {Rect} pixel
+ * @return {Rect}
+ * @method rectPixelsToPoints
  */
 cc.rectPixelsToPoints = cc.IS_RETINA_DISPLAY_SUPPORTED ? function (pixel) {
     var scale = cc.contentScaleFactor();
@@ -322,9 +320,9 @@ cc.rectPixelsToPoints = cc.IS_RETINA_DISPLAY_SUPPORTED ? function (pixel) {
 
 /**
  * Converts a rect in points to pixels
- * @param {cc.Rect} point
- * @return {cc.Rect}
- * @function
+ * @param {Rect} point
+ * @return {Rect}
+ * @method rectPointsToPixels
  */
 cc.rectPointsToPixels = cc.IS_RETINA_DISPLAY_SUPPORTED ? function (point) {
    var scale = cc.contentScaleFactor();
@@ -337,94 +335,94 @@ cc.rectPointsToPixels = cc.IS_RETINA_DISPLAY_SUPPORTED ? function (point) {
 //some gl constant variable
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.ONE = 1;
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.ZERO = 0;
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.SRC_ALPHA = 0x0302;
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.SRC_ALPHA_SATURATE = 0x308;
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.SRC_COLOR = 0x300;
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.DST_ALPHA = 0x304;
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.DST_COLOR = 0x306;
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.ONE_MINUS_SRC_ALPHA = 0x0303;
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.ONE_MINUS_SRC_COLOR = 0x301;
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.ONE_MINUS_DST_ALPHA = 0x305;
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.ONE_MINUS_DST_COLOR = 0x0307;
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.ONE_MINUS_CONSTANT_ALPHA	= 0x8004;
 
 /**
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.ONE_MINUS_CONSTANT_COLOR	= 0x8002;
 
 /**
  * the constant variable equals gl.LINEAR for texture
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.LINEAR	= 0x2601;
 
 /**
  * default gl blend src function. Compatible with premultiplied alpha images.
  * @constant
- * @name cc.BLEND_SRC
- * @type Number
+ * @name BLEND_SRC
+ * @type {Number}
  */
 cc.defineGetterSetter(cc, "BLEND_SRC", function (){
     if (cc._renderType === cc.game.RENDER_TYPE_WEBGL
@@ -439,13 +437,13 @@ cc.defineGetterSetter(cc, "BLEND_SRC", function (){
 /**
  * default gl blend dst function. Compatible with premultiplied alpha images.
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.BLEND_DST = 0x0303;
 
 /**
  * Check webgl error.Error will be shown in console if exists.
- * @function
+ * @method checkGLErrorDebug
  */
 cc.checkGLErrorDebug = function () {
     if (cc.renderMode === cc.game.RENDER_TYPE_WEBGL) {
@@ -460,35 +458,35 @@ cc.checkGLErrorDebug = function () {
 /**
  * Device oriented vertically, home button on the bottom (UIDeviceOrientationPortrait)
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.DEVICE_ORIENTATION_PORTRAIT = 0;
 
 /**
  * Device oriented horizontally, home button on the right (UIDeviceOrientationLandscapeLeft)
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.DEVICE_ORIENTATION_LANDSCAPE_LEFT = 1;
 
 /**
  * Device oriented vertically, home button on the top (UIDeviceOrientationPortraitUpsideDown)
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.DEVICE_ORIENTATION_PORTRAIT_UPSIDE_DOWN = 2;
 
 /**
  * Device oriented horizontally, home button on the left (UIDeviceOrientationLandscapeRight)
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.DEVICE_ORIENTATION_LANDSCAPE_RIGHT = 3;
 
 /**
  * In browsers, we only support 2 orientations by change window size.
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.DEVICE_MAX_ORIENTATIONS = 2;
 
@@ -706,39 +704,39 @@ cc.ATTRIBUTE_NAME_TEX_COORD = "a_texCoord";
 /**
  * default size for font size
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.ITEM_SIZE = 32;
 
 /**
  * default tag for current item
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.CURRENT_ITEM = 0xc0c05001;
 /**
  * default tag for zoom action tag
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.ZOOM_ACTION_TAG = 0xc0c05002;
 /**
  * default tag for normal
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.NORMAL_TAG = 8801;
 
 /**
  * default selected tag
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.SELECTED_TAG = 8802;
 
 /**
  * default disabled tag
  * @constant
- * @type Number
+ * @type {Number}
  */
 cc.DISABLE_TAG = 8803;

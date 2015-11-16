@@ -27,7 +27,7 @@ var inputManager = require("./CCInputManager");
 
 /**
  * whether enable accelerometer event
- * @function
+ * @method setAccelerometerEnabled
  * @param {Boolean} isEnable
  */
 inputManager.setAccelerometerEnabled = function(isEnable){
@@ -48,7 +48,7 @@ inputManager.setAccelerometerEnabled = function(isEnable){
 
 /**
  * set accelerometer interval value
- * @function
+ * @method setAccelerometerInterval
  * @param {Number} interval
  */
 inputManager.setAccelerometerInterval = function(interval){

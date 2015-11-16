@@ -10,7 +10,7 @@ var AnimationNode = require('./types').AnimationNode;
  * @extends AnimationNode
  * @constructor
  * @param {AnimationClip} clip
- * @param {string} [name]
+ * @param {String} [name]
  */
 function AnimationState (clip, name) {
     AnimationNode.call(this, null, null, {
@@ -37,7 +37,7 @@ JS.get(state, 'clip', function () {
 /**
  * The name of the playing animation.
  * @property name
- * @type {string}
+ * @type {String}
  * @readOnly
  */
 JS.get(state, 'name', function () {
@@ -57,7 +57,15 @@ JS.getset(state, 'curveLoaded',
 
 state.onPlay = function () {
     // replay
-    this.time = 0;
+    this.setTime(0);
 };
+
+state.setTime = function (time) {
+    this.time = time || 0;
+
+    this.curves.forEach(function (curve) {
+        curve.onTimeChangedManually();
+    });
+}
 
 cc.AnimationState = module.exports = AnimationState;

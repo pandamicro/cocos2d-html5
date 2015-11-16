@@ -1,4 +1,3 @@
-
 var JS = cc.js;
 var Playable = require('./playable');
 
@@ -12,8 +11,8 @@ var WrapModeMask = {
 
 /**
  * Specifies how time is treated when it is outside of the keyframe range of an Animation.
- * @readonly
- * @enum {number}
+ * @readOnly
+ * @enum WrapMode
  * @memberof cc
  */
 var WrapMode = cc.Enum({
@@ -21,24 +20,28 @@ var WrapMode = cc.Enum({
     /**
      * !#en Reads the default wrap mode set higher up.
      * !#zh 向 Animation Component 或者 AnimationClip 查找 wrapMode
+     * @property {Number} Default
      */
     Default: 0,
 
     /**
      * !#en All iterations are played as specified.
      * !#zh 动画只播放一遍
+     * @property {Number} Normal
      */
     Normal: 1,
 
     /**
      * !#en All iterations are played in the reverse direction from the way they are specified.
      * !#zh 从最后一帧或结束位置开始反向播放，到第一帧或开始位置停止
+     * @property {Number} Reverse
      */
     Reverse: WrapModeMask.Reverse,
 
     /**
      * !#en When time reaches the end of the animation, time will continue at the beginning.
      * !#zh 循环播放
+     * @property {Number} Loop
      */
     Loop: WrapModeMask.Loop,
 
@@ -46,6 +49,7 @@ var WrapMode = cc.Enum({
      * !#en All iterations are played in the reverse direction from the way they are specified.
      * And when time reaches the start of the animation, time will continue at the ending.
      * !#zh 反向循环播放
+     * @property {Number} LoopReverse
      */
     LoopReverse: WrapModeMask.Loop | WrapModeMask.Reverse,
 
@@ -53,6 +57,7 @@ var WrapMode = cc.Enum({
      * !#en Even iterations are played as specified, odd iterations are played in the reverse direction from the way they
      * are specified.
      * !#zh 从第一帧播放到最后一帧，然后反向播放回第一帧，到第一帧后再正向播放，如此循环
+     * @property {Number} PingPong
      */
     PingPong: WrapModeMask.PingPong,
 
@@ -60,6 +65,7 @@ var WrapMode = cc.Enum({
      * !#en Even iterations are played in the reverse direction from the way they are specified, odd iterations are played
      * as specified.
      * !#zh 从最后一帧开始反向播放，其他同 PingPong
+     * @property {Number} PingPongReverse
      */
     PingPongReverse: WrapModeMask.PingPong | WrapModeMask.Reverse
 });
@@ -93,7 +99,7 @@ AnimationNodeBase.prototype.update = function (deltaTime) {};
  * @constructor
  * @param {Animator} animator
  * @param {AnimCurve[]} [curves]
- * @param {object} [timingInput] - This dictionary is used as a convenience for specifying the timing properties of an Animation in bulk.
+ * @param {Object} [timingInput] - This dictionary is used as a convenience for specifying the timing properties of an Animation in bulk.
  */
 function AnimationNode (animator, curves, timingInput) {
     AnimationNodeBase.call(this);
@@ -114,7 +120,7 @@ function AnimationNode (animator, curves, timingInput) {
      * !#zh 延迟多少秒播放
      *
      * @property delay
-     * @type {number}
+     * @type {Number}
      * @default 0
      */
     this.delay = 0;
@@ -131,7 +137,7 @@ function AnimationNode (animator, curves, timingInput) {
      * !#zh 迭代次数, 指动画播放多少次后结束, normalize time. 如 2.5 ( 2次半 )
      *
      * @property repeatCount
-     * @type {number}
+     * @type {Number}
      * @default 1
      */
     this.repeatCount = 1;
@@ -141,7 +147,7 @@ function AnimationNode (animator, curves, timingInput) {
      * !#zh 单次动画的持续时间, 秒
      *
      * @property duration
-     * @type {number}
+     * @type {Number}
      * @readOnly
      */
     this.duration = 1;
@@ -150,7 +156,7 @@ function AnimationNode (animator, curves, timingInput) {
      * !#en The animation's playback speed. 1 is normal playback speed.
      * !#zh 播放速率
      * @property speed
-     * @type {number}
+     * @type {Number}
      * @default: 1.0
      */
     this.speed = 1;
@@ -202,7 +208,7 @@ function AnimationNode (animator, curves, timingInput) {
     /**
      * The current time of this animation in seconds.
      * @property time
-     * @type {number}
+     * @type {Number}
      * @default 0
      */
     this.time = 0;
@@ -265,60 +271,91 @@ JS.mixin(AnimationNode.prototype, {
         }
     },
 
-    _calculateWrappedTime: function (iterationTime, currentIterations) {
-        var duration = this.duration;
+    _needRevers: function (currentIterations) {
         var wrapMode = this.wrapMode;
+        var needRevers = false;
+
         if ((wrapMode & WrapModeMask.PingPong) === WrapModeMask.PingPong) {
+            var isEnd = currentIterations - (currentIterations | 0) === 0;
+            if (isEnd) {
+                currentIterations -= 1;
+            }
+
             var isOddIteration = currentIterations & 1;
             if (isOddIteration) {
-                iterationTime = duration - iterationTime;
+                needRevers = !needRevers;
             }
         }
         if ((wrapMode & WrapModeMask.Reverse) === WrapModeMask.Reverse) {
-            iterationTime = duration - iterationTime;
+            needRevers = !needRevers;
         }
-        return iterationTime;
+        return needRevers;
+    },
+
+    getWrappedInfo: function (time) {
+        var stopped = false;
+        var duration = this.duration;
+        var ratio = 0;
+        var wrapMode = this.wrapMode;
+
+        var currentIterations = Math.abs(time / duration);
+        if (currentIterations > this.repeatCount) currentIterations = this.repeatCount;
+
+        var needRevers = false;
+        if (wrapMode & WrapModeMask.ShouldWrap) {
+            needRevers = this._needRevers(currentIterations);
+        }
+
+        var direction = needRevers ? -1 : 1;
+        if (this.speed < 0) direction *= -1;
+
+        if (currentIterations >= this.repeatCount) {
+            stopped = true;
+            var tempRatio = this.repeatCount - (this.repeatCount | 0);
+            if (tempRatio === 0) {
+                tempRatio = 1;  // 如果播放过，动画不复位
+            }
+            time = tempRatio * duration * (time > 0 ? 1 : -1);
+        }
+
+        if (time > duration) {
+            var tempTime = time % duration;
+            time = tempTime === 0 ? duration : tempTime;
+        }
+        else if (time < 0) {
+            time = time % duration;
+            if (time !== 0 ) time += duration;
+        }
+
+        // calculate wrapped time
+        if (wrapMode & WrapModeMask.ShouldWrap) {
+            if (needRevers) time = duration - time;
+        }
+
+        ratio = time / duration;
+
+        return {
+            ratio: ratio,
+            time: time,
+            direction: direction,
+            stopped: stopped,
+            iterations: currentIterations
+        }
     },
 
     sample: function () {
 
-        // calculate times
-
-        var stopped = false;
-        var duration = this.duration;
-        var ratio = 0;         // computed ratio
-        var time = this.time;   // computed time
-        var currentIterations = time / duration;
-        if (currentIterations < this.repeatCount) {
-            // calculate iteration time
-            if (time > duration) {
-                time %= duration;
-            }
-            // calculate wrapped time
-            if (this.wrapMode & WrapModeMask.ShouldWrap) {
-                time = this._calculateWrappedTime(time, currentIterations);
-            }
-            ratio = time / duration;
-        }
-        else {
-            stopped = true;
-            ratio = this.repeatCount - (this.repeatCount | 0);
-            if (currentIterations > 0 && ratio === 0) {
-                ratio = 1; // 如果播放过，动画不复位
-            }
-            time = ratio * duration;
-        }
-
         // sample
 
+        var info = this.getWrappedInfo(this.time);
+
         var curves = this.curves;
-        var animator = this.animator;
         for (var i = 0, len = curves.length; i < len; i++) {
             var curve = curves[i];
-            curve.sample(time, ratio, animator);
+            curve.sample(info.time, info.ratio, this);
         }
 
-        return stopped;
+        return info.stopped;
     }
 
     //onPlay: function () {

@@ -14,11 +14,9 @@ cc.url = {
     /**
      * Returns the url of raw assets.
      * @method raw
-     * @param {string} url
-     * @return {string}
-     * @example
-var url = cc.url.raw("textures/myTexture.png");
-console.log(url);   // "resources/raw/textures/myTexture.png"
+     * @param {String} url
+     * @return {String}
+     * @example {@link utils/api/cocos/docs/cocos2d/core/platform/url/raw.js}
      */
     raw: function (url) {
         if (url[0] === '.' && url[1] === '/') {

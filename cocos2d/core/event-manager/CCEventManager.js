@@ -98,8 +98,7 @@ cc.__getListenerID = function (event) {
  *  The EventListener list is managed in such way so that event listeners can be added and removed          <br/>
  *  while events are being dispatched.
  * </p>
- * @class
- * @name cc.eventManager
+ * @class eventManager
  */
 cc.eventManager = /** @lends cc.eventManager# */{
     //Priority dirty flag
@@ -132,7 +131,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Pauses all listeners which are associated the specified target.
-     * @param {cc.Node} node
+     * @param {ENode} node
      * @param {Boolean} [recursive=false]
      */
     pauseTarget: function (node, recursive) {
@@ -150,7 +149,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Resumes all listeners which are associated the specified target.
-     * @param {cc.Node} node
+     * @param {ENode} node
      * @param {Boolean} [recursive=false]
      */
     resumeTarget: function (node, recursive) {
@@ -644,13 +643,13 @@ cc.eventManager = /** @lends cc.eventManager# */{
      * if the parameter "nodeOrPriority" is a node, it means to add a event listener for a specified event with the priority of scene graph.                   <br/>
      * if the parameter "nodeOrPriority" is a Number, it means to add a event listener for a specified event with the fixed priority.                          <br/>
      * </p>
-     * @param {cc.EventListener|Object} listener The listener of a specified event or a object of some event parameters.
-     * @param {cc.Node|Number} nodeOrPriority The priority of the listener is based on the draw order of this node or fixedPriority The fixed priority of the listener.
+     * @param {EventListener|Object} listener - The listener of a specified event or a object of some event parameters.
+     * @param {ENode|Number} nodeOrPriority - The priority of the listener is based on the draw order of this node or fixedPriority The fixed priority of the listener.
      * @note  The priority of scene graph will be fixed value 0. So the order of listener item in the vector will be ' <0, scene graph (0 priority), >0'.
      *         A lower priority will be called before the ones that have a higher value. 0 priority is forbidden for fixed priority since it's used for scene graph based priority.
      *         The listener must be a cc.EventListener object when adding a fixed priority listener, because we can't remove a fixed priority listener without the listener handler,
      *         except calls removeAllListeners().
-     * @return {cc.EventListener} Return the listener. Needed in order to remove the event from the dispatcher.
+     * @return {EventListener} Return the listener. Needed in order to remove the event from the dispatcher.
      */
     addListener: function (listener, nodeOrPriority) {
         cc.assert(listener && nodeOrPriority, cc._LogInfos.EventManager.addListener_2);
@@ -690,9 +689,9 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Adds a Custom event listener. It will use a fixed priority of 1.
-     * @param {string} eventName
-     * @param {function} callback
-     * @return {cc.EventListener} the generated event. Needed in order to remove the event from the dispatcher
+     * @param {String} eventName
+     * @param {Function} callback
+     * @return {EventListener} the generated event. Needed in order to remove the event from the dispatcher
      */
     addCustomListener: function (eventName, callback) {
         var listener = new cc._EventListenerCustom(eventName, callback);
@@ -701,8 +700,8 @@ cc.eventManager = /** @lends cc.eventManager# */{
     },
 
     /**
-     * Remove a listener
-     * @param {cc.EventListener} listener an event listener or a registered node target
+     * Remove a listener.
+     * @param {EventListener} listener - an event listener or a registered node target
      */
     removeListener: function (listener) {
         if (listener == null)
@@ -789,7 +788,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Removes all listeners with the same event listener type or removes all listeners of a node
-     * @param {Number|cc.Node} listenerType listenerType or a node
+     * @param {Number|ENode} listenerType - listenerType or a node
      * @param {Boolean} [recursive=false]
      */
     removeListeners: function (listenerType, recursive) {
@@ -846,7 +845,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Removes all custom listeners with the same event name
-     * @param {string} customEventName
+     * @param {String} customEventName
      */
     removeCustomListeners: function (customEventName) {
         this._removeListenersForListenerID(customEventName);
@@ -865,7 +864,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Sets listener's priority with fixed value.
-     * @param {cc.EventListener} listener
+     * @param {EventListener} listener
      * @param {Number} fixedPriority
      */
     setPriority: function (listener, fixedPriority) {
@@ -893,7 +892,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Whether to enable dispatching events
-     * @param {boolean} enabled
+     * @param {Boolean} enabled
      */
     setEnabled: function (enabled) {
         this._isEnabled = enabled;
@@ -901,7 +900,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Checks whether dispatching events is enabled
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     isEnabled: function () {
         return this._isEnabled;
@@ -909,7 +908,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Dispatches the event, also removes all EventListeners marked for deletion from the event dispatcher list.
-     * @param {cc.Event} event
+     * @param {Event} event
      */
     dispatchEvent: function (event) {
         if (!this._isEnabled)
@@ -943,7 +942,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Dispatches a Custom Event with a event name an optional user data
-     * @param {string} eventName
+     * @param {String} eventName
      * @param {*} optionalUserData
      */
     dispatchCustomEvent: function (eventName, optionalUserData) {

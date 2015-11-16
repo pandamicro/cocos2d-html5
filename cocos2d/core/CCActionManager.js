@@ -60,10 +60,10 @@ cc.HashElement = cc._Class.extend(/** @lends cc.HashElement# */{
  * Examples:<br/>
  * - When you want to run an action where the target is different from a CCNode.<br/>
  * - When you want to pause / resume the actions<br/>
- * @class
- * @extends cc._Class
- * @example
- * var mng = new cc.ActionManager();
+ *
+ * @class ActionManager
+ * @extends _Class
+ * @example {@link utils/api/cocos/docs/cocos2d/core/CCActionManager/ActionManager.js}
  */
 cc.ActionManager = cc._Class.extend(/** @lends cc.ActionManager# */{
     _hashTargets:null,

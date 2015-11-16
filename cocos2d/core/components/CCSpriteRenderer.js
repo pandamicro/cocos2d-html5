@@ -24,13 +24,16 @@
 
 /**
  * Renders a sprite in the scene.
- * @class
- * @name cc.SpriteRenderer
- * @extend cc.CCComponentInSG
+ * @class SpriteRenderer
+ * @extends _ComponentInSG
  */
 var SpriteRenderer = cc.Class({
     name: 'cc.Sprite',
     extends: require('./CCComponentInSG'),
+
+    editor: CC_EDITOR && {
+        menu: 'Sprite'
+    },
 
     properties: {
 
@@ -48,7 +51,7 @@ var SpriteRenderer = cc.Class({
         /**
          * Texture used to render the sprite.
          * @property textureAtlas
-         * @type {cc.SpriteAtlas}
+         * @type {SpriteAtlas}
          */
         textureAtlas: {
             get: function () {
@@ -66,7 +69,7 @@ var SpriteRenderer = cc.Class({
         /**
          * The texture of the sprite node
          * @property texture
-         * @type {cc.Texture2D}
+         * @type {Texture2D}
          */
         texture: {
             get: function () {
@@ -86,11 +89,26 @@ var SpriteRenderer = cc.Class({
                 }
             },
             url: cc.Texture2D
+        },
+
+        /**
+         * Only for editor to calculate bounding box
+         */
+        localSize: {
+            get: function () {
+                var texture = this._sgNode ? this._sgNode.texture : null;
+                if (!texture) {
+                    return cc.size(0, 0);
+                }
+                return cc.size(texture.width, texture.height);
+            },
+            visible: false
         }
     },
 
     /**
      * Returns whether or not the texture rectangle is rotated.
+     * @method isTextureRectRotated
      * @return {Boolean}
      */
     isTextureRectRotated: function () {
@@ -99,6 +117,7 @@ var SpriteRenderer = cc.Class({
 
     /**
      * Returns the index used on the TextureAtlas.
+     * @method getAtlasIndex
      * @return {Number}
      */
     getAtlasIndex: function () {
@@ -108,6 +127,7 @@ var SpriteRenderer = cc.Class({
     /**
      * Sets the index used on the TextureAtlas.
      * @warning Don't modify this value unless you know what you are doing
+     * @method setAtlasIndex
      * @param {Number} atlasIndex
      */
     setAtlasIndex: function (atlasIndex) {
@@ -117,7 +137,8 @@ var SpriteRenderer = cc.Class({
 
     /**
      * Returns the rect of the cc.Sprite in points
-     * @return {cc.Rect}
+     * @method getTextureRect
+     * @return {Rect}
      */
     getTextureRect: function () {
         return this._textureRect;
@@ -125,7 +146,8 @@ var SpriteRenderer = cc.Class({
 
     /**
      * Returns the offset position of the sprite. Calculated automatically by editors like Zwoptex.
-     * @return {cc.Vec2}
+     * @method getOffsetPosition
+     * @return {Vec2}
      */
     getOffsetPosition: function () {
         return this._sgNode.getOffsetPosition();
@@ -133,7 +155,7 @@ var SpriteRenderer = cc.Class({
 
     /**
      * Returns the offset position x of the sprite.
-     * @return {float}
+     * @return {Number}
      */
     _getOffsetX: function () {
         return this._sgNode._getOffsetX();
@@ -141,7 +163,7 @@ var SpriteRenderer = cc.Class({
 
     /**
      * Returns the offset position y of the sprite.
-     * @return {float}
+     * @return {Number}
      */
     _getOffsetY: function () {
         return this._sgNode._getOffsetY();
@@ -150,7 +172,8 @@ var SpriteRenderer = cc.Class({
     /**
      * Initializes a sprite with a SpriteFrame. The texture and rect in SpriteFrame will be applied on this sprite.<br/>
      * Please pass parameters to the constructor to initialize the sprite, do not call this function yourself,
-     * @param {cc.SpriteFrame} spriteFrame A CCSpriteFrame object. It should includes a valid texture and a rect
+     * @method initWithSpriteFrame
+     * @param {SpriteFrame} spriteFrame - A CCSpriteFrame object. It should includes a valid texture and a rect
      * @return {Boolean}  true if the sprite is initialized properly, false otherwise.
      */
     initWithSpriteFrame: function (spriteFrame) {
@@ -162,11 +185,10 @@ var SpriteRenderer = cc.Class({
      * A cc.SpriteFrame will be fetched from the cc.SpriteFrameCache by name.  <br/>
      * If the cc.SpriteFrame doesn't exist it will raise an exception. <br/>
      * Please pass parameters to the constructor to initialize the sprite, do not call this function yourself.
-     * @param {String} spriteFrameName A key string that can fected a valid cc.SpriteFrame from cc.SpriteFrameCache
+     * @method initWithSpriteFrameName
+     * @param {String} spriteFrameName - A key string that can fected a valid cc.SpriteFrame from cc.SpriteFrameCache
      * @return {Boolean} true if the sprite is initialized properly, false otherwise.
-     * @example
-     * var sprite = new cc.Sprite();
-     * sprite.initWithSpriteFrameName("grossini_dance_01.png");
+     * @example {@link utils/api/cocos/docs/cocos2d/core/components/CCSpriteRenderer/initWithSpriteFrameName.js}
      */
     initWithSpriteFrameName: function (spriteFrameName) {
         return this._sgNode.initWithSpriteFrameName(spriteFrameName);
@@ -180,7 +202,8 @@ var SpriteRenderer = cc.Class({
      *    Do not call it manually. Use setTextureRect instead.  <br/>
      *    (override this method to generate "double scale" sprites)
      * </p>
-     * @param {cc.Rect} rect
+     * @method setVertexRect
+     * @param {Rect} rect
      */
     setVertexRect: function (rect) {
         var locRect = this._textureRect;
@@ -194,6 +217,7 @@ var SpriteRenderer = cc.Class({
 
     /**
      * Sets whether the sprite is visible or not.
+     * @method setVisible
      * @param {Boolean} visible
      * @override
      */
@@ -203,7 +227,8 @@ var SpriteRenderer = cc.Class({
 
     /**
      * Sets whether the sprite should be flipped horizontally or not.
-     * @param {Boolean} flippedX true if the sprite should be flipped horizontally, false otherwise.
+     * @method setFlippedX
+     * @param {Boolean} flippedX - true if the sprite should be flipped horizontally, false otherwise.
      */
     setFlippedX: function (flippedX) {
         this._isFlippedX = flippedX;
@@ -212,7 +237,8 @@ var SpriteRenderer = cc.Class({
 
     /**
      * Sets whether the sprite should be flipped vertically or not.
-     * @param {Boolean} flippedY true if the sprite should be flipped vertically, false otherwise.
+     * @method setFlippedY
+     * @param {Boolean} flippedY - true if the sprite should be flipped vertically, false otherwise.
      */
     setFlippedY: function (flippedY) {
         this._isFlippedY = flippedY;
@@ -227,6 +253,7 @@ var SpriteRenderer = cc.Class({
      * Also, flipping the texture doesn't alter the anchorPoint.                                                    <br/>
      * If you want to flip the anchorPoint too, and/or to flip the children too use:                                <br/>
      *      sprite.setScaleX(sprite.getScaleX() * -1);  <p/>
+     * @method isFlippedX
      * @return {Boolean} true if the sprite is flipped horizontally, false otherwise.
      */
     isFlippedX: function () {
@@ -241,6 +268,7 @@ var SpriteRenderer = cc.Class({
      *      Also, flipping the texture doesn't alter the anchorPoint.                                               <br/>
      *      If you want to flip the anchorPoint too, and/or to flip the children too use:                           <br/>
      *         sprite.setScaleY(sprite.getScaleY() * -1); <p/>
+     * @method isFlippedY
      * @return {Boolean} true if the sprite is flipped vertically, false otherwise.
      */
     isFlippedY: function () {
@@ -252,6 +280,7 @@ var SpriteRenderer = cc.Class({
     /**
      * Changes the display frame with animation name and index.<br/>
      * The animation name will be get from the CCAnimationCache
+     * @method setDisplayFrameWithAnimationName
      * @param {String} animationName
      * @param {Number} frameIndex
      */
@@ -268,8 +297,9 @@ var SpriteRenderer = cc.Class({
      *     After initialization, the rect used will be the size of the image. The offset will be (0,0).<br/>
      *     Please pass parameters to the constructor to initialize the sprite, do not call this function yourself.
      * </p>
-     * @param {String} filename The path to an image file in local file system
-     * @param {cc.Rect} rect The rectangle assigned the content area from texture.
+     * @method initWithFile
+     * @param {String} filename - The path to an image file in local file system
+     * @param {Rect} rect - The rectangle assigned the content area from texture.
      * @return {Boolean} true if the sprite is initialized properly, false otherwise.
      */
     initWithFile: function (filename, rect) {
@@ -280,12 +310,12 @@ var SpriteRenderer = cc.Class({
      * Initializes a sprite with a texture and a rect in points, optionally rotated.  <br/>
      * After initialization, the rect used will be the size of the texture, and the offset will be (0,0).<br/>
      * Please pass parameters to the constructor to initialize the sprite, do not call this function yourself.
-     * @function
+     * @method initWithTexture
      * @param {cc.Texture2D|HTMLImageElement|HTMLCanvasElement} texture A pointer to an existing CCTexture2D object.
      * You can use a CCTexture2D object for many sprites.
-     * @param {cc.Rect} [rect] Only the contents inside rect of this texture will be applied for this sprite.
-     * @param {Boolean} [rotated] Whether or not the texture rectangle is rotated.
-     * @param {Boolean} [counterclockwise=true] Whether or not the texture rectangle rotation is counterclockwise
+     * @param {Rect} [rect] - Only the contents inside rect of this texture will be applied for this sprite.
+     * @param {Boolean} [rotated] - Whether or not the texture rectangle is rotated.
+     * @param {Boolean} [counterclockwise=true] -  Whether or not the texture rectangle rotation is counterclockwise
      * (texture package is counterclockwise, spine is clockwise).
      * @return {Boolean} true if the sprite is initialized properly, false otherwise.
      */
@@ -296,11 +326,11 @@ var SpriteRenderer = cc.Class({
     // BatchNode methods
     /**
      * Updates the texture rect of the CCSprite in points.
-     * @function
-     * @param {cc.Rect} rect a rect of texture
-     * @param {Boolean} [rotated] Whether or not the texture is rotated
-     * @param {cc.Size} [untrimmedSize] The original pixels size of the texture
-     * @param {Boolean} [needConvert] contentScaleFactor switch
+     * @method setTextureRect
+     * @param {Rect} rect a rect of texture
+     * @param {Boolean} [rotated] - Whether or not the texture is rotated
+     * @param {Size} [untrimmedSize] - The original pixels size of the texture
+     * @param {Boolean} [needConvert] - contentScaleFactor switch
      */
     setTextureRect: function (rect, rotated, untrimmedSize, needConvert) {
         var _t = this;
@@ -326,8 +356,8 @@ var SpriteRenderer = cc.Class({
     // Frames
     /**
      * Sets a new sprite frame to the sprite.
-     * @function
-     * @param {cc.SpriteFrame|String} newFrame
+     * @method setSpriteFrame
+     * @param {SpriteFrame|String} newFrame
      */
     setSpriteFrame: function (newFrame) {
         this._sgNode.setSpriteFrame(newFrame);
@@ -335,7 +365,8 @@ var SpriteRenderer = cc.Class({
 
     /**
      * Returns the current displayed frame.
-     * @return {cc.SpriteFrame}
+     * @method getSpriteFrame
+     * @return {SpriteFrame}
      */
     getSpriteFrame: function () {
         return this._sgNode.getSpriteFrame();
@@ -343,7 +374,8 @@ var SpriteRenderer = cc.Class({
 
     /**
      * Sets a new display frame to the sprite.
-     * @param {cc.SpriteFrame|String} newFrame
+     * @method setDisplayFrame
+     * @param {SpriteFrame|String} newFrame
      * @deprecated
      */
     setDisplayFrame: function(newFrame){
@@ -352,8 +384,9 @@ var SpriteRenderer = cc.Class({
 
     /**
      * Returns the current displayed frame.
+     * @method displayFrame
      * @deprecated since 3.4, please use getSpriteFrame instead
-     * @return {cc.SpriteFrame}
+     * @return {SpriteFrame}
      */
     displayFrame: function () {
         return this.getSpriteFrame();
@@ -361,8 +394,8 @@ var SpriteRenderer = cc.Class({
 
     /**
      * Returns whether or not a cc.SpriteFrame is being displayed
-     * @function
-     * @param {cc.SpriteFrame} frame
+     * @method isFrameDisplayed
+     * @param {SpriteFrame} frame
      * @return {Boolean}
      */
     isFrameDisplayed: function(frame){
@@ -371,7 +404,6 @@ var SpriteRenderer = cc.Class({
 
     _createSgNode: function () {
         var sprite = new cc.Sprite();
-        sprite.setAnchorPoint(0, 1);
 
         if (this._texture) {
             sprite.texture = this._texture;
@@ -395,5 +427,17 @@ var DiffNameGetSets = {
     textureRectRotated: ['isTextureRectRotated'],
 };
 misc.propertyDefine(SpriteRenderer, SameNameGetSets, DiffNameGetSets);
+
+/**
+ * The offset position x of the sprite.
+ * @property offsetX
+ * @type {Number}
+ */
+
+/**
+ * The offset position y of the sprite.
+ * @property offsetY
+ * @type {Number}
+ */
 
 cc.SpriteRenderer = module.exports = SpriteRenderer;

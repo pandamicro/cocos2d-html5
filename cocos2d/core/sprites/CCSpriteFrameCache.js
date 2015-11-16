@@ -27,16 +27,13 @@
 // init CCSpriteFrame
 require("../cocos2d/core/sprites/CCSpriteFrame");
 
+
+
 /**
  * <p>
  * cc.spriteFrameCache is a singleton that handles the loading of the sprite frames. It saves in a cache the sprite frames.<br/>
  * <br/>
- * example<br/>
- * // add SpriteFrames to spriteFrameCache With File<br/>
- * cc.spriteFrameCache.addSpriteFrames(s_grossiniPlist);<br/>
- * </p>
- * @class
- * @name cc.spriteFrameCache
+ * @class spriteFrameCache
  */
 cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
     _CCNS_REG1 : /^\s*\{\s*([\-]?\d+[.]?\d*)\s*,\s*([\-]?\d+[.]?\d*)\s*\}\s*$/,
@@ -209,12 +206,10 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
      *   A texture will be loaded automatically. The texture name will composed by replacing the .plist or .json suffix with .png<br/>
      *   If you want to use another texture, you should use the addSpriteFrames:texture method.<br/>
      * </p>
-     * @param {String} url file path
-     * @param {HTMLImageElement|cc.Texture2D|string} texture
-     * @example
-     * // add SpriteFrames to SpriteFrameCache With File
-     * cc.spriteFrameCache.addSpriteFrames(s_grossiniPlist);
-     * cc.spriteFrameCache.addSpriteFrames(s_grossiniJson);
+     * @method addSpriteFrames
+     * @param {String} url - file path
+     * @param {HTMLImageElement|Texture2D|string} texture
+     * @example {@link utils/api/cocos/docs/cocos2d/core/sprites/addSpriteFrames.js}
      */
     addSpriteFrames: function (url, texture) {
         cc.assert(url, cc._LogInfos.spriteFrameCache.addSpriteFrames_2);
@@ -245,7 +240,8 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
      *  Adds an sprite frame with a given name.<br/>
      *  If the name already exists, then the contents of the old name will be replaced with the new one.
      * </p>
-     * @param {cc.SpriteFrame} frame
+     * @method addSpriteFrame
+     * @param {SpriteFrame} frame
      * @param {String} frameName
      */
     addSpriteFrame: function (frame, frameName) {
@@ -260,6 +256,7 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
      *   In the medium term: it will allocate more resources.<br/>
      *   In the long term: it will be the same.<br/>
      * </p>
+     * @method removeSpriteFrames
      */
     removeSpriteFrames: function () {
         this._spriteFrames = {};
@@ -268,6 +265,7 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
 
     /**
      * Deletes an sprite frame from the sprite frame cache.
+     * @method removeSpriteFrameByName
      * @param {String} name
      */
     removeSpriteFrameByName: function (name) {
@@ -292,7 +290,8 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
      *     Sprite Frames stored in this file will be removed.<br/>
      *     It is convinient to call this method when a specific texture needs to be removed.<br/>
      * </p>
-     * @param {String} url Plist filename
+     * @method removeSpriteFramesFromFile
+     * @param {String} url - Plist filename
      */
     removeSpriteFramesFromFile: function (url) {
         var self = this, spriteFrames = self._spriteFrames,
@@ -314,7 +313,8 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
      *    Removes all Sprite Frames associated with the specified textures.<br/>
      *    It is convenient to call this method when a specific texture needs to be removed.
      * </p>
-     * @param {HTMLImageElement|HTMLCanvasElement|cc.Texture2D} texture
+     * @method removeSpriteFramesFromTexture
+     * @param {HTMLImageElement|HTMLCanvasElement|Texture2D} texture
      */
     removeSpriteFramesFromTexture: function (texture) {
         var self = this, spriteFrames = self._spriteFrames, aliases = self._spriteFramesAliases;
@@ -335,11 +335,10 @@ cc.spriteFrameCache = /** @lends cc.spriteFrameCache# */{
      *   If the name is not found it will return nil.<br/>
      *   You should retain the returned copy if you are going to use it.<br/>
      * </p>
-     * @param {String} name name of SpriteFrame
-     * @return {cc.SpriteFrame}
-     * @example
-     * //get a SpriteFrame by name
-     * var frame = cc.spriteFrameCache.getSpriteFrame("grossini_dance_01.png");
+     * @method getSpriteFrame
+     * @param {String} name - name of SpriteFrame
+     * @return {SpriteFrame}
+     * @example {@link utils/api/cocos/docs/cocos2d/core/sprites/getSpriteFrame.js}
      */
     getSpriteFrame: function (name) {
         var self = this, frame = self._spriteFrames[name];

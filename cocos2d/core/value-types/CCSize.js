@@ -4,7 +4,7 @@ var JS = require('../platform/js');
 /**
  * cc.Size is the class for size object, please do not use its constructor to create sizes, use cc.size() alias function instead.
  * It will be deprecated soon, please use cc.Vec2 instead
- * @class cc.Size
+ * @class Size
  * @param {Number} width
  * @param {Number} height
  * @see cc.size
@@ -17,7 +17,7 @@ JS.extend(Size, ValueType);
 require('../platform/CCClass').fastDefine('cc.Size', Size, ['width', 'height']);
 
 /**
- * return a Size object with width = 0 and height = 0
+ * return a Size object with width = 0 and height = 0.
  * @property zero
  * @type {Size}
  * @default new Size(0, 0)
@@ -31,7 +31,7 @@ var proto = Size.prototype;
 
 /**
  * @method clone
- * @return {cc.Size}
+ * @return {Size}
  */
 proto.clone = function () {
     return new Size(this.width, this.height);
@@ -50,9 +50,9 @@ proto.equals = function (other) {
 
 /**
  * @method lerp
- * @param {cc.Rect} to
- * @param {number} ratio - the interpolation coefficient
- * @param {Size} [out] - optional, the receiving vector
+ * @param {Rect} to
+ * @param {Number} ratio - the interpolation coefficient.
+ * @param {Size} [out] - optional, the receiving vector.
  * @return {Size}
  */
 proto.lerp = function (to, ratio, out) {
@@ -66,7 +66,7 @@ proto.lerp = function (to, ratio, out) {
 
 /**
  * @method toString
- * @return {string}
+ * @return {String}
  */
 proto.toString = function () {
     return '(' + this.width.toFixed(2) + ', ' + this.height.toFixed(2) + ')';
@@ -74,16 +74,13 @@ proto.toString = function () {
 
 /**
  * Helper function that creates a cc.Size.
- * Please use cc.p or cc.v2 instead, it will soon replace cc.Size
- * @function
- * @param {Number|Size} w width or a size object
- * @param {Number} h height
+ * Please use cc.p or cc.v2 instead, it will soon replace cc.Size.
+ *
+ * @method size
+ * @param {Number|Size} w  - width or a size object
+ * @param {Number} h - height
  * @return {Size}
- * @example
- * var size1 = cc.size();
- * var size2 = cc.size(100,100);
- * var size3 = cc.size(size2);
- * var size4 = cc.size({width: 100, height: 100});
+ * @example {@link utils/api/cocos/docs/cocos2d/core/value-types/CCSize/size.js}
  */
 cc.size = function (w, h) {
     if (w === undefined)
@@ -94,8 +91,8 @@ cc.size = function (w, h) {
 };
 
 /**
- * Check whether a point's value equals to another
- * @function
+ * Check whether a point's value equals to another.
+ * @method sizeEqualToSize
  * @param {Size} size1
  * @param {Size} size2
  * @return {Boolean}

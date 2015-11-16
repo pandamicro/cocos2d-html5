@@ -1,5 +1,4 @@
 var RawAsset = require('./CCRawAsset');
-
 /**
  * Base class for handling assets used in Fireball. This class can be instantiate.
  *
@@ -18,7 +17,7 @@ cc.Asset = cc.Class({
     ctor: function () {
         /**
          * @property _uuid
-         * @type {string}
+         * @type {String}
          * @private
          */
         Object.defineProperty(this, '_uuid', {
@@ -32,8 +31,9 @@ cc.Asset = cc.Class({
         /**
          * Returns the url of this asset's first raw file, if none of rawFile exists,
          * it will returns the url of this serialized asset.
+         *
          * @property url
-         * @type {string}
+         * @type {String}
          * @readOnly
          */
         url: {
@@ -56,8 +56,9 @@ cc.Asset = cc.Class({
         /**
          * Returns the url of this asset's raw files, if none of rawFile exists,
          * it will returns an empty array.
+         *
          * @property urls
-         * @type {string[]}
+         * @type {String[]}
          * @readOnly
          */
         urls: {
@@ -82,8 +83,9 @@ cc.Asset = cc.Class({
          * 在 lite 版的 Fireball 里，raw asset 并不仅仅是在 properties 里声明了 rawType 才有，
          * 而是每个 asset 都能指定自己的 raw file url。这些 url 就存在 _rawFiles 字段中。
          * AssetLibrary 并不会帮你加载这些 url，除非你声明了 rawType。
+         *
          * @property _rawFiles
-         * @type {string[]}
+         * @type {String[]}
          * @default null
          * @private
          */
@@ -93,8 +95,9 @@ cc.Asset = cc.Class({
     statics: {
         /**
          * 应 AssetDB 要求提供这个方法
+         *
          * @method deserialize
-         * @param {string} data
+         * @param {String} data
          * @return {Asset}
          * @static
          * @private
@@ -106,8 +109,9 @@ cc.Asset = cc.Class({
 
     /**
      * 应 AssetDB 要求提供这个方法
+     *
      * @method serialize
-     * @return {string}
+     * @return {String}
      * @private
      */
     serialize: function () {
@@ -117,17 +121,19 @@ cc.Asset = cc.Class({
     /**
      * Create a new node using this asset in the scene.
      * If this type of asset dont have its corresponding node type, this method should be null.
+     *
      * @method createNode
-     * @param {function} callback
-     * @param {string} callback.error - null or the error info
-     * @param {object} callback.node - the created node or null
+     * @param {Function} callback
+     * @param {String} callback.error - null or the error info
+     * @param {Object} callback.node - the created node or null
      */
     createNode: null,
 
     /**
      * Set raw extname for this asset.
+     *
      * @method _setRawFiles
-     * @param {string[]} rawFiles
+     * @param {String[]} rawFiles
      * @private
      */
     _setRawFiles: function (rawFiles) {

@@ -83,6 +83,11 @@ var defaultValues = {
 var ParticleWrapper = cc.Class({
     name: 'cc.ParticleWrapper',
     extends: NodeWrapper,
+
+    editor: CC_EDITOR && {
+        playOnFocus: true
+    },
+
     ctor: function () {
     },
 
@@ -711,10 +716,6 @@ var ParticleWrapper = cc.Class({
         _serializeObject: {
             default: null
         }
-    },
-
-    statics: {
-        _60fpsInEditMode: true
     },
 
     onFocusInEditor: function () {

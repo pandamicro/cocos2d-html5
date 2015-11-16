@@ -93,9 +93,11 @@ test('activation logic for component', function () {
     // my component
     var MyComponentBase = cc.Class({
         name: 'MyComponentBase',
-        extends: CallbackTester
+        extends: CallbackTester,
+        editor: {
+            executeInEditMode: true
+        },
     });
-    cc.executeInEditMode(MyComponentBase);
 
     var MyComponent = cc.Class({
         name: 'MyComponent',
@@ -155,12 +157,14 @@ test('life cycle logic for component', function () {
     var MyComponent = cc.Class({
         name: 'MyComponent',
         extends: CallbackTester,
+        editor: {
+            executeInEditMode: true
+        },
         ctor: function () {
             this.expect(CallbackTester.OnLoad, 'call onLoad while attaching to node');
             this.expect(CallbackTester.OnEnable, 'then call onEnable if node active', true);
         }
     });
-    cc.executeInEditMode(MyComponent);
 
     var obj = new cc.ENode();
     cc.director.getScene().addChild(obj);
@@ -216,11 +220,13 @@ test('activation logic for component in hierarchy', function () {
 
     var MyComponent = cc.Class({
         extends: CallbackTester,
+        editor: {
+            executeInEditMode: true
+        },
         ctor: function () {
             this.notExpect(CallbackTester.OnLoad, 'should not call onLoad while node inactive');
         }
     });
-    cc.executeInEditMode(MyComponent);
 
     var comp = child.addComponent(MyComponent);
 
@@ -260,11 +266,13 @@ test('destroy', function () {
     // add child component
     var ChildComp = cc.Class({
         extends: CallbackTester,
+        editor: {
+            executeInEditMode: true
+        },
         ctor: function () {
             this.expect([CallbackTester.OnLoad, CallbackTester.OnEnable]);
         }
     });
-    cc.executeInEditMode(ChildComp);
     var childComp = child.addComponent(ChildComp);
 
     // expect ondisable

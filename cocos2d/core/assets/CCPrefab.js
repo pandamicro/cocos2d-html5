@@ -7,6 +7,12 @@ function visitWrapper (wrapper, visitor) {
     }
 }
 
+/**
+ * Class for prefab handling.
+ * @class Prefab
+ * @extends Asset
+ * @constructor
+ */
 var Prefab = cc.Class({
     name: 'cc.Prefab',
     extends: cc.Asset,

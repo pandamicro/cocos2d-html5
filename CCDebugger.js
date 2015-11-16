@@ -326,16 +326,37 @@ cc._formatString = function (arg) {
 
 /**
  * Enum for debug modes.
- * @readonly
- * @enum {Number}
+ * @readOnly
+ * @enum DebugMode
  */
 cc.DebugMode = cc.Enum({
+    /**
+     *  @property {number} NONE - The debug mode none.
+     */
     NONE: 0,
+    /**
+     *  @property {number} INFO - The debug mode info.
+     */
     INFO: 1,
+    /**
+     *  @property {number} WARN - The debug mode warn.
+     */
     WARN: 2,
+    /**
+     *  @property {number} ERROR - The debug mode error.
+     */
     ERROR: 3,
+    /**
+     *  @property {number} INFO_FOR_WEB_PAGE - The debug mode info for web page.
+     */
     INFO_FOR_WEB_PAGE: 4,
+    /**
+     *  @property {number} WARN_FOR_WEB_PAGE - The debug mode warn for web page.
+     */
     WARN_FOR_WEB_PAGE: 5,
+    /**
+     *  @property {number} ERROR_FOR_WEB_PAGE - The debug mode error for web page.
+     */
     ERROR_FOR_WEB_PAGE: 6
 });
 

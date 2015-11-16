@@ -33,7 +33,7 @@ var Attr = require('./attribute');
 var getTypeChecker = Attr.getTypeChecker;
 var preprocessAttrs = require('./preprocess-attrs');
 
-var BUILTIN_ENTRIES = ['name', 'extends', 'ctor', 'properties', 'statics'];
+var BUILTIN_ENTRIES = ['name', 'extends', 'ctor', 'properties', 'statics', 'editor'];
 
 var TYPO_TO_CORRECT = (CC_EDITOR || CC_TEST) && {
     extend: 'extends',
@@ -47,7 +47,7 @@ var INVALID_STATICS = (CC_EDITOR || CC_TEST) && ['name', '__ctors__', '__props__
 
 ///**
 // * both getter and prop must register the name into __props__ array
-// * @param {string} name - prop name
+// * @param {String} name - prop name
 // */
 var _appendProp = function (cls, name/*, isGetter*/) {
     if (CC_DEV) {
@@ -254,8 +254,8 @@ var _metaClass = {
 
     /**
      * Create a new Class that inherits from this Class
-     * @param {object} options
-     * @return {function}
+     * @param {Object} options
+     * @return {Function}
      * @deprecated
      */
     extend: function (options) {
@@ -314,8 +314,8 @@ function instantiateProps (instance, itsClass) {
  * Checks whether subclass is child of superclass or equals to superclass
  *
  * @method isChildClassOf
- * @param {function} subclass
- * @param {function} superclass
+ * @param {Function} subclass
+ * @param {Function} superclass
  * @return {Boolean}
  */
 cc.isChildClassOf = function (subclass, superclass) {
@@ -409,7 +409,7 @@ function define (className, baseClass, constructor, options) {
             if (uuid) {
                 JS._setClassId(uuid, cls);
                 if (CC_EDITOR) {
-                    //Editor.addComponentMenu(cls, 'Scripts/' + cc.js.getClassName(comp), -1);
+                    cc.Component._addMenuItem(cls, 'Scripts/' + className, -1);
                     cls.prototype.__scriptUuid = Editor.decompressUuid(uuid);
                 }
             }
@@ -633,8 +633,8 @@ function boundSuperCalls (baseClass, options) {
  * !#en Defines a FireClass using the given specification, please see [Class](/en/scripting/class/) for details.
  * !#zh 定义一个 FireClass，传入参数必须是一个包含类型参数的字面量对象，具体用法请查阅[类型定义](/zh/scripting/class/)。
  *
- * @param {object} options
- * @return {function} - the created class
+ * @param {Object} options
+ * @return {Function} - the created class
  * @memberof cc
  *
  * @example
@@ -754,7 +754,7 @@ function FireClass (options) {
 
     // define functions
     for (var funcName in options) {
-        if (BUILTIN_ENTRIES.indexOf(funcName) !== -1) {
+        if (BUILTIN_ENTRIES.indexOf(funcName) >= 0) {
             continue;
         }
         var func = options[funcName];
@@ -772,6 +772,18 @@ function FireClass (options) {
         }
     }
 
+    if (CC_EDITOR || CC_TEST) {
+        var editor = options.editor;
+        if (editor) {
+            if ( cc.isChildClassOf(base, cc.Component) ) {
+                cc.Component._registerEditorProps(cls, editor);
+            }
+            else {
+                cc.warn('Can only define "editor" attribute for sub class of Components.');
+            }
+        }
+    }
+
     return cls;
 }
 
@@ -779,7 +791,7 @@ function FireClass (options) {
  * Checks whether the constructor is created by cc.Class
  *
  * @method _isCCClass
- * @param {function} constructor
+ * @param {Function} constructor
  * @return {Boolean}
  * @private
  */
@@ -789,7 +801,7 @@ FireClass._isCCClass = function (constructor) {
 
 //
 // @method _convertToFireClass
-// @param {function} constructor
+// @param {Function} constructor
 // @private
 //
 //FireClass._convertToFireClass = function (constructor) {
@@ -800,8 +812,8 @@ FireClass._isCCClass = function (constructor) {
 // Specially optimized define function only for internal base classes
 //
 // @method _fastDefine
-// @param {string} className
-// @param {function} constructor
+// @param {String} className
+// @param {Function} constructor
 // @param {string[]} serializableFields
 // @private
 //
@@ -828,23 +840,23 @@ function parseAttributes (attrs, className, propName) {
             // Specify that the input value must be integer in Inspector.
             // Also used to indicates that the type of elements in array or the type of value in dictionary is integer.
             case 'Integer':
-                result.push( { type: 'Integer', expectedTypeOf: 'number' } );
+                result.push( { type: 'Integer'/*, expectedTypeOf: 'number'*/ } );
                 break;
             // Indicates that the type of elements in array or the type of value in dictionary is double.
             case 'Float':
-                result.push( { type: 'Float', expectedTypeOf: 'number' } );
+                result.push( { type: 'Float'/*, expectedTypeOf: 'number'*/ } );
                 break;
             case 'Boolean':
                 result.push({
                     type: 'Boolean',
-                    expectedTypeOf: 'number',
+                    //expectedTypeOf: 'number',
                     _onAfterProp: getTypeChecker('Boolean', 'Boolean')
                 });
                 break;
             case 'String':
                 result.push({
                     type: 'String',
-                    expectedTypeOf: 'number',
+                    //expectedTypeOf: 'string',
                     _onAfterProp: getTypeChecker('String', 'String')
                 });
                 break;
@@ -864,7 +876,7 @@ function parseAttributes (attrs, className, propName) {
                         if (Enum.isEnum(type)) {
                             result.push({
                                 type: 'Enum',
-                                expectedTypeOf: 'number',
+                                //expectedTypeOf: 'number',
                                 enumList: Enum.getList(type)
                             });
                         }
@@ -874,7 +886,7 @@ function parseAttributes (attrs, className, propName) {
                     }
                     else if (typeof type === 'function') {
                         result.push(Attr.ObjectType(type));
-                        result.push( { expectedTypeOf: 'object' } );
+                        //result.push( { expectedTypeOf: 'object' } );
                     }
                     else if (CC_EDITOR || CC_TEST) {
                         cc.error('Unknown "type" parameter of %s.%s：%s', className, propName, type);
@@ -883,13 +895,13 @@ function parseAttributes (attrs, className, propName) {
                 break;
         }
     }
-    else {
-        if (attrs.default != null) {
-            result.push({
-                expectedTypeOf: typeof attrs.default,
-            });
-        }
-    }
+    //else {
+    //    if (attrs.default != null) {
+    //        result.push({
+    //            expectedTypeOf: typeof attrs.default,
+    //        });
+    //    }
+    //}
 
     function parseSimpleAttr (attrName, expectType, attrCreater) {
         var val = attrs[attrName];
@@ -1006,8 +1018,8 @@ function parseAttributes (attrs, className, propName) {
 }
 
 /**
- * @param {object} options
- * @return {function}
+ * @param {Object} options
+ * @return {Function}
  * @deprecated
  */
 FireClass.extend = FireClass;

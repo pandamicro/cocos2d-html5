@@ -2,8 +2,7 @@ var EventTarget = require('./event/event-target');
 
 /**
  * An object to boot the game.
- * @class
- * @name cc.game
+ * @class game
  */
 var game = /** @lends cc.game# */{
 
@@ -59,35 +58,41 @@ var game = /** @lends cc.game# */{
     _sceneInfos: [],
 
     /**
-     * The outer frame of the game canvas, parent of cc.container
+     * The outer frame of the game canvas, parent of cc.container.
+     * @property frame
      * @type {Object}
      */
     frame: null,
     /**
-     * The container of game canvas, equals to cc.container
+     * The container of game canvas, equals to cc.container.
+     * @property container
      * @type {Object}
      */
     container: null,
     /**
-     * The canvas of the game, equals to cc._canvas
+     * The canvas of the game, equals to cc._canvas.
+     * @property canvas
      * @type {Object}
      */
     canvas: null,
 
     /**
      * Config of game
+     * @property config
      * @type {Object}
      */
     config: null,
 
     /**
      * Callback when the scripts of engine have been load.
+     * @method onStart
      * @type {Function}
      */
     onStart: null,
 
     /**
      * Callback when game exits.
+     * @method onStop
      * @type {Function}
      */
     onStop: null,
@@ -97,6 +102,7 @@ var game = /** @lends cc.game# */{
 //  @Game play control
     /**
      * Set frameRate of game.
+     * @method setFrameRate
      * @param frameRate
      */
     setFrameRate: function (frameRate) {
@@ -111,6 +117,7 @@ var game = /** @lends cc.game# */{
 
     /**
      * Run the game frame by frame.
+     * @method step
      */
     step: function () {
         cc.director.mainLoop();
@@ -118,6 +125,7 @@ var game = /** @lends cc.game# */{
 
     /**
      * Pause the game.
+     * @method pause
      */
     pause: function () {
         if (this._paused) return;
@@ -132,6 +140,7 @@ var game = /** @lends cc.game# */{
 
     /**
      * Resume the game from pause.
+     * @method resume
      */
     resume: function () {
         if (!this._paused) return;
@@ -144,6 +153,8 @@ var game = /** @lends cc.game# */{
 
     /**
      * Check whether the game is paused.
+     * @method isPaused
+     * @return {Boolean}
      */
     isPaused: function () {
         return this._paused;
@@ -151,6 +162,7 @@ var game = /** @lends cc.game# */{
 
     /**
      * Restart game.
+     * @method restart
      */
     restart: function () {
         cc.director.popToSceneStackLevel(0);
@@ -164,6 +176,7 @@ var game = /** @lends cc.game# */{
     /**
      * Prepare game.
      * @param cb
+     * @method prepare
      */
     prepare: function (cb) {
         var self = this,
@@ -240,8 +253,9 @@ var game = /** @lends cc.game# */{
 
     /**
      * Run game with configuration object and onStart function.
-     * @param {Object|Function} [config] Pass configuration object or onStart function
-     * @param {onStart} [onStart] onStart function to be executed after game initialized
+     * @method run
+     * @param {Object|Function} [config] - Pass configuration object or onStart function
+     * @param {Function} [onStart] - function to be executed after game initialized
      */
     run: function (config, onStart) {
         if (typeof config === 'function') {
@@ -262,7 +276,8 @@ var game = /** @lends cc.game# */{
 //  @ Persist root node section
     /**
      * Add a persistent root node to the game, the persistent node won't be destroyed during scene transition
-     * @param {cc.ENode} node - The node to be made persistent
+     * @method addPersistRootNode
+     * @param {ENode} node - The node to be made persistent
      */
     addPersistRootNode: function (node) {
         if (!node instanceof cc.ENode)
@@ -286,7 +301,8 @@ var game = /** @lends cc.game# */{
 
     /**
      * Remove a persistent root node
-     * @param {cc.ENode} node - The node to be removed from persistent node list
+     * @method removePersistRootNode
+     * @param {ENode} node - The node to be removed from persistent node list
      */
     removePersistRootNode: function (node) {
         var index = this._persistRootNodes.indexOf(node);
@@ -298,7 +314,9 @@ var game = /** @lends cc.game# */{
 
     /**
      * Check whether the node is a persistent root node
-     * @param {cc.ENode} node - The node to be checked
+     * @method isPersistRootNode
+     * @param {ENode} node - The node to be checked
+     * @return {Boolean}
      */
     isPersistRootNode: function (node) {
         return node._persistNode;

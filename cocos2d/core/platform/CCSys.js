@@ -1,373 +1,329 @@
-
 if (cc.sys) return;
 
 /**
  * System variables
- * @namespace
- * @name cc.sys
+ * @class sys
+ * @static
  */
 cc.sys = {};
 var sys = cc.sys;
 
 /**
  * English language code
- * @memberof cc.sys
- * @name LANGUAGE_ENGLISH
- * @constant
- * @type {Number}
+ * @property LANGUAGE_ENGLISH
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_ENGLISH = "en";
 
 /**
  * Chinese language code
- * @memberof cc.sys
- * @name LANGUAGE_CHINESE
- * @constant
- * @type {Number}
+ * @property LANGUAGE_CHINESE
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_CHINESE = "zh";
 
 /**
  * French language code
- * @memberof cc.sys
- * @name LANGUAGE_FRENCH
- * @constant
- * @type {Number}
+ * @property LANGUAGE_FRENCH
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_FRENCH = "fr";
 
 /**
  * Italian language code
- * @memberof cc.sys
- * @name LANGUAGE_ITALIAN
- * @constant
- * @type {Number}
+ * @property LANGUAGE_ITALIAN
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_ITALIAN = "it";
 
 /**
  * German language code
- * @memberof cc.sys
- * @name LANGUAGE_GERMAN
- * @constant
- * @type {Number}
+ * @property LANGUAGE_GERMAN
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_GERMAN = "de";
 
 /**
  * Spanish language code
- * @memberof cc.sys
- * @name LANGUAGE_SPANISH
- * @constant
- * @type {Number}
+ * @property LANGUAGE_SPANISH
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_SPANISH = "es";
 
 /**
  * Spanish language code
- * @memberof cc.sys
- * @name LANGUAGE_DUTCH
- * @constant
- * @type {Number}
+ * @property LANGUAGE_DUTCH
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_DUTCH = "du";
 
 /**
  * Russian language code
- * @memberof cc.sys
- * @name LANGUAGE_RUSSIAN
- * @constant
- * @type {Number}
+ * @property LANGUAGE_RUSSIAN
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_RUSSIAN = "ru";
 
 /**
  * Korean language code
- * @memberof cc.sys
- * @name LANGUAGE_KOREAN
- * @constant
- * @type {Number}
+ * @property LANGUAGE_KOREAN
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_KOREAN = "ko";
 
 /**
  * Japanese language code
- * @memberof cc.sys
- * @name LANGUAGE_JAPANESE
- * @constant
- * @type {Number}
+ * @property LANGUAGE_JAPANESE
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_JAPANESE = "ja";
 
 /**
  * Hungarian language code
- * @memberof cc.sys
- * @name LANGUAGE_HUNGARIAN
+ * @property LANGUAGE_HUNGARIAN
  * @constant
- * @type {Number}
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_HUNGARIAN = "hu";
 
 /**
  * Portuguese language code
- * @memberof cc.sys
- * @name LANGUAGE_PORTUGUESE
- * @constant
- * @type {Number}
+ * @property LANGUAGE_PORTUGUESE
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_PORTUGUESE = "pt";
 
 /**
  * Arabic language code
- * @memberof cc.sys
- * @name LANGUAGE_ARABIC
- * @constant
- * @type {Number}
+ * @property LANGUAGE_ARABIC
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_ARABIC = "ar";
 
 /**
  * Norwegian language code
- * @memberof cc.sys
- * @name LANGUAGE_NORWEGIAN
- * @constant
- * @type {Number}
+ * @property LANGUAGE_NORWEGIAN
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_NORWEGIAN = "no";
 
 /**
  * Polish language code
- * @memberof cc.sys
- * @name LANGUAGE_POLISH
- * @constant
- * @type {Number}
+ * @property LANGUAGE_POLISH
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_POLISH = "pl";
 
 /**
  * Unknown language code
- * @memberof cc.sys
- * @name LANGUAGE_UNKNOWN
- * @constant
- * @type {Number}
+ * @property LANGUAGE_UNKNOWN
+ * @type {String}
+ * @readOnly
  */
 sys.LANGUAGE_UNKNOWN = "unkonwn";
 
 /**
- * @memberof cc.sys
- * @name OS_IOS
- * @constant
- * @type {string}
+ * @property OS_IOS
+ * @type {String}
+ * @readOnly
  */
 sys.OS_IOS = "iOS";
 /**
- * @memberof cc.sys
- * @name OS_ANDROID
- * @constant
- * @type {string}
+ * @property OS_ANDROID
+ * @type {String}
+ * @readOnly
  */
 sys.OS_ANDROID = "Android";
 /**
- * @memberof cc.sys
- * @name OS_WINDOWS
- * @constant
- * @type {string}
+ * @property OS_WINDOWS
+ * @type {String}
+ * @readOnly
  */
 sys.OS_WINDOWS = "Windows";
 /**
- * @memberof cc.sys
- * @name OS_MARMALADE
- * @constant
- * @type {string}
+ * @property OS_MARMALADE
+ * @type {String}
+ * @readOnly
  */
 sys.OS_MARMALADE = "Marmalade";
 /**
- * @memberof cc.sys
- * @name OS_LINUX
- * @constant
- * @type {string}
+ * @property OS_LINUX
+ * @type {String}
+ * @readOnly
  */
 sys.OS_LINUX = "Linux";
 /**
- * @memberof cc.sys
- * @name OS_BADA
- * @constant
- * @type {string}
+ * @property OS_BADA
+ * @type {String}
+ * @readOnly
  */
 sys.OS_BADA = "Bada";
 /**
- * @memberof cc.sys
- * @name OS_BLACKBERRY
- * @constant
- * @type {string}
+ * @property OS_BLACKBERRY
+ * @type {String}
+ * @readOnly
  */
 sys.OS_BLACKBERRY = "Blackberry";
 /**
- * @memberof cc.sys
- * @name OS_OSX
- * @constant
- * @type {string}
+ * @property OS_OSX
+ * @type {String}
+ * @readOnly
  */
 sys.OS_OSX = "OS X";
 /**
- * @memberof cc.sys
- * @name OS_WP8
- * @constant
- * @type {string}
+ * @property OS_WP8
+ * @type {String}
+ * @readOnly
  */
 sys.OS_WP8 = "WP8";
 /**
- * @memberof cc.sys
- * @name OS_WINRT
- * @constant
- * @type {string}
+ * @property OS_WINRT
+ * @type {String}
+ * @readOnly
  */
 sys.OS_WINRT = "WINRT";
 /**
- * @memberof cc.sys
- * @name OS_UNKNOWN
- * @constant
- * @type {string}
+ * @property OS_UNKNOWN
+ * @type {String}
+ * @readOnly
  */
 sys.OS_UNKNOWN = "Unknown";
 
 /**
- * @memberof cc.sys
- * @name UNKNOWN
- * @constant
- * @default
+ * @property UNKNOWN
  * @type {Number}
+ * @readOnly
+ * @default -1
  */
 sys.UNKNOWN = -1;
 /**
- * @memberof cc.sys
- * @name WIN32
- * @constant
- * @default
+ * @property WIN32
  * @type {Number}
+ * @readOnly
+ * @default 0
  */
 sys.WIN32 = 0;
 /**
- * @memberof cc.sys
- * @name LINUX
- * @constant
- * @default
+ * @property LINUX
  * @type {Number}
+ * @readOnly
+ * @default 1
  */
 sys.LINUX = 1;
 /**
- * @memberof cc.sys
- * @name MACOS
- * @constant
- * @default
+ * @property MACOS
  * @type {Number}
+ * @readOnly
+ * @default 2
  */
 sys.MACOS = 2;
 /**
- * @memberof cc.sys
- * @name ANDROID
- * @constant
- * @default
+ * @property ANDROID
  * @type {Number}
+ * @readOnly
+ * @default 3
  */
 sys.ANDROID = 3;
 /**
- * @memberof cc.sys
- * @name IOS
- * @constant
- * @default
+ * @property IOS
  * @type {Number}
+ * @readOnly
+ * @default 4
  */
 sys.IPHONE = 4;
 /**
- * @memberof cc.sys
- * @name IOS
- * @constant
- * @default
+ * @property IPAD
  * @type {Number}
+ * @readOnly
+ * @default 5
  */
 sys.IPAD = 5;
 /**
- * @memberof cc.sys
- * @name BLACKBERRY
- * @constant
- * @default
+ * @property BLACKBERRY
  * @type {Number}
+ * @readOnly
+ * @default 6
  */
 sys.BLACKBERRY = 6;
 /**
- * @memberof cc.sys
- * @name NACL
- * @constant
- * @default
+ * @property NACL
  * @type {Number}
+ * @readOnly
+ * @default 7
  */
 sys.NACL = 7;
 /**
- * @memberof cc.sys
- * @name EMSCRIPTEN
- * @constant
- * @default
+ * @property EMSCRIPTEN
  * @type {Number}
+ * @readOnly
+ * @default 8
  */
 sys.EMSCRIPTEN = 8;
 /**
- * @memberof cc.sys
- * @name TIZEN
- * @constant
- * @default
+ * @property TIZEN
  * @type {Number}
+ * @readOnly
+ * @default 9
  */
 sys.TIZEN = 9;
 /**
- * @memberof cc.sys
- * @name WINRT
- * @constant
- * @default
+ * @property WINRT
  * @type {Number}
+ * @readOnly
+ * @default 10
  */
 sys.WINRT = 10;
 /**
- * @memberof cc.sys
- * @name WP8
- * @constant
- * @default
+ * @property WP8
  * @type {Number}
+ * @readOnly
+ * @default 11
  */
 sys.WP8 = 11;
 /**
- * @memberof cc.sys
- * @name MOBILE_BROWSER
- * @constant
- * @default
+ * @property MOBILE_BROWSER
  * @type {Number}
+ * @readOnly
+ * @default 100
  */
 sys.MOBILE_BROWSER = 100;
 /**
- * @memberof cc.sys
- * @name DESKTOP_BROWSER
- * @constant
- * @default
+ * @property DESKTOP_BROWSER
  * @type {Number}
+ * @readOnly
+ * @default 101
  */
 sys.DESKTOP_BROWSER = 101;
 
 /**
  * Indicates whether executes in editor's window process (Electron's renderer context)
- * @memberof cc.sys
- * @name EDITOR_PAGE
- * @constant
- * @default
+ * @property EDITOR_PAGE
  * @type {Number}
+ * @readOnly
+ * @default 102
  */
 sys.EDITOR_PAGE = 102;
 /**
  * Indicates whether executes in editor's main process (Electron's browser context)
- * @memberof cc.sys
- * @name EDITOR_CORE
- * @constant
- * @default
+ * @property EDITOR_CORE
  * @type {Number}
+ * @readOnly
+ * @default 103
  */
 sys.EDITOR_CORE = 103;
 
@@ -394,16 +350,14 @@ sys.BROWSER_TYPE_UNKNOWN = "unknown";
 
 /**
  * Is native ? This is set to be true in jsb auto.
- * @memberof cc.sys
- * @name isNative
+ * @property isNative
  * @type {Boolean}
  */
 sys.isNative = false;
 
 /**
  * Is web browser ?
- * @memberof cc.sys
- * @name isBrowser
+ * @property isBrowser
  * @type {Boolean}
  */
 sys.isBrowser = typeof window === 'object' && typeof document === 'object';
@@ -436,16 +390,14 @@ else {
     else {
         /**
          * Indicate whether system is mobile system
-         * @memberof cc.sys
-         * @name isMobile
+         * @property isMobile
          * @type {Boolean}
          */
         sys.isMobile = ua.indexOf('mobile') !== -1 || ua.indexOf('android') !== -1;
 
         /**
          * Indicate the running platform
-         * @memberof cc.sys
-         * @name platform
+         * @property platform
          * @type {Number}
          */
         sys.platform = sys.isMobile ? sys.MOBILE_BROWSER : sys.DESKTOP_BROWSER;
@@ -457,8 +409,7 @@ else {
 
     /**
      * Indicate the current language of the running system
-     * @memberof cc.sys
-     * @name language
+     * @property language
      * @type {String}
      */
     sys.language = currLanguage;
@@ -476,16 +427,14 @@ else {
 
     /**
      * Indicate the running os name
-     * @memberof cc.sys
-     * @name os
+     * @property os
      * @type {String}
      */
     sys.os = osName;
 
     /**
      * Indicate the running browser type
-     * @memberof cc.sys
-     * @name browserType
+     * @property browserType
      * @type {String}
      */
     sys.browserType = sys.BROWSER_TYPE_UNKNOWN;
@@ -514,8 +463,7 @@ else {
 
     /**
      * Indicate the running browser version
-     * @memberof cc.sys
-     * @name browserVersion
+     * @property browserVersion
      * @type {Number}
      */
     sys.browserVersion = "";
@@ -534,8 +482,7 @@ else {
 
     /**
      * Indicate the real pixel resolution of the whole game window
-     * @memberof cc.sys
-     * @name windowPixelResolution
+     * @property windowPixelResolution
      * @type {Number}
      */
     sys.windowPixelResolution = {
@@ -599,8 +546,7 @@ else {
 
     /**
      * cc.sys.localStorage is a local storage component.
-     * @memberof cc.sys
-     * @name localStorage
+     * @property localStorage
      * @type {Object}
      */
     try {
@@ -635,8 +581,7 @@ else {
 
     /**
      * The capabilities of the current platform
-     * @memberof cc.sys
-     * @name capabilities
+     * @property capabilities
      * @type {Object}
      */
     var capabilities = sys.capabilities = {
@@ -658,9 +603,7 @@ else {
 
 /**
  * Forces the garbage collection, only available in JSB
- * @memberof cc.sys
- * @name garbageCollect
- * @function
+ * @method garbageCollect
  */
 sys.garbageCollect = function () {
     // N/A in cocos2d-html5
@@ -668,9 +611,7 @@ sys.garbageCollect = function () {
 
 /**
  * Dumps rooted objects, only available in JSB
- * @memberof cc.sys
- * @name dumpRoot
- * @function
+ * @method dumpRoot
  */
 sys.dumpRoot = function () {
     // N/A in cocos2d-html5
@@ -678,9 +619,7 @@ sys.dumpRoot = function () {
 
 /**
  * Restart the JS VM, only available in JSB
- * @memberof cc.sys
- * @name restartVM
- * @function
+ * @method restartVM
  */
 sys.restartVM = function () {
     // N/A in cocos2d-html5
@@ -688,10 +627,8 @@ sys.restartVM = function () {
 
 /**
  * Clean a script in the JS VM, only available in JSB
- * @memberof cc.sys
- * @name cleanScript
+ * @method cleanScript
  * @param {String} jsfile
- * @function
  */
 sys.cleanScript = function (jsfile) {
     // N/A in cocos2d-html5
@@ -701,11 +638,9 @@ sys.cleanScript = function (jsfile) {
  * Check whether an object is valid,
  * In web engine, it will return true if the object exist
  * In native engine, it will return true if the JS object and the correspond native object are both valid
- * @memberof cc.sys
- * @name isObjectValid
+ * @method isObjectValid
  * @param {Object} obj
- * @return {boolean} Validity of the object
- * @function
+ * @return {Boolean} Validity of the object
  */
 sys.isObjectValid = function (obj) {
     if (obj) return true;
@@ -714,9 +649,7 @@ sys.isObjectValid = function (obj) {
 
 /**
  * Dump system informations
- * @memberof cc.sys
- * @name dump
- * @function
+ * @method dump
  */
 sys.dump = function () {
     var self = this;
@@ -732,8 +665,7 @@ sys.dump = function () {
 
 /**
  * Open a url in browser
- * @memberof cc.sys
- * @name openURL
+ * @method openURL
  * @param {String} url
  */
 sys.openURL = function(url){

@@ -26,9 +26,8 @@
 
 /**
  * A SAX Parser
- * @class
- * @name cc.saxParser
- * @extends cc._Class
+ * @class saxParser
+ * @extends _Class
  */
 cc.SAXParser = cc._Class.extend(/** @lends cc.saxParser# */{
     _parser: null,
@@ -47,7 +46,7 @@ cc.SAXParser = cc._Class.extend(/** @lends cc.saxParser# */{
     },
 
     /**
-     * @function
+     * @method parse
      * @param {String} xmlTxt
      * @return {Document}
      */
@@ -74,15 +73,14 @@ cc.SAXParser = cc._Class.extend(/** @lends cc.saxParser# */{
 /**
  *
  * cc.plistParser is a singleton object for parsing plist files
- * @class
- * @name cc.plistParser
- * @extends cc.SAXParser
+ * @class plistParser
+ * @extends SAXParser
  */
 cc.PlistParser = cc.SAXParser.extend(/** @lends cc.plistParser# */{
 
     /**
      * parse a xml string as plist object.
-     * @param {String} xmlTxt plist xml contents
+     * @param {String} xmlTxt - plist xml contents
      * @return {*} plist object
      */
     parse : function (xmlTxt) {
@@ -162,8 +160,8 @@ cc.PlistParser = cc.SAXParser.extend(/** @lends cc.plistParser# */{
 
 cc.saxParser = new cc.SAXParser();
 /**
- * @type {cc.PlistParser}
- * @name cc.plistParser
+ * @type {PlistParser}
+ * @name plistParser
  * A Plist Parser
  */
 cc.plistParser = new cc.PlistParser();

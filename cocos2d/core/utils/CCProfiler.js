@@ -1,3 +1,6 @@
+/**
+ * @class profiler
+ */
 cc.profiler = (function () {
     var _inited = _showFPS = false;
     var _frames = _frameRate = _lastSPF = _accumDt = 0;

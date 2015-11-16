@@ -4,10 +4,11 @@
  * This function will still returns the node even if it is inactive.
  * It is recommended to not use this function every frame instead cache the result at startup.
  *
- * @function
+ * @method find
+ * @static
  * @param {String} path
- * @param {cc.ENode} [referenceNode]
- * @return {cc.ENode} the node or null if not found
+ * @param {ENode} [referenceNode]
+ * @return {ENode} the node or null if not found
  */
 cc.find = module.exports = function (path, referenceNode) {
     if (path == null) {

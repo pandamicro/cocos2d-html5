@@ -30,8 +30,8 @@
  *     For instance, you could refer to EventListenerAcceleration, EventListenerKeyboard,                       <br/>
  *      EventListenerTouchOneByOne, EventListenerCustom.
  * </p>
- * @class
- * @extends cc._Class
+ * @class EventListener
+ * @extends _Class
  */
 cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
     _onEvent: null,                          // Event callback function
@@ -45,10 +45,10 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
     _isEnabled: true,                      // Whether the listener is enabled
 
     /**
-     * Initializes event with type and callback function
-     * @param {number} type
-     * @param {string} listenerID
-     * @param {function} callback
+     * Initializes event with type and callback function.
+     * @param {Number} type
+     * @param {String} listenerID
+     * @param {Function} callback
      */
     ctor: function (type, listenerID, callback) {
         this._onEvent = callback;
@@ -66,7 +66,7 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
      *              call `setEnabled(false)` instead.
      *            2) In `Node`'s onEnter and onExit, the `paused state` of the listeners which associated with that node will be automatically updated.
      * </p>
-     * @param {boolean} paused
+     * @param {Boolean} paused
      * @private
      */
     _setPaused: function (paused) {
@@ -74,8 +74,8 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
     },
 
     /**
-     * Checks whether the listener is paused
-     * @returns {boolean}
+     * Checks whether the listener is paused.
+     * @returns {Boolean}
      * @private
      */
     _isPaused: function () {
@@ -83,8 +83,8 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
     },
 
     /**
-     * Marks the listener was registered by EventDispatcher
-     * @param {boolean} registered
+     * Marks the listener was registered by EventDispatcher.
+     * @param {Boolean} registered
      * @private
      */
     _setRegistered: function (registered) {
@@ -93,7 +93,7 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
 
     /**
      * Checks whether the listener was registered by EventDispatcher
-     * @returns {boolean}
+     * @returns {Boolean}
      * @private
      */
     _isRegistered: function () {
@@ -103,7 +103,7 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
     /**
      * Gets the type of this listener
      * @note It's different from `EventType`, e.g. TouchEvent has two kinds of event listeners - EventListenerOneByOne, EventListenerAllAtOnce
-     * @returns {number}
+     * @returns {Number}
      * @private
      */
     _getType: function () {
@@ -113,7 +113,7 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
     /**
      *  Gets the listener ID of this listener
      *  When event is being dispatched, listener ID is used as key for searching listeners according to event type.
-     * @returns {string}
+     * @returns {String}
      * @private
      */
     _getListenerID: function () {
@@ -123,7 +123,7 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
     /**
      * Sets the fixed priority for this listener
      *  @note This method is only used for `fixed priority listeners`, it needs to access a non-zero value. 0 is reserved for scene graph priority listeners
-     * @param {number} fixedPriority
+     * @param {Number} fixedPriority
      * @private
      */
     _setFixedPriority: function (fixedPriority) {
@@ -132,7 +132,7 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
 
     /**
      * Gets the fixed priority of this listener
-     * @returns {number} 0 if it's a scene graph priority listener, non-zero for fixed priority listener
+     * @returns {Number} 0 if it's a scene graph priority listener, non-zero for fixed priority listener
      * @private
      */
     _getFixedPriority: function () {
@@ -141,7 +141,7 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
 
     /**
      * Sets scene graph priority for this listener
-     * @param {cc.Node} node
+     * @param {ENode} node
      * @private
      */
     _setSceneGraphPriority: function (node) {
@@ -150,7 +150,7 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
 
     /**
      * Gets scene graph priority of this listener
-     * @returns {cc.Node} if it's a fixed priority listener, non-null for scene graph priority listener
+     * @returns {ENode} if it's a fixed priority listener, non-null for scene graph priority listener
      * @private
      */
     _getSceneGraphPriority: function () {
@@ -159,7 +159,7 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
 
     /**
      * Checks whether the listener is available.
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     checkAvailable: function () {
         return this._onEvent !== null;
@@ -167,7 +167,7 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
 
     /**
      * Clones the listener, its subclasses have to override this method.
-     * @returns {cc.EventListener}
+     * @returns {EventListener}
      */
     clone: function () {
         return null;
@@ -179,7 +179,7 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
      *          When an listener was initialized, it's enabled by default.
      *          An event listener can receive events when it is enabled and is not paused.
      *          paused state is always false when it is a fixed priority listener.
-     * @param {boolean} enabled
+     * @param {Boolean} enabled
      */
     setEnabled: function(enabled){
         this._isEnabled = enabled;
@@ -187,7 +187,7 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
 
     /**
      * Checks whether the listener is enabled
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     isEnabled: function(){
         return this._isEnabled;
@@ -203,7 +203,8 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
      * The retain function can increase a reference count for the native object to avoid it being released,<br/>
      * you need to manually invoke release function when you think this object is no longer needed, otherwise, there will be memory learks.<br/>
      * retain and release function call should be paired in developer's game code.</p>
-     * @function
+     *
+     * @method retain
      * @see cc.EventListener#release
      */
     retain:function () {
@@ -218,7 +219,8 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
      * The retain function can increase a reference count for the native object to avoid it being released,<br/>
      * you need to manually invoke release function when you think this object is no longer needed, otherwise, there will be memory learks.<br/>
      * retain and release function call should be paired in developer's game code.</p>
-     * @function
+     *
+     * @method release
      * @see cc.EventListener#retain
      */
     release:function () {
@@ -229,56 +231,56 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
 /**
  * The type code of unknown event listener.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 cc.EventListener.UNKNOWN = 0;
 /**
  * The type code of one by one touch event listener.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 cc.EventListener.TOUCH_ONE_BY_ONE = 1;
 /**
  * The type code of all at once touch event listener.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 cc.EventListener.TOUCH_ALL_AT_ONCE = 2;
 /**
  * The type code of keyboard event listener.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 cc.EventListener.KEYBOARD = 3;
 /**
  * The type code of mouse event listener.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 cc.EventListener.MOUSE = 4;
 /**
  * The type code of acceleration event listener.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 cc.EventListener.ACCELERATION = 5;
 /**
  * The type code of focus event listener.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 cc.EventListener.ACCELERATION = 6;
 /**
  * The type code of custom event listener.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 cc.EventListener.CUSTOM = 8;
 
 /**
  * The type code of Focus change event listener.
  * @constant
- * @type {number}
+ * @type {Number}
  */
 cc.EventListener.FOCUS = 7;
 
@@ -445,20 +447,12 @@ cc._EventListenerTouchAllAtOnce.create = function(){
 
 /**
  * Create a EventListener object by json object
- * @function
+ * @method create
  * @static
- * @param {object} argObj a json object
- * @returns {cc.EventListener}
+ * @param {Object} argObj a json object
+ * @returns {EventListener}
  * todo: It should be the direct use new
- * @example
- * cc.EventListener.create({
- *       event: cc.EventListener.TOUCH_ONE_BY_ONE,
- *       swallowTouches: true,
- *       onTouchBegan: function (touch, event) {
- *           //do something
- *           return true;
- *       }
- *    });
+ * @example {@link utils/api/cocos/docs/cocos2d/core/event-manager/CCEventListener/create.js}
  */
 cc.EventListener.create = function(argObj){
 

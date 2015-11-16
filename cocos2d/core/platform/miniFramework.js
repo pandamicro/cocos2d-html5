@@ -28,8 +28,8 @@
  * the dollar sign, classic like jquery, this selector add extra methods to HTMLElement without touching its prototype</br>
  * it is also chainable like jquery
  * @param {HTMLElement|String} x pass in a css selector in string or the whole HTMLElement
- * @function
- * @return {cc.$}
+ * @method $
+ * @return {$}
  */
 cc.$ = function (x) {
     /** @lends cc.$# */
@@ -41,15 +41,15 @@ cc.$ = function (x) {
         /**
          * find and return the child wth css selector (same as jquery.find)
          * @lends cc.$#
-         * @function
+         * @method find
          * @param {HTMLElement|String} x pass in a css selector in string or the whole HTMLElement
-         * @return {cc.$}
+         * @return {$}
          */
         el.find = el.find || cc.$;
         /**
          * check if a DOMNode has a specific class
          * @lends cc.$#
-         * @function
+         * @method hasClass
          * @param {String} cls
          * @return {Boolean}
          */
@@ -59,9 +59,9 @@ cc.$ = function (x) {
         /**
          * add a class to a DOMNode, returns self to allow chaining
          * @lends cc.$#
-         * @function
+         * @method addClass
          * @param {String} cls
-         * @return {cc.$}
+         * @return {$}
          */
         el.addClass = el.addClass || function (cls) {
             if (!this.hasClass(cls)) {
@@ -75,9 +75,9 @@ cc.$ = function (x) {
         /**
          * remove a specific class from a DOMNode, returns self to allow chaining
          * @lends cc.$#
-         * @function
+         * @method removeClass
          * @param {String} cls
-         * @return {cc.$}
+         * @return {$}
          */
         el.removeClass = el.removeClass || function (cls) {
             if (this.hasClass(cls)) {
@@ -88,7 +88,7 @@ cc.$ = function (x) {
         /**
          * detach it self from parent
          * @lends cc.$#
-         * @function
+         * @method remove
          */
         el.remove = el.remove || function () {
             if (this.parentNode)
@@ -99,9 +99,9 @@ cc.$ = function (x) {
         /**
          * add to another element as a child
          * @lends cc.$#
-         * @function
-         * @param {HTMLElement|cc.$} x
-         * @return {cc.$}
+         * @method appendTo
+         * @param {HTMLElement|$} x
+         * @return {$}
          */
         el.appendTo = el.appendTo || function (x) {
             x.appendChild(this);
@@ -111,9 +111,9 @@ cc.$ = function (x) {
         /**
          * add to another element as a child and place on the top of the children list
          * @lends cc.$#
-         * @function
-         * @param {HTMLElement|cc.$} x
-         * @return {cc.$}
+         * @method prependTo
+         * @param {HTMLElement|$} x
+         * @return {$}
          */
         el.prependTo = el.prependTo || function (x) {
             ( x.childNodes[0]) ? x.insertBefore(this, x.childNodes[0]) : x.appendChild(this);
@@ -123,8 +123,8 @@ cc.$ = function (x) {
         /**
          * helper function for updating the css transform
          * @lends cc.$#
-         * @function
-         * @return {cc.$}
+         * @method transforms
+         * @return {$}
          */
         el.transforms = el.transforms || function () {
             this.style[cc.$.trans] = cc.$.translate(this.position) + cc.$.rotate(this.rotation) + cc.$.scale(this.scale) + cc.$.skew(this.skew);
@@ -139,11 +139,10 @@ cc.$ = function (x) {
         /**
          * move the element
          * @memberOf cc.$#
-         * @name translates
-         * @function
+         * @method translates
          * @param {Number} x in pixel
          * @param {Number} y in pixel
-         * @return {cc.$}
+         * @return {$}
          */
         el.translates = function (x, y) {
             this.position.x = x;
@@ -155,10 +154,9 @@ cc.$ = function (x) {
         /**
          * rotate the element
          * @memberOf cc.$#
-         * @name rotate
-         * @function
+         * @method rotate
          * @param {Number} x in degrees
-         * @return {cc.$}
+         * @return {$}
          */
         el.rotate = function (x) {
             this.rotation = x;
@@ -169,11 +167,10 @@ cc.$ = function (x) {
         /**
          * resize the element
          * @memberOf cc.$#
-         * @name resize
-         * @function
+         * @method resize
          * @param {Number} x
          * @param {Number} y
-         * @return {cc.$}
+         * @return {$}
          */
         el.resize = function (x, y) {
             this.scale.x = x;
@@ -185,11 +182,10 @@ cc.$ = function (x) {
         /**
          * skews the element
          * @memberOf cc.$#
-         * @name setSkew
-         * @function
+         * @method setSkew
          * @param {Number} x in degrees
          * @param {Number} y
-         * @return {cc.$}
+         * @return {$}
          */
         el.setSkew = function (x, y) {
             this.skew.x = x;
@@ -247,7 +243,7 @@ cc.$.skew = function (a) {
 /**
  * Creates a new element, and adds cc.$ methods
  * @param {String} x name of the element tag to create
- * @return {cc.$}
+ * @return {$}
  */
 cc.$new = function (x) {
     return cc.$(document.createElement(x))

@@ -114,9 +114,9 @@ switch(cc.__BrowserGetter.adaptationType){
  * Since the cc.view is a singleton, you don't need to call any constructor or create functions,<br/>
  * the standard way to use it is by calling:<br/>
  *  - cc.view.methodName(); <br/>
- * @class
- * @name cc.view
- * @extend cc._Class
+ *
+ * @class EGLView
+ * @extends _Class
  */
 cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
     _delegate: null,
@@ -233,6 +233,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
      *   4. cc.DENSITYDPI_LOW, value is "low-dpi"                                            <br/>
      *   5. Custom value, e.g: "480"                                                         <br/>
      * </p>
+     *
+     * @method setTargetDensityDPI
      * @param {String} densityDPI
      */
     setTargetDensityDPI: function(densityDPI){
@@ -242,6 +244,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns the current target-densitydpi value of cc.view.
+     * @method getTargetDensityDPI
      * @returns {String}
      */
     getTargetDensityDPI: function(){
@@ -251,7 +254,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
     /**
      * Sets whether resize canvas automatically when browser's size changed.<br/>
      * Useful only on web.
-     * @param {Boolean} enabled Whether enable automatic resize with browser's resize event
+     * @method resizeWithBrowserSize
+     * @param {Boolean} enabled - Whether enable automatic resize with browser's resize event
      */
     resizeWithBrowserSize: function (enabled) {
         if (enabled) {
@@ -276,7 +280,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
      * this callback will be invoked before applying resolution policy, <br/>
      * so you can do any additional modifications within the callback.<br/>
      * Useful only on web.
-     * @param {Function|null} callback The callback function
+     * @method setResizeCallback
+     * @param {Function|Null} callback - The callback function
      */
     setResizeCallback: function (callback) {
         if (cc.js.isFunction(callback) || callback == null) {
@@ -367,7 +372,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
      * It's enabled by default, we strongly suggest you not to disable it.<br/>
      * And even when it's enabled, you can still set your own "viewport" meta, it won't be overridden<br/>
      * Only useful on web
-     * @param {Boolean} enabled Enable automatic modification to "viewport" meta
+     * @method adjustViewPort
+     * @param {Boolean} enabled - Enable automatic modification to "viewport" meta
      */
     adjustViewPort: function (enabled) {
         this._isAdjustViewPort = enabled;
@@ -377,7 +383,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 	 * Retina support is enabled by default for Apple device but disabled for other devices,<br/>
 	 * it takes effect only when you called setDesignResolutionPolicy<br/>
      * Only useful on web
-	 * @param {Boolean} enabled  Enable or disable retina display
+     * @method enableRetina
+	 * @param {Boolean} enabled - Enable or disable retina display
 	 */
 	enableRetina: function(enabled) {
 		this._retinaEnabled = enabled ? true : false;
@@ -386,6 +393,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 	/**
 	 * Check whether retina display is enabled.<br/>
      * Only useful on web
+     * @method isRetinaEnabled
 	 * @return {Boolean}
 	 */
 	isRetinaEnabled: function() {
@@ -396,7 +404,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
      * If enabled, the application will try automatically to enter full screen mode on mobile devices<br/>
      * You can pass true as parameter to enable it and disable it by passing false.<br/>
      * Only useful on web
-     * @param {Boolean} enabled  Enable or disable auto full screen on mobile devices
+     * @method enableAutoFullScreen
+     * @param {Boolean} enabled - Enable or disable auto full screen on mobile devices
      */
     enableAutoFullScreen: function(enabled) {
         this._autoFullScreen = enabled ? true : false;
@@ -405,6 +414,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
     /**
      * Check whether auto full screen is enabled.<br/>
      * Only useful on web
+     * @method isAutoFullScreenEnabled
      * @return {Boolean} Auto full screen enabled or not
      */
     isAutoFullScreenEnabled: function() {
@@ -420,6 +430,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
     /**
      * Get whether render system is ready(no matter opengl or canvas),<br/>
      * this name is for the compatibility with cocos2d-x, subclass must implement this method.
+     * @method isOpenGLReady
      * @return {Boolean}
      */
     isOpenGLReady: function () {
@@ -428,6 +439,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /*
      * Set zoom factor for frame. This method is for debugging big resolution (e.g.new ipad) app on desktop.
+     * @method setFrameZoomFactor
      * @param {Number} zoomFactor
      */
     setFrameZoomFactor: function (zoomFactor) {
@@ -444,13 +456,15 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Open or close IME keyboard , subclass must implement this method.
+     * @method setIMEKeyboardState
      * @param {Boolean} isOpen
      */
     setIMEKeyboardState: function (isOpen) {
     },
 
     /**
-     * Sets the resolution translate on EGLView
+     * Sets the resolution translate on EGLView.
+     * @method setContentTranslateLeftTop
      * @param {Number} offsetLeft
      * @param {Number} offsetTop
      */
@@ -460,7 +474,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns the resolution translate on EGLView
-     * @return {cc.Size|Object}
+     * @method getContentTranslateLeftTop
+     * @return {Size|Object}
      */
     getContentTranslateLeftTop: function () {
         return this._contentTranslateLeftTop;
@@ -469,6 +484,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
     /**
      * Not support on native.<br/>
      * On web, it sets the size of the canvas.
+     * @method setCanvasSize
      * @param {Number} width
      * @param {Number} height
      */
@@ -493,7 +509,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
      * Returns the canvas size of the view.<br/>
      * On native platforms, it returns the screen size since the view is a fullscreen view.<br/>
      * On web, it returns the size of the canvas element.
-     * @return {cc.Size}
+     * @method getCanvasSize
+     * @return {Size}
      */
     getCanvasSize: function () {
         return cc.size(cc.game.canvas.width, cc.game.canvas.height);
@@ -503,7 +520,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
      * Returns the frame size of the view.<br/>
      * On native platforms, it returns the screen size since the view is a fullscreen view.<br/>
      * On web, it returns the size of the canvas's outer DOM element.
-     * @return {cc.Size}
+     * @method getFrameSize
+     * @return {Size}
      */
     getFrameSize: function () {
         return cc.size(this._frameSize.width, this._frameSize.height);
@@ -512,6 +530,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
     /**
      * On native, it sets the frame size of view.<br/>
      * On web, it sets the size of the canvas's outer DOM element.
+     * @method setFrameSize
      * @param {Number} width
      * @param {Number} height
      */
@@ -533,7 +552,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns the visible area size of the view port.
-     * @return {cc.Size}
+     * @method getVisibleSize
+     * @return {Size}
      */
     getVisibleSize: function () {
         return cc.size(this._visibleRect.width,this._visibleRect.height);
@@ -541,7 +561,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns the visible area size of the view port.
-     * @return {cc.Size}
+     * @method getVisibleSizeInPixel
+     * @return {Size}
      */
     getVisibleSizeInPixel: function () {
         return cc.size( this._visibleRect.width * this._scaleX,
@@ -550,7 +571,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns the visible origin of the view port.
-     * @return {cc.Vec2}
+     * @method getVisibleOrigin
+     * @return {Vec2}
      */
     getVisibleOrigin: function () {
         return cc.p(this._visibleRect.x,this._visibleRect.y);
@@ -558,7 +580,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns the visible origin of the view port.
-     * @return {cc.Vec2}
+     * @method getVisibleOriginInPixel
+     * @return {Vec2}
      */
     getVisibleOriginInPixel: function () {
         return cc.p(this._visibleRect.x * this._scaleX,
@@ -567,6 +590,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns whether developer can set content's scale factor.
+     * @method canSetContentScaleFactor
      * @return {Boolean}
      */
     canSetContentScaleFactor: function () {
@@ -576,7 +600,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
     /**
      * Returns the current resolution policy
      * @see cc.ResolutionPolicy
-     * @return {cc.ResolutionPolicy}
+     * @method getResolutionPolicy
+     * @return {ResolutionPolicy}
      */
     getResolutionPolicy: function () {
         return this._resolutionPolicy;
@@ -585,7 +610,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
     /**
      * Sets the current resolution policy
      * @see cc.ResolutionPolicy
-     * @param {cc.ResolutionPolicy|Number} resolutionPolicy
+     * @method setResolutionPolicy
+     * @param {ResolutionPolicy|Number} resolutionPolicy
      */
     setResolutionPolicy: function (resolutionPolicy) {
         var _t = this;
@@ -617,9 +643,10 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
      * [4] ResolutionFixedHeight    Scale the content's height to screen's height and proportionally scale its width<br/>
      * [5] ResolutionFixedWidth     Scale the content's width to screen's width and proportionally scale its height<br/>
      * [cc.ResolutionPolicy]        [Web only feature] Custom resolution policy, constructed by cc.ResolutionPolicy<br/>
+     * @method setDesignResolutionSize
      * @param {Number} width Design resolution width.
      * @param {Number} height Design resolution height.
-     * @param {cc.ResolutionPolicy|Number} resolutionPolicy The resolution policy desired
+     * @param {ResolutionPolicy|Number} resolutionPolicy The resolution policy desired
      */
     setDesignResolutionSize: function (width, height, resolutionPolicy) {
         // Defensive code
@@ -693,7 +720,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
     /**
      * Returns the designed size for the view.
      * Default resolution size is the same as 'getFrameSize'.
-     * @return {cc.Size}
+     * @method getDesignResolutionSize
+     * @return {Size}
      */
     getDesignResolutionSize: function () {
         return cc.size(this._designResolutionSize.width, this._designResolutionSize.height);
@@ -709,9 +737,10 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
      *     1. Set viewport's width to the desired width in pixel
      *     2. Set body width to the exact pixel resolution
      *     3. The resolution policy will be reset with designed view size in points.
+     * @method setRealPixelResolution
      * @param {Number} width Design resolution width.
      * @param {Number} height Design resolution height.
-     * @param {cc.ResolutionPolicy|Number} resolutionPolicy The resolution policy desired
+     * @param {ResolutionPolicy|Number} resolutionPolicy The resolution policy desired
      */
     setRealPixelResolution: function (width, height, resolutionPolicy) {
         // Set viewport's width
@@ -728,6 +757,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Sets view port rectangle with points.
+     * @method setViewPortInPoints
      * @param {Number} x
      * @param {Number} y
      * @param {Number} w width
@@ -743,6 +773,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Sets Scissor rectangle with points.
+     * @method setScissorInPoints
      * @param {Number} x
      * @param {Number} y
      * @param {Number} w
@@ -758,6 +789,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns whether GL_SCISSOR_TEST is enable
+     * @method isScissorEnabled
      * @return {Boolean}
      */
     isScissorEnabled: function () {
@@ -767,7 +799,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns the current scissor rectangle
-     * @return {cc.Rect}
+     * @method getScissorRect
+     * @return {Rect}
      */
     getScissorRect: function () {
         var gl = cc._renderContext, scaleX = this._scaleX, scaleY = this._scaleY;
@@ -778,6 +811,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Sets the name of the view
+     * @method setViewName
      * @param {String} viewName
      */
     setViewName: function (viewName) {
@@ -788,6 +822,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns the name of the view
+     * @method getViewName
      * @return {String}
      */
     getViewName: function () {
@@ -796,7 +831,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns the view port rectangle.
-     * @return {cc.Rect}
+     * @method getViewPortRect
+     * @return {Rect}
      */
     getViewPortRect: function () {
         return this._viewPortRect;
@@ -804,6 +840,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns scale factor of the horizontal direction (X axis).
+     * @method getScaleX
      * @return {Number}
      */
     getScaleX: function () {
@@ -812,6 +849,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns scale factor of the vertical direction (Y axis).
+     * @method getScaleY
      * @return {Number}
      */
     getScaleY: function () {
@@ -820,6 +858,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns device pixel ratio for retina display.
+     * @method getDevicePixelRatio
      * @return {Number}
      */
     getDevicePixelRatio: function() {
@@ -828,10 +867,11 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 
     /**
      * Returns the real location in view for a translation based on a related position
-     * @param {Number} tx The X axis translation
-     * @param {Number} ty The Y axis translation
-     * @param {Object} relatedPos The related position object including "left", "top", "width", "height" informations
-     * @return {cc.Vec2}
+     * @method convertToLocationInView
+     * @param {Number} tx - The X axis translation
+     * @param {Number} ty - The Y axis translation
+     * @param {Object} relatedPos - The related position object including "left", "top", "width", "height" informations
+     * @return {Vec2}
      */
     convertToLocationInView: function (tx, ty, relatedPos) {
         return {x: this._devicePixelRatio * (tx - relatedPos.left), y: this._devicePixelRatio * (relatedPos.top + relatedPos.height - ty)};
@@ -858,8 +898,8 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
 });
 
 /**
- * @function
- * @return {cc.EGLView}
+ * @method _getInstance
+ * @return {EGLView}
  * @private
  */
 cc.EGLView._getInstance = function () {
@@ -874,28 +914,31 @@ cc.EGLView._getInstance = function () {
  * <p>cc.ContainerStrategy class is the root strategy class of container's scale strategy,
  * it controls the behavior of how to scale the cc.container and cc.game.canvas object</p>
  *
- * @class
- * @extends cc._Class
+ * @class ContainerStrategy
+ * @extends _Class
  */
 cc.ContainerStrategy = cc._Class.extend(/** @lends cc.ContainerStrategy# */{
     /**
      * Manipulation before appling the strategy
-     * @param {cc.view} The target view
+     * @method preApply
+     * @param {view} view - The target view
      */
     preApply: function (view) {
     },
 
     /**
      * Function to apply this strategy
-     * @param {cc.view} view
-     * @param {cc.Size} designedResolution
+     * @method apply
+     * @param {view} view
+     * @param {Size} designedResolution
      */
     apply: function (view, designedResolution) {
     },
 
     /**
      * Manipulation after applying the strategy
-     * @param {cc.view} view  The target view
+     * @method postApply
+     * @param {view} view  The target view
      */
     postApply: function (view) {
 
@@ -959,8 +1002,8 @@ cc.ContainerStrategy = cc._Class.extend(/** @lends cc.ContainerStrategy# */{
  * <p>cc.ContentStrategy class is the root strategy class of content's scale strategy,
  * it controls the behavior of how to scale the scene and setup the viewport for the game</p>
  *
- * @class
- * @extends cc._Class
+ * @class ContentStrategy
+ * @extends _Class
  */
 cc.ContentStrategy = cc._Class.extend(/** @lends cc.ContentStrategy# */{
 
@@ -991,7 +1034,8 @@ cc.ContentStrategy = cc._Class.extend(/** @lends cc.ContentStrategy# */{
 
     /**
      * Manipulation before applying the strategy
-     * @param {cc.view} view The target view
+     * @method preApply
+     * @param {view} view - The target view
      */
     preApply: function (view) {
     },
@@ -1000,9 +1044,10 @@ cc.ContentStrategy = cc._Class.extend(/** @lends cc.ContentStrategy# */{
      * Function to apply this strategy
      * The return value is {scale: [scaleX, scaleY], viewport: {cc.Rect}},
      * The target view can then apply these value to itself, it's preferred not to modify directly its private variables
-     * @param {cc.view} view
-     * @param {cc.Size} designedResolution
-     * @return {object} scaleAndViewportRect
+     * @method apply
+     * @param {view} view
+     * @param {Size} designedResolution
+     * @return {Object} scaleAndViewportRect
      */
     apply: function (view, designedResolution) {
         return {"scale": [1, 1]};
@@ -1010,7 +1055,8 @@ cc.ContentStrategy = cc._Class.extend(/** @lends cc.ContentStrategy# */{
 
     /**
      * Manipulation after applying the strategy
-     * @param {cc.view} view The target view
+     * @method postApply
+     * @param {view} view - The target view
      */
     postApply: function (view) {
     }
@@ -1020,8 +1066,8 @@ cc.ContentStrategy = cc._Class.extend(/** @lends cc.ContentStrategy# */{
 
 // Container scale strategys
     /**
-     * @class
-     * @extends cc.ContainerStrategy
+     * @class EqualToFrame
+     * @extends ContainerStrategy
      */
     var EqualToFrame = cc.ContainerStrategy.extend({
         apply: function (view) {
@@ -1030,8 +1076,8 @@ cc.ContentStrategy = cc._Class.extend(/** @lends cc.ContentStrategy# */{
     });
 
     /**
-     * @class
-     * @extends cc.ContainerStrategy
+     * @class ProportionalToFrame
+     * @extends ContainerStrategy
      */
     var ProportionalToFrame = cc.ContainerStrategy.extend({
         apply: function (view, designedResolution) {
@@ -1058,7 +1104,7 @@ cc.ContentStrategy = cc._Class.extend(/** @lends cc.ContentStrategy# */{
     });
 
     /**
-     * @class
+     * @class EqualToWindow
      * @extends EqualToFrame
      */
     var EqualToWindow = EqualToFrame.extend({
@@ -1074,7 +1120,7 @@ cc.ContentStrategy = cc._Class.extend(/** @lends cc.ContentStrategy# */{
     });
 
     /**
-     * @class
+     * @class ProportionalToWindow
      * @extends ProportionalToFrame
      */
     var ProportionalToWindow = ProportionalToFrame.extend({
@@ -1090,8 +1136,8 @@ cc.ContentStrategy = cc._Class.extend(/** @lends cc.ContentStrategy# */{
     });
 
     /**
-     * @class
-     * @extends cc.ContainerStrategy
+     * @class OriginalContainer
+     * @extends ContainerStrategy
      */
     var OriginalContainer = cc.ContainerStrategy.extend({
         apply: function (view) {
@@ -1193,10 +1239,10 @@ cc.ContentStrategy = cc._Class.extend(/** @lends cc.ContentStrategy# */{
  * <p>cc.ResolutionPolicy class is the root strategy class of scale strategy,
  * its main task is to maintain the compatibility with Cocos2d-x</p>
  *
- * @class
- * @extends cc._Class
- * @param {cc.ContainerStrategy} containerStg The container strategy
- * @param {cc.ContentStrategy} contentStg The content strategy
+ * @class ResolutionPolicy
+ * @extends _Class
+ * @param {ContainerStrategy} containerStg The container strategy
+ * @param {ContentStrategy} contentStg The content strategy
  */
 cc.ResolutionPolicy = cc._Class.extend(/** @lends cc.ResolutionPolicy# */{
 	_containerStrategy: null,
@@ -1204,8 +1250,8 @@ cc.ResolutionPolicy = cc._Class.extend(/** @lends cc.ResolutionPolicy# */{
 
     /**
      * Constructor of cc.ResolutionPolicy
-     * @param {cc.ContainerStrategy} containerStg
-     * @param {cc.ContentStrategy} contentStg
+     * @param {ContainerStrategy} containerStg
+     * @param {ContentStrategy} contentStg
      */
     ctor: function (containerStg, contentStg) {
         this.setContainerStrategy(containerStg);
@@ -1214,7 +1260,8 @@ cc.ResolutionPolicy = cc._Class.extend(/** @lends cc.ResolutionPolicy# */{
 
     /**
      * Manipulation before applying the resolution policy
-     * @param {cc.view} view The target view
+     * @method preApply
+     * @param {view} view The target view
      */
     preApply: function (view) {
         this._containerStrategy.preApply(view);
@@ -1225,9 +1272,10 @@ cc.ResolutionPolicy = cc._Class.extend(/** @lends cc.ResolutionPolicy# */{
      * Function to apply this resolution policy
      * The return value is {scale: [scaleX, scaleY], viewport: {cc.Rect}},
      * The target view can then apply these value to itself, it's preferred not to modify directly its private variables
-     * @param {cc.view} view The target view
-     * @param {cc.Size} designedResolution The user defined design resolution
-     * @return {object} An object contains the scale X/Y values and the viewport rect
+     * @method apply
+     * @param {view} view - The target view
+     * @param {Size} designedResolution - The user defined design resolution
+     * @return {Object} An object contains the scale X/Y values and the viewport rect
      */
     apply: function (view, designedResolution) {
         this._containerStrategy.apply(view, designedResolution);
@@ -1236,7 +1284,8 @@ cc.ResolutionPolicy = cc._Class.extend(/** @lends cc.ResolutionPolicy# */{
 
     /**
      * Manipulation after appyling the strategy
-     * @param {cc.view} view The target view
+     * @method postApply
+     * @param {view} view - The target view
      */
     postApply: function (view) {
         this._containerStrategy.postApply(view);
@@ -1245,7 +1294,8 @@ cc.ResolutionPolicy = cc._Class.extend(/** @lends cc.ResolutionPolicy# */{
 
     /**
      * Setup the container's scale strategy
-     * @param {cc.ContainerStrategy} containerStg
+     * @method setContainerStrategy
+     * @param {ContainerStrategy} containerStg
      */
     setContainerStrategy: function (containerStg) {
         if (containerStg instanceof cc.ContainerStrategy)
@@ -1254,7 +1304,8 @@ cc.ResolutionPolicy = cc._Class.extend(/** @lends cc.ResolutionPolicy# */{
 
     /**
      * Setup the content's scale strategy
-     * @param {cc.ContentStrategy} contentStg
+     * @method setContentStrategy
+     * @param {ContentStrategy} contentStg
      */
     setContentStrategy: function (contentStg) {
         if (contentStg instanceof cc.ContentStrategy)
@@ -1270,7 +1321,7 @@ cc.js.get(cc.ResolutionPolicy.prototype, "canvasSize", function () {
  * @memberOf cc.ResolutionPolicy#
  * @name EXACT_FIT
  * @constant
- * @type Number
+ * @type {Number}
  * @static
  * The entire application is visible in the specified area without trying to preserve the original aspect ratio.<br/>
  * Distortion can occur, and the application may appear stretched or compressed.
@@ -1281,7 +1332,7 @@ cc.ResolutionPolicy.EXACT_FIT = 0;
  * @memberOf cc.ResolutionPolicy#
  * @name NO_BORDER
  * @constant
- * @type Number
+ * @type {Number}
  * @static
  * The entire application fills the specified area, without distortion but possibly with some cropping,<br/>
  * while maintaining the original aspect ratio of the application.
@@ -1292,7 +1343,7 @@ cc.ResolutionPolicy.NO_BORDER = 1;
  * @memberOf cc.ResolutionPolicy#
  * @name SHOW_ALL
  * @constant
- * @type Number
+ * @type {Number}
  * @static
  * The entire application is visible in the specified area without distortion while maintaining the original<br/>
  * aspect ratio of the application. Borders can appear on two sides of the application.
@@ -1303,7 +1354,7 @@ cc.ResolutionPolicy.SHOW_ALL = 2;
  * @memberOf cc.ResolutionPolicy#
  * @name FIXED_HEIGHT
  * @constant
- * @type Number
+ * @type {Number}
  * @static
  * The application takes the height of the design resolution size and modifies the width of the internal<br/>
  * canvas so that it fits the aspect ratio of the device<br/>
@@ -1316,7 +1367,7 @@ cc.ResolutionPolicy.FIXED_HEIGHT = 3;
  * @memberOf cc.ResolutionPolicy#
  * @name FIXED_WIDTH
  * @constant
- * @type Number
+ * @type {Number}
  * @static
  * The application takes the width of the design resolution size and modifies the height of the internal<br/>
  * canvas so that it fits the aspect ratio of the device<br/>
@@ -1329,7 +1380,7 @@ cc.ResolutionPolicy.FIXED_WIDTH = 4;
  * @memberOf cc.ResolutionPolicy#
  * @name UNKNOWN
  * @constant
- * @type Number
+ * @type {Number}
  * @static
  * Unknow policy
  */

@@ -27,37 +27,37 @@ var JS = require("../platform/js");
 
 /**
  * Base class of all kinds of events.
- * @class cc.Event
+ * @class Event
  * @constructor
  * @param {string} type - The name of the event (case-sensitive), e.g. "click", "fire", or "submit"
  * @param {boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
  */
 cc.Event = function(type, bubbles) {
     /**
-     * The name of the event (case-sensitive), e.g. "click", "fire", or "submit"
+     * The name of the event (case-sensitive), e.g. "click", "fire", or "submit".
      * @property type
-     * @type {string}
+     * @type {String}
      */
     this.type = type;
 
     /**
-     * A reference to the target to which the event was originally dispatched
+     * A reference to the target to which the event was originally dispatched.
      * @property target
-     * @type {object}
+     * @type {Object}
      */
     this.bubbles = bubbles || false;
 
     /**
-     * A reference to the target to which the event was originally dispatched
+     * A reference to the target to which the event was originally dispatched.
      * @property target
-     * @type {object}
+     * @type {Object}
      */
     this.target = null;
 
     /**
-     * A reference to the currently registered target for the event
+     * A reference to the currently registered target for the event.
      * @property currentTarget;
-     * @type {object}
+     * @type {Object}
      */
     this.currentTarget = null;
 
@@ -72,30 +72,30 @@ cc.Event = function(type, bubbles) {
      * (http://www.w3.org/TR/DOM-Level-3-Events/#event-flow), of the DOM Level 3 Events specification.
      *
      * @property eventPhase
-     * @type {number}
+     * @type {Number}
      */
     this.eventPhase = 0;
 
     /**
-     * Indicates whether or not event.preventDefault() has been called on the event
+     * Indicates whether or not event.preventDefault() has been called on the event.
      * @property _defaultPrevented
-     * @type {boolean}
+     * @type {Boolean}
      * @private
      */
     this._defaultPrevented = false;
 
     /**
-     * Indicates whether or not event.stopPropagation() has been called on the event
+     * Indicates whether or not event.stopPropagation() has been called on the event.
      * @property _propagationStopped
-     * @type {boolean}
+     * @type {Boolean}
      * @private
      */
     this._propagationStopped = false;
 
     /**
-     * Indicates whether or not event.stopPropagationImmediate() has been called on the event
+     * Indicates whether or not event.stopPropagationImmediate() has been called on the event.
      * @property _propagationImmediateStopped
-     * @type {boolean}
+     * @type {Boolean}
      * @private
      */
     this._propagationImmediateStopped = false;
@@ -104,8 +104,8 @@ cc.Event.prototype = {
     constructor: cc.Event,
 
     /**
-     * Reset the event for being stored in the object pool
-     * @function
+     * Reset the event for being stored in the object pool.
+     * @method unuse
      * @returns {String}
      */
     unuse: function () {
@@ -119,8 +119,8 @@ cc.Event.prototype = {
     },
 
     /**
-     * Reuse the event for being used again by the object pool
-     * @function
+     * Reuse the event for being used again by the object pool.
+     * @method reuse
      * @returns {String}
      */
     reuse: function (type, bubbles) {
@@ -137,8 +137,8 @@ cc.Event.prototype = {
     },
 
     /**
-     * Stops propagation for current event
-     * @function
+     * Stops propagation for current event.
+     * @method stopPropagation
      */
     stopPropagation: function () {
         this._propagationStopped = true;
@@ -146,17 +146,17 @@ cc.Event.prototype = {
 
     /**
      * Stops propagation for current event immediately, 
-     * the event won't even be dispatched to the listeners attached in the current target 
-     * @function
+     * the event won't even be dispatched to the listeners attached in the current target.
+     * @method stopPropagationImmediate
      */
     stopPropagationImmediate: function () {
         this._propagationImmediateStopped = true;
     },
 
     /**
-     * Checks whether the event has been stopped
-     * @function
-     * @returns {boolean}
+     * Checks whether the event has been stopped.
+     * @method isStopped
+     * @returns {Boolean}
      */
     isStopped: function () {
         return this._propagationStopped || this._propagationImmediateStopped;
@@ -168,16 +168,16 @@ cc.Event.prototype = {
      *     note: It only be available when the event listener is associated with node.                <br/>
      *          It returns 0 when the listener is associated with fixed priority.
      * </p>
-     * @function
-     * @returns {cc.Node}  The target with which the event associates.
+     * @method getCurrentTarget
+     * @returns {ENode}  The target with which the event associates.
      */
     getCurrentTarget: function () {
         return this.currentTarget;
     },
     
     /**
-     * Gets the event type
-     * @function
+     * Gets the event type.
+     * @method getType
      * @returns {String}
      */
     getType: function () {
@@ -197,7 +197,7 @@ cc.Event.NO_TYPE = 'no_type';
 /**
  * Events not currently dispatched are in this phase
  * @property NONE
- * @type {number}
+ * @type {Number}
  * @static
  * @final
  */
@@ -206,7 +206,7 @@ cc.Event.NONE = 0;
  * The capturing phase comprises the journey from the root to the last node before the event target's node
  * see http://www.w3.org/TR/DOM-Level-3-Events/#event-flow
  * @property CAPTURING_PHASE
- * @type {number}
+ * @type {Number}
  * @static
  * @final
  */
@@ -215,7 +215,7 @@ cc.Event.CAPTURING_PHASE = 1;
  * The target phase comprises only the event target node
  * see http://www.w3.org/TR/DOM-Level-3-Events/#event-flow
  * @property AT_TARGET
- * @type {number}
+ * @type {Number}
  * @static
  * @final
  */
@@ -224,7 +224,7 @@ cc.Event.AT_TARGET = 2;
  * The bubbling phase comprises any subsequent nodes encountered on the return trip to the root of the hierarchy
  * see http://www.w3.org/TR/DOM-Level-3-Events/#event-flow
  * @property BUBBLING_PHASE
- * @type {number}
+ * @type {Number}
  * @static
  * @final
  */
@@ -232,11 +232,11 @@ cc.Event.BUBBLING_PHASE = 3;
 
 /**
  * The Custom event
- * @class cc.Event.EventCustom
+ * @class Event.EventCustom
  * @constructor
- * @extends cc.Event
- * @param {string} type - The name of the event (case-sensitive), e.g. "click", "fire", or "submit"
- * @param {boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
+ * @extends Event
+ * @param {String} type - The name of the event (case-sensitive), e.g. "click", "fire", or "submit"
+ * @param {Boolean} [bubbles=false] - A boolean indicating whether the event bubbles up through the tree or not
  */
 var EventCustom = function (type, bubbles) {
     cc.Event.call(this, type, bubbles);
@@ -244,7 +244,7 @@ var EventCustom = function (type, bubbles) {
     /**
      * A reference to the detailed data of the event
      * @property detail
-     * @type {object}
+     * @type {Object}
      */
     this.detail = null;
 };

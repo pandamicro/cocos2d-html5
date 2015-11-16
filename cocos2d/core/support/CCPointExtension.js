@@ -29,11 +29,6 @@
  * These extensions work both with cc.Vec2</p>
  *
  * <p>The "ccp" prefix means: "CoCos2d Point"</p>
- *
- * <p> //Examples:<br />
- * - cc.pAdd( cc.p(1,1), cc.p(2,2) ); // preferred cocos2d way<br />
- * - cc.pAdd( cc.p(1,1), cc.p(2,2) ); // also ok but more verbose<br />
- * - cc.pAdd( cc.cpv(1,1), cc.cpv(2,2) ); // mixing chipmunk and cocos2d (avoid)</p>
  */
 
 /**
@@ -45,8 +40,9 @@ cc.POINT_EPSILON = parseFloat('1.192092896e-07F');
 
 /**
  * Returns opposite of point.
- * @param {cc.Vec2} point
- * @return {cc.Vec2}
+ * @method pNeg
+ * @param {Vec2} point
+ * @return {Vec2}
  */
 cc.pNeg = function (point) {
     return cc.p(-point.x, -point.y);
@@ -54,9 +50,11 @@ cc.pNeg = function (point) {
 
 /**
  * Calculates sum of two points.
- * @param {cc.Vec2} v1
- * @param {cc.Vec2} v2
- * @return {cc.Vec2}
+ * @method pAdd
+ * @param {Vec2} v1
+ * @param {Vec2} v2
+ * @return {Vec2}
+ * @examples {@link utils/api/cocos/docs/cocos2d/core/support/pAdd.js}
  */
 cc.pAdd = function (v1, v2) {
     return cc.p(v1.x + v2.x, v1.y + v2.y);
@@ -64,9 +62,10 @@ cc.pAdd = function (v1, v2) {
 
 /**
  * Calculates difference of two points.
- * @param {cc.Vec2} v1
- * @param {cc.Vec2} v2
- * @return {cc.Vec2}
+ * @method pSub
+ * @param {Vec2} v1
+ * @param {Vec2} v2
+ * @return {Vec2}
  */
 cc.pSub = function (v1, v2) {
     return cc.p(v1.x - v2.x, v1.y - v2.y);
@@ -74,9 +73,10 @@ cc.pSub = function (v1, v2) {
 
 /**
  * Returns point multiplied by given factor.
- * @param {cc.Vec2} point
+ * @method pMult
+ * @param {Vec2} point
  * @param {Number} floatVar
- * @return {cc.Vec2}
+ * @return {Vec2}
  */
 cc.pMult = function (point, floatVar) {
     return cc.p(point.x * floatVar, point.y * floatVar);
@@ -84,9 +84,10 @@ cc.pMult = function (point, floatVar) {
 
 /**
  * Calculates midpoint between two points.
- * @param {cc.Vec2} v1
- * @param {cc.Vec2} v2
- * @return {cc.pMult}
+ * @method pMidpoint
+ * @param {Vec2} v1
+ * @param {Vec2} v2
+ * @return {pMult}
  */
 cc.pMidpoint = function (v1, v2) {
     return cc.pMult(cc.pAdd(v1, v2), 0.5);
@@ -94,8 +95,9 @@ cc.pMidpoint = function (v1, v2) {
 
 /**
  * Calculates dot product of two points.
- * @param {cc.Vec2} v1
- * @param {cc.Vec2} v2
+ * @method pDot
+ * @param {Vec2} v1
+ * @param {Vec2} v2
  * @return {Number}
  */
 cc.pDot = function (v1, v2) {
@@ -104,8 +106,9 @@ cc.pDot = function (v1, v2) {
 
 /**
  * Calculates cross product of two points.
- * @param {cc.Vec2} v1
- * @param {cc.Vec2} v2
+ * @method pCross
+ * @param {Vec2} v1
+ * @param {Vec2} v2
  * @return {Number}
  */
 cc.pCross = function (v1, v2) {
@@ -114,8 +117,9 @@ cc.pCross = function (v1, v2) {
 
 /**
  * Calculates perpendicular of v, rotated 90 degrees counter-clockwise -- cross(v, perp(v)) >= 0
- * @param {cc.Vec2} point
- * @return {cc.Vec2}
+ * @method pPerp
+ * @param {Vec2} point
+ * @return {Vec2}
  */
 cc.pPerp = function (point) {
     return cc.p(-point.y, point.x);
@@ -123,8 +127,9 @@ cc.pPerp = function (point) {
 
 /**
  * Calculates perpendicular of v, rotated 90 degrees clockwise -- cross(v, rperp(v)) <= 0
- * @param {cc.Vec2} point
- * @return {cc.Vec2}
+ * @method pRPerp
+ * @param {Vec2} point
+ * @return Vec2}
  */
 cc.pRPerp = function (point) {
     return cc.p(point.y, -point.x);
@@ -132,9 +137,10 @@ cc.pRPerp = function (point) {
 
 /**
  * Calculates the projection of v1 over v2.
- * @param {cc.Vec2} v1
- * @param {cc.Vec2} v2
- * @return {cc.pMult}
+ * @method pProject
+ * @param {Vec2} v1
+ * @param {Vec2} v2
+ * @return {pMult}
  */
 cc.pProject = function (v1, v2) {
     return cc.pMult(v2, cc.pDot(v1, v2) / cc.pDot(v2, v2));
@@ -142,9 +148,10 @@ cc.pProject = function (v1, v2) {
 
 /**
  * Rotates two points.
- * @param  {cc.Vec2} v1
- * @param  {cc.Vec2} v2
- * @return {cc.Vec2}
+ * @method pRotate
+ * @param  {Vec2} v1
+ * @param  {Vec2} v2
+ * @return {Vec2}
  */
 cc.pRotate = function (v1, v2) {
     return cc.p(v1.x * v2.x - v1.y * v2.y, v1.x * v2.y + v1.y * v2.x);
@@ -152,9 +159,10 @@ cc.pRotate = function (v1, v2) {
 
 /**
  * Unrotates two points.
- * @param  {cc.Vec2} v1
- * @param  {cc.Vec2} v2
- * @return {cc.Vec2}
+ * @method pUnrotate
+ * @param  {Vec2} v1
+ * @param  {Vec2} v2
+ * @return {Vec2}
  */
 cc.pUnrotate = function (v1, v2) {
     return cc.p(v1.x * v2.x + v1.y * v2.y, v1.y * v2.x - v1.x * v2.y);
@@ -162,8 +170,9 @@ cc.pUnrotate = function (v1, v2) {
 
 /**
  * Calculates the square length of a cc.Vec2 (not calling sqrt() )
- * @param  {cc.Vec2} v
- *@return {Number}
+ * @method pLengthSQ
+ * @param  {Vec2} v
+ * @return {Number}
  */
 cc.pLengthSQ = function (v) {
     return cc.pDot(v, v);
@@ -171,8 +180,9 @@ cc.pLengthSQ = function (v) {
 
 /**
  * Calculates the square distance between two points (not calling sqrt() )
- * @param {cc.Vec2} point1
- * @param {cc.Vec2} point2
+ * @method pDistanceSQ
+ * @param {Vec2} point1
+ * @param {Vec2} point2
  * @return {Number}
  */
 cc.pDistanceSQ = function(point1, point2){
@@ -181,7 +191,8 @@ cc.pDistanceSQ = function(point1, point2){
 
 /**
  * Calculates distance between point an origin
- * @param  {cc.Vec2} v
+ * @method pLength
+ * @param  {Vec2} v
  * @return {Number}
  */
 cc.pLength = function (v) {
@@ -190,8 +201,9 @@ cc.pLength = function (v) {
 
 /**
  * Calculates the distance between two points
- * @param {cc.Vec2} v1
- * @param {cc.Vec2} v2
+ * @method pDistance
+ * @param {Vec2} v1
+ * @param {Vec2} v2
  * @return {Number}
  */
 cc.pDistance = function (v1, v2) {
@@ -200,8 +212,9 @@ cc.pDistance = function (v1, v2) {
 
 /**
  * Returns point multiplied to a length of 1.
- * @param {cc.Vec2} v
- * @return {cc.Vec2}
+ * @method pNormalize
+ * @param {Vec2} v
+ * @return {Vec2}
  */
 cc.pNormalize = function (v) {
     var n = cc.pLength(v);
@@ -210,8 +223,9 @@ cc.pNormalize = function (v) {
 
 /**
  * Converts radians to a normalized vector.
+ * @method pForAngle
  * @param {Number} a
- * @return {cc.Vec2}
+ * @return {Vec2}
  */
 cc.pForAngle = function (a) {
     return cc.p(Math.cos(a), Math.sin(a));
@@ -219,7 +233,8 @@ cc.pForAngle = function (a) {
 
 /**
  * Converts a vector to radians.
- * @param {cc.Vec2} v
+ * @method pToAngle
+ * @param {Vec2} v
  * @return {Number}
  */
 cc.pToAngle = function (v) {
@@ -228,6 +243,7 @@ cc.pToAngle = function (v) {
 
 /**
  * Clamp a value between from and to.
+ * @method clampf
  * @param {Number} value
  * @param {Number} min_inclusive
  * @param {Number} max_inclusive
@@ -244,6 +260,7 @@ cc.clampf = function (value, min_inclusive, max_inclusive) {
 
 /**
  * Clamp a value between 0 and 1.
+ * @method clamp01
  * @param {Number} value
  * @return {Number}
  */
@@ -253,19 +270,21 @@ cc.clamp01 = function (value) {
 
 /**
  * Clamp a point between from and to.
+ * @method pClamp
  * @param {Point} p
  * @param {Number} min_inclusive
  * @param {Number} max_inclusive
- * @return {cc.Vec2}
+ * @return {Vec2}
  */
 cc.pClamp = function (p, min_inclusive, max_inclusive) {
     return cc.p(cc.clampf(p.x, min_inclusive.x, max_inclusive.x), cc.clampf(p.y, min_inclusive.y, max_inclusive.y));
 };
 
 /**
- * Quickly convert cc.Size to a cc.Vec2
- * @param {cc.Size} s
- * @return {cc.Vec2}
+ * Quickly convert cc.Size to a cc.Vec2.
+ * @method pFromSize
+ * @param {Size} s
+ * @return {Vec2}
  */
 cc.pFromSize = function (s) {
     return cc.p(s.width, s.height);
@@ -274,34 +293,37 @@ cc.pFromSize = function (s) {
 /**
  * Run a math operation function on each point component <br />
  * Math.abs, Math.fllor, Math.ceil, Math.round.
- * @param {cc.Vec2} p
+ *
+ * @method pCompOp
+ * @param {Vec2} p
  * @param {Function} opFunc
- * @return {cc.Vec2}
- * @example
- * //For example: let's try to take the floor of x,y
- * var p = cc.pCompOp(cc.p(10,10),Math.abs);
+ * @return {Vec2}
+ * @example {@link utils/api/cocos/docs/cocos2d/core/support/pCompOp.js}
  */
 cc.pCompOp = function (p, opFunc) {
     return cc.p(opFunc(p.x), opFunc(p.y));
 };
 
 /**
- * Linear Interpolation between two points a and b
+ * Linear Interpolation between two points a and b.
  * alpha == 0 ? a
  * alpha == 1 ? b
  * otherwise a value between a..b
- * @param {cc.Vec2} a
- * @param {cc.Vec2} b
+ *
+ * @method pLerp
+ * @param {Vec2} a
+ * @param {Vec2} b
  * @param {Number} alpha
- * @return {cc.pAdd}
+ * @return {pAdd}
  */
 cc.pLerp = function (a, b, alpha) {
     return cc.pAdd(cc.pMult(a, 1 - alpha), cc.pMult(b, alpha));
 };
 
 /**
- * @param {cc.Vec2} a
- * @param {cc.Vec2} b
+ * @method pFuzzyEqual
+ * @param {Vec2} a
+ * @param {Vec2} b
  * @param {Number} variance
  * @return {Boolean} if points have fuzzy equality which means equal with some degree of variance.
  */
@@ -314,18 +336,20 @@ cc.pFuzzyEqual = function (a, b, variance) {
 };
 
 /**
- * Multiplies a nd b components, a.x*b.x, a.y*b.y
- * @param {cc.Vec2} a
- * @param {cc.Vec2} b
- * @return {cc.Vec2}
+ * Multiplies a nd b components, a.x*b.x, a.y*b.y.
+ * @method pCompMult
+ * @param {Vec2} a
+ * @param {Vec2} b
+ * @return {Vec2}
  */
 cc.pCompMult = function (a, b) {
     return cc.p(a.x * b.x, a.y * b.y);
 };
 
 /**
- * @param {cc.Vec2} a
- * @param {cc.Vec2} b
+ * @method pAngleSigned
+ * @param {Vec2} a
+ * @param {Vec2} b
  * @return {Number} the signed angle in radians between two vector directions
  */
 cc.pAngleSigned = function (a, b) {
@@ -338,8 +362,9 @@ cc.pAngleSigned = function (a, b) {
 };
 
 /**
- * @param {cc.Vec2} a
- * @param {cc.Vec2} b
+ * @method pAngle
+ * @param {Vec2} a
+ * @param {Vec2} b
  * @return {Number} the angle in radians between two vector directions
  */
 cc.pAngle = function (a, b) {
@@ -349,11 +374,12 @@ cc.pAngle = function (a, b) {
 };
 
 /**
- * Rotates a point counter clockwise by the angle around a pivot
- * @param {cc.Vec2} v v is the point to rotate
- * @param {cc.Vec2} pivot pivot is the pivot, naturally
- * @param {Number} angle angle is the angle of rotation cw in radians
- * @return {cc.Vec2} the rotated point
+ * Rotates a point counter clockwise by the angle around a pivot.
+ * @method pRotateByAngle
+ * @param {Vec2} v - v is the point to rotate
+ * @param {Vec2} pivot - pivot is the pivot, naturally
+ * @param {Number} angle - angle is the angle of rotation cw in radians
+ * @return {Vec2} the rotated point
  */
 cc.pRotateByAngle = function (v, pivot, angle) {
     var r = cc.pSub(v, pivot);
@@ -371,11 +397,13 @@ cc.pRotateByAngle = function (v, pivot, angle) {
  * sure that s & t lie within [0..1] and for rays, make sure s & t > 0<br />
  * the hit point is        p3 + t * (p4 - p3);<br />
  * the hit point also is    p1 + s * (p2 - p1);
- * @param {cc.Vec2} A A is the startpoint for the first line P1 = (p1 - p2).
- * @param {cc.Vec2} B B is the endpoint for the first line P1 = (p1 - p2).
- * @param {cc.Vec2} C C is the startpoint for the second line P2 = (p3 - p4).
- * @param {cc.Vec2} D D is the endpoint for the second line P2 = (p3 - p4).
- * @param {cc.Vec2} retP retP.x is the range for a hitpoint in P1 (pa = p1 + s*(p2 - p1)), <br />
+ *
+ * @method pLineIntersect
+ * @param {Vec2} A - A is the startpoint for the first line P1 = (p1 - p2).
+ * @param {Vec2} B - B is the endpoint for the first line P1 = (p1 - p2).
+ * @param {Vec2} C - C is the startpoint for the second line P2 = (p3 - p4).
+ * @param {Vec2} D - D is the endpoint for the second line P2 = (p3 - p4).
+ * @param {Vec2} retP - retP.x is the range for a hitpoint in P1 (pa = p1 + s*(p2 - p1)), <br />
  * retP.y is the range for a hitpoint in P3 (pa = p2 + t*(p4 - p3)).
  * @return {Boolean}
  */
@@ -412,10 +440,11 @@ cc.pLineIntersect = function (A, B, C, D, retP) {
 
 /**
  * ccpSegmentIntersect return YES if Segment A-B intersects with segment C-D.
- * @param {cc.Vec2} A
- * @param {cc.Vec2} B
- * @param {cc.Vec2} C
- * @param {cc.Vec2} D
+ * @method pSegmentIntersect
+ * @param {Vec2} A
+ * @param {Vec2} B
+ * @param {Vec2} C
+ * @param {Vec2} D
  * @return {Boolean}
  */
 cc.pSegmentIntersect = function (A, B, C, D) {
@@ -427,12 +456,13 @@ cc.pSegmentIntersect = function (A, B, C, D) {
 };
 
 /**
- * ccpIntersectPoint return the intersection point of line A-B, C-D
- * @param {cc.Vec2} A
- * @param {cc.Vec2} B
- * @param {cc.Vec2} C
- * @param {cc.Vec2} D
- * @return {cc.Vec2}
+ * ccpIntersectPoint return the intersection point of line A-B, C-D.
+ * @method pIntersectPoint
+ * @param {Vec2} A
+ * @param {Vec2} B
+ * @param {Vec2} C
+ * @param {Vec2} D
+ * @return {Vec2}
  */
 cc.pIntersectPoint = function (A, B, C, D) {
     var retP = cc.p(0, 0);
@@ -449,9 +479,10 @@ cc.pIntersectPoint = function (A, B, C, D) {
 };
 
 /**
- * check to see if both points are equal
- * @param {cc.Vec2} A A ccp a
- * @param {cc.Vec2} B B ccp b to be compared
+ * check to see if both points are equal.
+ * @method pSameAs
+ * @param {Vec2} A - A ccp a
+ * @param {Vec2} B - B ccp b to be compared
  * @return {Boolean} the true if both ccp are same
  */
 cc.pSameAs = function (A, B) {
@@ -466,8 +497,9 @@ cc.pSameAs = function (A, B) {
 // High Perfomance In Place Operationrs ---------------------------------------
 
 /**
- * sets the position of the point to 0
- * @param {cc.Vec2} v
+ * sets the position of the point to 0.
+ * @method pZeroIn
+ * @param {Vec2} v
  */
 cc.pZeroIn = function(v) {
     v.x = 0;
@@ -475,9 +507,10 @@ cc.pZeroIn = function(v) {
 };
 
 /**
- * copies the position of one point to another
- * @param {cc.Vec2} v1
- * @param {cc.Vec2} v2
+ * copies the position of one point to another.
+ * @method pIn
+ * @param {Vec2} v1
+ * @param {Vec2} v2
  */
 cc.pIn = function(v1, v2) {
     v1.x = v2.x;
@@ -485,8 +518,9 @@ cc.pIn = function(v1, v2) {
 };
 
 /**
- * multiplies the point with the given factor (inplace)
- * @param {cc.Vec2} point
+ * multiplies the point with the given factor (inplace).
+ * @method pMultIn
+ * @param {Vec2} point
  * @param {Number} floatVar
  */
 cc.pMultIn = function(point, floatVar) {
@@ -495,9 +529,10 @@ cc.pMultIn = function(point, floatVar) {
 };
 
 /**
- * subtracts one point from another (inplace)
- * @param {cc.Vec2} v1
- * @param {cc.Vec2} v2
+ * subtracts one point from another (inplace).
+ * @method pSubIn
+ * @param {Vec2} v1
+ * @param {Vec2} v2
  */
 cc.pSubIn = function(v1, v2) {
     v1.x -= v2.x;
@@ -505,9 +540,10 @@ cc.pSubIn = function(v1, v2) {
 };
 
 /**
- * adds one point to another (inplace)
- * @param {cc.Vec2} v1
- * @param {cc.point} v2
+ * adds one point to another (inplace).
+ * @method pAddIn
+ * @param {Vec2} v1
+ * @param {point} v2
  */
 cc.pAddIn = function(v1, v2) {
     v1.x += v2.x;
@@ -515,8 +551,9 @@ cc.pAddIn = function(v1, v2) {
 };
 
 /**
- * normalizes the point (inplace)
- * @param {cc.Vec2} v
+ * normalizes the point (inplace).
+ * @method pNormalizeIn
+ * @param {Vec2} v
  */
 cc.pNormalizeIn = function(v) {
     cc.pMultIn(v, 1.0 / Math.sqrt(v.x * v.x + v.y * v.y));

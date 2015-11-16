@@ -33,10 +33,10 @@ var DontSave = 1 << 2;
 var EditorOnly  = 1 << 3;
 var Dirty = 1 << 4;
 var DontDestroy = 1 << 5;
-//var NodeSavedAsWrapper = 1 << 6;
-var Destroying = 1 << 9;
-var HideInGame = 1 << 10;
-var HideInEditor = 1 << 11;
+var Destroying = 1 << 6;
+//var RegisteredInEditor = 1 << 8;
+var HideInGame = 1 << 9;
+var HideInEditor = 1 << 10;
 
 var IsOnEnableCalled = 1 << 12;
 var IsOnLoadCalled = 1 << 13;
@@ -45,7 +45,8 @@ var IsOnStartCalled = 1 << 14;
 var Hide = HideInGame | HideInEditor;
 // should not clone or serialize these flags
 var PersistentMask = ~(ToDestroy | Dirty | Destroying | DontDestroy |
-                        IsOnEnableCalled | IsOnLoadCalled | IsOnStartCalled);
+                       IsOnEnableCalled | IsOnLoadCalled | IsOnStartCalled
+                       /*RegisteredInEditor*/);
 
 /**
  * Bit mask that controls object states.
@@ -58,14 +59,14 @@ CCObject.Flags = {
     /**
      * The object will not be saved.
      * @property DontSave
-     * @type number
+     * @type {Number}
      */
     DontSave: DontSave,
 
     /**
      * The object will not be saved when building a player.
      * @property EditorOnly
-     * @type number
+     * @type {Number}
      */
     EditorOnly: EditorOnly,
 
@@ -88,7 +89,7 @@ CCObject.Flags = {
      * Hide in game and hierarchy.
      * This flag is readonly, it can only be used as an argument of scene.addEntity() or Entity.createWithFlags()
      * @property HideInGame
-     * @type number
+     * @type {Number}
      */
     HideInGame: HideInGame,
 
@@ -97,7 +98,7 @@ CCObject.Flags = {
     /**
      * This flag is readonly, it can only be used as an argument of scene.addEntity() or Entity.createWithFlags()
      * @property HideInEditor
-     * @type number
+     * @type {Number}
      */
     HideInEditor: HideInEditor,
 
@@ -105,9 +106,12 @@ CCObject.Flags = {
      * Hide in game view, hierarchy, and scene view... etc.
      * This flag is readonly, it can only be used as an argument of scene.addEntity() or Entity.createWithFlags()
      * @property Hide
-     * @type number
+     * @type {Number}
      */
     Hide: Hide,
+
+    //// UUID Registered in editor
+    //RegisteredInEditor: RegisteredInEditor,
 
     // FLAGS FOR COMPONENT
 
@@ -166,7 +170,7 @@ var prototype = CCObject.prototype;
 /**
  * The name of the object.
  * @property name
- * @type string
+ * @type {String}
  * @default ""
  */
 JS.getset(prototype, 'name',
@@ -181,7 +185,7 @@ JS.getset(prototype, 'name',
 /**
  * Indicates whether the object is not yet destroyed
  * @property isValid
- * @type boolean
+ * @type {Boolean}
  * @default true
  * @readOnly
  */
@@ -285,19 +289,16 @@ if (CC_EDITOR) {
 /**
  * Init this object from the custom serialized data.
  * @method _deserialize
- * @param {object} data - the serialized json data
+ * @param {Object} data - the serialized json data
  * @param {_Deserializer} ctx
  * @private
  */
 prototype._deserialize = null;
 
 /**
- * @module cc
- */
-/**
  * Checks whether the object is non-nil and not yet destroyed
  * @method isValid
- * @param {object|any} value
+ * @param {Object|any} value
  * @return {Boolean} whether is valid
  */
 cc.isValid = function (value) {

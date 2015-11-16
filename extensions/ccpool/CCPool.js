@@ -28,20 +28,13 @@
  * <p>
  *  cc.pool is a singleton object serves as an object cache pool.<br/>
  *  It can helps you to improve your game performance for objects which need frequent release and recreate operations<br/>
- *  Some common use case is :
- *      1. Bullets in game (die very soon, massive creation and recreation, no side effect on other objects)
- *      2. Blocks in candy crash (massive creation and recreation)
+ *  Some common use case is :<br/>
+ *      1. Bullets in game (die very soon, massive creation and recreation, no side effect on other objects)<br/>
+ *      2. Blocks in candy crash (massive creation and recreation)<br/>
  *      etc...
  * </p>
  *
- * @example
- * var sp = new cc.Sprite("a.png");
- * this.addChild(sp);
- * cc.pool.putInPool(sp);
- *
- * cc.pool.getFromPool(cc.Sprite, "a.png");
- * @class
- * @name cc.pool
+ * @class pool
  */
 cc.pool = /** @lends cc.pool# */{
     _pool: {},
@@ -56,8 +49,10 @@ cc.pool = /** @lends cc.pool# */{
     },
 
     /**
-     * Put the obj in pool
-     * @param obj
+     * Put the obj in pool.
+     * @method putInPool
+     * @param {Object} obj - The need put in pool object.
+     * @example {@link utils/api/cocos/docs/extensions/ccpool/putInPool.js}
      */
     putInPool: function (obj) {
         var cid = cc.js._getClassId(obj.constructor);
@@ -75,9 +70,10 @@ cc.pool = /** @lends cc.pool# */{
     },
 
     /**
-     * Check if this kind of obj has already in pool
-     * @param objClass
-     * @returns {boolean} if this kind of obj is already in pool return true,else return false;
+     * Check if this kind of obj has already in pool.
+     * @method hasObject
+     * @param {Object} objClass - The check object class.
+     * @returns {Boolean} If this kind of obj is already in pool return true,else return false.
      */
     hasObject: function (objClass) {
         var cid = cc.js._getClassId(objClass);
@@ -89,8 +85,8 @@ cc.pool = /** @lends cc.pool# */{
     },
 
     /**
-     * Remove the obj if you want to delete it;
-     * @param obj
+     * Remove the obj if you want to delete it.
+     * @method removeObject
      */
     removeObject: function (obj) {
         var cid = cc.js._getClassId(obj.constructor);
@@ -109,9 +105,9 @@ cc.pool = /** @lends cc.pool# */{
     },
 
     /**
-     * Get the obj from pool
-     * @param args
-     * @returns {*} call the reuse function an return the obj
+     * Get the obj from pool.
+     * @method getFromPool
+     * @returns {*} Call the reuse function an return the obj.
      */
     getFromPool: function (objClass/*,args*/) {
         if (this.hasObject(objClass)) {
@@ -129,7 +125,8 @@ cc.pool = /** @lends cc.pool# */{
     },
 
     /**
-     *  remove all objs in pool and reset the pool
+     *  Remove all objs in pool and reset the pool.
+     *  @method drainAllPools
      */
     drainAllPools: function () {
         for (var i in this._pool) {

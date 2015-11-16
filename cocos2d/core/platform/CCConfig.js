@@ -62,7 +62,7 @@ cc.FIX_ARTIFACTS_BY_STRECHING_TEXEL = 0;
  * Position of the FPS (Default: 0,0 (bottom-left corner))<br/>
  * To modify it, in Web engine please refer to CCConfig.js, in JSB please refer to CCConfig.h
  * @constant
- * @type {cc.Vec2}
+ * @type {Vec2}
  */
 cc.DIRECTOR_STATS_POSITION = cc.p(0, 0);
 
@@ -281,7 +281,7 @@ cc.DEFAULT_ENGINE = cc.ENGINE_VERSION + "-canvas";
  *    If disabled, only the last run action will take effect.
  * </p>
  * @constant
- * @type {number}
+ * @type {Number}
  */
 cc.ENABLE_STACKABLE_ACTIONS = 1;
 

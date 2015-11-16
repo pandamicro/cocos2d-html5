@@ -9,10 +9,10 @@ var JS = require('../platform/js');
  * @class Rect
  * @extends ValueType
  * @constructor
- * @param {number} [x=0]
- * @param {number} [y=0]
- * @param {number} [w=0]
- * @param {number} [h=0]
+ * @param {Number} [x=0]
+ * @param {Number} [y=0]
+ * @param {Number} [w=0]
+ * @param {Number} [h=0]
  */
 function Rect (x, y, w, h) {
     this.x = typeof x === 'number' ? x : 0.0;
@@ -29,7 +29,7 @@ require('../platform/CCClass').fastDefine('cc.Rect', Rect, ['x', 'y', 'width', '
  * @method fromMinMax
  * @param {Vec2} v1
  * @param {Vec2} v2
- * @return {cc.Rect}
+ * @return {Rect}
  */
 Rect.fromMinMax = function (v1, v2) {
     var min_x = Math.min(v1.x, v2.x);
@@ -46,19 +46,19 @@ Rect.fromMinMax = function (v1, v2) {
  * @method fromVec2
  * @param {Vec2} leftTop
  * @param {Vec2} size
- * @return {cc.Rect}
+ * @return {Rect}
  */
 Rect.fromVec2 = function (leftTop, size) {
     return new Rect(leftTop.x, leftTop.y, size.x, size.y);
 };
 
 /**
- * Checks if rect contains
+ * Checks if rect contains.
  * @static
  * @method contain
- * @param a {cc.Rect} Rect a
- * @param b {cc.Rect} Rect b
- * @return {Number} The contains result, 1 is a contains b, -1 is b contains a, 0 is no contains
+ * @param a {Rect} Rect a
+ * @param b {Rect} Rect b
+ * @return {Number} The contains result, 1 is a contains b, -1 is b contains a, 0 is no contains.
  */
 Rect.contain = function _Contain (a, b) {
     if (a.x <= b.x &&
@@ -82,7 +82,7 @@ var proto = Rect.prototype;
 
 /**
  * @method clone
- * @return {cc.Rect}
+ * @return {Rect}
  */
 proto.clone = function () {
     return new Rect(this.x, this.y, this.width, this.height);
@@ -90,7 +90,7 @@ proto.clone = function () {
 
 /**
  * @method equals
- * @param {cc.Rect} other
+ * @param {Rect} other
  * @return {Boolean}
  */
 proto.equals = function (other) {
@@ -103,10 +103,10 @@ proto.equals = function (other) {
 
 /**
  * @method lerp
- * @param {cc.Rect} to
- * @param {number} ratio - the interpolation coefficient
- * @param {cc.Rect} [out] - optional, the receiving vector
- * @return {cc.Rect}
+ * @param {Rect} to
+ * @param {Number} ratio - the interpolation coefficient.
+ * @param {Rect} [out] - optional, the receiving vector.
+ * @return {Rect}
  */
 proto.lerp = function (to, ratio, out) {
     out = out || new Rect();
@@ -123,7 +123,7 @@ proto.lerp = function (to, ratio, out) {
 
 /**
  * @method toString
- * @return {string}
+ * @return {String}
  */
 proto.toString = function () {
     return '(' + this.x.toFixed(2) + ', ' + this.y.toFixed(2) + ', ' + this.width.toFixed(2) +
@@ -132,7 +132,7 @@ proto.toString = function () {
 
 /**
  * @property xMin
- * @type number
+ * @type {Number}
  */
 Object.defineProperty(proto, 'xMin', {
     get: function () { return this.x; },
@@ -144,7 +144,7 @@ Object.defineProperty(proto, 'xMin', {
 
 /**
  * @property yMin
- * @type number
+ * @type {Number}
  */
 Object.defineProperty(proto, 'yMin', {
     get: function () { return this.y; },
@@ -156,7 +156,7 @@ Object.defineProperty(proto, 'yMin', {
 
 /**
  * @property xMax
- * @type number
+ * @type {Number}
  */
 Object.defineProperty(proto, 'xMax', {
     get: function () { return this.x + this.width; },
@@ -165,7 +165,7 @@ Object.defineProperty(proto, 'xMax', {
 
 /**
  * @property yMax
- * @type number
+ * @type {Number}
  */
 Object.defineProperty(proto, 'yMax', {
     get: function () { return this.y + this.height; },
@@ -174,7 +174,7 @@ Object.defineProperty(proto, 'yMax', {
 
 /**
  * @property center
- * @type number
+ * @type {Number}
  */
 Object.defineProperty(proto, 'center', {
     get: function () {
@@ -203,7 +203,7 @@ Object.defineProperty(proto, 'size', {
 
 /**
  * @method intersects
- * @param {cc.Rect} rect
+ * @param {Rect} rect
  * @type {Boolean}
  */
 proto.intersects = function (rect) {
@@ -226,7 +226,7 @@ proto.contains = function (point) {
 /**
  * Returns true if the other rect totally inside this rectangle.
  * @method containsRect
- * @param {cc.Rect} rect
+ * @param {Rect} rect
  * @type {Boolean}
  */
 proto.containsRect = function (rect) {
@@ -239,17 +239,15 @@ proto.containsRect = function (rect) {
 cc.Rect = Rect;
 
 
+
 /**
- * @module cc
- */
-/**
- * The convenience method to create a new Rect
+ * The convenience method to create a new Rect.
  * @method rect
  * @param {Number[]|Number} [x=0]
  * @param {Number} [y=0]
  * @param {Number} [w=0]
  * @param {Number} [h=0]
- * @return {cc.Rect}
+ * @return {Rect}
  */
 cc.rect = function rect (x, y, w, h) {
     if (x === undefined)
@@ -263,10 +261,10 @@ cc.rect = function rect (x, y, w, h) {
 // Functional style API, for backward compatibility
 
 /**
- * Check whether a rect's value equals to another
- * @function
- * @param {cc.Rect} rect1
- * @param {cc.Rect} rect2
+ * Check whether a rect's value equals to another.
+ * @method rectEqualToRect
+ * @param {Rect} rect1
+ * @param {Rect} rect2
  * @return {Boolean}
  */
 cc.rectEqualToRect = function (rect1, rect2) {
@@ -278,10 +276,10 @@ cc._rectEqualToZero = function(rect){
 };
 
 /**
- * Check whether the rect1 contains rect2
- * @function
- * @param {cc.Rect} rect1
- * @param {cc.Rect} rect2
+ * Check whether the rect1 contains rect2.
+ * @method rectContainsRect
+ * @param {Rect} rect1
+ * @param {Rect} rect2
  * @return {Boolean}
  */
 cc.rectContainsRect = function (rect1, rect2) {
@@ -293,69 +291,69 @@ cc.rectContainsRect = function (rect1, rect2) {
 };
 
 /**
- * Returns the rightmost x-value of a rect
- * @function
- * @param {cc.Rect} rect
- * @return {Number} The rightmost x value
+ * Returns the rightmost x-value of a rect.
+ * @method rectGetMaxX
+ * @param {Rect} rect
+ * @return {Number} The rightmost x value.
  */
 cc.rectGetMaxX = function (rect) {
     return (rect.x + rect.width);
 };
 
 /**
- * Return the midpoint x-value of a rect
- * @function
- * @param {cc.Rect} rect
- * @return {Number} The midpoint x value
+ * Return the midpoint x-value of a rect.
+ * @method rectGetMidX
+ * @param {Rect} rect
+ * @return {Number} The midpoint x value.
  */
 cc.rectGetMidX = function (rect) {
     return (rect.x + rect.width / 2.0);
 };
 /**
- * Returns the leftmost x-value of a rect
- * @function
- * @param {cc.Rect} rect
- * @return {Number} The leftmost x value
+ * Returns the leftmost x-value of a rect.
+ * @method rectGetMinX
+ * @param {Rect} rect
+ * @return {Number} The leftmost x value.
  */
 cc.rectGetMinX = function (rect) {
     return rect.x;
 };
 
 /**
- * Return the topmost y-value of a rect
- * @function
- * @param {cc.Rect} rect
- * @return {Number} The topmost y value
+ * Return the topmost y-value of a rect.
+ * @method rectGetMaxY
+ * @param {Rect} rect
+ * @return {Number} The topmost y value.
  */
 cc.rectGetMaxY = function (rect) {
     return(rect.y + rect.height);
 };
 
 /**
- * Return the midpoint y-value of `rect'
- * @function
- * @param {cc.Rect} rect
- * @return {Number} The midpoint y value
+ * Return the midpoint y-value of `rect'.
+ * @method rectGetMidY
+ * @param {Rect} rect
+ * @return {Number} The midpoint y value.
  */
 cc.rectGetMidY = function (rect) {
     return rect.y + rect.height / 2.0;
 };
 
 /**
- * Return the bottommost y-value of a rect
- * @function
- * @param {cc.Rect} rect
- * @return {Number} The bottommost y value
+ * Return the bottommost y-value of a rect.
+ * @method rectGetMinY
+ * @param {Rect} rect
+ * @return {Number} The bottommost y value.
  */
 cc.rectGetMinY = function (rect) {
     return rect.y;
 };
 
 /**
- * Check whether a rect contains a point
- * @function
- * @param {cc.Rect} rect
- * @param {cc.Vec2} point
+ * Check whether a rect contains a point.
+ * @method rectContainsPoint
+ * @param {Rect} rect
+ * @param {Vec2} point
  * @return {Boolean}
  */
 cc.rectContainsPoint = function (rect, point) {
@@ -364,10 +362,10 @@ cc.rectContainsPoint = function (rect, point) {
 };
 
 /**
- * Check whether a rect intersect with another
- * @function
- * @param {cc.Rect} rectA
- * @param {cc.Rect} rectB
+ * Check whether a rect intersect with another.
+ * @method rectIntersectsRect
+ * @param {Rect} rectA
+ * @param {Rect} rectB
  * @return {Boolean}
  */
 cc.rectIntersectsRect = function (ra, rb) {
@@ -379,10 +377,10 @@ cc.rectIntersectsRect = function (ra, rb) {
 };
 
 /**
- * Check whether a rect overlaps another
- * @function
- * @param {cc.Rect} rectA
- * @param {cc.Rect} rectB
+ * Check whether a rect overlaps another.
+ * @method rectOverlapsRect
+ * @param {Rect} rectA
+ * @param {Rect} rectB
  * @return {Boolean}
  */
 cc.rectOverlapsRect = function (rectA, rectB) {
@@ -394,10 +392,10 @@ cc.rectOverlapsRect = function (rectA, rectB) {
 
 /**
  * Returns the smallest rectangle that contains the two source rectangles.
- * @function
- * @param {cc.Rect} rectA
- * @param {cc.Rect} rectB
- * @return {cc.Rect}
+ * @method rectUnion
+ * @param {Rect} rectA
+ * @param {Rect} rectB
+ * @return {Rect}
  */
 cc.rectUnion = function (rectA, rectB) {
     var rect = cc.rect(0, 0, 0, 0);
@@ -409,11 +407,11 @@ cc.rectUnion = function (rectA, rectB) {
 };
 
 /**
- * Returns the overlapping portion of 2 rectangles
- * @function
- * @param {cc.Rect} rectA
- * @param {cc.Rect} rectB
- * @return {cc.Rect}
+ * Returns the overlapping portion of 2 rectangles.
+ * @method rectUnion
+ * @param {Rect} rectA
+ * @param {Rect} rectB
+ * @return {Rect}
  */
 cc.rectIntersection = function (rectA, rectB) {
     var intersection = cc.rect(

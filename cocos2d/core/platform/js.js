@@ -46,14 +46,14 @@ function _copyprop(name, source, target) {
 /**
  * This module provides some JavaScript utilities.
  *
- * @module cc.js
+ * @module js
  */
 var js = {
 
     /**
      * Check the obj whether is function or not
      * @param {*} obj
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     isFunction: function(obj) {
         return typeof obj === 'function';
@@ -62,7 +62,7 @@ var js = {
     /**
      * Check the obj whether is number or not
      * @param {*} obj
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     isNumber: function(obj) {
         return typeof obj === 'number' || Object.prototype.toString.call(obj) === '[object Number]';
@@ -71,7 +71,7 @@ var js = {
     /**
      * Check the obj whether is string or not
      * @param {*} obj
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     isString: function(obj) {
         return typeof obj === 'string' || Object.prototype.toString.call(obj) === '[object String]';
@@ -80,7 +80,7 @@ var js = {
     /**
      * Check the obj whether is array or not
      * @param {*} obj
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     isArray: function(obj) {
         return Array.isArray(obj) ||
@@ -90,7 +90,7 @@ var js = {
     /**
      * Check the obj whether is undefined or not
      * @param {*} obj
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     isUndefined: function(obj) {
         return typeof obj === 'undefined';
@@ -99,7 +99,7 @@ var js = {
     /**
      * Check the obj whether is object or not
      * @param {*} obj
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     isObject: function(obj) {
         return typeof obj === "object" && Object.prototype.toString.call(obj) === '[object Object]';
@@ -108,9 +108,9 @@ var js = {
     /**
      * copy all properties not defined in obj from arguments[1...n]
      * @method addon
-     * @param {object} obj object to extend its properties
-     * @param {object} ...sourceObj source object to copy properties from
-     * @return {object} the result obj
+     * @param {Object} obj object to extend its properties
+     * @param {Object} ...sourceObj source object to copy properties from
+     * @return {Object} the result obj
      */
     addon: function (obj) {
         'use strict';
@@ -135,9 +135,9 @@ var js = {
     /**
      * copy all properties from arguments[1...n] to obj
      * @method mixin
-     * @param {object} obj
-     * @param {object} ...sourceObj
-     * @return {object} the result obj
+     * @param {Object} obj
+     * @param {Object} ...sourceObj
+     * @return {Object} the result obj
      */
     mixin: function (obj) {
         'use strict';
@@ -163,9 +163,9 @@ var js = {
      * usually you will want to inherit using {% crosslink cc.Class cc.Class %} instead.
      *
      * @method extend
-     * @param {function} cls
-     * @param {function} base - the baseclass to inherit
-     * @return {function} the result class
+     * @param {Function} cls
+     * @param {Function} base - the baseclass to inherit
+     * @return {Function} the result class
      */
     extend: function (cls, base) {
         if (CC_DEV) {
@@ -199,9 +199,9 @@ var js = {
     /**
      * Get property descriptor in object and all its ancestors
      * @method getPropertyDescriptor
-     * @param {object} obj
-     * @param {string} name
-     * @return {object}
+     * @param {Object} obj
+     * @param {String} name
+     * @return {Object}
      */
     getPropertyDescriptor: _getPropertyDescriptor
 };
@@ -210,8 +210,8 @@ var js = {
  * Get class name of the object, if object is just a {} (and which class named 'Object'), it will return null.
  * (modified from <a href="http://stackoverflow.com/questions/1249531/how-to-get-a-javascript-objects-class">the code from this stackoverflow post</a>)
  * @method getClassName
- * @param {object|function} obj - instance or constructor
- * @return {string}
+ * @param {Object|Function} obj - instance or constructor
+ * @return {String}
  */
 js.getClassName = function (obj) {
     if (typeof obj === 'function') {
@@ -294,8 +294,8 @@ cc.js.unregisterClass to remove the id of unused class';
     /**
      * Register the class by specified id, if its classname is not defined, the class name will also be set.
      * @method _setClassId
-     * @param {string} classId
-     * @param {function} constructor
+     * @param {String} classId
+     * @param {Function} constructor
      * @private
      */
     js._setClassId = getRegister('__cid__', _idToClass);
@@ -305,8 +305,8 @@ cc.js.unregisterClass to remove the id of unused class';
     /**
      * Register the class by specified name manually
      * @method setClassName
-     * @param {string} className
-     * @param {function} constructor
+     * @param {String} className
+     * @param {Function} constructor
      */
     js.setClassName = function (className, constructor) {
         doSetClassName(className, constructor);
@@ -326,7 +326,7 @@ cc.js.unregisterClass to remove the id of unused class';
      * Please note that its still your responsibility to free other references to the class.
      *
      * @method unregisterClass
-     * @param {function} ...constructor - the class you will want to unregister, any number of classes can be added
+     * @param {Function} ...constructor - the class you will want to unregister, any number of classes can be added
      */
     js.unregisterClass = function (constructor) {
         'use strict';
@@ -346,8 +346,8 @@ cc.js.unregisterClass to remove the id of unused class';
     /**
      * Get the registered class by id
      * @method _getClassById
-     * @param {string} classId
-     * @return {function} constructor
+     * @param {String} classId
+     * @return {Function} constructor
      * @private
      */
     js._getClassById = function (classId) {
@@ -357,8 +357,8 @@ cc.js.unregisterClass to remove the id of unused class';
     /**
      * Get the registered class by name
      * @method getClassByName
-     * @param {string} classname
-     * @return {function} constructor
+     * @param {String} classname
+     * @return {Function} constructor
      */
     js.getClassByName = function (classname) {
         return _nameToClass[classname];
@@ -367,9 +367,9 @@ cc.js.unregisterClass to remove the id of unused class';
     /**
      * Get class id of the object
      * @method _getClassId
-     * @param {object|function} obj - instance or constructor
-     * @param {boolean} [allowTempId=true] - can return temp id in editor
-     * @return {string}
+     * @param {Object|Function} obj - instance or constructor
+     * @param {Boolean} [allowTempId=true] - can return temp id in editor
+     * @return {String}
      * @private
      */
     js._getClassId = function (obj, allowTempId) {
@@ -435,9 +435,9 @@ cc.js.unregisterClass to remove the id of unused class';
  * Define get set accessor, just help to call Object.defineProperty(...)
  * @method getset
  * @param {any} obj
- * @param {string} prop
- * @param {function} getter
- * @param {function} setter
+ * @param {String} prop
+ * @param {Function} getter
+ * @param {Function} setter
  * @param {Boolean} [enumerable=false]
  */
 js.getset = function (obj, prop, getter, setter, enumerable) {
@@ -456,8 +456,8 @@ js.getset = function (obj, prop, getter, setter, enumerable) {
  * Define get accessor, just help to call Object.defineProperty(...)
  * @method get
  * @param {any} obj
- * @param {string} prop
- * @param {function} getter
+ * @param {String} prop
+ * @param {Function} getter
  * @param {Boolean} [enumerable=false]
  */
 js.get = function (obj, prop, getter, enumerable) {
@@ -471,8 +471,8 @@ js.get = function (obj, prop, getter, enumerable) {
  * Define set accessor, just help to call Object.defineProperty(...)
  * @method set
  * @param {any} obj
- * @param {string} prop
- * @param {function} setter
+ * @param {String} prop
+ * @param {Function} setter
  * @param {Boolean} [enumerable=false]
  */
 js.set = function (obj, prop, setter, enumerable) {
@@ -486,9 +486,9 @@ js.set = function (obj, prop, setter, enumerable) {
  * Defines a polyfill field for obsoleted codes.
  * @method obsolete
  * @param {any} obj - YourObject or YourClass.prototype
- * @param {string} obsoleted - "OldParam" or "YourClass.OldParam"
- * @param {string} newPropName - "NewParam"
- * @param {bool} [writable=false]
+ * @param {String} obsoleted - "OldParam" or "YourClass.OldParam"
+ * @param {String} newPropName - "NewParam"
+ * @param {Boolean} [writable=false]
  */
 js.obsolete = function (obj, obsoleted, newPropName, writable) {
     var oldName = obsoleted.split('.').slice(-1);
@@ -513,8 +513,8 @@ js.obsolete = function (obj, obsoleted, newPropName, writable) {
  * @method obsoletes
  * @param {any} obj - YourObject or YourClass.prototype
  * @param {any} objName - "YourObject" or "YourClass"
- * @param {object} props
- * @param {bool} [writable=false]
+ * @param {Object} props
+ * @param {Boolean} [writable=false]
  */
 js.obsoletes = function (obj, objName, props, writable) {
     for (var obsoleted in props) {
@@ -550,7 +550,7 @@ js.array = {
      * Removes the array item at the specified index.
      * @method removeAt
      * @param {any[]} array
-     * @param {number} index
+     * @param {Number} index
      */
     removeAt: function (array, index) {
         array.splice(index, 1);
@@ -570,9 +570,9 @@ js.array = {
     /**
      * Verify array's Type
      * @param {array} array
-     * @param {function} type
+     * @param {Function} type
      * @return {Boolean}
-     * @function
+     * @method
      */
     verifyType: function (array, type) {
         if (array && array.length > 0) {
@@ -588,7 +588,7 @@ js.array = {
 
     /**
      * Removes from array all values in minusArr. For each Value in minusArr, the first matching instance in array will be removed.
-     * @function
+     * @method
      * @param {Array} array Source Array
      * @param {Array} minusArr minus Array
      */
@@ -600,7 +600,7 @@ js.array = {
 
     /**
      * Inserts some objects at index
-     * @function
+     * @method
      * @param {Array} array
      * @param {Array} addObjs
      * @param {Number} index

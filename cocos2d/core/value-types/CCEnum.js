@@ -55,6 +55,7 @@
     1024: 1024,
 });
  */
+
 cc.Enum = function (obj) {
     var enumType = {};
     Object.defineProperty(enumType, '__enums__', {
@@ -90,8 +91,8 @@ cc.Enum.isEnum = function (enumType) {
 
 /**
  * @method getList
- * @param {object} enumDef - the enum type defined from cc.Enum
- * @return {object[]}
+ * @param {Object} enumDef - the enum type defined from cc.Enum
+ * @return {Object[]}
  * @private
  */
 cc.Enum.getList = function (enumDef) {

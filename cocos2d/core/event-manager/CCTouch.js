@@ -25,8 +25,8 @@
 
 /**
  * The touch event class
- * @class
- * @extends cc._Class
+ * @class Touch
+ * @extends _Class
  *
  * @param {Number} x
  * @param {Number} y
@@ -44,8 +44,9 @@ cc.Touch = cc._Class.extend(/** @lends cc.Touch# */{
     },
 
     /**
-     * Returns the current touch location in OpenGL coordinates
-     * @return {cc.Vec2}
+     * Returns the current touch location in OpenGL coordinates.
+     * @method getLocation
+     * @return {Vec2}
      */
     getLocation:function () {
         //TODO
@@ -54,24 +55,27 @@ cc.Touch = cc._Class.extend(/** @lends cc.Touch# */{
     },
 
 	/**
-	 * Returns X axis location value
-	 * @returns {number}
+	 * Returns X axis location value.
+     * @method getLocationX
+	 * @returns {Number}
 	 */
 	getLocationX: function () {
 		return this._point.x;
 	},
 
 	/**
-     * Returns Y axis location value
-	 * @returns {number}
+     * Returns Y axis location value.
+     * @method getLocationY
+	 * @returns {Number}
 	 */
 	getLocationY: function () {
 		return this._point.y;
 	},
 
     /**
-     * Returns the previous touch location in OpenGL coordinates
-     * @return {cc.Vec2}
+     * Returns the previous touch location in OpenGL coordinates.
+     * @method getPreviousLocation
+     * @return {Vec2}
      */
     getPreviousLocation:function () {
         //TODO
@@ -80,8 +84,9 @@ cc.Touch = cc._Class.extend(/** @lends cc.Touch# */{
     },
 
     /**
-     * Returns the start touch location in OpenGL coordinates
-     * @returns {cc.Vec2}
+     * Returns the start touch location in OpenGL coordinates.
+     * @method getStartLocation
+     * @returns {Vec2}
      */
     getStartLocation: function() {
         //TODO
@@ -90,39 +95,44 @@ cc.Touch = cc._Class.extend(/** @lends cc.Touch# */{
     },
 
     /**
-     * Returns the delta distance from the previous touche to the current one in screen coordinates
-     * @return {cc.Vec2}
+     * Returns the delta distance from the previous touche to the current one in screen coordinates.
+     * @method getDelta
+     * @return {Vec2}
      */
     getDelta:function () {
         return cc.pSub(this._point, this._prevPoint);
     },
 
     /**
-     * Returns the current touch location in screen coordinates
-     * @return {cc.Vec2}
+     * Returns the current touch location in screen coordinates.
+     * @method getLocationInView
+     * @return {Vec2}
      */
     getLocationInView: function() {
         return {x: this._point.x, y: this._point.y};
     },
 
     /**
-     * Returns the previous touch location in screen coordinates
-     * @return {cc.Vec2}
+     * Returns the previous touch location in screen coordinates.
+     * @method getPreviousLocationInView
+     * @return {Vec2}
      */
     getPreviousLocationInView: function(){
         return {x: this._prevPoint.x, y: this._prevPoint.y};
     },
 
     /**
-     * Returns the start touch location in screen coordinates
-     * @return {cc.Vec2}
+     * Returns the start touch location in screen coordinates.
+     * @method getStartLocationInView
+     * @return {Vec2}
      */
     getStartLocationInView: function(){
         return {x: this._startPoint.x, y: this._startPoint.y};
     },
 
     /**
-     * Returns the id of cc.Touch
+     * Returns the id of cc.Touch.
+     * @method getID
      * @return {Number}
      */
     getID:function () {
@@ -130,7 +140,8 @@ cc.Touch = cc._Class.extend(/** @lends cc.Touch# */{
     },
 
     /**
-     * Returns the id of cc.Touch
+     * Returns the id of cc.Touch.
+     * @method getId
      * @return {Number}
      * @deprecated since v3.0, please use getID() instead
      */
@@ -140,7 +151,8 @@ cc.Touch = cc._Class.extend(/** @lends cc.Touch# */{
     },
 
     /**
-     * Sets information to touch
+     * Sets information to touch.
+     * @method setTouchInfo
      * @param {Number} id
      * @param  {Number} x
      * @param  {Number} y

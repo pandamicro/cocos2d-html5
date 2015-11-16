@@ -44,7 +44,7 @@ module.exports = {
 if (CC_DEV) {
     cc.js.mixin(module.exports, {
         ///**
-        // * @param {object} obj
+        // * @param {Object} obj
         // * @return {Boolean} is {} ?
         // */
         isPlainEmptyObj_DEV: function (obj) {

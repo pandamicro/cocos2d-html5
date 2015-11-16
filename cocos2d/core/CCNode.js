@@ -23,59 +23,27 @@
  ****************************************************************************/
 
 var JS = cc.js;
-var Destroying = cc.Object.Flags.Destroying;
-var DontDestroy = cc.Object.Flags.DontDestroy;
+var Flags = cc.Object.Flags;
+var Destroying = Flags.Destroying;
+var DontDestroy = Flags.DontDestroy;
+//var RegisteredInEditor = Flags.RegisteredInEditor;
+
+
 
 /**
  * Class of all entities in Fireball scenes.
- * @class
- * @name cc.ENode
- * @param {string} [name] - the name of the node
- *
- * @property {Number}               x                   - x axis position of node
- * @property {Number}               y                   - y axis position of node
- * @property {Number}               width               - Width of node
- * @property {Number}               height              - Height of node
- * @property {Number}               anchorX             - Anchor point's position on x axis
- * @property {Number}               anchorY             - Anchor point's position on y axis
- * @property {Boolean}              ignoreAnchor        - Indicate whether ignore the anchor point property for positioning
- * @property {Number}               skewX               - Skew x
- * @property {Number}               skewY               - Skew y
- * @property {Number}               zIndex              - Z order in depth which stands for the drawing order
- * @property {Number}               rotation            - Rotation of node
- * @property {Number}               rotationX           - Rotation on x axis
- * @property {Number}               rotationY           - Rotation on y axis
- * @property {Number}               scale               - Scale of node
- * @property {Number}               scaleX              - Scale on x axis
- * @property {Number}               scaleY              - Scale on y axis
- * @property {Boolean}              visible             - Indicate whether node is visible or not
- * @property {cc.Color}             color               - Color of node, default value is white: (255, 255, 255)
- * @property {Boolean}              cascadeColor        - Indicate whether node's color value affect its child nodes, default value is false
- * @property {Number}               opacity             - Opacity of node, default value is 255
- * @property {Boolean}              opacityModifyRGB    - Indicate whether opacity affect the color value, default value is false
- * @property {Boolean}              cascadeOpacity      - Indicate whether node's opacity value affect its child nodes, default value is false
- * @property {Array}                children            - <@readonly> All children nodes
- * @property {Number}               childrenCount       - <@readonly> Number of children
- * @property {cc.Node}              parent              - Parent node
- * @property {Boolean}              running             - <@readonly> Indicate whether node is running or not
- * @property {Number}               tag                 - Tag of node
- * @property {Object}               userData            - Custom user data
- * @property {Object}               userObject          - User assigned CCObject, similar to userData, but instead of holding a void* it holds an id
- * @property {Number}               arrivalOrder        - The arrival order, indicates which children is added previously
- * @property {cc.ActionManager}     actionManager       - The CCActionManager object that is used by all actions.
- * @property {cc.Scheduler}         scheduler           - cc.Scheduler used to schedule all "updates" and timers.
- * @property {cc.GLProgram}         shaderProgram       - The shader program currently used for this node
- * @property {Number}               glServerState       - The state of OpenGL server side
+ * @class ENode
+ * @extends NodeWrapper
  */
 var Node = cc.Class({
     name: 'cc.Node',
-    extends: require('./utils/node-wrapper'),
+    extends: require('./utils/base-node'),
 
     properties: {
         /**
          * The local active state of this node.
          * @property active
-         * @type {boolean}
+         * @type {Boolean}
          * @default true
          */
         active: {
@@ -97,7 +65,7 @@ var Node = cc.Class({
         /**
          * Indicates whether this node is active in the scene.
          * @property activeInHierarchy
-         * @type {boolean}
+         * @type {Boolean}
          */
         activeInHierarchy: {
             get: function () {
@@ -139,7 +107,7 @@ var Node = cc.Class({
          */
         _persistNode: {
             get: function () {
-                return this._objFlags | DontDestroy;
+                return (this._objFlags & DontDestroy) > 0;
             },
             set: function (value) {
                 if (value) {
@@ -149,18 +117,6 @@ var Node = cc.Class({
                     this._objFlags &= ~DontDestroy;
                 }
             }
-        },
-
-        /**
-         * Register all related EventTargets, 
-         * all event callbacks will be removed in _onPreDestroy
-         * @property __eventTargets
-         * @type array
-         * @private
-         */
-        __eventTargets: {
-            default: [],
-            serializable: false
         }
     },
 
@@ -168,6 +124,22 @@ var Node = cc.Class({
         var name = arguments[0];
         this._name = typeof name !== 'undefined' ? name : 'New Node';
         this._activeInHierarchy = false;
+
+        // cache component
+        this._widget = null;
+
+        /**
+         * Register all related EventTargets,
+         * all event callbacks will be removed in _onPreDestroy
+         * @property __eventTargets
+         * @type {EventTarget[]}
+         * @private
+         */
+        this.__eventTargets = [];
+    },
+
+    statics: {
+        _DirtyFlags: require('./utils/misc').DirtyFlags
     },
 
     // OVERRIDES
@@ -217,10 +189,8 @@ var Node = cc.Class({
             children[i]._destroyImmediate();
         }
 
-        if (CC_EDITOR) {
-            // detach
-            delete cc.engine.attachedObjsForEditor[this._id];
-        }
+        // detach
+        this._registerIfAttached(false);
     },
 
     // COMPONENT
@@ -229,9 +199,9 @@ var Node = cc.Class({
      * Returns the component of supplied type if the node has one attached, null if it doesn't.
      * You can also get component in the node by passing in the name of the script.
      *
-     * @function
-     * @param {function|string} typeOrClassName
-     * @returns {cc.Component}
+     * @method getComponent
+     * @param {Function|String} typeOrClassName
+     * @returns {Component}
      */
     getComponent: function (typeOrClassName) {
         if ( !typeOrClassName ) {
@@ -259,11 +229,19 @@ var Node = cc.Class({
     /**
      * Adds a component class to the node. You can also add component to entity by passing in the name of the script.
      *
-     * @function
-     * @param {function|string} typeOrClassName - the constructor or the class name of the component to add
-     * @returns {cc.Component} - the newly added component
+     * @method addComponent
+     * @param {Function|String} typeOrClassName - The constructor or the class name of the component to add
+     * @returns {Component} - The newly added component
      */
     addComponent: function (typeOrClassName) {
+
+        if ((this._objFlags & Destroying) && CC_EDITOR) {
+            cc.error('isDestroying');
+            return null;
+        }
+
+        // check component
+
         var constructor;
         if (typeof typeOrClassName === 'string') {
             constructor = JS.getClassByName(typeOrClassName);
@@ -282,14 +260,20 @@ var Node = cc.Class({
             }
             constructor = typeOrClassName;
         }
-        if ((this._objFlags & Destroying) && CC_EDITOR) {
-            cc.error('isDestroying');
-            return null;
-        }
         if (typeof constructor !== 'function') {
             cc.error("addComponent: The component to add must be a constructor");
             return null;
         }
+        if (constructor._disallowMultiple && CC_EDITOR) {
+            if (this.getComponent(constructor._disallowMultiple)) {
+                cc.error("The component %s can't be added because %s already contains the same (or subtype) component.",
+                    JS.getClassName(typeOrClassName), this._name);
+                return null;
+            }
+        }
+
+        //
+
         var component = new constructor();
         component.node = this;
         this._components.push(component);
@@ -305,8 +289,8 @@ var Node = cc.Class({
     /**
      * Removes a component identified by the given name or removes the component object given.
      * You can also use component.destroy() if you already have the reference.
-     * @function
-     * @param {String|function|cc.Component} component
+     * @method removeComponent
+     * @param {String|Function|Component} component - The need remove component.
      * @deprecated please destroy the component to remove it.
      */
     removeComponent: function (component) {
@@ -324,7 +308,7 @@ var Node = cc.Class({
 
     /**
      * Removes all components of cc.ENode.
-     * @function
+     * @method removeAllComponents
      */
     removeAllComponents: function () {
         for (var i = 0; i < this._components.length; i++) {
@@ -352,6 +336,18 @@ var Node = cc.Class({
     },
 
     // INTERNAL
+
+    _registerIfAttached: function (register) {
+        if (CC_EDITOR || CC_TEST) {
+            if (register) {
+                cc.engine.attachedObjsForEditor[this.uuid] = this;
+                //this._objFlags |= RegisteredInEditor;
+            }
+            else {
+                delete cc.engine.attachedObjsForEditor[this._id];
+            }
+        }
+    },
 
     _onActivatedInHierarchy: function (newActive) {
         this._activeInHierarchy = newActive;
@@ -382,26 +378,28 @@ var Node = cc.Class({
     },
 
     _onHierarchyChanged: function (oldParent) {
-        // Not allowed for persistent node
-        if (this._persistNode) {
+        if (this._persistNode && !(this._parent instanceof cc.EScene)) {
             cc.game.removePersistRootNode(this);
+            if (CC_EDITOR) {
+                cc.warn('Set "%s" to normal node (not persist root node).');
+            }
         }
         var activeInHierarchyBefore = this._active && !!(oldParent && oldParent._activeInHierarchy);
         var shouldActiveNow = this._active && !!(this._parent && this._parent._activeInHierarchy);
         if (activeInHierarchyBefore !== shouldActiveNow) {
             this._onActivatedInHierarchy(shouldActiveNow);
         }
-        if (CC_EDITOR) {
+        if (CC_EDITOR || CC_TEST) {
             var scene = cc.director.getScene();
             var inCurrentSceneBefore = oldParent && oldParent.isChildOf(scene);
             var inCurrentSceneNow = this._parent && this._parent.isChildOf(scene);
             if (!inCurrentSceneBefore && inCurrentSceneNow) {
-                // attach
-                cc.engine.attachedObjsForEditor[this.uuid] = this;
+                // attached
+                this._registerIfAttached(true);
             }
             else if (inCurrentSceneBefore && !inCurrentSceneNow) {
-                // detach
-                delete cc.engine.attachedObjsForEditor[this._id];
+                // detached
+                this._registerIfAttached(false);
             }
         }
     },
