@@ -185,55 +185,43 @@ cc.loader = (function () {
          * @param {Function} [cb] - arguments are : err, txt
          */
         loadTxt: function (url, cb) {
-            if (!cc._isNodeJs) {
-                var xhr = this.getXMLHttpRequest(),
-                    errInfo = "load " + url + " failed!";
-                xhr.open("GET", url, true);
-                if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
-                    // IE-specific logic here
-                    xhr.setRequestHeader("Accept-Charset", "utf-8");
-                    xhr.onreadystatechange = function () {
-                        if(xhr.readyState === 4)
-                            (xhr.status === 200 || xhr.status === 0) ? cb(null, xhr.responseText) : cb({status:xhr.status, errorMessage:errInfo}, null);
-                    };
-                } else {
-                    if (xhr.overrideMimeType) xhr.overrideMimeType("text\/plain; charset=utf-8");
-                    xhr.onload = function () {
-                        if(xhr.readyState === 4) {
-                            (xhr.status === 200 || xhr.status === 0) ? cb(null, xhr.responseText) : cb({status:xhr.status, errorMessage:errInfo}, null);
-                        }
-                    };
-                    xhr.onerror = function(){
-                        cb({status:xhr.status, errorMessage:errInfo}, null);
-                    };
-                }
-                xhr.send(null);
+            var xhr = this.getXMLHttpRequest(),
+                errInfo = "load " + url + " failed!";
+            xhr.open("GET", url, true);
+            if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
+                // IE-specific logic here
+                xhr.setRequestHeader("Accept-Charset", "utf-8");
+                xhr.onreadystatechange = function () {
+                    if(xhr.readyState === 4)
+                        (xhr.status === 200 || xhr.status === 0) ? cb(null, xhr.responseText) : cb({status:xhr.status, errorMessage:errInfo}, null);
+                };
             } else {
-                var fs = require("fs");
-                fs.readFile(url, function (err, data) {
-                    err ? cb(err) : cb(null, data.toString());
-                });
+                if (xhr.overrideMimeType) xhr.overrideMimeType("text\/plain; charset=utf-8");
+                xhr.onload = function () {
+                    if(xhr.readyState === 4) {
+                        (xhr.status === 200 || xhr.status === 0) ? cb(null, xhr.responseText) : cb({status:xhr.status, errorMessage:errInfo}, null);
+                    }
+                };
+                xhr.onerror = function(){
+                    cb({status:xhr.status, errorMessage:errInfo}, null);
+                };
             }
+            xhr.send(null);
         },
         _loadTxtSync: function (url) {
-            if (!cc._isNodeJs) {
-                var xhr = this.getXMLHttpRequest();
-                xhr.open("GET", url, false);
-                if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
-                    // IE-specific logic here
-                    xhr.setRequestHeader("Accept-Charset", "utf-8");
-                } else {
-                    if (xhr.overrideMimeType) xhr.overrideMimeType("text\/plain; charset=utf-8");
-                }
-                xhr.send(null);
-                if (!xhr.readyState === 4 || !(xhr.status === 200 || xhr.status === 0)) {
-                    return null;
-                }
-                return xhr.responseText;
+            var xhr = this.getXMLHttpRequest();
+            xhr.open("GET", url, false);
+            if (/msie/i.test(navigator.userAgent) && !/opera/i.test(navigator.userAgent)) {
+                // IE-specific logic here
+                xhr.setRequestHeader("Accept-Charset", "utf-8");
             } else {
-                var fs = require("fs");
-                return fs.readFileSync(url).toString();
+                if (xhr.overrideMimeType) xhr.overrideMimeType("text\/plain; charset=utf-8");
             }
+            xhr.send(null);
+            if (!xhr.readyState === 4 || !(xhr.status === 200 || xhr.status === 0)) {
+                return null;
+            }
+            return xhr.responseText;
         },
 
         loadCsb: function(url, cb){
