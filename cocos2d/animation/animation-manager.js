@@ -1,20 +1,18 @@
 var JS = cc.js;
 
-function AnimationManager () {
-    // animating objects
-    this.animators = [];
-}
-JS.mixin(AnimationManager.prototype, {
+var AnimationManager = cc._Class.extend({
+    ctor: function () {
+        this.animators = [];
+    },
 
     // for manager
 
-    update: function () {
-        var deltaTime = Time.deltaTime;
+    update: function (dt) {
         var animators = this.animators;
         for (var i = 0, len = animators.length; i < len; i++) {
             var animator = animators[i];
-            if (animator._isUpdating) {
-                animator.update(deltaTime);
+            if (animator._isPlaying && !animator._isPaused) {
+                animator.update(dt);
                 // if removed
                 if (! animator._isPlaying) {
                     i--;
@@ -22,21 +20,22 @@ JS.mixin(AnimationManager.prototype, {
                 }
             }
         }
-        // TODO: trigger events
     },
+
     destruct: function () {},
 
     // for animator
 
-    ///**
-    // * @param {Animator} animator
-    // */
+    /**
+     * @param {Animator} animator
+     */
     addAnimator: function (animator) {
         this.animators.push(animator);
     },
-    ///**
-    // * @param {Animator} animator
-    // */
+
+    /**
+     * @param {Animator} animator
+     */
     removeAnimator: function (animator) {
         var index = this.animators.indexOf(animator);
         if (index >= 0) {
@@ -45,9 +44,8 @@ JS.mixin(AnimationManager.prototype, {
         else {
             cc.error('animator not added or already removed');
         }
-    },
-    // internal
-    _: function () {}
+    }
 });
 
-module.exports = AnimationManager;
+
+cc.AnimationManager = module.exports = AnimationManager;
