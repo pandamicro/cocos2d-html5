@@ -746,6 +746,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
         // by default use "Self Render".
         // if the sprite is added to a batchnode, then it will automatically switch to "batchnode Render"
         _t.setBatchNode(null);
+        this.emit("load");
         return true;
     },
 
@@ -949,12 +950,14 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
             this._setTexture(texture, isFileName);
             this.setColor(this._realColor);
             this._textureLoaded = true;
+            this.emit("load");
         }else{
             this._renderCmd._setTexture(texture);
             texture.once("load", function (event) {
                 this._setTexture(texture, isFileName);
                 this.setColor(this._realColor);
                 this._textureLoaded = true;
+                this.emit("load");
             }, this);
         }
     },

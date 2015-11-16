@@ -35,6 +35,7 @@ require('./prefab-info');
 require('./requiring-frame');
 require('./CCSys');
 require('./CCLoader');
+require('./CCMacro');
 
 if (cc.sys.isBrowser || cc.sys.isNative) {
     require('./load-manager');
