@@ -116,7 +116,7 @@
     proto._spriteFrameLoadedCallback = function (event) {
         var spriteFrame = event.currentTarget;
         this.setTextureRect(spriteFrame.getRect(), spriteFrame.isRotated(), spriteFrame.getOriginalSize());
-        this.emit("load");
+        this._node.emit("load");
     };
 
     proto._textureLoadedCallback = function (event) {
@@ -140,7 +140,7 @@
         // if the sprite is added to a batchnode, then it will automatically switch to "batchnode Render"
         this.setBatchNode(this._batchNode);
         renderCmd._quadDirty = true;
-        this.emit("load");
+        this._node.emit("load");
     };
 
     proto._setTextureCoords = function (rect, needConvert) {
