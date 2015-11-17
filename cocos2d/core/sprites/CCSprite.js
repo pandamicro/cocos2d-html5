@@ -252,7 +252,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
         if(!spriteFrame.textureLoaded()){
             //add event listener
             this._textureLoaded = false;
-            spriteFrame.once("load", this._renderCmd._spriteFrameLoadedCallback, this);
+            spriteFrame.once("load", this._renderCmd._spriteFrameLoadedCallback, this._renderCmd);
         }
 
         //TODO
@@ -729,8 +729,8 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
                 _t._rect.height = rect.height;
             }
             if(_t.texture)
-                _t.texture.off("load", _t._renderCmd._textureLoadedCallback, _t);
-            texture.once("load", _t._renderCmd._textureLoadedCallback, _t);
+                _t.texture.off("load", _t._renderCmd._textureLoadedCallback, _t._renderCmd);
+            texture.once("load", _t._renderCmd._textureLoadedCallback, _t._renderCmd);
             _t.setTexture(texture);
             return true;
         }
