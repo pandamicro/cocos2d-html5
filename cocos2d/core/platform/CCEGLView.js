@@ -214,14 +214,15 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
             return;
 
         // Frame size changed, do resize works
-        cc.eventManager.dispatchCustomEvent('canvas-resize');
-        if (view._resizeCallback) {
-            view._resizeCallback.call();
-        }
         var width = view._originalDesignResolutionSize.width;
         var height = view._originalDesignResolutionSize.height;
         if (width > 0)
             view.setDesignResolutionSize(width, height, view._resolutionPolicy);
+
+        cc.eventManager.dispatchCustomEvent('canvas-resize');
+        if (view._resizeCallback) {
+            view._resizeCallback.call();
+        }
     },
 
     /**
@@ -501,8 +502,7 @@ cc.EGLView = cc._Class.extend(/** @lends cc.view# */{
         container.style.width = width + 'px';
         container.style.height = height + 'px';
 
-        // make canvas size works
-        this.setDesignResolutionSize(this._designResolutionSize.width, this._designResolutionSize.height, this.getResolutionPolicy());
+        this._resizeEvent();
     },
 
     /**
