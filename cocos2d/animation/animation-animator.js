@@ -196,7 +196,11 @@ function initClipData (root, state) {
 
             var curveTypes = keyframe.curve;
             if (curveTypes) {
-                if (Array.isArray(curveTypes)) {
+                if (typeof curveTypes === 'string') {
+                    curve.types.push(curveTypes);
+                    continue;
+                }
+                else if (Array.isArray(curveTypes)) {
                     if (curveTypes[0] === curveTypes[1] &&
                         curveTypes[2] === curveTypes[3]) {
                         curve.types.push(DynamicAnimCurve.Linear);

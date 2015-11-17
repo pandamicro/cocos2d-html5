@@ -6,6 +6,31 @@ var binarySearch = require('./binary-search');
 var WrapMode = require('./types').WrapMode;
 var WrapModeMask = require('./types').WrapModeMask;
 
+/**
+ * Compute a new ratio by curve type
+ * @param {Number} ratio - The origin ratio
+ * @param {any}
+ *  - If it's Array, then ratio will be computed with bezierByTime
+ *  - If it's string, then ratio will be computed with cc.Easing function
+ */
+function computeRatioByType (ratio, type) {
+    if (typeof type === 'string') {
+        var func = cc.Easing[type];
+        if (func) {
+            ratio = func(ratio);
+        }
+        else {
+            cc.error('Can\'t find easing type [' + type + ']');
+        }
+    }
+    else if (Array.isArray(type)) {
+        // bezier curve
+        ratio = bezierByTime(type, ratio);
+    }
+
+    return ratio;
+}
+
 //
 // 动画数据类，相当于 AnimationClip。
 // 虽然叫做 AnimCurve，但除了曲线，可以保存任何类型的值。
@@ -129,10 +154,7 @@ var DynamicAnimCurve = cc.Class({
                 var type = this.types[index - 1];
                 var ratioBetweenFrames = (ratio - fromRatio) / (toRatio - fromRatio);
 
-                if (Array.isArray(type)) {
-                    // bezier curve
-                    ratioBetweenFrames = bezierByTime(type, ratioBetweenFrames);
-                }
+                ratioBetweenFrames = computeRatioByType(ratioBetweenFrames, type);
 
                 value = this._calcValue(index, ratioBetweenFrames);
             }
@@ -370,5 +392,6 @@ module.exports = {
     DynamicAnimCurve: DynamicAnimCurve,
     SampledAnimCurve: SampledAnimCurve,
     EventAnimCurve: EventAnimCurve,
-    EventInfo: EventInfo
+    EventInfo: EventInfo,
+    computeRatioByType: computeRatioByType
 };

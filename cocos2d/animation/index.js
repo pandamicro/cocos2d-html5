@@ -1,4 +1,5 @@
 require('./bezier');
+require('./easing');
 require('./types');
 require('./motion-path-helper');
 require('./animation-curves');

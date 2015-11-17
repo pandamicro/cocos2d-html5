@@ -1,4 +1,5 @@
 var DynamicAnimCurve = require('./animation-curves').DynamicAnimCurve;
+var computeRatioByType = require('./animation-curves').computeRatioByType;
 
 var bezier = require('./bezier').bezier;
 var bezierByTime = require('./bezier').bezierByTime;
@@ -273,10 +274,7 @@ function sampleMotionPaths (motionPaths, data, duration, fps) {
             while ( 1 - progress > Number.EPSILON) {
                 var finalProgress = progress;
 
-                if (Array.isArray(type)) {
-                    // bezier curve
-                    finalProgress = bezierByTime(type, finalProgress);
-                }
+                finalProgress = computeRatioByType(finalProgress, type);
 
                 var bezierIndex = binarySearch(progresses, finalProgress);
                 if (bezierIndex < 0) bezierIndex = ~bezierIndex;
@@ -295,10 +293,7 @@ function sampleMotionPaths (motionPaths, data, duration, fps) {
             while ( 1 - progress > Number.EPSILON) {
                 var finalProgress = progress;
 
-                if (Array.isArray(type)) {
-                    // bezier curve
-                    finalProgress = bezierByTime(type, finalProgress);
-                }
+                finalProgress = computeRatioByType(finalProgress, type);
 
                 results.push(value.lerp(nextValue, finalProgress));
 

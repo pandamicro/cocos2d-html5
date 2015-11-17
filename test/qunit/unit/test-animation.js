@@ -4,6 +4,41 @@ var color = cc.color;
 var Color = cc.Color;
 var v2 = cc.v2;
 
+test('curve types', function () {
+    var initClipData = cc._Test.initClipData;
+    var bezierByTime = cc._Test.bezierByTime;
+
+    var entity = new cc.ENode();
+
+    var clip = new cc.AnimationClip();
+    clip._duration = 3;
+    clip.sample = 10;
+    clip.curveData = {
+        props: {
+            x: [
+                {frame: 0, value: 0, curve: 'cubicInOut'},
+                {frame: 1, value: 100, curve: [0, 0.5, 0.5, 1]},
+                {frame: 2, value: 200},
+                {frame: 3, value: 300}
+            ]
+        }
+    };
+
+    state = new cc.AnimationState(clip);
+    initClipData(entity, state);
+
+    state.update(0);
+
+    state.update(0.2);
+    strictEqual(entity.x, cc.Easing.cubicInOut(0.2) * 100, 'should wrap time by cc.Easing.cubicInOut');
+
+    state.update(1.2);
+    close(entity.x, bezierByTime([0, 0.5, 0.5, 1], 0.4) * 100 + 100, 0.0001, 'should wrap time by bezierByTime');
+
+    state.update(1.3);
+    strictEqual(entity.x, 0.7 * 100 + 200, 'should wrap time by linear');
+});
+
 test('computeNullRatios', function () {
     var computeNullRatios = cc._Test.computeNullRatios;
     var computedRatio;
