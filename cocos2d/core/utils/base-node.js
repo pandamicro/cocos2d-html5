@@ -368,6 +368,9 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
                 }
             },
             set: function (value) {
+                if (this._sizeProvider) {
+                    this._sizeProvider._setWidth(value);
+                }
                 this._contentSize.width = value;
                 this._onSizeChanged();
             },
@@ -390,6 +393,9 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
                 }
             },
             set: function (value) {
+                if (this._sizeProvider) {
+                    this._sizeProvider._setHeight(value);
+                }
                 this._contentSize.height = value;
                 this._onSizeChanged();
             },
@@ -751,6 +757,9 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
                 return;
             locContentSize.width = size;
             locContentSize.height = height;
+        }
+        if (this._sizeProvider) {
+            this._sizeProvider.setContentSize(locContentSize);
         }
         this._onSizeChanged();
     },

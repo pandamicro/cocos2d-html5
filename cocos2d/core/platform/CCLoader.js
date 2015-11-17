@@ -1,11 +1,10 @@
-if (cc.loader) return;
 
 /**
  * Loader for resource loading process. It's a singleton object.
  * @class loader
  * @static
  */
-cc.loader = (function () {
+cc.loader = cc.loader || (function () {
     var _jsCache = {}, //cache for js
         _register = {}, //register of loaders
         _langPathCache = {}, //cache for lang path
