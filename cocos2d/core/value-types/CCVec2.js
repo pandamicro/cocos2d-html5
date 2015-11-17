@@ -188,29 +188,29 @@ JS.mixin(Vec2.prototype, {
     },
 
     /**
-     * Divides two vectors. If you want to save result to another vector, use div() instead.
+     * Divides by a number. If you want to save result to another vector, use div() instead.
      * @method divSelf
      * @param {Vec2} vector
      * @return {Vec2} returns this
      * @chainable
      */
-    divSelf: function (vector) {
-        this.x /= vector.x;
-        this.y /= vector.y;
+    divSelf: function (num) {
+        this.x /= num;
+        this.y /= num;
         return this;
     },
 
     /**
-     * Divides two vectors, and returns the new result.
+     * Divides by a number, and returns the new result.
      * @method div
      * @param {Vec2} vector
      * @param {Vec2} [out] - optional, the receiving vector
      * @return {Vec2} the result
      */
-    div: function (vector, out) {
+    div: function (num, out) {
         out = out || new Vec2();
-        out.x = this.x / vector.x;
-        out.y = this.y / vector.y;
+        out.x = this.x / num;
+        out.y = this.y / num;
         return out;
     },
 
