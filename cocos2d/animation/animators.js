@@ -138,6 +138,7 @@ function createPropCurve (curves, target, propName, value, ratio) {
 
 entProto._doAnimate = function (keyFrames, timingInput) {
     var anim = new AnimationNode(this, null, timingInput);
+    anim.play();
     var curves = anim.curves;
 
     // create curves

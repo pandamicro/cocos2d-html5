@@ -222,7 +222,6 @@ function AnimationNode (animator, curves, timingInput) {
     if (this.delay > 0) {
         this._duringDelay = true;
     }
-    this.play();
 }
 JS.extend(AnimationNode, AnimationNodeBase);
 
