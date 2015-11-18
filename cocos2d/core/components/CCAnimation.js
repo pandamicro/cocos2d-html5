@@ -72,7 +72,7 @@ var AnimationComponent = cc.Class({
                 this._currentClip = value;
 
                 if (CC_EDITOR && force) {
-                    this.sample();
+                    this._updateClip(value);
                 }
             },
             type: AnimationClip,
@@ -130,9 +130,17 @@ var AnimationComponent = cc.Class({
         var state = this.getAnimationState(name || this.defaultClip.name);
         if (state) {
             if (state.isPlaying) {
-                this._animator.stopState(state);
+                if (state.isPaused) {
+                    this._animator.resumeState(state);
+                }
+                else {
+                    this._animator.stopState(state);
+                    this._animator.playState(state, startTime);
+                }
             }
-            this._animator.playState(state, startTime);
+            else {
+                this._animator.playState(state, startTime);
+            }
 
             this.currentClip = state.clip;
         }
@@ -207,6 +215,7 @@ var AnimationComponent = cc.Class({
      * @param {String} [name] - Specified animation name, if not supplied then make all animations go to the time.
      */
     setCurrentTime: function (time, name) {
+        this._init();
         if (name) {
             var state = this._nameToState[name];
             if (state) {
@@ -228,6 +237,7 @@ var AnimationComponent = cc.Class({
      * @return {AnimationState}
      */
     getAnimationState: function (name) {
+        this._init();
         return this._nameToState[name] || null;
     },
 
@@ -268,8 +278,12 @@ var AnimationComponent = cc.Class({
         return newState;
     },
 
-    _removeStateIfNotUsed: function (state) {
-        if (state.clip !== this.defaultClip && !cc.js.array.contains(this._clips, state.clip)) {
+    _removeStateIfNotUsed: function (state, force) {
+        var needRemove = state.clip !== this.defaultClip && !cc.js.array.contains(this._clips, state.clip);
+        if (force || needRemove) {
+            if (state.isPlaying) {
+                this.stop(state.name);
+            }
             delete this._nameToState[state.name];
         }
     },
@@ -277,9 +291,10 @@ var AnimationComponent = cc.Class({
     /**
      * Remove clip from the animation list. This will remove the clip and any animation states based on it.
      * @method removeClip
+     * @param {Boolean} force If force is true, then will always remove the clip and any animation states based on it.
      * @param {AnimationClip} clip
      */
-    removeClip: function (clip) {
+    removeClip: function (clip, force) {
         if (!clip) {
             cc.warn('Invalid clip to remove');
             return;
@@ -287,14 +302,15 @@ var AnimationComponent = cc.Class({
         this._init();
 
         this._clips = this._clips.filter(function (item) {
-            return item !== clip;
+            return item !== clip && item.name !== clip.name;
         });
 
         var state;
         for (var name in this._nameToState) {
             state = this._nameToState[name];
-            if (state.clip === clip) {
-                this._removeStateIfNotUsed(state);
+            var stateClip = state.clip;
+            if (stateClip === clip || stateClip.name === clip.name) {
+                this._removeStateIfNotUsed(state, force);
             }
         }
     },
@@ -313,7 +329,7 @@ var AnimationComponent = cc.Class({
     // Internal Methods
     ///////////////////////////////////////////////////////////////////////////////
 
-    // Dont forget to call _init before every actual process in public methods. (Or checking this.isOnLoadCalled)
+    // Dont forget to call _init before every actual process in public methods.
     // Just invoking _init by onLoad is not enough because onLoad is called only if the entity is active.
 
     _init: function () {
@@ -344,6 +360,46 @@ var AnimationComponent = cc.Class({
             this._nameToState[state.name] = state;
         }
     },
+
+    _updateClip: CC_EDITOR && function (clip, clipName) {
+        this._init();
+
+        clipName = clipName || clip.name;
+
+        var oldState;
+        for (var name in this._nameToState) {
+            var state = this._nameToState[name];
+            var stateClip = state.clip;
+            if (stateClip === clip || stateClip.name === clipName) {
+                if (!clip._uuid) clip._uuid = stateClip._uuid;
+                oldState = state;
+                break;
+            }
+        }
+
+        if (!oldState) {
+            cc.error('Can\'t find state from clip [' + clipName + ']');
+            return;
+        }
+
+        var time = oldState.time;
+        var isPlaying = oldState.isPlaying;
+        var isPaused = oldState.isPaused;
+
+        this.removeClip(clip, true);
+        this.addClip(clip);
+
+        if (isPlaying) {
+            this.play(clipName);
+
+            if (isPaused) {
+                this.pause(clipName);
+            }
+        }
+
+        this.setCurrentTime(time, clipName);
+        this.sample();
+    }
 });
 
 
