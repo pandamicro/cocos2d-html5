@@ -302,7 +302,7 @@ var AnimationComponent = cc.Class({
         this._init();
 
         this._clips = this._clips.filter(function (item) {
-            return item !== clip && item.name !== clip.name;
+            return item !== clip;
         });
 
         var state;
