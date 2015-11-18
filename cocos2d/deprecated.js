@@ -387,25 +387,10 @@ if (CC_DEV) {
 
     [
         'textureLoaded',
-        'addLoadedEventListener',
-        'isDirty',
-        'setDirty',
-        'sortAllChildren',
-        'reorderChild',
-        'removeChild',
-        'init',
-        'removeAllChildren',
-        'setOpacityModifyRGB',
-        'isOpacityModifyRGB',
-        'addChild',
-        'getQuad',
-        'getBlendFunc',
         'setBlendFunc',
-        'useBatchNode',
-        'getBatchNode',
-        'setBatchNode',
-        'updateTransform',
-        'ignoreAnchorPointForPosition',
+        'getBlendFunc',
+        'setState',
+        'getState',
 
     ].forEach(function (prop) {
         function error () {

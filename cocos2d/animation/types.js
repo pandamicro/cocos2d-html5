@@ -11,7 +11,6 @@ var WrapModeMask = {
 
 /**
  * Specifies how time is treated when it is outside of the keyframe range of an Animation.
- * @readOnly
  * @enum WrapMode
  * @memberof cc
  */
