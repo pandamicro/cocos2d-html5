@@ -309,7 +309,7 @@ var AnimationComponent = cc.Class({
         for (var name in this._nameToState) {
             state = this._nameToState[name];
             var stateClip = state.clip;
-            if (stateClip === clip || stateClip.name === clip.name) {
+            if (stateClip === clip) {
                 this._removeStateIfNotUsed(state, force);
             }
         }
@@ -386,7 +386,7 @@ var AnimationComponent = cc.Class({
         var isPlaying = oldState.isPlaying;
         var isPaused = oldState.isPaused;
 
-        this.removeClip(clip, true);
+        this.removeClip(oldState.clip, true);
         this.addClip(clip);
 
         if (isPlaying) {
