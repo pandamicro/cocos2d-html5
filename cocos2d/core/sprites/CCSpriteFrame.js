@@ -490,7 +490,7 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
                 this._rotated = rotated;
             }
             var self = this;
-            AssetLibrary.queryAssetInfo(uuid, function (err, url) {
+            cc.AssetLibrary.queryAssetInfo(uuid, function (err, url) {
                 if (err) {
                     cc.error('SpriteFrame: Failed to sprite texture "%s", %s', uuid, err);
                     // Fall through since we still need to initialze if not async
