@@ -33,20 +33,10 @@ var designResolutionWrapper = {
     _getWidth: function () {
         return this.getContentSize().width;
     },
-    _setWidth: function (value) {
-        var size = this.getContentSize();
-        size.width = value;
-        this.setContentSize(size);
-    },
 
     _getHeight: function () {
         return this.getContentSize().height;
     },
-    _setHeight: function (value) {
-        var size = this.getContentSize();
-        size.height = value;
-        this.setContentSize(size);
-    }
 };
 
 /**
