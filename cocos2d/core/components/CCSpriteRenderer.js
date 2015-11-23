@@ -442,7 +442,7 @@ var SpriteRenderer = cc.Class({
         node.initWithSpriteFrame(this._sprite);
         var locLoaded = this._sprite.textureLoaded();
         if (!locLoaded) {
-            this._sprite.on('load', function () {
+            this._sprite.once('load', function () {
                 this._updateCapInset();
                 var texture = this._sprite.getTexture();
                 if (!oldSprite && texture) {
