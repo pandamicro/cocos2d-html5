@@ -139,6 +139,7 @@ JS.mixin(EventTarget.prototype, {
      *                              from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE.
      *                              When false, callback will NOT be invoked when event's eventPhase attribute value is CAPTURING_PHASE.
      *                              Either way, callback will be invoked when event's eventPhase attribute value is AT_TARGET.
+     * @return {Function} - Just returns the incoming callback so you can save the anonymous function easier.
      */
     on: function (type, callback, target, useCapture) {
         // Accept also patameters like: (type, callback, useCapture)
@@ -164,6 +165,7 @@ JS.mixin(EventTarget.prototype, {
             if (target && target.__eventTargets)
                 target.__eventTargets.push(this);
         }
+        return callback;
     },
 
     /**

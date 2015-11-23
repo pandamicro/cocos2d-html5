@@ -13,6 +13,10 @@ var FireClass = require('../platform/CCClass');
  * @param {number} [y=0]
  */
 function Vec2 (x, y) {
+    if (typeof x === 'object') {
+        y = x.y;
+        x = x.x;
+    }
     this.x = (typeof x === 'number' ? x : 0.0);
     this.y = (typeof y === 'number' ? y : 0.0);
 }
@@ -445,12 +449,6 @@ var proto = Vec2.prototype;
  * @return {Vec2}
  */
 cc.v2 = function v2 (x, y) {
-    if (x === undefined) {
-        return new Vec2(0, 0);
-    }
-    if (y === undefined) {
-        return new Vec2(x.x, x.y);
-    }
     return new Vec2(x, y);
 };
 
