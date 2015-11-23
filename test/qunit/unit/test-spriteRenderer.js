@@ -1,6 +1,8 @@
 largeModule('SpriteRenderer');
 
-test('basic test', function () {
+asyncTest('basic test', function () {
+    var url = assetDir + '/button.png';
+
     var node = new cc.ENode();
     cc.director.getScene().addChild(node);
 
@@ -9,21 +11,19 @@ test('basic test', function () {
 
     deepEqual(render._sgNode.color, Color.RED, 'color set success');
 
-    render.textureAtlas = 'qweasd.png';
-    strictEqual(render._sgNode.textureAtlas, 'qweasd.png', 'textureAtlas set success');
+    var texture = new cc.Texture2D();
+    texture.url = url;
+    cc.loader.load(texture.url, function (err) {
+        texture.handleLoadedTexture(cc.path.extname(url) === '.png');
+    });
+    cc.textureCache.cacheImage(url, texture);
 
-    var path = 'aabbcc.png';
-    var restore = cc.loader.loadImg;
-    cc.loader.loadImg = function (url, callback) {
-        if (url.endsWith(path)) {
-            callback(null, new Image());
-        }
-        else {
-            restore(url, callback);
-        }
-    }
-    render.texture = 'aabbcc.png';
-    strictEqual(render._sgNode.texture.url, 'aabbcc.png', 'texture set success');
+    var newSprite = new cc.SpriteFrame();
+    newSprite.setTexture(texture);
+    render.sprite = newSprite;
 
-    cc.loader.loadImg = restore;
+    render.sprite.on('load', function () {
+        strictEqual(render._sgNode._scale9Image.texture.url, url, 'texture set success');
+        start();
+    });
 });
