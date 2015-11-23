@@ -15,6 +15,12 @@ var JS = require('../platform/js');
  * @param {Number} [h=0]
  */
 function Rect (x, y, w, h) {
+    if (typeof x === 'object') {
+        y = x.y;
+        w = x.width;
+        h = x.height;
+        x = x.x;
+    }
     this.x = typeof x === 'number' ? x : 0.0;
     this.y = typeof y === 'number' ? y : 0.0;
     this.width = typeof w === 'number' ? w : 0.0;
@@ -250,10 +256,6 @@ cc.Rect = Rect;
  * @return {Rect}
  */
 cc.rect = function rect (x, y, w, h) {
-    if (x === undefined)
-        return new Rect(0, 0, 0, 0);
-    if (y === undefined)
-        return new Rect(x.x, x.y, x.width, x.height);
     return new Rect(x, y, w, h);
 };
 

@@ -19,6 +19,12 @@ var Color = (function () {
      * @param {Number} [a=255] - alpha component of the color.
      */
     function Color( r, g, b, a ) {
+        if (typeof r === 'object') {
+            g = r.g;
+            b = r.b;
+            a = r.a;
+            r = r.r;
+        }
         this.r = typeof r === 'number' ? r : 0;
         this.g = typeof g === 'number' ? g : 0;
         this.b = typeof b === 'number' ? b : 0;
@@ -430,9 +436,6 @@ cc.Color = Color;
  * @examples {@link utils/api/cocos/docs/cocos2d/core/value-types/CCColor/color.js}
  */
 cc.color = function color (r, g, b, a) {
-    if (r === undefined) {
-        return new cc.Color(0, 0, 0, 255);
-    }
     if (JS.isString(r)) {
         var result = new cc.Color();
         return result.fromHEX(r);

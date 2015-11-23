@@ -766,7 +766,7 @@ function FireClass (options) {
             if (correct) {
                 cc.warn('Unknown parameter of %s.%s, maybe you want is "%s".', name, funcName, correct);
             }
-            else {
+            else if (func) {
                 cc.error('Unknown parameter of %s.%s, property should be defined in "properties" or "ctor"', name, funcName);
             }
         }
