@@ -77,13 +77,13 @@ var SpriteRenderer = cc.Class({
                 return this._sprite;
             },
             set: function (value, force) {
+                var lastSprite = this._sprite;
                 this._sprite = value;
-
                 if (this._sgNode) {
                     if (CC_EDITOR && force) {
                         this._sgNode._scale9Image = null;
                     }
-                    this._sgNode.setSpriteFrame(value);
+                    this._applySprite(this._sgNode, lastSprite);
                     // color cleared after reset texture, should reapply color
                     this._sgNode.setColor(this.node._color);
                     this._sgNode.setOpacity(this.node._opacity);
@@ -104,14 +104,8 @@ var SpriteRenderer = cc.Class({
             set: function (value) {
                 this._type = value;
                 this._sgNode.setRenderingType(this._type);
-                var sprite = this._sprite;
                 // manual settings inset top, bttom, right, left.
-                if (this._type === SpriteType.SLICED && sprite) {
-                    this._sgNode.setInsetTop(sprite.insetTop);
-                    this._sgNode.setInsetBottom(sprite.insetBottom);
-                    this._sgNode.setInsetRight(sprite.insetRight);
-                    this._sgNode.setInsetLeft(sprite.insetLeft);
-                }
+                this._updateCapInset();
             },
             type: SpriteType
         },
@@ -259,8 +253,8 @@ var SpriteRenderer = cc.Class({
      * @param {Rect} capInsets
      */
     setSpriteFrame: function (spriteFrame, capInsets) {
-        this._sprite = spriteFrame;
-        this._sgNode.setSpriteFrame(spriteFrame, capInsets);
+        this.sprite = spriteFrame;
+        this.setCapInsets(capInsets);
     },
 
     /**
@@ -429,17 +423,37 @@ var SpriteRenderer = cc.Class({
         return this._isFlippedY;
     },
 
-    _createSgNode: function () {
-        var sprite = new cc.Scale9Sprite();
-        sprite.setRenderingType(this._type);
-        if (this._sprite) {
-            sprite.initWithFile(this._sprite);
-            sprite.setInsetTop(this._sprite.insetTop);
-            sprite.setInsetBottom(this._sprite.insetBottom);
-            sprite.setInsetRight(this._sprite.insetRight);
-            sprite.setInsetLeft(this._sprite.insetLeft);
+    _updateCapInset: function() {
+        if (this._type === SpriteType.SLICED) {
+            this._sgNode.setInsetTop(this._sprite.insetTop);
+            this._sgNode.setInsetBottom(this._sprite.insetBottom);
+            this._sgNode.setInsetRight(this._sprite.insetRight);
+            this._sgNode.setInsetLeft(this._sprite.insetLeft);
         }
-        return sprite;
+    },
+
+    _applySprite: function (node, oldSprite) {
+        if (oldSprite) {
+            oldSprite.off('load', this._updateCapInset, this);
+        }
+        if (!this._sprite) { return; }
+        node._spriteRect = cc.rect(0, 0);
+        node._originalSize = cc.size(0, 0);
+        node.initWithSpriteFrame(this._sprite);
+        var locLoaded = this._sprite.textureLoaded();
+        if (!locLoaded) {
+            this._sprite.on('load', this._updateCapInset, this);
+        }
+        else {
+            this._updateCapInset();
+        }
+    },
+
+    _createSgNode: function () {
+        var sgNode = new cc.Scale9Sprite();
+        sgNode.setRenderingType(this._type);
+        this._applySprite(sgNode, null);
+        return sgNode;
     },
 });
 
