@@ -897,8 +897,9 @@ game.once(game.EVENT_RENDERER_INITED, function () {
                 this._textureLoaded = true;
             },
 
+            // [premultiplied=false]
             handleLoadedTexture: function (premultiplied) {
-                premultiplied = (premultiplied === undefined) ? false : premultiplied;
+                premultiplied = !!premultiplied;
                 var self = this;
                 // Not sure about this ! Some texture need to be updated even after loaded
                 if (!game._rendererInitialized)
