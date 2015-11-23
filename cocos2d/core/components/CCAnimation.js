@@ -238,7 +238,20 @@ var AnimationComponent = cc.Class({
      */
     getAnimationState: function (name) {
         this._init();
-        return this._nameToState[name] || null;
+        var state = this._nameToState[name];
+
+        if (CC_EDITOR && !state) {
+            this._didInit = false;
+
+            if (this.animator) {
+                this.animator.stop();
+            }
+
+            this._init();
+            state = this._nameToState[name];
+        }
+
+        return state || null;
     },
 
     /**
