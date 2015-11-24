@@ -31,13 +31,13 @@
  ****************************************************************************/
 
 (function(){
-    cc.Label.CanvasRenderCmd = function(renderableObject){
+    cc.Label.TTFCanvasRenderCmd = function(renderableObject){
         cc.Node.CanvasRenderCmd.call(this, renderableObject);
         this._needDraw = true;
     };
 
-    var proto = cc.Label.CanvasRenderCmd.prototype = Object.create(cc.Node.CanvasRenderCmd.prototype);
-    proto.constructor = cc.Label.CanvasRenderCmd;
+    var proto = cc.Label.TTFCanvasRenderCmd.prototype = Object.create(cc.Node.CanvasRenderCmd.prototype);
+    proto.constructor = cc.Label.TTFCanvasRenderCmd;
 
     proto.rendering = function (ctx, scaleX, scaleY) {
         cc.log("I am ready to rendering Label in WebGL");

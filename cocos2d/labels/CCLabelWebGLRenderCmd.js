@@ -31,7 +31,7 @@
  ****************************************************************************/
 
 (function(){
-    cc.Label.WebGLRenderCmd = function(renderableObject){
+    cc.Label.TTFWebGLRenderCmd = function(renderableObject){
         cc.Node.WebGLRenderCmd.call(this, renderableObject);
         this._needDraw = true;
         this._labelTexture = null;
@@ -46,11 +46,12 @@
         this._splitedStrings = null;
     };
 
-    var proto = cc.Label.WebGLRenderCmd.prototype = Object.create(cc.Node.WebGLRenderCmd.prototype);
-    proto.constructor = cc.Label.WebGLRenderCmd;
+    var proto = cc.Label.TTFWebGLRenderCmd.prototype = Object.create(cc.Node.WebGLRenderCmd.prototype);
+    proto.constructor = cc.Label.TTFWebGLRenderCmd;
 
     proto._rebuildLabelSkin = function() {
         if(this._node._labelSkinDirty) {
+            this._splitString();
             this._bakeLabel();
             this._prepareQuad();
             this._node._labelSkinDirty = false;
@@ -77,11 +78,14 @@
         gl.vertexAttribPointer(2, 2, gl.FLOAT, false, 24, 16);                  //cc.VERTEX_ATTRIB_TEX_COORDS
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     };
-
-    proto._bakeLabel = function() {
+    proto._splitString = function() {
         var node = this._node;
         //splite string by \n;
         this._splitedStrings = node._string.split("\n");
+
+    };
+    proto._bakeLabel = function() {
+        var node = this._node;
         var textMetric = this._labelContext.measureText(node._string);
         var canvasSizeX = node._contentSize.width;
         var canvasSizeY = node._contentSize.height;

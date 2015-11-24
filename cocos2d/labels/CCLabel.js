@@ -145,9 +145,9 @@ cc.Label = cc.Node.extend({
 
         if(this._labelIsTTF) {
             if (cc._renderType === cc.game.RENDER_TYPE_WEBGL)
-                return new cc.Label.WebGLRenderCmd(this);
+                return new cc.Label.TTFWebGLRenderCmd(this);
             else
-                return new cc.Label.CanvasRenderCmd(this);
+                return new cc.Label.TTFCanvasRenderCmd(this);
         }
         else {
             //todo:add label bmfont here
