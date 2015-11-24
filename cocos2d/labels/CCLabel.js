@@ -28,7 +28,7 @@ cc.Label = cc.Node.extend({
     _hAlign: 0, //0 left, 1 center, 2 right
     _vAlign: 0, //0 bottom,1 center, 2 top
     _string: "",
-    _fontSize: 0,
+    _fontSize: 20,
     _overFlow: 0, //0 shrink, 1 clamp 2, resize to content
     _isWrapText: true,
     _spacingX : 0,
