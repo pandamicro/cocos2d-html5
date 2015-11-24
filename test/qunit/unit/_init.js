@@ -114,6 +114,8 @@ cc.engine = {
     },
 };
 
+cc.EventTarget.polyfill(cc.engine);
+
 var assetDir = '../test/qunit/assets';
 
 var canvas;
