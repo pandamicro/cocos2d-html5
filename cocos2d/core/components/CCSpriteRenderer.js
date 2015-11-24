@@ -22,6 +22,22 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+function MonitorSize(target) {
+    this._target = target;
+}
+MonitorSize.prototype.getContentSize = function () {
+    return this._target._sgNode.getContentSize();
+}
+MonitorSize.prototype.setContentSize = function () {
+    this._target.useOriginalSize = false;
+}
+MonitorSize.prototype._getWidth = function () {
+    return this.getContentSize().width;
+}
+MonitorSize.prototype._getHeight = function () {
+    return this.getContentSize().height;
+}
+
 var SpriteType = cc.SpriteType;
 
 /**
@@ -50,6 +66,7 @@ var SpriteRenderer = cc.Class({
         _type: SpriteType.SIMPLE,
         _isFlippedX: false,
         _isFlippedY: false,
+        _useOriginalSize: true,
 
         /**
          * The Sprite Atlas.
@@ -108,6 +125,18 @@ var SpriteRenderer = cc.Class({
                 this._updateCapInset();
             },
             type: SpriteType
+        },
+
+        useOriginalSize: {
+            get: function () {
+                return this._useOriginalSize;
+            },
+            set: function (value) {
+                this._useOriginalSize = value;
+                if (value) {
+                    this._updateSpriteSize();
+                }
+            }
         },
 
         /**
@@ -423,12 +452,29 @@ var SpriteRenderer = cc.Class({
         return this._isFlippedY;
     },
 
+    onLoad: function () {
+        this._super();
+        this.node._sizeProvider = new MonitorSize(this);
+    },
+
+    onDestroy: function () {
+        this._super();
+        this.node._sizeProvider = null;
+    },
+
     _updateCapInset: function() {
         if (this._type === SpriteType.SLICED) {
             this._sgNode.setInsetTop(this._sprite.insetTop);
             this._sgNode.setInsetBottom(this._sprite.insetBottom);
             this._sgNode.setInsetRight(this._sprite.insetRight);
             this._sgNode.setInsetLeft(this._sprite.insetLeft);
+        }
+    },
+
+    _updateSpriteSize: function () {
+        if (this._useOriginalSize) {
+            var rect = this._sprite.getRect();
+            this._sgNode.setPreferredSize(rect.size);
         }
     },
 
@@ -444,14 +490,12 @@ var SpriteRenderer = cc.Class({
         if (!locLoaded) {
             this._sprite.once('load', function () {
                 this._updateCapInset();
-                if (!oldSprite) {
-                    var rect = this._sprite.getRect();
-                    node.setPreferredSize(rect.size);
-                }
+                this._updateSpriteSize();
             }, this)
         }
         else {
             this._updateCapInset();
+            this._updateSpriteSize();
         }
     },
 
