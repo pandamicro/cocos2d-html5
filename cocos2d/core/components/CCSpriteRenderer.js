@@ -35,7 +35,7 @@ var SpriteRenderer = cc.Class({
 
     editor: CC_EDITOR && {
         menu: 'Sprite',
-        inspector: 'app://editor/page/inspector/cc-sprite-inspector.html'
+        inspector: 'app://editor/page/inspector/sprite.html'
     },
 
     properties: {
@@ -442,7 +442,13 @@ var SpriteRenderer = cc.Class({
         node.initWithSpriteFrame(this._sprite);
         var locLoaded = this._sprite.textureLoaded();
         if (!locLoaded) {
-            this._sprite.on('load', this._updateCapInset, this);
+            this._sprite.once('load', function () {
+                this._updateCapInset();
+                var texture = this._sprite.getTexture();
+                if (!oldSprite && texture) {
+                    node.setPreferredSize(cc.size(texture.width, texture.height));
+                }
+            }, this)
         }
         else {
             this._updateCapInset();
