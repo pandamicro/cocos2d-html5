@@ -25,17 +25,19 @@
 function MonitorSize(target) {
     this._target = target;
 }
-MonitorSize.prototype.getContentSize = function () {
-    return this._target._sgNode.getContentSize();
-}
-MonitorSize.prototype.setContentSize = function () {
-    this._target.useOriginalSize = false;
-}
-MonitorSize.prototype._getWidth = function () {
-    return this.getContentSize().width;
-}
-MonitorSize.prototype._getHeight = function () {
-    return this.getContentSize().height;
+MonitorSize.prototype = {
+    getContentSize: function () {
+        return this._target._sgNode.getContentSize();
+    },
+    setContentSize: function () {
+        this._target.useOriginalSize = false;
+    },
+    _getWidth: function () {
+        return this.getContentSize().width;
+    },
+    _getHeight: function () {
+        return this.getContentSize().height;
+    }
 }
 
 var SpriteType = cc.SpriteType;
