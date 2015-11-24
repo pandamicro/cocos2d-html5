@@ -47,18 +47,6 @@ Rect.fromMinMax = function (v1, v2) {
 };
 
 /**
- * Creates a rectangle from left-top coordinate value and size.
- * @static
- * @method fromVec2
- * @param {Vec2} leftTop
- * @param {Vec2} size
- * @return {Rect}
- */
-Rect.fromVec2 = function (leftTop, size) {
-    return new Rect(leftTop.x, leftTop.y, size.x, size.y);
-};
-
-/**
  * Checks if rect contains.
  * @static
  * @method contain
@@ -199,11 +187,11 @@ Object.defineProperty(proto, 'center', {
  */
 Object.defineProperty(proto, 'size', {
     get: function () {
-        return new cc.Vec2(this.width, this.height);
+        return new cc.Size(this.width, this.height);
     },
     set: function (value) {
-        this.width = value.x;
-        this.height = value.y;
+        this.width = value.width;
+        this.height = value.height;
     }
 });
 
