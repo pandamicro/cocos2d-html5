@@ -9,6 +9,6 @@
     }
   },
   {
-    "__type__": "cc.Scene",
+    "__type__": "cc.Scene"
   }
 ]
