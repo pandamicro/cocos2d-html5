@@ -115,11 +115,11 @@ var SpriteRenderer = cc.Class({
          */
         localSize: {
             get: function () {
-                var sprite = this._sgNode ? this._sgNode._scale9Image : null;
-                if (!sprite) {
+                var sgNode = this._sgNode;
+                if (!sgNode) {
                     return cc.size(0, 0);
                 }
-                return cc.size(sprite.width, sprite.height);
+                return cc.size(sgNode.width, sgNode.height);
             },
             visible: false
         }
