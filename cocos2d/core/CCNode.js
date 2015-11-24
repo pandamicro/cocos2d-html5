@@ -341,9 +341,11 @@ var Node = cc.Class({
         if (CC_EDITOR || CC_TEST) {
             if (register) {
                 cc.engine.attachedObjsForEditor[this.uuid] = this;
+                cc.engine.emit('node-attach-to-scene', {target: this});
                 //this._objFlags |= RegisteredInEditor;
             }
             else {
+                cc.engine.emit('node-detach-from-scene', {target: this});
                 delete cc.engine.attachedObjsForEditor[this._id];
             }
         }
