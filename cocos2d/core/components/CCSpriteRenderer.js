@@ -444,9 +444,10 @@ var SpriteRenderer = cc.Class({
         if (!locLoaded) {
             this._sprite.once('load', function () {
                 this._updateCapInset();
-                var texture = this._sprite.getTexture();
-                if (!oldSprite && texture) {
-                    node.setPreferredSize(cc.size(texture.width, texture.height));
+                if (!oldSprite) {
+                    var rectInPixels = this._sprite.getRect();
+                    var size = cc.size(rectInPixels.width, rectInPixels.height);
+                    node.setPreferredSize(size);
                 }
             }, this)
         }
