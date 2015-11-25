@@ -270,10 +270,6 @@ var AnimationComponent = cc.Class({
      * @return {AnimationState} - The AnimationState which gives full control over the animation clip.
      */
     addClip: function (clip, newName) {
-        this._addClip(clip, newName);
-    },
-
-    _addClip: function (clip, newName, index) {
         if (!clip) {
             cc.warn('Invalid clip to add');
             return;
@@ -282,10 +278,7 @@ var AnimationComponent = cc.Class({
 
         // add clip
         if (!cc.js.array.contains(this._clips, clip)) {
-            if (typeof index !== 'undefined')
-                this._clips.splice(index, 0, clip);
-            else
-                this._clips.push(clip);
+            this._clips.push(clip);
         }
 
         // replace same name clip
@@ -410,23 +403,20 @@ var AnimationComponent = cc.Class({
             return;
         }
 
-        var time = oldState.time;
-        var isPlaying = oldState.isPlaying;
-        var isPaused = oldState.isPaused;
-        var index = this._clips.indexOf(oldState.clip);
+        var clips = this._clips;
+        var index = clips.indexOf(oldState.clip);
+        clips[index] = clip;
 
-        this.removeClip(oldState.clip, true);
-        this._addClip(clip, clipName, index);
-
-        if (isPlaying) {
-            this.play(clipName);
-
-            if (isPaused) {
-                this.pause(clipName);
-            }
+        // clip name changed
+        if (oldState.name !== clipName) {
+            delete this._nameToState[oldState.name];
+            this._nameToState[clipName] = oldState;
+            oldState._name = clipName;
         }
 
-        this.setCurrentTime(time, clipName);
+        oldState._clip = clip;
+        this._animator.reloadClip(oldState);
+
         this.sample();
     }
 });
