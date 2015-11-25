@@ -758,12 +758,23 @@ var ParticleSystem = cc.Class({
 
                 var active = node.isActive();
                 node.initWithFile(file);
+
                 // recover sgNode properties
+
                 if (!active) {
                     node.stopSystem();
                 }
+
+                var sourcePos = node.getPosition();
+                if (CC_EDITOR && (sourcePos.x !== 0 || sourcePos.y !== 0)) {
+                    cc.log('Discard sourcePosition: %s from "%s", you can set position in the node directly.', sourcePos, cc.path.basename(file));
+                }
+                node.setPosition(0, 0);
+
                 node.autoRemoveOnFinish = self._autoRemoveOnFinish;
 
+                //
+                
                 if (done) {
                     done();
                 }
