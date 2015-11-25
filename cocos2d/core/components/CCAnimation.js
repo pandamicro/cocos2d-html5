@@ -27,10 +27,10 @@ var AnimationClip = require('../../animation/animation-clip');
 
 function equalClips (clip1, clip2) {
     if (clip1 !== clip2) {
-        if (clip1 === null || clip2 === null) return false;
-        return clip1.name === clip2.name || clip1._uuid === clip2._uuid;
+        return true;
     }
-    return true;
+
+    return clip1 && clip2 && (clip1.name === clip2.name || clip1._uuid === clip2._uuid);
 }
 
 /**
