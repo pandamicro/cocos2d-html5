@@ -25,6 +25,9 @@
 require('./cocos2d/core');
 require('./cocos2d/animation');
 
+require('./cocos2d/particle/CCParticleAsset');
+require('./cocos2d/particle/CCEParticleSystem');
+
 if (!(CC_EDITOR && Editor.isCoreLevel)) {
     if (cc.sys.isNative) {
         // TODO - add to jsb ?

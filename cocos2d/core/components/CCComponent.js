@@ -631,8 +631,8 @@ if (CC_EDITOR || CC_TEST) {
         });
     };
 
+    // use defineProperty to prevent inherited by sub classes
     Object.defineProperty(Component, '_registerEditorProps', {
-        // use defineProperty to prevent inherited by sub classes
         value: function (cls, props) {
             var name = cc.js.getClassName(cls);
             for (var key in props) {
@@ -645,7 +645,7 @@ if (CC_EDITOR || CC_TEST) {
 
                     case 'playOnFocus':
                         if (val) {
-                            if (props.executeInEditMode) {
+                            if (props.executeInEditMode || cls.$super._executeInEditMode) {
                                 cls._playOnFocus = true;
                             }
                             else {
