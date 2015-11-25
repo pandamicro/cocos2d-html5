@@ -437,6 +437,30 @@ test('Animation Component', function () {
     strictEqual(animation.getAnimationState('test'), null, 'should remove state');
 });
 
+
+test('CCAnimation._updateClip', function () {
+    var entity = new cc.ENode();
+    var animation = entity.addComponent(cc.AnimationComponent);
+
+    entity.x = 400;
+
+    var clip = new cc.AnimationClip();
+    clip._name = 'test';
+
+    animation.addClip(clip);
+    animation.defaultClip = clip;
+    animation._init();
+
+    var newClip = new cc.AnimationClip();
+    newClip._name = 'test';
+
+    animation._updateClip(newClip);
+
+    strictEqual(animation._clips.length, 1, 'animation clips length should be 1 after update clip');
+    strictEqual(animation._clips[0], newClip, 'animation clips should only include new clip');
+    strictEqual(animation.getAnimationState(newClip.name).clip, newClip, 'new animation state\'s clip should be new clip');
+});
+
 test('sampleMotionPaths', function () {
     var sampleMotionPaths = cc._Test.sampleMotionPaths;
 

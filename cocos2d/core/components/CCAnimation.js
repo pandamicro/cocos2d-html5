@@ -25,6 +25,10 @@
 var AnimationAnimator = require('../../animation/animation-animator');
 var AnimationClip = require('../../animation/animation-clip');
 
+function equalClips (clip1, clip2) {
+    return clip1 === clip2 || clip1.name === clip2.name || clip1._uuid === clip2._uuid;
+}
+
 /**
  * @class AnimationComponent
  * @extends CCComponent
@@ -315,14 +319,14 @@ var AnimationComponent = cc.Class({
         this._init();
 
         this._clips = this._clips.filter(function (item) {
-            return item !== clip;
+            return !equalClips(item, clip);
         });
 
         var state;
         for (var name in this._nameToState) {
             state = this._nameToState[name];
             var stateClip = state.clip;
-            if (stateClip === clip) {
+            if (equalClips(stateClip, clip)) {
                 this._removeStateIfNotUsed(state, force);
             }
         }
@@ -363,7 +367,7 @@ var AnimationComponent = cc.Class({
             if (clip) {
                 state = new cc.AnimationState(clip);
                 this._nameToState[state.name] = state;
-                if (this.defaultClip === clip) {
+                if (equalClips(this.defaultClip, clip)) {
                     defaultClipState = state;
                 }
             }
@@ -374,7 +378,7 @@ var AnimationComponent = cc.Class({
         }
     },
 
-    _updateClip: CC_EDITOR && function (clip, clipName) {
+    _updateClip: (CC_TEST || CC_EDITOR) && function (clip, clipName) {
         this._init();
 
         clipName = clipName || clip.name;
