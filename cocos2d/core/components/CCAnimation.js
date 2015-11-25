@@ -25,6 +25,14 @@
 var AnimationAnimator = require('../../animation/animation-animator');
 var AnimationClip = require('../../animation/animation-clip');
 
+function equalClips (clip1, clip2) {
+    if (clip1 !== clip2) {
+        return true;
+    }
+
+    return clip1 && clip2 && (clip1.name === clip2.name || clip1._uuid === clip2._uuid);
+}
+
 /**
  * @class AnimationComponent
  * @extends CCComponent
@@ -363,7 +371,7 @@ var AnimationComponent = cc.Class({
             if (clip) {
                 state = new cc.AnimationState(clip);
                 this._nameToState[state.name] = state;
-                if (this.defaultClip === clip) {
+                if (equalClips(this.defaultClip, clip)) {
                     defaultClipState = state;
                 }
             }
@@ -374,7 +382,7 @@ var AnimationComponent = cc.Class({
         }
     },
 
-    _updateClip: CC_EDITOR && function (clip, clipName) {
+    _updateClip: (CC_TEST || CC_EDITOR) && function (clip, clipName) {
         this._init();
 
         clipName = clipName || clip.name;
@@ -383,7 +391,7 @@ var AnimationComponent = cc.Class({
         for (var name in this._nameToState) {
             var state = this._nameToState[name];
             var stateClip = state.clip;
-            if (stateClip === clip || stateClip.name === clipName) {
+            if (equalClips(stateClip, clip)) {
                 if (!clip._uuid) clip._uuid = stateClip._uuid;
                 oldState = state;
                 break;
@@ -395,22 +403,20 @@ var AnimationComponent = cc.Class({
             return;
         }
 
-        var time = oldState.time;
-        var isPlaying = oldState.isPlaying;
-        var isPaused = oldState.isPaused;
+        var clips = this._clips;
+        var index = clips.indexOf(oldState.clip);
+        clips[index] = clip;
 
-        this.removeClip(oldState.clip, true);
-        this.addClip(clip);
-
-        if (isPlaying) {
-            this.play(clipName);
-
-            if (isPaused) {
-                this.pause(clipName);
-            }
+        // clip name changed
+        if (oldState.name !== clipName) {
+            delete this._nameToState[oldState.name];
+            this._nameToState[clipName] = oldState;
+            oldState._name = clipName;
         }
 
-        this.setCurrentTime(time, clipName);
+        oldState._clip = clip;
+        this._animator.reloadClip(oldState);
+
         this.sample();
     }
 });

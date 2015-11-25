@@ -64,7 +64,7 @@ p.setStateTime = function (state, time) {
     }
 }
 
-if (CC_EDITOR) {
+if (CC_EDITOR || CC_TEST) {
     p.reloadClip = function (state) {
         if (state.isPlaying) {
             initClipData(this.target, state);
