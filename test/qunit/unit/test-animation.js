@@ -459,6 +459,14 @@ test('CCAnimation._updateClip', function () {
     strictEqual(animation._clips.length, 1, 'animation clips length should be 1 after update clip');
     strictEqual(animation._clips[0], newClip, 'animation clips should only include new clip');
     strictEqual(animation.getAnimationState(newClip.name).clip, newClip, 'new animation state\'s clip should be new clip');
+
+    clip = new cc.AnimationClip();
+    clip._name = 'test2';
+    animation.addClip(clip);
+
+    animation._updateClip(newClip);
+    strictEqual(animation._clips.indexOf(newClip), 0, 'clip index should be 0');
+
 });
 
 test('sampleMotionPaths', function () {

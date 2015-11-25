@@ -26,7 +26,11 @@ var AnimationAnimator = require('../../animation/animation-animator');
 var AnimationClip = require('../../animation/animation-clip');
 
 function equalClips (clip1, clip2) {
-    return clip1 === clip2 || clip1.name === clip2.name || clip1._uuid === clip2._uuid;
+    if (clip1 !== clip2) {
+        if (clip1 === null || clip2 === null) return false;
+        return clip1.name === clip2.name || clip1._uuid === clip2._uuid;
+    }
+    return true;
 }
 
 /**
@@ -266,6 +270,10 @@ var AnimationComponent = cc.Class({
      * @return {AnimationState} - The AnimationState which gives full control over the animation clip.
      */
     addClip: function (clip, newName) {
+        this._addClip(clip, newName);
+    },
+
+    _addClip: function (clip, newName, index) {
         if (!clip) {
             cc.warn('Invalid clip to add');
             return;
@@ -274,7 +282,10 @@ var AnimationComponent = cc.Class({
 
         // add clip
         if (!cc.js.array.contains(this._clips, clip)) {
-            this._clips.push(clip);
+            if (typeof index !== 'undefined')
+                this._clips.splice(index, 0, clip);
+            else
+                this._clips.push(clip);
         }
 
         // replace same name clip
@@ -319,14 +330,14 @@ var AnimationComponent = cc.Class({
         this._init();
 
         this._clips = this._clips.filter(function (item) {
-            return !equalClips(item, clip);
+            return item !== clip;
         });
 
         var state;
         for (var name in this._nameToState) {
             state = this._nameToState[name];
             var stateClip = state.clip;
-            if (equalClips(stateClip, clip)) {
+            if (stateClip === clip) {
                 this._removeStateIfNotUsed(state, force);
             }
         }
@@ -387,7 +398,7 @@ var AnimationComponent = cc.Class({
         for (var name in this._nameToState) {
             var state = this._nameToState[name];
             var stateClip = state.clip;
-            if (stateClip === clip || stateClip.name === clipName) {
+            if (equalClips(stateClip, clip)) {
                 if (!clip._uuid) clip._uuid = stateClip._uuid;
                 oldState = state;
                 break;
@@ -402,9 +413,10 @@ var AnimationComponent = cc.Class({
         var time = oldState.time;
         var isPlaying = oldState.isPlaying;
         var isPaused = oldState.isPaused;
+        var index = this._clips.indexOf(oldState.clip);
 
         this.removeClip(oldState.clip, true);
-        this.addClip(clip);
+        this._addClip(clip, clipName, index);
 
         if (isPlaying) {
             this.play(clipName);
