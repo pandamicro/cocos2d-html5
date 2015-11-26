@@ -144,7 +144,7 @@ var enumerateObject = function (obj, parent) {
                 }
             }
         }
-        if (clone instanceof cc.ENode && CC_EDITOR) {
+        if (clone instanceof cc._BaseNode && CC_EDITOR) {
             clone._id = '';
         }
     }
@@ -216,7 +216,7 @@ function instantiateObj (obj, parent, ownerObj, ownerKey) {
         var ctor = obj.constructor;
         if (cc.Class._isCCClass(ctor)) {
             if (parent) {
-                if (obj instanceof cc.ENode) {
+                if (obj instanceof cc._BaseNode) {
                     if (!obj.isChildOf(parent)) {
                         // should not clone other nodes if not descendant
                         return obj;
