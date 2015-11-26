@@ -399,21 +399,21 @@ JS.mixin(Vec2.prototype, {
 
 /**
  * return a Vec2 object with x = 1 and y = 1
- * @property one
+ * @property ONE
  * @type Vec2
  * @static
  */
-JS.get(Vec2, 'one', function () {
+JS.get(Vec2, 'ONE', function () {
     return new Vec2(1.0, 1.0);
 });
 
 /**
  * return a Vec2 object with x = 0 and y = 0
- * @property zero
+ * @property ZERO
  * @type Vec2
  * @static
  */
-JS.get(Vec2, 'zero', function () {
+JS.get(Vec2, 'ZERO', function () {
     return new Vec2(0.0, 0.0);
 });
 
@@ -423,17 +423,17 @@ JS.get(Vec2, 'zero', function () {
  * @type Vec2
  * @static
  */
-JS.get(Vec2, 'up', function () {
+JS.get(Vec2, 'UP', function () {
     return new Vec2(0.0, 1.0);
 });
 
 /**
  * return a Vec2 object with x = 1 and y = 0
- * @property right
+ * @property RIGHT
  * @type Vec2
  * @static
  */
-JS.get(Vec2, 'right', function () {
+JS.get(Vec2, 'RIGHT', function () {
     return new Vec2(1.0, 0.0);
 });
 

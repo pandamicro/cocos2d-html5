@@ -208,9 +208,9 @@ function sampleMotionPaths (motionPaths, data, duration, fps) {
         }
 
         return {
-            in: cc.Vec2.zero,
-            pos: cc.Vec2.zero,
-            out: cc.Vec2.zero
+            in: cc.Vec2.ZERO,
+            pos: cc.Vec2.ZERO,
+            out: cc.Vec2.ZERO
         };
     }
 
