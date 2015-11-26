@@ -239,7 +239,7 @@ function initClipData (root, state) {
                 var comp = target.getComponent(compName);
 
                 if (!comp) {
-                    cc.error('Can\'t get component [' + compName + '] of target [' + target.name +']');
+                    if (!CC_EDITOR) cc.warn('Can\'t get component [' + compName + '] of target [' + target.name +']');
                     continue;
                 }
 
@@ -297,7 +297,7 @@ function initClipData (root, state) {
         var target = cc.find(namePath, root);
 
         if (!target) {
-            cc.error('Can\'t find child [' + namePath + '] of [' + root.name +']');
+            if (!CC_EDITOR) cc.warn('Can\'t find child [' + namePath + '] of [' + root.name +']');
             continue;
         }
 
