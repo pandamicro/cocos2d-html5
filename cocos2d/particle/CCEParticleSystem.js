@@ -202,11 +202,13 @@ var properties = {
             return this._autoRemoveOnFinish;
         },
         set: function (value) {
-            this._autoRemoveOnFinish = value;
-            if (CC_EDITOR && !cc.engine.isPlaying) {
-                return;
+            if (this._autoRemoveOnFinish !== value) {
+                this._autoRemoveOnFinish = value;
+                if (CC_EDITOR && !cc.engine.isPlaying) {
+                    return;
+                }
+                this._applyAutoRemove();
             }
-            this._applyAutoRemove();
         },
     },
 
@@ -601,8 +603,8 @@ var ParticleSystem = cc.Class({
     //    this._super();
     //},
     onDestroy: function () {
-        if (this._autoRemoveOnFinish && this._sgNode) {
-            this._sgNode.onExit = null; // dont call destroy again
+        if (this._autoRemoveOnFinish) {
+            this.autoRemoveOnFinish = false;    // already removed
         }
         this._super();
     },
@@ -806,14 +808,15 @@ var ParticleSystem = cc.Class({
     },
 
     _applyAutoRemove: function () {
-        var autoRemove = this._autoRemoveOnFinish;
         var sgNode = this._sgNode;
         if (sgNode) {
+            var autoRemove = this._autoRemoveOnFinish;
             sgNode.autoRemoveOnFinish = autoRemove;
             if (autoRemove) {
                 cc.assert(!sgNode.onExit);
                 var self = this;
                 sgNode.onExit = function () {
+                    cc.Node.prototype.onExit.call(this);
                     self.node.destroy();
                 };
             }

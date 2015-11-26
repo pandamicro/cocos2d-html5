@@ -645,7 +645,8 @@ if (CC_EDITOR || CC_TEST) {
 
                     case 'playOnFocus':
                         if (val) {
-                            if (props.executeInEditMode || cls.$super._executeInEditMode) {
+                            var willExecuteInEditMode = ('executeInEditMode' in props) ? props.executeInEditMode : cls._executeInEditMode;
+                            if (willExecuteInEditMode) {
                                 cls._playOnFocus = true;
                             }
                             else {
