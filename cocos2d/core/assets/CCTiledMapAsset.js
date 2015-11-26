@@ -9,12 +9,12 @@ var TiledMapAsset = cc.Class({
     extends: cc.RawAsset,
 
     statics: {
-        createNodeByUrl: function (url, callback) {
+        createNodeByInfo: function (info, callback) {
             if (CC_EDITOR) {
 
                 var Url = require('fire-url');
 
-                cc.TiledMapWrapper.preloadTmx( url , function (err, textures) {
+                cc.TiledMapWrapper.preloadTmx( info.url , function (err, textures) {
                     if (err) {
                         callback(err);
                         return;
@@ -22,15 +22,15 @@ var TiledMapAsset = cc.Class({
 
                     var node;
                     try {
-                        node = new cc.TMXTiledMap(url);
-                        node._file = url;
+                        node = new cc.TMXTiledMap(info.url);
+                        node._file = info.url;
                     }
                     catch(e) {
                         return callback(e);
                     }
 
                     var wrapper = cc.getWrapper(node);
-                    wrapper.name = Url.basenameNoExt(url);
+                    wrapper.name = Url.basenameNoExt(info.url);
                     wrapper._textures = textures;
 
                     return callback(null, node);
