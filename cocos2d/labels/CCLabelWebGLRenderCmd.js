@@ -44,6 +44,7 @@
         this._quadWebBuffer = cc._renderContext.createBuffer();
         this._shaderProgram = cc.shaderCache.programForKey(cc.SHADER_POSITION_TEXTURECOLOR);
         this._splitedStrings = null;
+        this._drawFontsize = 0;
     };
 
     var proto = cc.Label.TTFWebGLRenderCmd.prototype = Object.create(cc.Node.WebGLRenderCmd.prototype);
@@ -84,29 +85,120 @@
     };
     proto._getLineHeight = function() {
         //todo refine it
-        return this._node._fontSize * 1.5;
+        return this._drawFontsize ;
     };
+    proto._fragmentText = function fragmentText(text, maxWidth, ctx) {
+        var words = text.split(' '),
+            lines = [],
+            line = "";
+        if (ctx.measureText(text).width < maxWidth) {
+            return [text];
+        }
+        while (words.length > 0) {
+            while (ctx.measureText(words[0]).width >= maxWidth) {
+                var tmp = words[0];
+                words[0] = tmp.slice(0, -1);
+                if (words.length > 1) {
+                    words[1] = tmp.slice(-1) + words[1];
+                } else {
+                    words.push(tmp.slice(-1));
+                }
+            }
+            if (ctx.measureText(line + words[0]).width < maxWidth) {
+                line += words.shift() + " ";
+            } else {
+                lines.push(line);
+                line = "";
+            }
+            if (words.length === 0) {
+                lines.push(line);
+            }
+        }
+        return lines;
+    };
+
     proto._bakeLabel = function() {
         var node = this._node;
+        this._drawFontsize = node._fontSize;
         var ctx = this._labelContext;
+        var canvasSizeX = node._contentSize.width;
+        var canvasSizeY = node._contentSize.height;
         var paragraphedStrings = node._string.split("\n");
-        this._splitedStrings = paragraphedStrings;
         var paragraphLength = [];
-        var fontDesc = node._fontSize.toString() + "px ";
+        this._drawFontsize = node._fontSize;
+        var fontDesc = this._drawFontsize.toString() + "px ";
         var fontFamily = node._fontHandle.length === 0? "serif" : node._fontHandle;
         fontDesc = fontDesc + fontFamily;
+        this._labelContext.font = fontDesc;
         for(var i = 0; i < paragraphedStrings.length; ++i) {
             var textMetric = ctx.measureText(paragraphedStrings[i]);
             paragraphLength.push(textMetric.width);
         }
 
-        var canvasSizeX = node._contentSize.width;
-        var canvasSizeY = node._contentSize.height;
+        if(cc.Label.Overflow.CLAMP == node._overFlow) {
+            if(node._isWrapText) {
+                this._splitedStrings = [];
+                for(var i = 0; i < paragraphedStrings.length; ++i) {
+                    this._splitedStrings = this._splitedStrings.concat(this._fragmentText(paragraphedStrings[i], canvasSizeX, ctx));
+                }
+            }
+            else {
+                this._splitedStrings = paragraphedStrings;
+            }
+        }
+        else if(cc.Label.Overflow.RESIZE == node._overFlow) {
+            //todo fix it
+            if(node._isWrapText) {
+                this._splitedStrings = [];
+                for(var i = 0; i < paragraphedStrings.length; ++i) {
+                    this._splitedStrings = this._splitedStrings.concat(this._fragmentText(paragraphedStrings[i], canvasSizeX, ctx));
+                }
+                canvasSizeY = this._splitedStrings.length * this._getLineHeight();
+                node.setContentSize(cc.size(canvasSizeX,canvasSizeY));
+            }
+            else {
+                this._splitedStrings = paragraphedStrings;
+                canvasSizeY = this._splitedStrings.length * this._getLineHeight();
+                node.setContentSize(cc.size(canvasSizeX,canvasSizeY));
+            }
+        }
+        else {
+            this._splitedStrings = paragraphedStrings;
+            //shrink
+            if(node._isWrapText) {
+                var totalLength = 0;
+                for(var i = 0; i < paragraphedStrings.length; ++i) { totalLength += paragraphLength[i]; }
+                var scale = canvasSizeX * ((canvasSizeY/this._getLineHeight())|0)/totalLength;
+                this._drawFontsize = (this._drawFontsize * Math.min(scale,1) ) | 0;
+                fontDesc = this._drawFontsize.toString() + "px " + fontFamily;
+                this._labelContext.font = fontDesc;
+                //
+                this._splitedStrings = [];
+                for(var i = 0; i < paragraphedStrings.length; ++i) {
+                    this._splitedStrings = this._splitedStrings.concat(this._fragmentText(paragraphedStrings[i], canvasSizeX, ctx));
+                }
+            }
+            else {
+                var maxLength = 0;
+                var totalHeight = paragraphedStrings.length * this._getLineHeight();
+                for(var i = 0; i < paragraphedStrings.length; ++i) {
+                    if(maxLength < paragraphLength[i]) maxLength = paragraphLength[i];
+                }
+                var scaleX = canvasSizeX/maxLength;
+                var scaleY = canvasSizeY/totalHeight;
+
+                this._drawFontsize = (this._drawFontsize * Math.min(1, scaleX, scaleY)) | 0;
+                fontDesc = this._drawFontsize.toString() + "px " + fontFamily;
+                this._splitedStrings = paragraphedStrings;
+            }
+
+        }
+
         this._labelCanvas.width = canvasSizeX;
         this._labelCanvas.height = canvasSizeY;
         this._labelContext.clearRect(0,0,this._labelCanvas.width,this._labelCanvas.height);
-        this._labelContext.fillStyle = "rgb(128,128,128)";
-        this._labelContext.fillRect(0,0,this._labelCanvas.width,this._labelCanvas.height);
+        //this._labelContext.fillStyle = "rgb(128,128,128)";
+        //this._labelContext.fillRect(0,0,this._labelCanvas.width,this._labelCanvas.height);
         this._labelContext.fillStyle = "rgb(255,255,255)";
 
         var lineHeight = this._getLineHeight();
@@ -150,7 +242,7 @@
         for(var i = 0; i < this._splitedStrings.length; ++i) {
             this._labelContext.fillText(this._splitedStrings[i],labelX,firstLinelabelY + i * lineHeight);
         }
-        //this._labelContext.fillText(node._string,labelX,firstLinelabelY, canvasSizeX);
+
         this._labelTexture = new cc.Texture2D();
         this._labelTexture.initWithElement(this._labelCanvas);
         this._labelTexture.handleLoadedTexture();

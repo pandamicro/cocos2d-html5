@@ -40,6 +40,6 @@
     proto.constructor = cc.Label.TTFCanvasRenderCmd;
 
     proto.rendering = function (ctx, scaleX, scaleY) {
-        cc.log("I am ready to rendering Label in WebGL");
+        cc.log("I am ready to rendering Label in Canvas");
     };
 })();

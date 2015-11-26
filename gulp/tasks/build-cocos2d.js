@@ -107,7 +107,9 @@ var srcs = [
     "./cocos2d/labels/CCLabelBMFont.js",
     "./cocos2d/labels/CCLabelBMFontCanvasRenderCmd.js",
     "./cocos2d/labels/CCLabelBMFontWebGLRenderCmd.js",
-
+    "./cocos2d/labels/CCLabel.js",
+    "./cocos2d/labels/CCLabelWebGLRenderCmd.js",
+    "./cocos2d/labels/CCLabelCanvasRenderCmd.js",
     "./cocos2d/shape-nodes/CCDrawNode.js",
     "./cocos2d/shape-nodes/CCDrawNodeCanvasRenderCmd.js",
     "./cocos2d/shape-nodes/CCDrawNodeWebGLRenderCmd.js",

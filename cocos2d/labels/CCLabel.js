@@ -29,7 +29,7 @@ cc.Label = cc.Node.extend({
     _vAlign: 0, //0 bottom,1 center, 2 top
     _string: "",
     _fontSize: 20,
-    _overFlow: 0, //0 shrink, 1 clamp 2, resize to content
+    _overFlow: 0, //0 clamp, 1 shrink 2, resize to content
     _isWrapText: true,
     _spacingX : 0,
     _spacingY : 0,
@@ -157,4 +157,4 @@ cc.Label = cc.Node.extend({
 
 cc.Label.HorizontalAlign = {LEFT: 0, CENTER: 1, RIGHT: 2};
 cc.Label.VerticalAlign = {BOTTOM: 0, CENTER: 1, TOP: 2};
-cc.Label.Overflow = {SHRINK: 0, CLAMP: 1, RESIZE: 2};
+cc.Label.Overflow = {CLAMP: 0, SHRINK: 1, RESIZE: 2};
