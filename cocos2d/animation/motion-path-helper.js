@@ -236,6 +236,9 @@ function sampleMotionPaths (motionPaths, data, duration, fps) {
     // ensure every ratio section's length is the same
     var startRatioOffset = 0;
 
+    // from es6 Number.EPSILON
+    var EPSILON = 2.220446049250313e-16;
+
     // do not need to compute last path
     for (var i = 0, l = motionPaths.length; i < l-1; i++) {
         var motionPath = motionPaths[i];
@@ -271,7 +274,7 @@ function sampleMotionPaths (motionPaths, data, duration, fps) {
             // sample beziers
             var progresses = curve.progresses;
 
-            while ( 1 - progress > Number.EPSILON) {
+            while ( 1 - progress > EPSILON) {
                 var finalProgress = progress;
 
                 finalProgress = computeRatioByType(finalProgress, type);
@@ -290,7 +293,7 @@ function sampleMotionPaths (motionPaths, data, duration, fps) {
 
         }
         else {
-            while ( 1 - progress > Number.EPSILON) {
+            while ( 1 - progress > EPSILON) {
                 var finalProgress = progress;
 
                 finalProgress = computeRatioByType(finalProgress, type);
@@ -306,7 +309,7 @@ function sampleMotionPaths (motionPaths, data, duration, fps) {
             addNewDatas(results[j], DynamicAnimCurve.Linear, newRatio);
         }
 
-        if (Math.abs(progress - 1) > Number.EPSILON) // progress > 1
+        if (Math.abs(progress - 1) > EPSILON) // progress > 1
             startRatioOffset = (progress - 1) * betweenRatio;
         else
             startRatioOffset = 0;
