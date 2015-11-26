@@ -394,7 +394,7 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
             },
             set: function (value) {
                 if (this._sizeProvider) {
-                    this._sizeProvider.setContentSize(this.width,value);
+                    this._sizeProvider.setContentSize(this.width, value);
                 }
                 this._contentSize.height = value;
                 this._onSizeChanged();
