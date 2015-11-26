@@ -2047,10 +2047,58 @@ var labelTTFDrawModeTest = AtlasDemo.extend({
     }
 });
 
+var NewLabelTest = AtlasDemo.extend({
+    _testLabel: null,
+    _labelAlignCode: 0,
+    ctor:function () {
+        this._super();
+        var testLabel = new cc.Label("Times");
+        testLabel.setFontSize(40);
+        testLabel.setContentSize(cc.size(480,320));
+        testLabel.enableWrapText(false);
+        testLabel.setOverflow(cc.Label.Overflow.CLAMP);
+        this._testLabel = testLabel;
+        testLabel.x = 100;
+        testLabel.y = 50;
+        var sentence = "a short sentence.\n" +
+            "this is the second paragraph it could be long.\n" +
+            "中文的长句子中文的长句子中文的长句子中文的长句子中文的长句子长句子.\n" +
+            "中文的长句子中文的长句子中文的长句子中文的长句子中文的长句子长句子第四段短句";
+        testLabel.setString(sentence);
+        this.updateLabelAlign(this._labelAlignCode);
+        this.schedule(this.scheduleLabel,2);
+        this.addChild(testLabel);
+
+        //testLabel = new cc.Label();
+        //testLabel.x = 200;
+        //testLabel.y = 300;
+        //testLabel.setString("  Test   Label");
+        //this.addChild(testLabel);
+    },
+    scheduleLabel: function(dt) {
+        this._labelAlignCode++;
+        this.updateLabelAlign(this._labelAlignCode);
+    },
+    updateLabelAlign: function(value) {
+        value = value % 9;
+        var valuex = value % 3;
+        var valuey = (value / 3) | 0;
+        this._testLabel.setVerticalAlign(valuey);
+        this._testLabel.setHorizontalAlign(valuex);
+    },
+    title:function () {
+        return "NewLabelTest";
+    },
+    subtitle:function() {
+        return "TTF new label";
+    }
+});
+
 //
 // Flow control
 //
 var arrayOfLabelTest = [
+    NewLabelTest,
     LabelAtlasOpacityTest,
     LabelAtlasOpacityColorTest,
     LabelAtlasHD,
