@@ -49,7 +49,7 @@ function setMaxZOrder (node) {
  * - notifications if some properties changed
  * - define some interfaces shares between CCENode and CCEScene
  *
- * @class BaseNode
+ * @class _BaseNode
  * @extends Object
  */
 var BaseNode = cc.Class(/** @lends cc.ENode# */{
@@ -122,7 +122,11 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
                 this._parent = value || null;
                 if (oldParent) {
                     if (!(oldParent._objFlags & Destroying)) {
-                        oldParent._children.splice(oldParent._children.indexOf(this), 1);
+                        var removeAt = oldParent._children.indexOf(this);
+                        if (removeAt < 0 && CC_EDITOR) {
+                            return cc.error('Internal error, should not remove unknown node from parent.');
+                        }
+                        oldParent._children.splice(removeAt, 1);
                         this._onHierarchyChanged(oldParent);
                     }
                 }
@@ -1390,4 +1394,4 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
  */
 
 
-module.exports = BaseNode;
+cc._BaseNode = module.exports = BaseNode;

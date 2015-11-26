@@ -29,7 +29,7 @@ var NIL = function () {};
  * <p>cc.Scene and cc.Node are almost identical with the difference that users can not modify cc.Scene manually. </p>
  *
  * @class EScene
- * @extends NodeWrapper
+ * @extends _BaseNode
  */
 cc.EScene = cc.Class({
     name: 'cc.Scene',

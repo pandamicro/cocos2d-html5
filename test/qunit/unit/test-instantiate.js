@@ -142,6 +142,18 @@
         ok(sprite.sprite === clone.sprite, 'should not clone asset');
     });
 
+    test('node', function () {
+        var node = new cc.ENode();
+        var child = new cc.ENode();
+        child.parent = node;
+        cc.director.getScene().addChild(node);
+
+        var clone = cc.instantiate(node);
+
+        ok(clone.parent === null, 'root of cloned node should not have parent');
+        ok(clone.children[0].parent === clone, 'cloned child node should have parent');
+    });
+
     test('component', function () {
         var Script = cc.Class({
             name: '2154648724566',
