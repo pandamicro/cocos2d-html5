@@ -109,6 +109,9 @@ var Canvas = cc.Class({
             cc.error('CCCanvas: Node can only have one size.');
         }
 
+        this.node.position = cc.Vec2.ZERO;
+        this.node.setAnchorPoint(0, 0);
+
         if (CC_EDITOR) {
             cc.engine.on('design-resolution-changed', this._updateSize);
         }
