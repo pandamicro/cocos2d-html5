@@ -474,7 +474,7 @@ var SpriteRenderer = cc.Class({
     },
 
     _updateSpriteSize: function () {
-        if (this._useOriginalSize) {
+        if (this._useOriginalSize && this._sgNode) {
             var rect = this._sprite.getRect();
             this._sgNode.setPreferredSize(rect.size);
         }
