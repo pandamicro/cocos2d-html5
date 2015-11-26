@@ -267,7 +267,7 @@ JS.mixin(AnimationNode.prototype, {
 
         if ((wrapMode & WrapModeMask.PingPong) === WrapModeMask.PingPong) {
             var isEnd = currentIterations - (currentIterations | 0) === 0;
-            if (isEnd) {
+            if (isEnd && (currentIterations > 0)) {
                 currentIterations -= 1;
             }
 

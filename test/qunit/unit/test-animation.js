@@ -224,6 +224,69 @@ test('AnimationNode', function () {
     deepEqual(renderer.colorProp, color(255, 255, 255, 255 * 0.75), 'should not animate if stopped');
 });
 
+test('AnimationNode.getWrappedInfo', function () {
+    var info;
+    var animation = new cc.AnimationNode();
+
+    animation.duration = 2;
+    animation.wrapMode = cc.WrapMode.PingPong;
+    animation.repeatCount = Infinity;
+
+    function deepClose (actual, expected, maxDifference, message) {
+        close(actual.time, expected.time, maxDifference, message + '[time]');
+        close(actual.ratio, expected.ratio, maxDifference, message + '[ratio]');
+        close(actual.direction, expected.direction, maxDifference, message + '[direction]');
+        close(actual.stopped, expected.stopped, maxDifference, message + '[stopped]');
+        close(actual.iterations, expected.iterations, maxDifference, message + '[iterations]');
+    }
+
+    info = animation.getWrappedInfo(0);
+    deepClose(info, {
+        time: 0,
+        ratio: 0,
+        direction: 1,
+        stopped: false,
+        iterations: 0
+    }, 0.00001, 'should start at time 0');
+
+    info = animation.getWrappedInfo(2);
+    deepClose(info, {
+        time: 2,
+        ratio: 1,
+        direction: 1,
+        stopped: false,
+        iterations: 1
+    }, 0.00001, 'should at the end of first loop');
+
+    info = animation.getWrappedInfo(2.1);
+    deepClose(info, {
+        time: 1.9,
+        ratio: 0.95,
+        direction: -1,
+        stopped: false,
+        iterations: 1.05
+    }, 0.00001, 'should at 2nd loop');
+
+    info = animation.getWrappedInfo(4.0);
+    deepClose(info, {
+        time: 0,
+        ratio: 0,
+        direction: -1,
+        stopped: false,
+        iterations: 2
+    }, 0.00001, 'should at the end of second loop');
+
+    info = animation.getWrappedInfo(4.2);
+    deepClose(info, {
+        time: 0.2,
+        ratio: 0.1,
+        direction: 1,
+        stopped: false,
+        iterations: 2.1
+    }, 0.00001, 'should at 3rd loop');
+
+});
+
 test('wrapMode', function () {
     var EntityAnimator = cc._Test.EntityAnimator;
 
