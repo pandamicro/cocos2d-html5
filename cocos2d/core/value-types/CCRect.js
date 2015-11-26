@@ -182,8 +182,7 @@ Object.defineProperty(proto, 'center', {
 });
 
 /**
- * @property size
- * @type {Vec2}
+ * @property {Size} size
  */
 Object.defineProperty(proto, 'size', {
     get: function () {
