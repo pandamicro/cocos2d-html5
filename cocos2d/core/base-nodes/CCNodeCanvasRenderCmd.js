@@ -352,7 +352,7 @@ cc.Node.RenderCmd.prototype = {
 
         if (transformDirty)
             //update the transform
-            this.transform(parentCmd);
+            this.transform(parentCmd, true);
     },
 
     visitChildren: function(){
