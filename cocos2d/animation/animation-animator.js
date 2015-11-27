@@ -121,6 +121,9 @@ function initClipData (root, state) {
     if ((state.wrapMode & WrapModeMask.Loop) === WrapModeMask.Loop) {
         state.repeatCount = Infinity;
     }
+    else {
+        state.repeatCount = 1;
+    }
 
     // create curves
 
