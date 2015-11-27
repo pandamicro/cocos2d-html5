@@ -344,7 +344,8 @@ game.once(game.EVENT_RENDERER_INITED, function () {
                 tex = locTexs[url] = new Texture2D();
                 tex.url = url;
             }
-            premultiplied = (cc.path.extname(url) === ".png");
+            // premultiplied = (cc.path.extname(url) === ".png");
+            premultiplied = false;
             tex.handleLoadedTexture(premultiplied);
         };
 
