@@ -417,7 +417,8 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
                         cc.error('SpriteFrame: Failed to load sprite texture "%s", %s', url, err);
                         return;
                     }
-                    locTexture.handleLoadedTexture(cc.path.extname(url) === '.png');
+                    var premultiplied = cc.AUTO_PREMULTIPLIED_ALPHA_FOR_PNG && cc.path.extname(url) === '.png';
+                    locTexture.handleLoadedTexture(premultiplied);
                 });
                 cc.textureCache.cacheImage(url, locTexture);
                 this.setTexture(locTexture);
