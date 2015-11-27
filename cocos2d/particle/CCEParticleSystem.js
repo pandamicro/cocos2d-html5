@@ -251,10 +251,10 @@ var CustomProps = (function () {
          */
         life: 1,
         /**
-         * @property {Number} lifeVariance - Variation of life.
+         * @property {Number} lifeVar - Variation of life.
          * @default 0
          */
-        lifeVariance: 0,
+        lifeVar: 0,
 
         /**
          * @property {Color} startColor - Start color of each particle.
@@ -535,7 +535,7 @@ var ParticleSystem = cc.Class({
     extends: cc._ComponentInSG,
     editor: CC_EDITOR && {
         menu: 'ParticleSystem',
-        //inspector: 'app://editor/page/inspector/particle-system.html'
+        inspector: 'app://editor/page/inspector/particle-system/index.html',
         playOnFocus: true,
     },
 
