@@ -33,7 +33,7 @@ var DontDestroy = Flags.DontDestroy;
 /**
  * Class of all entities in Fireball scenes.
  * @class ENode
- * @extends NodeWrapper
+ * @extends _BaseNode
  */
 var Node = cc.Class({
     name: 'cc.Node',
@@ -424,11 +424,12 @@ var Node = cc.Class({
 
     _instantiate: function () {
         var clone = cc.instantiate._clone(this, this);
+        clone._parent = null;
+
         // init
         if (CC_EDITOR && cc.engine.isPlaying) {
             this._name += ' (Clone)';
         }
-
         clone._onBatchCreated();
 
         return clone;

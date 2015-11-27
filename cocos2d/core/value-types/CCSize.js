@@ -22,12 +22,12 @@ require('../platform/CCClass').fastDefine('cc.Size', Size, ['width', 'height']);
 
 /**
  * return a Size object with width = 0 and height = 0.
- * @property zero
+ * @property ZERO
  * @type {Size}
  * @default new Size(0, 0)
  * @static
  */
-JS.get(Size, 'zero', function () {
+JS.get(Size, 'ZERO', function () {
     return new Size(0.0, 0.0);
 });
 
