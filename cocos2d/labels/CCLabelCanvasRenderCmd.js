@@ -59,7 +59,10 @@
 
     proto._getLineHeight = function() {
         //todo refine it
-        return this._drawFontsize ;
+        var nodeSpacingY = this._node._spacingY;
+        if(nodeSpacingY === 0) nodeSpacingY = this._drawFontsize;
+        else { nodeSpacingY = nodeSpacingY * this._drawFontsize / this._node._fontSize;}
+        return nodeSpacingY | 0;
     };
     proto._fragmentText = function fragmentText(text, maxWidth, ctx) {
         var words = text.split(' '),
@@ -196,9 +199,9 @@
             //shrink
             if(node._isWrapText) {
                 var totalLength = 0;
-                for(var i = 0; i < paragraphedStrings.length; ++i) { totalLength += paragraphLength[i]; }
+                for(var i = 0; i < paragraphedStrings.length; ++i) { totalLength += ((paragraphLength[i]/canvasSizeX + 1) | 0) * canvasSizeX; }
                 var scale = canvasSizeX * ((canvasSizeY/this._getLineHeight())|0)/totalLength;
-                this._drawFontsize = (this._drawFontsize * Math.min(scale,1) ) | 0;
+                this._drawFontsize = (this._drawFontsize * Math.min(Math.sqrt(scale),1) ) | 0;
                 fontDesc = this._drawFontsize.toString() + "px " + fontFamily;
                 this._labelContext.font = fontDesc;
                 //
