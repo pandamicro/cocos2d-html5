@@ -381,6 +381,24 @@ var Widget = cc.Class({
                     this._originalHeight = this.node.height;
                 }
             }
+
+            if (CC_EDITOR && !cc.engine.isPlaying) {
+                // adjust the offsets to keep the size and position unchanged after alignment chagned
+                var type;
+                if (flag & TOP) {
+                    type = 'top';
+                }
+                else if (flag & LEFT) {
+                    type = 'left';
+                }
+                else if (flag & RIGHT) {
+                    type = 'right';
+                }
+                else if (flag & BOT) {
+                    type = 'bottom';
+                }
+                cc._widgetManager.updateOffsetsToStayPut(this, type);
+            }
         }
         else {
             if (isHorizontal) {
