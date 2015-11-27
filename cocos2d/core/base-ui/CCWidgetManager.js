@@ -22,28 +22,34 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+// returns a readonly size of the parent node
+function getParentSize (parent) {
+    if (parent instanceof cc.EScene) {
+        if (CC_EDITOR) {
+            return cc.engine.getDesignResolutionSize();
+        }
+        else {
+            return cc.visibleRect;
+        }
+    }
+    else {
+        return parent._contentSize;
+    }
+}
+
 function alignToParent (node, widget) {
     var parent = node._parent;
     var parentAnchor = parent._anchorPoint;
-    var parentWidth = parent._contentSize.width;
-    var parentHeight = parent._contentSize.height;
-    if (parent instanceof cc.EScene) {
-        if (CC_EDITOR) {
-            var s = cc.engine.getDesignResolutionSize();
-            parentWidth = s.width;
-            parentHeight = s.height;
-        }
-        else {
-            parentWidth = cc.visibleRect.width;
-            parentHeight = cc.visibleRect.height;
-        }
-    }
+    var parentSize = getParentSize(parent);
+    var parentWidth = parentSize.width;
+    var parentHeight = parentSize.height;
+
     var localLeft = -parentAnchor.x * parentWidth;
     var localRight = localLeft + parentWidth;
     var localBottom = -parentAnchor.y * parentHeight;
     var localTop = localBottom + parentHeight;
 
-    // adjust borders according to margins
+    // adjust borders according to offsets
 
     localLeft += widget._isAbsLeft ? widget._left : widget._left * parentWidth;
     localRight -= widget._isAbsRight ? widget._right : widget._right * parentWidth;
@@ -63,7 +69,7 @@ function alignToParent (node, widget) {
     else {
         width = node.width;
         if (widget.isAlignHorizontalCenter) {
-            var parentCenter = (0.5 - parentAnchor.x) * parentWidth;    // no margin
+            var parentCenter = (0.5 - parentAnchor.x) * parentWidth;    // no offset
             x = parentCenter + (anchorX - 0.5) * width;
         }
         else if (widget.isAlignLeft) {
@@ -83,7 +89,7 @@ function alignToParent (node, widget) {
     else {
         height = node.height;
         if (widget.isAlignVerticalCenter) {
-            var parentMiddle = (0.5 - parentAnchor.y) * parentHeight;    // no margin
+            var parentMiddle = (0.5 - parentAnchor.y) * parentHeight;    // no offset
             y = parentMiddle + (anchorY - 0.5) * height;
         }
         else if (widget.isAlignBottom) {
@@ -127,5 +133,6 @@ cc._widgetManager = {
     },
     remove: function (widget) {
         widget.node._widget = null;
-    }
+    },
+    _getParentSize: getParentSize
 };
