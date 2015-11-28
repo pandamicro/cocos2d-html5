@@ -382,7 +382,7 @@ var Widget = cc.Class({
                 }
             }
 
-            if (CC_EDITOR && !cc.engine.isPlaying) {
+            if (CC_EDITOR && !cc.engine._isPlaying) {
                 // adjust the offsets to keep the size and position unchanged after alignment chagned
                 var type;
                 if (flag & TOP) {
