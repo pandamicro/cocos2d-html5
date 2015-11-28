@@ -107,6 +107,9 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
                 return this._parent;
             },
             set: function (value) {
+                if (this._parent === value) {
+                    return;
+                }
                 var node = this._sgNode;
                 if (node._parent) {
                     node._parent.removeChild(node, false);
