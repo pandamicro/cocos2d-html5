@@ -258,8 +258,8 @@ var Button = cc.Class({
         var hitted = this._hitTest(touch.getLocation());
         if (hitted) {
             this._pressed = true;
-            this.emit(EVENT_TOUCH_DOWN);
             this._applyState(ButtonState.Pressed);
+            this.emit(EVENT_TOUCH_DOWN);
         }
 
         return hitted;
@@ -289,8 +289,8 @@ var Button = cc.Class({
         }
         else if (this._hovered) {
             this._hovered = false;
-            this.emit(EVENT_HOVER_OUT);
             this._applyState(ButtonState.Normal);
+            this.emit(EVENT_HOVER_OUT);
         }
     },
 
