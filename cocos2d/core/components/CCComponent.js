@@ -73,7 +73,7 @@ function callOnEnable (self, enable) {
 }
 
 var _callStart = CC_EDITOR ? function () {
-    var isPlaying = cc.engine.isPlaying;
+    var isPlaying = cc.engine._isPlaying;
     if (!(this._objFlags & IsOnStartCalled) && (isPlaying || this.constructor._executeInEditMode)) {
         if (this.start) {
             callStartInTryCatch(this);
@@ -89,7 +89,7 @@ var _callStart = CC_EDITOR ? function () {
     }
 };
 var _callUpdate = CC_EDITOR ? function (dt) {
-    var isPlaying = cc.engine.isPlaying;
+    var isPlaying = cc.engine._isPlaying;
     if ((isPlaying || this.constructor._executeInEditMode) && this.update) {
         try {
             this.update(dt);
@@ -102,7 +102,7 @@ var _callUpdate = CC_EDITOR ? function (dt) {
     this.update && this.update(dt);
 };
 var _callLateUpdate = CC_EDITOR ? function (dt) {
-    var isPlaying = cc.engine.isPlaying;
+    var isPlaying = cc.engine._isPlaying;
     if ((isPlaying || this.constructor._executeInEditMode) && this.lateUpdate) {
         try {
             this.lateUpdate(dt);
@@ -481,12 +481,12 @@ var Component = cc.Class({
 
     __onNodeActivated: CC_EDITOR ? function (active) {
         if (!(this._objFlags & IsOnLoadCalled) &&
-            (cc.engine.isPlaying || this.constructor._executeInEditMode)) {
+            (cc.engine._isPlaying || this.constructor._executeInEditMode)) {
             if (this.onLoad) {
                 callOnLoadInTryCatch(this);
                 this._objFlags |= IsOnLoadCalled;
 
-                if (!cc.engine.isPlaying) {
+                if (!cc.engine._isPlaying) {
                     var focused = Editor.Selection.curActivate('node') === this.node.uuid;
                     if (focused && this.onFocusInEditMode) {
                         callOnFocusInTryCatch(this);
@@ -531,7 +531,7 @@ var Component = cc.Class({
         // onDestroy
         if (CC_EDITOR) {
             Editor._AssetsWatcher.stop(this);
-            if (cc.engine.isPlaying || this.constructor._executeInEditMode) {
+            if (cc.engine._isPlaying || this.constructor._executeInEditMode) {
                 if (this.onDestroy) {
                     callOnDestroyInTryCatch(this);
                 }

@@ -107,12 +107,21 @@ var TestScript = cc.Class({
     }
 });
 
+// polyfills to test engine extends
+
 cc.engine = {
     attachedObjsForEditor: {},
     getInstanceById: function (uuid) {
         return this.attachedObjsForEditor[uuid] || null;
     },
 };
+
+Editor.log = cc.log;
+Editor.warn = cc.warn;
+Editor.error = cc.error;
+Editor.info = cc.info;
+
+//
 
 cc.EventTarget.polyfill(cc.engine);
 
