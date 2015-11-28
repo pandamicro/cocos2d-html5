@@ -1,30 +1,5 @@
 var JS = require('./js');
 
-/**
- * The base class of most of all the objects in Fireball.
- * @class CCObject
- * @constructor
- */
-function CCObject () {
-
-    /**
-     * @property _name
-     * @type string
-     * @default ""
-     * @private
-     */
-    this._name = '';
-
-    /**
-     * @property _objFlags
-     * @type number
-     * @default 0
-     * @private
-     */
-    this._objFlags = 0;
-}
-
-
 // definitions for CCObject.Flags
 
 var Destroyed = 1 << 0;
@@ -49,12 +24,38 @@ var PersistentMask = ~(ToDestroy | Dirty | Destroying | DontDestroy |
                        /*RegisteredInEditor*/);
 
 /**
+ * The base class of most of all the objects in Fireball.
+ * @class CCObject
+ * @constructor
+ */
+function CCObject () {
+    /**
+     * @property _name
+     * @type string
+     * @default ""
+     * @private
+     */
+    this._name = '';
+
+    /**
+     * @property _objFlags
+     * @type number
+     * @default 0
+     * @private
+     */
+    this._objFlags = 0;
+}
+
+/**
  * Bit mask that controls object states.
  * @class Flags
  * @static
  * @private
  */
 CCObject.Flags = {
+
+    //Destroyed: Destroyed,
+    //ToDestroy: ToDestroy,
 
     /**
      * The object will not be saved.
@@ -126,29 +127,31 @@ require('./CCClass').fastDefine('cc.Object', CCObject, ['_name', '_objFlags']);
 
 var objectsToDestroy = [];
 
-Object.defineProperty(CCObject, '_deferredDestroy', {
-    value: function () {
-        var deleteCount = objectsToDestroy.length;
-        for (var i = 0; i < deleteCount; ++i) {
-            var obj = objectsToDestroy[i];
-            if (!(obj._objFlags & Destroyed)) {
-                obj._destroyImmediate();
-            }
+function deferredDestroy () {
+    var deleteCount = objectsToDestroy.length;
+    for (var i = 0; i < deleteCount; ++i) {
+        var obj = objectsToDestroy[i];
+        if (!(obj._objFlags & Destroyed)) {
+            obj._destroyImmediate();
         }
-        // if we called b.destory() in a.onDestroy(), objectsToDestroy will be resized,
-        // but we only destroy the objects which called destory in this frame.
-        if (deleteCount === objectsToDestroy.length) {
-            objectsToDestroy.length = 0;
-        }
-        else {
-            objectsToDestroy.splice(0, deleteCount);
-        }
+    }
+    // if we called b.destory() in a.onDestroy(), objectsToDestroy will be resized,
+    // but we only destroy the objects which called destory in this frame.
+    if (deleteCount === objectsToDestroy.length) {
+        objectsToDestroy.length = 0;
+    }
+    else {
+        objectsToDestroy.splice(0, deleteCount);
+    }
 
-        if (CC_EDITOR) {
-            deferredDestroyTimer = null;
-        }
-    },
-    enumerable: false
+    if (CC_EDITOR) {
+        deferredDestroyTimer = null;
+    }
+}
+
+Object.defineProperty(CCObject, '_deferredDestroy', {
+    value: deferredDestroy,
+    // enumerable is false by default
 });
 
 if (CC_EDITOR) {
@@ -196,7 +199,7 @@ JS.get(prototype, 'isValid', function () {
 var deferredDestroyTimer = null;
 
 /**
- * Destroy this CCObject, and release all its own references to other resources.
+ * Destroy this Object, and release all its own references to other objects.
  *
  * After destroy, this CCObject is not usable any more.
  * You can use cc.isValid(obj) (or obj.isValid if obj is non-nil) to check whether the object is destroyed before
@@ -218,10 +221,36 @@ prototype.destroy = function () {
 
     if (deferredDestroyTimer === null && cc.engine && ! cc.engine._isUpdating && CC_EDITOR) {
         // auto destroy immediate in edit mode
-        deferredDestroyTimer = setImmediate(CCObject._deferredDestroy);
+        deferredDestroyTimer = setImmediate(deferredDestroy);
     }
     return true;
 };
+
+if (CC_EDITOR || CC_TEST) {
+    /**
+     * In fact, Object's "destroy" will not trigger the destruct operation in Firebal Editor.
+     * The destruct operation will be executed by Undo system later.
+     *
+     * @method realDestroyInEditor
+     */
+    prototype.realDestroyInEditor = function () {
+        if (this._objFlags & Destroyed) {
+            cc.warn('object already destroyed');
+            return false;
+        }
+        if (this._objFlags & ToDestroy) {
+            return false;
+        }
+        this._objFlags |= ToDestroy;
+        objectsToDestroy.push(this);
+
+        if (deferredDestroyTimer === null && cc.engine && ! cc.engine._isUpdating && CC_EDITOR) {
+            // auto destroy immediate in edit mode
+            deferredDestroyTimer = setImmediate(deferredDestroy);
+        }
+        return true;
+    };
+}
 
 /**
  * Clear all references in the instance.
@@ -232,21 +261,19 @@ prototype.destroy = function () {
  * @private
  */
 prototype._destruct = function () {
+    if (CC_EDITOR && !(this._objFlags & Destroyed)) {
+        return cc.error('object not yet destroyed');
+    }
     // 所有可枚举到的属性，都会被清空
     for (var key in this) {
         if (this.hasOwnProperty(key)) {
-            var type = typeof this[key];
-            switch (type) {
+            switch (typeof this[key]) {
                 case 'string':
                     this[key] = '';
                     break;
                 case 'object':
-                    this[key] = null;
-                    break;
                 case 'function':
                     this[key] = null;
-                    break;
-                default:
                     break;
             }
         }
@@ -269,8 +296,12 @@ prototype._destroyImmediate = function () {
     if (this._onPreDestroy) {
         this._onPreDestroy();
     }
-    // do destroy
-    this._destruct();
+
+    if (!CC_EDITOR || cc.engine._isPlaying) {
+        // 这里 _destruct 将由编辑器进行调用
+        this._destruct();
+    }
+
     // mark destroyed
     this._objFlags |= Destroyed;
 };
@@ -309,6 +340,23 @@ cc.isValid = function (value) {
         return typeof value !== 'undefined';
     }
 };
+
+if (CC_EDITOR || CC_TEST) {
+    Object.defineProperty(CCObject, '_willDestroy', {
+        value: function (obj) {
+            return !(value._objFlags & Destroyed) && (obj._objFlags & ToDestroy) > 0;
+        }
+    });
+    Object.defineProperty(CCObject, '_cancelDestroy', {
+        value: function (obj) {
+            obj._objFlags &= ~ToDestroy;
+            var index = objectsToDestroy.indexOf(obj);
+            if (index !== -1) {
+                objectsToDestroy.splice(index, 1);
+            }
+        }
+    });
+}
 
 cc.Object = CCObject;
 module.exports = CCObject;

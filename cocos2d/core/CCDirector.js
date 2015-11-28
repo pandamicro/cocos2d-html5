@@ -251,7 +251,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         cc.renderer.rendering(cc._renderContext);
         this._totalFrames++;
 
-        this.emit(cc.Director.EVENT_AFTER_DRAW, this);
+        this.emit(cc.Director.EVENT_AFTER_DRAW);
     },
 
     /**
@@ -263,17 +263,17 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
 
         if (!this._paused) {
             // Call start for new added components
-            this.emit(cc.Director.EVENT_BEFORE_UPDATE, this);
+            this.emit(cc.Director.EVENT_BEFORE_UPDATE);
             // Update for components
-            this.emit(cc.Director.EVENT_COMPONENT_UPDATE, this);
+            this.emit(cc.Director.EVENT_COMPONENT_UPDATE, this._deltaTime);
             // Destroy entities that have been removed recently
             CCObject._deferredDestroy();
             // Engine update with scheduler
             this.engineUpdate(this._deltaTime);
             // Late update for components
-            this.emit(cc.Director.EVENT_COMPONENT_LATE_UPDATE, this);
+            this.emit(cc.Director.EVENT_COMPONENT_LATE_UPDATE, this._deltaTime);
             // User can use this event to do things after update
-            this.emit(cc.Director.EVENT_AFTER_UPDATE, this);
+            this.emit(cc.Director.EVENT_AFTER_UPDATE);
         }
 
         /* to avoid flickr, nextScene MUST be here: after tick and before draw.
