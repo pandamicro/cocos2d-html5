@@ -28,14 +28,35 @@ var Transition = cc.Enum({
     Sprite: 2
 });
 
-var ButtonState = cc.Enum({
-    Normal: 0,
-    Pressed: 1,
-    Hover: 2,
-    Disabled: 3
+var ButtonState = {
+    Normal: 'normal',
+    Pressed: 'pressed',
+    Hover: 'hover',
+    Disabled: 'disabled'
+};
+
+var ClickEvent = cc.Class({
+    properties: {
+        target: {
+            default: null,
+            type: cc.ENode
+        },
+        component: {
+            default: ''
+        },
+        handler: {
+            default: ''
+        }
+    }
 });
 
 var WHITE = cc.Color.WHITE;
+
+var EVENT_TOUCH_DOWN = 'touch-down';
+var EVENT_TOUCH_UP = 'touch-up';
+var EVENT_HOVER_IN = 'hover-in';
+var EVENT_HOVER_MOVE = 'hover-move';
+var EVENT_HOVER_OUT = 'hover-out';
 
 var Button = cc.Class({
     name: 'cc.Button',
@@ -48,7 +69,6 @@ var Button = cc.Class({
         this._pressed = false;
         this._hovered = false;
 
-        this._stateHandlers = {};
         this._sprite = null;
 
         this._fromColor = null;
@@ -59,6 +79,7 @@ var Button = cc.Class({
 
     editor: CC_EDITOR && {
         menu: 'Button',
+        inspector: 'app://editor/page/inspector/button.html',
         executeInEditMode: true
     },
 
@@ -78,21 +99,25 @@ var Button = cc.Class({
         // color transition
         normalColor: {
             default: WHITE,
+            displayName: 'Normal',
             notify: function () {
                 this._initState();
             }
         },
 
         pressedColor: {
-            default: WHITE
+            default: WHITE,
+            displayName: 'Pressed'
         },
 
         hoverColor: {
-            default: WHITE
+            default: WHITE,
+            displayName: 'Hover'
         },
 
         disabledColor: {
             default: WHITE,
+            displayName: 'Disabled',
             notify: function () {
                 this._initState();
             }
@@ -107,6 +132,7 @@ var Button = cc.Class({
         normalSprite: {
             default: null,
             type: cc.SpriteFrame,
+            displayName: 'Normal',
             notify: function () {
                 this._initState();
             }
@@ -114,17 +140,20 @@ var Button = cc.Class({
 
         pressedSprite: {
             default: null,
-            type: cc.SpriteFrame
+            type: cc.SpriteFrame,
+            displayName: 'Pressed',
         },
 
         hoverSprite: {
             default: null,
-            type: cc.SpriteFrame
+            type: cc.SpriteFrame,
+            displayName: 'Hover',
         },
 
         disabledSprite: {
             default: null,
             type: cc.SpriteFrame,
+            displayName: 'Disabled',
             notify: function () {
                 this._initState();
             }
@@ -139,9 +168,9 @@ var Button = cc.Class({
             }
         },
 
-        eventListeners: {
+        clickEvents: {
             default: [],
-            type: cc.ENode
+            type: ClickEvent
         }
     },
 
@@ -149,8 +178,6 @@ var Button = cc.Class({
         if (!this.target) this.target = this.node;
 
         this._registerEvent();
-        this._registerStateHandler();
-
         this._applyTarget();
         this._initState();
     },
@@ -192,11 +219,21 @@ var Button = cc.Class({
         }
     },
 
-    _registerStateHandler: function () {
-        this._stateHandlers[ButtonState.Normal]     = this._onNormalState.bind(this);
-        this._stateHandlers[ButtonState.Pressed]    = this._onPressedState.bind(this);
-        this._stateHandlers[ButtonState.Hover]      = this._onHoverState.bind(this);
-        this._stateHandlers[ButtonState.Disabled]   = this._onDisabledState.bind(this);
+    _registerListeners: function () {
+        var events = this.clickEvents;
+        for (var i = 0, l = events.length; i < l; i++) {
+            var event = events[i];
+            var target = event.target;
+            if (!target) continue;
+
+            var comp = target.getComponent(event.component);
+            if (!comp) continue;
+
+            var handler = comp[event.handler];
+            if (!handler) continue;
+
+            this.on(EVENT_TOUCH_UP, handler.bind(comp));
+        }
     },
 
     _applyTarget: function () {
@@ -220,6 +257,8 @@ var Button = cc.Class({
 
         var hitted = this._hitTest(touch.getLocation());
         if (hitted) {
+            this._pressed = true;
+            this.emit(EVENT_TOUCH_DOWN);
             this._applyState(ButtonState.Pressed);
         }
 
@@ -227,7 +266,13 @@ var Button = cc.Class({
     },
 
     _onTouchEnded: function () {
-        this._applyState(ButtonState.Normal);
+        if (this._hovered)
+            this._applyState(ButtonState.Hover);
+        else
+            this._applyState(ButtonState.Normal);
+
+        this.emit(EVENT_TOUCH_UP);
+        this._pressed = false;
     },
 
     _onMouseMove: function (event) {
@@ -238,18 +283,23 @@ var Button = cc.Class({
             if (!this._hovered) {
                 this._hovered = true;
                 this._applyState(ButtonState.Hover);
+                this.emit(EVENT_HOVER_IN);
             }
+            this.emit(EVENT_HOVER_MOVE);
         }
         else if (this._hovered) {
             this._hovered = false;
+            this.emit(EVENT_HOVER_OUT);
             this._applyState(ButtonState.Normal);
         }
     },
 
     // state handler
     _applyState: function (state) {
-        var handler = this._stateHandlers[state];
-        handler();
+        var color  = this[state + 'Color'];
+        var sprite = this[state + 'Sprite'];
+
+        this._applyTransition(color, sprite);
     },
     _applyTransition: function (color, sprite) {
         var transition = this.transition;
@@ -267,26 +317,9 @@ var Button = cc.Class({
                 this._tarnsitionFinished = false;
             }
         }
-        else if (transition === Transition.Sprite && this._sprite) {
+        else if (transition === Transition.Sprite && this._sprite && sprite) {
             this._sprite.sprite = sprite;
         }
-    },
-    _onNormalState: function () {
-        this._pressed = false;
-        this._applyTransition(this.normalColor, this.normalSprite);
-    },
-
-    _onPressedState: function () {
-        this._pressed = true;
-        this._applyTransition(this.pressedColor, this.pressedSprite);
-    },
-
-    _onDisabledState: function () {
-        this._applyTransition(this.disabledColor, this.disabledSprite);
-    },
-
-    _onHoverState: function () {
-        this._applyTransition(this.hoverColor, this.hoverSprite);
     },
 
     // hit test
@@ -300,18 +333,17 @@ var Button = cc.Class({
 
         var rect = cc.rect(-anchor.x*w, -anchor.y*h, w, h);
         return cc.rectContainsPoint(rect, target.convertToNodeSpace(pos));
-    },
-
-    _emit: function (eventName) {
-        var listeners = this.eventListeners;
-        for (var i = 0, l = listeners.length; i < l; i++) {
-            var listener = listeners[i];
-            var func = listener[eventName];
-            if (func) {
-                func.call(listener);
-            }
-        }
     }
- });
 
- cc.EButton = module.exports = Button;
+});
+
+Button.EVENT_TOUCH_DOWN = EVENT_TOUCH_DOWN;
+Button.EVENT_TOUCH_UP = EVENT_TOUCH_UP;
+Button.EVENT_HOVER_IN = EVENT_HOVER_IN;
+Button.EVENT_HOVER_MOVE = EVENT_HOVER_MOVE;
+Button.EVENT_HOVER_OUT = EVENT_HOVER_OUT;
+
+var EventTarget = require("../event/event-target");
+EventTarget.polyfill(Button.prototype);
+
+cc.EButton = module.exports = Button;
