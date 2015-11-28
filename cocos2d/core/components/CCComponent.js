@@ -46,12 +46,14 @@ function callOnEnable (self, enable) {
                 else {
                     self.onEnable();
                 }
-                if (!(self._objFlags & IsOnStartCalled) && self.start) {
-                    cc.director.once(cc.Director.EVENT_BEFORE_UPDATE, _callStart, self);
-                }
-                self.update && cc.director.on(cc.Director.EVENT_COMPONENT_UPDATE, _callUpdate, self);
-                self.lateUpdate && cc.director.on(cc.Director.EVENT_COMPONENT_LATE_UPDATE, _callLateUpdate, self);
             }
+
+            if (!(self._objFlags & IsOnStartCalled) && self.start) {
+                cc.director.once(cc.Director.EVENT_BEFORE_UPDATE, _callStart, self);
+            }
+            self.update && cc.director.on(cc.Director.EVENT_COMPONENT_UPDATE, _callUpdate, self);
+            self.lateUpdate && cc.director.on(cc.Director.EVENT_COMPONENT_LATE_UPDATE, _callLateUpdate, self);
+
             self._objFlags |= IsOnEnableCalled;
         }
     }
@@ -64,9 +66,11 @@ function callOnEnable (self, enable) {
                 else {
                     self.onDisable();
                 }
-                self.update && cc.director.off(cc.Director.EVENT_COMPONENT_UPDATE, _callUpdate, self);
-                self.lateUpdate && cc.director.off(cc.Director.EVENT_COMPONENT_LATE_UPDATE, _callLateUpdate, self);
             }
+
+            self.update && cc.director.off(cc.Director.EVENT_COMPONENT_UPDATE, _callUpdate, self);
+            self.lateUpdate && cc.director.off(cc.Director.EVENT_COMPONENT_LATE_UPDATE, _callLateUpdate, self);
+
             self._objFlags &= ~IsOnEnableCalled;
         }
     }
@@ -292,7 +296,7 @@ var Component = cc.Class({
         },
 
         /**
-         * Register all related EventTargets, 
+         * Register all related EventTargets,
          * all event callbacks will be removed in _onPreDestroy
          * @property __eventTargets
          * @type {Array}
