@@ -27,8 +27,8 @@
 var EventTarget = require("../cocos2d/core/event/event-target");
 
 cc.Label = cc.Node.extend({
-    _hAlign: 0, //0 left, 1 center, 2 right
-    _vAlign: 0, //0 bottom,1 center, 2 top
+    _hAlign: cc.TextAlignment.LEFT,
+    _vAlign: cc.VerticalTextAlignment.BOTTOM,
     _string: "",
     _fontSize: 20,
     _overFlow: 0, //0 clamp, 1 shrink 2, resize to content
@@ -156,16 +156,6 @@ cc.Label = cc.Node.extend({
     }
 });
 
-cc.Label.HorizontalAlign = {
-    LEFT: 0,
-    CENTER: 1,
-    RIGHT: 2
-};
-cc.Label.VerticalAlign = {
-    BOTTOM: 0,
-    CENTER: 1,
-    TOP: 2
-};
 cc.Label.Overflow = {
     CLAMP: 0,
     SHRINK: 1,

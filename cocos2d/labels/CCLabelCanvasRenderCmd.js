@@ -238,11 +238,11 @@
         var hAlign; var vAlign;
         //apply align
         {
-            if(cc.Label.HorizontalAlign.RIGHT === node._hAlign) {
+            if(cc.TextAlignment.RIGHT === node._hAlign) {
                 hAlign = "right";
                 labelX = canvasSizeX;
             }
-            else if(cc.Label.HorizontalAlign.CENTER === node._hAlign) {
+            else if(cc.TextAlignment.CENTER === node._hAlign) {
                 hAlign = "center";
                 labelX = canvasSizeX/2;
             }
@@ -252,11 +252,11 @@
             }
 
             this._labelContext.textAlign = hAlign;
-            if(cc.Label.VerticalAlign.TOP === node._vAlign) {
+            if(cc.VerticalTextAlignment.TOP === node._vAlign) {
                 vAlign = "top";
                 firstLinelabelY = 0;
             }
-            else if(cc.Label.VerticalAlign.CENTER === node._vAlign) {
+            else if(cc.VerticalTextAlignment.CENTER === node._vAlign) {
                 vAlign = "middle";
                 firstLinelabelY = canvasSizeY/2 - lineHeight * (lineCount -1 ) / 2;
             }
