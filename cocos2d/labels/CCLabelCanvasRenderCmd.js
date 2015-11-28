@@ -29,33 +29,11 @@
  http://slick.cokeandcode.com/demos/hiero.jnlp (Free, Java)
  http://www.angelcode.com/products/bmfont/ (Free, Windows only)
  ****************************************************************************/
+(function() {
+    cc.Label.TTFLabelBaker = function() {
 
-(function(){
-    cc.Label.TTFCanvasRenderCmd = function(renderableObject){
-        cc.Node.CanvasRenderCmd.call(this, renderableObject);
-        this._needDraw = true;
-        this._labelTexture = new cc.Texture2D();
-        this._labelCanvas = document.createElement("canvas");
-        this._labelCanvas.width = 1;
-        this._labelCanvas.height = 1;
-        this._labelContext = this._labelCanvas.getContext("2d");
-        this._quad = new cc.V3F_C4B_T2F_Quad();
-        this._quadDirty = true;
-        this._splitedStrings = null;
-        this._drawFontsize = 0;
     };
-
-    var proto = cc.Label.TTFCanvasRenderCmd.prototype = Object.create(cc.Node.CanvasRenderCmd.prototype);
-    proto.constructor = cc.Label.TTFCanvasRenderCmd;
-
-    proto._rebuildLabelSkin = function() {
-        if(this._node._labelSkinDirty) {
-            this._bakeLabel();
-            this._prepareQuad();
-            this._node._labelSkinDirty = false;
-        }
-    };
-
+    var proto = cc.Label.TTFLabelBaker.prototype = Object.create(Object.prototype);
     proto._getLineHeight = function() {
         //todo refine it
         var nodeSpacingY = this._node._spacingY;
@@ -63,6 +41,31 @@
         else { nodeSpacingY = nodeSpacingY * this._drawFontsize / this._node._fontSize;}
         return nodeSpacingY | 0;
     };
+
+    proto._prepareQuad = function() {
+        var quad = this._quad;
+        var white = cc.color(255,255,255,255);
+        var width = this._node._contentSize.width;
+        var height = this._node._contentSize.height;
+        quad._bl.colors = white;
+        quad._br.colors = white;
+        quad._tl.colors = white;
+        quad._tr.colors = white;
+
+        quad._bl.vertices = new cc.Vertex3F(0,0,0);
+        quad._br.vertices = new cc.Vertex3F(width,0,0);
+        quad._tl.vertices = new cc.Vertex3F(0,height,0);
+        quad._tr.vertices = new cc.Vertex3F(width,height,0);
+
+        //texture coordinate should be y-flipped
+        quad._bl.texCoords = new cc.Tex2F(0,1);
+        quad._br.texCoords = new cc.Tex2F(1,1);
+        quad._tl.texCoords = new cc.Tex2F(0,0);
+        quad._tr.texCoords = new cc.Tex2F(1,0);
+
+        this._quadDirty = true;
+    };
+
     proto._fragmentText = function fragmentText(text, maxWidth, ctx) {
         var words = text.split(' '),
             lines = [],
@@ -91,61 +94,6 @@
             }
         }
         return lines;
-    };
-
-    proto.rendering = function (ctx, scaleX, scaleY) {
-        this._rebuildLabelSkin();
-        var node = this._node;
-        var locDisplayOpacity = this._displayedOpacity;
-        var alpha =  locDisplayOpacity/ 255;
-        //var locTexture = this._labelTexture;
-        if (locDisplayOpacity === 0)
-            return;
-
-        var wrapper = ctx || cc._renderContext, context = wrapper.getContext();
-        wrapper.setTransform(this._worldTransform, scaleX, scaleY);
-        //wrapper.setCompositeOperation(node._blendFunc);
-        wrapper.setGlobalAlpha(alpha);
-
-        if(this._labelTexture) {
-
-            var quad = this._quad;
-            {
-                var sx,sy,sw,sh;
-                var x, y, w,h;
-
-                x = quad._bl.vertices.x;
-                y = quad._bl.vertices.y;
-                w = quad._tr.vertices.x - quad._bl.vertices.x;
-                h = quad._tr.vertices.y - quad._bl.vertices.y;
-                y = - y - h;
-
-                var textureWidth = this._labelTexture.getPixelWidth();
-                var textureHeight = this._labelTexture.getPixelHeight();
-
-                sx = quad._bl.texCoords.u * textureWidth;
-                sy = quad._bl.texCoords.v * textureHeight;
-                sw = (quad._tr.texCoords.u - quad._bl.texCoords.u) * textureWidth;
-                sh = (quad._tr.texCoords.v - quad._bl.texCoords.v) * textureHeight;
-
-                x = x * scaleX;
-                y = y * scaleY;
-                w = w * scaleX;
-                h = h * scaleY;
-
-                var image = this._labelTexture._htmlElementObj;
-                if (this._labelTexture._pattern !== "") {
-                    wrapper.setFillStyle(context.createPattern(image, this._labelTexture._pattern));
-                    context.fillRect(x, y, w, h);
-                } else {
-                    context.drawImage(image,
-                        sx, sy, sw, sh,
-                        x, y, w, h);
-                }
-            }
-
-        }
-        cc.g_NumberOfDraws = cc.g_NumberOfDraws + 1;
     };
 
     proto._bakeLabel = function() {
@@ -278,27 +226,88 @@
         this._labelTexture.handleLoadedTexture();
     };
 
-    proto._prepareQuad = function() {
-        var quad = this._quad;
-        var white = cc.color(255,255,255,255);
-        var width = this._node._contentSize.width;
-        var height = this._node._contentSize.height;
-        quad._bl.colors = white;
-        quad._br.colors = white;
-        quad._tl.colors = white;
-        quad._tr.colors = white;
-
-        quad._bl.vertices = new cc.Vertex3F(0,0,0);
-        quad._br.vertices = new cc.Vertex3F(width,0,0);
-        quad._tl.vertices = new cc.Vertex3F(0,height,0);
-        quad._tr.vertices = new cc.Vertex3F(width,height,0);
-
-        //texture coordinate should be y-flipped
-        quad._bl.texCoords = new cc.Tex2F(0,1);
-        quad._br.texCoords = new cc.Tex2F(1,1);
-        quad._tl.texCoords = new cc.Tex2F(0,0);
-        quad._tr.texCoords = new cc.Tex2F(1,0);
-
-        this._quadDirty = true;
+    proto._rebuildLabelSkin = function() {
+        if(this._node._labelSkinDirty) {
+            this._bakeLabel();
+            this._prepareQuad();
+            this._node._labelSkinDirty = false;
+        }
     };
+})();
+
+(function(){
+    cc.Label.TTFCanvasRenderCmd = function(renderableObject){
+        cc.Node.CanvasRenderCmd.call(this, renderableObject);
+        this._needDraw = true;
+        this._labelTexture = new cc.Texture2D();
+        this._labelCanvas = document.createElement("canvas");
+        this._labelCanvas.width = 1;
+        this._labelCanvas.height = 1;
+        this._labelContext = this._labelCanvas.getContext("2d");
+        this._quad = new cc.V3F_C4B_T2F_Quad();
+        this._quadDirty = true;
+        this._splitedStrings = null;
+        this._drawFontsize = 0;
+    };
+
+    var proto = cc.Label.TTFCanvasRenderCmd.prototype = Object.create(cc.Node.CanvasRenderCmd.prototype);
+    cc.js.mixin(proto, cc.Label.TTFLabelBaker.prototype);
+
+    proto.constructor = cc.Label.TTFCanvasRenderCmd;
+
+    proto.rendering = function (ctx, scaleX, scaleY) {
+        this._rebuildLabelSkin();
+        var node = this._node;
+        var locDisplayOpacity = this._displayedOpacity;
+        var alpha =  locDisplayOpacity/ 255;
+        //var locTexture = this._labelTexture;
+        if (locDisplayOpacity === 0)
+            return;
+
+        var wrapper = ctx || cc._renderContext, context = wrapper.getContext();
+        wrapper.setTransform(this._worldTransform, scaleX, scaleY);
+        //wrapper.setCompositeOperation(node._blendFunc);
+        wrapper.setGlobalAlpha(alpha);
+
+        if(this._labelTexture) {
+
+            var quad = this._quad;
+            {
+                var sx,sy,sw,sh;
+                var x, y, w,h;
+
+                x = quad._bl.vertices.x;
+                y = quad._bl.vertices.y;
+                w = quad._tr.vertices.x - quad._bl.vertices.x;
+                h = quad._tr.vertices.y - quad._bl.vertices.y;
+                y = - y - h;
+
+                var textureWidth = this._labelTexture.getPixelWidth();
+                var textureHeight = this._labelTexture.getPixelHeight();
+
+                sx = quad._bl.texCoords.u * textureWidth;
+                sy = quad._bl.texCoords.v * textureHeight;
+                sw = (quad._tr.texCoords.u - quad._bl.texCoords.u) * textureWidth;
+                sh = (quad._tr.texCoords.v - quad._bl.texCoords.v) * textureHeight;
+
+                x = x * scaleX;
+                y = y * scaleY;
+                w = w * scaleX;
+                h = h * scaleY;
+
+                var image = this._labelTexture._htmlElementObj;
+                if (this._labelTexture._pattern !== "") {
+                    wrapper.setFillStyle(context.createPattern(image, this._labelTexture._pattern));
+                    context.fillRect(x, y, w, h);
+                } else {
+                    context.drawImage(image,
+                        sx, sy, sw, sh,
+                        x, y, w, h);
+                }
+            }
+
+        }
+        cc.g_NumberOfDraws = cc.g_NumberOfDraws + 1;
+    };
+
 })();
