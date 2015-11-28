@@ -1,3 +1,5 @@
+var EPSILON = 1e-6;
+
 //
 // Searches the entire sorted Array for an element and returns the zero-based index of the element.
 // @method binarySearch
@@ -9,7 +11,8 @@ function binarySearch (array, value) {
     var l = 0, h = array.length - 1;
     while (l <= h) {
         var m = ((l + h) >> 1);
-        if (array[m] === value) {
+
+        if (Math.abs(array[m] - value) < EPSILON) {
             return m;
         }
         if (array[m] > value) {
