@@ -251,7 +251,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
         cc.renderer.rendering(cc._renderContext);
         this._totalFrames++;
 
-        this.emit(cc.Director.EVENT_AFTER_DRAW, this);
+        this.emit(cc.Director.EVENT_AFTER_DRAW);
     },
 
     /**
@@ -263,7 +263,7 @@ cc.Director = Class.extend(/** @lends cc.Director# */{
 
         if (!this._paused) {
             // Call start for new added components
-            this.emit(cc.Director.EVENT_BEFORE_UPDATE, this);
+            this.emit(cc.Director.EVENT_BEFORE_UPDATE);
             // Update for components
             this.emit(cc.Director.EVENT_COMPONENT_UPDATE, this._deltaTime);
             // Destroy entities that have been removed recently
