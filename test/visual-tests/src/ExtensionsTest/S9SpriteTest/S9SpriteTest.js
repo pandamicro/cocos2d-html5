@@ -278,6 +278,46 @@ var S9Actiontest = S9SpriteTestDemo.extend({
     }
 });
 
+//S9Actiontest
+var S9ChangeFiletest = S9SpriteTestDemo.extend({
+
+    _title:"Scale9 Change File test",
+    _subtitle:"",
+    _s9sprite1: null,
+    ctor:function() {
+        this._super();
+
+        var x = winSize.width ;
+        var y = 0 + (winSize.height / 2);
+
+        _s9sprite1 = cc.Scale9Sprite.create(cc.rect(20,20,30,30),"Images/blocks9.png");
+        _s9sprite1.setPreferredSize(cc.size(150,150));
+        _s9sprite1.x = x/4; _s9sprite1.y = y;
+
+        this.addChild(_s9sprite1);
+        var actionArray = [];
+        actionArray.push(cc.DelayTime.create(1));
+        actionArray.push(cc.CallFunc.create(this.changeFile1,this));
+        actionArray.push(cc.DelayTime.create(2));
+        actionArray.push(cc.CallFunc.create(this.changeFile2,this));
+        _s9sprite1.runAction(cc.Sequence.create(actionArray));
+    },
+    changeFile1: function() {
+        this.changeFile("Images/btn-highscores-normal.png");
+    },
+    changeFile2: function() {
+        this.changeFile("Images/blocks9.png");
+    },
+    changeFile: function(file) {
+        console.log("I'am going to change a new file");
+        _s9sprite1.initWithFile(file);
+        _s9sprite1.setInsetTop(10);
+        _s9sprite1.setInsetBottom(10);
+        _s9sprite1.setInsetLeft(10);
+        _s9sprite1.setInsetRight(10);
+    }
+});
+
 //S9ChangePreferredSizeTest
 var S9ChangePreferredSizeTest = S9SpriteTestDemo.extend({
 
@@ -917,6 +957,7 @@ var arrayOfS9SpriteTest = [
     S9ChangePreferredSizeTest,
     S9ChangeCapInsetsTest,
     S9ChangeColorOpacityTest,
+    S9ChangeFiletest,
     //old ones
     //S9BatchNodeBasic,
     //S9FrameNameSpriteSheet,
