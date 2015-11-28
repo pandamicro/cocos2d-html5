@@ -113,10 +113,11 @@ cc.Label = cc.Node.extend({
     setSpacingX: function(spacing) {
         if (this._spacingX === spacing) return;
         this._spacingX = spacing;
-        this._notifyLabelSkinDirty();
+        if(this._labelIsTTF === false)
+            this._notifyLabelSkinDirty();
     },
 
-    setSpacingY: function(spacing) {
+    setLineHeight: function(spacing) {
         if (this._spacingY === spacing) return;
         this._spacingY = spacing;
         this._notifyLabelSkinDirty();
@@ -126,7 +127,7 @@ cc.Label = cc.Node.extend({
         return this._spacingX;
     },
 
-    getSpacingY: function() {
+    getLineHeight: function() {
         return this._spacingY;
     },
 

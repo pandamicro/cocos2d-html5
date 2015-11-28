@@ -34,7 +34,7 @@
     cc.Label.TTFWebGLRenderCmd = function(renderableObject){
         cc.Node.WebGLRenderCmd.call(this, renderableObject);
         this._needDraw = true;
-        this._labelTexture = null;
+        this._labelTexture = new cc.Texture2D();
         this._labelCanvas = document.createElement("canvas");
         this._labelCanvas.width = 1;
         this._labelCanvas.height = 1;
@@ -77,11 +77,6 @@
         gl.vertexAttribPointer(1, 4, gl.UNSIGNED_BYTE, true, 24, 12);           //cc.VERTEX_ATTRIB_COLOR
         gl.vertexAttribPointer(2, 2, gl.FLOAT, false, 24, 16);                  //cc.VERTEX_ATTRIB_TEX_COORDS
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    };
-    proto._splitString = function() {
-        var node = this._node;
-        //splite string by \n;
-
     };
     proto._getLineHeight = function() {
         //todo refine it
@@ -246,7 +241,6 @@
             this._labelContext.fillText(this._splitedStrings[i],labelX,firstLinelabelY + i * lineHeight);
         }
 
-        this._labelTexture = new cc.Texture2D();
         this._labelTexture.initWithElement(this._labelCanvas);
         this._labelTexture.handleLoadedTexture();
     };

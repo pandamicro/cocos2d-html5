@@ -34,7 +34,7 @@
     cc.Label.TTFCanvasRenderCmd = function(renderableObject){
         cc.Node.CanvasRenderCmd.call(this, renderableObject);
         this._needDraw = true;
-        this._labelTexture = null;
+        this._labelTexture = new cc.Texture2D();
         this._labelCanvas = document.createElement("canvas");
         this._labelCanvas.width = 1;
         this._labelCanvas.height = 1;
@@ -53,7 +53,6 @@
             this._bakeLabel();
             this._prepareQuad();
             this._node._labelSkinDirty = false;
-            cc.log("I am rebuild the skin of label");
         }
     };
 
@@ -275,7 +274,6 @@
             this._labelContext.fillText(this._splitedStrings[i],labelX,firstLinelabelY + i * lineHeight);
         }
 
-        this._labelTexture = new cc.Texture2D();
         this._labelTexture.initWithElement(this._labelCanvas);
         this._labelTexture.handleLoadedTexture();
     };
