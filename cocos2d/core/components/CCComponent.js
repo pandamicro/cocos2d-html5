@@ -92,31 +92,31 @@ var _callStart = CC_EDITOR ? function () {
         this._objFlags |= IsOnStartCalled;
     }
 };
-var _callUpdate = CC_EDITOR ? function (dt) {
+var _callUpdate = CC_EDITOR ? function (event) {
     var isPlaying = cc.engine.isPlaying;
     if ((isPlaying || this.constructor._executeInEditMode) && this.update) {
         try {
-            this.update(dt);
+            this.update(event.detail);
         }
         catch (e) {
             cc._throw(e);
         }
     }
-} : function (dt) {
-    this.update && this.update(dt);
+} : function (event) {
+    this.update && this.update(event.detail);
 };
-var _callLateUpdate = CC_EDITOR ? function (dt) {
+var _callLateUpdate = CC_EDITOR ? function (event) {
     var isPlaying = cc.engine.isPlaying;
     if ((isPlaying || this.constructor._executeInEditMode) && this.lateUpdate) {
         try {
-            this.lateUpdate(dt);
+            this.lateUpdate(event.detail);
         }
         catch (e) {
             cc._throw(e);
         }
     }
-} : function (dt) {
-    this.lateUpdate && this.lateUpdate(dt);
+} : function (event) {
+    this.lateUpdate && this.lateUpdate(event.detail);
 };
 
 //var createInvoker = function (timerFunc, timerWithKeyFunc, errorInfo) {
