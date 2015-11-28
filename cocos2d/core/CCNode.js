@@ -427,7 +427,7 @@ var Node = cc.Class({
         clone._parent = null;
 
         // init
-        if (CC_EDITOR && cc.engine.isPlaying) {
+        if (CC_EDITOR && cc.engine._isPlaying) {
             this._name += ' (Clone)';
         }
         clone._onBatchCreated();

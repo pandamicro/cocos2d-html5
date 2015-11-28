@@ -45,7 +45,7 @@ test('deferred destroy', function () {
 
     obj._onPreDestroy = function () {
         ok(false, 'should not callback');
-    }
+    };
 
     obj.destroy();
 
@@ -56,7 +56,7 @@ test('deferred destroy', function () {
 
     obj._onPreDestroy = function () {
         ok(true, 'should callback');
-    }
+    };
 
     CCObject._deferredDestroy();
 
@@ -65,7 +65,7 @@ test('deferred destroy', function () {
 
     obj._onPreDestroy = function () {
         ok(false, 'should not callback anymore');
-    }
+    };
 
     // frame 2
 
@@ -91,7 +91,7 @@ test('multiply deferred destroy', function () {
 
     obj2._onPreDestroy = function () {
         ok(true, 'should callback');
-    }
+    };
 
     CCObject._deferredDestroy();
 
@@ -107,21 +107,21 @@ test('destroy other at destroy callback', 3, function () {
 
     obj2._onPreDestroy = function () {
         ok(false, 'other should not destroyed this frame');
-    }
+    };
 
     obj1._onPreDestroy = function () {
         obj2.destroy();
         strictEqual(obj2.isValid, true, 'other is valid until the end of next frame');
-    }
+    };
 
     CCObject._deferredDestroy();
 
     obj1._onPreDestroy = function () {
         ok(false, 'should not destroyed again');
-    }
+    };
     obj2._onPreDestroy = function () {
         ok(true, "should called other's destroy callback at the end of next frame");
-    }
+    };
 
     CCObject._deferredDestroy();
 
