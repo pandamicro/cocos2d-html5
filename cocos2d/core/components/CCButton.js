@@ -22,20 +22,29 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+/**
+ * Enum for transition type
+ * @enum Transition
+ */
 var Transition = cc.Enum({
+    /**
+     * @property {Number} None
+     */
     None: 0,
+
+    /**
+     * @property {Number} Color
+     */
     Color: 1,
+
+    /**
+     * @property {Number} Sprite
+     */
     Sprite: 2
 });
 
-var ButtonState = {
-    Normal: 'normal',
-    Pressed: 'pressed',
-    Hover: 'hover',
-    Disabled: 'disabled'
-};
-
 var ClickEvent = cc.Class({
+    name: 'cc.ClickEvent',
     properties: {
         target: {
             default: null,
@@ -52,12 +61,36 @@ var ClickEvent = cc.Class({
 
 var WHITE = cc.Color.WHITE;
 
+var ButtonState = {
+    Normal: 'normal',
+    Pressed: 'pressed',
+    Hover: 'hover',
+    Disabled: 'disabled'
+};
+
 var EVENT_TOUCH_DOWN = 'touch-down';
 var EVENT_TOUCH_UP = 'touch-up';
 var EVENT_HOVER_IN = 'hover-in';
 var EVENT_HOVER_MOVE = 'hover-move';
 var EVENT_HOVER_OUT = 'hover-out';
 
+/**
+ * Button has 3 Transition types
+ * When Button state changed:
+ *  If Transition type is EButton.Transition.None, Button will do nothing
+ *  If Transition type is EButton.Transition.Color, Button will change target's color
+ *  If Transition type is EButton.Transition.Color, Button will change target SpriteRenderer's sprite
+ *
+ * Button will trigger 5 events:
+ *  EButton.EVENT_TOUCH_DOWN
+ *  EButton.EVENT_TOUCH_UP
+ *  EButton.EVENT_HOVER_IN
+ *  EButton.EVENT_HOVER_MOVE
+ *  EButton.EVENT_HOVER_OUT
+ *
+ * @class EButton
+ * @extends Component
+ */
 var Button = cc.Class({
     name: 'cc.Button',
     extends: require('./CCComponent'),
@@ -79,11 +112,17 @@ var Button = cc.Class({
 
     editor: CC_EDITOR && {
         menu: 'Button',
-        inspector: 'app://editor/page/inspector/button.html',
+        inspector: 'app://editor/page/inspector/button/button.html',
         executeInEditMode: true
     },
 
     properties: {
+        /**
+         * Whether the Button is disabled.
+         * If true, the Button will trigger event and do transition.
+         * @property {Boolean} interactable
+         * @default true
+         */
         interactable: {
             default: true,
             notify: function () {
@@ -91,12 +130,22 @@ var Button = cc.Class({
             }
         },
 
+        /**
+         * Transition type
+         * @property {EButton.Transition} transition
+         * @default EButton.Transition.Node
+         */
         transition: {
             default: Transition.None,
             type: Transition
         },
 
         // color transition
+
+        /**
+         * Normal state color
+         * @property {cc.Color} normalColor
+         */
         normalColor: {
             default: WHITE,
             displayName: 'Normal',
@@ -105,16 +154,28 @@ var Button = cc.Class({
             }
         },
 
+        /**
+         * Pressed state color
+         * @property {cc.Color} pressedColor
+         */
         pressedColor: {
             default: WHITE,
             displayName: 'Pressed'
         },
 
+        /**
+         * Hover state color
+         * @property {cc.Color} hoverColor
+         */
         hoverColor: {
             default: WHITE,
             displayName: 'Hover'
         },
 
+        /**
+         * Disabled state color
+         * @property {cc.Color} disabledColor
+         */
         disabledColor: {
             default: WHITE,
             displayName: 'Disabled',
@@ -123,12 +184,20 @@ var Button = cc.Class({
             }
         },
 
+        /**
+         * Color transition duration
+         * @property {float} duration
+         */
         duration: {
             default: 0.1,
             range: [0, Number.MAX_VALUE]
         },
 
         // sprite transition
+        /**
+         * Normal state sprite
+         * @property {cc.SpriteFrame} normalSprite
+         */
         normalSprite: {
             default: null,
             type: cc.SpriteFrame,
@@ -138,18 +207,30 @@ var Button = cc.Class({
             }
         },
 
+        /**
+         * Pressed state sprite
+         * @property {cc.SpriteFrame} pressedSprite
+         */
         pressedSprite: {
             default: null,
             type: cc.SpriteFrame,
             displayName: 'Pressed',
         },
 
+        /**
+         * Hover state sprite
+         * @property {cc.SpriteFrame} hoverSprite
+         */
         hoverSprite: {
             default: null,
             type: cc.SpriteFrame,
             displayName: 'Hover',
         },
 
+        /**
+         * Disabled state sprite
+         * @property {cc.SpriteFrame} disabledSprite
+         */
         disabledSprite: {
             default: null,
             type: cc.SpriteFrame,
@@ -159,6 +240,14 @@ var Button = cc.Class({
             }
         },
 
+        /**
+         * Transition target.
+         * When Button state changed:
+         *  If Transition type is EButton.Transition.None, Button will do nothing
+         *  If Transition type is EButton.Transition.Color, Button will change target's color
+         *  If Transition type is EButton.Transition.Color, Button will change target SpriteRenderer's sprite
+         * @property {cc.ENode} target
+         */
         target: {
             default: null,
             type: cc.ENode,
@@ -168,6 +257,10 @@ var Button = cc.Class({
             }
         },
 
+        /**
+         * If Button is clicked, will trigger event's handler
+         * @property {[EButton.ClickEvent]} clickEvents
+         */
         clickEvents: {
             default: [],
             type: ClickEvent
@@ -342,6 +435,9 @@ Button.EVENT_TOUCH_UP = EVENT_TOUCH_UP;
 Button.EVENT_HOVER_IN = EVENT_HOVER_IN;
 Button.EVENT_HOVER_MOVE = EVENT_HOVER_MOVE;
 Button.EVENT_HOVER_OUT = EVENT_HOVER_OUT;
+
+Button.Transition = Transition;
+Button.ClickEvent = ClickEvent;
 
 var EventTarget = require("../event/event-target");
 EventTarget.polyfill(Button.prototype);
