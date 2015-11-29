@@ -121,6 +121,9 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
         this._textureFilename = '';
         this._textureLoaded = false;
 
+        // The current parsing uuid for editor
+        this._loadingUuid = '';
+
         if(filename !== undefined && rect !== undefined ){
             if(rotated === undefined || offset === undefined || originalSize === undefined)
                 this.initWithTexture(filename, rect);
@@ -409,6 +412,7 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
                 }
 
                 this._textureFilename = url;
+                this._loadingUuid = '';
 
                 var locTexture = new cc.Texture2D();
                 locTexture.url = url;
@@ -435,6 +439,7 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
             if (cc.js.isString(texture)){
                 this._texture = null;
                 this._textureFilename = texture;
+                this._loadingUuid = '';
             } else if (texture instanceof cc.Texture2D) {
                 this.setTexture(texture);
             }
@@ -474,6 +479,9 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
             if (url) {
                 uuid = Editor.urlToUuid(url);
             }
+            else {
+                uuid = this._loadingUuid;
+            }
             var capInsets = undefined;
             if (this.insetLeft !== 0 ||
                 this.insetTop !== 0 ||
@@ -512,6 +520,7 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
             this.insetBottom = capInsets[3];
         }
         var uuid = data.texture;
+        this._loadingUuid = uuid;
         this.initWithTexture(null, rectInP, rotated, offsetInP, sizeInP, uuid);
     },
 });

@@ -224,8 +224,8 @@ var Component = cc.Class({
                 if (this.__scriptUuid !== value) {
                     if (value && Editor.isUuid(value._uuid)) {
                         var classId = Editor.compressUuid(value._uuid);
-                        var newComp = cc.js._getClassById(classId);
-                        if (newComp) {
+                        var NewComp = cc.js._getClassById(classId);
+                        if (cc.isChildClassOf(NewComp, cc.Component)) {
                             cc.warn('Sorry, replacing component script is not yet implemented.');
                             //Editor.sendToWindows('reload:window-scripts', Editor._Sandbox.compiled);
                         }
