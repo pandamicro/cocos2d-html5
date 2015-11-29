@@ -24,35 +24,56 @@
 
 /**
  * Enum for transition type
- * @enum Transition
+ * @enum EButton.Transition
  */
 var Transition = cc.Enum({
     /**
-     * @property {Number} None
+     * @property {Number} NONE
      */
-    None: 0,
+    NONE: 0,
 
     /**
-     * @property {Number} Color
+     * @property {Number} COLOR
      */
-    Color: 1,
+    COLOR: 1,
 
     /**
-     * @property {Number} Sprite
+     * @property {Number} SPRITE
      */
-    Sprite: 2
+    SPRITE: 2
 });
 
+/**
+ * Click event will register a event to target component's handler.
+ * And will trigger when a click event emit
+ *
+ * @class EButton.ClickEvent
+ */
 var ClickEvent = cc.Class({
     name: 'cc.ClickEvent',
     properties: {
+        /**
+         * Event target
+         * @property {cc.ENode}
+         * @default null
+         */
         target: {
             default: null,
             type: cc.ENode
         },
+        /**
+         * Component name
+         * @type {String}
+         * @default ''
+         */
         component: {
             default: ''
         },
+        /**
+         * Event handler
+         * @type {String}
+         * @default ''
+         */
         handler: {
             default: ''
         }
@@ -77,9 +98,9 @@ var EVENT_HOVER_OUT = 'hover-out';
 /**
  * Button has 3 Transition types
  * When Button state changed:
- *  If Transition type is EButton.Transition.None, Button will do nothing
- *  If Transition type is EButton.Transition.Color, Button will change target's color
- *  If Transition type is EButton.Transition.Color, Button will change target SpriteRenderer's sprite
+ *  If Transition type is EButton.Transition.NONE, Button will do nothing
+ *  If Transition type is EButton.Transition.COLOR, Button will change target's color
+ *  If Transition type is EButton.Transition.SPRITE, Button will change target SpriteRenderer's sprite
  *
  * Button will trigger 5 events:
  *  EButton.EVENT_TOUCH_DOWN
@@ -111,7 +132,7 @@ var Button = cc.Class({
     },
 
     editor: CC_EDITOR && {
-        menu: 'Button',
+        menu: 'UI/Button',
         inspector: 'app://editor/page/inspector/button/button.html',
         executeInEditMode: true
     },
@@ -136,7 +157,7 @@ var Button = cc.Class({
          * @default EButton.Transition.Node
          */
         transition: {
-            default: Transition.None,
+            default: Transition.NONE,
             type: Transition
         },
 
@@ -243,9 +264,9 @@ var Button = cc.Class({
         /**
          * Transition target.
          * When Button state changed:
-         *  If Transition type is EButton.Transition.None, Button will do nothing
-         *  If Transition type is EButton.Transition.Color, Button will change target's color
-         *  If Transition type is EButton.Transition.Color, Button will change target SpriteRenderer's sprite
+         *  If Transition type is EButton.Transition.NONE, Button will do nothing
+         *  If Transition type is EButton.Transition.COLOR, Button will change target's color
+         *  If Transition type is EButton.Transition.SPRITE, Button will change target SpriteRenderer's sprite
          * @property {cc.ENode} target
          */
         target: {
@@ -267,6 +288,37 @@ var Button = cc.Class({
         }
     },
 
+    static: {
+        /**
+         * Touch down event
+         * @property {String} EVENT_TOUCH_DOWN
+         */
+        EVENT_TOUCH_DOWN: EVENT_TOUCH_DOWN,
+        /**
+         * Touch up event
+         * @property {String} EVENT_TOUCH_UP
+         */
+        EVENT_TOUCH_UP: EVENT_TOUCH_UP,
+        /**
+         * Hover in event
+         * @property {String} EVENT_HOVER_IN
+         */
+        EVENT_HOVER_IN: EVENT_HOVER_IN,
+        /**
+         * Hover move event
+         * @property {String} EVENT_HOVER_MOVE
+         */
+        EVENT_HOVER_MOVE: EVENT_HOVER_MOVE,
+        /**
+         * Hover out event
+         * @property {String} EVENT_HOVER_OUT
+         */
+        EVENT_HOVER_OUT: EVENT_HOVER_OUT,
+
+        Transition: Transition,
+        ClickEvent: ClickEvent
+    },
+
     onLoad: function () {
         if (!this.target) this.target = this.node;
 
@@ -282,7 +334,7 @@ var Button = cc.Class({
 
     update: function (dt) {
         var target = this.target;
-        if (!this.transition === Transition.Color || !target || this._tarnsitionFinished) return;
+        if (!this.transition === Transition.COLOR || !target || this._tarnsitionFinished) return;
 
         this.time += dt;
         var ratio = this.time / this.duration;
@@ -348,14 +400,14 @@ var Button = cc.Class({
     _onTouchBegan: function (touch) {
         if (!this.interactable) return false;
 
-        var hitted = this._hitTest(touch.getLocation());
-        if (hitted) {
+        var hit = this._hitTest(touch.getLocation());
+        if (hit) {
             this._pressed = true;
             this._applyState(ButtonState.Pressed);
             this.emit(EVENT_TOUCH_DOWN);
         }
 
-        return hitted;
+        return hit;
     },
 
     _onTouchEnded: function () {
@@ -371,8 +423,8 @@ var Button = cc.Class({
     _onMouseMove: function (event) {
         if (this._pressed || !this.interactable) return;
 
-        var hitted = this._hitTest(event.getLocation());
-        if (hitted) {
+        var hit = this._hitTest(event.getLocation());
+        if (hit) {
             if (!this._hovered) {
                 this._hovered = true;
                 this._applyState(ButtonState.Hover);
@@ -397,7 +449,7 @@ var Button = cc.Class({
     _applyTransition: function (color, sprite) {
         var transition = this.transition;
 
-        if (transition === Transition.Color) {
+        if (transition === Transition.COLOR) {
             var target = this.target;
 
             if (CC_EDITOR) {
@@ -410,7 +462,7 @@ var Button = cc.Class({
                 this._tarnsitionFinished = false;
             }
         }
-        else if (transition === Transition.Sprite && this._sprite && sprite) {
+        else if (transition === Transition.SPRITE && this._sprite && sprite) {
             this._sprite.sprite = sprite;
         }
     },
@@ -429,15 +481,6 @@ var Button = cc.Class({
     }
 
 });
-
-Button.EVENT_TOUCH_DOWN = EVENT_TOUCH_DOWN;
-Button.EVENT_TOUCH_UP = EVENT_TOUCH_UP;
-Button.EVENT_HOVER_IN = EVENT_HOVER_IN;
-Button.EVENT_HOVER_MOVE = EVENT_HOVER_MOVE;
-Button.EVENT_HOVER_OUT = EVENT_HOVER_OUT;
-
-Button.Transition = Transition;
-Button.ClickEvent = ClickEvent;
 
 var EventTarget = require("../event/event-target");
 EventTarget.polyfill(Button.prototype);
