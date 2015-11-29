@@ -344,7 +344,7 @@ cc.isValid = function (value) {
 if (CC_EDITOR || CC_TEST) {
     Object.defineProperty(CCObject, '_willDestroy', {
         value: function (obj) {
-            return !(value._objFlags & Destroyed) && (obj._objFlags & ToDestroy) > 0;
+            return !(obj._objFlags & Destroyed) && (obj._objFlags & ToDestroy) > 0;
         }
     });
     Object.defineProperty(CCObject, '_cancelDestroy', {
