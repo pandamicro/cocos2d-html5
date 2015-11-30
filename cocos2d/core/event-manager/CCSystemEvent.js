@@ -25,6 +25,8 @@
 
 var JS = cc.js;
 
+var Event = cc.Event;
+
 /**
  * The type code of Touch event.
  * @constant
@@ -423,4 +425,4 @@ cc.Event.EventFocus = EventFocus;
 cc.Event.EventAcceleration = EventAcceleration;
 cc.Event.EventKeyboard = EventKeyboard;
 
-module.exports = cc.Event;
+module.exports = Event;

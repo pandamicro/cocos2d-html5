@@ -41,6 +41,7 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
 
     _fixedPriority: 0,                      // The higher the number, the higher the priority, 0 is for scene graph base priority.
     _node: null,                           // scene graph based priority
+    _target: null,
     _paused: true,                        // Whether the listener is paused
     _isEnabled: true,                      // Whether the listener is enabled
 
@@ -141,16 +142,27 @@ cc.EventListener = cc._Class.extend(/** @lends cc.EventListener# */{
 
     /**
      * Sets scene graph priority for this listener
-     * @param {ENode} node
+     * @param {cc.Node|cc.ENode} node
      * @private
      */
     _setSceneGraphPriority: function (node) {
-        this._node = node;
+        if (cc.ENode && node instanceof cc.ENode) {
+            this._target = node;
+            this._node = node._sgNode;
+        }
+        else if (cc.Component && node instanceof cc.Component) {
+            this._target = node;
+            this._node = node.node._sgNode;
+        }
+        else {
+            this._target = node;
+            this._node = node;
+        }
     },
 
     /**
      * Gets scene graph priority of this listener
-     * @returns {ENode} if it's a fixed priority listener, non-null for scene graph priority listener
+     * @returns {cc.Node|cc.ENode} if it's a fixed priority listener, non-null for scene graph priority listener
      * @private
      */
     _getSceneGraphPriority: function () {

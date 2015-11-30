@@ -946,7 +946,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
     },
 
     _onListenerCallback: function(listener, event){
-        event.currentTarget = listener._getSceneGraphPriority();
+        event.currentTarget = listener._target;
         listener._onEvent(event);
         return event.isStopped();
     },
