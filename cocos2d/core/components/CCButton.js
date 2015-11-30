@@ -63,7 +63,7 @@ var ClickEvent = cc.Class({
         },
         /**
          * Component name
-         * @type {String}
+         * @property {String}
          * @default ''
          */
         component: {
@@ -71,7 +71,7 @@ var ClickEvent = cc.Class({
         },
         /**
          * Event handler
-         * @type {String}
+         * @property {String}
          * @default ''
          */
         handler: {
@@ -288,7 +288,7 @@ var Button = cc.Class({
         }
     },
 
-    static: {
+    statics: {
         /**
          * Touch down event
          * @property {String} EVENT_TOUCH_DOWN
