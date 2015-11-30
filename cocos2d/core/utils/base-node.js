@@ -66,7 +66,7 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
         _cascadeColorEnabled: false,
         _parent: null,
         _anchorPoint: cc.p(0.5, 0.5),
-        _contentSize: cc.size(100, 100),
+        _contentSize: cc.size(0, 0),
         _children: [],
         _rotationX: 0,
         _rotationY: 0.0,
