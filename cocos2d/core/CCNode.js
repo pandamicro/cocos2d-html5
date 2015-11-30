@@ -154,12 +154,9 @@ var Node = cc.Class({
     },
 
     _onPreDestroy: function () {
-        var parent = this._parent, i, len;
+        var i, len;
         this._objFlags |= Destroying;
-        var destroyByParent = parent && (parent._objFlags & Destroying);
-        if (!destroyByParent) {
-            this._removeSgNode();
-        }
+
         // Remove all listeners
         for (i = 0, len = this.__eventTargets.length; i < len; ++i) {
             var target = this.__eventTargets[i];
@@ -176,19 +173,26 @@ var Node = cc.Class({
         if (this._persistNode) {
             cc.game.removePersistRootNode(this);
         }
-        // remove self
-        if (parent) {
-            if (!destroyByParent) {
-                parent._children.splice(parent._children.indexOf(this), 1);
-            }
-        }
         // destroy children
         var children = this._children;
         for (i = 0, len = children.length; i < len; ++i) {
             // destroy immediate so its _onPreDestroy can be called before
             children[i]._destroyImmediate();
         }
-
+        // remove self
+        var parent = this._parent;
+        var destroyByParent = parent && (parent._objFlags & Destroying);
+        if (!destroyByParent) {
+            if (parent) {
+                parent._children.splice(parent._children.indexOf(this), 1);
+            }
+            this._removeSgNode();
+            // simulate some destruct logic to make undo system work correctly
+            if (CC_EDITOR) {
+                // ensure this node can reattach to scene by undo system
+                this._parent = null;
+            }
+        }
         // detach
         this._registerIfAttached(false);
     },
