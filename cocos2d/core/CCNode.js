@@ -230,6 +230,15 @@ var Node = cc.Class({
         return null;
     },
 
+    _checkMultipleComp: CC_EDITOR && function (ctor) {
+        if (this.getComponent(ctor._disallowMultiple)) {
+            cc.error("The component %s can't be added because %s already contains the same (or subtype) component.",
+                JS.getClassName(typeOrClassName), this._name);
+            return false;
+        }
+        return true;
+    },
+
     /**
      * Adds a component class to the node. You can also add component to entity by passing in the name of the script.
      *
@@ -269,9 +278,7 @@ var Node = cc.Class({
             return null;
         }
         if (constructor._disallowMultiple && CC_EDITOR) {
-            if (this.getComponent(constructor._disallowMultiple)) {
-                cc.error("The component %s can't be added because %s already contains the same (or subtype) component.",
-                    JS.getClassName(typeOrClassName), this._name);
+            if (!this._checkMultipleComp(constructor)) {
                 return null;
             }
         }
@@ -288,6 +295,40 @@ var Node = cc.Class({
         }
 
         return component;
+    },
+
+    /**
+     * This api should only used by undo system
+     * @method _addComponentAt
+     * @param {Component} comp
+     * @param {Number} index
+     * @private
+     */
+    _addComponentAt: CC_EDITOR && function (comp, index) {
+        if (this._objFlags & Destroying) {
+            return cc.error('isDestroying');;
+        }
+        if (typeof comp !== 'function') {
+            return cc.error("_addComponentAt: The component to add must be a constructor");
+        }
+        if (index > this._components.length) {
+            return cc.error("_addComponentAt: Index out of range");
+        }
+
+        var ctor = comp.constructor;
+        if (ctor._disallowMultiple) {
+            if (!this._checkMultipleComp(ctor)) {
+                return;
+            }
+        }
+
+        comp.node = this;
+        this._components.splice(index, 0, comp);
+
+        if (this._activeInHierarchy) {
+            // call onLoad/onEnable
+            comp.__onNodeActivated(true);
+        }
     },
 
     /**
