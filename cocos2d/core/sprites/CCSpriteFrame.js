@@ -416,15 +416,36 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
 
                 var locTexture = new cc.Texture2D();
                 locTexture.url = url;
+                cc.textureCache.cacheImage(url, locTexture);
                 cc.loader.load(url, function (err) {
                     if (err) {
                         cc.error('SpriteFrame: Failed to load sprite texture "%s", %s', url, err);
                         return;
                     }
                     var premultiplied = cc.AUTO_PREMULTIPLIED_ALPHA_FOR_PNG && cc.path.extname(url) === '.png';
-                    locTexture.handleLoadedTexture(premultiplied);
+
+                    var img = cc.loader.getRes(url);
+                    var loaded = img.width > 0 || img.height > 0;
+                    if (loaded) {
+                        locTexture.handleLoadedTexture(premultiplied);
+                    }
+                    else {
+                        // if not yet loaded, we have to register onLoad
+                        // see https://github.com/fireball-x/fireball/issues/668
+                        function loadCallback () {
+                            img.removeEventListener('load', loadCallback, false);
+                            img.removeEventListener('error', errorCallback, false);
+
+                            locTexture.handleLoadedTexture(premultiplied);
+                        }
+                        function errorCallback () {
+                            img.removeEventListener('load', loadCallback, false);
+                            img.removeEventListener('error', errorCallback, false);
+                        }
+                        img.addEventListener("load", loadCallback);
+                        img.addEventListener("error", errorCallback);
+                    }
                 });
-                cc.textureCache.cacheImage(url, locTexture);
                 this.setTexture(locTexture);
 
                 if (locTexture.isLoaded()) {
