@@ -156,8 +156,8 @@ cc.Label = cc.Node.extend({
     }
 });
 
-cc.Label.Overflow = {
+cc.Label.Overflow = cc.Enum({
     CLAMP: 0,
     SHRINK: 1,
     RESIZE: 2
-};
+});
