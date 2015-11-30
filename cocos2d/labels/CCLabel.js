@@ -132,9 +132,10 @@ cc.Label = cc.Node.extend({
     },
 
     setContentSize: function(size, height) {
-        var oldSize = this.getContentSize();
+        var oldWidth = this._contentSize.width;
+        var oldHeight = this._contentSize.height;
         cc.Node.prototype.setContentSize.call(this, size,height);
-        if (cc.sizeEqualToSize(this._contentSize, oldSize)) {
+        if (oldWidth === this._contentSize.width && oldHeight === this._contentSize.height) {
             return;
         }
         this._notifyLabelSkinDirty();
