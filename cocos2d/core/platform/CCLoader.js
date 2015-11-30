@@ -310,6 +310,7 @@ cc.loader = cc.loader || (function () {
 
             var self = this;
             var errorCallback = function () {
+                img.removeEventListener('load', loadCallback, false);
                 img.removeEventListener('error', errorCallback, false);
 
                 if(img.crossOrigin && img.crossOrigin.toLowerCase() === "anonymous"){
@@ -425,7 +426,7 @@ cc.loader = cc.loader || (function () {
          * @param {Function|Object} [loadCallback]
          * @return {AsyncPool}
          */
-        load : function(resources, option, loadCallback){
+        load: function(resources, option, loadCallback){
             var self = this;
             var len = arguments.length;
             if(len === 0)
