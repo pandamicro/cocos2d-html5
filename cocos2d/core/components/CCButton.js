@@ -325,6 +325,10 @@ var Button = cc.Class({
         this._registerEvent();
         this._applyTarget();
         this._initState();
+
+        if (!CC_EDITOR) {
+            this._registerListeners();
+        }
     },
 
     onDestroy: function () {
