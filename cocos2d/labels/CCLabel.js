@@ -131,11 +131,13 @@ cc.Label = cc.Node.extend({
         return this._spacingY;
     },
 
-    setContentSize: function(size) {
-        if (cc.sizeEqualToSize(this._contentSize, size)) {
+    setContentSize: function(size, height) {
+        var oldWidth = this._contentSize.width;
+        var oldHeight = this._contentSize.height;
+        cc.Node.prototype.setContentSize.call(this, size,height);
+        if (oldWidth === this._contentSize.width && oldHeight === this._contentSize.height) {
             return;
         }
-        cc.Node.prototype.setContentSize.call(this, size);
         this._notifyLabelSkinDirty();
     },
 
