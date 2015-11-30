@@ -19,7 +19,7 @@ animProto.update = function (deltaTime) {
     var anims = this.playingAnims;
     for (var i = 0; i < anims.length; i++) {
         var anim = anims[i];
-        if (anim._isPlaying) {
+        if (anim._isPlaying && !anim._isPaused) {
             anim.update(deltaTime);
             // if removed
             if (! anim._isPlaying) {
@@ -34,27 +34,12 @@ animProto.update = function (deltaTime) {
 };
 
 animProto.onPlay = function () {
-    // if (CC_EDITOR) {
-    //     if (cc.engine._isPlaying) {
-    //         cc.engine._animationManager.addAnimator(this);
-    //     }
-    // }
-    // else {
-    //     cc.engine._animationManager.addAnimator(this);
-    // }
+    cc.director.getAnimationManager().addAnimator(this);
 };
 
 animProto.onStop = function () {
     this.playingAnims.length = 0;
-
-    // if (CC_EDITOR) {
-    //     if (cc.engine._isPlaying) {
-    //         cc.engine._animationManager.removeAnimator(this);
-    //     }
-    // }
-    // else {
-    //     cc.engine._animationManager.removeAnimator(this);
-    // }
+    cc.director.getAnimationManager().removeAnimator(this);
 };
 
 
@@ -153,6 +138,7 @@ function createPropCurve (curves, target, propName, value, ratio) {
 
 entProto._doAnimate = function (keyFrames, timingInput) {
     var anim = new AnimationNode(this, null, timingInput);
+    anim.play();
     var curves = anim.curves;
 
     // create curves

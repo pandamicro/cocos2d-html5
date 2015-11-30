@@ -121,6 +121,9 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
         this._textureFilename = '';
         this._textureLoaded = false;
 
+        // The current parsing uuid for editor
+        this._loadingUuid = '';
+
         if(filename !== undefined && rect !== undefined ){
             if(rotated === undefined || offset === undefined || originalSize === undefined)
                 this.initWithTexture(filename, rect);
@@ -377,7 +380,73 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
      * @param {Size} [originalSize=rect.size]
      * @return {Boolean}
      */
-    initWithTexture:function (texture, rect, rotated, offset, originalSize) {
+    initWithTexture:function (texture, rect, rotated, offset, originalSize, _uuid) {
+
+        function check(texture) {
+            if (texture && texture.url && texture.isLoaded()) {
+                var _x, _y;
+                if (rotated) {
+                    _x = rect.x + rect.height;
+                    _y = rect.y + rect.width;
+                }
+                else {
+                    _x = rect.x + rect.width;
+                    _y = rect.y + rect.height;
+                }
+                if (_x > texture.getPixelWidth()) {
+                    cc.error(cc._LogInfos.RectWidth, texture.url);
+                }
+                if (_y > texture.getPixelHeight()) {
+                    cc.error(cc._LogInfos.RectHeight, texture.url);
+                }
+            }
+        }
+
+        if (!texture && _uuid) {
+            this._texture = new cc.Texture2D();
+            // deserialize texture from uuid
+            cc.AssetLibrary.queryAssetInfo(_uuid, function (err, url) {
+                if (err) {
+                    cc.error('SpriteFrame: Failed to load sprite texture "%s", %s', _uuid, err);
+                    return;
+                }
+
+                this._textureFilename = url;
+                this._loadingUuid = '';
+
+                var locTexture = new cc.Texture2D();
+                locTexture.url = url;
+                cc.loader.load(url, function (err) {
+                    if (err) {
+                        cc.error('SpriteFrame: Failed to load sprite texture "%s", %s', url, err);
+                        return;
+                    }
+                    var premultiplied = cc.AUTO_PREMULTIPLIED_ALPHA_FOR_PNG && cc.path.extname(url) === '.png';
+                    locTexture.handleLoadedTexture(premultiplied);
+                });
+                cc.textureCache.cacheImage(url, locTexture);
+                this.setTexture(locTexture);
+
+                if (locTexture.isLoaded()) {
+                    this.emit("load");
+                }
+
+                check(locTexture);
+
+            }.bind(this));
+        }
+        else {
+            if (cc.js.isString(texture)){
+                this._texture = null;
+                this._textureFilename = texture;
+                this._loadingUuid = '';
+            } else if (texture instanceof cc.Texture2D) {
+                this.setTexture(texture);
+            }
+
+            check(this.getTexture());
+        }
+
         if(arguments.length === 2)
             rect = cc.rectPointsToPixels(rect);
 
@@ -385,34 +454,8 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
         originalSize = originalSize || rect;
         rotated = rotated || false;
 
-        if (cc.js.isString(texture)){
-            this._texture = null;
-            this._textureFilename = texture;
-        } else if (texture instanceof cc.Texture2D){
-            this.setTexture(texture);
-        }
-
-        texture = this.getTexture();
-
         this._rectInPixels = rect;
         rect = this._rect = cc.rectPixelsToPoints(rect);
-        
-        if(texture && texture.url && texture.isLoaded()) {
-            var _x, _y;
-            if(rotated){
-                _x = rect.x + rect.height;
-                _y = rect.y + rect.width;
-            }else{
-                _x = rect.x + rect.width;
-                _y = rect.y + rect.height;
-            }
-            if(_x > texture.getPixelWidth()){
-                cc.error(cc._LogInfos.RectWidth, texture.url);
-            }
-            if(_y > texture.getPixelHeight()){
-                cc.error(cc._LogInfos.RectHeight, texture.url);
-            }
-        }
 
         this._offsetInPixels.x = offset.x;
         this._offsetInPixels.y = offset.y;
@@ -435,6 +478,9 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
             var uuid;
             if (url) {
                 uuid = Editor.urlToUuid(url);
+            }
+            else {
+                uuid = this._loadingUuid;
             }
             var capInsets = undefined;
             if (this.insetLeft !== 0 ||
@@ -464,7 +510,6 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
         var size = new cc.Size(data.originalSize[0], data.originalSize[1]);
         var sizeInP = cc.sizePointsToPixels(size);
         var rotated = data.rotated === 1;
-
         // init properties not included in this.initWithTexture()
         this._name = data.name;
         var capInsets = data.capInsets;
@@ -474,33 +519,9 @@ cc.SpriteFrame = cc.Class(/** @lends cc.SpriteFrame# */{
             this.insetRight = capInsets[2];
             this.insetBottom = capInsets[3];
         }
-
         var uuid = data.texture;
-        if (uuid) {
-            var isAsync = CC_EDITOR;
-            if (isAsync) {
-                // Still needs to init property before async AssetLibrary.queryAssetInfo finished,
-                // to ensure subsequent operations in this frame can get the right value.
-                this._rect = rect;
-                this._rectInPixels = rectInP;
-                this._offset = offset;
-                this._offsetInPixels = offsetInP;
-                this._originalSize = size;
-                this._originalSizeInPixels = sizeInP;
-                this._rotated = rotated;
-            }
-            var self = this;
-            AssetLibrary.queryAssetInfo(uuid, function (err, url) {
-                if (err) {
-                    cc.error('SpriteFrame: Failed to sprite texture "%s", %s', uuid, err);
-                    // Fall through since we still need to initialze if not async
-                }
-                self.initWithTexture(url, rectInP, rotated, offsetInP, sizeInP);
-            });
-        }
-        else {
-            this.initWithTexture(null, rectInP, rotated, offsetInP, sizeInP);
-        }
+        this._loadingUuid = uuid;
+        this.initWithTexture(null, rectInP, rotated, offsetInP, sizeInP, uuid);
     },
 });
 

@@ -15,7 +15,7 @@ JS.mixin(ValueType.prototype, {
      * @method clone
      * @return {ValueType}
      */
-    clone: function () {
+    clone: CC_EDITOR && function () {
         cc.error("%.clone not yet implemented.", JS.getClassName(this));
         return null;
     },
@@ -26,7 +26,7 @@ JS.mixin(ValueType.prototype, {
      * @param {ValueType} other
      * @return {Boolean}
      */
-    equals: function (other) {
+    equals: CC_EDITOR && function (other) {
         cc.error("%.equals not yet implemented.", JS.getClassName(this));
         return false;
     },
@@ -36,7 +36,7 @@ JS.mixin(ValueType.prototype, {
      * @return {string}
      */
     toString: function () {
-        return '[object Object]';
+        return '' + {};
     },
 
     /**
@@ -47,7 +47,8 @@ JS.mixin(ValueType.prototype, {
      * @param {number} ratio - the interpolation coefficient
      * @return {ValueType}
      */
-    lerp: function (to, ratio) {
+    lerp: CC_EDITOR && function (to, ratio) {
+        cc.warn("%.lerp not yet implemented.", JS.getClassName(this));
         return this.clone();
     }
 });

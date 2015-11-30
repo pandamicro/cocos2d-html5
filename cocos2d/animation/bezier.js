@@ -185,6 +185,11 @@ function bezierByTime (controlPoints, x) {
            p3y * percent * percent * percent;
 }
 
+if (CC_TEST) {
+    cc._Test.bezier = bezier;
+    cc._Test.bezierByTime = bezierByTime;
+}
+
 module.exports = {
     bezier: bezier,
     bezierByTime: bezierByTime

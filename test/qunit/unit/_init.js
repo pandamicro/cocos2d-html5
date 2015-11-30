@@ -107,12 +107,23 @@ var TestScript = cc.Class({
     }
 });
 
+// polyfills to test engine extends
+
 cc.engine = {
     attachedObjsForEditor: {},
     getInstanceById: function (uuid) {
         return this.attachedObjsForEditor[uuid] || null;
     },
 };
+
+Editor.log = cc.log;
+Editor.warn = cc.warn;
+Editor.error = cc.error;
+Editor.info = cc.info;
+
+//
+
+cc.EventTarget.polyfill(cc.engine);
 
 var assetDir = '../test/qunit/assets';
 
@@ -163,6 +174,8 @@ function _resetGame (w, h) {
 
         cc.eventManager.dispatchCustomEvent('canvas-resize');
     }
+    cc.director.purgeDirector();
+    cc.loader.releaseAll();
     cc.director.runScene(new cc.EScene());
     //cc.director.pause();
 }

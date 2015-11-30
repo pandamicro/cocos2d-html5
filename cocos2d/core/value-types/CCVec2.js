@@ -13,6 +13,10 @@ var FireClass = require('../platform/CCClass');
  * @param {number} [y=0]
  */
 function Vec2 (x, y) {
+    if (typeof x === 'object') {
+        y = x.y;
+        x = x.x;
+    }
     this.x = (typeof x === 'number' ? x : 0.0);
     this.y = (typeof y === 'number' ? y : 0.0);
 }
@@ -188,29 +192,29 @@ JS.mixin(Vec2.prototype, {
     },
 
     /**
-     * Divides two vectors. If you want to save result to another vector, use div() instead.
+     * Divides by a number. If you want to save result to another vector, use div() instead.
      * @method divSelf
      * @param {Vec2} vector
      * @return {Vec2} returns this
      * @chainable
      */
-    divSelf: function (vector) {
-        this.x /= vector.x;
-        this.y /= vector.y;
+    divSelf: function (num) {
+        this.x /= num;
+        this.y /= num;
         return this;
     },
 
     /**
-     * Divides two vectors, and returns the new result.
+     * Divides by a number, and returns the new result.
      * @method div
      * @param {Vec2} vector
      * @param {Vec2} [out] - optional, the receiving vector
      * @return {Vec2} the result
      */
-    div: function (vector, out) {
+    div: function (num, out) {
         out = out || new Vec2();
-        out.x = this.x / vector.x;
-        out.y = this.y / vector.y;
+        out.x = this.x / num;
+        out.y = this.y / num;
         return out;
     },
 
@@ -395,21 +399,21 @@ JS.mixin(Vec2.prototype, {
 
 /**
  * return a Vec2 object with x = 1 and y = 1
- * @property one
+ * @property ONE
  * @type Vec2
  * @static
  */
-JS.get(Vec2, 'one', function () {
+JS.get(Vec2, 'ONE', function () {
     return new Vec2(1.0, 1.0);
 });
 
 /**
  * return a Vec2 object with x = 0 and y = 0
- * @property zero
+ * @property ZERO
  * @type Vec2
  * @static
  */
-JS.get(Vec2, 'zero', function () {
+JS.get(Vec2, 'ZERO', function () {
     return new Vec2(0.0, 0.0);
 });
 
@@ -419,17 +423,17 @@ JS.get(Vec2, 'zero', function () {
  * @type Vec2
  * @static
  */
-JS.get(Vec2, 'up', function () {
+JS.get(Vec2, 'UP', function () {
     return new Vec2(0.0, 1.0);
 });
 
 /**
  * return a Vec2 object with x = 1 and y = 0
- * @property right
+ * @property RIGHT
  * @type Vec2
  * @static
  */
-JS.get(Vec2, 'right', function () {
+JS.get(Vec2, 'RIGHT', function () {
     return new Vec2(1.0, 0.0);
 });
 
@@ -445,12 +449,6 @@ var proto = Vec2.prototype;
  * @return {Vec2}
  */
 cc.v2 = function v2 (x, y) {
-    if (x === undefined) {
-        return new Vec2(0, 0);
-    }
-    if (y === undefined) {
-        return new Vec2(x.x, x.y);
-    }
     return new Vec2(x, y);
 };
 

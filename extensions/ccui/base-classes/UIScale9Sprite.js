@@ -52,10 +52,14 @@ EventTarget = require("../cocos2d/core/event/event-target");
  */
 
 ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprite# */{
+
     _textureInited:false,
     _spriteRect: null,
     _spriteFrameRotated:false,
-    _capInsetsInternal:null,
+
+    //To keep backward compatibility
+    //this member is just used for secondary usage, instead, insetTop/Bottom/Left/right is the key value.
+    _derivedCapInsets:null,
 
     _scale9Image: null, //the original sprite
 
@@ -95,7 +99,6 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         this._originalSize = cc.size(0,0);
         this._preferredSize = cc.rect(0,0,0,0);
         this._spriteRect = cc.rect(0,0,0,0);
-        this._capInsetsInternal = cc.rect(0,0,0,0);
         this._blendFunc = cc.BlendFunc._disable();
         this.setAnchorPoint(cc.p(0.5,0.5));
 
@@ -143,7 +146,6 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
             file = rect;
         }
         rect = rect || cc.rect(0,0,0,0);
-        capInsets = capInsets || cc.rect(0,0,0,0);
 
         if(!file){
             throw new Error("ccui.Scale9Sprite.initWithFile(): file should be non-null");
@@ -169,11 +171,9 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         if(!spriteFrame || !spriteFrame.getTexture())
             throw new Error("ccui.Scale9Sprite.initWithSpriteFrame(): spriteFrame should be non-null and its texture should be non-null");
 
-        capInsets = capInsets || cc.rect(0,0,0,0);
-
         var locLoaded = spriteFrame.textureLoaded();
 
-        this._capInsetsInternal = capInsets;
+        if(capInsets!== undefined) this._derivedCapInsets = capInsets;
         this._textureLoaded = false;
         var _onTextureLoadedCallback = function () {
             var sprite = cc.Sprite.createWithSpriteFrame(spriteFrame);
@@ -203,7 +203,6 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
     initWithSpriteFrameName : function(spriteFrameName, capInsets){
         if(!spriteFrameName)
             throw new Error("ccui.Scale9Sprite.initWithSpriteFrameName(): spriteFrameName should be non-null");
-        capInsets = capInsets || cc.rect(0, 0, 0, 0);
 
         var frame = cc.spriteFrameCache.getSpriteFrame(spriteFrameName);
 
@@ -237,7 +236,6 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         rotated = rotated || false;
         offset = offset || cc.p(0,0);
         originalSize = originalSize || cc.size(rect.width, rect.height);
-        capInsets = capInsets || cc.rect(0,0,0,0);
 
         if(rotated instanceof cc.Rect)
         {
@@ -327,6 +325,16 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
             this.setColor(color);
         }
         this._textureInited = true;
+
+        if(this._derivedCapInsets)
+        {
+            this._insetLeft = this._derivedCapInsets.x;
+            this._insetTop = this._derivedCapInsets.y;
+            this._insetRight = this._originalSize.width-this._insetLeft-this._derivedCapInsets.width;
+            this._insetBottom = this._originalSize.height-this._insetTop-this._derivedCapInsets.height;
+            this._derivedCapInsets = null;
+        }
+
         this._quadsDirty = true;
     }, /**
      * @brief Update Scale9Sprite with a specified sprite.
@@ -350,7 +358,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
         this._spriteRect = cc.rect(textureRect);
         this._spriteFrameRotated = rotated;
         this._originalSize = originalSize;
-        this._capInsetsInternal = capInsets;
+        if(capInsets !== undefined) this._derivedCapInsets = capInsets;
         this._textureLoaded = false;
 
         if(sprite === null){
@@ -393,12 +401,6 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
             spriteFrame.getOffset(),
             spriteFrame.getOriginalSize(),
             capInsets);
-
-        // Reset insets
-        this._insetLeft = capInsets.x;
-        this._insetTop = capInsets.y;
-        this._insetRight = this._originalSize.width - this._insetLeft - capInsets.width;
-        this._insetBottom = this._originalSize.height - this._insetTop - capInsets.height;
     },
 
     // overrides
@@ -487,12 +489,15 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
      * @param rect A delimitation zone.
      */
     setCapInsets : function(capInsets){
-        this._quadsDirty = true;
-        this._capInsetsInternal = capInsets;
-        this._insetLeft = capInsets.x;
-        this._insetTop = capInsets.y;
-        this._insetRight = this._originalSize.width - this._insetLeft - capInsets.width;
-        this._insetBottom = this._originalSize.height - this._insetTop - capInsets.height;
+        if(this._textureLoaded) {
+            this._quadsDirty = true;
+            this._insetLeft = capInsets.x;
+            this._insetTop = capInsets.y;
+            this._insetRight = this._originalSize.width - this._insetLeft - capInsets.width;
+            this._insetBottom = this._originalSize.height - this._insetTop - capInsets.height;
+        } else {
+            cc.log("Can not set capinset when resource is loading");
+        }
     },
 
     /**
@@ -501,7 +506,9 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
      * @return Scale9Sprite's cap inset.
      */
     getCapInsets : function(){
-        return cc.rect(this._capInsetsInternal);
+
+        return cc.rect(this._insetLeft, this._insetTop, this._originalSize.width - this._insetLeft - this._insetRight,
+            this._originalSize.height - this._insetTop - this._insetBottom);
     },
 
     /**
@@ -511,7 +518,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
      */
     setInsetLeft : function(insetLeft){
         this._insetLeft = insetLeft;
-        this._updateCapInset();
+        this._quadsDirty = true;
     },
 
     /**
@@ -530,7 +537,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
      */
     setInsetTop : function(insetTop){
         this._insetTop = insetTop;
-        this._updateCapInset();
+        this._quadsDirty = true;
     },
 
     /**
@@ -549,7 +556,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
      */
     setInsetRight : function(insetRight){
         this._insetRight = insetRight;
-        this._updateCapInset();
+        this._quadsDirty = true;
     },
 
     /**
@@ -570,7 +577,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
     setInsetBottom : function(insetBottom)
     {
         this._insetBottom = insetBottom;
-        this._updateCapInset();
+        this._quadsDirty = true;
     },
 
     /**
@@ -716,7 +723,6 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
     },
 
     getScale : function(){
-
         return this.getScaleX();
     },
 
@@ -726,13 +732,13 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
             this._scale9Image.setCameraMask(mask,applyChildren);
     },
 
-    _updateCapInset : function() {
-        var insets = cc.rect(this._insetLeft,
-            this._insetTop,
-            this._originalSize.width-this._insetLeft-this._insetRight,
-            this._originalSize.height-this._insetTop-this._insetBottom);
-        this.setCapInsets(insets);
-    },
+    //_updateCapInset : function() {
+    //    var insets = cc.rect(this._insetLeft,
+    //        this._insetTop,
+    //        this._originalSize.width-this._insetLeft-this._insetRight,
+    //        this._originalSize.height-this._insetTop-this._insetBottom);
+    //    this.setCapInsets(insets);
+    //},
 
     _adjustScale9ImagePosition : function(){
         if (this._scale9Image)
@@ -780,7 +786,7 @@ ccui.Scale9Sprite = cc.Scale9Sprite = cc.Node.extend(/** @lends ccui.Scale9Sprit
                 return;
             }
 
-            var capInsets = cc.rectPointsToPixels(this._capInsetsInternal);
+            var capInsets = cc.rectPointsToPixels(this.getCapInsets());
             var textureRect = cc.rectPointsToPixels(this._spriteRect);
             var spriteRectSize = cc.sizePointsToPixels(this._originalSize);
 

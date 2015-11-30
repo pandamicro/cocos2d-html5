@@ -146,7 +146,7 @@
         testNode.scale = 0;
         testNode.removeComponent(TestScript);
         testNode.children[1].parent = null;
-        testChild.scale = cc.Vec2.zero;
+        testChild.scale = cc.Vec2.ZERO;
         testChild.addComponent(TestScript);
 
         var newNode = new cc.Node();

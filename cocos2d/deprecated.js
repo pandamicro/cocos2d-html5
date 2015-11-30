@@ -227,6 +227,8 @@ if (CC_DEV) {
     deprecateEnum(cc, 'cc.VERTICAL_TEXT_ALIGNMENT', 'cc.VerticalTextAlignment');
     deprecateEnum(cc.ParticleSystem, 'cc.ParticleSystem.TYPE', 'cc.ParticleSystem.Type');
     deprecateEnum(cc.ParticleSystem, 'cc.ParticleSystem.MODE', 'cc.ParticleSystem.Mode');
+    deprecateEnum(cc.EParticleSystem, 'cc.EParticleSystem.TYPE', 'cc.EParticleSystem.PositionType');
+    deprecateEnum(cc.EParticleSystem, 'cc.EParticleSystem.MODE', 'cc.EParticleSystem.EmitterMode');
     deprecateEnum(ccui.ScrollView, 'ccui.ScrollView.DIR', 'ccui.ScrollView.Dir');
     deprecateEnum(ccui.ScrollView, 'ccui.ScrollView.EVENT', 'ccui.ScrollView.Event');
     deprecateEnum(ccui.Layout, 'ccui.Layout', 'ccui.Layout.Type', false);
@@ -243,22 +245,48 @@ if (CC_DEV) {
         deprecateEnum(cc, 'cc', 'cc.Texture2D.WrapMode', false);
     });
 
+    function markAsRemoved (ownerCtor, removedProps, ownerName) {
+        ownerName = ownerName || js.getClassName(ownerCtor);
+        removedProps.forEach(function (prop) {
+            function error () {
+                cc.error('Sorry, %s.%s is removed.', ownerName, prop);
+            }
+            js.getset(ownerCtor.prototype, prop, error, error);
+        });
+    }
 
     function provideClearError (owner, obj) {
         var className = cc.js.getClassName(owner);
         var Info = 'Sorry,' + className + '.%s is removed, please use %s instead.';
         for (var prop in obj) {
-            (function (prop) {
-                var getset = obj[prop];
-                js.getset(owner, prop,
-                    function () {
-                        cc.error(Info, prop, getset[0]);
-                    },
-                    getset[1] && function () {
-                        cc.error(Info, prop, getset[1]);
-                    }
-                );
-            })(prop);
+            function define (prop, getset) {
+                function accessor (newProp) {
+                    cc.error(Info, prop, newProp);
+                }
+                if (!Array.isArray(getset)) {
+                    getset = getset.split(',')
+                        .map(function (x) {
+                            return x.trim();
+                        });
+                }
+                js.getset(owner, prop, accessor.bind(null, getset[0]), getset[1] && accessor.bind(null, getset[1]));
+            }
+            var getset = obj[prop];
+            if (prop[0] === '*') {
+                // get set
+                var etProp = prop.slice(1);
+                define('g' + etProp, getset);
+                define('s' + etProp, getset);
+            }
+            else {
+                prop.split(',')
+                    .map(function (x) {
+                        return x.trim();
+                    })
+                    .forEach(function (x) {
+                        define(x, getset);
+                    });
+            }
         }
     }
 
@@ -284,7 +312,7 @@ if (CC_DEV) {
 
     // cc.ENode
 
-    [
+    markAsRemoved(cc.ENode, [
         '_componentContainer',
         '_camera',
         '_additionalTransform',
@@ -352,83 +380,104 @@ if (CC_DEV) {
         'updateDisplayedColor',
         'userData',
         'userObject'
-    ].forEach(function (prop) {
-        function error () {
-            cc.error('Sorry, cc.ENode.' + prop + ' is removed.');
-        }
-        js.getset(cc.ENode.prototype, prop, error, error);
+    ]);
+    provideClearError(cc.ENode.prototype, {
+        arrivalOrder: 'getSiblingIndex, setSiblingIndex',
+        _visible: '_activeInHierarchy, active',
+        _running: '_activeInHierarchy, active',
+        running: 'activeInHierarchy, active',
+        _realOpacity: '_opacity, _opacity',
+        _realColor: '_color, _color',
+        getZOrder: 'getLocalZOrder',
+        setZOrder: 'setLocalZOrder',
+        getOrderOfArrival: 'getSiblingIndex',
+        setOrderOfArrival: 'setSiblingIndex',
+        boundingBox: 'getBoundingBox',
+        removeFromParentAndCleanup: 'removeFromParent',
+        removeAllChildrenWithCleanup: 'removeAllChildren',
+        parentToNodeTransform: 'getParentToNodeTransform',
+        nodeToWorldTransform: 'getNodeToWorlshaderProgramdTransform',
+        worldToNodeTransform: 'getWorldToNodeTransform',
+        nodeToParentTransform: 'getNodeToParentTransform',
+        getNodeToParentAffineTransform: 'getNodeToParentTransform',
     });
-
-    (function () {
-        var GetSet = {
-            arrivalOrder: ['getSiblingIndex', 'setSiblingIndex'],
-            _visible: ['_activeInHierarchy', 'active'],
-            _running: ['_activeInHierarchy', 'active'],
-            running: ['activeInHierarchy', 'active'],
-            _realOpacity: ['_opacity', '_opacity'],
-            _realColor: ['_color', '_color'],
-            getZOrder: ['getLocalZOrder'],
-            setZOrder: ['setLocalZOrder'],
-            getOrderOfArrival: ['getSiblingIndex'],
-            setOrderOfArrival: ['setSiblingIndex'],
-            boundingBox: ['getBoundingBox'],
-            removeFromParentAndCleanup: ['removeFromParent'],
-            removeAllChildrenWithCleanup: ['removeAllChildren'],
-            parentToNodeTransform: ['getParentToNodeTransform'],
-            nodeToWorldTransform: ['getNodeToWorlshaderProgramdTransform'],
-            worldToNodeTransform: ['getWorldToNodeTransform'],
-            nodeToParentTransform: ['getNodeToParentTransform'],
-            getNodeToParentAffineTransform: ['getNodeToParentTransform'],
-        };
-        provideClearError(cc.ENode.prototype, GetSet);
-    })();
 
     // cc.SpriteRenderer
 
-    [
+    markAsRemoved(cc.SpriteRenderer, [
         'textureLoaded',
-        'addLoadedEventListener',
-        'isDirty',
-        'setDirty',
-        'sortAllChildren',
-        'reorderChild',
-        'removeChild',
-        'init',
-        'removeAllChildren',
-        'setOpacityModifyRGB',
-        'isOpacityModifyRGB',
-        'addChild',
-        'getQuad',
-        'getBlendFunc',
         'setBlendFunc',
-        'useBatchNode',
-        'getBatchNode',
-        'setBatchNode',
-        'updateTransform',
-        'ignoreAnchorPointForPosition',
-
-    ].forEach(function (prop) {
-        function error () {
-            cc.error('Sorry, cc.SpriteRenderer.' + prop + ' is removed.');
-        }
-        js.getset(cc.SpriteRenderer.prototype, prop, error, error);
+        'getBlendFunc',
+        'setState',
+        'getState',
+    ]);
+    provideClearError(cc.SpriteRenderer, {
+        create: 'node.addComponent',
+        createWithTexture: 'node.addComponent',
+        createWithSpriteFrameName: 'node.addComponent',
+        createWithSpriteFrame: 'node.addComponent',
     });
-
-    (function () {
-        var StaticFunc = {
-            create: ['addComponent'],
-            createWithTexture: ['addComponent'],
-            createWithSpriteFrameName: ['addComponent'],
-            createWithSpriteFrame: ['addComponent'],
-            ignoreAnchorPointForPosition: ['node.ignoreAnchor'],
-        };
-        provideClearError(cc.SpriteRenderer, StaticFunc);
-    })();
-
+    provideClearError(cc.SpriteRenderer.prototype, {
+        ignoreAnchorPointForPosition: 'instance.ignoreAnchor',
+    });
     shouldNotUseNodeProp(cc.SpriteRenderer);
 
+    // Particle
+    markAsRemoved(cc.EParticleSystem, [
+        'batchNode',
+        'drawMode',
+        'getDrawMode',
+        'setDrawMode',
+        'shapeType',
+        'getShapeType',
+        'setShapeType',
+        'atlasIndex',
+        'init',
+        'initParticle',
+        'updateWithNoTime',
+    ]);
+    provideClearError(cc.EParticleSystem, {
+        initWithFile: 'instance.file',
+        initWithDictionary: 'instance.file',
+        initWithTotalParticles: 'instance.totalParticles'
+    });
+    provideClearError(cc.EParticleSystem.prototype, {
+        destroyParticleSystem: 'destroy',
+        clone: 'cc.instantiate',
+        isActive: 'active',
+        '*etParticleCount': 'particleCount',
+        '*etDuration': 'duration',
+        '*etSourcePosition': 'sourcePos',
+        '*etPosVar': 'posVar',
+        '*etGravity': 'gravity',
+        '*etSpeed': 'speed',
+        '*etSpeedVar': 'speedVar',
+        '*etTangentialAccel': 'tangentialAccel',
+        '*etTangentialAccelVar': 'tangentialAccelVar',
+        '*etRadialAccel': 'radialAccel',
+        '*etRadialAccelVar': 'radialAccelVar',
+        '*etRotationIsDir': 'rotationIsDir',
+        '*etStartRadius': 'startRadius',
+        '*etStartRadiusVar': 'startRadiusVar',
+        '*etEndRadius': 'endRadius',
+        '*etEndRadiusVar': 'endRadiusVar',
+        '*etRotatePerSecond': 'rotatePerS',
+        '*etRotatePerSecondVar': 'rotatePerSVar',
+        '*etStartColor': 'startColor',
+        '*etStartColorVar': 'startColorVar',
+        '*etEndColor': 'endColor',
+        '*etEndColorVar': 'endColorVar',
+        '*etTotalParticles': 'totalParticles',
+        '*etTexture': 'texture',
+    });
+    shouldNotUseNodeProp(cc.EParticleSystem);
+    js.obsoletes(cc.EParticleSystem, 'cc.EParticleSystem', {
+        Type: 'PositionType',
+        Mode: 'EmitterMode'
+    });
+
     // cc.Node
-    [
+    markAsRemoved(cc.Node, [
         '_normalizedPositionDirty',
         '_normalizedPosition',
         '_usingNormalizedPosition',
@@ -447,11 +496,6 @@ if (CC_DEV) {
         'removeComponent',
         'removeAllComponents',
         'enumerateChildren'
-    ].forEach(function (prop) {
-        function error () {
-            cc.error('Sorry, cc.Node.' + prop + ' is removed.');
-        }
-        js.getset(cc.Node.prototype, prop, error, error);
-    });
+    ], 'cc.Node');
 
 }

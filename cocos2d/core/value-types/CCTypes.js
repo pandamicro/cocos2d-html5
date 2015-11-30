@@ -144,8 +144,30 @@ cc.FontDefinition.prototype._getCanvasFontStr = function(){
 };
 
 /**
+ * Enum for sprite type
+ * @enum SpriteType
+ */
+cc.SpriteType = cc.Enum({
+    /**
+     * @property {Number} SIMPLE
+     */
+    SIMPLE: 0,
+    /**
+     * @property {Number} SLICED
+     */
+    SLICED: 1,
+    ///*
+    // * @property {Number} TILED
+    // */
+    //TILED : 2,
+    ///*
+    // * @property {Number} FILLED
+    // */
+    //FILLED: 3
+});
+
+/**
  * Enum for text alignment
- * @readonly
  * @enum TextAlignment
  */
 cc.TextAlignment = cc.Enum({
@@ -165,7 +187,6 @@ cc.TextAlignment = cc.Enum({
 
 /**
  * Enum for vertical text alignment
- * @readonly
  * @enum VerticalTextAlignment
  */
 cc.VerticalTextAlignment = cc.Enum({

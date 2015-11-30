@@ -46,7 +46,25 @@ p.stopState = function (state) {
     }
 };
 
-if (CC_EDITOR) {
+p.pauseState = function (state) {
+    if (state) {
+        state.pause();
+    }
+};
+
+p.resumeState = function (state) {
+    if (state) {
+        state.resume();
+    }
+};
+
+p.setStateTime = function (state, time) {
+    if (state) {
+        state.setTime(time);
+    }
+}
+
+if (CC_EDITOR || CC_TEST) {
     p.reloadClip = function (state) {
         if (state.isPlaying) {
             initClipData(this.target, state);
@@ -102,6 +120,9 @@ function initClipData (root, state) {
 
     if ((state.wrapMode & WrapModeMask.Loop) === WrapModeMask.Loop) {
         state.repeatCount = Infinity;
+    }
+    else {
+        state.repeatCount = 1;
     }
 
     // create curves
@@ -178,7 +199,11 @@ function initClipData (root, state) {
 
             var curveTypes = keyframe.curve;
             if (curveTypes) {
-                if (Array.isArray(curveTypes)) {
+                if (typeof curveTypes === 'string') {
+                    curve.types.push(curveTypes);
+                    continue;
+                }
+                else if (Array.isArray(curveTypes)) {
                     if (curveTypes[0] === curveTypes[1] &&
                         curveTypes[2] === curveTypes[3]) {
                         curve.types.push(DynamicAnimCurve.Linear);
@@ -217,7 +242,6 @@ function initClipData (root, state) {
                 var comp = target.getComponent(compName);
 
                 if (!comp) {
-                    cc.error('Can\'t get component [' + compName + '] of target [' + target.name +']');
                     continue;
                 }
 
@@ -275,7 +299,6 @@ function initClipData (root, state) {
         var target = cc.find(namePath, root);
 
         if (!target) {
-            cc.error('Can\'t find child [' + namePath + '] of [' + root.name +']');
             continue;
         }
 

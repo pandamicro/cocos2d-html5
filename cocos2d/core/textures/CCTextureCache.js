@@ -334,7 +334,7 @@ game.once(game.EVENT_RENDERER_INITED, function () {
     } else if (cc._renderType === game.RENDER_TYPE_WEBGL) {
         
         _p.handleLoadedTexture = function (url) {
-            var locTexs = this._textures, tex, ext;
+            var locTexs = this._textures, tex, premultiplied;
             //remove judge(webgl)
             if (!cc.game._rendererInitialized) {
                 locTexs = this._loadedTexturesBefore;
@@ -344,13 +344,8 @@ game.once(game.EVENT_RENDERER_INITED, function () {
                 tex = locTexs[url] = new Texture2D();
                 tex.url = url;
             }
-            ext = cc.path.extname(url);
-            if (ext === ".png") {
-                tex.handleLoadedTexture(true);
-            }
-            else {
-                tex.handleLoadedTexture();
-            }
+            premultiplied = cc.AUTO_PREMULTIPLIED_ALPHA_FOR_PNG && (cc.path.extname(url) === ".png");
+            tex.handleLoadedTexture(premultiplied);
         };
 
         _p.addImage = function (url, cb, target) {

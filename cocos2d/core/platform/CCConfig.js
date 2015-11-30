@@ -108,6 +108,15 @@ cc.SPRITEBATCHNODE_RENDER_SUBPIXEL = 1;
 
 /**
  * <p>
+ *     Automatically premultiply alpha for PNG resources
+ * </p>
+ * @constant
+ * @type {Number}
+ */
+cc.AUTO_PREMULTIPLIED_ALPHA_FOR_PNG = 0;
+
+/**
+ * <p>
  *     If most of your images have pre-multiplied alpha, set it to 1 (if you are going to use .PNG/.JPG file images).<br/>
  *     Only set to 0 if ALL your images by-pass Apple UIImage loading system (eg: if you use libpng or PVR images)<br/>
  *     <br/>
@@ -117,7 +126,7 @@ cc.SPRITEBATCHNODE_RENDER_SUBPIXEL = 1;
  * @constant
  * @type {Number}
  */
-cc.OPTIMIZE_BLEND_FUNC_FOR_PREMULTIPLIED_ALPHA = 1;
+cc.OPTIMIZE_BLEND_FUNC_FOR_PREMULTIPLIED_ALPHA = 0;
 
 /**
  * <p>

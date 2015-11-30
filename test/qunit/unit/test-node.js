@@ -353,3 +353,38 @@ test('isChildOf', function () {
     strictEqual(ent2.isChildOf(ent1), true, 'is child of its parent');
     strictEqual(ent3.isChildOf(ent1), true, 'is child of its ancestor');
 });
+
+
+test('attach events', function () {
+    var parent = cc.director.getScene();
+    var child = new cc.ENode();
+
+    var attachedNode = null;
+    var detachedNode = null;
+
+    function onAttach (event) {
+        attachedNode = event.detail.target;
+    }
+    function onDetach (event) {
+        detachedNode = event.detail.target;
+        if (attachedNode === detachedNode) {
+            attachedNode = null;
+        }
+    }
+
+    cc.engine.on('node-attach-to-scene', onAttach);
+    cc.engine.on('node-detach-from-scene', onDetach);
+
+    child.parent = parent;
+
+    strictEqual(attachedNode, child);
+    strictEqual(detachedNode, null);
+
+    child.parent = null;
+
+    strictEqual(attachedNode, null);
+    strictEqual(detachedNode, child);
+
+    cc.engine.off('node-attach-to-scene', onAttach);
+    cc.engine.off('node-detach-from-scene', onDetach);
+});

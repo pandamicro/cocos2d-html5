@@ -115,17 +115,17 @@
 
     proto._spriteFrameLoadedCallback = function (event) {
         var spriteFrame = event.currentTarget;
-        this.setTextureRect(spriteFrame.getRect(), spriteFrame.isRotated(), spriteFrame.getOriginalSize());
-        this.emit("load");
+        this._node.setTextureRect(spriteFrame.getRect(), spriteFrame.isRotated(), spriteFrame.getOriginalSize());
+        this._node.emit("load");
     };
 
     proto._textureLoadedCallback = function (event) {
-        var renderCmd = this._renderCmd, sender = event.currentTarget;
-        if (this._textureLoaded)
+        var node = this._node, sender = event.currentTarget;
+        if (node._textureLoaded)
             return;
 
-        this._textureLoaded = true;
-        var locRect = this._rect;
+        node._textureLoaded = true;
+        var locRect = node._rect;
         if (!locRect) {
             locRect = cc.rect(0, 0, sender.width, sender.height);
         } else if (cc._rectEqualToZero(locRect)) {
@@ -133,14 +133,14 @@
             locRect.height = sender.height;
         }
 
-        this.texture = sender;
-        this.setTextureRect(locRect, this._rectRotated);
+        node.texture = sender;
+        node.setTextureRect(locRect, node._rectRotated);
 
         // by default use "Self Render".
         // if the sprite is added to a batchnode, then it will automatically switch to "batchnode Render"
-        this.setBatchNode(this._batchNode);
-        renderCmd._quadDirty = true;
-        this.emit("load");
+        node.setBatchNode(node._batchNode);
+        this._quadDirty = true;
+        node.emit("load");
     };
 
     proto._setTextureCoords = function (rect, needConvert) {

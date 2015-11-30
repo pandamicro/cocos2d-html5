@@ -49,7 +49,7 @@ function setMaxZOrder (node) {
  * - notifications if some properties changed
  * - define some interfaces shares between CCENode and CCEScene
  *
- * @class BaseNode
+ * @class _BaseNode
  * @extends Object
  */
 var BaseNode = cc.Class(/** @lends cc.ENode# */{
@@ -66,7 +66,7 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
         _cascadeColorEnabled: false,
         _parent: null,
         _anchorPoint: cc.p(0.5, 0.5),
-        _contentSize: cc.size(100, 100),
+        _contentSize: cc.size(0, 0),
         _children: [],
         _rotationX: 0,
         _rotationY: 0.0,
@@ -107,6 +107,9 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
                 return this._parent;
             },
             set: function (value) {
+                if (this._parent === value) {
+                    return;
+                }
                 var node = this._sgNode;
                 if (node._parent) {
                     node._parent.removeChild(node, false);
@@ -122,7 +125,11 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
                 this._parent = value || null;
                 if (oldParent) {
                     if (!(oldParent._objFlags & Destroying)) {
-                        oldParent._children.splice(oldParent._children.indexOf(this), 1);
+                        var removeAt = oldParent._children.indexOf(this);
+                        if (removeAt < 0 && CC_EDITOR) {
+                            return cc.error('Internal error, should not remove unknown node from parent.');
+                        }
+                        oldParent._children.splice(removeAt, 1);
                         this._onHierarchyChanged(oldParent);
                     }
                 }
@@ -368,6 +375,9 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
                 }
             },
             set: function (value) {
+                if (this._sizeProvider) {
+                    this._sizeProvider.setContentSize(value, this.height);
+                }
                 this._contentSize.width = value;
                 this._onSizeChanged();
             },
@@ -390,6 +400,9 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
                 }
             },
             set: function (value) {
+                if (this._sizeProvider) {
+                    this._sizeProvider.setContentSize(this.width, value);
+                }
                 this._contentSize.height = value;
                 this._onSizeChanged();
             },
@@ -751,6 +764,9 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
                 return;
             locContentSize.width = size;
             locContentSize.height = height;
+        }
+        if (this._sizeProvider) {
+            this._sizeProvider.setContentSize(locContentSize);
         }
         this._onSizeChanged();
     },
@@ -1381,4 +1397,4 @@ var BaseNode = cc.Class(/** @lends cc.ENode# */{
  */
 
 
-module.exports = BaseNode;
+cc._BaseNode = module.exports = BaseNode;

@@ -10,8 +10,6 @@ function Playable () {
     this._stepOnce = false;
 }
 
-//JS.extend(Playable, EventTarget);
-
 var prototype = Playable.prototype;
 
 /**
@@ -69,6 +67,7 @@ prototype.onError = virtual;
 // public
 
 /**
+ * Play this animation
  * @method play
  */
 prototype.play = function () {
@@ -76,39 +75,45 @@ prototype.play = function () {
         if (this._isPaused) {
             this._isPaused = false;
             this.onResume();
-            //this.emit('resume');
         }
         else {
             this.onError('already-playing');
-            //this.emit('error', 'already-play');
         }
     }
     else {
         this._isPlaying = true;
         this.onPlay();
-        //this.emit('play');
     }
 };
 
 /**
+ * Stop this animation
  * @method stop
  */
 prototype.stop = function () {
     if (this._isPlaying) {
         this._isPlaying = false;
         this._isPaused = false;
-        //this.emit('stop');
         this.onStop();
     }
 };
 
 /**
+ * Pause this animation
  * @method pause
  */
 prototype.pause = function () {
     this._isPaused = true;
-    //this.emit('pause');
     this.onPause();
+};
+
+/**
+ * Resume this animation
+ * @method resume
+ */
+prototype.resume = function () {
+    this._isPaused = false;
+    this.onResume();
 };
 
 /**

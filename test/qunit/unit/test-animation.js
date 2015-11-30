@@ -4,6 +4,41 @@ var color = cc.color;
 var Color = cc.Color;
 var v2 = cc.v2;
 
+test('curve types', function () {
+    var initClipData = cc._Test.initClipData;
+    var bezierByTime = cc._Test.bezierByTime;
+
+    var entity = new cc.ENode();
+
+    var clip = new cc.AnimationClip();
+    clip._duration = 3;
+    clip.sample = 10;
+    clip.curveData = {
+        props: {
+            x: [
+                {frame: 0, value: 0, curve: 'cubicInOut'},
+                {frame: 1, value: 100, curve: [0, 0.5, 0.5, 1]},
+                {frame: 2, value: 200},
+                {frame: 3, value: 300}
+            ]
+        }
+    };
+
+    state = new cc.AnimationState(clip);
+    initClipData(entity, state);
+
+    state.update(0);
+
+    state.update(0.2);
+    strictEqual(entity.x, cc.Easing.cubicInOut(0.2) * 100, 'should wrap time by cc.Easing.cubicInOut');
+
+    state.update(1.2);
+    close(entity.x, bezierByTime([0, 0.5, 0.5, 1], 0.4) * 100 + 100, 0.0001, 'should wrap time by bezierByTime');
+
+    state.update(1.3);
+    strictEqual(entity.x, 0.7 * 100 + 200, 'should wrap time by linear');
+});
+
 test('computeNullRatios', function () {
     var computeNullRatios = cc._Test.computeNullRatios;
     var computedRatio;
@@ -187,6 +222,69 @@ test('AnimationNode', function () {
 
     animation.update(actualDuration / 4);
     deepEqual(renderer.colorProp, color(255, 255, 255, 255 * 0.75), 'should not animate if stopped');
+});
+
+test('AnimationNode.getWrappedInfo', function () {
+    var info;
+    var animation = new cc.AnimationNode();
+
+    animation.duration = 2;
+    animation.wrapMode = cc.WrapMode.PingPong;
+    animation.repeatCount = Infinity;
+
+    function deepClose (actual, expected, maxDifference, message) {
+        close(actual.time, expected.time, maxDifference, message + '[time]');
+        close(actual.ratio, expected.ratio, maxDifference, message + '[ratio]');
+        close(actual.direction, expected.direction, maxDifference, message + '[direction]');
+        close(actual.stopped, expected.stopped, maxDifference, message + '[stopped]');
+        close(actual.iterations, expected.iterations, maxDifference, message + '[iterations]');
+    }
+
+    info = animation.getWrappedInfo(0);
+    deepClose(info, {
+        time: 0,
+        ratio: 0,
+        direction: 1,
+        stopped: false,
+        iterations: 0
+    }, 0.00001, 'should start at time 0');
+
+    info = animation.getWrappedInfo(2);
+    deepClose(info, {
+        time: 2,
+        ratio: 1,
+        direction: 1,
+        stopped: false,
+        iterations: 1
+    }, 0.00001, 'should at the end of first loop');
+
+    info = animation.getWrappedInfo(2.1);
+    deepClose(info, {
+        time: 1.9,
+        ratio: 0.95,
+        direction: -1,
+        stopped: false,
+        iterations: 1.05
+    }, 0.00001, 'should at 2nd loop');
+
+    info = animation.getWrappedInfo(4.0);
+    deepClose(info, {
+        time: 0,
+        ratio: 0,
+        direction: -1,
+        stopped: false,
+        iterations: 2
+    }, 0.00001, 'should at the end of second loop');
+
+    info = animation.getWrappedInfo(4.2);
+    deepClose(info, {
+        time: 0.2,
+        ratio: 0.1,
+        direction: 1,
+        stopped: false,
+        iterations: 2.1
+    }, 0.00001, 'should at 3rd loop');
+
 });
 
 test('wrapMode', function () {
@@ -400,6 +498,63 @@ test('Animation Component', function () {
     animation.removeClip(clip);
     strictEqual(animation._clips.length, 0, 'should remove clip');
     strictEqual(animation.getAnimationState('test'), null, 'should remove state');
+});
+
+
+test('CCAnimation._updateClip', function () {
+    var entity = new cc.ENode();
+    var animation = entity.addComponent(cc.AnimationComponent);
+
+    entity.x = 400;
+
+    var clip = new cc.AnimationClip();
+    clip._name = 'test';
+    clip._duration = 1;
+    clip.curveData = {
+        props: {
+            x: [
+                {frame: 0, value: 0},
+                {frame: 1, value: 100}
+            ]
+        }
+    };
+
+    animation.addClip(clip);
+    animation.defaultClip = clip;
+    animation._init();
+
+    animation.play('test');
+    animation.setCurrentTime(0.5, 'test');
+    animation.sample();
+
+    strictEqual(entity.x, 50, 'entity x should be 50');
+
+    var newClip = new cc.AnimationClip();
+    newClip._name = 'test';
+    newClip._duration = 1;
+    newClip.curveData = {
+        props: {
+            x: [
+                {frame: 0.5, value: 0},
+                {frame: 1, value: 100}
+            ]
+        }
+    };
+
+    animation._updateClip(newClip);
+
+    strictEqual(animation._clips.length, 1, 'animation clips length should be 1 after update clip');
+    strictEqual(animation._clips[0], newClip, 'animation clips should only include new clip');
+    strictEqual(animation.getAnimationState(newClip.name).clip, newClip, 'new animation state\'s clip should be new clip');
+
+    strictEqual(entity.x, 0, 'entity x should be 0');
+
+    clip = new cc.AnimationClip();
+    clip._name = 'test2';
+    animation.addClip(clip);
+
+    animation._updateClip(newClip);
+    strictEqual(animation._clips.indexOf(newClip), 0, 'clip index should be 0');
 });
 
 test('sampleMotionPaths', function () {

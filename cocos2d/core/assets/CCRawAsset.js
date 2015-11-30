@@ -17,13 +17,13 @@ cc.RawAsset = cc.Class({
          * Create a new node in the scene.
          * If this type of asset dont have its corresponding node type, this method should be null.
          *
-         * @method createNodeByUrl
-         * @param {String} url
+         * @method createNodeByInfo
+         * @param {Object} Info
          * @param {Function} callback
          * @param {String} callback.error - null or the error info
          * @param {Object} callback.node - the created node or null
          */
-        createNodeByUrl: null,
+        createNodeByInfo: null,
     }
 });
 

@@ -33,7 +33,7 @@ var DontDestroy = Flags.DontDestroy;
 /**
  * Class of all entities in Fireball scenes.
  * @class ENode
- * @extends NodeWrapper
+ * @extends _BaseNode
  */
 var Node = cc.Class({
     name: 'cc.Node',
@@ -154,12 +154,9 @@ var Node = cc.Class({
     },
 
     _onPreDestroy: function () {
-        var parent = this._parent, i, len;
+        var i, len;
         this._objFlags |= Destroying;
-        var destroyByParent = parent && (parent._objFlags & Destroying);
-        if (!destroyByParent) {
-            this._removeSgNode();
-        }
+
         // Remove all listeners
         for (i = 0, len = this.__eventTargets.length; i < len; ++i) {
             var target = this.__eventTargets[i];
@@ -176,19 +173,26 @@ var Node = cc.Class({
         if (this._persistNode) {
             cc.game.removePersistRootNode(this);
         }
-        // remove self
-        if (parent) {
-            if (!destroyByParent) {
-                parent._children.splice(parent._children.indexOf(this), 1);
-            }
-        }
         // destroy children
         var children = this._children;
         for (i = 0, len = children.length; i < len; ++i) {
             // destroy immediate so its _onPreDestroy can be called before
             children[i]._destroyImmediate();
         }
-
+        // remove self
+        var parent = this._parent;
+        var destroyByParent = parent && (parent._objFlags & Destroying);
+        if (!destroyByParent) {
+            if (parent) {
+                parent._children.splice(parent._children.indexOf(this), 1);
+            }
+            this._removeSgNode();
+            // simulate some destruct logic to make undo system work correctly
+            if (CC_EDITOR) {
+                // ensure this node can reattach to scene by undo system
+                this._parent = null;
+            }
+        }
         // detach
         this._registerIfAttached(false);
     },
@@ -224,6 +228,15 @@ var Node = cc.Class({
             }
         }
         return null;
+    },
+
+    _checkMultipleComp: CC_EDITOR && function (ctor) {
+        if (this.getComponent(ctor._disallowMultiple)) {
+            cc.error("The component %s can't be added because %s already contains the same (or subtype) component.",
+                JS.getClassName(typeOrClassName), this._name);
+            return false;
+        }
+        return true;
     },
 
     /**
@@ -265,9 +278,7 @@ var Node = cc.Class({
             return null;
         }
         if (constructor._disallowMultiple && CC_EDITOR) {
-            if (this.getComponent(constructor._disallowMultiple)) {
-                cc.error("The component %s can't be added because %s already contains the same (or subtype) component.",
-                    JS.getClassName(typeOrClassName), this._name);
+            if (!this._checkMultipleComp(constructor)) {
                 return null;
             }
         }
@@ -284,6 +295,40 @@ var Node = cc.Class({
         }
 
         return component;
+    },
+
+    /**
+     * This api should only used by undo system
+     * @method _addComponentAt
+     * @param {Component} comp
+     * @param {Number} index
+     * @private
+     */
+    _addComponentAt: CC_EDITOR && function (comp, index) {
+        if (this._objFlags & Destroying) {
+            return cc.error('isDestroying');;
+        }
+        if (typeof comp !== 'function') {
+            return cc.error("_addComponentAt: The component to add must be a constructor");
+        }
+        if (index > this._components.length) {
+            return cc.error("_addComponentAt: Index out of range");
+        }
+
+        var ctor = comp.constructor;
+        if (ctor._disallowMultiple) {
+            if (!this._checkMultipleComp(ctor)) {
+                return;
+            }
+        }
+
+        comp.node = this;
+        this._components.splice(index, 0, comp);
+
+        if (this._activeInHierarchy) {
+            // call onLoad/onEnable
+            comp.__onNodeActivated(true);
+        }
     },
 
     /**
@@ -341,9 +386,11 @@ var Node = cc.Class({
         if (CC_EDITOR || CC_TEST) {
             if (register) {
                 cc.engine.attachedObjsForEditor[this.uuid] = this;
+                cc.engine.emit('node-attach-to-scene', {target: this});
                 //this._objFlags |= RegisteredInEditor;
             }
             else {
+                cc.engine.emit('node-detach-from-scene', {target: this});
                 delete cc.engine.attachedObjsForEditor[this._id];
             }
         }
@@ -422,11 +469,12 @@ var Node = cc.Class({
 
     _instantiate: function () {
         var clone = cc.instantiate._clone(this, this);
+        clone._parent = null;
+
         // init
-        if (CC_EDITOR && cc.engine.isPlaying) {
+        if (CC_EDITOR && cc.engine._isPlaying) {
             this._name += ' (Clone)';
         }
-
         clone._onBatchCreated();
 
         return clone;

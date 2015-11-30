@@ -252,7 +252,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
         if(!spriteFrame.textureLoaded()){
             //add event listener
             this._textureLoaded = false;
-            spriteFrame.once("load", this._renderCmd._spriteFrameLoadedCallback, this);
+            spriteFrame.once("load", this._renderCmd._spriteFrameLoadedCallback, this._renderCmd);
         }
 
         //TODO
@@ -729,8 +729,8 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
                 _t._rect.height = rect.height;
             }
             if(_t.texture)
-                _t.texture.off("load", _t._renderCmd._textureLoadedCallback, _t);
-            texture.once("load", _t._renderCmd._textureLoadedCallback, _t);
+                _t.texture.off("load", _t._renderCmd._textureLoadedCallback, _t._renderCmd);
+            texture.once("load", _t._renderCmd._textureLoadedCallback, _t._renderCmd);
             _t.setTexture(texture);
             return true;
         }
@@ -746,6 +746,7 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
         // by default use "Self Render".
         // if the sprite is added to a batchnode, then it will automatically switch to "batchnode Render"
         _t.setBatchNode(null);
+        this.emit("load");
         return true;
     },
 
@@ -949,12 +950,14 @@ cc.Sprite = cc.Node.extend(/** @lends cc.Sprite# */{
             this._setTexture(texture, isFileName);
             this.setColor(this._realColor);
             this._textureLoaded = true;
+            this.emit("load");
         }else{
             this._renderCmd._setTexture(texture);
             texture.once("load", function (event) {
                 this._setTexture(texture, isFileName);
                 this.setColor(this._realColor);
                 this._textureLoaded = true;
+                this.emit("load");
             }, this);
         }
     },

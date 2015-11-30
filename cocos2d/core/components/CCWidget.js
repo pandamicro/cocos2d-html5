@@ -29,8 +29,8 @@ var BOT     = 1 << 2;
 var LEFT    = 1 << 3;
 var CENTER  = 1 << 4;   // horizontal center
 var RIGHT   = 1 << 5;
-var LEFT_RIGHT = LEFT | RIGHT;
 var TOP_BOT = TOP | BOT;
+var LEFT_RIGHT = LEFT | RIGHT;
 
 /**
  * Stores and manipulate the anchoring based on its parent.
@@ -44,7 +44,9 @@ var Widget = cc.Class({
 
     editor: CC_EDITOR && {
         menu: 'Widget',
-        executeInEditMode: true
+        executeInEditMode: true,
+        disallowMultiple: true,
+        inspector: 'app://editor/page/inspector/widget/index.html'
     },
 
     properties: {
@@ -378,6 +380,24 @@ var Widget = cc.Class({
                     // become stretch
                     this._originalHeight = this.node.height;
                 }
+            }
+
+            if (CC_EDITOR && !cc.engine._isPlaying) {
+                // adjust the offsets to keep the size and position unchanged after alignment chagned
+                var type;
+                if (flag & TOP) {
+                    type = 'top';
+                }
+                else if (flag & LEFT) {
+                    type = 'left';
+                }
+                else if (flag & RIGHT) {
+                    type = 'right';
+                }
+                else if (flag & BOT) {
+                    type = 'bottom';
+                }
+                cc._widgetManager.updateOffsetsToStayPut(this, type);
             }
         }
         else {

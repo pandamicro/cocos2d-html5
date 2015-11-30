@@ -10,20 +10,24 @@ var JS = require('../platform/js');
  * @see cc.size
  */
 function Size (width, height) {
-    this.width = width || 0;
-    this.height = height || 0;
+    if (typeof width === 'object') {
+        height = width.height;
+        width = width.width;
+    }
+    this.width = typeof width === 'number' ? width : 0;
+    this.height = typeof height === 'number' ? height : 0;
 }
 JS.extend(Size, ValueType);
 require('../platform/CCClass').fastDefine('cc.Size', Size, ['width', 'height']);
 
 /**
  * return a Size object with width = 0 and height = 0.
- * @property zero
+ * @property ZERO
  * @type {Size}
  * @default new Size(0, 0)
  * @static
  */
-JS.get(Size, 'zero', function () {
+JS.get(Size, 'ZERO', function () {
     return new Size(0.0, 0.0);
 });
 
@@ -83,10 +87,6 @@ proto.toString = function () {
  * @example {@link utils/api/cocos/docs/cocos2d/core/value-types/CCSize/size.js}
  */
 cc.size = function (w, h) {
-    if (w === undefined)
-        return new Size(0, 0);
-    if (h === undefined)
-        return new Size(w.width, w.height);
     return new Size(w, h);
 };
 

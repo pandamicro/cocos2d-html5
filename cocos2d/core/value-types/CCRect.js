@@ -15,6 +15,12 @@ var JS = require('../platform/js');
  * @param {Number} [h=0]
  */
 function Rect (x, y, w, h) {
+    if (typeof x === 'object') {
+        y = x.y;
+        w = x.width;
+        h = x.height;
+        x = x.x;
+    }
     this.x = typeof x === 'number' ? x : 0.0;
     this.y = typeof y === 'number' ? y : 0.0;
     this.width = typeof w === 'number' ? w : 0.0;
@@ -38,18 +44,6 @@ Rect.fromMinMax = function (v1, v2) {
     var max_y = Math.max(v1.y, v2.y);
 
     return new Rect(min_x, min_y, max_x - min_x, max_y - min_y);
-};
-
-/**
- * Creates a rectangle from left-top coordinate value and size.
- * @static
- * @method fromVec2
- * @param {Vec2} leftTop
- * @param {Vec2} size
- * @return {Rect}
- */
-Rect.fromVec2 = function (leftTop, size) {
-    return new Rect(leftTop.x, leftTop.y, size.x, size.y);
 };
 
 /**
@@ -188,16 +182,15 @@ Object.defineProperty(proto, 'center', {
 });
 
 /**
- * @property size
- * @type {Vec2}
+ * @property {Size} size
  */
 Object.defineProperty(proto, 'size', {
     get: function () {
-        return new cc.Vec2(this.width, this.height);
+        return new cc.Size(this.width, this.height);
     },
     set: function (value) {
-        this.width = value.x;
-        this.height = value.y;
+        this.width = value.width;
+        this.height = value.height;
     }
 });
 
@@ -250,10 +243,6 @@ cc.Rect = Rect;
  * @return {Rect}
  */
 cc.rect = function rect (x, y, w, h) {
-    if (x === undefined)
-        return new Rect(0, 0, 0, 0);
-    if (y === undefined)
-        return new Rect(x.x, x.y, x.width, x.height);
     return new Rect(x, y, w, h);
 };
 

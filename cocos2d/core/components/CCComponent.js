@@ -46,12 +46,14 @@ function callOnEnable (self, enable) {
                 else {
                     self.onEnable();
                 }
-                if (!(self._objFlags & IsOnStartCalled) && self.start) {
-                    cc.director.once(cc.Director.EVENT_BEFORE_UPDATE, _callStart, self);
-                }
-                self.update && cc.director.on(cc.Director.EVENT_COMPONENT_UPDATE, _callUpdate, self);
-                self.lateUpdate && cc.director.on(cc.Director.EVENT_COMPONENT_LATE_UPDATE, _callLateUpdate, self);
             }
+
+            if (!(self._objFlags & IsOnStartCalled) && self.start) {
+                cc.director.once(cc.Director.EVENT_BEFORE_UPDATE, _callStart, self);
+            }
+            self.update && cc.director.on(cc.Director.EVENT_COMPONENT_UPDATE, _callUpdate, self);
+            self.lateUpdate && cc.director.on(cc.Director.EVENT_COMPONENT_LATE_UPDATE, _callLateUpdate, self);
+
             self._objFlags |= IsOnEnableCalled;
         }
     }
@@ -64,16 +66,18 @@ function callOnEnable (self, enable) {
                 else {
                     self.onDisable();
                 }
-                self.update && cc.director.off(cc.Director.EVENT_COMPONENT_UPDATE, _callUpdate, self);
-                self.lateUpdate && cc.director.off(cc.Director.EVENT_COMPONENT_LATE_UPDATE, _callLateUpdate, self);
             }
+
+            self.update && cc.director.off(cc.Director.EVENT_COMPONENT_UPDATE, _callUpdate, self);
+            self.lateUpdate && cc.director.off(cc.Director.EVENT_COMPONENT_LATE_UPDATE, _callLateUpdate, self);
+
             self._objFlags &= ~IsOnEnableCalled;
         }
     }
 }
 
 var _callStart = CC_EDITOR ? function () {
-    var isPlaying = cc.engine.isPlaying;
+    var isPlaying = cc.engine._isPlaying;
     if (!(this._objFlags & IsOnStartCalled) && (isPlaying || this.constructor._executeInEditMode)) {
         if (this.start) {
             callStartInTryCatch(this);
@@ -88,31 +92,31 @@ var _callStart = CC_EDITOR ? function () {
         this._objFlags |= IsOnStartCalled;
     }
 };
-var _callUpdate = CC_EDITOR ? function (dt) {
-    var isPlaying = cc.engine.isPlaying;
+var _callUpdate = CC_EDITOR ? function (event) {
+    var isPlaying = cc.engine._isPlaying;
     if ((isPlaying || this.constructor._executeInEditMode) && this.update) {
         try {
-            this.update(dt);
+            this.update(event.detail);
         }
         catch (e) {
             cc._throw(e);
         }
     }
-} : function (dt) {
-    this.update && this.update(dt);
+} : function (event) {
+    this.update && this.update(event.detail);
 };
-var _callLateUpdate = CC_EDITOR ? function (dt) {
-    var isPlaying = cc.engine.isPlaying;
+var _callLateUpdate = CC_EDITOR ? function (event) {
+    var isPlaying = cc.engine._isPlaying;
     if ((isPlaying || this.constructor._executeInEditMode) && this.lateUpdate) {
         try {
-            this.lateUpdate(dt);
+            this.lateUpdate(event.detail);
         }
         catch (e) {
             cc._throw(e);
         }
     }
-} : function (dt) {
-    this.lateUpdate && this.lateUpdate(dt);
+} : function (event) {
+    this.lateUpdate && this.lateUpdate(event.detail);
 };
 
 //var createInvoker = function (timerFunc, timerWithKeyFunc, errorInfo) {
@@ -220,8 +224,8 @@ var Component = cc.Class({
                 if (this.__scriptUuid !== value) {
                     if (value && Editor.isUuid(value._uuid)) {
                         var classId = Editor.compressUuid(value._uuid);
-                        var newComp = cc.js._getClassById(classId);
-                        if (newComp) {
+                        var NewComp = cc.js._getClassById(classId);
+                        if (cc.isChildClassOf(NewComp, cc.Component)) {
                             cc.warn('Sorry, replacing component script is not yet implemented.');
                             //Editor.sendToWindows('reload:window-scripts', Editor._Sandbox.compiled);
                         }
@@ -292,7 +296,7 @@ var Component = cc.Class({
         },
 
         /**
-         * Register all related EventTargets, 
+         * Register all related EventTargets,
          * all event callbacks will be removed in _onPreDestroy
          * @property __eventTargets
          * @type {Array}
@@ -481,12 +485,12 @@ var Component = cc.Class({
 
     __onNodeActivated: CC_EDITOR ? function (active) {
         if (!(this._objFlags & IsOnLoadCalled) &&
-            (cc.engine.isPlaying || this.constructor._executeInEditMode)) {
+            (cc.engine._isPlaying || this.constructor._executeInEditMode)) {
             if (this.onLoad) {
                 callOnLoadInTryCatch(this);
                 this._objFlags |= IsOnLoadCalled;
 
-                if (!cc.engine.isPlaying) {
+                if (!cc.engine._isPlaying) {
                     var focused = Editor.Selection.curActivate('node') === this.node.uuid;
                     if (focused && this.onFocusInEditMode) {
                         callOnFocusInTryCatch(this);
@@ -531,7 +535,7 @@ var Component = cc.Class({
         // onDestroy
         if (CC_EDITOR) {
             Editor._AssetsWatcher.stop(this);
-            if (cc.engine.isPlaying || this.constructor._executeInEditMode) {
+            if (cc.engine._isPlaying || this.constructor._executeInEditMode) {
                 if (this.onDestroy) {
                     callOnDestroyInTryCatch(this);
                 }
@@ -631,8 +635,8 @@ if (CC_EDITOR || CC_TEST) {
         });
     };
 
+    // use defineProperty to prevent inherited by sub classes
     Object.defineProperty(Component, '_registerEditorProps', {
-        // use defineProperty to prevent inherited by sub classes
         value: function (cls, props) {
             var name = cc.js.getClassName(cls);
             for (var key in props) {
@@ -645,7 +649,8 @@ if (CC_EDITOR || CC_TEST) {
 
                     case 'playOnFocus':
                         if (val) {
-                            if (props.executeInEditMode) {
+                            var willExecuteInEditMode = ('executeInEditMode' in props) ? props.executeInEditMode : cls._executeInEditMode;
+                            if (willExecuteInEditMode) {
                                 cls._playOnFocus = true;
                             }
                             else {
