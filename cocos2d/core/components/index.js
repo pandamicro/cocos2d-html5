@@ -6,5 +6,6 @@ module.exports = [
     require('./CCWidget'),
     require('./CCCanvas'),
     require('./CCAudioSource'),
-    require('./CCAnimation')
+    require('./CCAnimation'),
+    require('./CCButton'),
 ];
