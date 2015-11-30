@@ -131,6 +131,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Pauses all listeners which are associated the specified target.
+     * @method pauseTarget
      * @param {ENode} node
      * @param {Boolean} [recursive=false]
      */
@@ -149,6 +150,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Resumes all listeners which are associated the specified target.
+     * @method resumeTarget
      * @param {ENode} node
      * @param {Boolean} [recursive=false]
      */
@@ -643,6 +645,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
      * if the parameter "nodeOrPriority" is a node, it means to add a event listener for a specified event with the priority of scene graph.                   <br/>
      * if the parameter "nodeOrPriority" is a Number, it means to add a event listener for a specified event with the fixed priority.                          <br/>
      * </p>
+     * @method addListener
      * @param {EventListener|Object} listener - The listener of a specified event or a object of some event parameters.
      * @param {ENode|Number} nodeOrPriority - The priority of the listener is based on the draw order of this node or fixedPriority The fixed priority of the listener.
      * @note  The priority of scene graph will be fixed value 0. So the order of listener item in the vector will be ' <0, scene graph (0 priority), >0'.
@@ -689,6 +692,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Adds a Custom event listener. It will use a fixed priority of 1.
+     * @method addCustomListener
      * @param {String} eventName
      * @param {Function} callback
      * @return {EventListener} the generated event. Needed in order to remove the event from the dispatcher
@@ -701,6 +705,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Remove a listener.
+     * @method removeListener
      * @param {EventListener} listener - an event listener or a registered node target
      */
     removeListener: function (listener) {
@@ -788,6 +793,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Removes all listeners with the same event listener type or removes all listeners of a node
+     * @method removeListeners
      * @param {Number|ENode} listenerType - listenerType or a node
      * @param {Boolean} [recursive=false]
      */
@@ -845,6 +851,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Removes all custom listeners with the same event name
+     * @method removeCustomListeners
      * @param {String} customEventName
      */
     removeCustomListeners: function (customEventName) {
@@ -864,6 +871,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Sets listener's priority with fixed value.
+     * @method setPriority
      * @param {EventListener} listener
      * @param {Number} fixedPriority
      */
@@ -892,6 +900,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Whether to enable dispatching events
+     * @method setEnabled
      * @param {Boolean} enabled
      */
     setEnabled: function (enabled) {
@@ -900,6 +909,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Checks whether dispatching events is enabled
+     * @method isEnabled
      * @returns {Boolean}
      */
     isEnabled: function () {
@@ -908,6 +918,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Dispatches the event, also removes all EventListeners marked for deletion from the event dispatcher list.
+     * @method dispatchEvent
      * @param {Event} event
      */
     dispatchEvent: function (event) {
@@ -942,6 +953,7 @@ cc.eventManager = /** @lends cc.eventManager# */{
 
     /**
      * Dispatches a Custom Event with a event name an optional user data
+     * @method dispatchCustomEvent
      * @param {String} eventName
      * @param {*} optionalUserData
      */
