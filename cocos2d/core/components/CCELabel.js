@@ -105,6 +105,7 @@ var Label = cc.Class({
          */
         overFlow: {
             default: Overflow.CLAMP,
+            type: Overflow,
             notify: function () {
                 var sgNode = this._sgNode;
                 if (sgNode) {
