@@ -26,6 +26,11 @@ var HorizontalAlign = cc.TextAlignment;
 var VerticalAlign = cc.VerticalTextAlignment;
 var Overflow = cc.Label.Overflow;
 
+/**
+ *
+ * @class ELabel
+ * @extends _ComponentInSG
+ */
 var Label = cc.Class({
     name: 'cc.Label',
     extends: cc._ComponentInSG,
@@ -36,6 +41,10 @@ var Label = cc.Class({
 
     properties: {
 
+        /**
+         * Content string of label
+         * @property {String} string
+         */
         string: {
             default: '',
             notify: function () {
@@ -46,6 +55,10 @@ var Label = cc.Class({
             }
         },
 
+        /**
+         * Horizontal Alignment of label
+         * @property {TextAlignment} horizontalAlign
+         */
         horizontalAlign: {
             default: HorizontalAlign.LEFT,
             type: HorizontalAlign,
@@ -57,6 +70,10 @@ var Label = cc.Class({
             },
         },
 
+        /**
+         * Vertical Alignment of label
+         * @property {VerticalTextAlignment} verticalAlign
+         */
         verticalAlign: {
             default: VerticalAlign.TOP,
             type: VerticalAlign,
@@ -68,6 +85,10 @@ var Label = cc.Class({
             },
         },
 
+        /**
+         * Font size of label
+         * @property {Number} fontSize
+         */
         fontSize: {
             default: 18,
             notify: function () {
@@ -78,6 +99,10 @@ var Label = cc.Class({
             }
         },
 
+        /**
+         * OverFlow of label
+         * @property {Overflow} overFlow
+         */
         overFlow: {
             default: Overflow.CLAMP,
             notify: function () {
@@ -88,6 +113,10 @@ var Label = cc.Class({
             }
         },
 
+        /**
+         * Whether auto wrap label when string width is large than label width
+         * @property {Boolean} enableWrapText
+         */
         enableWrapText: {
             default: false,
             notify: function () {
