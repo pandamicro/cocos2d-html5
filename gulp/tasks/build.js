@@ -166,6 +166,10 @@ gulp.task('build-test', ['build-modular-cocos2d', 'clean-test'], function () {
 
 function rebundle_jsb(bundler, minify, suffix) {
     var SourceMap = false;
+    var skips = paths.JSBSkipModules;
+    for (var i = 0; i < skips.length; ++i) {
+        bundler.ignore(require.resolve(skips[i]));
+    }
     var bundle = bundler.bundle()
         .on('error', handleErrors.handler)
         .pipe(handleErrors())

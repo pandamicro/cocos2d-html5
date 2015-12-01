@@ -16,6 +16,12 @@ paths = {
     outFile: 'cocos2d-js.js',
     JSBOutFile: 'jsb.js',
 
+    JSBSkipModules: [
+        '../../cocos2d/core/CCGame', 
+        '../../cocos2d/core/textures/CCTexture2D',
+        '../../cocos2d/core/sprites/CCSpriteFrame'
+    ],
+
     test: {
         src: 'test/qunit/unit/**/*.js',
         runner: 'test/qunit/lib/qunit-runner.html',
