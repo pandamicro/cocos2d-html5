@@ -22,6 +22,22 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+function hierarchyWalker (node, handler) {
+    handler(node);
+
+    var children = node.children;
+    for (var i = 0; i < children.length; ++i) {
+        hierarchyWalker(children[i], handler);
+    }
+
+    if (node._protectedChildren) {
+        children = node._protectedChildren;
+        for (i = 0; i < children.length; ++i) {
+            hierarchyWalker(children[i], handler);
+        }
+    }
+}
+
 cc.texturePool = (function () {
 
     function generateHandler (key) {
@@ -104,19 +120,14 @@ cc.texturePool = (function () {
         }
     ];
 
-    function hierarchyWalker (node, handler) {
-        handler(node);
-
-        var children = node.children;
-        for (var i = 0; i < children.length; ++i) {
-            hierarchyWalker(children[i], handler);
-        }
-    }
-
     var pool = [];
-    var kept = {};
 
     return {
+
+        /**
+         * 通过覆盖 onEnter, onExit 来控制引用计数（值为 true），或者通过 cleanup 来控制引用计数（值为 false）
+         */
+        polyfillEnterExit: false,
 
         /**
          * 获取所有被 cc.texturePool 管理的贴图 url
@@ -148,18 +159,16 @@ cc.texturePool = (function () {
          * 通过 url 指定一个贴图资源不被删除
          */
         keepTexture: function (texKey) {
-            if (!kept[texKey]) {
-                kept[texKey] = true;
-            }
+            var tex = cc.textureCache.getTextureForKey(texKey);
+            tex.retain();
         },
 
         /**
          * 不再保留一个贴图，让 cc.texturePool 正常管理这个贴图
          */
         unkeepTexture: function (node) {
-            if (kept[texKey]) {
-                delete kept[texKey];
-            }
+            var tex = cc.textureCache.getTextureForKey(texKey);
+            tex.release();
         },
 
         /**
@@ -222,8 +231,6 @@ cc.texturePool = (function () {
             var i, texKey;
             for (i = pool.length-1; i >= 0; --i) {
                 texKey = pool[i];
-                if (kept[texKey]) continue;
-
                 var tex = cc.textureCache.getTextureForKey(texKey);
                 // Don't release never used resources
                 if (tex._neverUsed) continue;
@@ -239,8 +246,6 @@ cc.texturePool = (function () {
             var i, texKey;
             for (i = pool.length-1; i >= 0; --i) {
                 texKey = pool[i];
-                if (kept[texKey]) continue;
-
                 var tex = cc.textureCache.getTextureForKey(texKey);
                 // Don't release used resources
                 if (!tex._neverUsed) continue;
@@ -331,14 +336,34 @@ cc.texturePool.init = function () {
         tex && tex.retain();
     }
 
+    function onEnter() {
+        this._onEnter();
+        // Do not retain in the first enter, 
+        // because the first retain should be done by the property setter,
+        // and it will pair the first exit.
+        if (this._firstExited) {
+            this.__texture && this.__texture.retain();
+        }
+    }
+    function overrideOnEnter (proto) {
+        proto._onEnter = proto.onEnter;
+        proto.onEnter = onEnter;
+    }
+
     function onExit() {
+        if (!this._firstExited) {
+            this._firstExited = true;
+        }
         this.__texture && this.__texture.release();
         this._onExit();
     }
-
     function overrideOnExit (proto) {
         proto._onExit = proto.onExit;
         proto.onExit = onExit;
+    }
+
+    function _freeupTexture () {
+        this.__texture && this.__texture.release();
     }
 
     var polyfillMap = {
@@ -370,7 +395,13 @@ cc.texturePool.init = function () {
             if (!proto) continue;
 
             cc.defineGetterSetter(proto, prop, textureGetter, textureSetter);
-            overrideOnExit(proto);
+            if (this.polyfillEnterExit) {
+                overrideOnEnter(proto);
+                overrideOnExit(proto);
+            }
+            else {
+                proto._freeupTexture = _freeupTexture;
+            }
         }
     }
 
@@ -410,6 +441,15 @@ cc.texturePool.init = function () {
         cc.defineGetterSetter(proto, prop, getSubSpriteGetter(prop), getSubSpriteSetter(prop));
     }
 
+    ccui.Scale9Sprite.prototype.onEnter = function () {
+        cc.Node.prototype.onEnter.call(this);
+        for (i = 0; i < subSprites.length; ++i) {
+            prop = subSprites[i];
+            if (this[prop]) {
+                this[prop].onEnter();
+            }
+        }
+    };
     ccui.Scale9Sprite.prototype.onExit = function () {
         for (i = 0; i < subSprites.length; ++i) {
             prop = subSprites[i];
@@ -493,6 +533,17 @@ cc.texturePool.init = function () {
             proto._noBufferOnExit = proto.onExit;
             proto.onExit = onExit;
         };
+        
+        var generateFreeup = function (bufferProps) {
+            return function () {
+                for (var i = 0; i < bufferProps.length; ++i) {
+                    var prop = bufferProps[i];
+                    var buffer = this._renderCmd[prop];
+                    cc._renderContext.deleteBuffer(buffer);
+                    this._renderCmd[prop] = null;
+                }
+            };
+        };
 
         var bufferPolyfills = [
             {
@@ -504,7 +555,7 @@ cc.texturePool.init = function () {
                 props: ['_quadWebBuffer']
             },
             {
-                proto: cc.ParticleSystem.prototype,
+                proto: cc.ParticleSystem ? cc.ParticleSystem.prototype : null,
                 onEnter: function () {
                     this._noBufferOnEnter();
                     var vbos = this._renderCmd._buffersVBO;
@@ -524,19 +575,39 @@ cc.texturePool.init = function () {
                         cc._renderContext.deleteBuffer(vbos[1]);
                     }
                     this._noBufferOnExit();
+                },
+                freeup: function () {
+                    var vbos = this._renderCmd._buffersVBO;
+                    if (vbos[0]) {
+                        cc._renderContext.deleteBuffer(vbos[0]);
+                    }
+                    if (vbos[1]) {
+                        cc._renderContext.deleteBuffer(vbos[1]);
+                    }
                 }
             }
         ];
 
         for (i = 0; i < bufferPolyfills; ++i) {
             var polyfill = bufferPolyfills[i];
-            if (polyfill.props) {
-                polyfillOnEnter(polyfill.proto, generateOnEnter(polyfill.props));
-                polyfillOnExit(polyfill.proto, generateOnExit(polyfill.props));
+            if (!polyfill.proto) continue;
+            if (this.polyfillEnterExit) {
+                if (polyfill.props) {
+                    polyfillOnEnter(polyfill.proto, generateOnEnter(polyfill.props));
+                    polyfillOnExit(polyfill.proto, generateOnExit(polyfill.props));
+                }
+                else if (polyfill.onEnter && polyfill.onExit) {
+                    polyfillOnEnter(polyfill.proto, polyfill.onEnter);
+                    polyfillOnExit(polyfill.proto, polyfill.onExit);
+                }
             }
-            else if (polyfill.onEnter && polyfill.onExit) {
-                polyfillOnEnter(polyfill.proto, polyfill.onEnter);
-                polyfillOnExit(polyfill.proto, polyfill.onExit);
+            else {
+                if (polyfill.freeup) {
+                    polyfill.proto._freeupBuffer = polyfill.freeup;
+                }
+                else if (polyfill.props) {
+                    polyfill.proto._freeupBuffer = generateFreeup(polyfill.props);
+                }
             }
         }
 
@@ -560,6 +631,21 @@ cc.texturePool.init = function () {
         };
     }
 
+    cc.Node.prototype.freeup = function () {
+        hierarchyWalker(this, function (node) {
+            if (node._freeupTexture) {
+                node._freeupTexture();
+            }
+            if (node._freeupBuffer) {
+                node._freeupBuffer();
+            }
+        });
+    };
+
+    // cc.Scene.prototype.onExit = function () {
+    //     this.freeup();
+    //     cc.Node.prototype.onExit.call(this);
+    // };
 };
 
 cc.texturePool.init();
