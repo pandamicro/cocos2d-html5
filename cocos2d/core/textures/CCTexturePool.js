@@ -40,94 +40,9 @@ function hierarchyWalker (node, handler) {
 
 cc.texturePool = (function () {
 
-    function generateHandler (key) {
-        return function (node, keep) {
-            var tex = node[key];
-            if (tex) {
-                var texKey = cc.textureCache.getKeyByTexture(tex);
-                if (keep) {
-                    cc.texturePool.keepTexture(texKey);
-                }
-                else {
-                    cc.texturePool.unkeepTexture(texKey);
-                }
-            }
-        };
-    }
-
-    var keepHandlers = [
-        {
-            type: cc.Scale9Sprite,
-            handle: function (node, keep) {
-                var tex = node._scale9Image._texture;
-                if (tex) {
-                    var texKey = cc.textureCache.getKeyByTexture(tex);
-                    if (keep) {
-                        cc.texturePool.keepTexture(texKey);
-                    }
-                    else {
-                        cc.texturePool.unkeepTexture(texKey);
-                    }
-                }
-            }
-        },
-        {
-            type: cc.Sprite,
-            handle: generateHandler('_texture')
-        },
-        {
-            type: cc.ParticleSystem,
-            handle: generateHandler('_texture')
-        },
-        {
-            type: cc.ParticleBatchNode,
-            handle: generateHandler('textureAtlas')
-        },
-        {
-            type: cc.RenderTexture,
-            handle: generateHandler('_texture')
-        },
-        {
-            type: cc.SpriteBatchNode,
-            handle: function (node, keep) {
-                var key = '_texture';
-                if (node._renderCmd instanceof cc.SpriteBatchNode.WebGLRenderCmd) {
-                    key = '_textureAtlas';
-                }
-                var tex = node._renderCmd[key];
-                if (tex) {
-                    var texKey = cc.textureCache.getKeyByTexture(tex);
-                    if (keep) {
-                        cc.texturePool.keepTexture(texKey);
-                    }
-                    else {
-                        cc.texturePool.unkeepTexture(texKey);
-                    }
-                }
-            }
-        },
-        {
-            type: cc.MotionStreak,
-            handle: generateHandler('texture')
-        },
-        {
-            type: cc.AtlasNode,
-            handle: generateHandler('_texture')
-        },
-        {
-            type: cc.GridBase,
-            handle: generateHandler('_texture')
-        }
-    ];
-
     var pool = [];
 
     return {
-
-        /**
-         * 通过覆盖 onEnter, onExit 来控制引用计数（值为 true），或者通过 cleanup 来控制引用计数（值为 false）
-         */
-        polyfillEnterExit: false,
 
         /**
          * 获取所有被 cc.texturePool 管理的贴图 url
@@ -169,36 +84,6 @@ cc.texturePool = (function () {
         unkeepTexture: function (node) {
             var tex = cc.textureCache.getTextureForKey(texKey);
             tex.release();
-        },
-
-        /**
-         * 保留一个节点下依赖的所有贴图资源不被删除
-         */
-        keepTexturesForNode: function (root) {
-            hierarchyWalker(root, function (node) {
-                for (var i = 0; i < keepHandlers.length; ++i) {
-                    var handler = keepHandlers[i];
-                    if (node instanceof handler.type) {
-                        handler.handle(node, true);
-                        return;
-                    }
-                }
-            });
-        },
-
-        /**
-         * 不再保留一个节点所依赖的所有贴图，让 cc.texturePool 正常管理它们
-         */
-        unkeepTexturesForNode: function (root) {
-            hierarchyWalker(root, function (node) {
-                for (var i = 0; i < keepHandlers.length; ++i) {
-                    var handler = keepHandlers[i];
-                    if (node instanceof handler.type) {
-                        handler.handle(node, false);
-                        return;
-                    }
-                }
-            });
         },
 
         /**
@@ -323,88 +208,6 @@ cc.texturePool.init = function () {
     };
 
 
-    // Polyfill Nodes
-    function textureGetter () {
-        return this.__texture;
-    }
-    function textureSetter (tex) {
-        if (this.__texture) {
-            this.__texture.release();
-        }
-
-        this.__texture = tex;
-        tex && tex.retain();
-    }
-
-    function onEnter() {
-        this._onEnter();
-        // Do not retain in the first enter, 
-        // because the first retain should be done by the property setter,
-        // and it will pair the first exit.
-        if (this._firstExited) {
-            this.__texture && this.__texture.retain();
-        }
-    }
-    function overrideOnEnter (proto) {
-        proto._onEnter = proto.onEnter;
-        proto.onEnter = onEnter;
-    }
-
-    function onExit() {
-        if (!this._firstExited) {
-            this._firstExited = true;
-        }
-        this.__texture && this.__texture.release();
-        this._onExit();
-    }
-    function overrideOnExit (proto) {
-        proto._onExit = proto.onExit;
-        proto.onExit = onExit;
-    }
-
-    function _freeupTexture () {
-        this.__texture && this.__texture.release();
-    }
-
-    var polyfillMap = {
-        '_texture': [
-            cc.Sprite.prototype,
-            cc.AtlasNode.prototype,
-            cc.SpriteBatchNode.CanvasRenderCmd.prototype,
-            cc.GridBase ? cc.GridBase.prototype : null,
-            cc.ParticleSystem ? cc.ParticleSystem.prototype : null,
-            cc.RenderTexture ? cc.RenderTexture.prototype : null
-        ],
-        '_textureAtlas': [
-            cc.SpriteBatchNode.WebGLRenderCmd.prototype
-        ],
-        'texture': [
-            cc.MotionStreak ? cc.MotionStreak.prototype : null
-        ],
-        'textureAtlas': [
-            cc.ParticleBatchNode ? cc.ParticleBatchNode.prototype : null
-        ]
-    };
-
-    var i, proto, prop;
-
-    for (prop in polyfillMap) {
-        var protos = polyfillMap[prop];
-        for (i = 0; i < protos.length; ++i) {
-            proto = protos[i];
-            if (!proto) continue;
-
-            cc.defineGetterSetter(proto, prop, textureGetter, textureSetter);
-            if (this.polyfillEnterExit) {
-                overrideOnEnter(proto);
-                overrideOnExit(proto);
-            }
-            else {
-                proto._freeupTexture = _freeupTexture;
-            }
-        }
-    }
-
     // Polyfill Scale9Sprite
     var subSprites = [
         '_centre',
@@ -441,24 +244,193 @@ cc.texturePool.init = function () {
         cc.defineGetterSetter(proto, prop, getSubSpriteGetter(prop), getSubSpriteSetter(prop));
     }
 
-    ccui.Scale9Sprite.prototype.onEnter = function () {
-        cc.Node.prototype.onEnter.call(this);
-        for (i = 0; i < subSprites.length; ++i) {
-            prop = subSprites[i];
-            if (this[prop]) {
-                this[prop].onEnter();
+
+    // Release handlers for all texture related Node types
+    function generateReleaseHandler (key) {
+        return function (node) {
+            node[key] = null;
+        };
+    }
+
+    var releaseHandlers = [
+        {
+            type: cc.Scale9Sprite,
+            handle: function (node) {
+                for (i = 0; i < subSprites.length; ++i) {
+                    prop = subSprites[i];
+                    if (this[prop] && this[prop]._texture) {
+                        this[prop]._texture = null;
+                    }
+                }
             }
-        }
-    };
-    ccui.Scale9Sprite.prototype.onExit = function () {
-        for (i = 0; i < subSprites.length; ++i) {
-            prop = subSprites[i];
-            if (this[prop]) {
-                this[prop].onExit();
+        },
+        {
+            type: cc.Sprite,
+            handle: generateReleaseHandler('_texture')
+        },
+        {
+            type: cc.ParticleSystem,
+            handle: generateReleaseHandler('_texture')
+        },
+        {
+            type: cc.ParticleBatchNode,
+            handle: generateReleaseHandler('textureAtlas')
+        },
+        {
+            type: cc.RenderTexture,
+            handle: generateReleaseHandler('_texture')
+        },
+        {
+            type: cc.SpriteBatchNode,
+            handle: function (node) {
+                var key = '_texture';
+                if (node._renderCmd instanceof cc.SpriteBatchNode.WebGLRenderCmd) {
+                    key = '_textureAtlas';
+                }
+                node._renderCmd[key] = null;
             }
+        },
+        {
+            type: cc.MotionStreak,
+            handle: generateReleaseHandler('texture')
+        },
+        {
+            type: cc.AtlasNode,
+            handle: generateReleaseHandler('_texture')
+        },
+        {
+            type: cc.GridBase,
+            handle: generateReleaseHandler('_texture')
         }
-        cc.Node.prototype.onExit.call(this);
+    ];
+
+    // Polyfill Node
+    var nodeCtor = cc.Node.prototype.ctor;
+    var nodeAddChild = cc.Node.prototype.addChild;
+    var nodeRemoveChild = cc.Node.prototype.removeChild;
+    var nodeAddProtectedChild = cc.ProtectedNode.prototype.addProtectedChild;
+    var nodeRemoveProtectedChild = cc.ProtectedNode.prototype.removeProtectedChild;
+    cc.inject({
+        ctor: function () {
+            nodeCtor.call(this);
+            this._resRefCount = 1;
+        },
+        
+        retainJS: function () {
+            this._resRefCount++;
+        },
+
+        releaseJS: function () {
+            if (this._resRefCount > 0) {
+                this._resRefCount--;
+
+                if (this._resRefCount === 0) {
+                    // Release all textures
+                    this.releaseRes();
+
+                    // Release children
+                    var children = this.children;
+                    for (var i = 0; i < children.length; ++i) {
+                        children[i].releaseJS();
+                    }
+                    if (this._protectedChildren) {
+                        children = this._protectedChildren;
+                        for (i = 0; i < children.length; ++i) {
+                            children[i].releaseJS();
+                        }
+                    }
+                }
+                // Auto release, if node's ref count have incremented at least once and released to become 1, 
+                // then no other node is referencing it, so we can release it
+                // If a node is created, but never added to other node, it will not automatically be released,
+                // user need to invoke releaseJS manually.
+                else if (this._resRefCount === 1) {
+                    this.releaseJS();
+                }
+                else if (this._resRefCount < 0) {
+                    cc.log("Node resources already cleaned up");
+                }
+            }
+        },
+
+        releaseRes: function () {
+            for (var i = 0; i < releaseHandlers.length; ++i) {
+                var handler = releaseHandlers[i];
+                if (this instanceof handler.type) {
+                    handler.handle(this);
+                    return;
+                }
+            }
+        },
+
+        addChild: function (child, localZOrder, tag) {
+            nodeAddChild.call(this, child, localZOrder, tag);
+            child.retainJS();
+        },
+
+        removeChild: function (child, cleanup) {
+            nodeRemoveChild.call(this, child, cleanup);
+            child.releaseJS();
+        },
+
+        addProtectedChild: function(child, localZOrder, tag) {
+            nodeAddProtectedChild.call(this, child, localZOrder, tag);
+            child.retainJS();
+        },
+
+        removeProtectedChild: function(child,  cleanup) {
+            nodeRemoveProtectedChild.call(this, child, cleanup);
+            child.releaseJS();
+        }
+    }, cc.Node.prototype);
+
+
+    // Polyfill Texture properties getter setter
+    var polyfillMap = {
+        '_texture': [
+            cc.Sprite.prototype,
+            cc.AtlasNode.prototype,
+            cc.SpriteBatchNode.CanvasRenderCmd.prototype,
+            cc.GridBase ? cc.GridBase.prototype : null,
+            cc.ParticleSystem ? cc.ParticleSystem.prototype : null,
+            cc.RenderTexture ? cc.RenderTexture.prototype : null
+        ],
+        '_textureAtlas': [
+            cc.SpriteBatchNode.WebGLRenderCmd.prototype
+        ],
+        'texture': [
+            cc.MotionStreak ? cc.MotionStreak.prototype : null
+        ],
+        'textureAtlas': [
+            cc.ParticleBatchNode ? cc.ParticleBatchNode.prototype : null
+        ]
     };
+
+
+    function textureGetter () {
+        return this.__texture;
+    }
+    function textureSetter (tex) {
+        if (this.__texture) {
+            this.__texture.release();
+        }
+
+        this.__texture = tex;
+        tex && tex.retain();
+    }
+
+    var i, proto, prop;
+
+    for (prop in polyfillMap) {
+        var protos = polyfillMap[prop];
+        for (i = 0; i < protos.length; ++i) {
+            proto = protos[i];
+            if (!proto) continue;
+
+            cc.defineGetterSetter(proto, prop, textureGetter, textureSetter);
+        }
+    }
+
 
     // Polyfill textureCache
     cc.inject({
@@ -496,6 +468,34 @@ cc.texturePool.init = function () {
             }
         }
     }, cc.textureCache);
+
+
+    // Polyfill director
+    var dirPushScene = cc.director.pushScene;
+    var dirPopScene = cc.director.popScene;
+    var dirRunScene = cc.director.runScene;
+    cc.inject({
+        pushScene: function (scene) {
+            dirPushScene.call(this, scene);
+            scene.retainJS();
+        },
+        runScene: function (scene) {
+            var runningScene = this.getRunningScene();
+            dirRunScene.call(this, scene);
+            if (runningScene) {
+                runningScene.releaseJS();
+                scene.retainJS();
+            }
+        },
+        popScene: function () {
+            var runningScene = this.getRunningScene();
+            dirPopScene.call(this);
+            if (runningScene) {
+                runningScene.releaseJS();
+            }
+        }
+    }, cc.director);
+
 
     // release webgl buffer
     if (cc._renderType === cc.game.RENDER_TYPE_WEBGL) {
@@ -575,15 +575,6 @@ cc.texturePool.init = function () {
                         cc._renderContext.deleteBuffer(vbos[1]);
                     }
                     this._noBufferOnExit();
-                },
-                freeup: function () {
-                    var vbos = this._renderCmd._buffersVBO;
-                    if (vbos[0]) {
-                        cc._renderContext.deleteBuffer(vbos[0]);
-                    }
-                    if (vbos[1]) {
-                        cc._renderContext.deleteBuffer(vbos[1]);
-                    }
                 }
             }
         ];
@@ -591,23 +582,14 @@ cc.texturePool.init = function () {
         for (i = 0; i < bufferPolyfills; ++i) {
             var polyfill = bufferPolyfills[i];
             if (!polyfill.proto) continue;
-            if (this.polyfillEnterExit) {
-                if (polyfill.props) {
-                    polyfillOnEnter(polyfill.proto, generateOnEnter(polyfill.props));
-                    polyfillOnExit(polyfill.proto, generateOnExit(polyfill.props));
-                }
-                else if (polyfill.onEnter && polyfill.onExit) {
-                    polyfillOnEnter(polyfill.proto, polyfill.onEnter);
-                    polyfillOnExit(polyfill.proto, polyfill.onExit);
-                }
+            
+            if (polyfill.props) {
+                polyfillOnEnter(polyfill.proto, generateOnEnter(polyfill.props));
+                polyfillOnExit(polyfill.proto, generateOnExit(polyfill.props));
             }
-            else {
-                if (polyfill.freeup) {
-                    polyfill.proto._freeupBuffer = polyfill.freeup;
-                }
-                else if (polyfill.props) {
-                    polyfill.proto._freeupBuffer = generateFreeup(polyfill.props);
-                }
+            else if (polyfill.onEnter && polyfill.onExit) {
+                polyfillOnEnter(polyfill.proto, polyfill.onEnter);
+                polyfillOnExit(polyfill.proto, polyfill.onExit);
             }
         }
 
@@ -631,21 +613,6 @@ cc.texturePool.init = function () {
         };
     }
 
-    cc.Node.prototype.freeup = function () {
-        hierarchyWalker(this, function (node) {
-            if (node._freeupTexture) {
-                node._freeupTexture();
-            }
-            if (node._freeupBuffer) {
-                node._freeupBuffer();
-            }
-        });
-    };
-
-    // cc.Scene.prototype.onExit = function () {
-    //     this.freeup();
-    //     cc.Node.prototype.onExit.call(this);
-    // };
 };
 
 cc.texturePool.init();
